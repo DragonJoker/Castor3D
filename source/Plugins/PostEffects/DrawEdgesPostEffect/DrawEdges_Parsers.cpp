@@ -10,66 +10,47 @@
 
 namespace draw_edges
 {
-	namespace
+	CU_ImplementAttributeParserNewBlock( parserDrawEdges, castor3d::TargetContext, EdgesContext )
 	{
-		ParserContext & getParserContext( castor::FileParserContext & context )
-		{
-			return *static_cast< ParserContext * >( context.getUserContext( PostEffect::Type ) );
-		}
+		newBlockContext->renderTarget = blockContext->renderTarget;
 	}
+	CU_EndAttributePushNewBlock( Section::eRoot )
 
-	CU_ImplementAttributeParser( parserDrawEdges )
+	CU_ImplementAttributeParserBlock( parserNormalDepthWidth, EdgesContext )
 	{
-	}
-	CU_EndAttributePush( Section::eRoot )
-
-	CU_ImplementAttributeParser( parserNormalDepthWidth )
-	{
-		auto & deContext = getParserContext( context );
-
 		if ( params.empty() )
 		{
 			CU_ParsingError( "Missing parameter" );
 		}
 		else
 		{
-			int value{};
-			params[0]->get( value );
-			deContext.data.normalDepthWidth = value;
+			blockContext->data.normalDepthWidth = params[0]->get< int >();
 		}
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserObjectWidth )
+	CU_ImplementAttributeParserBlock( parserObjectWidth, EdgesContext )
 	{
-		auto & deContext = getParserContext( context );
-
 		if ( params.empty() )
 		{
 			CU_ParsingError( "Missing parameter" );
 		}
 		else
 		{
-			int value{};
-			params[0]->get( value );
-			deContext.data.objectWidth = value;
+			blockContext->data.objectWidth = params[0]->get< int >();
 		}
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserDrawEdgesEnd )
+	CU_ImplementAttributeParserBlock( parserDrawEdgesEnd, EdgesContext )
 	{
-		auto & parsingContext = castor3d::getParserContext( context );
-		auto & deContext = getParserContext( context );
 		castor3d::Parameters parameters;
-		parameters.add( PostEffect::NormalDepthWidth, castor::string::toString( deContext.data.normalDepthWidth ) );
-		parameters.add( PostEffect::ObjectWidth, castor::string::toString( deContext.data.objectWidth ) );
+		parameters.add( PostEffect::NormalDepthWidth, castor::string::toString( blockContext->data.normalDepthWidth ) );
+		parameters.add( PostEffect::ObjectWidth, castor::string::toString( blockContext->data.objectWidth ) );
 
-		auto effect = parsingContext.renderTarget->getPostEffect( PostEffect::Type );
+		auto effect = blockContext->renderTarget->getPostEffect( PostEffect::Type );
 		effect->enable( true );
 		effect->setParameters( parameters );
-
-		delete reinterpret_cast< ParserContext * >( context.unregisterUserContext( PostEffect::Type ) );
 	}
 	CU_EndAttributePop()
 }

@@ -10,11 +10,18 @@ namespace castor3d
 {
 	namespace vctcfg
 	{
-		static CU_ImplementAttributeParser( parserEnabled )
+		static CU_ImplementAttributeParserBlock( parserVoxelConeTracing, SceneContext )
 		{
-			auto & parsingContext = getParserContext( context );
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+		}
+		CU_EndAttributePushBlock( CSCNSection::eVoxelConeTracing, blockContext )
 
-			if ( !parsingContext.scene )
+		static CU_ImplementAttributeParserBlock( parserEnabled, SceneContext )
+		{
+			if ( !blockContext->scene )
 			{
 				CU_ParsingError( cuT( "No scene initialised." ) );
 			}
@@ -24,17 +31,15 @@ namespace castor3d
 			}
 			else
 			{
-				auto & vctConfig = parsingContext.scene->getVoxelConeTracingConfig();
+				auto & vctConfig = blockContext->scene->getVoxelConeTracingConfig();
 				params[0]->get( vctConfig.enabled );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserGridSize )
+		static CU_ImplementAttributeParserBlock( parserGridSize, SceneContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.scene )
+			if ( !blockContext->scene )
 			{
 				CU_ParsingError( cuT( "No scene initialised." ) );
 			}
@@ -44,7 +49,7 @@ namespace castor3d
 			}
 			else
 			{
-				auto & vctConfig = parsingContext.scene->getVoxelConeTracingConfig();
+				auto & vctConfig = blockContext->scene->getVoxelConeTracingConfig();
 				uint32_t value;
 				params[0]->get( value );
 				vctConfig.gridSize = value;
@@ -52,11 +57,9 @@ namespace castor3d
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserNumCones )
+		static CU_ImplementAttributeParserBlock( parserNumCones, SceneContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.scene )
+			if ( !blockContext->scene )
 			{
 				CU_ParsingError( cuT( "No scene initialised." ) );
 			}
@@ -66,7 +69,7 @@ namespace castor3d
 			}
 			else
 			{
-				auto & vctConfig = parsingContext.scene->getVoxelConeTracingConfig();
+				auto & vctConfig = blockContext->scene->getVoxelConeTracingConfig();
 				uint32_t value;
 				params[0]->get( value );
 				vctConfig.numCones = value;
@@ -74,11 +77,9 @@ namespace castor3d
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserMaxDistance )
+		static CU_ImplementAttributeParserBlock( parserMaxDistance, SceneContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.scene )
+			if ( !blockContext->scene )
 			{
 				CU_ParsingError( cuT( "No scene initialised." ) );
 			}
@@ -88,17 +89,15 @@ namespace castor3d
 			}
 			else
 			{
-				auto & vctConfig = parsingContext.scene->getVoxelConeTracingConfig();
+				auto & vctConfig = blockContext->scene->getVoxelConeTracingConfig();
 				params[0]->get( vctConfig.maxDistance );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserRayStepSize )
+		static CU_ImplementAttributeParserBlock( parserRayStepSize, SceneContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.scene )
+			if ( !blockContext->scene )
 			{
 				CU_ParsingError( cuT( "No scene initialised." ) );
 			}
@@ -108,17 +107,15 @@ namespace castor3d
 			}
 			else
 			{
-				auto & vctConfig = parsingContext.scene->getVoxelConeTracingConfig();
+				auto & vctConfig = blockContext->scene->getVoxelConeTracingConfig();
 				params[0]->get( vctConfig.rayStepSize );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserVoxelSize )
+		static CU_ImplementAttributeParserBlock( parserVoxelSize, SceneContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.scene )
+			if ( !blockContext->scene )
 			{
 				CU_ParsingError( cuT( "No scene initialised." ) );
 			}
@@ -128,17 +125,15 @@ namespace castor3d
 			}
 			else
 			{
-				auto & vctConfig = parsingContext.scene->getVoxelConeTracingConfig();
+				auto & vctConfig = blockContext->scene->getVoxelConeTracingConfig();
 				params[0]->get( vctConfig.voxelSizeFactor );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserConservativeRasterization )
+		static CU_ImplementAttributeParserBlock( parserConservativeRasterization, SceneContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.scene )
+			if ( !blockContext->scene )
 			{
 				CU_ParsingError( cuT( "No scene initialised." ) );
 			}
@@ -148,17 +143,15 @@ namespace castor3d
 			}
 			else
 			{
-				auto & vctConfig = parsingContext.scene->getVoxelConeTracingConfig();
+				auto & vctConfig = blockContext->scene->getVoxelConeTracingConfig();
 				params[0]->get( vctConfig.enableConservativeRasterization );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserTemporalSmoothing )
+		static CU_ImplementAttributeParserBlock( parserTemporalSmoothing, SceneContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.scene )
+			if ( !blockContext->scene )
 			{
 				CU_ParsingError( cuT( "No scene initialised." ) );
 			}
@@ -168,17 +161,15 @@ namespace castor3d
 			}
 			else
 			{
-				auto & vctConfig = parsingContext.scene->getVoxelConeTracingConfig();
+				auto & vctConfig = blockContext->scene->getVoxelConeTracingConfig();
 				params[0]->get( vctConfig.enableTemporalSmoothing );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserOcclusion )
+		static CU_ImplementAttributeParserBlock( parserOcclusion, SceneContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.scene )
+			if ( !blockContext->scene )
 			{
 				CU_ParsingError( cuT( "No scene initialised." ) );
 			}
@@ -188,17 +179,15 @@ namespace castor3d
 			}
 			else
 			{
-				auto & vctConfig = parsingContext.scene->getVoxelConeTracingConfig();
+				auto & vctConfig = blockContext->scene->getVoxelConeTracingConfig();
 				params[0]->get( vctConfig.enableOcclusion );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserSecondaryBounce )
+		static CU_ImplementAttributeParserBlock( parserSecondaryBounce, SceneContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.scene )
+			if ( !blockContext->scene )
 			{
 				CU_ParsingError( cuT( "No scene initialised." ) );
 			}
@@ -208,7 +197,7 @@ namespace castor3d
 			}
 			else
 			{
-				auto & vctConfig = parsingContext.scene->getVoxelConeTracingConfig();
+				auto & vctConfig = blockContext->scene->getVoxelConeTracingConfig();
 				params[0]->get( vctConfig.enableSecondaryBounce );
 			}
 		}
@@ -232,15 +221,20 @@ namespace castor3d
 	void VctConfig::addParsers( castor::AttributeParsers & result )
 	{
 		using namespace castor;
-		addParser( result, uint32_t( CSCNSection::eVoxelConeTracing ), cuT( "enabled" ), vctcfg::parserEnabled, { makeParameter< ParameterType::eBool >() } );
-		addParser( result, uint32_t( CSCNSection::eVoxelConeTracing ), cuT( "grid_size" ), vctcfg::parserGridSize, { makeParameter< ParameterType::eUInt32 >( castor::Range< uint32_t >( 2u, VctMaxTextureSize ) ) } );
-		addParser( result, uint32_t( CSCNSection::eVoxelConeTracing ), cuT( "num_cones" ), vctcfg::parserNumCones, { makeParameter< ParameterType::eUInt32 >( castor::Range< uint32_t >( 1u, VctMaxDiffuseCones ) ) } );
-		addParser( result, uint32_t( CSCNSection::eVoxelConeTracing ), cuT( "max_distance" ), vctcfg::parserMaxDistance, { makeParameter< ParameterType::eFloat >() } );
-		addParser( result, uint32_t( CSCNSection::eVoxelConeTracing ), cuT( "ray_step_size" ), vctcfg::parserRayStepSize, { makeParameter< ParameterType::eFloat >() } );
-		addParser( result, uint32_t( CSCNSection::eVoxelConeTracing ), cuT( "voxel_size" ), vctcfg::parserVoxelSize, { makeParameter< ParameterType::eFloat >() } );
-		addParser( result, uint32_t( CSCNSection::eVoxelConeTracing ), cuT( "conservative_rasterization" ), vctcfg::parserConservativeRasterization, { makeParameter< ParameterType::eBool >() } );
-		addParser( result, uint32_t( CSCNSection::eVoxelConeTracing ), cuT( "temporal_smoothing" ), vctcfg::parserTemporalSmoothing, { makeParameter< ParameterType::eBool >() } );
-		addParser( result, uint32_t( CSCNSection::eVoxelConeTracing ), cuT( "occlusion" ), vctcfg::parserOcclusion, { makeParameter< ParameterType::eBool >() } );
-		addParser( result, uint32_t( CSCNSection::eVoxelConeTracing ), cuT( "secondary_bounce" ), vctcfg::parserSecondaryBounce, { makeParameter< ParameterType::eBool >() } );
+		BlockParserContextT< SceneContext > sceneContext{ result, CSCNSection::eScene, CSCNSection::eRoot };
+		BlockParserContextT< SceneContext > vctContext{ result, CSCNSection::eVoxelConeTracing, CSCNSection::eScene };
+
+		sceneContext.addPushParser( cuT( "voxel_cone_tracing" ), CSCNSection::eVoxelConeTracing, vctcfg::parserVoxelConeTracing );
+		vctContext.addParser( cuT( "enabled" ), vctcfg::parserEnabled, { makeParameter< ParameterType::eBool >() } );
+		vctContext.addParser( cuT( "grid_size" ), vctcfg::parserGridSize, { makeParameter< ParameterType::eUInt32 >( castor::Range< uint32_t >( 2u, VctMaxTextureSize ) ) } );
+		vctContext.addParser( cuT( "num_cones" ), vctcfg::parserNumCones, { makeParameter< ParameterType::eUInt32 >( castor::Range< uint32_t >( 1u, VctMaxDiffuseCones ) ) } );
+		vctContext.addParser( cuT( "max_distance" ), vctcfg::parserMaxDistance, { makeParameter< ParameterType::eFloat >() } );
+		vctContext.addParser( cuT( "ray_step_size" ), vctcfg::parserRayStepSize, { makeParameter< ParameterType::eFloat >() } );
+		vctContext.addParser( cuT( "voxel_size" ), vctcfg::parserVoxelSize, { makeParameter< ParameterType::eFloat >() } );
+		vctContext.addParser( cuT( "conservative_rasterization" ), vctcfg::parserConservativeRasterization, { makeParameter< ParameterType::eBool >() } );
+		vctContext.addParser( cuT( "temporal_smoothing" ), vctcfg::parserTemporalSmoothing, { makeParameter< ParameterType::eBool >() } );
+		vctContext.addParser( cuT( "occlusion" ), vctcfg::parserOcclusion, { makeParameter< ParameterType::eBool >() } );
+		vctContext.addParser( cuT( "secondary_bounce" ), vctcfg::parserSecondaryBounce, { makeParameter< ParameterType::eBool >() } );
+		vctContext.addDefaultPopParser();
 	}
 }

@@ -227,7 +227,7 @@ namespace castor3d
 		registerParsers( ControlsManager::Name
 			, std::move( ControlsManager::createParsers( *this ) )
 			, std::move( ControlsManager::createSections() )
-			, &ControlsManager::createContext );
+			, nullptr );
 		setUserInputListenerT( castor::makeUnique< ControlsManager >( *this ) );
 
 		log::info << cuT( "Castor3D - Core engine version : " ) << Version{} << std::endl;

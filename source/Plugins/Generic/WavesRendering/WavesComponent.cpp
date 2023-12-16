@@ -46,222 +46,185 @@ namespace waves
 			eWave = CU_MakeSectionName( 'W', 'A', 'V', 'E' ),
 		};
 
-		static void * createContext( castor::FileParserContext & context )
+		static CU_ImplementAttributeParserNewBlock( parserWavesComponent, castor3d::MeshContext, WavesContext )
 		{
-			waves::ParserContext * userContext = new waves::ParserContext;
-			userContext->engine = static_cast< castor3d::SceneFileParser * >( context.parser )->getEngine();
-			return userContext;
-		}
-
-		static ParserContext & getParserContext( castor::FileParserContext & context )
-		{
-			return *static_cast< ParserContext * >( context.getUserContext( WavesRenderComponent::TypeName ) );
-		}
-
-		static CU_ImplementAttributeParser( parserWavesComponent )
-		{
-			auto & parsingContext = getSceneParserContext( context );
-
-			if ( !parsingContext.mesh )
+			if ( !blockContext->mesh )
 			{
 				CU_ParsingError( "Mesh not initialised" );
 			}
+
+			newBlockContext->mesh = blockContext->mesh;
 		}
-		CU_EndAttributePush( WavesSection::eWaves )
+		CU_EndAttributePushNewBlock( WavesSection::eWaves )
 
-		static CU_ImplementAttributeParser( parserWidthSubdiv )
+		static CU_ImplementAttributeParserBlock( parserWidthSubdiv, WavesContext )
 		{
-			auto & wavesContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( "Missing parameter" );
 			}
 			else
 			{
-				wavesContext.parameters.add( "width_subdiv"
+				blockContext->parameters.add( "width_subdiv"
 					, castor::string::toString( params[0]->get< uint32_t >() ) );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserDepthSubdiv )
+		static CU_ImplementAttributeParserBlock( parserDepthSubdiv, WavesContext )
 		{
-			auto & wavesContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( "Missing parameter" );
 			}
 			else
 			{
-				wavesContext.parameters.add( "depth_subdiv"
+				blockContext->parameters.add( "depth_subdiv"
 					, castor::string::toString( params[0]->get< uint32_t >() ) );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserWidth )
+		static CU_ImplementAttributeParserBlock( parserWidth, WavesContext )
 		{
-			auto & wavesContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( "Missing parameter" );
 			}
 			else
 			{
-				wavesContext.parameters.add( "width"
+				blockContext->parameters.add( "width"
 					, castor::string::toString( params[0]->get< uint32_t >() ) );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserDepth )
+		static CU_ImplementAttributeParserBlock( parserDepth, WavesContext )
 		{
-			auto & wavesContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( "Missing parameter" );
 			}
 			else
 			{
-				wavesContext.parameters.add( "depth"
+				blockContext->parameters.add( "depth"
 					, castor::string::toString( params[0]->get< uint32_t >() ) );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserTessellationFactor )
+		static CU_ImplementAttributeParserBlock( parserTessellationFactor, WavesContext )
 		{
-			auto & wavesContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( "Missing parameter" );
 			}
 			else
 			{
-				wavesContext.config.tessellationFactor = float( params[0]->get< uint32_t >() );
+				blockContext->config.tessellationFactor = float( params[0]->get< uint32_t >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserDampeningFactor )
+		static CU_ImplementAttributeParserBlock( parserDampeningFactor, WavesContext )
 		{
-			auto & wavesContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( "Missing parameter" );
 			}
 			else
 			{
-				params[0]->get( wavesContext.config.dampeningFactor );
+				params[0]->get( blockContext->config.dampeningFactor );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserWave )
+		static CU_ImplementAttributeParserBlock( parserWave, WavesContext )
 		{
 		}
-		CU_EndAttributePush( WavesSection::eWave )
+		CU_EndAttributePushBlock( WavesSection::eWave, blockContext )
 
-		static CU_ImplementAttributeParser( parserWavesComponentEnd )
+		static CU_ImplementAttributeParserBlock( parserWavesComponentEnd, WavesContext )
 		{
-			auto & parsingContext = getSceneParserContext( context );
-			auto & wavesContext = getParserContext( context );
-			auto & factory = wavesContext.engine->getMeshFactory();
-			wavesContext.parameters.add( cuT( "flipYZ" ), true );
-			factory.create( "plane" )->generate( *parsingContext.mesh, wavesContext.parameters );
+			auto & factory = blockContext->mesh->getEngine()->getMeshFactory();
+			blockContext->parameters.add( cuT( "flipYZ" ), true );
+			factory.create( "plane" )->generate( *blockContext->mesh, blockContext->parameters );
 
-			auto submesh = parsingContext.mesh->getSubmesh( 0u );
+			auto submesh = blockContext->mesh->getSubmesh( 0u );
 			auto & component = *submesh->createComponent< WavesRenderComponent >();
-			wavesContext.config.numWaves = wavesContext.wave;
-			component.setConfig( std::move( wavesContext.config ) );
+			blockContext->config.numWaves = blockContext->wave;
+			component.setConfig( std::move( blockContext->config ) );
 		}
 		CU_EndAttributePop()
 
-		static CU_ImplementAttributeParser( parserWaveDirection )
+		static CU_ImplementAttributeParserBlock( parserWaveDirection, WavesContext )
 		{
-			auto & wavesContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( "Missing parameter" );
 			}
 			else
 			{
-				params[0]->get( wavesContext.config.waves[wavesContext.wave].direction );
+				params[0]->get( blockContext->config.waves[blockContext->wave].direction );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserWaveSteepness )
+		static CU_ImplementAttributeParserBlock( parserWaveSteepness, WavesContext )
 		{
-			auto & wavesContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( "Missing parameter" );
 			}
 			else
 			{
-				params[0]->get( wavesContext.config.waves[wavesContext.wave].steepness );
+				params[0]->get( blockContext->config.waves[blockContext->wave].steepness );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserWaveLength )
+		static CU_ImplementAttributeParserBlock( parserWaveLength, WavesContext )
 		{
-			auto & wavesContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( "Missing parameter" );
 			}
 			else
 			{
-				params[0]->get( wavesContext.config.waves[wavesContext.wave].length );
+				params[0]->get( blockContext->config.waves[blockContext->wave].length );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserWaveAmplitude )
+		static CU_ImplementAttributeParserBlock( parserWaveAmplitude, WavesContext )
 		{
-			auto & wavesContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( "Missing parameter" );
 			}
 			else
 			{
-				params[0]->get( wavesContext.config.waves[wavesContext.wave].amplitude );
+				params[0]->get( blockContext->config.waves[blockContext->wave].amplitude );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserWaveSpeed )
+		static CU_ImplementAttributeParserBlock( parserWaveSpeed, WavesContext )
 		{
-			auto & wavesContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( "Missing parameter" );
 			}
 			else
 			{
-				params[0]->get( wavesContext.config.waves[wavesContext.wave].speed );
+				params[0]->get( blockContext->config.waves[blockContext->wave].speed );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserWaveEnd )
+		static CU_ImplementAttributeParserBlock( parserWaveEnd, WavesContext )
 		{
-			auto & wavesContext = getParserContext( context );
-			++wavesContext.wave;
+			++blockContext->wave;
 		}
 		CU_EndAttributePop()
 	}
@@ -718,29 +681,33 @@ namespace waves
 	//*********************************************************************************************
 
 	WavesRenderComponent::Plugin::Plugin( castor3d::SubmeshComponentRegister const & submeshComponents )
-		: castor3d::SubmeshComponentPlugin{ submeshComponents, &parse::createContext }
+		: castor3d::SubmeshComponentPlugin{ submeshComponents, nullptr }
 	{
 	}
 
 	void WavesRenderComponent::Plugin::createParsers( castor::AttributeParsers & parsers )const
 	{
-		addParser( parsers, uint32_t( castor3d::CSCNSection::eMesh ), cuT( "waves" ), &parse::parserWavesComponent );
+		castor3d::BlockParserContextT< castor3d::MeshContext > meshContext{ parsers, castor3d::CSCNSection::eMesh };
+		castor3d::BlockParserContextT< WavesContext > wavesContext{ parsers, parse::WavesSection::eWaves, castor3d::CSCNSection::eMesh };
+		castor3d::BlockParserContextT< WavesContext > waveContext{ parsers, parse::WavesSection::eWave, castor3d::CSCNSection::eMesh };
 
-		addParser( parsers, uint32_t( parse::WavesSection::eWaves ), cuT( "widthSubdiv" ), &parse::parserWidthSubdiv, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		addParser( parsers, uint32_t( parse::WavesSection::eWaves ), cuT( "depthSubdiv" ), &parse::parserDepthSubdiv, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		addParser( parsers, uint32_t( parse::WavesSection::eWaves ), cuT( "width" ), &parse::parserWidth, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		addParser( parsers, uint32_t( parse::WavesSection::eWaves ), cuT( "depth" ), &parse::parserDepth, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		addParser( parsers, uint32_t( parse::WavesSection::eWaves ), cuT( "tessellationFactor" ), &parse::parserTessellationFactor, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		addParser( parsers, uint32_t( parse::WavesSection::eWaves ), cuT( "dampeningFactor" ), &parse::parserDampeningFactor, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		addParser( parsers, uint32_t( parse::WavesSection::eWaves ), cuT( "wave" ), &parse::parserWave );
-		addParser( parsers, uint32_t( parse::WavesSection::eWaves ), cuT( "}" ), &parse::parserWavesComponentEnd );
+		meshContext.addPushParser( cuT( "waves" ), parse::WavesSection::eWaves, &parse::parserWavesComponent );
 
-		addParser( parsers, uint32_t( parse::WavesSection::eWave ), cuT( "direction" ), &parse::parserWaveDirection, { castor::makeParameter< castor::ParameterType::ePoint3F >() } );
-		addParser( parsers, uint32_t( parse::WavesSection::eWave ), cuT( "steepness" ), &parse::parserWaveSteepness, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		addParser( parsers, uint32_t( parse::WavesSection::eWave ), cuT( "length" ), &parse::parserWaveLength, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		addParser( parsers, uint32_t( parse::WavesSection::eWave ), cuT( "amplitude" ), &parse::parserWaveAmplitude, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		addParser( parsers, uint32_t( parse::WavesSection::eWave ), cuT( "speed" ), &parse::parserWaveSpeed, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		addParser( parsers, uint32_t( parse::WavesSection::eWave ), cuT( "}" ), &parse::parserWaveEnd );
+		wavesContext.addParser( cuT( "widthSubdiv" ), &parse::parserWidthSubdiv, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+		wavesContext.addParser( cuT( "depthSubdiv" ), &parse::parserDepthSubdiv, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+		wavesContext.addParser( cuT( "width" ), &parse::parserWidth, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+		wavesContext.addParser( cuT( "depth" ), &parse::parserDepth, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+		wavesContext.addParser( cuT( "tessellationFactor" ), &parse::parserTessellationFactor, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+		wavesContext.addParser( cuT( "dampeningFactor" ), &parse::parserDampeningFactor, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+		wavesContext.addPushParser( cuT( "wave" ), parse::WavesSection::eWave, &parse::parserWave );
+		wavesContext.addPopParser( cuT( "}" ), &parse::parserWavesComponentEnd );
+
+		waveContext.addParser( cuT( "direction" ), &parse::parserWaveDirection, { castor::makeParameter< castor::ParameterType::ePoint3F >() } );
+		waveContext.addParser( cuT( "steepness" ), &parse::parserWaveSteepness, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+		waveContext.addParser( cuT( "length" ), &parse::parserWaveLength, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+		waveContext.addParser( cuT( "amplitude" ), &parse::parserWaveAmplitude, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+		waveContext.addParser( cuT( "speed" ), &parse::parserWaveSpeed, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+		waveContext.addPopParser( cuT( "}" ), &parse::parserWaveEnd );
 	}
 
 	void WavesRenderComponent::Plugin::createSections( castor::StrUInt32Map & sections )const

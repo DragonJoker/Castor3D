@@ -60,10 +60,10 @@ namespace castor3d
 		castor::ChangeTracked< castor::RangedValue< uint32_t > > blurStepSize{ { 2u, castor::makeRange( 1u, 60u ) } };
 		//!\~english	VkFilter radius in pixels. This will be multiplied by m_blurStepSize.
 		//!\~french		Rayon du filtre en pixels. Sera multiplié par m_blurStepSize.
-		castor::ChangeTracked< castor::RangedValue< int32_t > > blurRadius{ { 4, castor::makeRange( 1, 6 ) } };
+		castor::ChangeTracked< castor::RangedValue< uint32_t > > blurRadius{ { 4u, castor::makeRange( 1u, 6u ) } };
 		//!\~english	The normals bending ray marching steps count.
 		//!\~french		Le nombre de pas de ray marching pour les bent normals.
-		castor::RangedValue< int32_t > bendStepCount{ 4, castor::makeRange( 1, 60 ) };
+		castor::RangedValue< uint32_t > bendStepCount{ 4u, castor::makeRange( 1u, 60u ) };
 		//!\~english	The normals bending ray marching step size.
 		//!\~french		La taille d'un pas de ray marching pour les bent normals.
 		float bendStepSize{ 0.5f };

@@ -11,32 +11,33 @@ namespace castor3d
 {
 	namespace hdrcfg
 	{
-		static CU_ImplementAttributeParser( parserExponent )
+		static CU_ImplementAttributeParserBlock( parserHdrConfig, CameraContext )
 		{
-			auto & parsingContext = getParserContext( context );
+		}
+		CU_EndAttributePushBlock( CSCNSection::eHdrConfig, blockContext )
 
+		static CU_ImplementAttributeParserBlock( parserExponent, CameraContext )
+		{
 			if ( params.empty() )
 			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
 			else
 			{
-				params[0]->get( parsingContext.hdrConfig.exposure );
+				params[0]->get( blockContext->hdrConfig.exposure );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserGamma )
+		static CU_ImplementAttributeParserBlock( parserGamma, CameraContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
 			else
 			{
-				params[0]->get( parsingContext.hdrConfig.gamma );
+				params[0]->get( blockContext->hdrConfig.gamma );
 			}
 		}
 		CU_EndAttribute()
@@ -52,7 +53,9 @@ namespace castor3d
 	void HdrConfig::addParsers( castor::AttributeParsers & result )
 	{
 		using namespace castor;
-		addParser( result, uint32_t( CSCNSection::eHdrConfig ), cuT( "exposure" ), hdrcfg::parserExponent, { makeParameter< ParameterType::eFloat >() } );
-		addParser( result, uint32_t( CSCNSection::eHdrConfig ), cuT( "gamma" ), hdrcfg::parserGamma, { makeParameter< ParameterType::eFloat >() } );
+		addParserT( result, CSCNSection::eCamera, CSCNSection::eHdrConfig, cuT( "hdr_config" ), hdrcfg::parserHdrConfig );
+		addParserT( result, CSCNSection::eHdrConfig, cuT( "exposure" ), hdrcfg::parserExponent, { makeParameter< ParameterType::eFloat >() } );
+		addParserT( result, CSCNSection::eHdrConfig, cuT( "gamma" ), hdrcfg::parserGamma, { makeParameter< ParameterType::eFloat >() } );
+		addParserT( result, CSCNSection::eHdrConfig, CSCNSection::eCamera, cuT( "}" ), parserdefaultEnd );
 	}
 }

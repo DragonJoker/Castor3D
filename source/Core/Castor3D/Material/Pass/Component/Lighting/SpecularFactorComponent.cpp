@@ -48,17 +48,15 @@ namespace castor3d
 
 	namespace spccmp
 	{
-		static CU_ImplementAttributeParser( parserPassSpecularFactor )
+		static CU_ImplementAttributeParserBlock( parserPassSpecularFactor, PassContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
 			else if ( !params.empty() )
 			{
-				auto & component = getPassComponent< SpecularFactorComponent >( parsingContext );
+				auto & component = getPassComponent< SpecularFactorComponent >( *blockContext );
 				component.setFactor( params[0]->get< float >() );
 			}
 		}

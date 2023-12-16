@@ -27,12 +27,29 @@ namespace
 	{
 		castor::AttributeParsers result;
 
-		addParser( result, uint32_t( castor3d::CSCNSection::eRenderTarget ), cuT( "linear_motion_blur" ), &motion_blur::parserMotionBlur );
+		addParserT( result
+			, castor3d::CSCNSection::eRenderTarget
+			, motion_blur::MotionBlurSection::eRoot
+			, cuT( "linear_motion_blur" )
+			, &motion_blur::parserMotionBlur );
 
-		addParser( result, uint32_t( motion_blur::MotionBlurSection::eRoot ), cuT( "vectorDivider" ), &motion_blur::parserDivider, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		addParser( result, uint32_t( motion_blur::MotionBlurSection::eRoot ), cuT( "samples" ), &motion_blur::parserSamples, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		addParser( result, uint32_t( motion_blur::MotionBlurSection::eRoot ), cuT( "fpsScale" ), &motion_blur::parserFpsScale, { castor::makeParameter< castor::ParameterType::eBool >() } );
-		addParser( result, uint32_t( motion_blur::MotionBlurSection::eRoot ), cuT( "}" ), &motion_blur::parserMotionBlurEnd );
+		addParserT( result
+			, motion_blur::MotionBlurSection::eRoot
+			, cuT( "vectorDivider" )
+			, &motion_blur::parserDivider, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+		addParserT( result
+			, motion_blur::MotionBlurSection::eRoot
+			, cuT( "samples" )
+			, &motion_blur::parserSamples, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+		addParserT( result
+			, motion_blur::MotionBlurSection::eRoot
+			, cuT( "fpsScale" )
+			, &motion_blur::parserFpsScale, { castor::makeParameter< castor::ParameterType::eBool >() } );
+		addParserT( result
+			, motion_blur::MotionBlurSection::eRoot
+			, castor3d::CSCNSection::eRenderTarget
+			, cuT( "}" )
+			, &motion_blur::parserMotionBlurEnd );
 
 		return result;
 	}
@@ -43,13 +60,6 @@ namespace
 		{
 			{ uint32_t( motion_blur::MotionBlurSection::eRoot ), cuT( "motion_blur" ) },
 		};
-	}
-
-	void * createContext( castor::FileParserContext & context )
-	{
-		motion_blur::ParserContext * userContext = new motion_blur::ParserContext;
-		userContext->engine = static_cast< castor3d::SceneFileParser * >( context.parser )->getEngine();
-		return userContext;
 	}
 }
 
@@ -83,7 +93,7 @@ extern "C"
 		engine->registerParsers( motion_blur::PostEffect::Type
 			, createParsers()
 			, createSections()
-			, &createContext );
+			, nullptr );
 	}
 
 	C3D_LinearMotionBlur_API void OnUnload( castor3d::Engine * engine )

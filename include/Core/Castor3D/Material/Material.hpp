@@ -101,7 +101,8 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		C3D_API static void addParsers( castor::AttributeParsers & result );
+		C3D_API static void addParsers( castor::AttributeParsers & result
+			, castor::UInt32StrMap const & textureChannels );
 		/**@}*/
 		/**
 		*\~english

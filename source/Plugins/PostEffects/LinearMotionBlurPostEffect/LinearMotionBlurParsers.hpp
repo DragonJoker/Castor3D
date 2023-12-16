@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___MotionBlur_Parsers_H___
 #define ___MotionBlur_Parsers_H___
 
-#include <Castor3D/Castor3DModule.hpp>
+#include <Castor3D/Scene/SceneFileParser.hpp>
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/FileParser/FileParserContext.hpp>
@@ -18,11 +18,11 @@ namespace motion_blur
 		float blurScale = 1.0f;
 	};
 
-	struct ParserContext
+	struct BlurContext
 	{
-		castor3d::Engine * engine{ nullptr };
-		Configuration data;
-		bool fpsScale;
+		castor3d::RenderTargetRPtr renderTarget{};
+		Configuration data{};
+		bool fpsScale{};
 	};
 
 	enum class MotionBlurSection
@@ -31,11 +31,11 @@ namespace motion_blur
 		eRoot = CU_MakeSectionName( 'M', 'T', 'B', 'R' ),
 	};
 
-	CU_DeclareAttributeParser( parserMotionBlur )
-	CU_DeclareAttributeParser( parserDivider )
-	CU_DeclareAttributeParser( parserSamples )
-	CU_DeclareAttributeParser( parserFpsScale )
-	CU_DeclareAttributeParser( parserMotionBlurEnd )
+	CU_DeclareAttributeParserBlock( parserMotionBlur, castor3d::TargetContext )
+	CU_DeclareAttributeParserBlock( parserDivider, BlurContext )
+	CU_DeclareAttributeParserBlock( parserSamples, BlurContext )
+	CU_DeclareAttributeParserBlock( parserFpsScale, BlurContext )
+	CU_DeclareAttributeParserBlock( parserMotionBlurEnd, BlurContext )
 }
 
 #endif

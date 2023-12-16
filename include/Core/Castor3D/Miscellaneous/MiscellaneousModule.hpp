@@ -310,6 +310,9 @@ namespace castor3d
 		, uint32_t value );
 	C3D_API void stepProgressBarLocal( ProgressBar * progress
 		, castor::String const & localLabel );
+	C3D_API void setProgressBarLocalStep( ProgressBar * progress
+		, castor::String const & localLabel
+		, uint32_t count );
 
 	//@}
 }

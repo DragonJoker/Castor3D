@@ -34,15 +34,15 @@ namespace castor3d
 			, intensityDivR6{ getMember< sdw::Float >( "intensityDivR6" ) }
 			, farPlaneZ{ getMember< sdw::Float >( "farPlaneZ" ) }
 			, edgeSharpness{ getMember< sdw::Float >( "edgeSharpness" ) }
-			, blurStepSize{ getMember< sdw::Int >( "blurStepSize" ) }
-			, blurRadius{ getMember< sdw::Int >( "blurRadius" ) }
+			, blurStepSize{ getMember< sdw::UInt >( "blurStepSize" ) }
+			, blurRadius{ getMember< sdw::UInt >( "blurRadius" ) }
 			, highQuality{ getMember< sdw::Int >( "highQuality" ) }
 			, blurHighQuality{ getMember< sdw::Int >( "blurHighQuality" ) }
 			, logMaxOffset{ getMember< sdw::Int >( "logMaxOffset" ) }
 			, maxMipLevel{ getMember< sdw::Int >( "maxMipLevel" ) }
 			, minRadius{ getMember< sdw::Float >( "minRadius" ) }
 			, variation{ getMember< sdw::Int >( "variation" ) }
-			, bendStepCount{ getMember< sdw::Int >( "bendStepCount" ) }
+			, bendStepCount{ getMember< sdw::UInt >( "bendStepCount" ) }
 			, bendStepSize{ getMember< sdw::Float >( "bendStepSize" ) }
 		{
 		}
@@ -67,15 +67,15 @@ namespace castor3d
 				result->declMember( "intensityDivR6", ast::type::Kind::eFloat );
 				result->declMember( "farPlaneZ", ast::type::Kind::eFloat );
 				result->declMember( "edgeSharpness", ast::type::Kind::eFloat );
-				result->declMember( "blurStepSize", ast::type::Kind::eInt );
-				result->declMember( "blurRadius", ast::type::Kind::eInt );
+				result->declMember( "blurStepSize", ast::type::Kind::eUInt );
+				result->declMember( "blurRadius", ast::type::Kind::eUInt );
 				result->declMember( "highQuality", ast::type::Kind::eInt );
 				result->declMember( "blurHighQuality", ast::type::Kind::eInt );
 				result->declMember( "logMaxOffset", ast::type::Kind::eInt );
 				result->declMember( "maxMipLevel", ast::type::Kind::eInt );
 				result->declMember( "minRadius", ast::type::Kind::eFloat );
 				result->declMember( "variation", ast::type::Kind::eInt );
-				result->declMember( "bendStepCount", ast::type::Kind::eInt );
+				result->declMember( "bendStepCount", ast::type::Kind::eUInt );
 				result->declMember( "bendStepSize", ast::type::Kind::eFloat );
 			}
 
@@ -167,7 +167,7 @@ namespace castor3d
 		configuration.intensityDivR6 = intersityDivR6;
 		configuration.farPlaneZ = farZ;
 		configuration.edgeSharpness = config.edgeSharpness;
-		configuration.blurStepSize = int32_t( config.blurStepSize.value().value() );
+		configuration.blurStepSize = config.blurStepSize.value().value();
 		configuration.blurRadius = config.blurRadius.value().value();
 		configuration.blurHighQuality = int32_t( config.blurHighQuality ? 1u : 0u );
 		configuration.highQuality = int32_t( config.highQuality ? 1u : 0u );

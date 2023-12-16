@@ -47,6 +47,7 @@
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
 #include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Scene/SceneFileParser.hpp"
 #include "Castor3D/Scene/SceneImporter.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Animation/AnimatedObjectGroup.hpp"
@@ -230,2418 +231,2890 @@ namespace castor3d
 				}
 			}
 		}
-	}
-
-	SceneFileContext & getParserContext( castor::FileParserContext & context )
-	{
-		return *static_cast< SceneFileContext * >( context.getUserContext( "c3d.scene" ) );
-	}
-
-	CU_ImplementAttributeParser( parserMaterial )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( params.empty() )
-		{
-			CU_ParsingError( cuT( "Missing parameter." ) );
-		}
-		else
-		{
-			params[0]->get( parsingContext.strName );
-			parsingContext.material = parsingContext.parser->getEngine()->tryFindMaterial( parsingContext.strName );
-			parsingContext.passIndex = 0u;
-			parsingContext.createMaterial = parsingContext.material == nullptr;
-
-			if ( parsingContext.createMaterial )
-			{
-				parsingContext.ownMaterial = parsingContext.parser->getEngine()->createMaterial( parsingContext.strName
-					, *parsingContext.parser->getEngine()
-					, parsingContext.parser->getEngine()->getDefaultLightingModel() );
-				parsingContext.material = parsingContext.ownMaterial.get();
-			}
-		}
-	}
-	CU_EndAttributePush( CSCNSection::eMaterial )
 		
-	CU_ImplementAttributeParser( parserSamplerState )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( params.empty() )
+		static CU_ImplementAttributeParserNewBlock( parserRootSamplerState, RootContext, SamplerContext )
 		{
-			CU_ParsingError( cuT( "Missing parameter." ) );
-		}
-		else
-		{
-			castor::String name;
-			parsingContext.sampler = parsingContext.parser->getEngine()->tryFindSampler( params[0]->get( name ) );
-
-			if ( !parsingContext.sampler )
+			if ( params.empty() )
 			{
-				parsingContext.ownSampler = parsingContext.parser->getEngine()->createSampler( name
-					, *parsingContext.parser->getEngine() );
-				parsingContext.sampler = parsingContext.ownSampler.get();
-			}
-		}
-	}
-	CU_EndAttributePush( CSCNSection::eSampler )
-
-	CU_ImplementAttributeParser( parserRootScene )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( params.empty() )
-		{
-			CU_ParsingError( cuT( "Missing parameter." ) );
-		}
-		else
-		{
-			castor::String name;
-			params[0]->get( name );
-			parsingContext.scene = parsingContext.parser->getEngine()->tryFindScene( name );
-
-			if ( !parsingContext.scene )
-			{
-				parsingContext.ownScene = castor::makeUnique< Scene >( name
-					, *parsingContext.parser->getEngine() );
-				parsingContext.scene = parsingContext.ownScene.get();
-			}
-
-			parsingContext.mapScenes.insert( std::make_pair( name, parsingContext.scene ) );
-		}
-	}
-	CU_EndAttributePush( CSCNSection::eScene )
-
-	CU_ImplementAttributeParser( parserRootLoadingScreen )
-	{
-		auto & parsingContext = getParserContext( context );
-		parsingContext.ownScene = castor::makeUnique< Scene >( LoadingScreen::SceneName
-			, *parsingContext.parser->getEngine() );
-		parsingContext.scene = parsingContext.ownScene.get();
-	}
-	CU_EndAttributePush( CSCNSection::eScene )
-
-	CU_ImplementAttributeParser( parserRootFont )
-	{
-		auto & parsingContext = getParserContext( context );
-		parsingContext.path.clear();
-
-		if ( params.empty() )
-		{
-			CU_ParsingError( cuT( "Missing parameter." ) );
-		}
-		else
-		{
-			params[0]->get( parsingContext.strName );
-			parsingContext.fontHeight = 0u;
-		}
-	}
-	CU_EndAttributePush( CSCNSection::eFont )
-
-	CU_ImplementAttributeParser( parserRootPanelOverlay )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( params.empty() )
-		{
-			CU_ParsingError( cuT( "Missing parameter." ) );
-		}
-		else
-		{
-			castor::String name;
-			parsingContext.parentOverlays.push_back( std::move( parsingContext.overlay ) );
-			auto & parent = parsingContext.parentOverlays.back();
-			parsingContext.overlay.rptr = parsingContext.parser->getEngine()->tryFindOverlay( params[0]->get( name ) );
-
-			if ( !parsingContext.overlay.rptr )
-			{
-				parsingContext.overlay.uptr = castor::makeUnique< Overlay >( *parsingContext.parser->getEngine()
-					, OverlayType::ePanel
-					, nullptr
-					, parent.rptr );
-				parsingContext.overlay.rptr = parsingContext.overlay.uptr.get();
-				parsingContext.overlay.rptr->rename( name );
-			}
-
-			parsingContext.overlay.rptr->setVisible( false );
-		}
-	}
-	CU_EndAttributePush( CSCNSection::ePanelOverlay )
-
-	CU_ImplementAttributeParser( parserRootBorderPanelOverlay )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( params.empty() )
-		{
-			CU_ParsingError( cuT( "Missing parameter." ) );
-		}
-		else
-		{
-			castor::String name;
-			parsingContext.parentOverlays.push_back( std::move( parsingContext.overlay ) );
-			auto & parent = parsingContext.parentOverlays.back();
-			parsingContext.overlay.rptr = parsingContext.parser->getEngine()->tryFindOverlay( params[0]->get( name ) );
-
-			if ( !parsingContext.overlay.rptr )
-			{
-				parsingContext.overlay.uptr = castor::makeUnique< Overlay >( *parsingContext.parser->getEngine()
-					, OverlayType::eBorderPanel
-					, nullptr
-					, parent.rptr );
-				parsingContext.overlay.rptr = parsingContext.overlay.uptr.get();
-				parsingContext.overlay.rptr->rename( name );
-			}
-
-			parsingContext.overlay.rptr->setVisible( false );
-		}
-	}
-	CU_EndAttributePush( CSCNSection::eBorderPanelOverlay )
-
-	CU_ImplementAttributeParser( parserRootTextOverlay )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( params.empty() )
-		{
-			CU_ParsingError( cuT( "Missing parameter." ) );
-		}
-		else
-		{
-			castor::String name;
-			parsingContext.parentOverlays.push_back( std::move( parsingContext.overlay ) );
-			auto & parent = parsingContext.parentOverlays.back();
-			parsingContext.overlay.rptr = parsingContext.parser->getEngine()->tryFindOverlay( params[0]->get( name ) );
-
-			if ( !parsingContext.overlay.rptr )
-			{
-				parsingContext.overlay.uptr = castor::makeUnique< Overlay >( *parsingContext.parser->getEngine()
-					, OverlayType::eText
-					, nullptr
-					, parent.rptr );
-				parsingContext.overlay.rptr = parsingContext.overlay.uptr.get();
-				parsingContext.overlay.rptr->rename( name );
-			}
-
-			parsingContext.overlay.rptr->setVisible( false );
-		}
-	}
-	CU_EndAttributePush( CSCNSection::eTextOverlay )
-
-	CU_ImplementAttributeParser( parserRootDebugOverlays )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( params.empty() )
-		{
-			CU_ParsingError( cuT( "Missing parameter." ) );
-		}
-		else
-		{
-			bool value;
-			parsingContext.parser->getEngine()->getRenderLoop().showDebugOverlays( params[0]->get( value ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserRootWindow )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( params.empty() )
-		{
-			CU_ParsingError( cuT( "Missing parameter." ) );
-		}
-		else
-		{
-			parsingContext.inWindow = true;
-			params[0]->get( parsingContext.window.name );
-		}
-	}
-	CU_EndAttributePush( CSCNSection::eWindow )
-
-	CU_ImplementAttributeParser( parserRootMaxImageSize )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( params.empty() )
-		{
-			CU_ParsingError( cuT( "Missing [count] parameter." ) );
-		}
-		else
-		{
-			uint32_t value;
-			params[0]->get( value );
-			parsingContext.parser->getEngine()->setMaxImageSize( value );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserRootDebugMaxImageSize )
-	{
-#if !defined( NDEBUG )
-		auto & parsingContext = getParserContext( context );
-
-		if ( params.empty() )
-		{
-			CU_ParsingError( cuT( "Missing [count] parameter." ) );
-		}
-		else
-		{
-			uint32_t value;
-			params[0]->get( value );
-			parsingContext.parser->getEngine()->setMaxImageSize( value );
-		}
-#endif
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserRootLpvGridSize )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( params.empty() )
-		{
-			CU_ParsingError( cuT( "Missing [count] parameter." ) );
-		}
-		else
-		{
-			uint32_t count;
-			params[0]->get( count );
-			parsingContext.parser->getEngine()->setLpvGridSize( count );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserRootDefaultUnit )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( params.empty() )
-		{
-			CU_ParsingError( cuT( "Missing [unit] parameter." ) );
-		}
-		else
-		{
-			parsingContext.parser->getEngine()->setLengthUnit( castor::LengthUnit( params[0]->get< uint32_t >() ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserRootFullLoading )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( params.empty() )
-		{
-			CU_ParsingError( cuT( "Missing [enable] parameter." ) );
-		}
-		else
-		{
-			params[0]->get( parsingContext.enableFullLoading );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserWindowRenderTarget )
-	{
-		auto & parsingContext = getParserContext( context );
-		parsingContext.targetType = TargetType::eWindow;
-		parsingContext.size = { 1u, 1u };
-		parsingContext.srgbPixelFormat = castor::PixelFormat::eUNDEFINED;
-		parsingContext.hdrPixelFormat = castor::PixelFormat::eUNDEFINED;
-	}
-	CU_EndAttributePush( CSCNSection::eRenderTarget )
-
-	CU_ImplementAttributeParser( parserWindowVSync )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !params.empty() )
-		{
-			params[0]->get( parsingContext.window.enableVSync );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserWindowFullscreen )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !params.empty() )
-		{
-			params[0]->get( parsingContext.window.fullscreen );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserWindowAllowHdr )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !params.empty() )
-		{
-			params[0]->get( parsingContext.window.allowHdr );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserWindowEnd )
-	{
-		auto & parsingContext = getParserContext( context );
-		parsingContext.inWindow = false;
-		log::info << "Loaded window [" << parsingContext.window.name
-			<< ", HDR(" << parsingContext.window.allowHdr << ")"
-			<< ", VSYNC(" << parsingContext.window.enableVSync << ")"
-			<< ", FS(" << parsingContext.window.fullscreen << ")]" << std::endl;
-	}
-	CU_EndAttributePop()
-
-	CU_ImplementAttributeParser( parserRenderTargetScene )
-	{
-		auto & parsingContext = getParserContext( context );
-		castor::String name;
-
-		if ( !parsingContext.renderTarget )
-		{
-			CU_ParsingError( cuT( "No target initialised. (Did you forget to set its size and format ?)" ) );
-		}
-		else if ( !params.empty() )
-		{
-			ScenePtrStrMap::iterator it = parsingContext.mapScenes.find( params[0]->get( name ) );
-
-			if ( it != parsingContext.mapScenes.end() )
-			{
-				parsingContext.renderTarget->setScene( *it->second );
+				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
 			else
 			{
-				CU_ParsingError( cuT( "No scene found with name : [" ) + name + cuT( "]." ) );
+				castor::String name;
+				newBlockContext->sampler = blockContext->engine->tryFindSampler( params[0]->get( name ) );
+
+				if ( !newBlockContext->sampler )
+				{
+					newBlockContext->ownSampler = blockContext->engine->createSampler( name
+						, *blockContext->engine );
+					newBlockContext->sampler = newBlockContext->ownSampler.get();
+				}
 			}
 		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserRenderTargetCamera )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.renderTarget )
+		CU_EndAttributePushNewBlock( CSCNSection::eSampler )
+		
+		static CU_ImplementAttributeParserNewBlock( parserSceneSamplerState, SceneContext, SamplerContext )
 		{
-			CU_ParsingError( cuT( "No target initialised. (Did you forget to set its size and format ?)" ) );
-		}
-		else if ( !params.empty() )
-		{
-			if ( parsingContext.renderTarget->getScene() )
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
 			{
 				castor::String name;
+				newBlockContext->sampler = blockContext->root->engine->tryFindSampler( params[0]->get( name ) );
 
-				if ( auto camera = parsingContext.renderTarget->getScene()->findCamera( params[0]->get( name ) ) )
+				if ( !newBlockContext->sampler )
 				{
-					parsingContext.renderTarget->setCamera( *camera );
+					newBlockContext->ownSampler = blockContext->root->engine->createSampler( name
+						, *blockContext->root->engine );
+					newBlockContext->sampler = newBlockContext->ownSampler.get();
+				}
+			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eSampler )
+
+		static CU_ImplementAttributeParserNewBlock( parserRootScene, RootContext, SceneContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				castor::String name;
+				newBlockContext->root = blockContext;
+				newBlockContext->scene = newBlockContext->root->engine->tryFindScene( params[0]->get( name ) );
+
+				if ( !newBlockContext->scene )
+				{
+					newBlockContext->ownScene = castor::makeUnique< Scene >( name
+						, *newBlockContext->root->engine );
+					newBlockContext->scene = newBlockContext->ownScene.get();
+				}
+
+				newBlockContext->root->mapScenes.insert( std::make_pair( name, newBlockContext->scene ) );
+				newBlockContext->overlays.scene = newBlockContext->scene;
+			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eScene )
+
+		static CU_ImplementAttributeParserNewBlock( parserRootLoadingScreen, RootContext, SceneContext )
+		{
+			newBlockContext->root = blockContext;
+			newBlockContext->ownScene = castor::makeUnique< Scene >( LoadingScreen::SceneName
+				, *newBlockContext->root->engine );
+			newBlockContext->scene = newBlockContext->ownScene.get();
+			newBlockContext->overlays.scene = newBlockContext->scene;
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eScene )
+
+		static CU_ImplementAttributeParserNewBlock( parserRootFont, RootContext, FontContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				params[0]->get( newBlockContext->name );
+				newBlockContext->root = blockContext;
+			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eFont )
+
+		static CU_ImplementAttributeParserNewBlock( parserRootMaterial, RootContext, MaterialContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				castor::String name;
+				newBlockContext->root = blockContext;
+				newBlockContext->material = blockContext->engine->tryFindMaterial( params[0]->get( name ) );
+				newBlockContext->passIndex = 0u;
+				newBlockContext->createMaterial = newBlockContext->material == nullptr;
+
+				if ( newBlockContext->createMaterial )
+				{
+					newBlockContext->ownMaterial = blockContext->engine->createMaterial( name
+						, *blockContext->engine
+						, blockContext->engine->getDefaultLightingModel() );
+					newBlockContext->material = newBlockContext->ownMaterial.get();
+				}
+			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eMaterial )
+
+		static CU_ImplementAttributeParserBlock( parserRootPanelOverlay, RootContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				castor::String name;
+				blockContext->overlays.parentOverlays.push_back( std::move( blockContext->overlays.overlay ) );
+				auto & parent = blockContext->overlays.parentOverlays.back();
+				blockContext->overlays.overlay.rptr = blockContext->engine->tryFindOverlay( params[0]->get( name ) );
+
+				if ( !blockContext->overlays.overlay.rptr )
+				{
+					blockContext->overlays.overlay.uptr = castor::makeUnique< Overlay >( *blockContext->engine
+						, OverlayType::ePanel
+						, nullptr
+						, parent.rptr );
+					blockContext->overlays.overlay.rptr = blockContext->overlays.overlay.uptr.get();
+					blockContext->overlays.overlay.rptr->rename( name );
+				}
+
+				blockContext->overlays.overlay.rptr->setVisible( false );
+			}
+		}
+		CU_EndAttributePushBlock( CSCNSection::ePanelOverlay, &blockContext->overlays )
+
+		static CU_ImplementAttributeParserBlock( parserRootBorderPanelOverlay, RootContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				castor::String name;
+				blockContext->overlays.parentOverlays.push_back( std::move( blockContext->overlays.overlay ) );
+				auto & parent = blockContext->overlays.parentOverlays.back();
+				blockContext->overlays.overlay.rptr = blockContext->engine->tryFindOverlay( params[0]->get( name ) );
+
+				if ( !blockContext->overlays.overlay.rptr )
+				{
+					blockContext->overlays.overlay.uptr = castor::makeUnique< Overlay >( *blockContext->engine
+						, OverlayType::eBorderPanel
+						, nullptr
+						, parent.rptr );
+					blockContext->overlays.overlay.rptr = blockContext->overlays.overlay.uptr.get();
+					blockContext->overlays.overlay.rptr->rename( name );
+				}
+
+				blockContext->overlays.overlay.rptr->setVisible( false );
+			}
+		}
+		CU_EndAttributePushBlock( CSCNSection::eBorderPanelOverlay, &blockContext->overlays )
+
+		static CU_ImplementAttributeParserBlock( parserRootTextOverlay, RootContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				castor::String name;
+				blockContext->overlays.parentOverlays.push_back( std::move( blockContext->overlays.overlay ) );
+				auto & parent = blockContext->overlays.parentOverlays.back();
+				blockContext->overlays.overlay.rptr = blockContext->engine->tryFindOverlay( params[0]->get( name ) );
+
+				if ( !blockContext->overlays.overlay.rptr )
+				{
+					blockContext->overlays.overlay.uptr = castor::makeUnique< Overlay >( *blockContext->engine
+						, OverlayType::eText
+						, nullptr
+						, parent.rptr );
+					blockContext->overlays.overlay.rptr = blockContext->overlays.overlay.uptr.get();
+					blockContext->overlays.overlay.rptr->rename( name );
+				}
+
+				blockContext->overlays.overlay.rptr->setVisible( false );
+			}
+		}
+		CU_EndAttributePushBlock( CSCNSection::eTextOverlay, &blockContext->overlays )
+
+		static CU_ImplementAttributeParserBlock( parserRootDebugOverlays, RootContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				blockContext->engine->getRenderLoop().showDebugOverlays( params[0]->get< bool >() );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserNewBlock( parserRootWindow, RootContext, WindowContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				params[0]->get( newBlockContext->window.name );
+				newBlockContext->root = blockContext;
+			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eWindow )
+
+		static CU_ImplementAttributeParserBlock( parserRootMaxImageSize, RootContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing [count] parameter." ) );
+			}
+			else
+			{
+				blockContext->engine->setMaxImageSize( params[0]->get< uint32_t >() );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserRootDebugMaxImageSize, RootContext )
+		{
+	#if !defined( NDEBUG )
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing [count] parameter." ) );
+			}
+			else
+			{
+				blockContext->engine->setMaxImageSize( params[0]->get< uint32_t >() );
+			}
+	#endif
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserRootLpvGridSize, RootContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing [count] parameter." ) );
+			}
+			else
+			{
+				blockContext->engine->setLpvGridSize( params[0]->get< uint32_t >() );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserRootDefaultUnit, RootContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing [unit] parameter." ) );
+			}
+			else
+			{
+				blockContext->engine->setLengthUnit( castor::LengthUnit( params[0]->get< uint32_t >() ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserRootFullLoading, RootContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing [enable] parameter." ) );
+			}
+			else
+			{
+				params[0]->get( blockContext->enableFullLoading );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserNewBlock( parserWindowRenderTarget, WindowContext, TargetContext )
+		{
+			newBlockContext->window = &blockContext->window;
+			newBlockContext->targetType = TargetType::eWindow;
+			newBlockContext->size = { 1u, 1u };
+			newBlockContext->srgbPixelFormat = castor::PixelFormat::eUNDEFINED;
+			newBlockContext->hdrPixelFormat = castor::PixelFormat::eUNDEFINED;
+			newBlockContext->root = blockContext->root;
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eRenderTarget )
+
+		static CU_ImplementAttributeParserBlock( parserWindowVSync, WindowContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				params[0]->get( blockContext->window.enableVSync );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserWindowFullscreen, WindowContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				params[0]->get( blockContext->window.fullscreen );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserWindowAllowHdr, WindowContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				params[0]->get( blockContext->window.allowHdr );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserWindowEnd, WindowContext )
+		{
+			log::info << "Loaded window [" << blockContext->window.name
+				<< ", HDR(" << blockContext->window.allowHdr << ")"
+				<< ", VSYNC(" << blockContext->window.enableVSync << ")"
+				<< ", FS(" << blockContext->window.fullscreen << ")]" << std::endl;
+			blockContext->root->window = std::move( blockContext->window );
+		}
+		CU_EndAttributePop()
+
+		static CU_ImplementAttributeParserBlock( parserRenderTargetScene, TargetContext )
+		{
+			if ( !blockContext->renderTarget )
+			{
+				CU_ParsingError( cuT( "No target initialised. (Did you forget to set its size and format ?)" ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				castor::String name;
+				ScenePtrStrMap::iterator it = blockContext->root->mapScenes.find( params[0]->get( name ) );
+
+				if ( it != blockContext->root->mapScenes.end() )
+				{
+					blockContext->renderTarget->setScene( *it->second );
 				}
 				else
 				{
-					CU_ParsingError( cuT( "Camera [" ) + name + cuT( "] was not found." ) );
-				}
-			}
-			else
-			{
-				CU_ParsingError( cuT( "No scene initialised for this window, set scene before camera." ) );
-			}
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserRenderTargetSize )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !params.empty() )
-		{
-			params[0]->get( parsingContext.size );
-
-			if ( parsingContext.srgbPixelFormat != castor::PixelFormat::eUNDEFINED
-				&& parsingContext.hdrPixelFormat != castor::PixelFormat::eUNDEFINED )
-			{
-				bool allowHdr = parsingContext.targetType == TargetType::eWindow
-					? parsingContext.window.allowHdr
-					: true;
-				parsingContext.renderTarget = parsingContext.parser->getEngine()->getRenderTargetCache().add( parsingContext.targetType
-					, parsingContext.size
-					, allowHdr ? parsingContext.hdrPixelFormat : parsingContext.srgbPixelFormat );
-				parsingContext.renderTarget->enableFullLoading( parsingContext.enableFullLoading );
-			}
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserRenderTargetFormat )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !params.empty() )
-		{
-			params[0]->get( parsingContext.srgbPixelFormat );
-			parsingContext.hdrPixelFormat = parsingContext.srgbPixelFormat;
-
-			if ( parsingContext.srgbPixelFormat < castor::PixelFormat::eD16_UNORM )
-			{
-				if ( parsingContext.size != castor::Size{ 1u, 1u } )
-				{
-					bool allowHdr = parsingContext.targetType == TargetType::eWindow
-						? parsingContext.window.allowHdr
-						: true;
-					parsingContext.renderTarget = parsingContext.parser->getEngine()->getRenderTargetCache().add( parsingContext.targetType
-						, parsingContext.size
-						, allowHdr ? parsingContext.hdrPixelFormat : parsingContext.srgbPixelFormat );
-					parsingContext.renderTarget->enableFullLoading( parsingContext.enableFullLoading );
-				}
-			}
-			else
-			{
-				CU_ParsingError( cuT( "Wrong format for colour" ) );
-			}
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserRenderTargetSRGBFormat )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !params.empty() )
-		{
-			params[0]->get( parsingContext.srgbPixelFormat );
-
-			if ( parsingContext.srgbPixelFormat < castor::PixelFormat::eD16_UNORM )
-			{
-				if ( parsingContext.size != castor::Size{ 1u, 1u }
-					&& parsingContext.hdrPixelFormat != castor::PixelFormat::eUNDEFINED )
-				{
-					bool allowHdr = parsingContext.targetType == TargetType::eWindow
-						? parsingContext.window.allowHdr
-						: true;
-					parsingContext.renderTarget = parsingContext.parser->getEngine()->getRenderTargetCache().add( parsingContext.targetType
-						, parsingContext.size
-						, allowHdr ? parsingContext.hdrPixelFormat : parsingContext.srgbPixelFormat );
-					parsingContext.renderTarget->enableFullLoading( parsingContext.enableFullLoading );
-				}
-			}
-			else
-			{
-				CU_ParsingError( cuT( "Wrong format for colour" ) );
-			}
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserRenderTargetHDRFormat )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !params.empty() )
-		{
-			params[0]->get( parsingContext.hdrPixelFormat );
-
-			if ( parsingContext.hdrPixelFormat < castor::PixelFormat::eD16_UNORM )
-			{
-				if ( parsingContext.size != castor::Size{ 1u, 1u }
-					&& parsingContext.srgbPixelFormat != castor::PixelFormat::eUNDEFINED )
-				{
-					bool allowHdr = parsingContext.targetType == TargetType::eWindow
-						? parsingContext.window.allowHdr
-						: true;
-					parsingContext.renderTarget = parsingContext.parser->getEngine()->getRenderTargetCache().add( parsingContext.targetType
-						, parsingContext.size
-						, allowHdr ? parsingContext.hdrPixelFormat : parsingContext.srgbPixelFormat );
-					parsingContext.renderTarget->enableFullLoading( parsingContext.enableFullLoading );
-				}
-			}
-			else
-			{
-				CU_ParsingError( cuT( "Wrong format for colour" ) );
-			}
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserRenderTargetStereo )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.renderTarget )
-		{
-			CU_ParsingError( cuT( "No target initialised. (Did you forget to set its size and format ?)" ) );
-		}
-		else if ( !params.empty() )
-		{
-			float rIntraOcularDistance;
-			params[0]->get( rIntraOcularDistance );
-
-			if ( rIntraOcularDistance > 0 )
-			{
-				//parsingContext->renderTarget->setStereo( true );
-				//parsingContext->renderTarget->setIntraOcularDistance( rIntraOcularDistance );
-			}
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserRenderTargetPostEffect )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.renderTarget )
-		{
-			CU_ParsingError( cuT( "No target initialised. (Did you forget to set its size and format ?)" ) );
-		}
-		else if ( !params.empty() )
-		{
-			castor::String name;
-			params[0]->get( name );
-			Parameters parameters;
-
-			if ( params.size() > 1 )
-			{
-				castor::String tmp;
-				parameters.parse( params[1]->get( tmp ) );
-			}
-
-			auto effect = parsingContext.renderTarget->getPostEffect( name );
-
-			if ( !effect )
-			{
-				CU_ParsingError( cuT( "PostEffect [" ) + name + cuT( "] is not registered, make sure you've got the matching plug-in installed." ) );
-			}
-			else
-			{
-				effect->enable( true );
-				effect->setParameters( std::move( parameters ) );
-			}
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserRenderTargetToneMapping )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.renderTarget )
-		{
-			CU_ParsingError( cuT( "No target initialised. (Did you forget to set its size and format ?)" ) );
-		}
-		else if ( params.empty() )
-		{
-			CU_ParsingError( cuT( "Missing parameter." ) );
-		}
-		else
-		{
-			castor::String name;
-			params[0]->get( name );
-			Parameters parameters;
-
-			if ( params.size() > 1 )
-			{
-				castor::String tmp;
-				parameters.parse( params[1]->get( tmp ) );
-			}
-
-			parsingContext.renderTarget->setToneMappingType( name, parameters );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserRenderTargetSsao )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.renderTarget )
-		{
-			CU_ParsingError( cuT( "No target initialised. (Did you forget to set its size and format ?)" ) );
-		}
-	}
-	CU_EndAttributePush( CSCNSection::eSsao )
-
-	CU_ImplementAttributeParser( parserRenderTargetFullLoading )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( params.empty() )
-		{
-			CU_ParsingError( cuT( "Missing [enable] parameter." ) );
-		}
-		else
-		{
-			parsingContext.renderTarget->enableFullLoading( params[0]->get< bool >() );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserRenderTargetEnd )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.renderTarget )
-		{
-			CU_ParsingError( cuT( "No target initialised. (Did you forget to set its size and format ?)" ) );
-		}
-		else
-		{
-			auto target = parsingContext.renderTarget;
-			log::info << "Loaded target [" << target->getName()
-				<< ", FMT(" << ashes::getName( VkFormat( target->getPixelFormat() ) ) << ")"
-				<< ", DIM(" << target->getSize() << ")]" << std::endl;
-
-			if ( parsingContext.inWindow )
-			{
-				parsingContext.window.renderTarget = std::move( parsingContext.renderTarget );
-			}
-			else
-			{
-				parsingContext.texture.renderTarget = std::move( parsingContext.renderTarget );
-			}
-		}
-	}
-	CU_EndAttributePop()
-
-	CU_ImplementAttributeParser( parserSamplerMinFilter )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( auto sampler = parsingContext.sampler )
-		{
-			uint32_t uiMode;
-			params[0]->get( uiMode );
-			sampler->setMinFilter( VkFilter( uiMode ) );
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No sampler initialised." ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserSamplerMagFilter )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( auto sampler = parsingContext.sampler )
-		{
-			uint32_t uiMode;
-			params[0]->get( uiMode );
-			sampler->setMagFilter( VkFilter( uiMode ) );
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No sampler initialised." ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserSamplerMipFilter )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( auto sampler = parsingContext.sampler )
-		{
-			uint32_t uiMode;
-			params[0]->get( uiMode );
-			sampler->setMipFilter( VkSamplerMipmapMode( uiMode ) );
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No sampler initialised." ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserSamplerMinLod )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( auto sampler = parsingContext.sampler )
-		{
-			float rValue = -1000;
-			params[0]->get( rValue );
-
-			if ( rValue >= -1000 && rValue <= 1000 )
-			{
-				sampler->setMinLod( rValue );
-			}
-			else
-			{
-				CU_ParsingError( cuT( "LOD out of bounds [-1000,1000] : " ) + castor::string::toString( rValue ) );
-			}
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No sampler initialised." ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserSamplerMaxLod )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( auto sampler = parsingContext.sampler )
-		{
-			float rValue = 1000;
-			params[0]->get( rValue );
-
-			if ( rValue >= -1000 && rValue <= 1000 )
-			{
-				sampler->setMaxLod( rValue );
-			}
-			else
-			{
-				CU_ParsingError( cuT( "LOD out of bounds [-1000,1000] : " ) + castor::string::toString( rValue ) );
-			}
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No sampler initialised." ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserSamplerLodBias )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( auto sampler = parsingContext.sampler )
-		{
-			float rValue = 1000;
-			params[0]->get( rValue );
-
-			if ( rValue >= -1000 && rValue <= 1000 )
-			{
-				sampler->setLodBias( rValue );
-			}
-			else
-			{
-				CU_ParsingError( cuT( "LOD out of bounds [-1000,1000] : " ) + castor::string::toString( rValue ) );
-			}
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No sampler initialised." ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserSamplerUWrapMode )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( auto sampler = parsingContext.sampler )
-		{
-			uint32_t uiMode;
-			params[0]->get( uiMode );
-			sampler->setWrapS( VkSamplerAddressMode( uiMode ) );
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No sampler initialised." ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserSamplerVWrapMode )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( auto sampler = parsingContext.sampler )
-		{
-			uint32_t uiMode;
-			params[0]->get( uiMode );
-			sampler->setWrapT( VkSamplerAddressMode( uiMode ) );
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No sampler initialised." ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserSamplerWWrapMode )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( auto sampler = parsingContext.sampler )
-		{
-			uint32_t uiMode;
-			params[0]->get( uiMode );
-			sampler->setWrapR( VkSamplerAddressMode( uiMode ) );
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No sampler initialised." ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserSamplerBorderColour )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( auto sampler = parsingContext.sampler )
-		{
-			uint32_t colour;
-			params[0]->get( colour );
-			sampler->setBorderColour( VkBorderColor( colour ) );
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No sampler initialised." ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserSamplerAnisotropicFiltering )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( auto sampler = parsingContext.sampler )
-		{
-			bool value;
-			params[0]->get( value );
-			sampler->enableAnisotropicFiltering( value );
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No sampler initialised." ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserSamplerMaxAnisotropy )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( auto sampler = parsingContext.sampler )
-		{
-			float rValue = 1000;
-			params[0]->get( rValue );
-			sampler->setMaxAnisotropy( rValue );
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No sampler initialised." ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserSamplerComparisonMode )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( auto sampler = parsingContext.sampler )
-		{
-			uint32_t mode;
-			params[0]->get( mode );
-			sampler->enableCompare( bool( mode ) );
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No sampler initialised." ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserSamplerComparisonFunc )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( auto sampler = parsingContext.sampler )
-		{
-			uint32_t uiMode;
-			params[0]->get( uiMode );
-			sampler->setCompareOp( VkCompareOp( uiMode ) );
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No sampler initialised." ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserSamplerEnd )
-	{
-		auto & parsingContext = getParserContext( context );
-		auto sampler = parsingContext.sampler;
-
-		if ( !parsingContext.ownSampler
-			&& !sampler )
-		{
-			CU_ParsingError( cuT( "No sampler initialised." ) );
-		}
-		else
-		{
-			log::info << "Loaded sampler [" << parsingContext.sampler->getName() << "]" << std::endl;
-
-			if ( parsingContext.ownSampler )
-			{
-				parsingContext.parser->getEngine()->addSampler( parsingContext.ownSampler->getName()
-					, parsingContext.ownSampler
-					, true );
-			}
-
-			parsingContext.sampler = {};
-		}
-	}
-	CU_EndAttributePop()
-
-	CU_ImplementAttributeParser( parserSceneBkColour )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.scene )
-		{
-			CU_ParsingError( cuT( "No scene initialised." ) );
-		}
-		else if ( !params.empty() )
-		{
-			castor::RgbColour clrBackground;
-			params[0]->get( clrBackground );
-			parsingContext.scene->setBackgroundColour( clrBackground );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserSceneBkImage )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.scene )
-		{
-			CU_ParsingError( cuT( "No scene initialised." ) );
-		}
-		else if ( !params.empty() )
-		{
-			auto imgBackground = castor::makeUnique< ImageBackground >( *parsingContext.parser->getEngine()
-				, *parsingContext.scene );
-			castor::Path path;
-			imgBackground->setImage( context.file.getPath(), params[0]->get( path ) );
-			parsingContext.scene->setBackground( castor::ptrRefCast< SceneBackground >( imgBackground ) );
-			parsingContext.skybox.reset();
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserSceneFont )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.scene )
-		{
-			CU_ParsingError( cuT( "No scene initialised." ) );
-		}
-		else if ( !params.empty() )
-		{
-			parsingContext.path.clear();
-			params[0]->get( parsingContext.strName );
-		}
-	}
-	CU_EndAttributePush( CSCNSection::eFont )
-
-	CU_ImplementAttributeParser( parserSceneCamera )
-	{
-		auto & parsingContext = getParserContext( context );
-		parsingContext.viewport.reset();
-		parsingContext.hdrConfig = {};
-
-		if ( !parsingContext.scene )
-		{
-			CU_ParsingError( cuT( "No scene initialised." ) );
-		}
-		else if ( !params.empty() )
-		{
-			params[0]->get( parsingContext.strName );
-		}
-	}
-	CU_EndAttributePush( CSCNSection::eCamera )
-
-	CU_ImplementAttributeParser( parserSceneLight )
-	{
-		auto & parsingContext = getParserContext( context );
-		parsingContext.light = {};
-		parsingContext.strName.clear();
-
-		if ( !parsingContext.scene )
-		{
-			CU_ParsingError( cuT( "No scene initialised." ) );
-		}
-		else if ( !params.empty() )
-		{
-			params[0]->get( parsingContext.strName );
-		}
-	}
-	CU_EndAttributePush( CSCNSection::eLight )
-
-	CU_ImplementAttributeParser( parserSceneCameraNode )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.scene )
-		{
-			CU_ParsingError( cuT( "No scene initialised." ) );
-		}
-		else if ( !params.empty() )
-		{
-			parsingContext.nodeConfig = {};
-			params[0]->get( parsingContext.nodeConfig.name );
-			parsingContext.nodeConfig.isCameraNode = true;
-			parsingContext.nodeConfig.parent = parsingContext.scene->getCameraRootNode();
-		}
-	}
-	CU_EndAttributePush( CSCNSection::eNode )
-
-	CU_ImplementAttributeParser( parserSceneSceneNode )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.scene )
-		{
-			CU_ParsingError( cuT( "No scene initialised." ) );
-		}
-		else if ( !params.empty() )
-		{
-			parsingContext.nodeConfig = {};
-			params[0]->get( parsingContext.nodeConfig.name );
-			parsingContext.nodeConfig.isCameraNode = false;
-			parsingContext.nodeConfig.parent = parsingContext.scene->getObjectRootNode();
-		}
-	}
-	CU_EndAttributePush( CSCNSection::eNode )
-
-	CU_ImplementAttributeParser( parserSceneObject )
-	{
-		auto & parsingContext = getParserContext( context );
-		parsingContext.geometry = {};
-		castor::String name;
-
-		if ( !parsingContext.scene )
-		{
-			CU_ParsingError( cuT( "No scene initialised." ) );
-		}
-		else if ( !params.empty() )
-		{
-			params[0]->get( name );
-			parsingContext.ownGeometry = parsingContext.scene->createGeometry( name
-				, *parsingContext.scene );
-			parsingContext.geometry = parsingContext.ownGeometry.get();
-		}
-	}
-	CU_EndAttributePush( CSCNSection::eObject )
-
-	CU_ImplementAttributeParser( parserSceneAmbientLight )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.scene )
-		{
-			CU_ParsingError( cuT( "No scene initialised." ) );
-		}
-		else if ( !params.empty() )
-		{
-			castor::RgbColour clColour;
-			params[0]->get( clColour );
-			parsingContext.scene->setAmbientLight( clColour );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserSceneImport )
-	{
-		auto & parsingContext = getParserContext( context );
-		parsingContext.sceneImportConfig = {};
-	}
-	CU_EndAttributePush( CSCNSection::eSceneImport )
-
-	CU_ImplementAttributeParser( parserSceneBillboard )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.scene )
-		{
-			CU_ParsingError( cuT( "No scene initialised." ) );
-		}
-		else if ( !params.empty() )
-		{
-			castor::String name;
-			params[0]->get( name );
-			parsingContext.ownBillboards = castor::makeUnique< BillboardList >( name, *parsingContext.scene );
-			parsingContext.billboards = parsingContext.ownBillboards.get();
-		}
-	}
-	CU_EndAttributePush( CSCNSection::eBillboard )
-
-	CU_ImplementAttributeParser( parserSceneAnimatedObjectGroup )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.scene )
-		{
-			CU_ParsingError( cuT( "No scene initialised." ) );
-		}
-		else if ( !params.empty() )
-		{
-			castor::String name;
-			params[0]->get( name );
-			parsingContext.animGroup = parsingContext.scene->addNewAnimatedObjectGroup( name, *parsingContext.scene );
-		}
-	}
-	CU_EndAttributePush( CSCNSection::eAnimGroup )
-
-	CU_ImplementAttributeParser( parserScenePanelOverlay )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.scene )
-		{
-			CU_ParsingError( cuT( "No scene initialised." ) );
-		}
-		else if ( !params.empty() )
-		{
-			castor::String name;
-			parsingContext.parentOverlays.push_back( std::move( parsingContext.overlay ) );
-			auto & parent = parsingContext.parentOverlays.back();
-			parsingContext.overlay.rptr = parsingContext.scene->tryFindOverlay( params[0]->get( name ) );
-
-			if ( !parsingContext.overlay.rptr )
-			{
-				parsingContext.overlay.uptr = castor::makeUnique< Overlay >( *parsingContext.parser->getEngine()
-					, OverlayType::ePanel
-					, parsingContext.scene
-					, parent.rptr );
-				parsingContext.overlay.rptr = parsingContext.overlay.uptr.get();
-				parsingContext.overlay.rptr->rename( name );
-			}
-
-			parsingContext.overlay.rptr->setVisible( false );
-		}
-	}
-	CU_EndAttributePush( CSCNSection::ePanelOverlay )
-
-	CU_ImplementAttributeParser( parserSceneBorderPanelOverlay )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.scene )
-		{
-			CU_ParsingError( cuT( "No scene initialised." ) );
-		}
-		else if ( !params.empty() )
-		{
-			castor::String name;
-			parsingContext.parentOverlays.push_back( std::move( parsingContext.overlay ) );
-			auto & parent = parsingContext.parentOverlays.back();
-			parsingContext.overlay.rptr = parsingContext.scene->tryFindOverlay( params[0]->get( name ) );
-
-			if ( !parsingContext.overlay.rptr )
-			{
-				parsingContext.overlay.uptr = castor::makeUnique< Overlay >( *parsingContext.parser->getEngine()
-					, OverlayType::eBorderPanel
-					, parsingContext.scene
-					, parent.rptr );
-				parsingContext.overlay.rptr = parsingContext.overlay.uptr.get();
-				parsingContext.overlay.rptr->rename( name );
-			}
-
-			parsingContext.overlay.rptr->setVisible( false );
-		}
-	}
-	CU_EndAttributePush( CSCNSection::eBorderPanelOverlay )
-
-	CU_ImplementAttributeParser( parserSceneTextOverlay )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.scene )
-		{
-			CU_ParsingError( cuT( "No scene initialised." ) );
-		}
-		else if ( !params.empty() )
-		{
-			castor::String name;
-			parsingContext.parentOverlays.push_back( std::move( parsingContext.overlay ) );
-			auto & parent = parsingContext.parentOverlays.back();
-			parsingContext.overlay.rptr = parsingContext.scene->tryFindOverlay( params[0]->get( name ) );
-
-			if ( !parsingContext.overlay.rptr )
-			{
-				parsingContext.overlay.uptr = castor::makeUnique< Overlay >( *parsingContext.parser->getEngine()
-					, OverlayType::eText
-					, parsingContext.scene
-					, parent.rptr );
-				parsingContext.overlay.rptr = parsingContext.overlay.uptr.get();
-				parsingContext.overlay.rptr->rename( name );
-			}
-
-			parsingContext.overlay.rptr->setVisible( false );
-		}
-	}
-	CU_EndAttributePush( CSCNSection::eTextOverlay )
-
-	CU_ImplementAttributeParser( parserSceneSkybox )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.scene )
-		{
-			CU_ParsingError( cuT( "No scene initialised." ) );
-		}
-		else
-		{
-			parsingContext.skybox = castor::makeUnique< SkyboxBackground >( *parsingContext.parser->getEngine()
-					, *parsingContext.scene );
-		}
-	}
-	CU_EndAttributePush( CSCNSection::eSkybox )
-
-	CU_ImplementAttributeParser( parserSceneFogType )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.scene )
-		{
-			CU_ParsingError( cuT( "No scene initialised." ) );
-		}
-		else
-		{
-			uint32_t value;
-			params[0]->get( value );
-			parsingContext.scene->getFog().setType( FogType( value ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserSceneFogDensity )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.scene )
-		{
-			CU_ParsingError( cuT( "No scene initialised." ) );
-		}
-		else
-		{
-			float value;
-			params[0]->get( value );
-			parsingContext.scene->getFog().setDensity( value );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserSceneParticleSystem )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.scene )
-		{
-			CU_ParsingError( cuT( "No scene initialised." ) );
-		}
-		else if ( params.empty() )
-		{
-			CU_ParsingError( cuT( "Missing parameter." ) );
-		}
-		else
-		{
-			castor::String value;
-			params[0]->get( value );
-			parsingContext.strName = value;
-			parsingContext.particleCount = 0u;
-			parsingContext.material = {};
-		}
-	}
-	CU_EndAttributePush( CSCNSection::eParticleSystem )
-
-	CU_ImplementAttributeParser( parserVoxelConeTracing )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.scene )
-		{
-			CU_ParsingError( cuT( "No scene initialised." ) );
-		}
-	}
-	CU_EndAttributePush( CSCNSection::eVoxelConeTracing )
-
-	CU_ImplementAttributeParser( parserSceneEnd )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.scene )
-		{
-			CU_ParsingError( cuT( "No scene initialised." ) );
-		}
-		else
-		{
-			log::info << "Loaded scene [" << parsingContext.scene->getName() << "]" << std::endl;
-
-			if ( parsingContext.scene->getName() == LoadingScreen::SceneName )
-			{
-				parsingContext.parser->getEngine()->setLoadingScene( std::move( parsingContext.ownScene ) );
-			}
-			else
-			{
-				parsingContext.parser->getEngine()->addScene( parsingContext.scene->getName()
-					, parsingContext.ownScene
-					, true );
-				parsingContext.scene = {};
-			}
-		}
-	}
-	CU_EndAttributePop()
-
-	CU_ImplementAttributeParser( parserSceneImportFile )
-	{
-		auto & parsingContext = getParserContext( context );
-		castor::Path path;
-		castor::Path pathFile = context.file.getPath() / params[0]->get( path );
-		parsingContext.sceneImportConfig.files.push_back( pathFile );
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserSceneImportAnimFile )
-	{
-		auto & parsingContext = getParserContext( context );
-		castor::Path path;
-		castor::Path pathFile = context.file.getPath() / params[0]->get( path );
-		parsingContext.sceneImportConfig.animFiles.push_back( pathFile );
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserSceneImportPrefix )
-	{
-		auto & parsingContext = getParserContext( context );
-		params[0]->get( parsingContext.sceneImportConfig.prefix );
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserSceneImportRescale )
-	{
-		auto & parsingContext = getParserContext( context );
-		params[0]->get( parsingContext.sceneImportConfig.rescale );
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserSceneImportPitch )
-	{
-		auto & parsingContext = getParserContext( context );
-		params[0]->get( parsingContext.sceneImportConfig.pitch );
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserSceneImportYaw )
-	{
-		auto & parsingContext = getParserContext( context );
-		params[0]->get( parsingContext.sceneImportConfig.yaw );
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserSceneImportRoll )
-	{
-		auto & parsingContext = getParserContext( context );
-		params[0]->get( parsingContext.sceneImportConfig.roll );
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserSceneImportNoOptimisations )
-	{
-		auto & parsingContext = getParserContext( context );
-		params[0]->get( parsingContext.sceneImportConfig.noOptimisations );
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserSceneImportEmissiveMult )
-	{
-		auto & parsingContext = getParserContext( context );
-		params[0]->get( parsingContext.sceneImportConfig.emissiveMult );
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserSceneImportTexRemap )
-	{
-		auto & parsingContext = getParserContext( context );
-		parsingContext.sceneImportConfig.textureRemaps.clear();
-		parsingContext.sceneImportConfig.textureRemapIt = parsingContext.sceneImportConfig.textureRemaps.end();
-	}
-	CU_EndAttributePush( CSCNSection::eTextureRemap )
-
-	CU_ImplementAttributeParser( parserSceneImportCenterCamera )
-	{
-		auto & parsingContext = getParserContext( context );
-		if ( params.empty() )
-		{
-			CU_ParsingError( cuT( "Missing name parameter" ) );
-		}
-		else
-		{
-			parsingContext.sceneImportConfig.centerCamera = params[0]->get< castor::String >();
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserSceneImportPreferredImporter )
-	{
-		auto & parsingContext = getParserContext( context );
-		if ( params.empty() )
-		{
-			CU_ParsingError( cuT( "Missing name parameter" ) );
-		}
-		else
-		{
-			parsingContext.sceneImportConfig.preferredImporter = params[0]->get< castor::String >();
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserSceneImportEnd )
-	{
-		auto & parsingContext = getParserContext( context );
-		Engine * engine = parsingContext.parser->getEngine();
-
-		if ( parsingContext.sceneImportConfig.files.empty() )
-		{
-			CU_ParsingError( cuT( "No file chosen to import" ) );
-		}
-		else
-		{
-			Parameters parameters;
-
-			if ( parsingContext.sceneImportConfig.rescale != 1.0f )
-			{
-				parameters.add( cuT( "rescale" ), parsingContext.sceneImportConfig.rescale );
-			}
-
-			if ( parsingContext.sceneImportConfig.pitch != 0.0f )
-			{
-				parameters.add( cuT( "pitch" ), parsingContext.sceneImportConfig.pitch );
-			}
-
-			if ( parsingContext.sceneImportConfig.yaw != 0.0f )
-			{
-				parameters.add( cuT( "yaw" ), parsingContext.sceneImportConfig.yaw );
-			}
-
-			if ( parsingContext.sceneImportConfig.roll != 0.0f )
-			{
-				parameters.add( cuT( "roll" ), parsingContext.sceneImportConfig.roll );
-			}
-
-			if ( !parsingContext.sceneImportConfig.prefix.empty() )
-			{
-				parameters.add( cuT( "prefix" ), parsingContext.sceneImportConfig.prefix );
-			}
-
-			if ( parsingContext.sceneImportConfig.noOptimisations )
-			{
-				parameters.add( cuT( "no_optimisations" ), parsingContext.sceneImportConfig.noOptimisations );
-			}
-
-			if ( parsingContext.sceneImportConfig.emissiveMult != 1.0f )
-			{
-				parameters.add( cuT( "emissive_mult" ), parsingContext.sceneImportConfig.emissiveMult );
-			}
-
-			if ( !parsingContext.sceneImportConfig.centerCamera.empty() )
-			{
-				parameters.add( cuT( "center_camera" ), parsingContext.sceneImportConfig.centerCamera );
-			}
-
-			if ( !parsingContext.sceneImportConfig.preferredImporter.empty() )
-			{
-				parameters.add( cuT( "preferred_importer" ), parsingContext.sceneImportConfig.preferredImporter );
-			}
-
-			SceneImporter importer{ *engine };
-
-			for ( auto & file : parsingContext.sceneImportConfig.files )
-			{
-				if ( !importer.import( *parsingContext.scene
-					, file
-					, parameters
-					, parsingContext.sceneImportConfig.textureRemaps ) )
-				{
-					CU_ParsingError( cuT( "External scene Import failed" ) );
-				}
-			}
-
-			for ( auto & file : parsingContext.sceneImportConfig.animFiles )
-			{
-				if ( !importer.importAnimations( *parsingContext.scene
-					, file
-					, parameters ) )
-				{
-					CU_ParsingError( cuT( "External scene Import failed" ) );
+					CU_ParsingError( cuT( "No scene found with name : [" ) + name + cuT( "]." ) );
 				}
 			}
 		}
+		CU_EndAttribute()
 
-		parsingContext.sceneImportConfig = {};
-	}
-	CU_EndAttributePop()
-
-	CU_ImplementAttributeParser( parserMesh )
-	{
-		auto & parsingContext = getParserContext( context );
-		castor::String name;
-		params[0]->get( name );
-
-		if ( parsingContext.scene )
+		static CU_ImplementAttributeParserBlock( parserRenderTargetCamera, TargetContext )
 		{
-			parsingContext.mesh = parsingContext.scene->tryFindMesh( name );
-
-			if ( !parsingContext.mesh )
+			if ( !blockContext->renderTarget )
 			{
-				parsingContext.ownMesh = parsingContext.scene->createMesh( name
-					, *parsingContext.scene );
-				parsingContext.mesh = parsingContext.ownMesh.get();
+				CU_ParsingError( cuT( "No target initialised. (Did you forget to set its size and format ?)" ) );
 			}
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No scene initialised" ) );
-		}
-	}
-	CU_EndAttributePush( CSCNSection::eMesh )
-
-	CU_ImplementAttributeParser( parserSkeleton )
-	{
-		auto & parsingContext = getParserContext( context );
-		castor::String name;
-		params[0]->get( name );
-
-		if ( parsingContext.scene )
-		{
-			parsingContext.skeleton = parsingContext.scene->tryFindSkeleton( name );
-
-			if ( !parsingContext.skeleton )
+			else if ( params.empty() )
 			{
-				parsingContext.skeleton = parsingContext.scene->addNewSkeleton( name
-					, *parsingContext.scene );
-			}
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No scene initialised" ) );
-		}
-	}
-	CU_EndAttributePush( CSCNSection::eSkeleton )
-
-	CU_ImplementAttributeParser( parserDirectionalShadowCascades )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.scene )
-		{
-			CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
-		}
-		else if ( !params.empty() )
-		{
-			uint32_t value;
-			params[0]->get( value );
-			parsingContext.scene->setDirectionalShadowCascades( value );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserParticleSystemParent )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.scene )
-		{
-			CU_ParsingError( cuT( "No scene initialised." ) );
-		}
-		else if ( params.empty() )
-		{
-			CU_ParsingError( cuT( "Missing parameter." ) );
-		}
-		else
-		{
-			castor::String value;
-			params[0]->get( value );
-
-			if ( auto node = parsingContext.scene->tryFindSceneNode( value ) )
-			{
-				parsingContext.parentNode = node;
+				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
 			else
 			{
-				CU_ParsingError( cuT( "No scene node named " ) + value );
-			}
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserParticleSystemCount )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.scene )
-		{
-			CU_ParsingError( cuT( "No scene initialised." ) );
-		}
-		else if ( params.empty() )
-		{
-			CU_ParsingError( cuT( "Missing parameter." ) );
-		}
-		else
-		{
-			uint32_t value;
-			params[0]->get( value );
-			parsingContext.particleCount = value;
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserParticleSystemMaterial )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.scene )
-		{
-			CU_ParsingError( cuT( "No scene initialised." ) );
-		}
-		else if ( params.empty() )
-		{
-			CU_ParsingError( cuT( "Missing parameter." ) );
-		}
-		else
-		{
-			castor::String name;
-			params[0]->get( name );
-			auto material = parsingContext.parser->getEngine()->tryFindMaterial( name );
-
-			if ( material )
-			{
-				parsingContext.material = material;
-			}
-			else
-			{
-				CU_ParsingError( cuT( "Material [" ) + name + cuT( "] does not exist" ) );
-			}
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserParticleSystemDimensions )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.scene )
-		{
-			CU_ParsingError( cuT( "No scene initialised." ) );
-		}
-		else if ( params.empty() )
-		{
-			CU_ParsingError( cuT( "Missing parameter." ) );
-		}
-		else
-		{
-			params[0]->get( parsingContext.point2f );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserParticleSystemParticle )
-	{
-		auto & parsingContext = getParserContext( context );
-		
-		if ( !parsingContext.scene )
-		{
-			CU_ParsingError( cuT( "No scene initialised." ) );
-		}
-		else if ( parsingContext.particleCount == 0 )
-		{
-			CU_ParsingError( cuT( "particles_count has not been specified." ) );
-		}
-		else if ( parsingContext.point2f[0] == 0 || parsingContext.point2f[1] == 0 )
-		{
-			CU_ParsingError( cuT( "one component of the particles dimensions is 0." ) );
-		}
-		else
-		{
-			if ( !parsingContext.material )
-			{
-				parsingContext.material = parsingContext.parser->getEngine()->getMaterialCache().getDefaultMaterial();
-			}
-
-			parsingContext.particleSystem = parsingContext.scene->tryFindParticleSystem( parsingContext.strName );
-
-			if ( !parsingContext.particleSystem )
-			{
-				auto node = parsingContext.parentNode;
-
-				if ( !node )
+				if ( blockContext->renderTarget->getScene() )
 				{
-					node = parsingContext.scene->getObjectRootNode();
-				}
+					castor::String name;
 
-				parsingContext.parentNode = nullptr;
-				parsingContext.ownParticleSystem = parsingContext.scene->createParticleSystem( parsingContext.strName
-					, *parsingContext.scene
-					, *node
-					, parsingContext.particleCount );
-				parsingContext.particleSystem = parsingContext.ownParticleSystem.get();
-			}
-
-			parsingContext.particleSystem->setMaterial( parsingContext.material );
-			parsingContext.particleSystem->setDimensions( parsingContext.point2f );
-		}
-	}
-	CU_EndAttributePush( CSCNSection::eParticle )
-
-	CU_ImplementAttributeParser( parserParticleSystemCSShader )
-	{
-		auto & parsingContext = getParserContext( context );
-		parsingContext.shaderProgram = {};
-		parsingContext.shaderStage = VkShaderStageFlagBits( 0u );
-
-		if ( !parsingContext.scene )
-		{
-			CU_ParsingError( cuT( "No scene initialised." ) );
-		}
-		else
-		{
-			parsingContext.shaderProgram = parsingContext.parser->getEngine()->getShaderProgramCache().getNewProgram( parsingContext.strName, true );
-		}
-	}
-	CU_EndAttributePush( CSCNSection::eShaderProgram )
-
-	CU_ImplementAttributeParser( parserParticleSystemEnd )
-	{
-		auto & parsingContext = getParserContext( context );
-		parsingContext.shaderProgram = {};
-		parsingContext.shaderStage = VkShaderStageFlagBits( 0u );
-		
-		if ( !parsingContext.particleSystem )
-		{
-			CU_ParsingError( cuT( "No particle system initialised." ) );
-		}
-		else
-		{
-			parsingContext.parentNode = nullptr;
-			log::info << "Loaded sampler [" << parsingContext.particleSystem->getName() << "]" << std::endl;
-
-			if ( parsingContext.ownParticleSystem )
-			{
-				parsingContext.scene->addParticleSystem( parsingContext.particleSystem->getName()
-					, parsingContext.ownParticleSystem
-					, true );
-			}
-
-			parsingContext.particleSystem = {};
-		}
-	}
-	CU_EndAttributePop()
-
-	CU_ImplementAttributeParser( parserParticleType )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.particleSystem )
-		{
-			CU_ParsingError( cuT( "No particle system initialised." ) );
-		}
-		else if ( params.empty() )
-		{
-			CU_ParsingError( cuT( "Missing parameter." ) );
-		}
-		else
-		{
-			castor::String value;
-			params[0]->get( value );
-			Engine * engine = parsingContext.parser->getEngine();
-
-			if ( !engine->getParticleFactory().isTypeRegistered( castor::string::lowerCase( value ) ) )
-			{
-				CU_ParsingError( cuT( "Particle type [" ) + value + cuT( "] is not registered, make sure you've got the matching plug-in installed." ) );
-			}
-			else
-			{
-				parsingContext.particleSystem->setParticleType( value );
-			}
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserParticleVariable )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.particleSystem )
-		{
-			CU_ParsingError( cuT( "No particle system initialised." ) );
-		}
-		else if ( params.size() < 2 )
-		{
-			CU_ParsingError( cuT( "Missing parameter." ) );
-		}
-		else
-		{
-			castor::String name;
-			uint32_t type;
-			castor::String value;
-			params[0]->get( name );
-			params[1]->get( type );
-
-			if ( params.size() > 2 )
-			{
-				params[2]->get( value );
-			}
-
-			parsingContext.particleSystem->addParticleVariable( name, ParticleFormat( type ), value );
-		}
-	}
-	CU_EndAttributePush( CSCNSection::eUBOVariable )
-
-	CU_ImplementAttributeParser( parserLightParent )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.scene )
-		{
-			CU_ParsingError( cuT( "No scene initialised." ) );
-		}
-		else if ( !params.empty() )
-		{
-			castor::String name;
-
-			if ( auto parent = parsingContext.scene->findSceneNode( params[0]->get( name ) ) )
-			{
-				parsingContext.parentNode = parent;
-
-				if ( parsingContext.light )
-				{
-					parsingContext.light->detach();
-					parsingContext.parentNode->attachObject( *parsingContext.light );
-					parsingContext.parentNode = nullptr;
-				}
-			}
-			else
-			{
-				CU_ParsingError( cuT( "Node [" ) + name + cuT( "] does not exist" ) );
-			}
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserLightEnd )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.light )
-		{
-			CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
-		}
-		else
-		{
-			log::info << "Loaded light [" << parsingContext.light->getName() << "]" << std::endl;
-			parsingContext.parentNode = nullptr;
-
-			if ( parsingContext.ownLight )
-			{
-				parsingContext.scene->addLight( parsingContext.light->getName()
-					, parsingContext.ownLight
-					, true );
-			}
-
-			parsingContext.light = {};
-		}
-	}
-	CU_EndAttributePop()
-
-	CU_ImplementAttributeParser( parserLightType )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.scene )
-		{
-			CU_ParsingError( cuT( "No scene initialised." ) );
-		}
-		else if ( !params.empty() )
-		{
-			uint32_t uiType;
-			params[0]->get( uiType );
-			parsingContext.lightType = LightType( uiType );
-			parsingContext.light = parsingContext.scene->tryFindLight( parsingContext.strName );
-
-			if ( !parsingContext.light )
-			{
-				auto node = parsingContext.parentNode;
-
-				if ( !node )
-				{
-					node = parsingContext.scene->getObjectRootNode();
-				}
-
-				parsingContext.parentNode = nullptr;
-				parsingContext.ownLight = parsingContext.scene->createLight( parsingContext.strName
-					, *parsingContext.scene
-					, *node
-					, parsingContext.scene->getLightsFactory()
-					, parsingContext.lightType );
-				parsingContext.light = parsingContext.ownLight.get();
-			}
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserLightColour )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.light )
-		{
-			CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
-		}
-		else if ( !params.empty() )
-		{
-			castor::Point3f value;
-			params[0]->get( value );
-			parsingContext.light->setColour( value.ptr() );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserLightIntensity )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.light )
-		{
-			CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
-		}
-		else if ( !params.empty() )
-		{
-			castor::Point2f value;
-			params[0]->get( value );
-			parsingContext.light->setIntensity( value.ptr() );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserLightAttenuation )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.light )
-		{
-			CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
-		}
-		else if ( !params.empty() )
-		{
-			castor::Point3f value;
-			params[0]->get( value );
-
-			if ( parsingContext.lightType == LightType::ePoint )
-			{
-				parsingContext.light->getPointLight()->setAttenuation( value );
-			}
-			else if ( parsingContext.lightType == LightType::eSpot )
-			{
-				parsingContext.light->getSpotLight()->setAttenuation( value );
-			}
-			else
-			{
-				CU_ParsingError( cuT( "Wrong type of light to apply attenuation components, needs spotlight or pointlight" ) );
-			}
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserLightRange )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.light )
-		{
-			CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
-		}
-		else if ( !params.empty() )
-		{
-			auto value = params[0]->get< float >();
-
-			if ( parsingContext.lightType == LightType::ePoint )
-			{
-				parsingContext.light->getPointLight()->setRange( value );
-			}
-			else if ( parsingContext.lightType == LightType::eSpot )
-			{
-				parsingContext.light->getSpotLight()->setRange( value );
-			}
-			else
-			{
-				CU_ParsingError( cuT( "Wrong type of light to apply attenuation components, needs spotlight or pointlight" ) );
-			}
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserLightCutOff )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.light )
-		{
-			CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
-		}
-		else if ( !params.empty() )
-		{
-			float fFloat;
-			params[0]->get( fFloat );
-
-			if ( parsingContext.lightType == LightType::eSpot )
-			{
-				parsingContext.light->getSpotLight()->setInnerCutOff( castor::Angle::fromDegrees( fFloat / 2.0f ) );
-				parsingContext.light->getSpotLight()->setOuterCutOff( castor::Angle::fromDegrees( fFloat ) );
-			}
-			else
-			{
-				CU_ParsingError( cuT( "Wrong type of light to apply a cut off, needs spotlight" ) );
-			}
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserLightInnerCutOff )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.light )
-		{
-			CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
-		}
-		else if ( !params.empty() )
-		{
-			float fFloat;
-			params[0]->get( fFloat );
-
-			if ( parsingContext.lightType == LightType::eSpot )
-			{
-				parsingContext.light->getSpotLight()->setInnerCutOff( castor::Angle::fromDegrees( fFloat ) );
-			}
-			else
-			{
-				CU_ParsingError( cuT( "Wrong type of light to apply a cut off, needs spotlight" ) );
-			}
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserLightOuterCutOff )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.light )
-		{
-			CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
-		}
-		else if ( !params.empty() )
-		{
-			float fFloat;
-			params[0]->get( fFloat );
-
-			if ( parsingContext.lightType == LightType::eSpot )
-			{
-				parsingContext.light->getSpotLight()->setOuterCutOff( castor::Angle::fromDegrees( fFloat ) );
-			}
-			else
-			{
-				CU_ParsingError( cuT( "Wrong type of light to apply a cut off, needs spotlight" ) );
-			}
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserLightExponent )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.light )
-		{
-			CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
-		}
-		else if ( !params.empty() )
-		{
-			float fFloat;
-			params[0]->get( fFloat );
-
-			if ( parsingContext.lightType == LightType::eSpot )
-			{
-				parsingContext.light->getSpotLight()->setExponent( fFloat );
-			}
-			else
-			{
-				CU_ParsingError( cuT( "Wrong type of light to apply an exponent, needs spotlight" ) );
-			}
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserNodeStatic )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( params.empty() )
-		{
-			CU_ParsingError( cuT( "Missing [static] parameter." ) );
-		}
-		else
-		{
-			params[0]->get( parsingContext.nodeConfig.isStatic );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserNodeParent )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( params.empty() )
-		{
-			CU_ParsingError( cuT( "Missing [parent] parameter." ) );
-		}
-		else
-		{
-			castor::String name;
-			params[0]->get( name );
-			SceneNodeRPtr parent;
-
-			if ( name == Scene::ObjectRootNode )
-			{
-				parent = parsingContext.scene->getObjectRootNode();
-			}
-			else if ( name == Scene::CameraRootNode )
-			{
-				parent = parsingContext.scene->getCameraRootNode();
-			}
-			else if ( name == Scene::RootNode )
-			{
-				parent = parsingContext.scene->getRootNode();
-			}
-			else
-			{
-				parent = parsingContext.scene->findSceneNode( name );
-			}
-
-			if ( parent )
-			{
-				parsingContext.nodeConfig.parent = parent;
-			}
-			else
-			{
-				CU_ParsingError( cuT( "Node [" ) + name + cuT( "] does not exist" ) );
-			}
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserNodePosition )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( params.empty() )
-		{
-			CU_ParsingError( cuT( "Missing [position] parameter." ) );
-		}
-		else
-		{
-			params[0]->get( parsingContext.nodeConfig.position );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserNodeOrientation )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( params.empty() )
-		{
-			CU_ParsingError( cuT( "Missing [orientation] parameter." ) );
-		}
-		else
-		{
-			castor::Point3f axis;
-			float angle;
-			params[0]->get( axis );
-			params[1]->get( angle );
-			parsingContext.nodeConfig.orientation = castor::Quaternion::fromAxisAngle( axis
-				, castor::Angle::fromDegrees( angle ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserNodeRotate )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( params.empty() )
-		{
-			CU_ParsingError( cuT( "Missing [orientation] parameter." ) );
-		}
-		else
-		{
-			castor::Point3f axis;
-			float angle;
-			params[0]->get( axis );
-			params[1]->get( angle );
-			parsingContext.nodeConfig.orientation *= castor::Quaternion::fromAxisAngle( axis
-				, castor::Angle::fromDegrees( angle ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserNodeDirection )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( params.empty() )
-		{
-			CU_ParsingError( cuT( "Missing [direction] parameter." ) );
-		}
-		else
-		{
-			castor::Point3f direction;
-			params[0]->get( direction );
-			castor::Point3f up{ 0, 1, 0 };
-			castor::Point3f right{ castor::point::cross( direction, up ) };
-			parsingContext.nodeConfig.orientation = castor::Quaternion::fromAxes( right, up, direction );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserNodeScale )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( params.empty() )
-		{
-			CU_ParsingError( cuT( "Missing [direction] parameter." ) );
-		}
-		else
-		{
-			params[0]->get( parsingContext.nodeConfig.scale );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserNodeEnd )
-	{
-		auto & parsingContext = getParserContext( context );
-		auto & nodeConfig = parsingContext.nodeConfig;
-
-		auto sceneNode = parsingContext.scene->createSceneNode( nodeConfig.name
-			, *parsingContext.scene
-			, nodeConfig.parent
-			, nodeConfig.position
-			, nodeConfig.orientation
-			, nodeConfig.scale
-			, nodeConfig.isStatic );
-
-		auto name = sceneNode->getName();
-		auto node = parsingContext.scene->addSceneNode( name, sceneNode );
-		sceneNode.reset();
-
-		if ( !nodeConfig.isStatic )
-		{
-			for ( auto fileName : parsingContext.csnaFiles )
-			{
-				auto fName = fileName.getFileName();
-				auto pos = fName.find( name );
-
-				if ( pos == 0u
-					&& fName[name.size()] == '-' )
-				{
-					auto animName = fName.substr( name.size() + 1u );
-
-					if ( !animName.empty() )
+					if ( auto camera = blockContext->renderTarget->getScene()->findCamera( params[0]->get( name ) ) )
 					{
-						auto & animation = node->createAnimation( animName );
-						BinaryParser< SceneNodeAnimation > parser;
-						castor::BinaryFile animFile{ fileName, castor::File::OpenMode::eRead };
-						parser.parse( animation, animFile );
+						blockContext->renderTarget->setCamera( *camera );
+					}
+					else
+					{
+						CU_ParsingError( cuT( "Camera [" ) + name + cuT( "] was not found." ) );
+					}
+				}
+				else
+				{
+					CU_ParsingError( cuT( "No scene initialised for this window, set scene before camera." ) );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserRenderTargetSize, TargetContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				params[0]->get( blockContext->size );
+
+				if ( blockContext->srgbPixelFormat != castor::PixelFormat::eUNDEFINED
+					&& blockContext->hdrPixelFormat != castor::PixelFormat::eUNDEFINED )
+				{
+					bool allowHdr = blockContext->window
+						? blockContext->window->allowHdr
+						: true;
+					blockContext->renderTarget = blockContext->root->engine->getRenderTargetCache().add( blockContext->targetType
+						, blockContext->size
+						, allowHdr ? blockContext->hdrPixelFormat : blockContext->srgbPixelFormat );
+					blockContext->renderTarget->enableFullLoading( blockContext->root->enableFullLoading );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserRenderTargetFormat, TargetContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				params[0]->get( blockContext->srgbPixelFormat );
+				blockContext->hdrPixelFormat = blockContext->srgbPixelFormat;
+
+				if ( blockContext->srgbPixelFormat < castor::PixelFormat::eD16_UNORM )
+				{
+					if ( blockContext->size != castor::Size{ 1u, 1u }
+						&& blockContext->size != castor::Size{} )
+					{
+						bool allowHdr = blockContext->window
+							? blockContext->window->allowHdr
+							: true;
+						blockContext->renderTarget = blockContext->root->engine->getRenderTargetCache().add( blockContext->targetType
+							, blockContext->size
+							, allowHdr ? blockContext->hdrPixelFormat : blockContext->srgbPixelFormat );
+						blockContext->renderTarget->enableFullLoading( blockContext->root->enableFullLoading );
+					}
+				}
+				else
+				{
+					CU_ParsingError( cuT( "Wrong format for colour" ) );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserRenderTargetSRGBFormat, TargetContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				params[0]->get( blockContext->srgbPixelFormat );
+
+				if ( blockContext->srgbPixelFormat < castor::PixelFormat::eD16_UNORM )
+				{
+					if ( blockContext->size != castor::Size{ 1u, 1u }
+						&& blockContext->size != castor::Size{}
+						&& blockContext->hdrPixelFormat != castor::PixelFormat::eUNDEFINED )
+					{
+						bool allowHdr = blockContext->window
+							? blockContext->window->allowHdr
+							: true;
+						blockContext->renderTarget = blockContext->root->engine->getRenderTargetCache().add( blockContext->targetType
+							, blockContext->size
+							, allowHdr ? blockContext->hdrPixelFormat : blockContext->srgbPixelFormat );
+						blockContext->renderTarget->enableFullLoading( blockContext->root->enableFullLoading );
+					}
+				}
+				else
+				{
+					CU_ParsingError( cuT( "Wrong format for colour" ) );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserRenderTargetHDRFormat, TargetContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				params[0]->get( blockContext->hdrPixelFormat );
+
+				if ( blockContext->hdrPixelFormat < castor::PixelFormat::eD16_UNORM )
+				{
+					if ( blockContext->size != castor::Size{ 1u, 1u }
+						&& blockContext->size != castor::Size{}
+						&& blockContext->srgbPixelFormat != castor::PixelFormat::eUNDEFINED )
+					{
+						bool allowHdr = blockContext->window
+							? blockContext->window->allowHdr
+							: true;
+						blockContext->renderTarget = blockContext->root->engine->getRenderTargetCache().add( blockContext->targetType
+							, blockContext->size
+							, allowHdr ? blockContext->hdrPixelFormat : blockContext->srgbPixelFormat );
+						blockContext->renderTarget->enableFullLoading( blockContext->root->enableFullLoading );
+					}
+				}
+				else
+				{
+					CU_ParsingError( cuT( "Wrong format for colour" ) );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserRenderTargetStereo, TargetContext )
+		{
+			if ( !blockContext->renderTarget )
+			{
+				CU_ParsingError( cuT( "No target initialised. (Did you forget to set its size and format ?)" ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				float rIntraOcularDistance;
+				params[0]->get( rIntraOcularDistance );
+
+				if ( rIntraOcularDistance > 0 )
+				{
+					//blockContext->renderTarget->setStereo( true );
+					//blockContext->renderTarget->setIntraOcularDistance( rIntraOcularDistance );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserRenderTargetPostEffect, TargetContext )
+		{
+			if ( !blockContext->renderTarget )
+			{
+				CU_ParsingError( cuT( "No target initialised. (Did you forget to set its size and format ?)" ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				Parameters parameters;
+
+				if ( params.size() > 1 )
+				{
+					castor::String tmp;
+					parameters.parse( params[1]->get( tmp ) );
+				}
+
+				castor::String name;
+				auto effect = blockContext->renderTarget->getPostEffect( params[0]->get( name ) );
+
+				if ( !effect )
+				{
+					CU_ParsingError( cuT( "PostEffect [" ) + name + cuT( "] is not registered, make sure you've got the matching plug-in installed." ) );
+				}
+				else
+				{
+					effect->enable( true );
+					effect->setParameters( std::move( parameters ) );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserRenderTargetToneMapping, TargetContext )
+		{
+			if ( !blockContext->renderTarget )
+			{
+				CU_ParsingError( cuT( "No target initialised. (Did you forget to set its size and format ?)" ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				Parameters parameters;
+
+				if ( params.size() > 1 )
+				{
+					castor::String tmp;
+					parameters.parse( params[1]->get( tmp ) );
+				}
+
+				blockContext->renderTarget->setToneMappingType( params[0]->get< castor::String >(), parameters );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserRenderTargetFullLoading, TargetContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing [enable] parameter." ) );
+			}
+			else
+			{
+				blockContext->renderTarget->enableFullLoading( params[0]->get< bool >() );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserRenderTargetEnd, TargetContext )
+		{
+			if ( !blockContext->renderTarget )
+			{
+				CU_ParsingError( cuT( "No target initialised. (Did you forget to set its size and format ?)" ) );
+			}
+			else
+			{
+				auto target = blockContext->renderTarget;
+				log::info << "Loaded target [" << target->getName()
+					<< ", FMT(" << ashes::getName( VkFormat( target->getPixelFormat() ) ) << ")"
+					<< ", DIM(" << target->getSize() << ")]" << std::endl;
+
+				if ( blockContext->window )
+				{
+					blockContext->window->renderTarget = std::move( blockContext->renderTarget );
+				}
+				else
+				{
+					blockContext->texture->renderTarget = std::move( blockContext->renderTarget );
+				}
+			}
+		}
+		CU_EndAttributePop()
+
+		static CU_ImplementAttributeParserBlock( parserSamplerMinFilter, SamplerContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else if ( auto sampler = blockContext->sampler )
+			{
+				sampler->setMinFilter( VkFilter( params[0]->get< uint32_t >() ) );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No sampler initialised." ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserSamplerMagFilter, SamplerContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else if ( auto sampler = blockContext->sampler )
+			{
+				sampler->setMagFilter( VkFilter( params[0]->get< uint32_t >() ) );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No sampler initialised." ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserSamplerMipFilter, SamplerContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else if ( auto sampler = blockContext->sampler )
+			{
+				sampler->setMipFilter( VkSamplerMipmapMode( params[0]->get< uint32_t >() ) );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No sampler initialised." ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserSamplerMinLod, SamplerContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else if ( auto sampler = blockContext->sampler )
+			{
+				float rValue = -1000;
+				params[0]->get( rValue );
+
+				if ( rValue >= -1000 && rValue <= 1000 )
+				{
+					sampler->setMinLod( rValue );
+				}
+				else
+				{
+					CU_ParsingError( cuT( "LOD out of bounds [-1000,1000] : " ) + castor::string::toString( rValue ) );
+				}
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No sampler initialised." ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserSamplerMaxLod, SamplerContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else if ( auto sampler = blockContext->sampler )
+			{
+				float rValue = 1000;
+				params[0]->get( rValue );
+
+				if ( rValue >= -1000 && rValue <= 1000 )
+				{
+					sampler->setMaxLod( rValue );
+				}
+				else
+				{
+					CU_ParsingError( cuT( "LOD out of bounds [-1000,1000] : " ) + castor::string::toString( rValue ) );
+				}
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No sampler initialised." ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserSamplerLodBias, SamplerContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else if ( auto sampler = blockContext->sampler )
+			{
+				float rValue = 1000;
+				params[0]->get( rValue );
+
+				if ( rValue >= -1000 && rValue <= 1000 )
+				{
+					sampler->setLodBias( rValue );
+				}
+				else
+				{
+					CU_ParsingError( cuT( "LOD out of bounds [-1000,1000] : " ) + castor::string::toString( rValue ) );
+				}
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No sampler initialised." ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserSamplerUWrapMode, SamplerContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else if ( auto sampler = blockContext->sampler )
+			{
+				sampler->setWrapS( VkSamplerAddressMode( params[0]->get< uint32_t >() ) );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No sampler initialised." ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserSamplerVWrapMode, SamplerContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else if ( auto sampler = blockContext->sampler )
+			{
+				sampler->setWrapT( VkSamplerAddressMode( params[0]->get< uint32_t >() ) );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No sampler initialised." ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserSamplerWWrapMode, SamplerContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else if ( auto sampler = blockContext->sampler )
+			{
+				sampler->setWrapR( VkSamplerAddressMode( params[0]->get< uint32_t >() ) );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No sampler initialised." ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserSamplerBorderColour, SamplerContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else if ( auto sampler = blockContext->sampler )
+			{
+				sampler->setBorderColour( VkBorderColor( params[0]->get< uint32_t >() ) );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No sampler initialised." ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserSamplerAnisotropicFiltering, SamplerContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else if ( auto sampler = blockContext->sampler )
+			{
+				sampler->enableAnisotropicFiltering( params[0]->get< bool >() );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No sampler initialised." ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserSamplerMaxAnisotropy, SamplerContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else if ( auto sampler = blockContext->sampler )
+			{
+				float rValue = 1000;
+				params[0]->get( rValue );
+				sampler->setMaxAnisotropy( rValue );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No sampler initialised." ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserSamplerComparisonMode, SamplerContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else if ( auto sampler = blockContext->sampler )
+			{
+				sampler->enableCompare( bool( params[0]->get< uint32_t >() ) );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No sampler initialised." ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserSamplerComparisonFunc, SamplerContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else if ( auto sampler = blockContext->sampler )
+			{
+				sampler->setCompareOp( VkCompareOp( params[0]->get< uint32_t >() ) );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No sampler initialised." ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserSamplerEnd, SamplerContext )
+		{
+			auto sampler = blockContext->sampler;
+
+			if ( !blockContext->ownSampler
+				&& !sampler )
+			{
+				CU_ParsingError( cuT( "No sampler initialised." ) );
+			}
+			else
+			{
+				log::info << "Loaded sampler [" << blockContext->sampler->getName() << "]" << std::endl;
+
+				if ( blockContext->ownSampler )
+				{
+					blockContext->sampler->getEngine()->addSampler( blockContext->ownSampler->getName()
+						, blockContext->ownSampler
+						, true );
+				}
+
+				blockContext->sampler = {};
+			}
+		}
+		CU_EndAttributePop()
+
+		static CU_ImplementAttributeParserBlock( parserSceneBkColour, SceneContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				blockContext->scene->setBackgroundColour( params[0]->get< castor::RgbColour >() );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserSceneBkImage, SceneContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				auto imgBackground = castor::makeUnique< ImageBackground >( *blockContext->scene->getEngine()
+					, *blockContext->scene );
+				imgBackground->setImage( context.file.getPath(), params[0]->get< castor::Path >() );
+				blockContext->scene->setBackground( castor::ptrRefCast< SceneBackground >( imgBackground ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserNewBlock( parserSceneFont, SceneContext, FontContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				newBlockContext->scene = blockContext->scene;
+				newBlockContext->root = blockContext->root;
+				params[0]->get( newBlockContext->name );
+			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eFont )
+
+		static CU_ImplementAttributeParserNewBlock( parserSceneMaterial, SceneContext, MaterialContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				auto name = params[0]->get< castor::String >();
+				newBlockContext->root = blockContext->root;
+				newBlockContext->material = blockContext->root->engine->tryFindMaterial( name );
+				newBlockContext->passIndex = 0u;
+				newBlockContext->createMaterial = newBlockContext->material == nullptr;
+				newBlockContext->scene = blockContext->scene;
+
+				if ( newBlockContext->createMaterial )
+				{
+					newBlockContext->ownMaterial = blockContext->root->engine->createMaterial( name
+						, *blockContext->root->engine
+						, blockContext->root->engine->getDefaultLightingModel() );
+					newBlockContext->material = newBlockContext->ownMaterial.get();
+				}
+			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eMaterial )
+
+		static CU_ImplementAttributeParserNewBlock( parserSceneCamera, SceneContext, CameraContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				newBlockContext->scene = blockContext->scene;
+				params[0]->get( newBlockContext->name );
+			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eCamera )
+
+		static CU_ImplementAttributeParserNewBlock( parserSceneLight, SceneContext, LightContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				newBlockContext->scene = blockContext->scene;
+				params[0]->get( newBlockContext->name );
+			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eLight )
+
+		static CU_ImplementAttributeParserNewBlock( parserSceneCameraNode, SceneContext, NodeContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				params[0]->get( newBlockContext->name );
+				newBlockContext->scene = blockContext->scene;
+				newBlockContext->root = blockContext->root;
+				newBlockContext->isCameraNode = true;
+				newBlockContext->parentNode = blockContext->scene->getCameraRootNode();
+			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eNode )
+
+		static CU_ImplementAttributeParserNewBlock( parserSceneSceneNode, SceneContext, NodeContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				params[0]->get( newBlockContext->name );
+				newBlockContext->scene = blockContext->scene;
+				newBlockContext->root = blockContext->root;
+				newBlockContext->isCameraNode = false;
+				newBlockContext->parentNode = blockContext->scene->getObjectRootNode();
+			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eNode )
+
+		static CU_ImplementAttributeParserNewBlock( parserSceneObject, SceneContext, ObjectContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				newBlockContext->scene = blockContext->scene;
+				newBlockContext->root = blockContext->root;
+				newBlockContext->ownGeometry = blockContext->scene->createGeometry( params[0]->get< castor::String >()
+					, *blockContext->scene );
+				newBlockContext->geometry = newBlockContext->ownGeometry.get();
+			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eObject )
+
+		static CU_ImplementAttributeParserBlock( parserSceneAmbientLight, SceneContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				blockContext->scene->setAmbientLight( params[0]->get< castor::RgbColour >() );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserNewBlock( parserSceneImport, SceneContext, SceneImportContext )
+		{
+			newBlockContext->scene = blockContext->scene;
+			newBlockContext->root = blockContext->root;
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eSceneImport )
+
+		static CU_ImplementAttributeParserNewBlock( parserSceneBillboard, SceneContext, BillboardsContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				newBlockContext->scene = blockContext->scene;
+				newBlockContext->ownBillboards = castor::makeUnique< BillboardList >( params[0]->get< castor::String >()
+					, *blockContext->scene );
+				newBlockContext->billboards = newBlockContext->ownBillboards.get();
+			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eBillboard )
+
+		static CU_ImplementAttributeParserNewBlock( parserSceneAnimatedObjectGroup, SceneContext, AnimGroupContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				newBlockContext->scene = blockContext->scene;
+				newBlockContext->animGroup = blockContext->scene->addNewAnimatedObjectGroup( params[0]->get< castor::String >()
+					, *blockContext->scene );
+			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eAnimGroup )
+
+		static CU_ImplementAttributeParserBlock( parserScenePanelOverlay, SceneContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				castor::String name;
+				blockContext->overlays.parentOverlays.push_back( std::move( blockContext->overlays.overlay ) );
+				auto & parent = blockContext->overlays.parentOverlays.back();
+				blockContext->overlays.overlay.rptr = blockContext->scene->tryFindOverlay( params[0]->get( name ) );
+
+				if ( !blockContext->overlays.overlay.rptr )
+				{
+					blockContext->overlays.overlay.uptr = castor::makeUnique< Overlay >( *blockContext->scene->getEngine()
+						, OverlayType::ePanel
+						, blockContext->scene
+						, parent.rptr );
+					blockContext->overlays.overlay.rptr = blockContext->overlays.overlay.uptr.get();
+					blockContext->overlays.overlay.rptr->rename( name );
+				}
+
+				blockContext->overlays.overlay.rptr->setVisible( false );
+			}
+		}
+		CU_EndAttributePushBlock( CSCNSection::ePanelOverlay, &blockContext->overlays )
+
+		static CU_ImplementAttributeParserBlock( parserSceneBorderPanelOverlay, SceneContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				castor::String name;
+				blockContext->overlays.parentOverlays.push_back( std::move( blockContext->overlays.overlay ) );
+				auto & parent = blockContext->overlays.parentOverlays.back();
+				blockContext->overlays.overlay.rptr = blockContext->scene->tryFindOverlay( params[0]->get( name ) );
+
+				if ( !blockContext->overlays.overlay.rptr )
+				{
+					blockContext->overlays.overlay.uptr = castor::makeUnique< Overlay >( *blockContext->scene->getEngine()
+						, OverlayType::eBorderPanel
+						, blockContext->scene
+						, parent.rptr );
+					blockContext->overlays.overlay.rptr = blockContext->overlays.overlay.uptr.get();
+					blockContext->overlays.overlay.rptr->rename( name );
+				}
+
+				blockContext->overlays.overlay.rptr->setVisible( false );
+			}
+		}
+		CU_EndAttributePushBlock( CSCNSection::eBorderPanelOverlay, &blockContext->overlays )
+
+		static CU_ImplementAttributeParserBlock( parserSceneTextOverlay, SceneContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				castor::String name;
+				blockContext->overlays.parentOverlays.push_back( std::move( blockContext->overlays.overlay ) );
+				auto & parent = blockContext->overlays.parentOverlays.back();
+				blockContext->overlays.overlay.rptr = blockContext->scene->tryFindOverlay( params[0]->get( name ) );
+
+				if ( !blockContext->overlays.overlay.rptr )
+				{
+					blockContext->overlays.overlay.uptr = castor::makeUnique< Overlay >( *blockContext->scene->getEngine()
+						, OverlayType::eText
+						, blockContext->scene
+						, parent.rptr );
+					blockContext->overlays.overlay.rptr = blockContext->overlays.overlay.uptr.get();
+					blockContext->overlays.overlay.rptr->rename( name );
+				}
+
+				blockContext->overlays.overlay.rptr->setVisible( false );
+			}
+		}
+		CU_EndAttributePushBlock( CSCNSection::eTextOverlay, &blockContext->overlays )
+
+		static CU_ImplementAttributeParserNewBlock( parserSceneSkybox, SceneContext, SkyboxContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else
+			{
+				newBlockContext->skybox = castor::makeUnique< SkyboxBackground >( *blockContext->scene->getEngine()
+					, *blockContext->scene );
+			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eSkybox )
+
+		static CU_ImplementAttributeParserBlock( parserSceneFogType, SceneContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else
+			{
+				blockContext->scene->getFog().setType( FogType( params[0]->get< uint32_t >() ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserSceneFogDensity, SceneContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else
+			{
+				blockContext->scene->getFog().setDensity( params[0]->get< float >() );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserNewBlock( parserSceneParticleSystem, SceneContext, ParticleSystemContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				newBlockContext->scene = blockContext->scene;
+				params[0]->get( newBlockContext->name );
+			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eParticleSystem )
+
+		static CU_ImplementAttributeParserBlock( parserSceneEnd, SceneContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else
+			{
+				log::info << "Loaded scene [" << blockContext->scene->getName() << "]" << std::endl;
+
+				if ( blockContext->scene->getName() == LoadingScreen::SceneName )
+				{
+					blockContext->scene->getEngine()->setLoadingScene( std::move( blockContext->ownScene ) );
+				}
+				else
+				{
+					blockContext->scene->getEngine()->addScene( blockContext->scene->getName()
+						, blockContext->ownScene
+						, true );
+				}
+			}
+		}
+		CU_EndAttributePop()
+
+		static CU_ImplementAttributeParserBlock( parserSceneImportFile, SceneImportContext )
+		{
+			castor::Path path;
+			castor::Path pathFile = context.file.getPath() / params[0]->get( path );
+			blockContext->files.push_back( pathFile );
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserSceneImportAnimFile, SceneImportContext )
+		{
+			castor::Path path;
+			castor::Path pathFile = context.file.getPath() / params[0]->get( path );
+			blockContext->animFiles.push_back( pathFile );
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserSceneImportPrefix, SceneImportContext )
+		{
+			params[0]->get( blockContext->prefix );
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserSceneImportRescale, SceneImportContext )
+		{
+			params[0]->get( blockContext->rescale );
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserSceneImportPitch, SceneImportContext )
+		{
+			params[0]->get( blockContext->pitch );
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserSceneImportYaw, SceneImportContext )
+		{
+			params[0]->get( blockContext->yaw );
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserSceneImportRoll, SceneImportContext )
+		{
+			params[0]->get( blockContext->roll );
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserSceneImportNoOptimisations, SceneImportContext )
+		{
+			params[0]->get( blockContext->noOptimisations );
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserSceneImportEmissiveMult, SceneImportContext )
+		{
+			params[0]->get( blockContext->emissiveMult );
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserSceneImportTexRemap, SceneImportContext )
+		{
+			blockContext->textureRemaps.clear();
+			blockContext->textureRemapIt = blockContext->textureRemaps.end();
+		}
+		CU_EndAttributePushBlock( CSCNSection::eTextureRemap, blockContext )
+
+		static CU_ImplementAttributeParserBlock( parserSceneImportCenterCamera, SceneImportContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing name parameter" ) );
+			}
+			else
+			{
+				blockContext->centerCamera = params[0]->get< castor::String >();
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserSceneImportPreferredImporter, SceneImportContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing name parameter" ) );
+			}
+			else
+			{
+				blockContext->preferredImporter = params[0]->get< castor::String >();
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserSceneImportEnd, SceneImportContext )
+		{
+			Engine * engine = blockContext->scene->getEngine();
+
+			if ( blockContext->files.empty() )
+			{
+				CU_ParsingError( cuT( "No file chosen to import" ) );
+			}
+			else
+			{
+				Parameters parameters;
+
+				if ( blockContext->rescale != 1.0f )
+				{
+					parameters.add( cuT( "rescale" ), blockContext->rescale );
+				}
+
+				if ( blockContext->pitch != 0.0f )
+				{
+					parameters.add( cuT( "pitch" ), blockContext->pitch );
+				}
+
+				if ( blockContext->yaw != 0.0f )
+				{
+					parameters.add( cuT( "yaw" ), blockContext->yaw );
+				}
+
+				if ( blockContext->roll != 0.0f )
+				{
+					parameters.add( cuT( "roll" ), blockContext->roll );
+				}
+
+				if ( !blockContext->prefix.empty() )
+				{
+					parameters.add( cuT( "prefix" ), blockContext->prefix );
+				}
+
+				if ( blockContext->noOptimisations )
+				{
+					parameters.add( cuT( "no_optimisations" ), blockContext->noOptimisations );
+				}
+
+				if ( blockContext->emissiveMult != 1.0f )
+				{
+					parameters.add( cuT( "emissive_mult" ), blockContext->emissiveMult );
+				}
+
+				if ( !blockContext->centerCamera.empty() )
+				{
+					parameters.add( cuT( "center_camera" ), blockContext->centerCamera );
+				}
+
+				if ( !blockContext->preferredImporter.empty() )
+				{
+					parameters.add( cuT( "preferred_importer" ), blockContext->preferredImporter );
+				}
+
+				SceneImporter importer{ *engine };
+
+				for ( auto & file : blockContext->files )
+				{
+					if ( !importer.import( *blockContext->scene
+						, file
+						, parameters
+						, blockContext->textureRemaps ) )
+					{
+						CU_ParsingError( cuT( "External scene Import failed" ) );
+					}
+				}
+
+				for ( auto & file : blockContext->animFiles )
+				{
+					if ( !importer.importAnimations( *blockContext->scene
+						, file
+						, parameters ) )
+					{
+						CU_ParsingError( cuT( "External scene Import failed" ) );
 					}
 				}
 			}
 		}
+		CU_EndAttributePop()
 
-		log::info << "Loaded scene node [" << name << "]" << std::endl;
-	}
-	CU_EndAttributePop()
-
-	CU_ImplementAttributeParser( parserObjectParent )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.geometry )
+		static CU_ImplementAttributeParserNewBlock( parserSceneMesh, SceneContext, MeshContext )
 		{
-			CU_ParsingError( cuT( "No Geometry initialised." ) );
-		}
-		else if ( !params.empty() )
-		{
-			castor::String name;
-			params[0]->get( name );
-			SceneNodeRPtr parent;
-
-			if ( name == Scene::ObjectRootNode )
-			{
-				parent = parsingContext.scene->getObjectRootNode();
-			}
-			else if ( name == Scene::CameraRootNode )
-			{
-				parent = parsingContext.scene->getCameraRootNode();
-			}
-			else if ( name == Scene::RootNode )
-			{
-				parent = parsingContext.scene->getRootNode();
-			}
-			else
-			{
-				parent = parsingContext.scene->findSceneNode( name );
-			}
-
-			if ( parent )
-			{
-				parent->attachObject( *parsingContext.geometry );
-			}
-			else
-			{
-				CU_ParsingError( cuT( "Node [" ) + name + cuT( "] does not exist" ) );
-			}
-		}
-		else
-		{
-			CU_ParsingError( cuT( "Geometry not initialised." ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserObjectMaterial )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.geometry )
-		{
-			CU_ParsingError( cuT( "No Geometry initialised." ) );
-		}
-		else if ( !params.empty() )
-		{
-			if ( parsingContext.geometry->getMesh() )
+			if ( blockContext->scene )
 			{
 				castor::String name;
-				auto material = parsingContext.parser->getEngine()->tryFindMaterial( params[0]->get( name ) );
+				newBlockContext->scene = blockContext->scene;
+				newBlockContext->root = blockContext->root;
+				newBlockContext->mesh = blockContext->scene->tryFindMesh( params[0]->get( name ) );
 
-				if ( material )
+				if ( !newBlockContext->mesh )
 				{
-					for ( auto & submesh : *parsingContext.geometry->getMesh() )
+					newBlockContext->ownMesh = blockContext->scene->createMesh( name
+						, *blockContext->scene );
+					newBlockContext->mesh = newBlockContext->ownMesh.get();
+				}
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No scene initialised" ) );
+			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eMesh )
+
+		static CU_ImplementAttributeParserNewBlock( parserSkeleton, SceneContext, SkeletonContext )
+		{
+			if ( blockContext->scene )
+			{
+				castor::String name;
+				newBlockContext->scene = blockContext->scene;
+				newBlockContext->skeleton = blockContext->scene->tryFindSkeleton( params[0]->get( name ) );
+
+				if ( !newBlockContext->skeleton )
+				{
+					newBlockContext->skeleton = blockContext->scene->addNewSkeleton( name
+						, *blockContext->scene );
+				}
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No scene initialised" ) );
+			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eSkeleton )
+
+		static CU_ImplementAttributeParserBlock( parserDirectionalShadowCascades, SceneContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				blockContext->scene->setDirectionalShadowCascades( params[0]->get< uint32_t >() );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserParticleSystemParent, ParticleSystemContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				castor::String value;
+
+				if ( auto node = blockContext->scene->tryFindSceneNode( params[0]->get( value ) ) )
+				{
+					blockContext->parentNode = node;
+				}
+				else
+				{
+					CU_ParsingError( cuT( "No scene node named " ) + value );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserParticleSystemCount, ParticleSystemContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				params[0]->get( blockContext->particleCount );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserParticleSystemMaterial, ParticleSystemContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				castor::String name;
+
+				if ( auto material = blockContext->scene->getEngine()->tryFindMaterial( params[0]->get( name ) ) )
+				{
+					blockContext->material = material;
+				}
+				else
+				{
+					CU_ParsingError( cuT( "Material [" ) + name + cuT( "] does not exist" ) );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserParticleSystemDimensions, ParticleSystemContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				params[0]->get( blockContext->dimensions );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserParticleSystemParticle, ParticleSystemContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else if ( blockContext->particleCount == 0 )
+			{
+				CU_ParsingError( cuT( "particles_count has not been specified." ) );
+			}
+			else if ( blockContext->dimensions[0] == 0 || blockContext->dimensions[1] == 0 )
+			{
+				CU_ParsingError( cuT( "one component of the particles dimensions is 0." ) );
+			}
+			else
+			{
+				if ( !blockContext->material )
+				{
+					blockContext->material = blockContext->scene->getEngine()->getMaterialCache().getDefaultMaterial();
+				}
+
+				blockContext->particleSystem = blockContext->scene->tryFindParticleSystem( blockContext->name );
+
+				if ( !blockContext->particleSystem )
+				{
+					auto node = blockContext->parentNode;
+
+					if ( !node )
 					{
-						parsingContext.geometry->setMaterial( *submesh, material );
+						node = blockContext->scene->getObjectRootNode();
+					}
+
+					blockContext->parentNode = nullptr;
+					blockContext->ownParticleSystem = blockContext->scene->createParticleSystem( blockContext->name
+						, *blockContext->scene
+						, *node
+						, blockContext->particleCount );
+					blockContext->particleSystem = blockContext->ownParticleSystem.get();
+				}
+
+				blockContext->particleSystem->setMaterial( blockContext->material );
+				blockContext->particleSystem->setDimensions( blockContext->dimensions );
+			}
+		}
+		CU_EndAttributePushBlock( CSCNSection::eParticle, blockContext )
+
+		static CU_ImplementAttributeParserNewBlock( parserParticleSystemCSShader, ParticleSystemContext, ProgramContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else
+			{
+				newBlockContext->shaderProgram = blockContext->scene->getEngine()->getShaderProgramCache().getNewProgram( blockContext->name, true );
+				newBlockContext->particleSystem = blockContext;
+			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eShaderProgram )
+
+		static CU_ImplementAttributeParserBlock( parserParticleSystemEnd, ParticleSystemContext )
+		{
+			if ( !blockContext->particleSystem )
+			{
+				CU_ParsingError( cuT( "No particle system initialised." ) );
+			}
+			else
+			{
+				blockContext->parentNode = nullptr;
+				log::info << "Loaded sampler [" << blockContext->particleSystem->getName() << "]" << std::endl;
+
+				if ( blockContext->ownParticleSystem )
+				{
+					blockContext->scene->addParticleSystem( blockContext->particleSystem->getName()
+						, blockContext->ownParticleSystem
+						, true );
+				}
+
+				blockContext->particleSystem = {};
+			}
+		}
+		CU_EndAttributePop()
+
+		static CU_ImplementAttributeParserBlock( parserParticleType, ParticleSystemContext )
+		{
+			if ( !blockContext->particleSystem )
+			{
+				CU_ParsingError( cuT( "No particle system initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				castor::String type;
+				Engine * engine = blockContext->scene->getEngine();
+
+				if ( !engine->getParticleFactory().isTypeRegistered( castor::string::lowerCase( params[0]->get( type ) ) ) )
+				{
+					CU_ParsingError( cuT( "Particle type [" ) + type + cuT( "] is not registered, make sure you've got the matching plug-in installed." ) );
+				}
+				else
+				{
+					blockContext->particleSystem->setParticleType( type );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserParticleVariable, ParticleSystemContext )
+		{
+			if ( !blockContext->particleSystem )
+			{
+				CU_ParsingError( cuT( "No particle system initialised." ) );
+			}
+			else if ( params.size() < 2 )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				castor::String value;
+
+				if ( params.size() > 2 )
+				{
+					params[2]->get( value );
+				}
+
+				blockContext->particleSystem->addParticleVariable( params[0]->get< castor::String >(), ParticleFormat( params[1]->get< uint32_t >() ), value );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserLightParent, LightContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				castor::String name;
+
+				if ( auto parent = blockContext->scene->findSceneNode( params[0]->get( name ) ) )
+				{
+					blockContext->parentNode = parent;
+
+					if ( blockContext->light )
+					{
+						blockContext->light->detach();
+						blockContext->parentNode->attachObject( *blockContext->light );
+						blockContext->parentNode = nullptr;
+					}
+				}
+				else
+				{
+					CU_ParsingError( cuT( "Node [" ) + name + cuT( "] does not exist" ) );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserLightType, LightContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				blockContext->lightType = LightType( params[0]->get< uint32_t >() );
+				blockContext->light = blockContext->scene->tryFindLight( blockContext->name );
+
+				if ( !blockContext->light )
+				{
+					auto node = blockContext->parentNode;
+
+					if ( !node )
+					{
+						node = blockContext->scene->getObjectRootNode();
+					}
+
+					blockContext->parentNode = nullptr;
+					blockContext->ownLight = blockContext->scene->createLight( blockContext->name
+						, *blockContext->scene
+						, *node
+						, blockContext->scene->getLightsFactory()
+						, blockContext->lightType );
+					blockContext->light = blockContext->ownLight.get();
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserLightColour, LightContext )
+		{
+			if ( !blockContext->light )
+			{
+				CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				blockContext->light->setColour( params[0]->get< castor::Point3f >() );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserLightIntensity, LightContext )
+		{
+			if ( !blockContext->light )
+			{
+				CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				blockContext->light->setIntensity( params[0]->get< castor::Point2f >() );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserLightAttenuation, LightContext )
+		{
+			if ( !blockContext->light )
+			{
+				CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				if ( blockContext->lightType == LightType::ePoint )
+				{
+					blockContext->light->getPointLight()->setAttenuation( params[0]->get< castor::Point3f >() );
+				}
+				else if ( blockContext->lightType == LightType::eSpot )
+				{
+					blockContext->light->getSpotLight()->setAttenuation( params[0]->get< castor::Point3f >() );
+				}
+				else
+				{
+					CU_ParsingError( cuT( "Wrong type of light to apply attenuation components, needs spotlight or pointlight" ) );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserLightRange, LightContext )
+		{
+			if ( !blockContext->light )
+			{
+				CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				if ( blockContext->lightType == LightType::ePoint )
+				{
+					blockContext->light->getPointLight()->setRange( params[0]->get< float >() );
+				}
+				else if ( blockContext->lightType == LightType::eSpot )
+				{
+					blockContext->light->getSpotLight()->setRange( params[0]->get< float >() );
+				}
+				else
+				{
+					CU_ParsingError( cuT( "Wrong type of light to apply attenuation components, needs spotlight or pointlight" ) );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserLightCutOff, LightContext )
+		{
+			if ( !blockContext->light )
+			{
+				CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				auto angle = params[0]->get< float >();
+
+				if ( blockContext->lightType == LightType::eSpot )
+				{
+					blockContext->light->getSpotLight()->setInnerCutOff( castor::Angle::fromDegrees( angle / 2.0f ) );
+					blockContext->light->getSpotLight()->setOuterCutOff( castor::Angle::fromDegrees( angle ) );
+				}
+				else
+				{
+					CU_ParsingError( cuT( "Wrong type of light to apply a cut off, needs spotlight" ) );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserLightInnerCutOff, LightContext )
+		{
+			if ( !blockContext->light )
+			{
+				CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				if ( blockContext->lightType == LightType::eSpot )
+				{
+					blockContext->light->getSpotLight()->setInnerCutOff( castor::Angle::fromDegrees( params[0]->get< float >() ) );
+				}
+				else
+				{
+					CU_ParsingError( cuT( "Wrong type of light to apply a cut off, needs spotlight" ) );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserLightOuterCutOff, LightContext )
+		{
+			if ( !blockContext->light )
+			{
+				CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				if ( blockContext->lightType == LightType::eSpot )
+				{
+					blockContext->light->getSpotLight()->setOuterCutOff( castor::Angle::fromDegrees( params[0]->get< float >() ) );
+				}
+				else
+				{
+					CU_ParsingError( cuT( "Wrong type of light to apply a cut off, needs spotlight" ) );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserLightExponent, LightContext )
+		{
+			if ( !blockContext->light )
+			{
+				CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				if ( blockContext->lightType == LightType::eSpot )
+				{
+					blockContext->light->getSpotLight()->setExponent( params[0]->get< float >() );
+				}
+				else
+				{
+					CU_ParsingError( cuT( "Wrong type of light to apply an exponent, needs spotlight" ) );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserLightEnd, LightContext )
+		{
+			if ( !blockContext->light )
+			{
+				CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
+			}
+			else
+			{
+				log::info << "Loaded light [" << blockContext->light->getName() << "]" << std::endl;
+				blockContext->parentNode = nullptr;
+
+				if ( blockContext->ownLight )
+				{
+					blockContext->scene->addLight( blockContext->light->getName()
+						, blockContext->ownLight
+						, true );
+				}
+
+				blockContext->light = {};
+			}
+		}
+		CU_EndAttributePop()
+
+		static CU_ImplementAttributeParserBlock( parserNodeStatic, NodeContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing [static] parameter." ) );
+			}
+			else
+			{
+				params[0]->get( blockContext->isStatic );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserNodeParent, NodeContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing [parent] parameter." ) );
+			}
+			else
+			{
+				auto name = params[0]->get< castor::String >();
+				SceneNodeRPtr parent;
+
+				if ( name == Scene::ObjectRootNode )
+				{
+					parent = blockContext->scene->getObjectRootNode();
+				}
+				else if ( name == Scene::CameraRootNode )
+				{
+					parent = blockContext->scene->getCameraRootNode();
+				}
+				else if ( name == Scene::RootNode )
+				{
+					parent = blockContext->scene->getRootNode();
+				}
+				else
+				{
+					parent = blockContext->scene->findSceneNode( name );
+				}
+
+				if ( parent )
+				{
+					blockContext->parentNode = parent;
+				}
+				else
+				{
+					CU_ParsingError( cuT( "Node [" ) + name + cuT( "] does not exist" ) );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserNodePosition, NodeContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing [position] parameter." ) );
+			}
+			else
+			{
+				params[0]->get( blockContext->position );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserNodeOrientation, NodeContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing [orientation] parameter." ) );
+			}
+			else
+			{
+				blockContext->orientation = castor::Quaternion::fromAxisAngle( params[0]->get< castor::Point3f >()
+					, castor::Angle::fromDegrees( params[1]->get< float >() ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserNodeRotate, NodeContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing [orientation] parameter." ) );
+			}
+			else
+			{
+				blockContext->orientation *= castor::Quaternion::fromAxisAngle( params[0]->get< castor::Point3f >()
+					, castor::Angle::fromDegrees( params[1]->get< float >() ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserNodeDirection, NodeContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing [direction] parameter." ) );
+			}
+			else
+			{
+				castor::Point3f direction;
+				params[0]->get( direction );
+				castor::Point3f up{ 0, 1, 0 };
+				castor::Point3f right{ castor::point::cross( direction, up ) };
+				blockContext->orientation = castor::Quaternion::fromAxes( right, up, direction );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserNodeScale, NodeContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing [direction] parameter." ) );
+			}
+			else
+			{
+				params[0]->get( blockContext->scale );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserNodeEnd, NodeContext )
+		{
+			auto sceneNode = blockContext->scene->createSceneNode( blockContext->name
+				, *blockContext->scene
+				, blockContext->parentNode
+				, blockContext->position
+				, blockContext->orientation
+				, blockContext->scale
+				, blockContext->isStatic );
+
+			auto name = sceneNode->getName();
+			auto node = blockContext->scene->addSceneNode( name, sceneNode );
+			sceneNode.reset();
+
+			if ( !blockContext->isStatic )
+			{
+				for ( auto fileName : blockContext->root->csnaFiles )
+				{
+					auto fName = fileName.getFileName();
+					auto pos = fName.find( name );
+
+					if ( pos == 0u
+						&& fName[name.size()] == '-' )
+					{
+						auto animName = fName.substr( name.size() + 1u );
+
+						if ( !animName.empty() )
+						{
+							auto & animation = node->createAnimation( animName );
+							BinaryParser< SceneNodeAnimation > parser;
+							castor::BinaryFile animFile{ fileName, castor::File::OpenMode::eRead };
+							parser.parse( animation, animFile );
+						}
+					}
+				}
+			}
+
+			log::info << "Loaded scene node [" << name << "]" << std::endl;
+		}
+		CU_EndAttributePop()
+
+		static CU_ImplementAttributeParserBlock( parserObjectParent, ObjectContext )
+		{
+			if ( !blockContext->geometry )
+			{
+				CU_ParsingError( cuT( "No Geometry initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				auto name = params[0]->get< castor::String >();
+				SceneNodeRPtr parent;
+
+				if ( name == Scene::ObjectRootNode )
+				{
+					parent = blockContext->scene->getObjectRootNode();
+				}
+				else if ( name == Scene::CameraRootNode )
+				{
+					parent = blockContext->scene->getCameraRootNode();
+				}
+				else if ( name == Scene::RootNode )
+				{
+					parent = blockContext->scene->getRootNode();
+				}
+				else
+				{
+					parent = blockContext->scene->findSceneNode( name );
+				}
+
+				if ( parent )
+				{
+					parent->attachObject( *blockContext->geometry );
+				}
+				else
+				{
+					CU_ParsingError( cuT( "Node [" ) + name + cuT( "] does not exist" ) );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserObjectMaterial, ObjectContext )
+		{
+			if ( !blockContext->geometry )
+			{
+				CU_ParsingError( cuT( "No Geometry initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				if ( blockContext->geometry->getMesh() )
+				{
+					castor::String name;
+					auto material = blockContext->scene->getEngine()->tryFindMaterial( params[0]->get( name ) );
+
+					if ( material )
+					{
+						for ( auto & submesh : *blockContext->geometry->getMesh() )
+						{
+							blockContext->geometry->setMaterial( *submesh, material );
+						}
+					}
+					else
+					{
+						CU_ParsingError( cuT( "Material [" ) + name + cuT( "] does not exist" ) );
+					}
+				}
+				else
+				{
+					CU_ParsingError( cuT( "Geometry's mesh not initialised" ) );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserNewBlock( parserObjectMesh, ObjectContext, MeshContext )
+		{
+			if ( blockContext->geometry )
+			{
+				castor::String name;
+				auto scene = blockContext->geometry->getScene();
+				newBlockContext->geometry = blockContext->geometry;
+				newBlockContext->scene = blockContext->scene;
+				newBlockContext->root = blockContext->root;
+				newBlockContext->mesh = scene->tryFindMesh( params[0]->get( name ) );
+
+				if ( !newBlockContext->mesh )
+				{
+					newBlockContext->ownMesh = scene->createMesh( name, *scene );
+					newBlockContext->mesh = newBlockContext->ownMesh.get();
+				}
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No scene initialised" ) );
+			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eMesh )
+
+		static CU_ImplementAttributeParserBlock( parserObjectMaterials, ObjectContext )
+		{
+		}
+		CU_EndAttributePushBlock( CSCNSection::eObjectMaterials, blockContext )
+
+		static CU_ImplementAttributeParserBlock( parserObjectCastShadows, ObjectContext )
+		{
+			if ( !blockContext->geometry )
+			{
+				CU_ParsingError( cuT( "No Geometry initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				blockContext->geometry->setShadowCaster( params[0]->get< bool >() );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserObjectReceivesShadows, ObjectContext )
+		{
+			if ( !blockContext->geometry )
+			{
+				CU_ParsingError( cuT( "No Geometry initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				blockContext->geometry->setShadowReceiver( params[0]->get< bool >() );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserObjectCullable, ObjectContext )
+		{
+			if ( !blockContext->geometry )
+			{
+				CU_ParsingError( cuT( "No Geometry initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				blockContext->geometry->setCullable( params[0]->get< bool >() );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserObjectEnd, ObjectContext )
+		{
+			blockContext->parentNode = nullptr;
+			log::info << "Loaded geometry [" << blockContext->geometry->getName() << "]" << std::endl;
+
+			if ( blockContext->ownGeometry )
+			{
+				blockContext->scene->addGeometry( std::move( blockContext->ownGeometry ) );
+			}
+		}
+		CU_EndAttributePop()
+
+		static CU_ImplementAttributeParserBlock( parserObjectMaterialsMaterial, ObjectContext )
+		{
+			if ( !blockContext->geometry )
+			{
+				CU_ParsingError( cuT( "No Geometry initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				if ( blockContext->geometry->getMesh() )
+				{
+					castor::String name;
+					uint16_t index;
+
+					if ( auto material = blockContext->scene->getEngine()->tryFindMaterial( params[1]->get( name ) ) )
+					{
+						if ( blockContext->geometry->getMesh()->getSubmeshCount() > params[0]->get( index ) )
+						{
+							auto submesh = blockContext->geometry->getMesh()->getSubmesh( index );
+							blockContext->geometry->setMaterial( *submesh, material );
+						}
+						else
+						{
+							CU_ParsingError( cuT( "Submesh index is too high" ) );
+						}
+					}
+					else
+					{
+						CU_ParsingError( cuT( "Material [" ) + name + cuT( "] does not exist" ) );
+					}
+				}
+				else
+				{
+					CU_ParsingError( cuT( "Geometry's mesh not initialised" ) );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserObjectMaterialsEnd, ObjectContext )
+		{
+		}
+		CU_EndAttributePop()
+
+		static CU_ImplementAttributeParserBlock( parserSkeletonImport, SkeletonContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else if ( !blockContext->skeleton )
+			{
+				CU_ParsingError( cuT( "No Skeleton initialised." ) );
+			}
+			else
+			{
+				castor::Path path;
+				castor::Path pathFile = context.file.getPath() / params[0]->get( path );
+				Parameters parameters;
+
+				if ( params.size() > 1 )
+				{
+					castor::String meshParams;
+					params[1]->get( meshParams );
+					scnprs::fillMeshImportParameters( context, meshParams, parameters );
+				}
+
+				if ( !SkeletonImporter::import( *blockContext->skeleton
+					, pathFile
+					, parameters ) )
+				{
+					CU_ParsingError( cuT( "Skeleton Import failed" ) );
+					blockContext->skeleton = nullptr;
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserSkeletonAnimImport, SkeletonContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else if ( !blockContext->skeleton )
+			{
+				CU_ParsingError( cuT( "No Skeleton initialised." ) );
+			}
+			else
+			{
+				castor::Path path;
+				castor::Path pathFile = context.file.getPath() / params[0]->get( path );
+				Parameters parameters;
+
+				if ( params.size() > 1 )
+				{
+					castor::String meshParams;
+					params[1]->get( meshParams );
+					scnprs::fillMeshImportParameters( context, meshParams, parameters );
+				}
+
+				auto & engine = *blockContext->scene->getEngine();
+				auto extension = castor::string::lowerCase( path.getExtension() );
+
+				if ( !engine.getImporterFileFactory().isTypeRegistered( extension ) )
+				{
+					CU_ParsingError( cuT( "Importer for [" ) + extension + cuT( "] files is not registered, make sure you've got the matching plug-in installed." ) );
+				}
+				else
+				{
+					castor::String preferredImporter = cuT( "any" );
+					parameters.get( "preferred_importer", preferredImporter );
+					auto file = engine.getImporterFileFactory().create( extension
+						, preferredImporter
+						, *blockContext->scene
+						, pathFile
+						, parameters );
+
+					if ( auto importer = file->createAnimationImporter() )
+					{
+						for ( auto animName : file->listSkeletonAnimations( *blockContext->skeleton ) )
+						{
+							auto animation = castor::makeUnique< SkeletonAnimation >( *blockContext->skeleton
+								, animName );
+
+							if ( !importer->import( *animation
+								, file.get()
+								, parameters ) )
+							{
+								CU_ParsingError( cuT( "Skeleton animation Import failed" ) );
+							}
+							else
+							{
+								blockContext->skeleton->addAnimation( castor::ptrRefCast< Animation >( animation ) );
+							}
+						}
+					}
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserSkeletonEnd, SkeletonContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No Scene initialised." ) );
+			}
+			else if ( !blockContext->skeleton )
+			{
+				CU_ParsingError( cuT( "No Skeleton initialised." ) );
+			}
+			else
+			{
+				log::info << "Loaded skeleton [" << blockContext->skeleton->getName() << "]" << std::endl;
+				blockContext->skeleton = nullptr;
+			}
+		}
+		CU_EndAttributePop()
+
+		static CU_ImplementAttributeParserBlock( parserMeshType, MeshContext )
+		{
+			if ( !blockContext->mesh )
+			{
+				CU_ParsingError( cuT( "No Mesh initialised." ) );
+			}
+			else
+			{
+				Parameters parameters;
+
+				if ( params.size() > 1 )
+				{
+					castor::String tmp;
+					parameters.parse( params[1]->get( tmp ) );
+				}
+
+				auto & factory = blockContext->mesh->getEngine()->getMeshFactory();
+				factory.create( params[0]->get< castor::String >() )->generate( *blockContext->mesh, parameters );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserNewBlock( parserMeshSubmesh, MeshContext, SubmeshContext )
+		{
+			if ( !blockContext->mesh )
+			{
+				CU_ParsingError( cuT( "No Mesh initialised." ) );
+			}
+			else
+			{
+				newBlockContext->root = blockContext->root;
+				newBlockContext->submesh = blockContext->mesh->createSubmesh();
+				newBlockContext->submesh->createComponent< DefaultRenderComponent >();
+			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eSubmesh )
+
+		static CU_ImplementAttributeParserBlock( parserMeshImport, MeshContext )
+		{
+			if ( auto mesh = blockContext->mesh )
+			{
+				castor::Path path;
+				castor::Path pathFile = context.file.getPath() / params[0]->get( path );
+				Parameters parameters;
+
+				if ( params.size() > 1 )
+				{
+					scnprs::fillMeshImportParameters( context, params[1]->get< castor::String >(), parameters );
+				}
+
+				if ( !MeshImporter::import( *mesh
+					, pathFile
+					, parameters
+					, true ) )
+				{
+					CU_ParsingError( cuT( "Mesh Import failed" ) );
+					blockContext->mesh = {};
+				}
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No Mesh initialised." ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserMeshAnimImport, MeshContext )
+		{
+			if ( !blockContext->mesh )
+			{
+				CU_ParsingError( cuT( "No Mesh initialised." ) );
+			}
+			else
+			{
+				castor::Path path;
+				castor::Path pathFile = context.file.getPath() / params[0]->get( path );
+				Parameters parameters;
+
+				if ( params.size() > 1 )
+				{
+					scnprs::fillMeshImportParameters( context, params[1]->get< castor::String >(), parameters );
+				}
+
+				auto animation = castor::makeUnique< MeshAnimation >( *blockContext->mesh
+					, pathFile.getFileName() );
+
+				if ( !AnimationImporter::import( *animation
+					, pathFile
+					, parameters ) )
+				{
+					CU_ParsingError( cuT( "Mesh animation Import failed" ) );
+				}
+				else
+				{
+					blockContext->mesh->addAnimation( castor::ptrRefCast< Animation >( animation ) );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserMeshMorphTargetImport, MeshContext )
+		{
+			if ( !blockContext->mesh )
+			{
+				CU_ParsingError( cuT( "No mesh initialised." ) );
+			}
+			else
+			{
+				castor::Path path;
+				castor::Path pathFile = context.file.getPath() / params[0]->get( path );
+				Parameters parameters;
+
+				if ( params.size() > 1 )
+				{
+					scnprs::fillMeshImportParameters( context, params[1]->get< castor::String >(), parameters );
+				}
+
+				Mesh mesh{ cuT( "MorphImport" ), *blockContext->mesh->getScene() };
+
+				if ( !MeshImporter::import( mesh
+					, pathFile
+					, parameters
+					, false ) )
+				{
+					CU_ParsingError( cuT( "Mesh Import failed" ) );
+				}
+				else if ( mesh.getSubmeshCount() == blockContext->mesh->getSubmeshCount() )
+				{
+					for ( auto & morphSubmesh : mesh )
+					{
+						auto id = morphSubmesh->getId();
+						auto submesh = blockContext->mesh->getSubmesh( id );
+						auto component = submesh->hasComponent( MorphComponent::TypeName )
+							? submesh->getComponent< MorphComponent >()
+							: submesh->createComponent< MorphComponent >();
+						castor3d::SubmeshAnimationBuffer buffer;
+					
+						if ( morphSubmesh->hasComponent( PositionsComponent::TypeName ) )
+						{
+							buffer.positions = morphSubmesh->getPositions();
+							uint32_t index = 0u;
+
+							for ( auto & position : buffer.positions )
+							{
+								position -= submesh->getPositions()[index++];
+							}
+						}
+
+						if ( morphSubmesh->hasComponent( NormalsComponent::TypeName ) )
+						{
+							buffer.normals = morphSubmesh->getNormals();
+							uint32_t index = 0u;
+
+							for ( auto & normal : buffer.normals )
+							{
+								normal -= submesh->getNormals()[index++];
+							}
+						}
+
+						if ( morphSubmesh->hasComponent( TangentsComponent::TypeName ) )
+						{
+							buffer.tangents = morphSubmesh->getTangents();
+							uint32_t index = 0u;
+
+							for ( auto & tangent : buffer.tangents )
+							{
+								tangent -= submesh->getTangents()[index++];
+							}
+						}
+
+						if ( morphSubmesh->hasComponent( BitangentsComponent::TypeName ) )
+						{
+							buffer.bitangents = morphSubmesh->getBitangents();
+							uint32_t index = 0u;
+
+							for ( auto & bitangent : buffer.bitangents )
+							{
+								bitangent -= submesh->getBitangents()[index++];
+							}
+						}
+
+						if ( morphSubmesh->hasComponent( Texcoords0Component::TypeName ) )
+						{
+							buffer.texcoords0 = morphSubmesh->getTexcoords0();
+							uint32_t index = 0u;
+
+							for ( auto & texcoord : buffer.texcoords0 )
+							{
+								texcoord -= submesh->getTexcoords0()[index++];
+							}
+						}
+
+						if ( morphSubmesh->hasComponent( Texcoords1Component::TypeName ) )
+						{
+							buffer.texcoords1 = morphSubmesh->getTexcoords1();
+							uint32_t index = 0u;
+
+							for ( auto & texcoord : buffer.texcoords1 )
+							{
+								texcoord -= submesh->getTexcoords1()[index++];
+							}
+						}
+
+						if ( morphSubmesh->hasComponent( Texcoords2Component::TypeName ) )
+						{
+							buffer.texcoords2 = morphSubmesh->getTexcoords2();
+							uint32_t index = 0u;
+
+							for ( auto & texcoord : buffer.texcoords2 )
+							{
+								texcoord -= submesh->getTexcoords2()[index++];
+							}
+						}
+
+						if ( morphSubmesh->hasComponent( Texcoords3Component::TypeName ) )
+						{
+							buffer.texcoords3 = morphSubmesh->getTexcoords3();
+							uint32_t index = 0u;
+
+							for ( auto & texcoord : buffer.texcoords3 )
+							{
+								texcoord -= submesh->getTexcoords3()[index++];
+							}
+						}
+
+						if ( morphSubmesh->hasComponent( ColoursComponent::TypeName ) )
+						{
+							buffer.colours = morphSubmesh->getColours();
+							uint32_t index = 0u;
+
+							for ( auto & colour : buffer.colours )
+							{
+								colour -= submesh->getColours()[index++];
+							}
+						}
+
+						component->getData().addMorphTarget( std::move( buffer ) );
+					}
+
+					mesh.cleanup();
+				}
+				else
+				{
+					CU_ParsingError( cuT( "The new mesh doesn't match the original mesh" ) );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserMeshDefaultMaterial, MeshContext )
+		{
+			if ( !blockContext->mesh )
+			{
+				CU_ParsingError( cuT( "No Mesh initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				castor::String name;
+
+				if ( auto material = blockContext->mesh->getEngine()->findMaterial( params[0]->get( name ) ) )
+				{
+					for ( auto & submesh : *blockContext->mesh )
+					{
+						submesh->setDefaultMaterial( material );
 					}
 				}
 				else
@@ -2649,107 +3122,172 @@ namespace castor3d
 					CU_ParsingError( cuT( "Material [" ) + name + cuT( "] does not exist" ) );
 				}
 			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserMeshDefaultMaterials, MeshContext )
+		{
+		}
+		CU_EndAttributePushBlock( CSCNSection::eMeshDefaultMaterials, blockContext )
+
+		static CU_ImplementAttributeParserBlock( parserMeshSkeleton, MeshContext )
+		{
+			if ( !blockContext->mesh )
+			{
+				CU_ParsingError( cuT( "No Mesh initialised." ) );
+			}
 			else
 			{
-				CU_ParsingError( cuT( "Geometry's mesh not initialised" ) );
+				castor::String name;
+
+				if ( auto skeleton = blockContext->mesh->getScene()->findSkeleton( params[0]->get( name ) ) )
+				{
+					blockContext->mesh->setSkeleton( skeleton );
+				}
+				else
+				{
+					CU_ParsingError( cuT( "Skeleton [" ) + name + cuT( "] does not exist" ) );
+				}
 			}
 		}
-	}
-	CU_EndAttribute()
+		CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserObjectMaterials )
-	{
-	}
-	CU_EndAttributePush( CSCNSection::eObjectMaterials )
-
-	CU_ImplementAttributeParser( parserObjectCastShadows )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.geometry )
+		static CU_ImplementAttributeParserBlock( parserMeshMorphAnimation, MeshContext )
 		{
-			CU_ParsingError( cuT( "No Geometry initialised." ) );
+			if ( !blockContext->mesh )
+			{
+				CU_ParsingError( cuT( "No Mesh initialised." ) );
+			}
+			else
+			{
+				blockContext->morphAnimation = castor::makeUnique< MeshAnimation >( *blockContext->mesh, params[0]->get< castor::String >() );
+			}
 		}
-		else if ( !params.empty() )
+		CU_EndAttributePushBlock( CSCNSection::eMorphAnimation, blockContext )
+
+		static CU_ImplementAttributeParserBlock( parserMeshEnd, MeshContext )
 		{
-			bool value;
-			params[0]->get( value );
-			parsingContext.geometry->setShadowCaster( value );
+			if ( auto mesh = blockContext->mesh )
+			{
+				if ( blockContext->ownMesh )
+				{
+					blockContext->mesh->getScene()->addMesh( mesh->getName()
+						, blockContext->ownMesh
+						, true );
+				}
+
+				if ( blockContext->geometry )
+				{
+					blockContext->geometry->setMesh( mesh );
+				}
+
+				blockContext->mesh = {};
+
+				for ( auto & submesh : *mesh )
+				{
+					if ( !submesh->hasRenderComponent() )
+					{
+						submesh->createComponent< DefaultRenderComponent >();
+					}
+
+					mesh->getScene()->getListener().postEvent( makeGpuInitialiseEvent( *submesh ) );
+				}
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No Mesh initialised." ) );
+			}
 		}
-	}
-	CU_EndAttribute()
+		CU_EndAttributePop()
 
-	CU_ImplementAttributeParser( parserObjectReceivesShadows )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.geometry )
+		static CU_ImplementAttributeParserBlock( parserMeshMorphTargetWeight, MeshContext )
 		{
-			CU_ParsingError( cuT( "No Geometry initialised." ) );
+			if ( !blockContext->morphAnimation )
+			{
+				CU_ParsingError( cuT( "No Morph Animation initialised." ) );
+			}
+			else if ( params.size() < 3u )
+			{
+				CU_ParsingError( cuT( "Invalid parameters." ) );
+			}
+			else if ( auto mesh = blockContext->mesh )
+			{
+				float timeIndex{};
+				params[0]->get( timeIndex );
+				uint32_t targetIndex{};
+				params[1]->get( targetIndex );
+				float targetWeight{};
+				params[2]->get( targetWeight );
+				auto & animation = *blockContext->morphAnimation;
+
+				for ( auto & submesh : *mesh )
+				{
+					MeshAnimationSubmesh animSubmesh{ animation, *submesh };
+					animation.addChild( std::move( animSubmesh ) );
+					auto time = castor::Milliseconds{ uint64_t( timeIndex * 1000 ) };
+					auto kfit = animation.find( time );
+					castor3d::MeshMorphTarget * kf{};
+
+					if ( kfit == animation.end() )
+					{
+						auto keyFrame = castor::makeUnique< MeshMorphTarget >( animation, time );
+						kf = keyFrame.get();
+						animation.addKeyFrame( castor::ptrRefCast< AnimationKeyFrame >( keyFrame ) );
+					}
+					else
+					{
+						kf = &static_cast< MeshMorphTarget & >( **kfit );
+					}
+
+					kf->setTargetWeight( *submesh, targetIndex, targetWeight );
+				}
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No Mesh initialised." ) );
+			}
 		}
-		else if ( !params.empty() )
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserMeshMorphAnimationEnd, MeshContext )
 		{
-			bool value;
-			params[0]->get( value );
-			parsingContext.geometry->setShadowReceiver( value );
+			if ( !blockContext->morphAnimation )
+			{
+				CU_ParsingError( cuT( "No Morph Animation initialised." ) );
+			}
+			else if ( auto mesh = blockContext->mesh )
+			{
+				log::info << "Loaded morp animation [" << blockContext->morphAnimation->getName() << "]" << std::endl;
+				mesh->addAnimation( castor::ptrRefCast< Animation >( blockContext->morphAnimation ) );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No Mesh initialised." ) );
+			}
 		}
-	}
-	CU_EndAttribute()
+		CU_EndAttributePop()
 
-	CU_ImplementAttributeParser( parserObjectCullable )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.geometry )
+		static CU_ImplementAttributeParserBlock( parserMeshDefaultMaterialsMaterial, MeshContext )
 		{
-			CU_ParsingError( cuT( "No Geometry initialised." ) );
-		}
-		else if ( !params.empty() )
-		{
-			bool value;
-			params[0]->get( value );
-			parsingContext.geometry->setCullable( value );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserObjectEnd )
-	{
-		auto & parsingContext = getParserContext( context );
-		parsingContext.parentNode = nullptr;
-		log::info << "Loaded geometry [" << parsingContext.geometry->getName() << "]" << std::endl;
-
-		if ( parsingContext.ownGeometry )
-		{
-			parsingContext.scene->addGeometry( std::move( parsingContext.ownGeometry ) );
-		}
-
-		parsingContext.geometry = nullptr;
-	}
-	CU_EndAttributePop()
-
-	CU_ImplementAttributeParser( parserObjectMaterialsMaterial )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.geometry )
-		{
-			CU_ParsingError( cuT( "No Geometry initialised." ) );
-		}
-		else if ( !params.empty() )
-		{
-			if ( parsingContext.geometry->getMesh() )
+			if ( !blockContext->mesh )
+			{
+				CU_ParsingError( cuT( "No Mesh initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
 			{
 				castor::String name;
 				uint16_t index;
-				auto material = parsingContext.parser->getEngine()->tryFindMaterial( params[1]->get( name ) );
 
-				if ( material )
+				if (  auto material = blockContext->mesh->getEngine()->findMaterial( params[1]->get( name ) ))
 				{
-					if ( parsingContext.geometry->getMesh()->getSubmeshCount() > params[0]->get( index ) )
+					if ( blockContext->mesh->getSubmeshCount() > params[0]->get( index ) )
 					{
-						auto submesh = parsingContext.geometry->getMesh()->getSubmesh( index );
-						parsingContext.geometry->setMaterial( *submesh, material );
+						auto submesh = blockContext->mesh->getSubmesh( index );
+						submesh->setDefaultMaterial( material );
 					}
 					else
 					{
@@ -2761,2748 +3299,2471 @@ namespace castor3d
 					CU_ParsingError( cuT( "Material [" ) + name + cuT( "] does not exist" ) );
 				}
 			}
-			else
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserMeshDefaultMaterialsEnd, MeshContext )
+		{
+		}
+		CU_EndAttributePop()
+
+		static CU_ImplementAttributeParserBlock( parserSubmeshVertex, SubmeshContext )
+		{
+			if ( !blockContext->submesh )
 			{
-				CU_ParsingError( cuT( "Geometry's mesh not initialised" ) );
+				CU_ParsingError( cuT( "No Submesh initialised." ) );
 			}
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserObjectMaterialsEnd )
-	{
-	}
-	CU_EndAttributePop()
-
-	CU_ImplementAttributeParser( parserSkeletonImport )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.scene )
-		{
-			CU_ParsingError( cuT( "No scene initialised." ) );
-		}
-		else if ( !parsingContext.skeleton )
-		{
-			CU_ParsingError( cuT( "No Skeleton initialised." ) );
-		}
-		else
-		{
-			castor::Path path;
-			castor::Path pathFile = context.file.getPath() / params[0]->get( path );
-			Parameters parameters;
-
-			if ( params.size() > 1 )
+			else if ( params.empty() )
 			{
-				castor::String meshParams;
-				params[1]->get( meshParams );
-				scnprs::fillMeshImportParameters( context, meshParams, parameters );
-			}
-
-			if ( !SkeletonImporter::import( *parsingContext.skeleton
-				, pathFile
-				, parameters ) )
-			{
-				CU_ParsingError( cuT( "Skeleton Import failed" ) );
-				parsingContext.skeleton = nullptr;
-			}
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserSkeletonAnimImport )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.scene )
-		{
-			CU_ParsingError( cuT( "No scene initialised." ) );
-		}
-		else if ( !parsingContext.skeleton )
-		{
-			CU_ParsingError( cuT( "No Skeleton initialised." ) );
-		}
-		else
-		{
-			castor::Path path;
-			castor::Path pathFile = context.file.getPath() / params[0]->get( path );
-			Parameters parameters;
-
-			if ( params.size() > 1 )
-			{
-				castor::String meshParams;
-				params[1]->get( meshParams );
-				scnprs::fillMeshImportParameters( context, meshParams, parameters );
-			}
-
-			auto & engine = *parsingContext.scene->getEngine();
-			auto extension = castor::string::lowerCase( path.getExtension() );
-
-			if ( !engine.getImporterFileFactory().isTypeRegistered( extension ) )
-			{
-				CU_ParsingError( cuT( "Importer for [" ) + extension + cuT( "] files is not registered, make sure you've got the matching plug-in installed." ) );
+				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
 			else
 			{
-				castor::String preferredImporter = cuT( "any" );
-				parameters.get( "preferred_importer", preferredImporter );
-				auto file = engine.getImporterFileFactory().create( extension
-					, preferredImporter
-					, *parsingContext.scene
-					, pathFile
-					, parameters );
-
-				if ( auto importer = file->createAnimationImporter() )
-				{
-					for ( auto animName : file->listSkeletonAnimations( *parsingContext.skeleton ) )
-					{
-						auto animation = castor::makeUnique< SkeletonAnimation >( *parsingContext.skeleton
-							, animName );
-
-						if ( !importer->import( *animation
-							, file.get()
-							, parameters ) )
-						{
-							CU_ParsingError( cuT( "Skeleton animation Import failed" ) );
-						}
-						else
-						{
-							parsingContext.skeleton->addAnimation( castor::ptrRefCast< Animation >( animation ) );
-						}
-					}
-				}
+				castor::Point3f value;
+				params[0]->get( value );
+				blockContext->vertexPos.push_back( value[0] );
+				blockContext->vertexPos.push_back( value[1] );
+				blockContext->vertexPos.push_back( value[2] );
 			}
 		}
-	}
-	CU_EndAttribute()
+		CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserSkeletonEnd )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.scene )
+		static CU_ImplementAttributeParserBlock( parserSubmeshUV, SubmeshContext )
 		{
-			CU_ParsingError( cuT( "No Scene initialised." ) );
-		}
-		else if ( !parsingContext.skeleton )
-		{
-			CU_ParsingError( cuT( "No Skeleton initialised." ) );
-		}
-		else
-		{
-			log::info << "Loaded skeleton [" << parsingContext.skeleton->getName() << "]" << std::endl;
-			parsingContext.importer.reset();
-			parsingContext.skeleton = nullptr;
-		}
-	}
-	CU_EndAttributePop()
-
-	CU_ImplementAttributeParser( parserMeshType )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.scene )
-		{
-			CU_ParsingError( cuT( "No scene initialised" ) );
-		}
-		else if ( !parsingContext.mesh )
-		{
-			CU_ParsingError( cuT( "No Mesh initialised." ) );
-		}
-		else
-		{
-			castor::String type;
-			params[0]->get( type );
-
-			Parameters parameters;
-
-			if ( params.size() > 1 )
+			if ( !blockContext->submesh )
 			{
-				castor::String tmp;
-				parameters.parse( params[1]->get( tmp ) );
+				CU_ParsingError( cuT( "No Submesh initialised." ) );
 			}
-
-			auto & factory = parsingContext.scene->getEngine()->getMeshFactory();
-			factory.create( type )->generate( *parsingContext.mesh, parameters );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserMeshSubmesh )
-	{
-		auto & parsingContext = getParserContext( context );
-		parsingContext.face1 = -1;
-		parsingContext.face2 = -1;
-		parsingContext.submesh = {};
-
-		if ( !parsingContext.mesh )
-		{
-			CU_ParsingError( cuT( "No Mesh initialised." ) );
-		}
-		else
-		{
-			parsingContext.submesh = parsingContext.mesh->createSubmesh();
-			parsingContext.submesh->createComponent< DefaultRenderComponent >();
-		}
-	}
-	CU_EndAttributePush( CSCNSection::eSubmesh )
-
-	CU_ImplementAttributeParser( parserMeshImport )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( auto mesh = parsingContext.mesh )
-		{
-			castor::Path path;
-			castor::Path pathFile = context.file.getPath() / params[0]->get( path );
-			Parameters parameters;
-
-			if ( params.size() > 1 )
+			else if ( params.empty() )
 			{
-				castor::String meshParams;
-				params[1]->get( meshParams );
-				scnprs::fillMeshImportParameters( context, meshParams, parameters );
-			}
-
-			if ( !MeshImporter::import( *mesh
-				, pathFile
-				, parameters
-				, true ) )
-			{
-				CU_ParsingError( cuT( "Mesh Import failed" ) );
-				parsingContext.mesh = {};
-			}
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No Mesh initialised." ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserMeshAnimImport )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.mesh )
-		{
-			CU_ParsingError( cuT( "No Mesh initialised." ) );
-		}
-		else
-		{
-			castor::Path path;
-			castor::Path pathFile = context.file.getPath() / params[0]->get( path );
-			Parameters parameters;
-
-			if ( params.size() > 1 )
-			{
-				castor::String meshParams;
-				params[1]->get( meshParams );
-				scnprs::fillMeshImportParameters( context, meshParams, parameters );
-			}
-
-			auto animation = castor::makeUnique< MeshAnimation >( *parsingContext.mesh
-				, pathFile.getFileName() );
-
-			if ( !AnimationImporter::import( *animation
-				, pathFile
-				, parameters ) )
-			{
-				CU_ParsingError( cuT( "Mesh animation Import failed" ) );
+				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
 			else
 			{
-				parsingContext.mesh->addAnimation( castor::ptrRefCast< Animation >( animation ) );
+				castor::Point2f value;
+				params[0]->get( value );
+				blockContext->vertexTex.push_back( value[0] );
+				blockContext->vertexTex.push_back( value[1] );
+				blockContext->vertexTex.push_back( 0.0 );
 			}
 		}
-	}
-	CU_EndAttribute()
+		CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserMeshMorphTargetImport )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.mesh )
+		static CU_ImplementAttributeParserBlock( parserSubmeshUVW, SubmeshContext )
 		{
-			CU_ParsingError( cuT( "No mesh initialised." ) );
-		}
-		else
-		{
-			castor::Path path;
-			castor::Path pathFile = context.file.getPath() / params[0]->get( path );
-			Parameters parameters;
-
-			if ( params.size() > 1 )
+			if ( !blockContext->submesh )
 			{
-				castor::String meshParams;
-				params[1]->get( meshParams );
-				scnprs::fillMeshImportParameters( context, meshParams, parameters );
+				CU_ParsingError( cuT( "No Submesh initialised." ) );
 			}
-
-			Mesh mesh{ cuT( "MorphImport" ), *parsingContext.scene };
-
-			if ( !MeshImporter::import( mesh
-				, pathFile
-				, parameters
-				, false ) )
+			else if ( params.empty() )
 			{
-				CU_ParsingError( cuT( "Mesh Import failed" ) );
-			}
-			else if ( mesh.getSubmeshCount() == parsingContext.mesh->getSubmeshCount() )
-			{
-				for ( auto & morphSubmesh : mesh )
-				{
-					auto id = morphSubmesh->getId();
-					auto submesh = parsingContext.mesh->getSubmesh( id );
-					auto component = submesh->hasComponent( MorphComponent::TypeName )
-						? submesh->getComponent< MorphComponent >()
-						: submesh->createComponent< MorphComponent >();
-					castor3d::SubmeshAnimationBuffer buffer;
-					
-					if ( morphSubmesh->hasComponent( PositionsComponent::TypeName ) )
-					{
-						buffer.positions = morphSubmesh->getPositions();
-						uint32_t index = 0u;
-
-						for ( auto & position : buffer.positions )
-						{
-							position -= submesh->getPositions()[index++];
-						}
-					}
-
-					if ( morphSubmesh->hasComponent( NormalsComponent::TypeName ) )
-					{
-						buffer.normals = morphSubmesh->getNormals();
-						uint32_t index = 0u;
-
-						for ( auto & normal : buffer.normals )
-						{
-							normal -= submesh->getNormals()[index++];
-						}
-					}
-
-					if ( morphSubmesh->hasComponent( TangentsComponent::TypeName ) )
-					{
-						buffer.tangents = morphSubmesh->getTangents();
-						uint32_t index = 0u;
-
-						for ( auto & tangent : buffer.tangents )
-						{
-							tangent -= submesh->getTangents()[index++];
-						}
-					}
-
-					if ( morphSubmesh->hasComponent( BitangentsComponent::TypeName ) )
-					{
-						buffer.bitangents = morphSubmesh->getBitangents();
-						uint32_t index = 0u;
-
-						for ( auto & bitangent : buffer.bitangents )
-						{
-							bitangent -= submesh->getBitangents()[index++];
-						}
-					}
-
-					if ( morphSubmesh->hasComponent( Texcoords0Component::TypeName ) )
-					{
-						buffer.texcoords0 = morphSubmesh->getTexcoords0();
-						uint32_t index = 0u;
-
-						for ( auto & texcoord : buffer.texcoords0 )
-						{
-							texcoord -= submesh->getTexcoords0()[index++];
-						}
-					}
-
-					if ( morphSubmesh->hasComponent( Texcoords1Component::TypeName ) )
-					{
-						buffer.texcoords1 = morphSubmesh->getTexcoords1();
-						uint32_t index = 0u;
-
-						for ( auto & texcoord : buffer.texcoords1 )
-						{
-							texcoord -= submesh->getTexcoords1()[index++];
-						}
-					}
-
-					if ( morphSubmesh->hasComponent( Texcoords2Component::TypeName ) )
-					{
-						buffer.texcoords2 = morphSubmesh->getTexcoords2();
-						uint32_t index = 0u;
-
-						for ( auto & texcoord : buffer.texcoords2 )
-						{
-							texcoord -= submesh->getTexcoords2()[index++];
-						}
-					}
-
-					if ( morphSubmesh->hasComponent( Texcoords3Component::TypeName ) )
-					{
-						buffer.texcoords3 = morphSubmesh->getTexcoords3();
-						uint32_t index = 0u;
-
-						for ( auto & texcoord : buffer.texcoords3 )
-						{
-							texcoord -= submesh->getTexcoords3()[index++];
-						}
-					}
-
-					if ( morphSubmesh->hasComponent( ColoursComponent::TypeName ) )
-					{
-						buffer.colours = morphSubmesh->getColours();
-						uint32_t index = 0u;
-
-						for ( auto & colour : buffer.colours )
-						{
-							colour -= submesh->getColours()[index++];
-						}
-					}
-
-					component->getData().addMorphTarget( std::move( buffer ) );
-				}
-
-				mesh.cleanup();
+				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
 			else
 			{
-				CU_ParsingError( cuT( "The new mesh doesn't match the original mesh" ) );
+				castor::Point3f value;
+				params[0]->get( value );
+				blockContext->vertexTex.push_back( value[0] );
+				blockContext->vertexTex.push_back( value[1] );
+				blockContext->vertexTex.push_back( value[2] );
 			}
 		}
-	}
-	CU_EndAttribute()
+		CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserMeshDefaultMaterial )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.mesh )
+		static CU_ImplementAttributeParserBlock( parserSubmeshNormal, SubmeshContext )
 		{
-			CU_ParsingError( cuT( "No Mesh initialised." ) );
-		}
-		else if ( !params.empty() )
-		{
-			castor::String name;
-			auto material = parsingContext.parser->getEngine()->findMaterial( params[0]->get( name ) );
-
-			if ( material )
+			if ( !blockContext->submesh )
 			{
-				for ( auto & submesh : *parsingContext.mesh )
-				{
-					submesh->setDefaultMaterial( material );
-				}
+				CU_ParsingError( cuT( "No Submesh initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
 			else
 			{
-				CU_ParsingError( cuT( "Material [" ) + name + cuT( "] does not exist" ) );
+				castor::Point3f value;
+				params[0]->get( value );
+				blockContext->vertexNml.push_back( value[0] );
+				blockContext->vertexNml.push_back( value[1] );
+				blockContext->vertexNml.push_back( value[2] );
 			}
 		}
-	}
-	CU_EndAttribute()
+		CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserMeshDefaultMaterials )
-	{
-	}
-	CU_EndAttributePush( CSCNSection::eMeshDefaultMaterials )
-
-	CU_ImplementAttributeParser( parserMeshSkeleton )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.scene )
+		static CU_ImplementAttributeParserBlock( parserSubmeshTangent, SubmeshContext )
 		{
-			CU_ParsingError( cuT( "No Scene initialised." ) );
-		}
-		else if ( auto mesh = parsingContext.mesh )
-		{
-			castor::String name;
-			auto skeleton = parsingContext.scene->findSkeleton( params[0]->get( name ) );
-
-			if ( skeleton )
+			if ( !blockContext->submesh )
 			{
-				mesh->setSkeleton( skeleton );
+				CU_ParsingError( cuT( "No Submesh initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
 			else
 			{
-				CU_ParsingError( cuT( "Skeleton [" ) + name + cuT( "] does not exist" ) );
+				castor::Point4f value;
+				params[0]->get( value );
+				blockContext->vertexTan.push_back( value[0] );
+				blockContext->vertexTan.push_back( value[1] );
+				blockContext->vertexTan.push_back( value[2] );
+				blockContext->vertexTan.push_back( value[3] );
 			}
 		}
-		else
-		{
-			CU_ParsingError( cuT( "No Mesh initialised." ) );
-		}
-	}
-	CU_EndAttribute()
+		CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserMeshMorphAnimation )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.scene )
+		static CU_ImplementAttributeParserBlock( parserSubmeshFace, SubmeshContext )
 		{
-			CU_ParsingError( cuT( "No Scene initialised." ) );
-		}
-		else if ( auto mesh = parsingContext.mesh )
-		{
-			castor::String name;
-			params[0]->get( name );
-			parsingContext.morphAnimation = castor::makeUnique< MeshAnimation >( *mesh, name );
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No Mesh initialised." ) );
-		}
-	}
-	CU_EndAttributePush( CSCNSection::eMorphAnimation )
-
-	CU_ImplementAttributeParser( parserMeshEnd )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.scene )
-		{
-			CU_ParsingError( cuT( "No Scene initialised." ) );
-		}
-		else if ( auto mesh = parsingContext.mesh )
-		{
-			if ( parsingContext.ownMesh )
+			if ( !blockContext->submesh )
 			{
-				parsingContext.scene->addMesh( mesh->getName()
-					, parsingContext.ownMesh
-					, true );
+				CU_ParsingError( cuT( "No Submesh initialised." ) );
 			}
-
-			if ( parsingContext.geometry )
+			else if ( params.empty() )
 			{
-				parsingContext.geometry->setMesh( mesh );
-			}
-
-			parsingContext.importer.reset();
-			parsingContext.mesh = {};
-
-			for ( auto & submesh : *mesh )
-			{
-				if ( !submesh->hasRenderComponent() )
-				{
-					submesh->createComponent< DefaultRenderComponent >();
-				}
-
-				mesh->getScene()->getListener().postEvent( makeGpuInitialiseEvent( *submesh ) );
-			}
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No Mesh initialised." ) );
-		}
-	}
-	CU_EndAttributePop()
-
-	CU_ImplementAttributeParser( parserMeshMorphTargetWeight )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.scene )
-		{
-			CU_ParsingError( cuT( "No Scene initialised." ) );
-		}
-		else if ( !parsingContext.morphAnimation )
-		{
-			CU_ParsingError( cuT( "No Morph Animation initialised." ) );
-		}
-		else if ( params.size() < 3u )
-		{
-			CU_ParsingError( cuT( "Invalid parameters." ) );
-		}
-		else if ( auto mesh = parsingContext.mesh )
-		{
-			float timeIndex{};
-			params[0]->get( timeIndex );
-			uint32_t targetIndex{};
-			params[1]->get( targetIndex );
-			float targetWeight{};
-			params[2]->get( targetWeight );
-			auto & animation = *parsingContext.morphAnimation;
-
-			for ( auto & submesh : *mesh )
-			{
-				MeshAnimationSubmesh animSubmesh{ animation, *submesh };
-				animation.addChild( std::move( animSubmesh ) );
-				auto time = castor::Milliseconds{ uint64_t( timeIndex * 1000 ) };
-				auto kfit = animation.find( time );
-				castor3d::MeshMorphTarget * kf{};
-
-				if ( kfit == animation.end() )
-				{
-					auto keyFrame = castor::makeUnique< MeshMorphTarget >( animation, time );
-					kf = keyFrame.get();
-					animation.addKeyFrame( castor::ptrRefCast< AnimationKeyFrame >( keyFrame ) );
-				}
-				else
-				{
-					kf = &static_cast< MeshMorphTarget & >( **kfit );
-				}
-
-				kf->setTargetWeight( *submesh, targetIndex, targetWeight );
-			}
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No Mesh initialised." ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserMeshMorphAnimationEnd )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.scene )
-		{
-			CU_ParsingError( cuT( "No Scene initialised." ) );
-		}
-		else if ( !parsingContext.morphAnimation )
-		{
-			CU_ParsingError( cuT( "No Morph Animation initialised." ) );
-		}
-		else if ( auto mesh = parsingContext.mesh )
-		{
-			log::info << "Loaded morp animation [" << parsingContext.morphAnimation->getName() << "]" << std::endl;
-			mesh->addAnimation( castor::ptrRefCast< Animation >( parsingContext.morphAnimation ) );
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No Mesh initialised." ) );
-		}
-	}
-	CU_EndAttributePop()
-
-	CU_ImplementAttributeParser( parserMeshDefaultMaterialsMaterial )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.mesh )
-		{
-			CU_ParsingError( cuT( "No Mesh initialised." ) );
-		}
-		else if ( !params.empty() )
-		{
-			castor::String name;
-			uint16_t index;
-			auto material = parsingContext.parser->getEngine()->findMaterial( params[1]->get( name ) );
-
-			if ( material )
-			{
-				if ( parsingContext.mesh->getSubmeshCount() > params[0]->get( index ) )
-				{
-					auto submesh = parsingContext.mesh->getSubmesh( index );
-					submesh->setDefaultMaterial( material );
-				}
-				else
-				{
-					CU_ParsingError( cuT( "Submesh index is too high" ) );
-				}
+				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
 			else
 			{
-				CU_ParsingError( cuT( "Material [" ) + name + cuT( "] does not exist" ) );
-			}
-		}
-	}
-	CU_EndAttribute()
+				castor::String strParams;
+				params[0]->get( strParams );
+				castor::Point3i pt3Indices;
+				auto arrayValues = castor::string::split( strParams, cuT( " " ) );
+				blockContext->face1 = -1;
+				blockContext->face2 = -1;
 
-	CU_ImplementAttributeParser( parserMeshDefaultMaterialsEnd )
-	{
-	}
-	CU_EndAttributePop()
-
-	CU_ImplementAttributeParser( parserSubmeshVertex )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.submesh )
-		{
-			CU_ParsingError( cuT( "No Submesh initialised." ) );
-		}
-		else if ( !params.empty() )
-		{
-			castor::Point3f value;
-			params[0]->get( value );
-			parsingContext.vertexPos.push_back( value[0] );
-			parsingContext.vertexPos.push_back( value[1] );
-			parsingContext.vertexPos.push_back( value[2] );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserSubmeshUV )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.submesh )
-		{
-			CU_ParsingError( cuT( "No Submesh initialised." ) );
-		}
-		else if ( !params.empty() )
-		{
-			castor::Point2f value;
-			params[0]->get( value );
-			parsingContext.vertexTex.push_back( value[0] );
-			parsingContext.vertexTex.push_back( value[1] );
-			parsingContext.vertexTex.push_back( 0.0 );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserSubmeshUVW )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.submesh )
-		{
-			CU_ParsingError( cuT( "No Submesh initialised." ) );
-		}
-		else if ( !params.empty() )
-		{
-			castor::Point3f value;
-			params[0]->get( value );
-			parsingContext.vertexTex.push_back( value[0] );
-			parsingContext.vertexTex.push_back( value[1] );
-			parsingContext.vertexTex.push_back( value[2] );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserSubmeshNormal )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.submesh )
-		{
-			CU_ParsingError( cuT( "No Submesh initialised." ) );
-		}
-		else if ( !params.empty() )
-		{
-			castor::Point3f value;
-			params[0]->get( value );
-			parsingContext.vertexNml.push_back( value[0] );
-			parsingContext.vertexNml.push_back( value[1] );
-			parsingContext.vertexNml.push_back( value[2] );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserSubmeshTangent )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.submesh )
-		{
-			CU_ParsingError( cuT( "No Submesh initialised." ) );
-		}
-		else if ( !params.empty() )
-		{
-			castor::Point4f value;
-			params[0]->get( value );
-			parsingContext.vertexTan.push_back( value[0] );
-			parsingContext.vertexTan.push_back( value[1] );
-			parsingContext.vertexTan.push_back( value[2] );
-			parsingContext.vertexTan.push_back( value[3] );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserSubmeshFace )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.submesh )
-		{
-			CU_ParsingError( cuT( "No Submesh initialised." ) );
-		}
-		else if ( !params.empty() )
-		{
-			castor::String strParams;
-			params[0]->get( strParams );
-			castor::Point3i pt3Indices;
-			auto arrayValues = castor::string::split( strParams, cuT( " " ) );
-			parsingContext.face1 = -1;
-			parsingContext.face2 = -1;
-
-			if ( arrayValues.size() >= 4 )
-			{
-				castor::Point4i pt4Indices;
-
-				if ( castor::parseValues( *parsingContext.logger, strParams, pt4Indices ) )
+				if ( arrayValues.size() >= 4 )
 				{
-					parsingContext.face1 = int( parsingContext.faces.size() );
-					parsingContext.faces.push_back( uint32_t( pt4Indices[0] ) );
-					parsingContext.faces.push_back( uint32_t( pt4Indices[1] ) );
-					parsingContext.faces.push_back( uint32_t( pt4Indices[2] ) );
-					parsingContext.face2 = int( parsingContext.faces.size() );
-					parsingContext.faces.push_back( uint32_t( pt4Indices[0] ) );
-					parsingContext.faces.push_back( uint32_t( pt4Indices[2] ) );
-					parsingContext.faces.push_back( uint32_t( pt4Indices[3] ) );
-				}
-			}
-			else if ( castor::parseValues( *parsingContext.logger, strParams, pt3Indices ) )
-			{
-				parsingContext.face1 = int( parsingContext.faces.size() );
-				parsingContext.faces.push_back( uint32_t( pt3Indices[0] ) );
-				parsingContext.faces.push_back( uint32_t( pt3Indices[1] ) );
-				parsingContext.faces.push_back( uint32_t( pt3Indices[2] ) );
-			}
-		}
-	}
-	CU_EndAttribute()
+					castor::Point4i pt4Indices;
 
-	CU_ImplementAttributeParser( parserSubmeshFaceUV )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.submesh )
-		{
-			CU_ParsingError( cuT( "No Submesh initialised." ) );
-		}
-		else if ( !params.empty() )
-		{
-			castor::String strParams;
-			params[0]->get( strParams );
-
-			if ( parsingContext.vertexTex.empty() )
-			{
-				parsingContext.vertexTex.resize( parsingContext.vertexPos.size() );
-			}
-
-			auto arrayValues = castor::string::split( strParams, cuT( " " ), 20 );
-
-			if ( arrayValues.size() >= 6 && parsingContext.face1 != -1 )
-			{
-				parsingContext.vertexTex[0 + parsingContext.faces[size_t( parsingContext.face1 + 0 )] * 3] = castor::string::toFloat( arrayValues[0] );
-				parsingContext.vertexTex[1 + parsingContext.faces[size_t( parsingContext.face1 + 0 )] * 3] = castor::string::toFloat( arrayValues[1] );
-				parsingContext.vertexTex[0 + parsingContext.faces[size_t( parsingContext.face1 + 1 )] * 3] = castor::string::toFloat( arrayValues[2] );
-				parsingContext.vertexTex[1 + parsingContext.faces[size_t( parsingContext.face1 + 1 )] * 3] = castor::string::toFloat( arrayValues[3] );
-				parsingContext.vertexTex[0 + parsingContext.faces[size_t( parsingContext.face1 + 2 )] * 3] = castor::string::toFloat( arrayValues[4] );
-				parsingContext.vertexTex[1 + parsingContext.faces[size_t( parsingContext.face1 + 2 )] * 3] = castor::string::toFloat( arrayValues[5] );
-			}
-
-			if ( arrayValues.size() >= 8 && parsingContext.face2 != -1 )
-			{
-				parsingContext.vertexTex[0 + parsingContext.faces[size_t( parsingContext.face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[0] );
-				parsingContext.vertexTex[1 + parsingContext.faces[size_t( parsingContext.face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[1] );
-				parsingContext.vertexTex[0 + parsingContext.faces[size_t( parsingContext.face2 + 1 )] * 3] = castor::string::toFloat( arrayValues[4] );
-				parsingContext.vertexTex[1 + parsingContext.faces[size_t( parsingContext.face2 + 1 )] * 3] = castor::string::toFloat( arrayValues[5] );
-				parsingContext.vertexTex[0 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[6] );
-				parsingContext.vertexTex[1 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[7] );
-			}
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserSubmeshFaceUVW )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.submesh )
-		{
-			CU_ParsingError( cuT( "No Submesh initialised." ) );
-		}
-		else if ( !params.empty() )
-		{
-			castor::String strParams;
-			params[0]->get( strParams );
-
-			if ( parsingContext.vertexTex.empty() )
-			{
-				parsingContext.vertexTex.resize( parsingContext.vertexPos.size() );
-			}
-
-			auto arrayValues = castor::string::split( strParams, cuT( " " ), 20 );
-
-			if ( arrayValues.size() >= 9 && parsingContext.face1 != -1 )
-			{
-				parsingContext.vertexTex[0 + parsingContext.faces[size_t( parsingContext.face1 + 0 )] * 3] = castor::string::toFloat( arrayValues[0] );
-				parsingContext.vertexTex[1 + parsingContext.faces[size_t( parsingContext.face1 + 0 )] * 3] = castor::string::toFloat( arrayValues[1] );
-				parsingContext.vertexTex[2 + parsingContext.faces[size_t( parsingContext.face1 + 0 )] * 3] = castor::string::toFloat( arrayValues[2] );
-				parsingContext.vertexTex[0 + parsingContext.faces[size_t( parsingContext.face1 + 1 )] * 3] = castor::string::toFloat( arrayValues[3] );
-				parsingContext.vertexTex[1 + parsingContext.faces[size_t( parsingContext.face1 + 1 )] * 3] = castor::string::toFloat( arrayValues[4] );
-				parsingContext.vertexTex[2 + parsingContext.faces[size_t( parsingContext.face1 + 1 )] * 3] = castor::string::toFloat( arrayValues[5] );
-				parsingContext.vertexTex[0 + parsingContext.faces[size_t( parsingContext.face1 + 2 )] * 3] = castor::string::toFloat( arrayValues[6] );
-				parsingContext.vertexTex[1 + parsingContext.faces[size_t( parsingContext.face1 + 2 )] * 3] = castor::string::toFloat( arrayValues[7] );
-				parsingContext.vertexTex[2 + parsingContext.faces[size_t( parsingContext.face1 + 2 )] * 3] = castor::string::toFloat( arrayValues[8] );
-			}
-
-			if ( arrayValues.size() >= 12 && parsingContext.face2 != -1 )
-			{
-				parsingContext.vertexTex[0 + parsingContext.faces[size_t( parsingContext.face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 0] );
-				parsingContext.vertexTex[1 + parsingContext.faces[size_t( parsingContext.face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 1] );
-				parsingContext.vertexTex[2 + parsingContext.faces[size_t( parsingContext.face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 2] );
-				parsingContext.vertexTex[0 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[ 6] );
-				parsingContext.vertexTex[1 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[ 7] );
-				parsingContext.vertexTex[2 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[ 8] );
-				parsingContext.vertexTex[0 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[ 9] );
-				parsingContext.vertexTex[1 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[10] );
-				parsingContext.vertexTex[2 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[11] );
-			}
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserSubmeshFaceNormals )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.submesh )
-		{
-			CU_ParsingError( cuT( "No Submesh initialised." ) );
-		}
-		else if ( !params.empty() )
-		{
-			castor::String strParams;
-			params[0]->get( strParams );
-
-			if ( parsingContext.vertexNml.empty() )
-			{
-				parsingContext.vertexNml.resize( parsingContext.vertexPos.size() );
-			}
-
-			auto arrayValues = castor::string::split( strParams, cuT( " " ), 20 );
-
-			if ( arrayValues.size() >= 9 && parsingContext.face1 != -1 )
-			{
-				parsingContext.vertexNml[0 + parsingContext.faces[size_t( parsingContext.face1 + 0 )] * 3] = castor::string::toFloat( arrayValues[0] );
-				parsingContext.vertexNml[1 + parsingContext.faces[size_t( parsingContext.face1 + 0 )] * 3] = castor::string::toFloat( arrayValues[1] );
-				parsingContext.vertexNml[2 + parsingContext.faces[size_t( parsingContext.face1 + 0 )] * 3] = castor::string::toFloat( arrayValues[2] );
-				parsingContext.vertexNml[0 + parsingContext.faces[size_t( parsingContext.face1 + 1 )] * 3] = castor::string::toFloat( arrayValues[3] );
-				parsingContext.vertexNml[1 + parsingContext.faces[size_t( parsingContext.face1 + 1 )] * 3] = castor::string::toFloat( arrayValues[4] );
-				parsingContext.vertexNml[2 + parsingContext.faces[size_t( parsingContext.face1 + 1 )] * 3] = castor::string::toFloat( arrayValues[5] );
-				parsingContext.vertexNml[0 + parsingContext.faces[size_t( parsingContext.face1 + 2 )] * 3] = castor::string::toFloat( arrayValues[6] );
-				parsingContext.vertexNml[1 + parsingContext.faces[size_t( parsingContext.face1 + 2 )] * 3] = castor::string::toFloat( arrayValues[7] );
-				parsingContext.vertexNml[2 + parsingContext.faces[size_t( parsingContext.face1 + 2 )] * 3] = castor::string::toFloat( arrayValues[8] );
-			}
-
-			if ( arrayValues.size() >= 12 && parsingContext.face2 != -1 )
-			{
-				parsingContext.vertexNml[0 + parsingContext.faces[size_t( parsingContext.face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 0] );
-				parsingContext.vertexNml[1 + parsingContext.faces[size_t( parsingContext.face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 1] );
-				parsingContext.vertexNml[2 + parsingContext.faces[size_t( parsingContext.face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 2] );
-				parsingContext.vertexNml[0 + parsingContext.faces[size_t( parsingContext.face2 + 1 )] * 3] = castor::string::toFloat( arrayValues[ 6] );
-				parsingContext.vertexNml[1 + parsingContext.faces[size_t( parsingContext.face2 + 1 )] * 3] = castor::string::toFloat( arrayValues[ 7] );
-				parsingContext.vertexNml[2 + parsingContext.faces[size_t( parsingContext.face2 + 1 )] * 3] = castor::string::toFloat( arrayValues[ 8] );
-				parsingContext.vertexNml[0 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[ 9] );
-				parsingContext.vertexNml[1 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[10] );
-				parsingContext.vertexNml[2 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[11] );
-			}
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserSubmeshFaceTangents )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.submesh )
-		{
-			CU_ParsingError( cuT( "No Submesh initialised." ) );
-		}
-		else if ( !params.empty() )
-		{
-			castor::String strParams;
-			params[0]->get( strParams );
-
-			if ( parsingContext.vertexTan.empty() )
-			{
-				parsingContext.vertexTan.resize( parsingContext.vertexPos.size() );
-			}
-
-			auto arrayValues = castor::string::split( strParams, cuT( " " ), 20 );
-
-			if ( arrayValues.size() >= 12 && parsingContext.face1 != -1 )
-			{
-				parsingContext.vertexTan[0 + parsingContext.faces[size_t( parsingContext.face1 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 0] );
-				parsingContext.vertexTan[1 + parsingContext.faces[size_t( parsingContext.face1 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 1] );
-				parsingContext.vertexTan[2 + parsingContext.faces[size_t( parsingContext.face1 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 2] );
-				parsingContext.vertexTan[3 + parsingContext.faces[size_t( parsingContext.face1 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 3] );
-				parsingContext.vertexTan[0 + parsingContext.faces[size_t( parsingContext.face1 + 1 )] * 3] = castor::string::toFloat( arrayValues[ 4] );
-				parsingContext.vertexTan[1 + parsingContext.faces[size_t( parsingContext.face1 + 1 )] * 3] = castor::string::toFloat( arrayValues[ 5] );
-				parsingContext.vertexTan[2 + parsingContext.faces[size_t( parsingContext.face1 + 1 )] * 3] = castor::string::toFloat( arrayValues[ 6] );
-				parsingContext.vertexTan[3 + parsingContext.faces[size_t( parsingContext.face1 + 1 )] * 3] = castor::string::toFloat( arrayValues[ 7] );
-				parsingContext.vertexTan[0 + parsingContext.faces[size_t( parsingContext.face1 + 2 )] * 3] = castor::string::toFloat( arrayValues[ 8] );
-				parsingContext.vertexTan[1 + parsingContext.faces[size_t( parsingContext.face1 + 2 )] * 3] = castor::string::toFloat( arrayValues[ 9] );
-				parsingContext.vertexTan[2 + parsingContext.faces[size_t( parsingContext.face1 + 2 )] * 3] = castor::string::toFloat( arrayValues[10] );
-				parsingContext.vertexTan[3 + parsingContext.faces[size_t( parsingContext.face1 + 2 )] * 3] = castor::string::toFloat( arrayValues[11] );
-			}
-
-			if ( arrayValues.size() >= 16 && parsingContext.face2 != -1 )
-			{
-				parsingContext.vertexTan[0 + parsingContext.faces[size_t( parsingContext.face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 0] );
-				parsingContext.vertexTan[1 + parsingContext.faces[size_t( parsingContext.face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 1] );
-				parsingContext.vertexTan[2 + parsingContext.faces[size_t( parsingContext.face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 2] );
-				parsingContext.vertexTan[3 + parsingContext.faces[size_t( parsingContext.face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 3] );
-				parsingContext.vertexTan[0 + parsingContext.faces[size_t( parsingContext.face2 + 1 )] * 3] = castor::string::toFloat( arrayValues[ 8] );
-				parsingContext.vertexTan[1 + parsingContext.faces[size_t( parsingContext.face2 + 1 )] * 3] = castor::string::toFloat( arrayValues[ 9] );
-				parsingContext.vertexTan[2 + parsingContext.faces[size_t( parsingContext.face2 + 1 )] * 3] = castor::string::toFloat( arrayValues[10] );
-				parsingContext.vertexTan[3 + parsingContext.faces[size_t( parsingContext.face2 + 1 )] * 3] = castor::string::toFloat( arrayValues[11] );
-				parsingContext.vertexTan[0 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[12] );
-				parsingContext.vertexTan[1 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[13] );
-				parsingContext.vertexTan[2 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[14] );
-				parsingContext.vertexTan[3 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[15] );
-			}
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserSubmeshEnd )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.vertexPos.empty() )
-		{
-			if ( !parsingContext.submesh->hasComponent( PositionsComponent::TypeName ) )
-			{
-				parsingContext.submesh->createComponent< PositionsComponent >();
-			}
-
-			if ( !parsingContext.vertexNml.empty()
-				&& !parsingContext.submesh->hasComponent( NormalsComponent::TypeName ) )
-			{
-				parsingContext.submesh->createComponent< NormalsComponent >();
-			}
-
-			if ( !parsingContext.vertexTan.empty()
-				&& !parsingContext.submesh->hasComponent( TangentsComponent::TypeName ) )
-			{
-				parsingContext.submesh->createComponent< TangentsComponent >();
-			}
-
-			if ( !parsingContext.vertexTex.empty()
-				&& !parsingContext.submesh->hasComponent( Texcoords0Component::TypeName ) )
-			{
-				parsingContext.submesh->createComponent< Texcoords0Component >();
-			}
-
-			std::vector< InterleavedVertex > vertices{ parsingContext.vertexPos.size() / 3 };
-			uint32_t index{ 0u };
-
-			for ( auto & vertex : vertices )
-			{
-				std::memcpy( vertex.pos.ptr(), &parsingContext.vertexPos[index], sizeof( vertex.pos ) );
-
-				if ( !parsingContext.vertexNml.empty() )
-				{
-					std::memcpy( vertex.nml.ptr(), &parsingContext.vertexNml[index], sizeof( vertex.nml ) );
-				}
-
-				if ( !parsingContext.vertexTan.empty() )
-				{
-					std::memcpy( vertex.tan.ptr(), &parsingContext.vertexTan[index], sizeof( vertex.tan ) );
-				}
-
-				if ( !parsingContext.vertexTex.empty() )
-				{
-					std::memcpy( vertex.tex.ptr(), &parsingContext.vertexTex[index], sizeof( vertex.tex ) );
-				}
-
-				index += 3;
-			}
-
-			parsingContext.submesh->addPoints( vertices );
-
-			if ( !parsingContext.faces.empty() )
-			{
-				auto indices = reinterpret_cast< FaceIndices * >( &parsingContext.faces[0] );
-				auto mapping = parsingContext.submesh->createComponent< TriFaceMapping >();
-				mapping->getData().addFaceGroup( indices, indices + ( parsingContext.faces.size() / 3 ) );
-
-				if ( !parsingContext.vertexNml.empty() )
-				{
-					if ( !parsingContext.vertexTex.empty()
-						&& parsingContext.vertexTan.empty() )
+					if ( castor::parseValues( *blockContext->root->logger, strParams, pt4Indices ) )
 					{
+						blockContext->face1 = int( blockContext->faces.size() );
+						blockContext->faces.push_back( uint32_t( pt4Indices[0] ) );
+						blockContext->faces.push_back( uint32_t( pt4Indices[1] ) );
+						blockContext->faces.push_back( uint32_t( pt4Indices[2] ) );
+						blockContext->face2 = int( blockContext->faces.size() );
+						blockContext->faces.push_back( uint32_t( pt4Indices[0] ) );
+						blockContext->faces.push_back( uint32_t( pt4Indices[2] ) );
+						blockContext->faces.push_back( uint32_t( pt4Indices[3] ) );
+					}
+				}
+				else if ( castor::parseValues( *blockContext->root->logger, strParams, pt3Indices ) )
+				{
+					blockContext->face1 = int( blockContext->faces.size() );
+					blockContext->faces.push_back( uint32_t( pt3Indices[0] ) );
+					blockContext->faces.push_back( uint32_t( pt3Indices[1] ) );
+					blockContext->faces.push_back( uint32_t( pt3Indices[2] ) );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserSubmeshFaceUV, SubmeshContext )
+		{
+			if ( !blockContext->submesh )
+			{
+				CU_ParsingError( cuT( "No Submesh initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				if ( blockContext->vertexTex.empty() )
+				{
+					blockContext->vertexTex.resize( blockContext->vertexPos.size() );
+				}
+
+				auto arrayValues = castor::string::split( params[0]->get< castor::String >(), cuT( " " ), 20 );
+
+				if ( arrayValues.size() >= 6 && blockContext->face1 != -1 )
+				{
+					blockContext->vertexTex[0 + blockContext->faces[size_t( blockContext->face1 + 0 )] * 3] = castor::string::toFloat( arrayValues[0] );
+					blockContext->vertexTex[1 + blockContext->faces[size_t( blockContext->face1 + 0 )] * 3] = castor::string::toFloat( arrayValues[1] );
+					blockContext->vertexTex[0 + blockContext->faces[size_t( blockContext->face1 + 1 )] * 3] = castor::string::toFloat( arrayValues[2] );
+					blockContext->vertexTex[1 + blockContext->faces[size_t( blockContext->face1 + 1 )] * 3] = castor::string::toFloat( arrayValues[3] );
+					blockContext->vertexTex[0 + blockContext->faces[size_t( blockContext->face1 + 2 )] * 3] = castor::string::toFloat( arrayValues[4] );
+					blockContext->vertexTex[1 + blockContext->faces[size_t( blockContext->face1 + 2 )] * 3] = castor::string::toFloat( arrayValues[5] );
+				}
+
+				if ( arrayValues.size() >= 8 && blockContext->face2 != -1 )
+				{
+					blockContext->vertexTex[0 + blockContext->faces[size_t( blockContext->face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[0] );
+					blockContext->vertexTex[1 + blockContext->faces[size_t( blockContext->face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[1] );
+					blockContext->vertexTex[0 + blockContext->faces[size_t( blockContext->face2 + 1 )] * 3] = castor::string::toFloat( arrayValues[4] );
+					blockContext->vertexTex[1 + blockContext->faces[size_t( blockContext->face2 + 1 )] * 3] = castor::string::toFloat( arrayValues[5] );
+					blockContext->vertexTex[0 + blockContext->faces[size_t( blockContext->face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[6] );
+					blockContext->vertexTex[1 + blockContext->faces[size_t( blockContext->face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[7] );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserSubmeshFaceUVW, SubmeshContext )
+		{
+			if ( !blockContext->submesh )
+			{
+				CU_ParsingError( cuT( "No Submesh initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				if ( blockContext->vertexTex.empty() )
+				{
+					blockContext->vertexTex.resize( blockContext->vertexPos.size() );
+				}
+
+				auto arrayValues = castor::string::split( params[0]->get< castor::String >(), cuT( " " ), 20 );
+
+				if ( arrayValues.size() >= 9 && blockContext->face1 != -1 )
+				{
+					blockContext->vertexTex[0 + blockContext->faces[size_t( blockContext->face1 + 0 )] * 3] = castor::string::toFloat( arrayValues[0] );
+					blockContext->vertexTex[1 + blockContext->faces[size_t( blockContext->face1 + 0 )] * 3] = castor::string::toFloat( arrayValues[1] );
+					blockContext->vertexTex[2 + blockContext->faces[size_t( blockContext->face1 + 0 )] * 3] = castor::string::toFloat( arrayValues[2] );
+					blockContext->vertexTex[0 + blockContext->faces[size_t( blockContext->face1 + 1 )] * 3] = castor::string::toFloat( arrayValues[3] );
+					blockContext->vertexTex[1 + blockContext->faces[size_t( blockContext->face1 + 1 )] * 3] = castor::string::toFloat( arrayValues[4] );
+					blockContext->vertexTex[2 + blockContext->faces[size_t( blockContext->face1 + 1 )] * 3] = castor::string::toFloat( arrayValues[5] );
+					blockContext->vertexTex[0 + blockContext->faces[size_t( blockContext->face1 + 2 )] * 3] = castor::string::toFloat( arrayValues[6] );
+					blockContext->vertexTex[1 + blockContext->faces[size_t( blockContext->face1 + 2 )] * 3] = castor::string::toFloat( arrayValues[7] );
+					blockContext->vertexTex[2 + blockContext->faces[size_t( blockContext->face1 + 2 )] * 3] = castor::string::toFloat( arrayValues[8] );
+				}
+
+				if ( arrayValues.size() >= 12 && blockContext->face2 != -1 )
+				{
+					blockContext->vertexTex[0 + blockContext->faces[size_t( blockContext->face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 0] );
+					blockContext->vertexTex[1 + blockContext->faces[size_t( blockContext->face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 1] );
+					blockContext->vertexTex[2 + blockContext->faces[size_t( blockContext->face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 2] );
+					blockContext->vertexTex[0 + blockContext->faces[size_t( blockContext->face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[ 6] );
+					blockContext->vertexTex[1 + blockContext->faces[size_t( blockContext->face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[ 7] );
+					blockContext->vertexTex[2 + blockContext->faces[size_t( blockContext->face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[ 8] );
+					blockContext->vertexTex[0 + blockContext->faces[size_t( blockContext->face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[ 9] );
+					blockContext->vertexTex[1 + blockContext->faces[size_t( blockContext->face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[10] );
+					blockContext->vertexTex[2 + blockContext->faces[size_t( blockContext->face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[11] );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserSubmeshFaceNormals, SubmeshContext )
+		{
+			if ( !blockContext->submesh )
+			{
+				CU_ParsingError( cuT( "No Submesh initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				if ( blockContext->vertexNml.empty() )
+				{
+					blockContext->vertexNml.resize( blockContext->vertexPos.size() );
+				}
+
+				auto arrayValues = castor::string::split( params[0]->get< castor::String >(), cuT( " " ), 20 );
+
+				if ( arrayValues.size() >= 9 && blockContext->face1 != -1 )
+				{
+					blockContext->vertexNml[0 + blockContext->faces[size_t( blockContext->face1 + 0 )] * 3] = castor::string::toFloat( arrayValues[0] );
+					blockContext->vertexNml[1 + blockContext->faces[size_t( blockContext->face1 + 0 )] * 3] = castor::string::toFloat( arrayValues[1] );
+					blockContext->vertexNml[2 + blockContext->faces[size_t( blockContext->face1 + 0 )] * 3] = castor::string::toFloat( arrayValues[2] );
+					blockContext->vertexNml[0 + blockContext->faces[size_t( blockContext->face1 + 1 )] * 3] = castor::string::toFloat( arrayValues[3] );
+					blockContext->vertexNml[1 + blockContext->faces[size_t( blockContext->face1 + 1 )] * 3] = castor::string::toFloat( arrayValues[4] );
+					blockContext->vertexNml[2 + blockContext->faces[size_t( blockContext->face1 + 1 )] * 3] = castor::string::toFloat( arrayValues[5] );
+					blockContext->vertexNml[0 + blockContext->faces[size_t( blockContext->face1 + 2 )] * 3] = castor::string::toFloat( arrayValues[6] );
+					blockContext->vertexNml[1 + blockContext->faces[size_t( blockContext->face1 + 2 )] * 3] = castor::string::toFloat( arrayValues[7] );
+					blockContext->vertexNml[2 + blockContext->faces[size_t( blockContext->face1 + 2 )] * 3] = castor::string::toFloat( arrayValues[8] );
+				}
+
+				if ( arrayValues.size() >= 12 && blockContext->face2 != -1 )
+				{
+					blockContext->vertexNml[0 + blockContext->faces[size_t( blockContext->face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 0] );
+					blockContext->vertexNml[1 + blockContext->faces[size_t( blockContext->face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 1] );
+					blockContext->vertexNml[2 + blockContext->faces[size_t( blockContext->face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 2] );
+					blockContext->vertexNml[0 + blockContext->faces[size_t( blockContext->face2 + 1 )] * 3] = castor::string::toFloat( arrayValues[ 6] );
+					blockContext->vertexNml[1 + blockContext->faces[size_t( blockContext->face2 + 1 )] * 3] = castor::string::toFloat( arrayValues[ 7] );
+					blockContext->vertexNml[2 + blockContext->faces[size_t( blockContext->face2 + 1 )] * 3] = castor::string::toFloat( arrayValues[ 8] );
+					blockContext->vertexNml[0 + blockContext->faces[size_t( blockContext->face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[ 9] );
+					blockContext->vertexNml[1 + blockContext->faces[size_t( blockContext->face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[10] );
+					blockContext->vertexNml[2 + blockContext->faces[size_t( blockContext->face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[11] );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserSubmeshFaceTangents, SubmeshContext )
+		{
+			if ( !blockContext->submesh )
+			{
+				CU_ParsingError( cuT( "No Submesh initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				if ( blockContext->vertexTan.empty() )
+				{
+					blockContext->vertexTan.resize( blockContext->vertexPos.size() );
+				}
+
+				auto arrayValues = castor::string::split( params[0]->get< castor::String >(), cuT( " " ), 20 );
+
+				if ( arrayValues.size() >= 12 && blockContext->face1 != -1 )
+				{
+					blockContext->vertexTan[0 + blockContext->faces[size_t( blockContext->face1 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 0] );
+					blockContext->vertexTan[1 + blockContext->faces[size_t( blockContext->face1 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 1] );
+					blockContext->vertexTan[2 + blockContext->faces[size_t( blockContext->face1 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 2] );
+					blockContext->vertexTan[3 + blockContext->faces[size_t( blockContext->face1 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 3] );
+					blockContext->vertexTan[0 + blockContext->faces[size_t( blockContext->face1 + 1 )] * 3] = castor::string::toFloat( arrayValues[ 4] );
+					blockContext->vertexTan[1 + blockContext->faces[size_t( blockContext->face1 + 1 )] * 3] = castor::string::toFloat( arrayValues[ 5] );
+					blockContext->vertexTan[2 + blockContext->faces[size_t( blockContext->face1 + 1 )] * 3] = castor::string::toFloat( arrayValues[ 6] );
+					blockContext->vertexTan[3 + blockContext->faces[size_t( blockContext->face1 + 1 )] * 3] = castor::string::toFloat( arrayValues[ 7] );
+					blockContext->vertexTan[0 + blockContext->faces[size_t( blockContext->face1 + 2 )] * 3] = castor::string::toFloat( arrayValues[ 8] );
+					blockContext->vertexTan[1 + blockContext->faces[size_t( blockContext->face1 + 2 )] * 3] = castor::string::toFloat( arrayValues[ 9] );
+					blockContext->vertexTan[2 + blockContext->faces[size_t( blockContext->face1 + 2 )] * 3] = castor::string::toFloat( arrayValues[10] );
+					blockContext->vertexTan[3 + blockContext->faces[size_t( blockContext->face1 + 2 )] * 3] = castor::string::toFloat( arrayValues[11] );
+				}
+
+				if ( arrayValues.size() >= 16 && blockContext->face2 != -1 )
+				{
+					blockContext->vertexTan[0 + blockContext->faces[size_t( blockContext->face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 0] );
+					blockContext->vertexTan[1 + blockContext->faces[size_t( blockContext->face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 1] );
+					blockContext->vertexTan[2 + blockContext->faces[size_t( blockContext->face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 2] );
+					blockContext->vertexTan[3 + blockContext->faces[size_t( blockContext->face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 3] );
+					blockContext->vertexTan[0 + blockContext->faces[size_t( blockContext->face2 + 1 )] * 3] = castor::string::toFloat( arrayValues[ 8] );
+					blockContext->vertexTan[1 + blockContext->faces[size_t( blockContext->face2 + 1 )] * 3] = castor::string::toFloat( arrayValues[ 9] );
+					blockContext->vertexTan[2 + blockContext->faces[size_t( blockContext->face2 + 1 )] * 3] = castor::string::toFloat( arrayValues[10] );
+					blockContext->vertexTan[3 + blockContext->faces[size_t( blockContext->face2 + 1 )] * 3] = castor::string::toFloat( arrayValues[11] );
+					blockContext->vertexTan[0 + blockContext->faces[size_t( blockContext->face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[12] );
+					blockContext->vertexTan[1 + blockContext->faces[size_t( blockContext->face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[13] );
+					blockContext->vertexTan[2 + blockContext->faces[size_t( blockContext->face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[14] );
+					blockContext->vertexTan[3 + blockContext->faces[size_t( blockContext->face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[15] );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserSubmeshEnd, SubmeshContext )
+		{
+			if ( !blockContext->vertexPos.empty() )
+			{
+				if ( !blockContext->submesh->hasComponent( PositionsComponent::TypeName ) )
+				{
+					blockContext->submesh->createComponent< PositionsComponent >();
+				}
+
+				if ( !blockContext->vertexNml.empty()
+					&& !blockContext->submesh->hasComponent( NormalsComponent::TypeName ) )
+				{
+					blockContext->submesh->createComponent< NormalsComponent >();
+				}
+
+				if ( !blockContext->vertexTan.empty()
+					&& !blockContext->submesh->hasComponent( TangentsComponent::TypeName ) )
+				{
+					blockContext->submesh->createComponent< TangentsComponent >();
+				}
+
+				if ( !blockContext->vertexTex.empty()
+					&& !blockContext->submesh->hasComponent( Texcoords0Component::TypeName ) )
+				{
+					blockContext->submesh->createComponent< Texcoords0Component >();
+				}
+
+				std::vector< InterleavedVertex > vertices{ blockContext->vertexPos.size() / 3 };
+				uint32_t index{ 0u };
+
+				for ( auto & vertex : vertices )
+				{
+					std::memcpy( vertex.pos.ptr(), &blockContext->vertexPos[index], sizeof( vertex.pos ) );
+
+					if ( !blockContext->vertexNml.empty() )
+					{
+						std::memcpy( vertex.nml.ptr(), &blockContext->vertexNml[index], sizeof( vertex.nml ) );
+					}
+
+					if ( !blockContext->vertexTan.empty() )
+					{
+						std::memcpy( vertex.tan.ptr(), &blockContext->vertexTan[index], sizeof( vertex.tan ) );
+					}
+
+					if ( !blockContext->vertexTex.empty() )
+					{
+						std::memcpy( vertex.tex.ptr(), &blockContext->vertexTex[index], sizeof( vertex.tex ) );
+					}
+
+					index += 3;
+				}
+
+				blockContext->submesh->addPoints( vertices );
+
+				if ( !blockContext->faces.empty() )
+				{
+					auto indices = reinterpret_cast< FaceIndices * >( &blockContext->faces[0] );
+					auto mapping = blockContext->submesh->createComponent< TriFaceMapping >();
+					mapping->getData().addFaceGroup( indices, indices + ( blockContext->faces.size() / 3 ) );
+
+					if ( !blockContext->vertexNml.empty() )
+					{
+						if ( !blockContext->vertexTex.empty()
+							&& blockContext->vertexTan.empty() )
+						{
+							mapping->computeTangents();
+						}
+					}
+					else
+					{
+						mapping->computeNormals();
 						mapping->computeTangents();
 					}
 				}
+
+				MeshPreparer::prepare( *blockContext->submesh
+					, Parameters{} );
+				blockContext->vertexPos.clear();
+				blockContext->vertexNml.clear();
+				blockContext->vertexTan.clear();
+				blockContext->vertexTex.clear();
+				blockContext->faces.clear();
+				blockContext->submesh->getParent().getScene()->getListener().postEvent( makeGpuInitialiseEvent( *blockContext->submesh ) );
+				blockContext->submesh = {};
+			}
+		}
+		CU_EndAttributePop()
+
+		static CU_ImplementAttributeParserBlock( parserVertexShader, ProgramContext )
+		{
+			blockContext->shaderStage = VK_SHADER_STAGE_VERTEX_BIT;
+		}
+		CU_EndAttributePushBlock( CSCNSection::eShaderStage, blockContext )
+
+		static CU_ImplementAttributeParserBlock( parserPixelShader, ProgramContext )
+		{
+			blockContext->shaderStage = VK_SHADER_STAGE_FRAGMENT_BIT;
+		}
+		CU_EndAttributePushBlock( CSCNSection::eShaderStage, blockContext )
+
+		static CU_ImplementAttributeParserBlock( parserGeometryShader, ProgramContext )
+		{
+			blockContext->shaderStage = VK_SHADER_STAGE_GEOMETRY_BIT;
+		}
+		CU_EndAttributePushBlock( CSCNSection::eShaderStage, blockContext )
+
+		static CU_ImplementAttributeParserBlock( parserHullShader, ProgramContext )
+		{
+			blockContext->shaderStage = VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT;
+		}
+		CU_EndAttributePushBlock( CSCNSection::eShaderStage, blockContext )
+
+		static CU_ImplementAttributeParserBlock( parserDomainShader, ProgramContext )
+		{
+			blockContext->shaderStage = VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT;
+		}
+		CU_EndAttributePushBlock( CSCNSection::eShaderStage, blockContext )
+
+		static CU_ImplementAttributeParserBlock( parserComputeShader, ProgramContext )
+		{
+			blockContext->shaderStage = VK_SHADER_STAGE_COMPUTE_BIT;
+		}
+		CU_EndAttributePushBlock( CSCNSection::eShaderStage, blockContext )
+
+		static CU_ImplementAttributeParserBlock( parserConstantsBuffer, ProgramContext )
+		{
+			if ( !blockContext->shaderProgram )
+			{
+				CU_ParsingError( cuT( "No ShaderProgram initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				params[0]->get( blockContext->name );
+
+				if ( blockContext->name.empty() )
+				{
+					CU_ParsingError( cuT( "Invalid empty name" ) );
+				}
+			}
+		}
+		CU_EndAttributePushBlock( CSCNSection::eShaderUBO, blockContext )
+
+		static CU_ImplementAttributeParserBlock( parserShaderProgramEnd, ProgramContext )
+		{
+			if ( !blockContext->shaderProgram )
+			{
+				CU_ParsingError( cuT( "No ShaderProgram initialised." ) );
+			}
+			else
+			{
+				if ( blockContext->particleSystem )
+				{
+					blockContext->particleSystem->particleSystem->setCSUpdateProgram( blockContext->shaderProgram );
+				}
+
+				blockContext->shaderProgram = {};
+			}
+		}
+		CU_EndAttributePop()
+
+		static CU_ImplementAttributeParserBlock( parserShaderFile, ProgramContext )
+		{
+			if ( !blockContext->shaderProgram )
+			{
+				CU_ParsingError( cuT( "No ShaderProgram initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				if ( blockContext->shaderStage != VkShaderStageFlagBits( 0u ) )
+				{
+					blockContext->shaderProgram->setFile( blockContext->shaderStage
+						, context.file.getPath() / params[0]->get< castor::Path >() );
+				}
 				else
 				{
-					mapping->computeNormals();
-					mapping->computeTangents();
+					CU_ParsingError( cuT( "Shader not initialised" ) );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserShaderGroupSizes, ProgramContext )
+		{
+			if ( !blockContext->shaderProgram )
+			{
+				CU_ParsingError( cuT( "No ShaderProgram initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				if ( blockContext->particleSystem
+					&& blockContext->shaderStage != VkShaderStageFlagBits( 0u ) )
+				{
+					blockContext->particleSystem->particleSystem->setCSGroupSizes( params[0]->get< castor::Point3i >() );
+				}
+				else
+				{
+					CU_ParsingError( cuT( "Shader not initialised" ) );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserFontFile, FontContext )
+		{
+			params[0]->get( blockContext->path );
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserFontHeight, FontContext )
+		{
+			params[0]->get( blockContext->fontHeight );
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserFontEnd, FontContext )
+		{
+			if ( !blockContext->name.empty() && !blockContext->path.empty() )
+			{
+				if ( blockContext->scene )
+				{
+					blockContext->scene->getFontView().add( blockContext->name
+						, uint32_t( blockContext->fontHeight )
+						, context.file.getPath() / blockContext->path );
+				}
+				else
+				{
+					blockContext->root->engine->getFontCache().add( blockContext->name
+						, uint32_t( blockContext->fontHeight )
+						, context.file.getPath() / blockContext->path );
+				}
+
+				log::info << "Loaded font [" << blockContext->name << "]" << std::endl;
+			}
+		}
+		CU_EndAttributePop()
+
+		static CU_ImplementAttributeParserBlock( parserOverlayPosition, OverlayContext )
+		{
+			if ( blockContext->overlay.rptr )
+			{
+				blockContext->overlay.rptr->setRelativePosition( params[0]->get< castor::Point2d >() );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "Overlay not initialised" ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserOverlaySize, OverlayContext )
+		{
+			if ( blockContext->overlay.rptr )
+			{
+				blockContext->overlay.rptr->setRelativeSize( params[0]->get< castor::Point2d >() );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "Overlay not initialised" ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserOverlayPixelSize, OverlayContext )
+		{
+			if ( blockContext->overlay.rptr )
+			{
+				;
+				blockContext->overlay.rptr->setPixelSize( params[0]->get< castor::Size >() );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "Overlay not initialised" ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserOverlayPixelPosition, OverlayContext )
+		{
+			if ( blockContext->overlay.rptr )
+			{
+				blockContext->overlay.rptr->setPixelPosition( params[0]->get< castor::Position >() );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "Overlay not initialised" ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserOverlayMaterial, OverlayContext )
+		{
+			if ( blockContext->overlay.rptr )
+			{
+				blockContext->overlay.rptr->setMaterial( blockContext->overlay.rptr->getEngine()->findMaterial( params[0]->get< castor::String >() ) );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "Overlay not initialised" ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserOverlayPanelOverlay, OverlayContext )
+		{
+			auto engine = blockContext->overlay.rptr->getEngine();
+			castor::String name;
+			blockContext->parentOverlays.push_back( std::move( blockContext->overlay ) );
+			auto & parent = blockContext->parentOverlays.back();
+			blockContext->overlay.rptr = blockContext->scene
+				? blockContext->scene->tryFindOverlay( params[0]->get( name ) )
+				: engine->tryFindOverlay( params[0]->get( name ) );
+
+			if ( !blockContext->overlay.rptr )
+			{
+				blockContext->overlay.uptr = castor::makeUnique< Overlay >( *engine
+					, OverlayType::ePanel
+					, parent.rptr ? parent.rptr->getScene() : blockContext->scene
+					, parent.rptr );
+				blockContext->overlay.rptr = blockContext->overlay.uptr.get();
+				blockContext->overlay.rptr->rename( name );
+			}
+
+			blockContext->overlay.rptr->setVisible( false );
+		}
+		CU_EndAttributePushBlock( CSCNSection::ePanelOverlay, blockContext )
+
+		static CU_ImplementAttributeParserBlock( parserOverlayBorderPanelOverlay, OverlayContext )
+		{
+			auto engine = blockContext->overlay.rptr->getEngine();
+			castor::String name;
+			blockContext->parentOverlays.push_back( std::move( blockContext->overlay ) );
+			auto & parent = blockContext->parentOverlays.back();
+			blockContext->overlay.rptr = blockContext->scene
+				? blockContext->scene->tryFindOverlay( params[0]->get( name ) )
+				: engine->tryFindOverlay( params[0]->get( name ) );
+
+			if ( !blockContext->overlay.rptr )
+			{
+				blockContext->overlay.uptr = castor::makeUnique< Overlay >( *engine
+					, OverlayType::eBorderPanel
+					, parent.rptr ? parent.rptr->getScene() : blockContext->scene
+					, parent.rptr );
+				blockContext->overlay.rptr = blockContext->overlay.uptr.get();
+				blockContext->overlay.rptr->rename( name );
+			}
+
+			blockContext->overlay.rptr->setVisible( false );
+		}
+		CU_EndAttributePushBlock( CSCNSection::eBorderPanelOverlay, blockContext )
+
+		static CU_ImplementAttributeParserBlock( parserOverlayTextOverlay, OverlayContext )
+		{
+			auto engine = blockContext->overlay.rptr->getEngine();
+			castor::String name;
+			blockContext->parentOverlays.push_back( std::move( blockContext->overlay ) );
+			auto & parent = blockContext->parentOverlays.back();
+			blockContext->overlay.rptr = blockContext->scene
+				? blockContext->scene->tryFindOverlay( params[0]->get( name ) )
+				: engine->tryFindOverlay( params[0]->get( name ) );
+
+			if ( !blockContext->overlay.rptr )
+			{
+				blockContext->overlay.uptr = castor::makeUnique< Overlay >( *engine
+					, OverlayType::eText
+					, parent.rptr ? parent.rptr->getScene() : blockContext->scene
+					, parent.rptr );
+				blockContext->overlay.rptr = blockContext->overlay.uptr.get();
+				blockContext->overlay.rptr->rename( name );
+			}
+
+			blockContext->overlay.rptr->setVisible( false );
+		}
+		CU_EndAttributePushBlock( CSCNSection::eTextOverlay, blockContext )
+
+		static CU_ImplementAttributeParserBlock( parserOverlayEnd, OverlayContext )
+		{
+			log::info << "Loaded overlay [" << blockContext->overlay.rptr->getName() << "]" << std::endl;
+
+			if ( blockContext->overlay.rptr->getType() == OverlayType::eText )
+			{
+				auto textOverlay = blockContext->overlay.rptr->getTextOverlay();
+
+				if ( textOverlay->getFontTexture() )
+				{
+					blockContext->overlay.rptr->setVisible( true );
+				}
+				else
+				{
+					blockContext->overlay.rptr->setVisible( false );
+					CU_ParsingError( cuT( "TextOverlay's font has not been set, it will not be rendered" ) );
+				}
+			}
+			else
+			{
+				blockContext->overlay.rptr->setVisible( true );
+			}
+
+			if ( blockContext->overlay.uptr )
+			{
+				if ( blockContext->scene )
+				{
+					blockContext->scene->addOverlay( blockContext->overlay.rptr->getName()
+						, blockContext->overlay.uptr
+						, true );
+				}
+				else
+				{
+					blockContext->overlay.rptr->getEngine()->addOverlay( blockContext->overlay.rptr->getName()
+						, blockContext->overlay.uptr
+						, true );
 				}
 			}
 
-			MeshPreparer::prepare( *parsingContext.submesh
-				, Parameters{} );
-			parsingContext.vertexPos.clear();
-			parsingContext.vertexNml.clear();
-			parsingContext.vertexTan.clear();
-			parsingContext.vertexTex.clear();
-			parsingContext.faces.clear();
-			parsingContext.submesh->getParent().getScene()->getListener().postEvent( makeGpuInitialiseEvent( *parsingContext.submesh ) );
-			parsingContext.submesh = {};
+			CU_Require( !blockContext->parentOverlays.empty() );
+			blockContext->overlay = std::move( blockContext->parentOverlays.back() );
+			blockContext->parentOverlays.pop_back();
 		}
-	}
-	CU_EndAttributePop()
+		CU_EndAttributePop()
 
-	CU_ImplementAttributeParser( parserVertexShader )
-	{
-		auto & parsingContext = getParserContext( context );
-		parsingContext.shaderStage = VK_SHADER_STAGE_VERTEX_BIT;
-	}
-	CU_EndAttributePush( CSCNSection::eShaderStage )
-
-	CU_ImplementAttributeParser( parserPixelShader )
-	{
-		auto & parsingContext = getParserContext( context );
-		parsingContext.shaderStage = VK_SHADER_STAGE_FRAGMENT_BIT;
-	}
-	CU_EndAttributePush( CSCNSection::eShaderStage )
-
-	CU_ImplementAttributeParser( parserGeometryShader )
-	{
-		auto & parsingContext = getParserContext( context );
-		parsingContext.shaderStage = VK_SHADER_STAGE_GEOMETRY_BIT;
-	}
-	CU_EndAttributePush( CSCNSection::eShaderStage )
-
-	CU_ImplementAttributeParser( parserHullShader )
-	{
-		auto & parsingContext = getParserContext( context );
-		parsingContext.shaderStage = VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT;
-	}
-	CU_EndAttributePush( CSCNSection::eShaderStage )
-
-	CU_ImplementAttributeParser( parserDomainShader )
-	{
-		auto & parsingContext = getParserContext( context );
-		parsingContext.shaderStage = VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT;
-	}
-	CU_EndAttributePush( CSCNSection::eShaderStage )
-
-	CU_ImplementAttributeParser( parserComputeShader )
-	{
-		auto & parsingContext = getParserContext( context );
-		parsingContext.shaderStage = VK_SHADER_STAGE_COMPUTE_BIT;
-	}
-	CU_EndAttributePush( CSCNSection::eShaderStage )
-
-	CU_ImplementAttributeParser( parserConstantsBuffer )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.shaderProgram )
+		static CU_ImplementAttributeParserBlock( parserPanelOverlayUvs, OverlayContext )
 		{
-			CU_ParsingError( cuT( "No ShaderProgram initialised." ) );
-		}
-		else if ( !params.empty() )
-		{
-			params[0]->get( parsingContext.strName );
+			auto overlay = blockContext->overlay.rptr;
 
-			if ( parsingContext.strName.empty() )
+			if ( overlay && overlay->getType() == OverlayType::ePanel )
 			{
-				CU_ParsingError( cuT( "Invalid empty name" ) );
-			}
-		}
-	}
-	CU_EndAttributePush( CSCNSection::eShaderUBO )
-
-	CU_ImplementAttributeParser( parserShaderEnd )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.shaderProgram )
-		{
-			CU_ParsingError( cuT( "No ShaderProgram initialised." ) );
-		}
-		else
-		{
-			if ( parsingContext.particleSystem )
-			{
-				parsingContext.particleSystem->setCSUpdateProgram( parsingContext.shaderProgram );
-			}
-
-			parsingContext.shaderProgram = {};
-		}
-	}
-	CU_EndAttributePop()
-
-	CU_ImplementAttributeParser( parserShaderProgramFile )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.shaderProgram )
-		{
-			CU_ParsingError( cuT( "No ShaderProgram initialised." ) );
-		}
-		else if ( !params.empty() )
-		{
-			if ( parsingContext.shaderStage != VkShaderStageFlagBits( 0u ) )
-			{
-				castor::Path path;
-				params[0]->get( path );
-				parsingContext.shaderProgram->setFile( parsingContext.shaderStage
-					, context.file.getPath() / path );
+				overlay->getPanelOverlay()->setUV( params[0]->get< castor::Point4d >() );
 			}
 			else
 			{
-				CU_ParsingError( cuT( "Shader not initialised" ) );
+				CU_ParsingError( cuT( "Overlay not initialised" ) );
 			}
 		}
-	}
-	CU_EndAttribute()
+		CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserShaderGroupSizes )
-	{
-		auto & parsingContext = getParserContext( context );
+		static CU_ImplementAttributeParserBlock( parserBorderPanelOverlaySizes, OverlayContext )
+		{
+			auto overlay = blockContext->overlay.rptr;
 
-		if ( !parsingContext.shaderProgram )
-		{
-			CU_ParsingError( cuT( "No ShaderProgram initialised." ) );
-		}
-		else if ( !params.empty() )
-		{
-			if ( parsingContext.shaderStage != VkShaderStageFlagBits( 0u ) )
+			if ( overlay && overlay->getType() == OverlayType::eBorderPanel )
 			{
-				castor::Point3i sizes;
-				params[0]->get( sizes );
-				parsingContext.particleSystem->setCSGroupSizes( sizes );
+				overlay->getBorderPanelOverlay()->setRelativeBorderSize( params[0]->get< castor::Point4d >() );
 			}
 			else
 			{
-				CU_ParsingError( cuT( "Shader not initialised" ) );
+				CU_ParsingError( cuT( "Overlay not initialised" ) );
 			}
 		}
-	}
-	CU_EndAttribute()
+		CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserShaderUboShaders )
-	{
-		if ( !params.empty() )
+		static CU_ImplementAttributeParserBlock( parserBorderPanelOverlayPixelSizes, OverlayContext )
 		{
-			uint32_t value;
-			params[0]->get( value );
+			auto overlay = blockContext->overlay.rptr;
 
-			if ( value )
+			if ( overlay && overlay->getType() == OverlayType::eBorderPanel )
 			{
-				//auto & parsingContext = getParserContext( context );
-				//parsingContext.uniformBuffer = std::make_unique< UniformBuffer >( parsingContext.strName
-				//	, *parsingContext.shaderProgram->getRenderSystem()
-				//	, 1u );
+				overlay->getBorderPanelOverlay()->setPixelBorderSize( params[0]->get< castor::Point4ui >() );
 			}
 			else
 			{
-				CU_ParsingError( cuT( "Unsupported shader type" ) );
+				CU_ParsingError( cuT( "Overlay not initialised" ) );
 			}
 		}
-	}
-	CU_EndAttribute()
+		CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserShaderUboVariable )
-	{
-		auto & parsingContext = getParserContext( context );
-		params[0]->get( parsingContext.strName2 );
-
-		if ( !parsingContext.uniformBuffer )
+		static CU_ImplementAttributeParserBlock( parserBorderPanelOverlayMaterial, OverlayContext )
 		{
-			CU_ParsingError( cuT( "Shader constants buffer not initialised" ) );
-		}
-		else if ( parsingContext.strName2.empty() )
-		{
-			CU_ParsingError( cuT( "Invalid empty name" ) );
-		}
-		else
-		{
-			parsingContext.particleCount = 1;
-		}
-	}
-	CU_EndAttributePush( CSCNSection::eUBOVariable )
+			auto overlay = blockContext->overlay.rptr;
 
-	CU_ImplementAttributeParser( parserShaderVariableCount )
-	{
-		auto & parsingContext = getParserContext( context );
-		uint32_t param;
-		params[0]->get( param );
-
-		if ( parsingContext.uniformBuffer )
-		{
-			parsingContext.particleCount = param;
-		}
-		else
-		{
-			CU_ParsingError( cuT( "Shader constants buffer not initialised" ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserShaderVariableType )
-	{
-		auto & parsingContext = getParserContext( context );
-		uint32_t uiType;
-		params[0]->get( uiType );
-
-		if ( parsingContext.uniformBuffer )
-		{
-			//if ( !parsingContext.uniform )
-			//{
-			//	parsingContext.uniform = parsingContext.uniformBuffer->createUniform( UniformType( uiType ), parsingContext.strName2, parsingContext.uiUInt32 );
-			//}
-			//else
-			//{
-			//	CU_ParsingError( cuT( "Variable type already set" ) );
-			//}
-		}
-		else
-		{
-			CU_ParsingError( cuT( "Shader constants buffer not initialised" ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserShaderVariableValue )
-	{
-		//auto & parsingContext = getParserContext( context );
-		//String strParams;
-		//params[0]->get( strParams );
-
-		//if ( parsingContext.uniform )
-		//{
-		//	parsingContext.uniform->setStrValue( strParams );
-		//}
-		//else
-		//{
-		//	CU_ParsingError( cuT( "Variable not initialised" ) );
-		//}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserFontFile )
-	{
-		auto & parsingContext = getParserContext( context );
-		params[0]->get( parsingContext.path );
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserFontHeight )
-	{
-		auto & parsingContext = getParserContext( context );
-		params[0]->get( parsingContext.fontHeight );
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserFontEnd )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.strName.empty() && !parsingContext.path.empty() )
-		{
-			if ( parsingContext.scene )
+			if ( overlay && overlay->getType() == OverlayType::eBorderPanel )
 			{
-				parsingContext.scene->getFontView().add( parsingContext.strName
-					, uint32_t( parsingContext.fontHeight )
-					, context.file.getPath() / parsingContext.path );
+				overlay->getBorderPanelOverlay()->setBorderMaterial( blockContext->overlay.rptr->getEngine()->findMaterial( params[0]->get< castor::String >() ) );
 			}
 			else
 			{
-				parsingContext.parser->getEngine()->getFontCache().add( parsingContext.strName
-					, uint32_t( parsingContext.fontHeight )
-					, context.file.getPath() / parsingContext.path );
+				CU_ParsingError( cuT( "Overlay not initialised" ) );
 			}
-
-			log::info << "Loaded font [" << parsingContext.strName << "]" << std::endl;
 		}
-	}
-	CU_EndAttributePop()
+		CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserOverlayPosition )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( parsingContext.overlay.rptr )
+		static CU_ImplementAttributeParserBlock( parserBorderPanelOverlayPosition, OverlayContext )
 		{
-			castor::Point2d ptPosition;
-			params[0]->get( ptPosition );
-			parsingContext.overlay.rptr->setRelativePosition( ptPosition );
+			auto overlay = blockContext->overlay.rptr;
+
+			if ( overlay && overlay->getType() == OverlayType::eBorderPanel )
+			{
+				overlay->getBorderPanelOverlay()->setBorderPosition( BorderPosition( params[0]->get< uint32_t >() ) );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "Overlay not initialised" ) );
+			}
 		}
-		else
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserBorderPanelOverlayCenterUvs, OverlayContext )
 		{
-			CU_ParsingError( cuT( "Overlay not initialised" ) );
+			auto overlay = blockContext->overlay.rptr;
+
+			if ( overlay && overlay->getType() == OverlayType::eBorderPanel )
+			{
+				overlay->getBorderPanelOverlay()->setUV( params[0]->get< castor::Point4d >() );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "Overlay not initialised" ) );
+			}
 		}
-	}
-	CU_EndAttribute()
+		CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserOverlaySize )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( parsingContext.overlay.rptr )
+		static CU_ImplementAttributeParserBlock( parserBorderPanelOverlayOuterUvs, OverlayContext )
 		{
-			castor::Point2d ptSize;
-			params[0]->get( ptSize );
-			parsingContext.overlay.rptr->setRelativeSize( ptSize );
+			auto overlay = blockContext->overlay.rptr;
+
+			if ( overlay && overlay->getType() == OverlayType::eBorderPanel )
+			{
+				overlay->getBorderPanelOverlay()->setBorderOuterUV( params[0]->get< castor::Point4d >() );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "Overlay not initialised" ) );
+			}
 		}
-		else
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserBorderPanelOverlayInnerUvs, OverlayContext )
 		{
-			CU_ParsingError( cuT( "Overlay not initialised" ) );
+			auto overlay = blockContext->overlay.rptr;
+
+			if ( overlay && overlay->getType() == OverlayType::eBorderPanel )
+			{
+				overlay->getBorderPanelOverlay()->setBorderInnerUV( params[0]->get< castor::Point4d >() );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "Overlay not initialised" ) );
+			}
 		}
-	}
-	CU_EndAttribute()
+		CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserOverlayPixelSize )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( parsingContext.overlay.rptr )
+		static CU_ImplementAttributeParserBlock( parserTextOverlayFont, OverlayContext )
 		{
-			castor::Size size;
-			params[0]->get( size );
-			parsingContext.overlay.rptr->setPixelSize( size );
+			auto overlay = blockContext->overlay.rptr;
+
+			if ( overlay && overlay->getType() == OverlayType::eText )
+			{
+				auto & cache = blockContext->overlay.rptr->getEngine()->getFontCache();
+				castor::String name;
+
+				if ( cache.find( params[0]->get( name ) ) )
+				{
+					overlay->getTextOverlay()->setFont( name );
+				}
+				else
+				{
+					CU_ParsingError( cuT( "Unknown font" ) );
+				}
+			}
+			else
+			{
+				CU_ParsingError( cuT( "TextOverlay not initialised" ) );
+			}
 		}
-		else
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserTextOverlayTextWrapping, OverlayContext )
 		{
-			CU_ParsingError( cuT( "Overlay not initialised" ) );
+			auto overlay = blockContext->overlay.rptr;
+
+			if ( overlay && overlay->getType() == OverlayType::eText )
+			{
+				overlay->getTextOverlay()->setTextWrappingMode( TextWrappingMode( params[0]->get< uint32_t >() ) );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "TextOverlay not initialised" ) );
+			}
 		}
-	}
-	CU_EndAttribute()
+		CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserOverlayPixelPosition )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( parsingContext.overlay.rptr )
+		static CU_ImplementAttributeParserBlock( parserTextOverlayVerticalAlign, OverlayContext )
 		{
-			castor::Position position;
-			params[0]->get( position );
-			parsingContext.overlay.rptr->setPixelPosition( position );
+			auto overlay = blockContext->overlay.rptr;
+
+			if ( overlay && overlay->getType() == OverlayType::eText )
+			{
+				overlay->getTextOverlay()->setVAlign( VAlign( params[0]->get< uint32_t >() ) );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "TextOverlay not initialised" ) );
+			}
 		}
-		else
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserTextOverlayHorizontalAlign, OverlayContext )
 		{
-			CU_ParsingError( cuT( "Overlay not initialised" ) );
+			auto overlay = blockContext->overlay.rptr;
+
+			if ( overlay && overlay->getType() == OverlayType::eText )
+			{
+				overlay->getTextOverlay()->setHAlign( HAlign( params[0]->get< uint32_t >() ) );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "TextOverlay not initialised" ) );
+			}
 		}
-	}
-	CU_EndAttribute()
+		CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserOverlayMaterial )
-	{
-		auto & parsingContext = getParserContext( context );
+		static CU_ImplementAttributeParserBlock( parserTextOverlayTexturingMode, OverlayContext )
+		{
+			auto overlay = blockContext->overlay.rptr;
 
-		if ( parsingContext.overlay.rptr )
+			if ( overlay && overlay->getType() == OverlayType::eText )
+			{
+				overlay->getTextOverlay()->setTexturingMode( TextTexturingMode( params[0]->get< uint32_t >() ) );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "TextOverlay not initialised" ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserTextOverlayLineSpacingMode, OverlayContext )
+		{
+			auto overlay = blockContext->overlay.rptr;
+
+			if ( overlay && overlay->getType() == OverlayType::eText )
+			{
+				overlay->getTextOverlay()->setLineSpacingMode( TextLineSpacingMode( params[0]->get< uint32_t >() ) );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "TextOverlay not initialised" ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserTextOverlayText, OverlayContext )
+		{
+			auto overlay = blockContext->overlay.rptr;
+
+			if ( overlay && overlay->getType() == OverlayType::eText )
+			{
+				castor::String strParams;
+				params[0]->get( strParams );
+				castor::string::replace( strParams, cuT( "\\n" ), cuT( "\n" ) );
+				overlay->getTextOverlay()->setCaption( castor::string::stringCast< char32_t >( strParams ) );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "TextOverlay not initialised" ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserCameraParent, CameraContext )
 		{
 			castor::String name;
-			params[0]->get( name );
-			parsingContext.overlay.rptr->setMaterial( parsingContext.parser->getEngine()->findMaterial( name ) );
-		}
-		else
-		{
-			CU_ParsingError( cuT( "Overlay not initialised" ) );
-		}
-	}
-	CU_EndAttribute()
+			SceneNodeRPtr parent = blockContext->scene->findSceneNode( params[0]->get( name ) );
 
-	CU_ImplementAttributeParser( parserOverlayPanelOverlay )
-	{
-		auto & parsingContext = getParserContext( context );
-		castor::String name;
-		parsingContext.parentOverlays.push_back( std::move( parsingContext.overlay ) );
-		auto & parent = parsingContext.parentOverlays.back();
-		parsingContext.overlay.rptr = parsingContext.scene
-			? parsingContext.scene->tryFindOverlay( params[0]->get( name ) )
-			: parsingContext.parser->getEngine()->tryFindOverlay( params[0]->get( name ) );
-
-		if ( !parsingContext.overlay.rptr )
-		{
-			parsingContext.overlay.uptr = castor::makeUnique< Overlay >( *parsingContext.parser->getEngine()
-				, OverlayType::ePanel
-				, parent.rptr ? parent.rptr->getScene() : parsingContext.scene
-				, parent.rptr );
-			parsingContext.overlay.rptr = parsingContext.overlay.uptr.get();
-			parsingContext.overlay.rptr->rename( name );
-		}
-
-		parsingContext.overlay.rptr->setVisible( false );
-	}
-	CU_EndAttributePush( CSCNSection::ePanelOverlay )
-
-	CU_ImplementAttributeParser( parserOverlayBorderPanelOverlay )
-	{
-		auto & parsingContext = getParserContext( context );
-		castor::String name;
-		parsingContext.parentOverlays.push_back( std::move( parsingContext.overlay ) );
-		auto & parent = parsingContext.parentOverlays.back();
-		parsingContext.overlay.rptr = parsingContext.scene
-			? parsingContext.scene->tryFindOverlay( params[0]->get( name ) )
-			: parsingContext.parser->getEngine()->tryFindOverlay( params[0]->get( name ) );
-
-		if ( !parsingContext.overlay.rptr )
-		{
-			parsingContext.overlay.uptr = castor::makeUnique< Overlay >( *parsingContext.parser->getEngine()
-				, OverlayType::eBorderPanel
-				, parent.rptr ? parent.rptr->getScene() : parsingContext.scene
-				, parent.rptr );
-			parsingContext.overlay.rptr = parsingContext.overlay.uptr.get();
-			parsingContext.overlay.rptr->rename( name );
-		}
-
-		parsingContext.overlay.rptr->setVisible( false );
-	}
-	CU_EndAttributePush( CSCNSection::eBorderPanelOverlay )
-
-	CU_ImplementAttributeParser( parserOverlayTextOverlay )
-	{
-		auto & parsingContext = getParserContext( context );
-		castor::String name;
-		parsingContext.parentOverlays.push_back( std::move( parsingContext.overlay ) );
-		auto & parent = parsingContext.parentOverlays.back();
-		parsingContext.overlay.rptr = parsingContext.scene
-			? parsingContext.scene->tryFindOverlay( params[0]->get( name ) )
-			: parsingContext.parser->getEngine()->tryFindOverlay( params[0]->get( name ) );
-
-		if ( !parsingContext.overlay.rptr )
-		{
-			parsingContext.overlay.uptr = castor::makeUnique< Overlay >( *parsingContext.parser->getEngine()
-				, OverlayType::eText
-				, parent.rptr ? parent.rptr->getScene() : parsingContext.scene
-				, parent.rptr );
-			parsingContext.overlay.rptr = parsingContext.overlay.uptr.get();
-			parsingContext.overlay.rptr->rename( name );
-		}
-
-		parsingContext.overlay.rptr->setVisible( false );
-	}
-	CU_EndAttributePush( CSCNSection::eTextOverlay )
-
-	CU_ImplementAttributeParser( parserOverlayEnd )
-	{
-		auto & parsingContext = getParserContext( context );
-		log::info << "Loaded overlay [" << parsingContext.overlay.rptr->getName() << "]" << std::endl;
-
-		if ( parsingContext.overlay.rptr->getType() == OverlayType::eText )
-		{
-			auto textOverlay = parsingContext.overlay.rptr->getTextOverlay();
-
-			if ( textOverlay->getFontTexture() )
+			if ( parent )
 			{
-				parsingContext.overlay.rptr->setVisible( true );
-			}
-			else
-			{
-				parsingContext.overlay.rptr->setVisible( false );
-				CU_ParsingError( cuT( "TextOverlay's font has not been set, it will not be rendered" ) );
-			}
-		}
-		else
-		{
-			parsingContext.overlay.rptr->setVisible( true );
-		}
+				while ( parent->getParent()
+					&& parent->getParent() != blockContext->scene->getObjectRootNode()
+					&& parent->getParent() != blockContext->scene->getCameraRootNode() )
+				{
+					parent = parent->getParent();
+				}
 
-		if ( parsingContext.overlay.uptr )
-		{
-			if ( parsingContext.scene )
-			{
-				parsingContext.scene->addOverlay( parsingContext.overlay.rptr->getName()
-					, parsingContext.overlay.uptr
-					, true );
-			}
-			else
-			{
-				parsingContext.parser->getEngine()->addOverlay( parsingContext.overlay.rptr->getName()
-					, parsingContext.overlay.uptr
-					, true );
-			}
-		}
+				if ( !parent->getParent()
+					|| parent->getParent() == blockContext->scene->getObjectRootNode() )
+				{
+					parent->attachTo( *blockContext->scene->getCameraRootNode() );
+				}
 
-		CU_Require( !parsingContext.parentOverlays.empty() );
-		parsingContext.overlay = std::move( parsingContext.parentOverlays.back() );
-		parsingContext.parentOverlays.pop_back();
-	}
-	CU_EndAttributePop()
-
-	CU_ImplementAttributeParser( parserPanelOverlayUvs )
-	{
-		auto & parsingContext = getParserContext( context );
-		auto overlay = parsingContext.overlay.rptr;
-
-		if ( overlay && overlay->getType() == OverlayType::ePanel )
-		{
-			castor::Point4d uvs;
-			params[0]->get( uvs );
-			overlay->getPanelOverlay()->setUV( uvs );
-		}
-		else
-		{
-			CU_ParsingError( cuT( "Overlay not initialised" ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserBorderPanelOverlaySizes )
-	{
-		auto & parsingContext = getParserContext( context );
-		auto overlay = parsingContext.overlay.rptr;
-
-		if ( overlay && overlay->getType() == OverlayType::eBorderPanel )
-		{
-			castor::Point4d ptSize;
-			params[0]->get( ptSize );
-			overlay->getBorderPanelOverlay()->setRelativeBorderSize( ptSize );
-		}
-		else
-		{
-			CU_ParsingError( cuT( "Overlay not initialised" ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserBorderPanelOverlayPixelSizes )
-	{
-		auto & parsingContext = getParserContext( context );
-		auto overlay = parsingContext.overlay.rptr;
-
-		if ( overlay && overlay->getType() == OverlayType::eBorderPanel )
-		{
-			castor::Point4ui size;
-			params[0]->get( size );
-			overlay->getBorderPanelOverlay()->setPixelBorderSize( size );
-		}
-		else
-		{
-			CU_ParsingError( cuT( "Overlay not initialised" ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserBorderPanelOverlayMaterial )
-	{
-		auto & parsingContext = getParserContext( context );
-		auto overlay = parsingContext.overlay.rptr;
-
-		if ( overlay && overlay->getType() == OverlayType::eBorderPanel )
-		{
-			castor::String name;
-			params[0]->get( name );
-			overlay->getBorderPanelOverlay()->setBorderMaterial( parsingContext.parser->getEngine()->findMaterial( name ) );
-		}
-		else
-		{
-			CU_ParsingError( cuT( "Overlay not initialised" ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserBorderPanelOverlayPosition )
-	{
-		auto & parsingContext = getParserContext( context );
-		auto overlay = parsingContext.overlay.rptr;
-
-		if ( overlay && overlay->getType() == OverlayType::eBorderPanel )
-		{
-			uint32_t position;
-			params[0]->get( position );
-			overlay->getBorderPanelOverlay()->setBorderPosition( BorderPosition( position ) );
-		}
-		else
-		{
-			CU_ParsingError( cuT( "Overlay not initialised" ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserBorderPanelOverlayCenterUvs )
-	{
-		auto & parsingContext = getParserContext( context );
-		auto overlay = parsingContext.overlay.rptr;
-
-		if ( overlay && overlay->getType() == OverlayType::eBorderPanel )
-		{
-			castor::Point4d uvs;
-			params[0]->get( uvs );
-			overlay->getBorderPanelOverlay()->setUV( uvs );
-		}
-		else
-		{
-			CU_ParsingError( cuT( "Overlay not initialised" ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserBorderPanelOverlayOuterUvs )
-	{
-		auto & parsingContext = getParserContext( context );
-		auto overlay = parsingContext.overlay.rptr;
-
-		if ( overlay && overlay->getType() == OverlayType::eBorderPanel )
-		{
-			castor::Point4d uvs;
-			params[0]->get( uvs );
-			overlay->getBorderPanelOverlay()->setBorderOuterUV( uvs );
-		}
-		else
-		{
-			CU_ParsingError( cuT( "Overlay not initialised" ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserBorderPanelOverlayInnerUvs )
-	{
-		auto & parsingContext = getParserContext( context );
-		auto overlay = parsingContext.overlay.rptr;
-
-		if ( overlay && overlay->getType() == OverlayType::eBorderPanel )
-		{
-			castor::Point4d uvs;
-			params[0]->get( uvs );
-			overlay->getBorderPanelOverlay()->setBorderInnerUV( uvs );
-		}
-		else
-		{
-			CU_ParsingError( cuT( "Overlay not initialised" ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserTextOverlayFont )
-	{
-		auto & parsingContext = getParserContext( context );
-		auto overlay = parsingContext.overlay.rptr;
-
-		if ( overlay && overlay->getType() == OverlayType::eText )
-		{
-			auto & cache = parsingContext.parser->getEngine()->getFontCache();
-			castor::String name;
-			params[0]->get( name );
-
-			if ( cache.find( name ) )
-			{
-				overlay->getTextOverlay()->setFont( name );
-			}
-			else
-			{
-				CU_ParsingError( cuT( "Unknown font" ) );
-			}
-		}
-		else
-		{
-			CU_ParsingError( cuT( "TextOverlay not initialised" ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserTextOverlayTextWrapping )
-	{
-		auto & parsingContext = getParserContext( context );
-		auto overlay = parsingContext.overlay.rptr;
-
-		if ( overlay && overlay->getType() == OverlayType::eText )
-		{
-			uint32_t value;
-			params[0]->get( value );
-
-			overlay->getTextOverlay()->setTextWrappingMode( TextWrappingMode( value ) );
-		}
-		else
-		{
-			CU_ParsingError( cuT( "TextOverlay not initialised" ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserTextOverlayVerticalAlign )
-	{
-		auto & parsingContext = getParserContext( context );
-		auto overlay = parsingContext.overlay.rptr;
-
-		if ( overlay && overlay->getType() == OverlayType::eText )
-		{
-			uint32_t value;
-			params[0]->get( value );
-
-			overlay->getTextOverlay()->setVAlign( VAlign( value ) );
-		}
-		else
-		{
-			CU_ParsingError( cuT( "TextOverlay not initialised" ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserTextOverlayHorizontalAlign )
-	{
-		auto & parsingContext = getParserContext( context );
-		auto overlay = parsingContext.overlay.rptr;
-
-		if ( overlay && overlay->getType() == OverlayType::eText )
-		{
-			uint32_t value;
-			params[0]->get( value );
-
-			overlay->getTextOverlay()->setHAlign( HAlign( value ) );
-		}
-		else
-		{
-			CU_ParsingError( cuT( "TextOverlay not initialised" ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserTextOverlayTexturingMode )
-	{
-		auto & parsingContext = getParserContext( context );
-		auto overlay = parsingContext.overlay.rptr;
-
-		if ( overlay && overlay->getType() == OverlayType::eText )
-		{
-			uint32_t value;
-			params[0]->get( value );
-
-			overlay->getTextOverlay()->setTexturingMode( TextTexturingMode( value ) );
-		}
-		else
-		{
-			CU_ParsingError( cuT( "TextOverlay not initialised" ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserTextOverlayLineSpacingMode )
-	{
-		auto & parsingContext = getParserContext( context );
-		auto overlay = parsingContext.overlay.rptr;
-
-		if ( overlay && overlay->getType() == OverlayType::eText )
-		{
-			uint32_t value;
-			params[0]->get( value );
-
-			overlay->getTextOverlay()->setLineSpacingMode( TextLineSpacingMode( value ) );
-		}
-		else
-		{
-			CU_ParsingError( cuT( "TextOverlay not initialised" ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserTextOverlayText )
-	{
-		auto & parsingContext = getParserContext( context );
-		auto overlay = parsingContext.overlay.rptr;
-		castor::String strParams;
-		params[0]->get( strParams );
-
-		if ( overlay && overlay->getType() == OverlayType::eText )
-		{
-			castor::string::replace( strParams, cuT( "\\n" ), cuT( "\n" ) );
-			overlay->getTextOverlay()->setCaption( castor::string::stringCast< char32_t >( strParams ) );
-		}
-		else
-		{
-			CU_ParsingError( cuT( "TextOverlay not initialised" ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserCameraParent )
-	{
-		auto & parsingContext = getParserContext( context );
-		castor::String name;
-		SceneNodeRPtr parent = parsingContext.scene->findSceneNode( params[0]->get( name ) );
-
-		if ( parent )
-		{
-			while ( parent->getParent()
-				&& parent->getParent() != parsingContext.scene->getObjectRootNode()
-				&& parent->getParent() != parsingContext.scene->getCameraRootNode() )
-			{
-				parent = parent->getParent();
-			}
-
-			if ( !parent->getParent()
-				|| parent->getParent() == parsingContext.scene->getObjectRootNode() )
-			{
-				parent->attachTo( *parsingContext.scene->getCameraRootNode() );
-			}
-
-			parsingContext.parentNode = parent;
-		}
-		else
-		{
-			CU_ParsingError( cuT( "Node [" ) + name + cuT( "] does not exist" ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserCameraViewport )
-	{
-		auto & parsingContext = getParserContext( context );
-		parsingContext.viewport = castor::makeUnique< Viewport >( *parsingContext.parser->getEngine() );
-		parsingContext.viewport->setPerspective( 0.0_degrees, 1, 0, 1 );
-	}
-	CU_EndAttributePush( CSCNSection::eViewport )
-		
-	CU_ImplementAttributeParser( parserCameraHdrConfig )
-	{
-	}
-	CU_EndAttributePush( CSCNSection::eHdrConfig )
-
-	CU_ImplementAttributeParser( parserCameraPrimitive )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !params.empty() )
-		{
-			uint32_t uiType;
-			parsingContext.primitiveType = VkPrimitiveTopology( params[0]->get( uiType ) );
-		}
-		else
-		{
-			CU_ParsingError( cuT( "Missing parameter" ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserCameraEnd )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( parsingContext.viewport )
-		{
-			auto node = parsingContext.parentNode;
-
-			if ( !node )
-			{
-				node = parsingContext.scene->getCameraRootNode();
-			}
-
-			parsingContext.parentNode = nullptr;
-			auto camera = parsingContext.scene->addNewCamera( parsingContext.strName
-				, *parsingContext.scene
-				, *node
-				, std::move( *parsingContext.viewport.release() ) );
-			camera->setHdrConfig( std::move( parsingContext.hdrConfig ) );
-			camera->setColourGradingConfig( std::move( parsingContext.colourGradingConfig ) );
-			log::info << "Loaded camera [" << camera->getName() << "]" << std::endl;
-		}
-	}
-	CU_EndAttributePop()
-
-	CU_ImplementAttributeParser( parserViewportType )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !params.empty() )
-		{
-			uint32_t uiType;
-			parsingContext.viewport->updateType( ViewportType( params[0]->get( uiType ) ) );
-		}
-		else
-		{
-			CU_ParsingError( cuT( "Missing parameter" ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserViewportLeft )
-	{
-		auto & parsingContext = getParserContext( context );
-		float rValue;
-		params[0]->get( rValue );
-		parsingContext.viewport->updateLeft( rValue );
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserViewportRight )
-	{
-		auto & parsingContext = getParserContext( context );
-		float rValue;
-		params[0]->get( rValue );
-		parsingContext.viewport->updateRight( rValue );
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserViewportTop )
-	{
-		auto & parsingContext = getParserContext( context );
-		float rValue;
-		params[0]->get( rValue );
-		parsingContext.viewport->updateTop( rValue );
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserViewportBottom )
-	{
-		auto & parsingContext = getParserContext( context );
-		float rValue;
-		params[0]->get( rValue );
-		parsingContext.viewport->updateBottom( rValue );
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserViewportNear )
-	{
-		auto & parsingContext = getParserContext( context );
-		float rValue;
-		params[0]->get( rValue );
-		parsingContext.viewport->updateNear( rValue );
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserViewportFar )
-	{
-		auto & parsingContext = getParserContext( context );
-		float rValue;
-		params[0]->get( rValue );
-		parsingContext.viewport->updateFar( rValue );
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserViewportSize )
-	{
-		auto & parsingContext = getParserContext( context );
-		castor::Size size;
-		params[0]->get( size );
-		parsingContext.viewport->resize( size );
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserViewportFovY )
-	{
-		auto & parsingContext = getParserContext( context );
-		float fFovY;
-		params[0]->get( fFovY );
-		parsingContext.viewport->updateFovY( castor::Angle::fromDegrees( fFovY ) );
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserViewportAspectRatio )
-	{
-		auto & parsingContext = getParserContext( context );
-		float fRatio;
-		params[0]->get( fRatio );
-		parsingContext.viewport->updateRatio( fRatio );
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserBillboardParent )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( parsingContext.billboards )
-		{
-			castor::String name;
-			params[0]->get( name );
-
-			if ( auto parent = parsingContext.scene->findSceneNode( name ) )
-			{
-				parent->attachObject( *parsingContext.billboards );
+				blockContext->parentNode = parent;
 			}
 			else
 			{
 				CU_ParsingError( cuT( "Node [" ) + name + cuT( "] does not exist" ) );
 			}
 		}
-		else
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserCameraViewport, CameraContext )
 		{
-			CU_ParsingError( cuT( "Geometry not initialised." ) );
+			blockContext->viewport = castor::makeUnique< Viewport >( *blockContext->scene->getEngine() );
+			blockContext->viewport->setPerspective( 0.0_degrees, 1, 0, 1 );
 		}
-	}
-	CU_EndAttribute()
+		CU_EndAttributePushBlock( CSCNSection::eViewport, blockContext )
 
-	CU_ImplementAttributeParser( parserBillboardType )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.billboards )
+		static CU_ImplementAttributeParserBlock( parserCameraPrimitive, CameraContext )
 		{
-			CU_ParsingError( cuT( "Billboard not initialised" ) );
-		}
-		else if ( params.empty() )
-		{
-			CU_ParsingError( cuT( "Missing parameter" ) );
-		}
-		else
-		{
-			uint32_t value;
-			params[0]->get( value );
-
-			parsingContext.billboards->setBillboardType( BillboardType( value ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserBillboardSize )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.billboards )
-		{
-			CU_ParsingError( cuT( "Billboard not initialised" ) );
-		}
-		else if ( params.empty() )
-		{
-			CU_ParsingError( cuT( "Missing parameter" ) );
-		}
-		else
-		{
-			uint32_t value;
-			params[0]->get( value );
-
-			parsingContext.billboards->setBillboardSize( BillboardSize( value ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserBillboardPositions )
-	{
-	}
-	CU_EndAttributePush( CSCNSection::eBillboardList )
-
-	CU_ImplementAttributeParser( parserBillboardMaterial )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( parsingContext.billboards )
-		{
-			castor::String name;
-			auto material = parsingContext.parser->getEngine()->tryFindMaterial( params[0]->get( name ) );
-
-			if ( material )
+			if ( params.empty() )
 			{
-				parsingContext.billboards->setMaterial( material );
+				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
 			else
 			{
-				CU_ParsingError( cuT( "Material [" ) + name + cuT( "] does not exist" ) );
+				blockContext->primitiveType = VkPrimitiveTopology( params[0]->get< uint32_t >() );
 			}
 		}
-		else
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserCameraEnd, CameraContext )
 		{
-			CU_ParsingError( cuT( "Billboard not initialised" ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserBillboardDimensions )
-	{
-		auto & parsingContext = getParserContext( context );
-		castor::Point2f dimensions;
-		params[0]->get( dimensions );
-		parsingContext.billboards->setDimensions( dimensions );
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserBillboardEnd )
-	{
-		auto & parsingContext = getParserContext( context );
-		parsingContext.parentNode = nullptr;
-		log::info << "Loaded billboards [" << parsingContext.billboards->getName() << "]" << std::endl;
-
-		if ( parsingContext.ownBillboards )
-		{
-			parsingContext.scene->addBillboardList( parsingContext.billboards->getName()
-				, parsingContext.ownBillboards
-				, true );
-		}
-
-		parsingContext.billboards = {};
-	}
-	CU_EndAttributePop()
-
-	CU_ImplementAttributeParser( parserBillboardPoint )
-	{
-		auto & parsingContext = getParserContext( context );
-		castor::Point3f position;
-		params[0]->get( position );
-		parsingContext.billboards->addPoint( position );
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserAnimatedObjectGroupAnimatedObject )
-	{
-		auto & parsingContext = getParserContext( context );
-		castor::String name;
-		params[0]->get( name );
-
-		if ( parsingContext.animGroup )
-		{
-			if ( auto geometry = parsingContext.scene->findGeometry( name ) )
+			if ( blockContext->viewport )
 			{
-				auto node = geometry->getParent();
+				auto node = blockContext->parentNode;
 
-				if ( node && node->hasAnimation() )
+				if ( !node )
 				{
-					parsingContext.animNode = parsingContext.animGroup->addObject( *node
-						, node->getName() );
+					node = blockContext->scene->getCameraRootNode();
 				}
 
-				if ( auto mesh = geometry->getMesh() )
+				auto camera = blockContext->scene->addNewCamera( blockContext->name
+					, *blockContext->scene
+					, *node
+					, std::move( *blockContext->viewport.release() ) );
+				camera->setHdrConfig( std::move( blockContext->hdrConfig ) );
+				camera->setColourGradingConfig( std::move( blockContext->colourGradingConfig ) );
+				log::info << "Loaded camera [" << camera->getName() << "]" << std::endl;
+			}
+		}
+		CU_EndAttributePop()
+
+		static CU_ImplementAttributeParserBlock( parserViewportType, CameraContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				blockContext->viewport->updateType( ViewportType( params[0]->get< uint32_t >() ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserViewportLeft, CameraContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				blockContext->viewport->updateLeft( params[0]->get< float >() );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserViewportRight, CameraContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				blockContext->viewport->updateRight( params[0]->get< float >() );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserViewportTop, CameraContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				blockContext->viewport->updateTop( params[0]->get< float >() );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserViewportBottom, CameraContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				blockContext->viewport->updateBottom( params[0]->get< float >() );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserViewportNear, CameraContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				blockContext->viewport->updateNear( params[0]->get< float >() );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserViewportFar, CameraContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				blockContext->viewport->updateFar( params[0]->get< float >() );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserViewportSize, CameraContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				blockContext->viewport->resize( params[0]->get< castor::Size >() );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserViewportFovY, CameraContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				blockContext->viewport->updateFovY( castor::Angle::fromDegrees( params[0]->get< float >() ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserViewportAspectRatio, CameraContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				blockContext->viewport->updateRatio( params[0]->get< float >() );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserBillboardParent, BillboardsContext )
+		{
+			if ( blockContext->billboards )
+			{
+				castor::String name;
+
+				if ( auto parent = blockContext->scene->findSceneNode( params[0]->get( name ) ) )
 				{
-					if ( mesh->hasAnimation() )
+					parent->attachObject( *blockContext->billboards );
+				}
+				else
+				{
+					CU_ParsingError( cuT( "Node [" ) + name + cuT( "] does not exist" ) );
+				}
+			}
+			else
+			{
+				CU_ParsingError( cuT( "Geometry not initialised." ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserBillboardType, BillboardsContext )
+		{
+			if ( !blockContext->billboards )
+			{
+				CU_ParsingError( cuT( "Billboard not initialised" ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter" ) );
+			}
+			else
+			{
+				blockContext->billboards->setBillboardType( BillboardType( params[0]->get< uint32_t >() ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserBillboardSize, BillboardsContext )
+		{
+			if ( !blockContext->billboards )
+			{
+				CU_ParsingError( cuT( "Billboard not initialised" ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter" ) );
+			}
+			else
+			{
+				blockContext->billboards->setBillboardSize( BillboardSize( params[0]->get< uint32_t >() ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserBillboardPositions, BillboardsContext )
+		{
+		}
+		CU_EndAttributePushBlock( CSCNSection::eBillboardList, blockContext )
+
+		static CU_ImplementAttributeParserBlock( parserBillboardMaterial, BillboardsContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter" ) );
+			}
+			else if ( !blockContext->billboards )
+			{
+				CU_ParsingError( cuT( "Billboard not initialised" ) );
+			}
+			else
+			{
+				castor::String name;
+
+				if ( auto material = blockContext->billboards->getEngine()->tryFindMaterial( params[0]->get( name ) ) )
+				{
+					blockContext->billboards->setMaterial( material );
+				}
+				else
+				{
+					CU_ParsingError( cuT( "Material [" ) + name + cuT( "] does not exist" ) );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserBillboardDimensions, BillboardsContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter" ) );
+			}
+			else
+			{
+				blockContext->billboards->setDimensions( params[0]->get< castor::Point2f >() );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserBillboardEnd, BillboardsContext )
+		{
+			log::info << "Loaded billboards [" << blockContext->billboards->getName() << "]" << std::endl;
+
+			if ( blockContext->ownBillboards )
+			{
+				blockContext->scene->addBillboardList( blockContext->billboards->getName()
+					, blockContext->ownBillboards
+					, true );
+			}
+		}
+		CU_EndAttributePop()
+
+		static CU_ImplementAttributeParserBlock( parserBillboardPoint, BillboardsContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter" ) );
+			}
+			else
+			{
+				blockContext->billboards->addPoint( params[0]->get< castor::Point3f >() );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserAnimatedObjectGroupAnimatedObject, AnimGroupContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter" ) );
+			}
+			else if ( !blockContext->animGroup )
+			{
+				CU_ParsingError( cuT( "No animated object group not initialised" ) );
+			}
+			else
+			{
+				castor::String name;
+
+				if ( auto geometry = blockContext->scene->findGeometry( params[0]->get( name ) ) )
+				{
+					auto node = geometry->getParent();
+
+					if ( node && node->hasAnimation() )
 					{
-						parsingContext.animMesh = parsingContext.animGroup->addObject( *mesh
-							, *geometry
-							, geometry->getName() );
+						blockContext->animNode = blockContext->animGroup->addObject( *node
+							, node->getName() );
 					}
 
-					if ( auto skeleton = mesh->getSkeleton() )
+					if ( auto mesh = geometry->getMesh() )
 					{
-						if ( skeleton->hasAnimation() )
+						if ( mesh->hasAnimation() )
 						{
-							parsingContext.animSkeleton = parsingContext.animGroup->addObject( *skeleton
-								, *mesh
+							blockContext->animMesh = blockContext->animGroup->addObject( *mesh
 								, *geometry
 								, geometry->getName() );
 						}
-					}
-				}
-			}
-			else
-			{
-				if ( auto node = parsingContext.scene->findSceneNode( name ) )
-				{
-					if ( node->hasAnimation() )
-					{
-						parsingContext.animNode = parsingContext.animGroup->addObject( *node
-							, node->getName() );
-					}
-				}
-				else
-				{
-					CU_ParsingError( cuT( "No geometry or node with name " ) + name );
-				}
-			}
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No animated object group not initialised" ) );
-		}
-	}
-	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserAnimatedObjectGroupAnimatedMesh )
-	{
-		auto & parsingContext = getParserContext( context );
-		castor::String name;
-		params[0]->get( name );
-
-		if ( parsingContext.animGroup )
-		{
-			if ( auto geometry = parsingContext.scene->findGeometry( name ) )
-			{
-				if ( auto mesh = geometry->getMesh() )
-				{
-					if ( mesh->hasAnimation() )
-					{
-						parsingContext.animMesh = parsingContext.animGroup->addObject( *mesh
-							, *geometry
-							, geometry->getName() );
-					}
-				}
-				else
-				{
-					CU_ParsingError( cuT( "Geometry [" ) + name + "] has no mesh" );
-				}
-			}
-			else
-			{
-				CU_ParsingError( cuT( "No geometry with name [" ) + name + "]" );
-			}
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No animated object group not initialised" ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserAnimatedObjectGroupAnimatedSkeleton )
-	{
-		auto & parsingContext = getParserContext( context );
-		castor::String name;
-		params[0]->get( name );
-
-		if ( parsingContext.animGroup )
-		{
-			if ( auto geometry = parsingContext.scene->findGeometry( name ) )
-			{
-				if ( auto mesh = geometry->getMesh() )
-				{
-					if ( auto skeleton = mesh->getSkeleton() )
-					{
-						if ( skeleton->hasAnimation() )
+						if ( auto skeleton = mesh->getSkeleton() )
 						{
-							parsingContext.animSkeleton = parsingContext.animGroup->addObject( *skeleton
-								, *mesh
+							if ( skeleton->hasAnimation() )
+							{
+								blockContext->animSkeleton = blockContext->animGroup->addObject( *skeleton
+									, *mesh
+									, *geometry
+									, geometry->getName() );
+							}
+						}
+					}
+				}
+				else
+				{
+					if ( auto node = blockContext->scene->findSceneNode( name ) )
+					{
+						if ( node->hasAnimation() )
+						{
+							blockContext->animNode = blockContext->animGroup->addObject( *node
+								, node->getName() );
+						}
+					}
+					else
+					{
+						CU_ParsingError( cuT( "No geometry or node with name " ) + name );
+					}
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserAnimatedObjectGroupAnimatedMesh, AnimGroupContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter" ) );
+			}
+			else if ( !blockContext->animGroup )
+			{
+				CU_ParsingError( cuT( "No animated object group not initialised" ) );
+			}
+			else
+			{
+				castor::String name;
+
+				if ( auto geometry = blockContext->scene->findGeometry( params[0]->get( name ) ) )
+				{
+					if ( auto mesh = geometry->getMesh() )
+					{
+						if ( mesh->hasAnimation() )
+						{
+							blockContext->animMesh = blockContext->animGroup->addObject( *mesh
 								, *geometry
 								, geometry->getName() );
 						}
 					}
 					else
 					{
-						CU_ParsingError( cuT( "Geometry [" ) + name + "]'s mesh has no skeleton" );
+						CU_ParsingError( cuT( "Geometry [" ) + name + "] has no mesh" );
 					}
 				}
 				else
 				{
-					CU_ParsingError( cuT( "Geometry [" ) + name + "] has no mesh" );
+					CU_ParsingError( cuT( "No geometry with name [" ) + name + "]" );
 				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserAnimatedObjectGroupAnimatedSkeleton, AnimGroupContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter" ) );
+			}
+			else if ( !blockContext->animGroup )
+			{
+				CU_ParsingError( cuT( "No animated object group not initialised" ) );
 			}
 			else
 			{
-				CU_ParsingError( cuT( "No geometry with name [" ) + name + "]" );
-			}
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No animated object group not initialised" ) );
-		}
-	}
-	CU_EndAttribute()
+				castor::String name;
 
-	CU_ImplementAttributeParser( parserAnimatedObjectGroupAnimatedNode )
-	{
-		auto & parsingContext = getParserContext( context );
-		castor::String name;
-		params[0]->get( name );
-
-		if ( parsingContext.animGroup )
-		{
-			if ( auto node = parsingContext.scene->findSceneNode( name ) )
-			{
-				if ( node->hasAnimation() )
+				if ( auto geometry = blockContext->scene->findGeometry( params[0]->get( name ) ) )
 				{
-					parsingContext.animNode = parsingContext.animGroup->addObject( *node
-						, node->getName() );
+					if ( auto mesh = geometry->getMesh() )
+					{
+						if ( auto skeleton = mesh->getSkeleton() )
+						{
+							if ( skeleton->hasAnimation() )
+							{
+								blockContext->animSkeleton = blockContext->animGroup->addObject( *skeleton
+									, *mesh
+									, *geometry
+									, geometry->getName() );
+							}
+						}
+						else
+						{
+							CU_ParsingError( cuT( "Geometry [" ) + name + "]'s mesh has no skeleton" );
+						}
+					}
+					else
+					{
+						CU_ParsingError( cuT( "Geometry [" ) + name + "] has no mesh" );
+					}
+				}
+				else
+				{
+					CU_ParsingError( cuT( "No geometry with name [" ) + name + "]" );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserAnimatedObjectGroupAnimatedNode, AnimGroupContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter" ) );
+			}
+			else if ( !blockContext->animGroup )
+			{
+				CU_ParsingError( cuT( "No animated object group not initialised" ) );
+			}
+			else
+			{
+				castor::String name;
+
+				if ( auto node = blockContext->scene->findSceneNode( params[0]->get( name ) ) )
+				{
+					if ( node->hasAnimation() )
+					{
+						blockContext->animNode = blockContext->animGroup->addObject( *node
+							, node->getName() );
+					}
+				}
+				else
+				{
+					CU_ParsingError( cuT( "No node with name [" ) + name + "]" );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserAnimatedObjectGroupAnimation, AnimGroupContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter" ) );
+			}
+			else if ( blockContext->animGroup )
+			{
+				params[0]->get( blockContext->animName );
+				blockContext->animGroup->addAnimation( blockContext->animName );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No animated object group initialised" ) );
+			}
+		}
+		CU_EndAttributePushBlock( CSCNSection::eAnimation, blockContext )
+
+		static CU_ImplementAttributeParserBlock( parserAnimatedObjectGroupAnimationStart, AnimGroupContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter" ) );
+			}
+			else if ( blockContext->animGroup )
+			{
+				blockContext->animGroup->startAnimation( params[0]->get< castor::String >() );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No animated object group initialised" ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserAnimatedObjectGroupAnimationPause, AnimGroupContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter" ) );
+			}
+			else if ( blockContext->animGroup )
+			{
+				blockContext->animGroup->pauseAnimation( params[0]->get< castor::String >() );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No animated object group initialised" ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserAnimatedObjectGroupEnd, AnimGroupContext )
+		{
+			if ( !blockContext->animGroup )
+			{
+				CU_ParsingError( cuT( "No animated object group initialised" ) );
+			}
+			else
+			{
+				log::info << "Loaded animated object group [" << blockContext->animGroup->getName() << "]" << std::endl;
+			}
+		}
+		CU_EndAttributePop()
+
+		static CU_ImplementAttributeParserBlock( parserAnimationLooped, AnimGroupContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter" ) );
+			}
+			else if ( blockContext->animGroup )
+			{
+				blockContext->animGroup->setAnimationLooped( blockContext->animName, params[0]->get< bool >() );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No animated object group initialised" ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserAnimationScale, AnimGroupContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter" ) );
+			}
+			else if ( blockContext->animGroup )
+			{
+				blockContext->animGroup->setAnimationScale( blockContext->animName, params[0]->get< float >() );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No animated object group initialised" ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserAnimationStartAt, AnimGroupContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter" ) );
+			}
+			else if ( blockContext->animGroup )
+			{
+				blockContext->animGroup->setAnimationStartingPoint( blockContext->animName
+					, castor::Milliseconds{ uint64_t( params[0]->get< float >() * 1000.0f ) } );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No animated object group initialised" ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserAnimationStopAt, AnimGroupContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter" ) );
+			}
+			else if ( blockContext->animGroup )
+			{
+				blockContext->animGroup->setAnimationStoppingPoint( blockContext->animName
+					, castor::Milliseconds{ uint64_t( params[0]->get< float >() * 1000.0f ) } );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No animated object group initialised" ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserAnimationInterpolation, AnimGroupContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter" ) );
+			}
+			else if ( blockContext->animGroup )
+			{
+				blockContext->animGroup->setAnimationInterpolation( blockContext->animName
+					, InterpolatorType( params[0]->get< uint32_t >() ) );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "No animated object group initialised" ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserAnimationEnd, AnimGroupContext )
+		{
+		}
+		CU_EndAttributePop()
+
+		static CU_ImplementAttributeParserBlock( parserSkyboxVisible, SkyboxContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else if ( !blockContext->skybox )
+			{
+				CU_ParsingError( cuT( "No skybox initialised." ) );
+			}
+			else
+			{
+				blockContext->skybox->setVisible( params[0]->get< bool >() );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserSkyboxEqui, SkyboxContext )
+		{
+			if ( params.size() <= 1 )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else if ( !blockContext->skybox )
+			{
+				CU_ParsingError( cuT( "No skybox initialised." ) );
+			}
+			else
+			{
+				auto path = params[0]->get< castor::Path >();
+				auto filePath = context.file.getPath();
+
+				if ( castor::File::fileExists( filePath / path ) )
+				{
+					blockContext->skybox->setEquiTexture( filePath, path, params[1]->get< uint32_t >() );
+				}
+				else
+				{
+					blockContext->skybox.reset();
+					castor::String err = cuT( "Couldn't load the image file [" ) + path + cuT( "] (file does not exist)" );
+					CU_ParsingError( err );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserSkyboxCross, SkyboxContext )
+		{
+			if ( params.size() < 1 )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else if ( !blockContext->skybox )
+			{
+				CU_ParsingError( cuT( "No skybox initialised." ) );
+			}
+			else
+			{
+				auto path = params[0]->get< castor::Path >();
+				auto filePath = context.file.getPath();
+
+				if ( castor::File::fileExists( filePath / path ) )
+				{
+					blockContext->skybox->setCrossTexture( filePath, path );
+				}
+				else
+				{
+					blockContext->skybox.reset();
+					castor::String err = cuT( "Couldn't load the image file [" ) + path + cuT( "] (file does not exist)" );
+					CU_ParsingError( err );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserSkyboxLeft, SkyboxContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else if ( blockContext->skybox )
+			{
+				auto path = params[0]->get< castor::Path >();
+				auto filePath = context.file.getPath();
+
+				if ( castor::File::fileExists( filePath / path ) )
+				{
+					blockContext->skybox->setLeftImage( filePath, path );
+				}
+				else
+				{
+					blockContext->skybox.reset();
+					castor::String err = cuT( "Couldn't load the image file [" ) + path + cuT( "] (file does not exist)" );
+					CU_ParsingError( err );
 				}
 			}
 			else
 			{
-				CU_ParsingError( cuT( "No node with name [" ) + name + "]" );
+				CU_ParsingError( cuT( "No skybox initialised" ) );
 			}
 		}
-		else
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserSkyboxRight, SkyboxContext )
 		{
-			CU_ParsingError( cuT( "No animated object group not initialised" ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserAnimatedObjectGroupAnimation )
-	{
-		auto & parsingContext = getParserContext( context );
-		params[0]->get( parsingContext.strName2 );
-
-		if ( parsingContext.animGroup )
-		{
-			parsingContext.animGroup->addAnimation( parsingContext.strName2 );
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No animated object group initialised" ) );
-		}
-	}
-	CU_EndAttributePush( CSCNSection::eAnimation )
-
-	CU_ImplementAttributeParser( parserAnimatedObjectGroupAnimationStart )
-	{
-		auto & parsingContext = getParserContext( context );
-		castor::String name;
-		params[0]->get( name );
-
-		if ( parsingContext.animGroup )
-		{
-			parsingContext.animGroup->startAnimation( name );
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No animated object group initialised" ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserAnimatedObjectGroupAnimationPause )
-	{
-		auto & parsingContext = getParserContext( context );
-		castor::String name;
-		params[0]->get( name );
-
-		if ( parsingContext.animGroup )
-		{
-			parsingContext.animGroup->pauseAnimation( name );
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No animated object group initialised" ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserAnimatedObjectGroupEnd )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.animGroup )
-		{
-			CU_ParsingError( cuT( "No animated object group initialised" ) );
-		}
-
-		log::info << "Loaded animated object group [" << parsingContext.animGroup->getName() << "]" << std::endl;
-		parsingContext.animGroup = {};
-	}
-	CU_EndAttributePop()
-
-	CU_ImplementAttributeParser( parserAnimationLooped )
-	{
-		auto & parsingContext = getParserContext( context );
-		bool value;
-		params[0]->get( value );
-
-		if ( parsingContext.animGroup )
-		{
-			parsingContext.animGroup->setAnimationLooped( parsingContext.strName2, value );
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No animated object group initialised" ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserAnimationScale )
-	{
-		auto & parsingContext = getParserContext( context );
-		float value;
-		params[0]->get( value );
-
-		if ( parsingContext.animGroup )
-		{
-			parsingContext.animGroup->setAnimationScale( parsingContext.strName2, value );
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No animated object group initialised" ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserAnimationStartAt )
-	{
-		auto & parsingContext = getParserContext( context );
-		float value;
-		params[0]->get( value );
-
-		if ( parsingContext.animGroup )
-		{
-			parsingContext.animGroup->setAnimationStartingPoint( parsingContext.strName2
-				, castor::Milliseconds{ uint64_t( value * 1000.0f ) } );
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No animated object group initialised" ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserAnimationStopAt )
-	{
-		auto & parsingContext = getParserContext( context );
-		float value;
-		params[0]->get( value );
-
-		if ( parsingContext.animGroup )
-		{
-			parsingContext.animGroup->setAnimationStoppingPoint( parsingContext.strName2
-				, castor::Milliseconds{ uint64_t( value * 1000.0f ) } );
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No animated object group initialised" ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserAnimationInterpolation )
-	{
-		auto & parsingContext = getParserContext( context );
-		uint32_t value;
-		params[0]->get( value );
-
-		if ( parsingContext.animGroup )
-		{
-			parsingContext.animGroup->setAnimationInterpolation( parsingContext.strName2
-				, InterpolatorType( value ) );
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No animated object group initialised" ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserAnimationEnd )
-	{
-	}
-	CU_EndAttributePop()
-
-	CU_ImplementAttributeParser( parserSkyboxVisible )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( params.empty() )
-		{
-			CU_ParsingError( cuT( "Missing parameter." ) );
-		}
-		else if ( !parsingContext.skybox )
-		{
-			CU_ParsingError( cuT( "No skybox initialised." ) );
-		}
-		else
-		{
-			parsingContext.skybox->setVisible( params[0]->get< bool >() );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserSkyboxEqui )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( params.size() <= 1 )
-		{
-			CU_ParsingError( cuT( "Missing parameter." ) );
-		}
-		else if ( !parsingContext.skybox )
-		{
-			CU_ParsingError( cuT( "No skybox initialised." ) );
-		}
-		else
-		{
-			auto path = params[0]->get< castor::Path >();
-			auto filePath = context.file.getPath();
-
-			if ( castor::File::fileExists( filePath / path ) )
+			if ( params.empty() )
 			{
-				uint32_t size;
-				params[1]->get( size );
-				parsingContext.skybox->setEquiTexture( filePath, path, size );
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else if ( blockContext->skybox )
+			{
+				auto path = params[0]->get< castor::Path >();
+				auto filePath = context.file.getPath();
+
+				if ( castor::File::fileExists( filePath / path ) )
+				{
+					blockContext->skybox->setRightImage( filePath, path );
+				}
+				else
+				{
+					blockContext->skybox.reset();
+					castor::String err = cuT( "Couldn't load the image file [" ) + path + cuT( "] (file does not exist)" );
+					CU_ParsingError( err );
+				}
 			}
 			else
 			{
-				parsingContext.skybox.reset();
-				castor::String err = cuT( "Couldn't load the image file [" ) + path + cuT( "] (file does not exist)" );
-				CU_ParsingError( err );
+				CU_ParsingError( cuT( "No skybox initialised" ) );
 			}
 		}
-	}
-	CU_EndAttribute()
+		CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserSkyboxCross )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( params.size() < 1 )
+		static CU_ImplementAttributeParserBlock( parserSkyboxTop, SkyboxContext )
 		{
-			CU_ParsingError( cuT( "Missing parameter." ) );
-		}
-		else if ( !parsingContext.skybox )
-		{
-			CU_ParsingError( cuT( "No skybox initialised." ) );
-		}
-		else
-		{
-			auto path = params[0]->get< castor::Path >();
-			auto filePath = context.file.getPath();
-
-			if ( castor::File::fileExists( filePath / path ) )
+			if ( params.empty() )
 			{
-				parsingContext.skybox->setCrossTexture( filePath, path );
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else if ( blockContext->skybox )
+			{
+				auto path = params[0]->get< castor::Path >();
+				auto filePath = context.file.getPath();
+
+				if ( castor::File::fileExists( filePath / path ) )
+				{
+					blockContext->skybox->setTopImage( filePath, path );
+				}
+				else
+				{
+					blockContext->skybox.reset();
+					castor::String err = cuT( "Couldn't load the image file [" ) + path + cuT( "] (file does not exist)" );
+					CU_ParsingError( err );
+				}
 			}
 			else
 			{
-				parsingContext.skybox.reset();
-				castor::String err = cuT( "Couldn't load the image file [" ) + path + cuT( "] (file does not exist)" );
-				CU_ParsingError( err );
+				CU_ParsingError( cuT( "No skybox initialised" ) );
 			}
 		}
-	}
-	CU_EndAttribute()
+		CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserSkyboxLeft )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( parsingContext.skybox )
+		static CU_ImplementAttributeParserBlock( parserSkyboxBottom, SkyboxContext )
 		{
-			auto path = params[0]->get< castor::Path >();
-			auto filePath = context.file.getPath();
-
-			if ( castor::File::fileExists( filePath / path ) )
+			if ( params.empty() )
 			{
-				parsingContext.skybox->setLeftImage( filePath, path );
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else if ( blockContext->skybox )
+			{
+				auto path = params[0]->get< castor::Path >();
+				auto filePath = context.file.getPath();
+
+				if ( castor::File::fileExists( filePath / path ) )
+				{
+					blockContext->skybox->setBottomImage( filePath, path );
+				}
+				else
+				{
+					blockContext->skybox.reset();
+					castor::String err = cuT( "Couldn't load the image file [" ) + path + cuT( "] (file does not exist)" );
+					CU_ParsingError( err );
+				}
 			}
 			else
 			{
-				parsingContext.skybox.reset();
-				castor::String err = cuT( "Couldn't load the image file [" ) + path + cuT( "] (file does not exist)" );
-				CU_ParsingError( err );
+				CU_ParsingError( cuT( "No skybox initialised" ) );
 			}
 		}
-		else
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserSkyboxFront, SkyboxContext )
 		{
-			parsingContext.skybox.reset();
-			CU_ParsingError( cuT( "No skybox initialised" ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserSkyboxRight )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( parsingContext.skybox )
-		{
-			auto path = params[0]->get< castor::Path >();
-			auto filePath = context.file.getPath();
-
-			if ( castor::File::fileExists( filePath / path ) )
+			if ( params.empty() )
 			{
-				parsingContext.skybox->setRightImage( filePath, path );
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else if ( blockContext->skybox )
+			{
+				auto path = params[0]->get< castor::Path >();
+				auto filePath = context.file.getPath();
+
+				if ( castor::File::fileExists( filePath / path ) )
+				{
+					blockContext->skybox->setFrontImage( filePath, path );
+				}
+				else
+				{
+					blockContext->skybox.reset();
+					castor::String err = cuT( "Couldn't load the image file [" ) + path + cuT( "] (file does not exist)" );
+					CU_ParsingError( err );
+				}
 			}
 			else
 			{
-				parsingContext.skybox.reset();
-				castor::String err = cuT( "Couldn't load the image file [" ) + path + cuT( "] (file does not exist)" );
-				CU_ParsingError( err );
+				CU_ParsingError( cuT( "No skybox initialised" ) );
 			}
 		}
-		else
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserSkyboxBack, SkyboxContext )
 		{
-			parsingContext.skybox.reset();
-			CU_ParsingError( cuT( "No skybox initialised" ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserSkyboxTop )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( parsingContext.skybox )
-		{
-			auto path = params[0]->get< castor::Path >();
-			auto filePath = context.file.getPath();
-
-			if ( castor::File::fileExists( filePath / path ) )
+			if ( params.empty() )
 			{
-				parsingContext.skybox->setTopImage( filePath, path );
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else if ( blockContext->skybox )
+			{
+				auto path = params[0]->get< castor::Path >();
+				auto filePath = context.file.getPath();
+
+				if ( castor::File::fileExists( filePath / path ) )
+				{
+					blockContext->skybox->setBackImage( filePath, path );
+				}
+				else
+				{
+					blockContext->skybox.reset();
+					castor::String err = cuT( "Couldn't load the image file [" ) + path + cuT( "] (file does not exist)" );
+					CU_ParsingError( err );
+				}
 			}
 			else
 			{
-				parsingContext.skybox.reset();
-				castor::String err = cuT( "Couldn't load the image file [" ) + path + cuT( "] (file does not exist)" );
-				CU_ParsingError( err );
+				CU_ParsingError( cuT( "No skybox initialised" ) );
 			}
 		}
-		else
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserSkyboxEnd, SkyboxContext )
 		{
-			parsingContext.skybox.reset();
-			CU_ParsingError( cuT( "No skybox initialised" ) );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserSkyboxBottom )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( parsingContext.skybox )
-		{
-			auto path = params[0]->get< castor::Path >();
-			auto filePath = context.file.getPath();
-
-			if ( castor::File::fileExists( filePath / path ) )
+			if ( blockContext->skybox )
 			{
-				parsingContext.skybox->setBottomImage( filePath, path );
+				log::info << "Loaded skybox" << std::endl;
+				blockContext->skybox->getScene().setBackground( castor::ptrRefCast< SceneBackground >( blockContext->skybox ) );
 			}
 			else
 			{
-				parsingContext.skybox.reset();
-				castor::String err = cuT( "Couldn't load the image file [" ) + path + cuT( "] (file does not exist)" );
-				CU_ParsingError( err );
+				CU_ParsingError( cuT( "No skybox initialised" ) );
 			}
 		}
-		else
+		CU_EndAttributePop()
+
+		using namespace castor;
+
+		static void addRootParsers( castor::AttributeParsers & result )
 		{
-			parsingContext.skybox.reset();
-			CU_ParsingError( cuT( "No skybox initialised" ) );
+			BlockParserContextT< RootContext > context{ result, CSCNSection::eRoot };
+			context.addParser( cuT( "debug_overlays" ), parserRootDebugOverlays, { makeParameter< ParameterType::eBool >() } );
+			context.addParser( cuT( "max_image_size" ), parserRootMaxImageSize, { makeParameter< ParameterType::eUInt32 >() } );
+			context.addParser( cuT( "debug_max_image_size" ), parserRootDebugMaxImageSize, { makeParameter< ParameterType::eUInt32 >() } );
+			context.addParser( cuT( "lpv_grid_size" ), parserRootLpvGridSize, { makeParameter< ParameterType::eUInt32 >() } );
+			context.addParser( cuT( "default_unit" ), parserRootDefaultUnit, { makeParameter< ParameterType::eCheckedText, castor::LengthUnit >() } );
+			context.addParser( cuT( "enable_full_loading" ), parserRootFullLoading, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
+			context.addPushParser( cuT( "scene" ), CSCNSection::eScene, parserRootScene, { makeParameter< ParameterType::eName >() } );
+			context.addPushParser( cuT( "loading_screen" ), CSCNSection::eScene, parserRootLoadingScreen, {} );
+			context.addPushParser( cuT( "font" ), CSCNSection::eFont, parserRootFont, { makeParameter< ParameterType::eName >() } );
+			context.addPushParser( cuT( "material" ), CSCNSection::eMaterial, parserRootMaterial, { makeParameter< ParameterType::eName >() } );
+			context.addPushParser( cuT( "panel_overlay" ), CSCNSection::ePanelOverlay, parserRootPanelOverlay, { makeParameter< ParameterType::eName >() } );
+			context.addPushParser( cuT( "border_panel_overlay" ), CSCNSection::eBorderPanelOverlay, parserRootBorderPanelOverlay, { makeParameter< ParameterType::eName >() } );
+			context.addPushParser( cuT( "text_overlay" ), CSCNSection::eTextOverlay, parserRootTextOverlay, { makeParameter< ParameterType::eName >() } );
+			context.addPushParser( cuT( "sampler" ), CSCNSection::eSampler, parserRootSamplerState, { makeParameter< ParameterType::eName >() } );
+			context.addPushParser( cuT( "window" ), CSCNSection::eWindow, parserRootWindow, { makeParameter< ParameterType::eName >() } );
+		}
+
+		static void addWindowParsers( castor::AttributeParsers & result )
+		{
+			BlockParserContextT< WindowContext > context{ result, CSCNSection::eWindow, CSCNSection::eRoot };
+			context.addParser( cuT( "vsync" ), parserWindowVSync, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
+			context.addParser( cuT( "fullscreen" ), parserWindowFullscreen, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
+			context.addParser( cuT( "allow_hdr" ), parserWindowAllowHdr, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
+			context.addPushParser( cuT( "render_target" ), CSCNSection::eRenderTarget, parserWindowRenderTarget );
+			context.addPopParser( cuT( "}" ), parserWindowEnd );
+		}
+
+		static void addRenderTargetParsers( castor::AttributeParsers & result )
+		{
+			BlockParserContextT< TargetContext > context{ result, CSCNSection::eRenderTarget };
+			context.addParser( cuT( "scene" ), parserRenderTargetScene, { makeParameter< ParameterType::eName >() } );
+			context.addParser( cuT( "camera" ), parserRenderTargetCamera, { makeParameter< ParameterType::eName >() } );
+			context.addParser( cuT( "size" ), parserRenderTargetSize, { makeParameter< ParameterType::eSize >() } );
+			context.addParser( cuT( "format" ), parserRenderTargetFormat, { makeParameter< ParameterType::ePixelFormat >() } );
+			context.addParser( cuT( "hdr_format" ), parserRenderTargetHDRFormat, { makeParameter< ParameterType::ePixelFormat >() } );
+			context.addParser( cuT( "srgb_format" ), parserRenderTargetSRGBFormat, { makeParameter< ParameterType::ePixelFormat >() } );
+			context.addParser( cuT( "stereo" ), parserRenderTargetStereo, { makeParameter< ParameterType::eFloat >() } );
+			context.addParser( cuT( "postfx" ), parserRenderTargetPostEffect, { makeParameter< ParameterType::eName >(), makeParameter< ParameterType::eText >() } );
+			context.addParser( cuT( "tone_mapping" ), parserRenderTargetToneMapping, { makeParameter< ParameterType::eName >(), makeParameter< ParameterType::eText >() } );
+			context.addParser( cuT( "enable_full_loading" ), parserRenderTargetFullLoading, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
+			context.addPopParser( cuT( "}" ), parserRenderTargetEnd );
+		}
+
+		static void addSamplerParsers( castor::AttributeParsers & result )
+		{
+			BlockParserContextT< SamplerContext > context{ result, CSCNSection::eSampler };
+			context.addParser( cuT( "min_filter" ), parserSamplerMinFilter, { makeParameter< ParameterType::eCheckedText, VkFilter >() } );
+			context.addParser( cuT( "mag_filter" ), parserSamplerMagFilter, { makeParameter< ParameterType::eCheckedText, VkFilter >() } );
+			context.addParser( cuT( "mip_filter" ), parserSamplerMipFilter, { makeParameter< ParameterType::eCheckedText, VkSamplerMipmapMode >() } );
+			context.addParser( cuT( "min_lod" ), parserSamplerMinLod, { makeParameter< ParameterType::eFloat >() } );
+			context.addParser( cuT( "max_lod" ), parserSamplerMaxLod, { makeParameter< ParameterType::eFloat >() } );
+			context.addParser( cuT( "lod_bias" ), parserSamplerLodBias, { makeParameter< ParameterType::eFloat >() } );
+			context.addParser( cuT( "u_wrap_mode" ), parserSamplerUWrapMode, { makeParameter< ParameterType::eCheckedText, VkSamplerAddressMode >() } );
+			context.addParser( cuT( "v_wrap_mode" ), parserSamplerVWrapMode, { makeParameter< ParameterType::eCheckedText, VkSamplerAddressMode >() } );
+			context.addParser( cuT( "w_wrap_mode" ), parserSamplerWWrapMode, { makeParameter< ParameterType::eCheckedText, VkSamplerAddressMode >() } );
+			context.addParser( cuT( "border_colour" ), parserSamplerBorderColour, { makeParameter< ParameterType::eCheckedText, VkBorderColor >() } );
+			context.addParser( cuT( "anisotropic_filtering" ), parserSamplerAnisotropicFiltering, { makeParameter< ParameterType::eBool >() } );
+			context.addParser( cuT( "max_anisotropy" ), parserSamplerMaxAnisotropy, { makeParameter< ParameterType::eFloat >() } );
+			context.addParser( cuT( "comparison_mode" ), parserSamplerComparisonMode, { makeParameter< ParameterType::eCheckedText, LimitedType< VkCompareOp > >() } );
+			context.addParser( cuT( "comparison_func" ), parserSamplerComparisonFunc, { makeParameter< ParameterType::eCheckedText, VkCompareOp >() } );
+			context.addPopParser( cuT( "}" ), parserSamplerEnd );
+		}
+
+		static void addSceneParsers( castor::AttributeParsers & result )
+		{
+			BlockParserContextT< SceneContext > context{ result, CSCNSection::eScene, CSCNSection::eRoot };
+			context.addParser( cuT( "background_colour" ), parserSceneBkColour, { makeParameter< ParameterType::eRgbColour >() } );
+			context.addParser( cuT( "background_image" ), parserSceneBkImage, { makeParameter< ParameterType::ePath >() } );
+			context.addParser( cuT( "ambient_light" ), parserSceneAmbientLight, { makeParameter< ParameterType::eRgbColour >() } );
+			context.addParser( cuT( "fog_type" ), parserSceneFogType, { makeParameter< ParameterType::eCheckedText, FogType >() } );
+			context.addParser( cuT( "fog_density" ), parserSceneFogDensity, { makeParameter< ParameterType::eFloat >() } );
+			context.addParser( cuT( "directional_shadow_cascades" ), parserDirectionalShadowCascades, { makeParameter< ParameterType::eUInt32 >( castor::makeRange( 0u, MaxDirectionalCascadesCount ) ) } );
+			context.addPushParser( cuT( "font" ), CSCNSection::eFont, parserSceneFont, { makeParameter< ParameterType::eName >() } );
+			context.addPushParser( cuT( "material" ), CSCNSection::eMaterial, parserSceneMaterial, { makeParameter< ParameterType::eName >() } );
+			context.addPushParser( cuT( "sampler" ), CSCNSection::eSampler, parserSceneSamplerState, { makeParameter< ParameterType::eName >() } );
+			context.addPushParser( cuT( "camera" ), CSCNSection::eCamera, parserSceneCamera, { makeParameter< ParameterType::eName >() } );
+			context.addPushParser( cuT( "light" ), CSCNSection::eLight, parserSceneLight, { makeParameter< ParameterType::eName >() } );
+			context.addPushParser( cuT( "camera_node" ), CSCNSection::eNode, parserSceneCameraNode, { makeParameter< ParameterType::eName >() } );
+			context.addPushParser( cuT( "scene_node" ), CSCNSection::eNode, parserSceneSceneNode, { makeParameter< ParameterType::eName >() } );
+			context.addPushParser( cuT( "object" ), CSCNSection::eObject, parserSceneObject, { makeParameter< ParameterType::eName >() } );
+			context.addPushParser( cuT( "import" ), CSCNSection::eSceneImport, parserSceneImport );
+			context.addPushParser( cuT( "billboard" ), CSCNSection::eBillboard, parserSceneBillboard, { makeParameter< ParameterType::eName >() } );
+			context.addPushParser( cuT( "animated_object_group" ), CSCNSection::eAnimGroup, parserSceneAnimatedObjectGroup, { makeParameter< ParameterType::eName >() } );
+			context.addPushParser( cuT( "panel_overlay" ), CSCNSection::ePanelOverlay, parserScenePanelOverlay, { makeParameter< ParameterType::eName >() } );
+			context.addPushParser( cuT( "border_panel_overlay" ), CSCNSection::eBorderPanelOverlay, parserSceneBorderPanelOverlay, { makeParameter< ParameterType::eName >() } );
+			context.addPushParser( cuT( "text_overlay" ), CSCNSection::eTextOverlay, parserSceneTextOverlay, { makeParameter< ParameterType::eName >() } );
+			context.addPushParser( cuT( "skybox" ), CSCNSection::eSkybox, parserSceneSkybox );
+			context.addPushParser( cuT( "particle_system" ), CSCNSection::eParticleSystem, parserSceneParticleSystem, { makeParameter< ParameterType::eName >() } );
+			context.addPushParser( cuT( "skeleton" ), CSCNSection::eSkeleton, parserSkeleton, { makeParameter< ParameterType::eName >() } );
+			context.addPushParser( cuT( "mesh" ), CSCNSection::eMesh, parserSceneMesh, { makeParameter< ParameterType::eName >() } );
+			context.addPopParser( cuT( "}" ), parserSceneEnd );
+		}
+
+		static void addSceneImportParsers( castor::AttributeParsers & result )
+		{
+			BlockParserContextT< SceneImportContext > context{ result, CSCNSection::eSceneImport, CSCNSection::eScene };
+			context.addParser( cuT( "file" ), parserSceneImportFile, { makeParameter< ParameterType::ePath >() } );
+			context.addParser( cuT( "file_anim" ), parserSceneImportAnimFile, { makeParameter< ParameterType::ePath >() } );
+			context.addParser( cuT( "prefix" ), parserSceneImportPrefix, { makeParameter< ParameterType::eText >() } );
+			context.addParser( cuT( "rescale" ), parserSceneImportRescale, { makeParameter< ParameterType::eFloat >() } );
+			context.addParser( cuT( "pitch" ), parserSceneImportPitch, { makeParameter< ParameterType::eFloat >() } );
+			context.addParser( cuT( "yaw" ), parserSceneImportYaw, { makeParameter< ParameterType::eFloat >() } );
+			context.addParser( cuT( "roll" ), parserSceneImportRoll, { makeParameter< ParameterType::eFloat >() } );
+			context.addParser( cuT( "no_optimisations" ), parserSceneImportNoOptimisations, { makeParameter< ParameterType::eBool >() } );
+			context.addParser( cuT( "emissive_mult" ), parserSceneImportEmissiveMult, { makeParameter< ParameterType::eFloat >() } );
+			context.addParser( cuT( "recenter_camera" ), parserSceneImportCenterCamera, { makeParameter< ParameterType::eName >() } );
+			context.addParser( cuT( "preferred_importer" ), parserSceneImportPreferredImporter, { makeParameter< ParameterType::eName >() } );
+			context.addPushParser( cuT( "texture_remap_config" ), CSCNSection::eTextureRemap, parserSceneImportTexRemap );
+			context.addPopParser( cuT( "}" ), parserSceneImportEnd );
+		}
+
+		static void addParticleSystemParsers( castor::AttributeParsers & result )
+		{
+			BlockParserContextT< ParticleSystemContext > context{ result, CSCNSection::eParticleSystem, CSCNSection::eScene };
+			context.addParser( cuT( "parent" ), parserParticleSystemParent, { makeParameter< ParameterType::eName >() } );
+			context.addParser( cuT( "particles_count" ), parserParticleSystemCount, { makeParameter< ParameterType::eUInt32 >() } );
+			context.addParser( cuT( "material" ), parserParticleSystemMaterial, { makeParameter< ParameterType::eName >() } );
+			context.addParser( cuT( "dimensions" ), parserParticleSystemDimensions, { makeParameter< ParameterType::ePoint2F >() } );
+			context.addPushParser( cuT( "particle" ), CSCNSection::eParticle, parserParticleSystemParticle );
+			context.addPushParser( cuT( "cs_shader_program" ), CSCNSection::eShaderProgram, parserParticleSystemCSShader );
+			context.addPopParser( cuT( "}" ), parserParticleSystemEnd );
+		}
+
+		static void addParticleParsers( castor::AttributeParsers & result )
+		{
+			BlockParserContextT< ParticleSystemContext > context{ result, CSCNSection::eParticle, CSCNSection::eParticleSystem };
+			context.addParser( cuT( "variable" ), parserParticleVariable, { makeParameter< ParameterType::eName >(), makeParameter< ParameterType::eCheckedText, ParticleFormat >(), makeParameter< ParameterType::eText >() } );
+			context.addParser( cuT( "type" ), parserParticleType, { makeParameter< ParameterType::eName >() } );
+			context.addDefaultPopParser();
+		}
+
+		static void addLightParsers( castor::AttributeParsers & result )
+		{
+			BlockParserContextT< LightContext > context{ result, CSCNSection::eLight, CSCNSection::eScene };
+			context.addParser( cuT( "parent" ), parserLightParent, { makeParameter< ParameterType::eName >() } );
+			context.addParser( cuT( "type" ), parserLightType, { makeParameter< ParameterType::eCheckedText, LightType >() } );
+			context.addParser( cuT( "colour" ), parserLightColour, { makeParameter< ParameterType::ePoint3F >() } );
+			context.addParser( cuT( "intensity" ), parserLightIntensity, { makeParameter< ParameterType::ePoint2F >() } );
+			context.addParser( cuT( "attenuation" ), parserLightAttenuation, { makeParameter< ParameterType::ePoint3F >() } );
+			context.addParser( cuT( "range" ), parserLightRange, { makeParameter< ParameterType::eFloat >() } );
+			context.addParser( cuT( "cut_off" ), parserLightCutOff, { makeParameter< ParameterType::eFloat >() } );
+			context.addParser( cuT( "inner_cut_off" ), parserLightInnerCutOff, { makeParameter< ParameterType::eFloat >() } );
+			context.addParser( cuT( "outer_cut_off" ), parserLightOuterCutOff, { makeParameter< ParameterType::eFloat >() } );
+			context.addParser( cuT( "exponent" ), parserLightExponent, { makeParameter< ParameterType::eFloat >() } );
+			context.addPopParser( cuT( "}" ), parserLightEnd );
+		}
+
+		static void addNodeParsers( castor::AttributeParsers & result )
+		{
+			BlockParserContextT< NodeContext > context{ result, CSCNSection::eNode, CSCNSection::eScene };
+			context.addParser( cuT( "static" ), parserNodeStatic, { makeParameter< ParameterType::eBool >() } );
+			context.addParser( cuT( "parent" ), parserNodeParent, { makeParameter< ParameterType::eName >() } );
+			context.addParser( cuT( "position" ), parserNodePosition, { makeParameter< ParameterType::ePoint3F >() } );
+			context.addParser( cuT( "orientation" ), parserNodeOrientation, { makeParameter< ParameterType::ePoint3F >(), makeParameter< ParameterType::eFloat >() } );
+			context.addParser( cuT( "rotate" ), parserNodeRotate, { makeParameter< ParameterType::ePoint3F >(), makeParameter< ParameterType::eFloat >() } );
+			context.addParser( cuT( "direction" ), parserNodeDirection, { makeParameter< ParameterType::ePoint3F >() } );
+			context.addParser( cuT( "scale" ), parserNodeScale, { makeParameter< ParameterType::ePoint3F >() } );
+			context.addPopParser( cuT( "}" ), parserNodeEnd );
+		}
+
+		static void addObjectParsers( castor::AttributeParsers & result )
+		{
+			BlockParserContextT< ObjectContext > context{ result, CSCNSection::eObject, CSCNSection::eScene };
+			context.addParser( cuT( "parent" ), parserObjectParent, { makeParameter< ParameterType::eName >() } );
+			context.addParser( cuT( "material" ), parserObjectMaterial, { makeParameter< ParameterType::eName >() } );
+			context.addParser( cuT( "cast_shadows" ), parserObjectCastShadows, { makeParameter< ParameterType::eBool >() } );
+			context.addParser( cuT( "receive_shadows" ), parserObjectReceivesShadows, { makeParameter< ParameterType::eBool >() } );
+			context.addParser( cuT( "cullable" ), parserObjectCullable, { makeParameter< ParameterType::eBool >() } );
+			context.addPushParser( cuT( "mesh" ), CSCNSection::eMesh, parserObjectMesh, { makeParameter< ParameterType::eName >() } );
+			context.addPushParser( cuT( "materials" ), CSCNSection::eObjectMaterials, parserObjectMaterials );
+			context.addPopParser( cuT( "}" ), parserObjectEnd );
+		}
+
+		static void addObjectMaterialsParsers( castor::AttributeParsers & result )
+		{
+			BlockParserContextT< ObjectContext > context{ result, CSCNSection::eObjectMaterials, CSCNSection::eObject };
+			context.addParser( cuT( "material" ), parserObjectMaterialsMaterial, { makeParameter< ParameterType::eUInt16 >(), makeParameter< ParameterType::eName >() } );
+			context.addPopParser( cuT( "}" ), parserObjectMaterialsEnd );
+		}
+
+		static void addSkeletonParsers( castor::AttributeParsers & result )
+		{
+			BlockParserContextT< SkeletonContext > context{ result, CSCNSection::eSkeleton, CSCNSection::eScene };
+			context.addParser( cuT( "import" ), parserSkeletonImport, { makeParameter< ParameterType::ePath >(), makeParameter< ParameterType::eText >() } );
+			context.addParser( cuT( "import_anim" ), parserSkeletonAnimImport, { makeParameter< ParameterType::ePath >(), makeParameter< ParameterType::eText >() } );
+			context.addPopParser( cuT( "}" ), parserSkeletonEnd );
+		}
+
+		static void addMeshParsers( castor::AttributeParsers & result )
+		{
+			BlockParserContextT< MeshContext > context{ result, CSCNSection::eMesh };
+			context.addParser( cuT( "type" ), parserMeshType, { makeParameter< ParameterType::eName >(), makeParameter< ParameterType::eText >() } );
+			context.addParser( cuT( "import" ), parserMeshImport, { makeParameter< ParameterType::ePath >(), makeParameter< ParameterType::eText >() } );
+			context.addParser( cuT( "import_anim" ), parserMeshAnimImport, { makeParameter< ParameterType::ePath >(), makeParameter< ParameterType::eText >() } );
+			context.addParser( cuT( "import_morph_target" ), parserMeshMorphTargetImport, { makeParameter< ParameterType::ePath >(), makeParameter< ParameterType::eText >() } );
+			context.addParser( cuT( "default_material" ), parserMeshDefaultMaterial, { makeParameter< ParameterType::eName >() } );
+			context.addParser( cuT( "skeleton" ), parserMeshSkeleton, { makeParameter< ParameterType::eName >() } );
+			context.addPushParser( cuT( "morph_animation" ), CSCNSection::eMorphAnimation, parserMeshMorphAnimation, { makeParameter< ParameterType::eName >() } );
+			context.addPushParser( cuT( "submesh" ), CSCNSection::eSubmesh, parserMeshSubmesh );
+			context.addPushParser( cuT( "default_materials" ), CSCNSection::eMeshDefaultMaterials, parserMeshDefaultMaterials );
+			context.addPopParser( cuT( "}" ), parserMeshEnd );
+		}
+
+		static void addMorphAnimationParsers( castor::AttributeParsers & result )
+		{
+			BlockParserContextT< MeshContext > context{ result, CSCNSection::eMorphAnimation, CSCNSection::eMesh };
+			context.addParser( cuT( "target_weight" ), parserMeshMorphTargetWeight, ParserParameterArray{ makeParameter< ParameterType::eFloat >(), makeParameter< ParameterType::eUInt32 >(), makeParameter< ParameterType::eFloat >() } );
+			context.addPopParser( cuT( "}" ), parserMeshMorphAnimationEnd );
+		}
+
+		static void addMeshDefaultMaterialsParsers( castor::AttributeParsers & result )
+		{
+			BlockParserContextT< MeshContext > context{ result, CSCNSection::eMeshDefaultMaterials, CSCNSection::eMesh };
+			context.addParser( cuT( "material" ), parserMeshDefaultMaterialsMaterial, { makeParameter< ParameterType::eUInt16 >(), makeParameter< ParameterType::eName >() } );
+			context.addPopParser( cuT( "}" ), parserMeshDefaultMaterialsEnd );
+		}
+
+		static void addSubmeshParsers( castor::AttributeParsers & result )
+		{
+			BlockParserContextT< SubmeshContext > context{ result, CSCNSection::eSubmesh, CSCNSection::eMesh };
+			context.addParser( cuT( "vertex" ), parserSubmeshVertex, { makeParameter< ParameterType::ePoint3F >() } );
+			context.addParser( cuT( "face" ), parserSubmeshFace, { makeParameter< ParameterType::eText >() } );
+			context.addParser( cuT( "face_uv" ), parserSubmeshFaceUV, { makeParameter< ParameterType::eText >() } );
+			context.addParser( cuT( "face_uvw" ), parserSubmeshFaceUVW, { makeParameter< ParameterType::eText >() } );
+			context.addParser( cuT( "face_normals" ), parserSubmeshFaceNormals, { makeParameter< ParameterType::eText >() } );
+			context.addParser( cuT( "face_tangents" ), parserSubmeshFaceTangents, { makeParameter< ParameterType::eText >() } );
+			context.addParser( cuT( "uv" ), parserSubmeshUV, { makeParameter< ParameterType::ePoint2F >() } );
+			context.addParser( cuT( "uvw" ), parserSubmeshUVW, { makeParameter< ParameterType::ePoint3F >() } );
+			context.addParser( cuT( "normal" ), parserSubmeshNormal, { makeParameter< ParameterType::ePoint3F >() } );
+			context.addParser( cuT( "tangent" ), parserSubmeshTangent, { makeParameter< ParameterType::ePoint4F >() } );
+			context.addPopParser( cuT( "}" ), parserSubmeshEnd );
+		}
+
+		static void addShaderProgramParsers( castor::AttributeParsers & result )
+		{
+			BlockParserContextT< ProgramContext > context{ result, CSCNSection::eShaderProgram };
+			context.addPushParser( cuT( "vertex_program" ), CSCNSection::eShaderStage, parserVertexShader );
+			context.addPushParser( cuT( "pixel_program" ), CSCNSection::eShaderStage, parserPixelShader );
+			context.addPushParser( cuT( "geometry_program" ), CSCNSection::eShaderStage, parserGeometryShader );
+			context.addPushParser( cuT( "hull_program" ), CSCNSection::eShaderStage, parserHullShader );
+			context.addPushParser( cuT( "domain_program" ), CSCNSection::eShaderStage, parserDomainShader );
+			context.addPushParser( cuT( "compute_program" ), CSCNSection::eShaderStage, parserComputeShader );
+			context.addPushParser( cuT( "constants_buffer" ), CSCNSection::eShaderUBO, parserConstantsBuffer, { makeParameter< ParameterType::eName >() } );
+			context.addPopParser( cuT( "}" ), parserShaderProgramEnd );
+		}
+
+		static void addShaderStageParsers( castor::AttributeParsers & result )
+		{
+			BlockParserContextT< ProgramContext > context{ result, CSCNSection::eShaderStage, CSCNSection::eShaderProgram };
+			context.addParser( cuT( "file" ), parserShaderFile, { makeParameter< ParameterType::ePath >() } );
+			context.addParser( cuT( "group_sizes" ), parserShaderGroupSizes, { makeParameter< ParameterType::ePoint3I >() } );
+			context.addDefaultPopParser();
+		}
+
+		static void addFontParsers( castor::AttributeParsers & result )
+		{
+			BlockParserContextT< FontContext > context{ result, CSCNSection::eFont };
+			context.addParser( cuT( "file" ), parserFontFile, { makeParameter< ParameterType::ePath >() } );
+			context.addParser( cuT( "height" ), parserFontHeight, { makeParameter< ParameterType::eInt16 >() } );
+			context.addPopParser( cuT( "}" ), parserFontEnd );
+		}
+
+		static void addPanelOverlayParsers( castor::AttributeParsers & result )
+		{
+			BlockParserContextT< OverlayContext > context{ result, CSCNSection::ePanelOverlay };
+			context.addParser( cuT( "material" ), parserOverlayMaterial, { makeParameter< ParameterType::eName >() } );
+			context.addParser( cuT( "position" ), parserOverlayPosition, { makeParameter< ParameterType::ePoint2D >() } );
+			context.addParser( cuT( "size" ), parserOverlaySize, { makeParameter< ParameterType::ePoint2D >() } );
+			context.addParser( cuT( "pxl_size" ), parserOverlayPixelSize, { makeParameter< ParameterType::eSize >() } );
+			context.addParser( cuT( "pxl_position" ), parserOverlayPixelPosition, { makeParameter< ParameterType::ePosition >() } );
+			context.addParser( cuT( "uv" ), parserPanelOverlayUvs, { makeParameter< ParameterType::ePoint4D >() } );
+			context.addPushParser( cuT( "panel_overlay" ), CSCNSection::ePanelOverlay, parserOverlayPanelOverlay, { makeParameter< ParameterType::eName >() } );
+			context.addPushParser( cuT( "border_panel_overlay" ), CSCNSection::eBorderPanelOverlay, parserOverlayBorderPanelOverlay, { makeParameter< ParameterType::eName >() } );
+			context.addPushParser( cuT( "text_overlay" ), CSCNSection::eTextOverlay, parserOverlayTextOverlay, { makeParameter< ParameterType::eName >() } );
+			context.addPopParser( cuT( "}" ), parserOverlayEnd );
+		}
+
+		static void addBorderPanelOverlayParsers( castor::AttributeParsers & result )
+		{
+			BlockParserContextT< OverlayContext > context{ result, CSCNSection::eBorderPanelOverlay };
+			context.addParser( cuT( "material" ), parserOverlayMaterial, { makeParameter< ParameterType::eName >() } );
+			context.addParser( cuT( "position" ), parserOverlayPosition, { makeParameter< ParameterType::ePoint2D >() } );
+			context.addParser( cuT( "size" ), parserOverlaySize, { makeParameter< ParameterType::ePoint2D >() } );
+			context.addParser( cuT( "pxl_size" ), parserOverlayPixelSize, { makeParameter< ParameterType::eSize >() } );
+			context.addParser( cuT( "pxl_position" ), parserOverlayPixelPosition, { makeParameter< ParameterType::ePosition >() } );
+			context.addParser( cuT( "border_material" ), parserBorderPanelOverlayMaterial, { makeParameter< ParameterType::eName >() } );
+			context.addParser( cuT( "border_size" ), parserBorderPanelOverlaySizes, { makeParameter< ParameterType::ePoint4D >() } );
+			context.addParser( cuT( "pxl_border_size" ), parserBorderPanelOverlayPixelSizes, { makeParameter< ParameterType::ePoint4U >() } );
+			context.addParser( cuT( "border_position" ), parserBorderPanelOverlayPosition, { makeParameter< ParameterType::eCheckedText, BorderPosition >() } );
+			context.addParser( cuT( "center_uv" ), parserBorderPanelOverlayCenterUvs, { makeParameter< ParameterType::ePoint4D >() } );
+			context.addParser( cuT( "border_inner_uv" ), parserBorderPanelOverlayInnerUvs, { makeParameter< ParameterType::ePoint4D >() } );
+			context.addParser( cuT( "border_outer_uv" ), parserBorderPanelOverlayOuterUvs, { makeParameter< ParameterType::ePoint4D >() } );
+			context.addPushParser( cuT( "panel_overlay" ), CSCNSection::ePanelOverlay, parserOverlayPanelOverlay, { makeParameter< ParameterType::eName >() } );
+			context.addPushParser( cuT( "border_panel_overlay" ), CSCNSection::eBorderPanelOverlay, parserOverlayBorderPanelOverlay, { makeParameter< ParameterType::eName >() } );
+			context.addPushParser( cuT( "text_overlay" ), CSCNSection::eTextOverlay, parserOverlayTextOverlay, { makeParameter< ParameterType::eName >() } );
+			context.addPopParser( cuT( "}" ), parserOverlayEnd );
+		}
+
+		static void addTextOverlayParsers( castor::AttributeParsers & result )
+		{
+			BlockParserContextT< OverlayContext > context{ result, CSCNSection::eTextOverlay };
+			context.addParser( cuT( "material" ), parserOverlayMaterial, { makeParameter< ParameterType::eName >() } );
+			context.addParser( cuT( "position" ), parserOverlayPosition, { makeParameter< ParameterType::ePoint2D >() } );
+			context.addParser( cuT( "size" ), parserOverlaySize, { makeParameter< ParameterType::ePoint2D >() } );
+			context.addParser( cuT( "pxl_size" ), parserOverlayPixelSize, { makeParameter< ParameterType::eSize >() } );
+			context.addParser( cuT( "pxl_position" ), parserOverlayPixelPosition, { makeParameter< ParameterType::ePosition >() } );
+			context.addParser( cuT( "font" ), parserTextOverlayFont, { makeParameter< ParameterType::eName >() } );
+			context.addParser( cuT( "text" ), parserTextOverlayText, { makeParameter< ParameterType::eText >() } );
+			context.addParser( cuT( "text_wrapping" ), parserTextOverlayTextWrapping, { makeParameter< ParameterType::eCheckedText, TextWrappingMode >() } );
+			context.addParser( cuT( "vertical_align" ), parserTextOverlayVerticalAlign, { makeParameter< ParameterType::eCheckedText, VAlign >() } );
+			context.addParser( cuT( "horizontal_align" ), parserTextOverlayHorizontalAlign, { makeParameter< ParameterType::eCheckedText, HAlign >() } );
+			context.addParser( cuT( "texturing_mode" ), parserTextOverlayTexturingMode, { makeParameter< ParameterType::eCheckedText, TextTexturingMode >() } );
+			context.addParser( cuT( "line_spacing_mode" ), parserTextOverlayLineSpacingMode, { makeParameter< ParameterType::eCheckedText, TextLineSpacingMode >() } );
+			context.addPushParser( cuT( "panel_overlay" ), CSCNSection::ePanelOverlay, parserOverlayPanelOverlay, { makeParameter< ParameterType::eName >() } );
+			context.addPushParser( cuT( "border_panel_overlay" ), CSCNSection::eBorderPanelOverlay, parserOverlayBorderPanelOverlay, { makeParameter< ParameterType::eName >() } );
+			context.addPushParser( cuT( "text_overlay" ), CSCNSection::eTextOverlay, parserOverlayTextOverlay, { makeParameter< ParameterType::eName >() } );
+			context.addPopParser( cuT( "}" ), parserOverlayEnd );
+		}
+
+		static void addCameraParsers( castor::AttributeParsers & result )
+		{
+			BlockParserContextT< CameraContext > context{ result, CSCNSection::eCamera, CSCNSection::eScene };
+			context.addParser( cuT( "parent" ), parserCameraParent, { makeParameter< ParameterType::eName >() } );
+			context.addParser( cuT( "primitive" ), parserCameraPrimitive, { makeParameter< ParameterType::eCheckedText, VkPrimitiveTopology >() } );
+			context.addPushParser( cuT( "viewport" ), CSCNSection::eViewport, parserCameraViewport );
+			context.addPopParser( cuT( "}" ), parserCameraEnd );
+		}
+
+		static void addViewportParsers( castor::AttributeParsers & result )
+		{
+			BlockParserContextT< CameraContext > context{ result, CSCNSection::eViewport, CSCNSection::eCamera };
+			context.addParser( cuT( "type" ), parserViewportType, { makeParameter< ParameterType::eCheckedText, ViewportType >() } );
+			context.addParser( cuT( "left" ), parserViewportLeft, { makeParameter< ParameterType::eFloat >() } );
+			context.addParser( cuT( "right" ), parserViewportRight, { makeParameter< ParameterType::eFloat >() } );
+			context.addParser( cuT( "top" ), parserViewportTop, { makeParameter< ParameterType::eFloat >() } );
+			context.addParser( cuT( "bottom" ), parserViewportBottom, { makeParameter< ParameterType::eFloat >() } );
+			context.addParser( cuT( "near" ), parserViewportNear, { makeParameter< ParameterType::eFloat >() } );
+			context.addParser( cuT( "far" ), parserViewportFar, { makeParameter< ParameterType::eFloat >() } );
+			context.addParser( cuT( "size" ), parserViewportSize, { makeParameter< ParameterType::eSize >() } );
+			context.addParser( cuT( "fov_y" ), parserViewportFovY, { makeParameter< ParameterType::eFloat >() } );
+			context.addParser( cuT( "aspect_ratio" ), parserViewportAspectRatio, { makeParameter< ParameterType::eFloat >() } );
+			context.addDefaultPopParser();
+		}
+
+		static void addBillboardParsers( castor::AttributeParsers & result )
+		{
+			BlockParserContextT< BillboardsContext > context{ result, CSCNSection::eBillboard, CSCNSection::eScene };
+			context.addParser( cuT( "parent" ), parserBillboardParent, { makeParameter< ParameterType::eName >() } );
+			context.addParser( cuT( "type" ), parserBillboardType, { makeParameter < ParameterType::eCheckedText, BillboardType >() } );
+			context.addParser( cuT( "size" ), parserBillboardSize, { makeParameter < ParameterType::eCheckedText, BillboardSize >() } );
+			context.addParser( cuT( "material" ), parserBillboardMaterial, { makeParameter< ParameterType::eName >() } );
+			context.addParser( cuT( "dimensions" ), parserBillboardDimensions, { makeParameter< ParameterType::ePoint2F >() } );
+			context.addPushParser( cuT( "positions" ), CSCNSection::eBillboardList, parserBillboardPositions );
+			context.addPopParser( cuT( "}" ), parserBillboardEnd );
+		}
+
+		static void addBillboardListParsers( castor::AttributeParsers & result )
+		{
+			BlockParserContextT< BillboardsContext > context{ result, CSCNSection::eBillboardList, CSCNSection::eBillboard };
+			context.addParser( cuT( "pos" ), parserBillboardPoint, { makeParameter< ParameterType::ePoint3F >() } );
+			context.addDefaultPopParser();
+		}
+
+		static void addAnimGroupParsers( castor::AttributeParsers & result )
+		{
+			BlockParserContextT< AnimGroupContext > context{ result, CSCNSection::eAnimGroup, CSCNSection::eScene };
+			context.addParser( cuT( "animated_object" ), parserAnimatedObjectGroupAnimatedObject, { makeParameter< ParameterType::eName >() } );
+			context.addParser( cuT( "animated_mesh" ), parserAnimatedObjectGroupAnimatedMesh, { makeParameter< ParameterType::eName >() } );
+			context.addParser( cuT( "animated_skeleton" ), parserAnimatedObjectGroupAnimatedSkeleton, { makeParameter< ParameterType::eName >() } );
+			context.addParser( cuT( "animated_node" ), parserAnimatedObjectGroupAnimatedNode, { makeParameter< ParameterType::eName >() } );
+			context.addParser( cuT( "start_animation" ), parserAnimatedObjectGroupAnimationStart, { makeParameter< ParameterType::eName >() } );
+			context.addParser( cuT( "pause_animation" ), parserAnimatedObjectGroupAnimationPause, { makeParameter< ParameterType::eName >() } );
+			context.addPushParser( cuT( "animation" ), CSCNSection::eAnimation, parserAnimatedObjectGroupAnimation, { makeParameter< ParameterType::eName >() } );
+			context.addPopParser( cuT( "}" ), parserAnimatedObjectGroupEnd );
+		}
+
+		static void addAnimationParsers( castor::AttributeParsers & result )
+		{
+			BlockParserContextT< AnimGroupContext > context{ result, CSCNSection::eAnimation, CSCNSection::eAnimGroup };
+			context.addParser( cuT( "looped" ), parserAnimationLooped, { makeParameter< ParameterType::eBool >() } );
+			context.addParser( cuT( "scale" ), parserAnimationScale, { makeParameter< ParameterType::eFloat >() } );
+			context.addParser( cuT( "start_at" ), parserAnimationStartAt, { makeParameter< ParameterType::eFloat >() } );
+			context.addParser( cuT( "stop_at" ), parserAnimationStopAt, { makeParameter< ParameterType::eFloat >() } );
+			context.addParser( cuT( "interpolation" ), parserAnimationInterpolation, { makeParameter< ParameterType::eCheckedText, InterpolatorType >() } );
+			context.addPopParser( cuT( "}" ), parserAnimationEnd );
+		}
+
+		static void addSkyboxParsers( castor::AttributeParsers & result )
+		{
+			BlockParserContextT< SkyboxContext > context{ result, CSCNSection::eSkybox, CSCNSection::eScene };
+			context.addParser( cuT( "visible" ), parserSkyboxVisible, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
+			context.addParser( cuT( "equirectangular" ), parserSkyboxEqui, { makeParameter< ParameterType::ePath >(), makeParameter< ParameterType::eUInt32 >() } );
+			context.addParser( cuT( "cross" ), parserSkyboxCross, { makeParameter< ParameterType::ePath >() } );
+			context.addParser( cuT( "left" ), parserSkyboxLeft, { makeParameter< ParameterType::ePath >() } );
+			context.addParser( cuT( "right" ), parserSkyboxRight, { makeParameter< ParameterType::ePath >() } );
+			context.addParser( cuT( "top" ), parserSkyboxTop, { makeParameter< ParameterType::ePath >() } );
+			context.addParser( cuT( "bottom" ), parserSkyboxBottom, { makeParameter< ParameterType::ePath >() } );
+			context.addParser( cuT( "front" ), parserSkyboxFront, { makeParameter< ParameterType::ePath >() } );
+			context.addParser( cuT( "back" ), parserSkyboxBack, { makeParameter< ParameterType::ePath >() } );
+			context.addPopParser( cuT( "}" ), parserSkyboxEnd );
+		}
+
+		static castor::AttributeParsers registerParsers( Engine & engine )
+		{
+			using namespace castor;
+			AttributeParsers result;
+			auto & textureChannels = engine.getPassComponentsRegister().getTextureChannels();
+
+			addRootParsers( result );
+			addSceneParsers( result );
+			addWindowParsers( result );
+			addSamplerParsers( result );
+			addCameraParsers( result );
+			addViewportParsers( result );
+			addLightParsers( result );
+			addNodeParsers( result );
+			addObjectParsers( result );
+			addObjectMaterialsParsers( result );
+			addFontParsers( result );
+			addPanelOverlayParsers( result );
+			addBorderPanelOverlayParsers( result );
+			addTextOverlayParsers( result );
+			addMeshParsers( result );
+			addSubmeshParsers( result );
+			addRenderTargetParsers( result );
+			addShaderProgramParsers( result );
+			addShaderStageParsers( result );
+			addBillboardParsers( result );
+			addBillboardListParsers( result );
+			addAnimGroupParsers( result );
+			addAnimationParsers( result );
+			addSkyboxParsers( result );
+			addParticleSystemParsers( result );
+			addParticleParsers( result );
+			addMeshDefaultMaterialsParsers( result );
+			addSceneImportParsers( result );
+			addSkeletonParsers( result );
+			addMorphAnimationParsers( result );
+			ClustersConfig::addParsers( result );
+			HdrConfig::addParsers( result );
+			ShadowConfig::addParsers( result );
+			SsaoConfig::addParsers( result );
+			VctConfig::addParsers( result );
+			Material::addParsers( result, textureChannels );
+
+			return result;
 		}
 	}
-	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserSkyboxFront )
+	castor::AdditionalParsers createSceneFileParsers( Engine & engine )
 	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( parsingContext.skybox )
-		{
-			auto path = params[0]->get< castor::Path >();
-			auto filePath = context.file.getPath();
-
-			if ( castor::File::fileExists( filePath / path ) )
-			{
-				parsingContext.skybox->setFrontImage( filePath, path );
-			}
-			else
-			{
-				parsingContext.skybox.reset();
-				castor::String err = cuT( "Couldn't load the image file [" ) + path + cuT( "] (file does not exist)" );
-				CU_ParsingError( err );
-			}
-		}
-		else
-		{
-			parsingContext.skybox.reset();
-			CU_ParsingError( cuT( "No skybox initialised" ) );
-		}
+		return { scnprs::registerParsers( engine )
+			, registerSceneFileSections()
+			, nullptr };
 	}
-	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserSkyboxBack )
+	castor::StrUInt32Map registerSceneFileSections()
 	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( parsingContext.skybox )
-		{
-			auto path = params[0]->get< castor::Path >();
-			auto filePath = context.file.getPath();
-
-			if ( castor::File::fileExists( filePath / path ) )
-			{
-				parsingContext.skybox->setBackImage( filePath, path );
-			}
-			else
-			{
-				parsingContext.skybox.reset();
-				castor::String err = cuT( "Couldn't load the image file [" ) + path + cuT( "] (file does not exist)" );
-				CU_ParsingError( err );
-			}
-		}
-		else
-		{
-			parsingContext.skybox.reset();
-			CU_ParsingError( cuT( "No skybox initialised" ) );
-		}
+		return { { uint32_t( CSCNSection::eRoot ), castor::String{} }
+			, { uint32_t( CSCNSection::eScene ), cuT( "scene" ) }
+			, { uint32_t( CSCNSection::eWindow ), cuT( "window" ) }
+			, { uint32_t( CSCNSection::eSampler ), cuT( "sampler" ) }
+			, { uint32_t( CSCNSection::eCamera ), cuT( "camera" ) }
+			, { uint32_t( CSCNSection::eViewport ), cuT( "viewport" ) }
+			, { uint32_t( CSCNSection::eLight ), cuT( "light" ) }
+			, { uint32_t( CSCNSection::eNode ), cuT( "scene_node" ) }
+			, { uint32_t( CSCNSection::eObject ), cuT( "object" ) }
+			, { uint32_t( CSCNSection::eObjectMaterials ), cuT( "materials" ) }
+			, { uint32_t( CSCNSection::eFont ), cuT( "font" ) }
+			, { uint32_t( CSCNSection::ePanelOverlay ), cuT( "panel_overlay" ) }
+			, { uint32_t( CSCNSection::eBorderPanelOverlay ), cuT( "border_panel_overlay" ) }
+			, { uint32_t( CSCNSection::eTextOverlay ), cuT( "text_overlay" ) }
+			, { uint32_t( CSCNSection::eMesh ), cuT( "mesh" ) }
+			, { uint32_t( CSCNSection::eSubmesh ), cuT( "submesh" ) }
+			, { uint32_t( CSCNSection::eMaterial ), cuT( "material" ) }
+			, { uint32_t( CSCNSection::ePass ), cuT( "pass" ) }
+			, { uint32_t( CSCNSection::eTextureUnit ), cuT( "texture_unit" ) }
+			, { uint32_t( CSCNSection::eRenderTarget ), cuT( "render_target" ) }
+			, { uint32_t( CSCNSection::eShaderProgram ), cuT( "shader_program" ) }
+			, { uint32_t( CSCNSection::eShaderStage ), cuT( "shader_object" ) }
+			, { uint32_t( CSCNSection::eShaderUBO ), cuT( "constants_buffer" ) }
+			, { uint32_t( CSCNSection::eUBOVariable ), cuT( "variable" ) }
+			, { uint32_t( CSCNSection::eBillboard ), cuT( "billboard" ) }
+			, { uint32_t( CSCNSection::eBillboardList ), cuT( "positions" ) }
+			, { uint32_t( CSCNSection::eAnimGroup ), cuT( "animated_object_group" ) }
+			, { uint32_t( CSCNSection::eAnimation ), cuT( "animation" ) }
+			, { uint32_t( CSCNSection::eSkybox ), cuT( "skybox" ) }
+			, { uint32_t( CSCNSection::eParticleSystem ), cuT( "particle_system" ) }
+			, { uint32_t( CSCNSection::eParticle ), cuT( "particle" ) }
+			, { uint32_t( CSCNSection::eSsao ), cuT( "ssao" ) }
+			, { uint32_t( CSCNSection::eHdrConfig ), cuT( "hdr_config" ) }
+			, { uint32_t( CSCNSection::eShadows ), cuT( "shadows" ) }
+			, { uint32_t( CSCNSection::eMeshDefaultMaterials ), cuT( "default_materials" ) }
+			, { uint32_t( CSCNSection::eRsm ), cuT( "rsm_config" ) }
+			, { uint32_t( CSCNSection::eLpv ), cuT( "lpv_config" ) }
+			, { uint32_t( CSCNSection::eRaw ), cuT( "raw_config" ) }
+			, { uint32_t( CSCNSection::ePcf ), cuT( "pcf_config" ) }
+			, { uint32_t( CSCNSection::eVsm ), cuT( "vsm_config" ) }
+			, { uint32_t( CSCNSection::eTextureAnimation ), cuT( "texture_animation" ) }
+			, { uint32_t( CSCNSection::eVoxelConeTracing ), cuT( "voxel_cone_tracing" ) }
+			, { uint32_t( CSCNSection::eTextureTransform ), cuT( "texture_transform" ) }
+			, { uint32_t( CSCNSection::eSceneImport ), cuT( "import" ) }
+			, { uint32_t( CSCNSection::eSkeleton ), cuT( "skeleton" ) }
+			, { uint32_t( CSCNSection::eMorphAnimation ), cuT( "morph_animation" ) }
+			, { uint32_t( CSCNSection::eTextureRemapChannel ), cuT( "texture_remap_channel" ) }
+			, { uint32_t( CSCNSection::eTextureRemap ), cuT( "texture_remap" ) }
+			, { uint32_t( CSCNSection::eClusters ), cuT( "clusters" ) }
+			, { uint32_t( CSCNSection::eTexture ), cuT( "texture" ) }
+			, { uint32_t( CSCNSection::eColourGrading ), cuT( "colour_grading" ) } };
 	}
-	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserSkyboxEnd )
+	uint32_t getSceneFileRootSection()
 	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( parsingContext.skybox )
-		{
-			log::info << "Loaded skybox" << std::endl;
-			parsingContext.scene->setBackground( castor::ptrRefCast< SceneBackground >( parsingContext.skybox ) );
-		}
-		else
-		{
-			CU_ParsingError( cuT( "No skybox initialised" ) );
-		}
+		return uint32_t( CSCNSection::eRoot );
 	}
-	CU_EndAttributePop()
 }

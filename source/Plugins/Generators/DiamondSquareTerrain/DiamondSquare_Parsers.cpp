@@ -9,39 +9,31 @@
 
 namespace diamond_square_terrain
 {
-	namespace parser
+	CU_ImplementAttributeParserNewBlock( parserDiamondSquareTerrain, castor3d::MeshContext, TerrainContext )
 	{
-		static ParserContext & getParserContext( castor::FileParserContext & context )
-		{
-			return *static_cast< ParserContext * >( context.getUserContext( Generator::Type ) );
-		}
+		newBlockContext->scene = blockContext->scene;
+		newBlockContext->mesh = blockContext->mesh;
 	}
+	CU_EndAttributePushNewBlock( DiamondSquareSection::eRoot )
 
-	CU_ImplementAttributeParser( parserDiamondSquareTerrain )
+	CU_ImplementAttributeParserBlock( parserDiamondSquareTerrainEnd, TerrainContext )
 	{
-	}
-	CU_EndAttributePush( DiamondSquareSection::eRoot )
-
-	CU_ImplementAttributeParser( parserDiamondSquareTerrainEnd )
-	{
-		auto & parsingContext = castor3d::getSceneParserContext( context );
-		auto & pluginContext = parser::getParserContext( context );
-		auto & factory = parsingContext.scene->getEngine()->getMeshFactory();
+		auto & factory = blockContext->scene->getEngine()->getMeshFactory();
 		auto generator = factory.create( Generator::Type );
 		auto & dsgen = static_cast< Generator & >( *generator );
-		std::sort( pluginContext.biomes.begin()
-			, pluginContext.biomes.end()
+		std::sort( blockContext->biomes.begin()
+			, blockContext->biomes.end()
 			, []( Biome const & lhs, Biome const & rhs )
 			{
 				return lhs.heightRange.getMin() < rhs.heightRange.getMin();
 			} );
-		dsgen.setBiomes( pluginContext.biomes );
-		generator->generate( *parsingContext.mesh
-			, pluginContext.parameters );
+		dsgen.setBiomes( blockContext->biomes );
+		generator->generate( *blockContext->mesh
+			, blockContext->parameters );
 	}
 	CU_EndAttributePop()
 
-	CU_ImplementAttributeParser( parserRandomSeed )
+	CU_ImplementAttributeParserBlock( parserRandomSeed, TerrainContext )
 	{
 		if ( params.empty() )
 		{
@@ -51,17 +43,16 @@ namespace diamond_square_terrain
 		{
 			bool value;
 			params[0]->get( value );
-			auto & pluginContext = parser::getParserContext( context );
 
 			if ( value )
 			{
-				pluginContext.parameters.add( Generator::ParamRandomSeed, castor::string::toString( value ) );
+				blockContext->parameters.add( Generator::ParamRandomSeed, castor::string::toString( value ) );
 			}
 		}
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserIsland )
+	CU_ImplementAttributeParserBlock( parserIsland, TerrainContext )
 	{
 		if ( params.empty() )
 		{
@@ -71,17 +62,16 @@ namespace diamond_square_terrain
 		{
 			bool value;
 			params[0]->get( value );
-			auto & pluginContext = parser::getParserContext( context );
 
 			if ( value )
 			{
-				pluginContext.parameters.add( Generator::ParamIsland, castor::string::toString( value ) );
+				blockContext->parameters.add( Generator::ParamIsland, castor::string::toString( value ) );
 			}
 		}
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserXzScale )
+	CU_ImplementAttributeParserBlock( parserXzScale, TerrainContext )
 	{
 		if ( params.empty() )
 		{
@@ -91,14 +81,13 @@ namespace diamond_square_terrain
 		{
 			castor::Point2f value;
 			params[0]->get( value );
-			auto & pluginContext = parser::getParserContext( context );
-			pluginContext.parameters.add( Generator::ParamXScale, castor::string::toString( value->x ) );
-			pluginContext.parameters.add( Generator::ParamZScale, castor::string::toString( value->y ) );
+			blockContext->parameters.add( Generator::ParamXScale, castor::string::toString( value->x ) );
+			blockContext->parameters.add( Generator::ParamZScale, castor::string::toString( value->y ) );
 		}
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserUvScale )
+	CU_ImplementAttributeParserBlock( parserUvScale, TerrainContext )
 	{
 		if ( params.empty() )
 		{
@@ -108,14 +97,13 @@ namespace diamond_square_terrain
 		{
 			castor::Point2f value;
 			params[0]->get( value );
-			auto & pluginContext = parser::getParserContext( context );
-			pluginContext.parameters.add( Generator::ParamUScale, castor::string::toString( value->x ) );
-			pluginContext.parameters.add( Generator::ParamVScale, castor::string::toString( value->y ) );
+			blockContext->parameters.add( Generator::ParamUScale, castor::string::toString( value->x ) );
+			blockContext->parameters.add( Generator::ParamVScale, castor::string::toString( value->y ) );
 		}
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserHeightRange )
+	CU_ImplementAttributeParserBlock( parserHeightRange, TerrainContext )
 	{
 		if ( params.empty() )
 		{
@@ -125,14 +113,13 @@ namespace diamond_square_terrain
 		{
 			castor::Point2f value;
 			params[0]->get( value );
-			auto & pluginContext = parser::getParserContext( context );
-			pluginContext.parameters.add( Generator::ParamYMin, castor::string::toString( value->x ) );
-			pluginContext.parameters.add( Generator::ParamYMax, castor::string::toString( value->y ) );
+			blockContext->parameters.add( Generator::ParamYMin, castor::string::toString( value->x ) );
+			blockContext->parameters.add( Generator::ParamYMax, castor::string::toString( value->y ) );
 		}
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserDetail )
+	CU_ImplementAttributeParserBlock( parserDetail, TerrainContext )
 	{
 		if ( params.empty() )
 		{
@@ -142,13 +129,12 @@ namespace diamond_square_terrain
 		{
 			uint32_t value;
 			params[0]->get( value );
-			auto & pluginContext = parser::getParserContext( context );
-			pluginContext.parameters.add( Generator::ParamDetail, castor::string::toString( value ) );
+			blockContext->parameters.add( Generator::ParamDetail, castor::string::toString( value ) );
 		}
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserGradient )
+	CU_ImplementAttributeParserBlock( parserGradient, TerrainContext )
 	{
 		if ( params.empty() )
 		{
@@ -159,7 +145,6 @@ namespace diamond_square_terrain
 			castor::Path folder;
 			castor::Path relative;
 			params[0]->get( relative );
-			auto & pluginContext = parser::getParserContext( context );
 
 			if ( castor::File::fileExists( context.file.getPath() / relative ) )
 			{
@@ -173,14 +158,14 @@ namespace diamond_square_terrain
 
 			if ( !relative.empty() )
 			{
-				pluginContext.parameters.add( Generator::ParamGradientFolder, folder );
-				pluginContext.parameters.add( Generator::ParamGradientRelative, relative );
+				blockContext->parameters.add( Generator::ParamGradientFolder, folder );
+				blockContext->parameters.add( Generator::ParamGradientRelative, relative );
 			}
 		}
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserHeatOffset )
+	CU_ImplementAttributeParserBlock( parserHeatOffset, TerrainContext )
 	{
 		if ( params.empty() )
 		{
@@ -190,13 +175,12 @@ namespace diamond_square_terrain
 		{
 			float value;
 			params[0]->get( value );
-			auto & pluginContext = parser::getParserContext( context );
-			pluginContext.parameters.add( Generator::ParamHeatOffset, castor::string::toString( value ) );
+			blockContext->parameters.add( Generator::ParamHeatOffset, castor::string::toString( value ) );
 		}
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserBiome )
+	CU_ImplementAttributeParserBlock( parserBiome, TerrainContext )
 	{
 		if ( params.empty() )
 		{
@@ -204,27 +188,25 @@ namespace diamond_square_terrain
 		}
 		else
 		{
-			auto & pluginContext = parser::getParserContext( context );
-			params[0]->get( pluginContext.biome.name );
+			params[0]->get( blockContext->biome.name );
 		}
 	}
-	CU_EndAttributePush( DiamondSquareSection::eBiome )
+	CU_EndAttributePushBlock( DiamondSquareSection::eBiome, blockContext )
 
-	CU_ImplementAttributeParser( parserBiomeEnd )
+	CU_ImplementAttributeParserBlock( parserBiomeEnd, TerrainContext )
 	{
-		auto & pluginContext = parser::getParserContext( context );
-		std::sort( pluginContext.biome.steepnessBiomes.begin()
-			, pluginContext.biome.steepnessBiomes.end()
+		std::sort( blockContext->biome.steepnessBiomes.begin()
+			, blockContext->biome.steepnessBiomes.end()
 			, []( SlopeBiome const & lhs, SlopeBiome const & rhs )
 			{
 				return lhs.steepnessRange.getMin() < rhs.steepnessRange.getMin();
 			} );
-		pluginContext.biomes.push_back( pluginContext.biome );
-		pluginContext.biome = {};
+		blockContext->biomes.push_back( blockContext->biome );
+		blockContext->biome = {};
 	}
 	CU_EndAttributePop()
 
-	CU_ImplementAttributeParser( parserBiomeRange )
+	CU_ImplementAttributeParserBlock( parserBiomeRange, TerrainContext )
 	{
 		if ( params.empty() )
 		{
@@ -234,13 +216,12 @@ namespace diamond_square_terrain
 		{
 			castor::Point2f value;
 			params[0]->get( value );
-			auto & pluginContext = parser::getParserContext( context );
-			pluginContext.biome.heightRange = { value->x, value->y };
+			blockContext->biome.heightRange = { value->x, value->y };
 		}
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserBiomeLowSteepness )
+	CU_ImplementAttributeParserBlock( parserBiomeLowSteepness, TerrainContext )
 	{
 		if ( params.empty() )
 		{
@@ -252,14 +233,13 @@ namespace diamond_square_terrain
 			params[0]->get( pass );
 			castor::Point2f range;
 			params[1]->get( range );
-			auto & pluginContext = parser::getParserContext( context );
-			pluginContext.biome.steepnessBiomes[0].passIndex = pass;
-			pluginContext.biome.steepnessBiomes[0].steepnessRange = { range->x, range->y };
+			blockContext->biome.steepnessBiomes[0].passIndex = pass;
+			blockContext->biome.steepnessBiomes[0].steepnessRange = { range->x, range->y };
 		}
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserBiomeMedSteepness )
+	CU_ImplementAttributeParserBlock( parserBiomeMedSteepness, TerrainContext )
 	{
 		if ( params.empty() )
 		{
@@ -271,14 +251,13 @@ namespace diamond_square_terrain
 			params[0]->get( pass );
 			castor::Point2f range;
 			params[1]->get( range );
-			auto & pluginContext = parser::getParserContext( context );
-			pluginContext.biome.steepnessBiomes[1].passIndex = pass;
-			pluginContext.biome.steepnessBiomes[1].steepnessRange = { range->x, range->y };
+			blockContext->biome.steepnessBiomes[1].passIndex = pass;
+			blockContext->biome.steepnessBiomes[1].steepnessRange = { range->x, range->y };
 		}
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserBiomeHigSteepness )
+	CU_ImplementAttributeParserBlock( parserBiomeHigSteepness, TerrainContext )
 	{
 		if ( params.empty() )
 		{
@@ -290,9 +269,8 @@ namespace diamond_square_terrain
 			params[0]->get( pass );
 			castor::Point2f range;
 			params[1]->get( range );
-			auto & pluginContext = parser::getParserContext( context );
-			pluginContext.biome.steepnessBiomes[2].passIndex = pass;
-			pluginContext.biome.steepnessBiomes[2].steepnessRange = { range->x, range->y };
+			blockContext->biome.steepnessBiomes[2].passIndex = pass;
+			blockContext->biome.steepnessBiomes[2].steepnessRange = { range->x, range->y };
 		}
 	}
 	CU_EndAttribute()

@@ -282,15 +282,17 @@ namespace castor3d
 
 					auto position = writer.declLocale( "position"
 						, positionFromKey( key, ssCenter, c3d_ssaoConfigData.projInfo ) );
+					auto blurRadius = writer.declLocale( "blurRadius"
+						, writer.cast< sdw::Int >( c3d_ssaoConfigData.blurRadius ) );
 
-					FOR( writer, sdw::Int, r, -c3d_ssaoConfigData.blurRadius, r <= c3d_ssaoConfigData.blurRadius, ++r )
+					FOR( writer, sdw::Int, r, -blurRadius, r <= blurRadius, ++r )
 					{
 						// We already handled the zero case above.  This loop should be unrolled and the static branch optimized out,
 						// so the IF statement has no runtime cost
 						IF( writer, r != 0_i )
 						{
 							auto tapLoc = writer.declLocale( "tapLoc"
-								, ssCenter + c3d_axis * ( r * c3d_ssaoConfigData.blurStepSize ) );
+								, ssCenter + c3d_axis * ( r * writer.cast< sdw::Int >( c3d_ssaoConfigData.blurStepSize ) ) );
 
 							// spatial domain: offset gaussian tap
 							auto absR = writer.declLocale( "absR"

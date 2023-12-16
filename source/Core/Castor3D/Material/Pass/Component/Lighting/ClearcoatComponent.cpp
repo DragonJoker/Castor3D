@@ -44,11 +44,9 @@ namespace castor3d
 
 	namespace coating
 	{
-		static CU_ImplementAttributeParser( parserPassClearcoatFactor )
+		static CU_ImplementAttributeParserBlock( parserPassClearcoatFactor, PassContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
@@ -58,17 +56,15 @@ namespace castor3d
 			}
 			else
 			{
-				auto & component = getPassComponent< ClearcoatComponent >( parsingContext );
+				auto & component = getPassComponent< ClearcoatComponent >( *blockContext );
 				component.setClearcoatFactor( params[0]->get< float >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserPassRoughnessFactor )
+		static CU_ImplementAttributeParserBlock( parserPassRoughnessFactor, PassContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
@@ -78,7 +74,7 @@ namespace castor3d
 			}
 			else
 			{
-				auto & component = getPassComponent< ClearcoatComponent >( parsingContext );
+				auto & component = getPassComponent< ClearcoatComponent >( *blockContext );
 				component.setRoughnessFactor( params[0]->get< float >() );
 			}
 		}

@@ -42,11 +42,9 @@ namespace castor3d
 
 	namespace mtlcmp
 	{
-		static CU_ImplementAttributeParser( parserPassMetalness )
+		static CU_ImplementAttributeParserBlock( parserPassMetalness, PassContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
@@ -54,7 +52,7 @@ namespace castor3d
 			{
 				float value;
 				params[0]->get( value );
-				auto & component = getPassComponent< MetalnessComponent >( parsingContext );
+				auto & component = getPassComponent< MetalnessComponent >( *blockContext );
 				component.setMetalness( value );
 			}
 		}

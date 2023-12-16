@@ -49,25 +49,25 @@ namespace
 		};
 		castor::AttributeParsers result;
 
-		addParser( result, uint32_t( castor3d::CSCNSection::eRenderTarget ), cuT( "smaa" ), &smaa::parserSmaa );
+		addParserT( result, castor3d::CSCNSection::eRenderTarget, smaa::SmaaSection::eRoot, cuT( "smaa" ), &smaa::parserSmaa );
 
-		addParser( result, uint32_t( smaa::SmaaSection::eRoot ), cuT( "mode" ), &smaa::parserMode, { castor::makeParameter< castor::ParameterType::eCheckedText >( "SMAAMode", modes ) } );
-		addParser( result, uint32_t( smaa::SmaaSection::eRoot ), cuT( "preset" ), &smaa::parserPreset, { castor::makeParameter< castor::ParameterType::eCheckedText >( "SMAAPreset", presets ) } );
-		addParser( result, uint32_t( smaa::SmaaSection::eRoot ), cuT( "edgeDetection" ), &smaa::parserEdgeDetection, { castor::makeParameter< castor::ParameterType::eCheckedText >( "SMAADepthDetection", detections ) } );
-		addParser( result, uint32_t( smaa::SmaaSection::eRoot ), cuT( "disableDiagonalDetection" ), &smaa::parserDisableDiagonalDetection, { castor::makeParameter< castor::ParameterType::eBool >() } );
-		addParser( result, uint32_t( smaa::SmaaSection::eRoot ), cuT( "disableCornerDetection" ), &smaa::parserDisableCornerDetection, { castor::makeParameter< castor::ParameterType::eBool >() } );
-		addParser( result, uint32_t( smaa::SmaaSection::eRoot ), cuT( "threshold" ), &smaa::parserThreshold, { castor::makeParameter< castor::ParameterType::eFloat >( castor::makeRange( 0.0f, 0.5f ) ) } );
-		addParser( result, uint32_t( smaa::SmaaSection::eRoot ), cuT( "maxSearchSteps" ), &smaa::parserMaxSearchSteps, { castor::makeParameter< castor::ParameterType::eInt32 >( castor::makeRange( 0, 112 ) ) } );
-		addParser( result, uint32_t( smaa::SmaaSection::eRoot ), cuT( "maxSearchStepsDiag" ), &smaa::parserMaxSearchStepsDiag, { castor::makeParameter< castor::ParameterType::eInt32 >( castor::makeRange( 0, 20 ) ) } );
-		addParser( result, uint32_t( smaa::SmaaSection::eRoot ), cuT( "cornerRounding" ), &smaa::parserCornerRounding, { castor::makeParameter< castor::ParameterType::eInt32 >( castor::makeRange( 0, 100 ) ) } );
-		addParser( result, uint32_t( smaa::SmaaSection::eRoot ), cuT( "enablePredication" ), &smaa::parserPredication, { castor::makeParameter< castor::ParameterType::eBool >() } );
-		addParser( result, uint32_t( smaa::SmaaSection::eRoot ), cuT( "enableReprojection" ), &smaa::parserReprojection, { castor::makeParameter< castor::ParameterType::eBool >() } );
-		addParser( result, uint32_t( smaa::SmaaSection::eRoot ), cuT( "predicationScale" ), &smaa::parserPredicationScale, { castor::makeParameter< castor::ParameterType::eFloat >( castor::makeRange( 1.0f, 5.0f ) ) } );
-		addParser( result, uint32_t( smaa::SmaaSection::eRoot ), cuT( "predicationStrength" ), &smaa::parserPredicationStrength, { castor::makeParameter< castor::ParameterType::eFloat >( castor::makeRange( 0.0f, 1.0f ) ) } );
-		addParser( result, uint32_t( smaa::SmaaSection::eRoot ), cuT( "reprojectionWeightScale" ), &smaa::parserReprojectionWeightScale, { castor::makeParameter< castor::ParameterType::eFloat >( castor::makeRange( 0.0f, 80.0f ) ) } );
-		addParser( result, uint32_t( smaa::SmaaSection::eRoot ), cuT( "localContrastAdaptationFactor" ), &smaa::parserLocalContrastAdaptationFactor, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		addParser( result, uint32_t( smaa::SmaaSection::eRoot ), cuT( "predicationThreshold" ), &smaa::parserPredicationThreshold, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		addParser( result, uint32_t( smaa::SmaaSection::eRoot ), cuT( "}" ), &smaa::parserSmaaEnd );
+		addParserT( result, smaa::SmaaSection::eRoot, cuT( "mode" ), &smaa::parserMode, { castor::makeParameter< castor::ParameterType::eCheckedText >( "SMAAMode", modes ) } );
+		addParserT( result, smaa::SmaaSection::eRoot, cuT( "preset" ), &smaa::parserPreset, { castor::makeParameter< castor::ParameterType::eCheckedText >( "SMAAPreset", presets ) } );
+		addParserT( result, smaa::SmaaSection::eRoot, cuT( "edgeDetection" ), &smaa::parserEdgeDetection, { castor::makeParameter< castor::ParameterType::eCheckedText >( "SMAADepthDetection", detections ) } );
+		addParserT( result, smaa::SmaaSection::eRoot, cuT( "disableDiagonalDetection" ), &smaa::parserDisableDiagonalDetection, { castor::makeParameter< castor::ParameterType::eBool >() } );
+		addParserT( result, smaa::SmaaSection::eRoot, cuT( "disableCornerDetection" ), &smaa::parserDisableCornerDetection, { castor::makeParameter< castor::ParameterType::eBool >() } );
+		addParserT( result, smaa::SmaaSection::eRoot, cuT( "threshold" ), &smaa::parserThreshold, { castor::makeParameter< castor::ParameterType::eFloat >( castor::makeRange( 0.0f, 0.5f ) ) } );
+		addParserT( result, smaa::SmaaSection::eRoot, cuT( "maxSearchSteps" ), &smaa::parserMaxSearchSteps, { castor::makeParameter< castor::ParameterType::eInt32 >( castor::makeRange( 0, 112 ) ) } );
+		addParserT( result, smaa::SmaaSection::eRoot, cuT( "maxSearchStepsDiag" ), &smaa::parserMaxSearchStepsDiag, { castor::makeParameter< castor::ParameterType::eInt32 >( castor::makeRange( 0, 20 ) ) } );
+		addParserT( result, smaa::SmaaSection::eRoot, cuT( "cornerRounding" ), &smaa::parserCornerRounding, { castor::makeParameter< castor::ParameterType::eInt32 >( castor::makeRange( 0, 100 ) ) } );
+		addParserT( result, smaa::SmaaSection::eRoot, cuT( "enablePredication" ), &smaa::parserPredication, { castor::makeParameter< castor::ParameterType::eBool >() } );
+		addParserT( result, smaa::SmaaSection::eRoot, cuT( "enableReprojection" ), &smaa::parserReprojection, { castor::makeParameter< castor::ParameterType::eBool >() } );
+		addParserT( result, smaa::SmaaSection::eRoot, cuT( "predicationScale" ), &smaa::parserPredicationScale, { castor::makeParameter< castor::ParameterType::eFloat >( castor::makeRange( 1.0f, 5.0f ) ) } );
+		addParserT( result, smaa::SmaaSection::eRoot, cuT( "predicationStrength" ), &smaa::parserPredicationStrength, { castor::makeParameter< castor::ParameterType::eFloat >( castor::makeRange( 0.0f, 1.0f ) ) } );
+		addParserT( result, smaa::SmaaSection::eRoot, cuT( "reprojectionWeightScale" ), &smaa::parserReprojectionWeightScale, { castor::makeParameter< castor::ParameterType::eFloat >( castor::makeRange( 0.0f, 80.0f ) ) } );
+		addParserT( result, smaa::SmaaSection::eRoot, cuT( "localContrastAdaptationFactor" ), &smaa::parserLocalContrastAdaptationFactor, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+		addParserT( result, smaa::SmaaSection::eRoot, cuT( "predicationThreshold" ), &smaa::parserPredicationThreshold, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+		addParserT( result, smaa::SmaaSection::eRoot, castor3d::CSCNSection::eRenderTarget, cuT( "}" ), &smaa::parserSmaaEnd );
 
 		return result;
 	}
@@ -78,13 +78,6 @@ namespace
 		{
 			{ uint32_t( smaa::SmaaSection::eRoot ), cuT( "smaa" ) },
 		};
-	}
-
-	void * createContext( castor::FileParserContext & context )
-	{
-		smaa::ParserContext * smaaContext = new smaa::ParserContext;
-		smaaContext->engine = static_cast< castor3d::SceneFileParser * >( context.parser )->getEngine();
-		return smaaContext;
 	}
 }
 
@@ -118,7 +111,7 @@ extern "C"
 		engine->registerParsers( smaa::PostEffect::Type
 			, createParsers()
 			, createSections()
-			, &createContext );
+			, nullptr );
 	}
 
 	C3D_Smaa_API void OnUnload( castor3d::Engine * engine )

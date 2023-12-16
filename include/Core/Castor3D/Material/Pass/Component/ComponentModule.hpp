@@ -34,7 +34,7 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	class SceneFileContext;
+	struct TextureContext;
 	/**@name Material */
 	//@{
 	/**@name Texture */
@@ -652,7 +652,7 @@ namespace castor3d
 
 	using PassComponentsBitset = castor::DynamicBitsetT< uint16_t >;
 
-	using ComponentConfigFiller = std::function< void( SceneFileContext & parsingContext ) >;
+	using ComponentConfigFiller = std::function< void( TextureContext & context ) >;
 	using ChannelFiller = std::pair< PassComponentTextureFlag, ComponentConfigFiller >;
 	using ChannelFillers = std::map< castor::String, ChannelFiller >;
 

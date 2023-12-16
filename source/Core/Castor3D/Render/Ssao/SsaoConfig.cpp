@@ -10,11 +10,18 @@ namespace castor3d
 {
 	namespace saocfg
 	{
-		static CU_ImplementAttributeParser( parserEnabled )
+		static CU_ImplementAttributeParserBlock( parserSsao, TargetContext )
 		{
-			auto & parsingContext = getParserContext( context );
+			if ( !blockContext->renderTarget )
+			{
+				CU_ParsingError( cuT( "No target initialised. (Did you forget to set its size and format ?)" ) );
+			}
+		}
+		CU_EndAttributePushBlock( CSCNSection::eSsao, blockContext )
 
-			if ( parsingContext.renderTarget )
+		static CU_ImplementAttributeParserBlock( parserEnabled, TargetContext )
+		{
+			if ( blockContext->renderTarget )
 			{
 				if ( params.empty() )
 				{
@@ -22,9 +29,7 @@ namespace castor3d
 				}
 				else
 				{
-					bool value;
-					params[0]->get( value );
-					parsingContext.ssaoConfig.enabled = value;
+					params[0]->get( blockContext->ssaoConfig.enabled );
 				}
 			}
 			else
@@ -34,11 +39,9 @@ namespace castor3d
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserHighQuality )
+		static CU_ImplementAttributeParserBlock( parserHighQuality, TargetContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( parsingContext.renderTarget )
+			if ( blockContext->renderTarget )
 			{
 				if ( params.empty() )
 				{
@@ -46,9 +49,7 @@ namespace castor3d
 				}
 				else
 				{
-					bool value;
-					params[0]->get( value );
-					parsingContext.ssaoConfig.highQuality = value;
+					params[0]->get( blockContext->ssaoConfig.highQuality );
 				}
 			}
 			else
@@ -58,11 +59,9 @@ namespace castor3d
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserUseNormalsBuffer )
+		static CU_ImplementAttributeParserBlock( parserUseNormalsBuffer, TargetContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( parsingContext.renderTarget )
+			if ( blockContext->renderTarget )
 			{
 				if ( params.empty() )
 				{
@@ -70,9 +69,7 @@ namespace castor3d
 				}
 				else
 				{
-					bool value;
-					params[0]->get( value );
-					parsingContext.ssaoConfig.useNormalsBuffer = value;
+					params[0]->get( blockContext->ssaoConfig.useNormalsBuffer );
 				}
 			}
 			else
@@ -82,11 +79,9 @@ namespace castor3d
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserRadius )
+		static CU_ImplementAttributeParserBlock( parserRadius, TargetContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( parsingContext.renderTarget )
+			if ( blockContext->renderTarget )
 			{
 				if ( params.empty() )
 				{
@@ -94,9 +89,7 @@ namespace castor3d
 				}
 				else
 				{
-					float value;
-					params[0]->get( value );
-					parsingContext.ssaoConfig.radius = value;
+					params[0]->get( blockContext->ssaoConfig.radius );
 				}
 			}
 			else
@@ -106,11 +99,9 @@ namespace castor3d
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserMinRadius )
+		static CU_ImplementAttributeParserBlock( parserMinRadius, TargetContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( parsingContext.renderTarget )
+			if ( blockContext->renderTarget )
 			{
 				if ( params.empty() )
 				{
@@ -118,9 +109,7 @@ namespace castor3d
 				}
 				else
 				{
-					float value;
-					params[0]->get( value );
-					parsingContext.ssaoConfig.minRadius = value;
+					params[0]->get( blockContext->ssaoConfig.minRadius );
 				}
 			}
 			else
@@ -130,11 +119,9 @@ namespace castor3d
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserBias )
+		static CU_ImplementAttributeParserBlock( parserBias, TargetContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( parsingContext.renderTarget )
+			if ( blockContext->renderTarget )
 			{
 				if ( params.empty() )
 				{
@@ -142,9 +129,7 @@ namespace castor3d
 				}
 				else
 				{
-					float value;
-					params[0]->get( value );
-					parsingContext.ssaoConfig.bias = value;
+					params[0]->get( blockContext->ssaoConfig.bias );
 				}
 			}
 			else
@@ -154,11 +139,9 @@ namespace castor3d
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserIntensity )
+		static CU_ImplementAttributeParserBlock( parserIntensity, TargetContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( parsingContext.renderTarget )
+			if ( blockContext->renderTarget )
 			{
 				if ( params.empty() )
 				{
@@ -166,9 +149,7 @@ namespace castor3d
 				}
 				else
 				{
-					float value;
-					params[0]->get( value );
-					parsingContext.ssaoConfig.intensity = value;
+					params[0]->get( blockContext->ssaoConfig.intensity );
 				}
 			}
 			else
@@ -178,11 +159,9 @@ namespace castor3d
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserNumSamples )
+		static CU_ImplementAttributeParserBlock( parserNumSamples, TargetContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( parsingContext.renderTarget )
+			if ( blockContext->renderTarget )
 			{
 				if ( params.empty() )
 				{
@@ -190,9 +169,7 @@ namespace castor3d
 				}
 				else
 				{
-					uint32_t value;
-					params[0]->get( value );
-					parsingContext.ssaoConfig.numSamples = value;
+					params[0]->get( blockContext->ssaoConfig.numSamples );
 				}
 			}
 			else
@@ -202,11 +179,9 @@ namespace castor3d
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserEdgeSharpness )
+		static CU_ImplementAttributeParserBlock( parserEdgeSharpness, TargetContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( parsingContext.renderTarget )
+			if ( blockContext->renderTarget )
 			{
 				if ( params.empty() )
 				{
@@ -214,9 +189,7 @@ namespace castor3d
 				}
 				else
 				{
-					float value;
-					params[0]->get( value );
-					parsingContext.ssaoConfig.edgeSharpness = value;
+					params[0]->get( blockContext->ssaoConfig.edgeSharpness );
 				}
 			}
 			else
@@ -226,11 +199,9 @@ namespace castor3d
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserBlurStepSize )
+		static CU_ImplementAttributeParserBlock( parserBlurStepSize, TargetContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( parsingContext.renderTarget )
+			if ( blockContext->renderTarget )
 			{
 				if ( params.empty() )
 				{
@@ -238,9 +209,8 @@ namespace castor3d
 				}
 				else
 				{
-					uint32_t value;
-					params[0]->get( value );
-					parsingContext.ssaoConfig.blurStepSize = { value, parsingContext.ssaoConfig.blurStepSize.value().range() };
+					blockContext->ssaoConfig.blurStepSize = { params[0]->get< uint32_t >()
+						, blockContext->ssaoConfig.blurStepSize.value().range() };
 				}
 			}
 			else
@@ -250,11 +220,9 @@ namespace castor3d
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserBlurHighQuality )
+		static CU_ImplementAttributeParserBlock( parserBlurHighQuality, TargetContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( parsingContext.renderTarget )
+			if ( blockContext->renderTarget )
 			{
 				if ( params.empty() )
 				{
@@ -262,9 +230,7 @@ namespace castor3d
 				}
 				else
 				{
-					bool value;
-					params[0]->get( value );
-					parsingContext.ssaoConfig.blurHighQuality = value;
+					params[0]->get( blockContext->ssaoConfig.blurHighQuality );
 				}
 			}
 			else
@@ -274,11 +240,9 @@ namespace castor3d
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserBlurRadius )
+		static CU_ImplementAttributeParserBlock( parserBlurRadius, TargetContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( parsingContext.renderTarget )
+			if ( blockContext->renderTarget )
 			{
 				if ( params.empty() )
 				{
@@ -286,9 +250,8 @@ namespace castor3d
 				}
 				else
 				{
-					uint32_t value;
-					params[0]->get( value );
-					parsingContext.ssaoConfig.blurRadius = { int32_t( value ), parsingContext.ssaoConfig.blurRadius.value().range() };
+					blockContext->ssaoConfig.blurRadius = { params[0]->get< uint32_t >()
+						, blockContext->ssaoConfig.blurRadius.value().range() };
 				}
 			}
 			else
@@ -298,11 +261,9 @@ namespace castor3d
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserBendStepCount )
+		static CU_ImplementAttributeParserBlock( parserBendStepCount, TargetContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( parsingContext.renderTarget )
+			if ( blockContext->renderTarget )
 			{
 				if ( params.empty() )
 				{
@@ -310,9 +271,8 @@ namespace castor3d
 				}
 				else
 				{
-					uint32_t value;
-					params[0]->get( value );
-					parsingContext.ssaoConfig.bendStepCount = int32_t( value );
+					blockContext->ssaoConfig.bendStepCount = { params[0]->get< uint32_t >()
+						, blockContext->ssaoConfig.bendStepCount.range() };
 				}
 			}
 			else
@@ -322,11 +282,9 @@ namespace castor3d
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserBendStepSize )
+		static CU_ImplementAttributeParserBlock( parserBendStepSize, TargetContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( parsingContext.renderTarget )
+			if ( blockContext->renderTarget )
 			{
 				if ( params.empty() )
 				{
@@ -334,9 +292,7 @@ namespace castor3d
 				}
 				else
 				{
-					float value;
-					params[0]->get( value );
-					parsingContext.ssaoConfig.bendStepSize = value;
+					params[0]->get( blockContext->ssaoConfig.bendStepSize );
 				}
 			}
 			else
@@ -346,14 +302,12 @@ namespace castor3d
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserEnd )
+		static CU_ImplementAttributeParserBlock( parserEnd, TargetContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( parsingContext.renderTarget )
+			if ( blockContext->renderTarget )
 			{
-				parsingContext.renderTarget->setSsaoConfig( std::move( parsingContext.ssaoConfig ) );
-				parsingContext.ssaoConfig = {};
+				blockContext->renderTarget->setSsaoConfig( std::move( blockContext->ssaoConfig ) );
+				blockContext->ssaoConfig = {};
 			}
 			else
 			{
@@ -384,20 +338,21 @@ namespace castor3d
 	void SsaoConfig::addParsers( castor::AttributeParsers & result )
 	{
 		using namespace castor;
-		addParser( result, uint32_t( CSCNSection::eSsao ), cuT( "enabled" ), saocfg::parserEnabled, { makeParameter< ParameterType::eBool >() } );
-		addParser( result, uint32_t( CSCNSection::eSsao ), cuT( "high_quality" ), saocfg::parserHighQuality, { makeParameter< ParameterType::eBool >() } );
-		addParser( result, uint32_t( CSCNSection::eSsao ), cuT( "use_normals_buffer" ), saocfg::parserUseNormalsBuffer, { makeParameter< ParameterType::eBool >() } );
-		addParser( result, uint32_t( CSCNSection::eSsao ), cuT( "radius" ), saocfg::parserRadius, { makeParameter< ParameterType::eFloat >() } );
-		addParser( result, uint32_t( CSCNSection::eSsao ), cuT( "min_radius" ), saocfg::parserMinRadius, { makeParameter< ParameterType::eFloat >() } );
-		addParser( result, uint32_t( CSCNSection::eSsao ), cuT( "bias" ), saocfg::parserBias, { makeParameter< ParameterType::eFloat >() } );
-		addParser( result, uint32_t( CSCNSection::eSsao ), cuT( "intensity" ), saocfg::parserIntensity, { makeParameter< ParameterType::eFloat >() } );
-		addParser( result, uint32_t( CSCNSection::eSsao ), cuT( "num_samples" ), saocfg::parserNumSamples, { makeParameter< ParameterType::eUInt32 >() } );
-		addParser( result, uint32_t( CSCNSection::eSsao ), cuT( "edge_sharpness" ), saocfg::parserEdgeSharpness, { makeParameter< ParameterType::eFloat >() } );
-		addParser( result, uint32_t( CSCNSection::eSsao ), cuT( "blur_high_quality" ), saocfg::parserBlurHighQuality, { makeParameter< ParameterType::eBool >() } );
-		addParser( result, uint32_t( CSCNSection::eSsao ), cuT( "blur_step_size" ), saocfg::parserBlurStepSize, { makeParameter< ParameterType::eUInt32 >() } );
-		addParser( result, uint32_t( CSCNSection::eSsao ), cuT( "blur_radius" ), saocfg::parserBlurRadius, { makeParameter< ParameterType::eUInt32 >() } );
-		addParser( result, uint32_t( CSCNSection::eSsao ), cuT( "bend_step_count" ), saocfg::parserBendStepCount, { makeParameter< ParameterType::eUInt32 >( makeRange( 1u, 60u ) ) } );
-		addParser( result, uint32_t( CSCNSection::eSsao ), cuT( "bend_step_size" ), saocfg::parserBendStepSize, { makeParameter< ParameterType::eFloat >() } );
-		addParser( result, uint32_t( CSCNSection::eSsao ), cuT( "}" ), saocfg::parserEnd );
+		addParserT( result, CSCNSection::eRenderTarget, CSCNSection::eSsao, cuT( "ssao" ), saocfg::parserSsao );
+		addParserT( result, CSCNSection::eSsao, cuT( "enabled" ), saocfg::parserEnabled, { makeParameter< ParameterType::eBool >() } );
+		addParserT( result, CSCNSection::eSsao, cuT( "high_quality" ), saocfg::parserHighQuality, { makeParameter< ParameterType::eBool >() } );
+		addParserT( result, CSCNSection::eSsao, cuT( "use_normals_buffer" ), saocfg::parserUseNormalsBuffer, { makeParameter< ParameterType::eBool >() } );
+		addParserT( result, CSCNSection::eSsao, cuT( "radius" ), saocfg::parserRadius, { makeParameter< ParameterType::eFloat >() } );
+		addParserT( result, CSCNSection::eSsao, cuT( "min_radius" ), saocfg::parserMinRadius, { makeParameter< ParameterType::eFloat >() } );
+		addParserT( result, CSCNSection::eSsao, cuT( "bias" ), saocfg::parserBias, { makeParameter< ParameterType::eFloat >() } );
+		addParserT( result, CSCNSection::eSsao, cuT( "intensity" ), saocfg::parserIntensity, { makeParameter< ParameterType::eFloat >() } );
+		addParserT( result, CSCNSection::eSsao, cuT( "num_samples" ), saocfg::parserNumSamples, { makeParameter< ParameterType::eUInt32 >() } );
+		addParserT( result, CSCNSection::eSsao, cuT( "edge_sharpness" ), saocfg::parserEdgeSharpness, { makeParameter< ParameterType::eFloat >() } );
+		addParserT( result, CSCNSection::eSsao, cuT( "blur_high_quality" ), saocfg::parserBlurHighQuality, { makeParameter< ParameterType::eBool >() } );
+		addParserT( result, CSCNSection::eSsao, cuT( "blur_step_size" ), saocfg::parserBlurStepSize, { makeParameter< ParameterType::eUInt32 >( makeRange( 1u, 60u ) ) } );
+		addParserT( result, CSCNSection::eSsao, cuT( "blur_radius" ), saocfg::parserBlurRadius, { makeParameter< ParameterType::eUInt32 >( makeRange( 1u, 6u ) ) } );
+		addParserT( result, CSCNSection::eSsao, cuT( "bend_step_count" ), saocfg::parserBendStepCount, { makeParameter< ParameterType::eUInt32 >( makeRange( 1u, 60u ) ) } );
+		addParserT( result, CSCNSection::eSsao, cuT( "bend_step_size" ), saocfg::parserBendStepSize, { makeParameter< ParameterType::eFloat >() } );
+		addParserT( result, CSCNSection::eSsao, CSCNSection::eRenderTarget, cuT( "}" ), saocfg::parserEnd );
 	}
 }

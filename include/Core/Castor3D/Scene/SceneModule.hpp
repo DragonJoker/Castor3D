@@ -297,15 +297,6 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	The context used into parsing functions.
-	*\~french
-	*\brief
-	*	Le contexte utilisé lors de l'analyse des fonctions.
-	*/
-	class SceneFileContext;
-	/**
-	*\~english
-	*\brief
 	*	CSCN file parser.
 	*\remarks
 	*	Reads CSCN files and extracts all 3D data from it.
@@ -363,7 +354,6 @@ namespace castor3d
 	CU_DeclareSmartPtr( castor3d, CameraImporter, C3D_API );
 	CU_DeclareSmartPtr( castor3d, Geometry, C3D_API );
 	CU_DeclareSmartPtr( castor3d, MovableObject, C3D_API );
-	CU_DeclareSmartPtr( castor3d, SceneFileContext, C3D_API );
 	CU_DeclareSmartPtr( castor3d, SceneFileParser, C3D_API );
 	CU_DeclareSmartPtr( castor3d, SceneNode, C3D_API );
 	CU_DeclareSmartPtr( castor3d, Scene, C3D_API );

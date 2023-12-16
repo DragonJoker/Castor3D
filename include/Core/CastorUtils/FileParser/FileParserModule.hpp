@@ -180,15 +180,36 @@ namespace castor
 	 *\~english
 	 *\brief		Parser function definition.
 	 *\param[in]	parser	The file parser.
+	 *\param[in]	block	The block context, if any.
 	 *\param[in]	params	The params contained in the line.
 	 *\return		\p true if a brace is to be opened on next line.
 	 *\~french
 	 *\brief		Définition d'une fonction d'analyse.
 	 *\param[in]	parser	L'analyseur de fichier.
+	 *\param[in]	block	Le contexte de bloc, s'il y en a un.
 	 *\param[in]	params	Les paramètres contenus dans la ligne.
 	 *\return		\p true si une accolade doit être ouverte à la ligne suivante.
 	 */
-	using ParserFunction = std::function< bool( FileParserContext &, ParserParameterArray const & ) >;
+	using ParserFunction = std::function< bool( FileParserContext &, void *, ParserParameterArray const & ) >;
+	using RawParserFunction = bool( * )( FileParserContext &, void *, ParserParameterArray const & );
+	/**
+	 *\~english
+	 *\brief		Parser function definition.
+	 *\param[in]	parser	The file parser.
+	 *\param[in]	block	The block context, if any.
+	 *\param[in]	params	The params contained in the line.
+	 *\return		\p true if a brace is to be opened on next line.
+	 *\~french
+	 *\brief		Définition d'une fonction d'analyse.
+	 *\param[in]	parser	L'analyseur de fichier.
+	 *\param[in]	block	Le contexte de bloc, s'il y en a un.
+	 *\param[in]	params	Les paramètres contenus dans la ligne.
+	 *\return		\p true si une accolade doit être ouverte à la ligne suivante.
+	 */
+	template< typename BlockContextT >
+	using ParserFunctionT = std::function< bool( FileParserContext &, BlockContextT *, ParserParameterArray const & ) >;
+	template< typename BlockContextT >
+	using RawParserFunctionT = bool( * )( FileParserContext &, BlockContextT *, ParserParameterArray const & );
 	/**
 	*\~english
 	*\brief
@@ -200,6 +221,7 @@ namespace castor
 	struct ParserFunctionAndParams
 	{
 		ParserFunction function;
+		uint32_t resultSection;
 		ParserParameterArray params;
 	};
 	/**
@@ -251,6 +273,44 @@ namespace castor
 	*	Adds a parser function to the parsers list.
 	*\param[in,out] parsers
 	*	Receives the added parser.
+	*\param[in] oldSection
+	*	The parser section onto which the function is applied.
+	*\param[in] newSection
+	*	The parser section resulting of the application oof the function.
+	*\param[in] name
+	*	The parser name.
+	*\param[in] function
+	*	The parser function.
+	*\param[in] params
+	*	The expected parameters.
+	*\~french
+	*\brief
+	*	Ajoute une fonction d'analyse à la liste.
+	*\param[in,out] parsers
+	*	Reçoit le parser ajouté.
+	*\param[in] oldSection
+	*	La section sur laquelle la fonction est appliquée.
+	*\param[in] newSection
+	*	La section résultant de l'application de la fonction.
+	*\param[in] name
+	*	Le nom de la fonction.
+	*\param[in] function
+	*	La fonction d'analyse.
+	*\param[in] params
+	*	Les paramètres attendus.
+	*/
+	CU_API void addParser( castor::AttributeParsers & parsers
+		, uint32_t oldSection
+		, uint32_t newSection
+		, castor::String const & name
+		, castor::ParserFunction function
+		, castor::ParserParameterArray params = castor::ParserParameterArray{} );
+	/**
+	*\~english
+	*\brief
+	*	Adds a parser function to the parsers list.
+	*\param[in,out] parsers
+	*	Receives the added parser.
 	*\param[in] section
 	*	The parser section.
 	*\param[in] name
@@ -273,25 +333,50 @@ namespace castor
 	*\param[in] params
 	*	Les paramètres attendus.
 	*/
-	CU_API void addParser( castor::AttributeParsers & parsers
+	static void addParser( castor::AttributeParsers & parsers
 		, uint32_t section
-		, castor::String const & name
-		, castor::ParserFunction function
-		, castor::ParserParameterArray params = castor::ParserParameterArray{} );
-
-	template< typename SectionT >
-	inline void addParserT( castor::AttributeParsers & parsers
-		, SectionT section
 		, castor::String const & name
 		, castor::ParserFunction function
 		, castor::ParserParameterArray params = castor::ParserParameterArray{} )
 	{
 		addParser( parsers
+			, section
+			, section
+			, name
+			, std::move( function )
+			, std::move( params ) );
+	}
+
+	template< typename SectionT, typename BlockContextT >
+	inline void addParserT( castor::AttributeParsers & parsers
+		, SectionT section
+		, castor::String const & name
+		, bool( *function )( FileParserContext &, BlockContextT *, ParserParameterArray const & )
+		, castor::ParserParameterArray params = castor::ParserParameterArray{} )
+	{
+		using BaseFunction = bool( * )( FileParserContext &, void *, ParserParameterArray const & );
+		addParser( parsers
 			, uint32_t( section )
 			, name
-			, function
+			, reinterpret_cast< BaseFunction >( function )
 			, std::move( params ) );
+	}
 
+	template< typename SectionT, typename SectionU, typename BlockContextT >
+	inline void addParserT( castor::AttributeParsers & parsers
+		, SectionT oldSection
+		, SectionU newSection
+		, castor::String const & name
+		, bool( *function )( FileParserContext &, BlockContextT *, ParserParameterArray const & )
+		, castor::ParserParameterArray params = castor::ParserParameterArray{} )
+	{
+		using BaseFunction = bool( * )( FileParserContext &, void *, ParserParameterArray const & );
+		addParser( parsers
+			, uint32_t( oldSection )
+			, uint32_t( newSection )
+			, name
+			, reinterpret_cast< BaseFunction >( function )
+			, std::move( params ) );
 	}
 	//@}
 }

@@ -45,10 +45,8 @@ namespace castor3d
 
 	namespace lgtmdl
 	{
-		static CU_ImplementAttributeParser( parserRootMaterials )
+		static CU_ImplementAttributeParserBlock( parserRootMaterials, RootContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
@@ -56,17 +54,15 @@ namespace castor3d
 			else if ( !params.empty() )
 			{
 				auto name = LightingModelFactory::normaliseName( params[0]->get< castor::String >() );
-				auto & engine = *parsingContext.parser->getEngine();
+				auto & engine = *blockContext->engine;
 				engine.setDefaultLightingModel( engine.getLightingModelFactory().getNameId( name ) );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserPassLightingModel )
+		static CU_ImplementAttributeParserBlock( parserPassLightingModel, PassContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
@@ -77,8 +73,8 @@ namespace castor3d
 			else
 			{
 				auto name = LightingModelFactory::normaliseName( params[0]->get< castor::String >() );
-				auto & engine = *parsingContext.parser->getEngine();
-				auto & component = getPassComponent< LightingModelComponent >( parsingContext );
+				auto & engine = *blockContext->root->engine;
+				auto & component = getPassComponent< LightingModelComponent >( *blockContext );
 				component.setLightingModelId( engine.getLightingModelFactory().getNameId( name ) );
 			}
 		}

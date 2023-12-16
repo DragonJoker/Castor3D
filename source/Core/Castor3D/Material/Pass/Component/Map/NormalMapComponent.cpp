@@ -61,126 +61,111 @@ namespace castor3d
 
 	namespace nmlcmp
 	{
-		static CU_ImplementAttributeParser( parserUnitNormalMask )
+		static CU_ImplementAttributeParserBlock( parserUnitNormalMask, TextureContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
-			else if ( !parsingContext.pass )
+			else if ( !blockContext->pass )
 			{
-				auto & plugin = parsingContext.parser->getEngine()->getPassComponentsRegister().getPlugin( NormalMapComponent::TypeName );
-				plugin.fillTextureConfiguration( parsingContext.texture.configuration
+				auto & plugin = blockContext->root->engine->getPassComponentsRegister().getPlugin( NormalMapComponent::TypeName );
+				plugin.fillTextureConfiguration( blockContext->configuration
 					, params[0]->get< uint32_t >() );
 			}
 			else
 			{
-				auto & plugin = parsingContext.pass->getComponentPlugin( NormalMapComponent::TypeName );
-				plugin.fillTextureConfiguration( parsingContext.texture.configuration
-					, params[0]->get< uint32_t >() );
-			}
-		}
-		CU_EndAttribute()
-
-		static CU_ImplementAttributeParser( parserUnitNormalFactor )
-		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( params.empty() )
-			{
-				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
-			else
-			{
-				params[0]->get( parsingContext.texture.configuration.normalFactor );
-			}
-		}
-		CU_EndAttribute()
-
-		static CU_ImplementAttributeParser( parserUnitNormalDirectX )
-		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( params.empty() )
-			{
-				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
-			else
-			{
-				params[0]->get( parsingContext.texture.configuration.normalDirectX );
-			}
-		}
-		CU_EndAttribute()
-
-		static CU_ImplementAttributeParser( parserUnitNormal2Channels )
-		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( params.empty() )
-			{
-				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
-			else
-			{
-				params[0]->get( parsingContext.texture.configuration.normal2Channels );
-			}
-		}
-		CU_EndAttribute()
-
-		static CU_ImplementAttributeParser( parserTexRemapNormal )
-		{
-			auto & parsingContext = getParserContext( context );
-			auto & plugin = parsingContext.parser->getEngine()->getPassComponentsRegister().getPlugin( NormalMapComponent::TypeName );
-			parsingContext.sceneImportConfig.textureRemapIt = parsingContext.sceneImportConfig.textureRemaps.emplace( plugin.getTextureFlags(), TextureConfiguration{} ).first;
-			parsingContext.sceneImportConfig.textureRemapIt->second = TextureConfiguration{};
-		}
-		CU_EndAttributePush( CSCNSection::eTextureRemapChannel )
-
-		static CU_ImplementAttributeParser( parserTexRemapNormalMask )
-		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( params.empty() )
-			{
-				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
-			else
-			{
-				auto & plugin = parsingContext.parser->getEngine()->getPassComponentsRegister().getPlugin( NormalMapComponent::TypeName );
-				plugin.fillTextureConfiguration( parsingContext.sceneImportConfig.textureRemapIt->second
+				auto & plugin = blockContext->pass->pass->getComponentPlugin( NormalMapComponent::TypeName );
+				plugin.fillTextureConfiguration( blockContext->configuration
 					, params[0]->get< uint32_t >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserTexRemapNormalDirectX )
+		static CU_ImplementAttributeParserBlock( parserUnitNormalFactor, TextureContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
 			else
 			{
-				params[0]->get( parsingContext.sceneImportConfig.textureRemapIt->second.normalDirectX );
+				params[0]->get( blockContext->configuration.normalFactor );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserTexRemapNormal2Channels )
+		static CU_ImplementAttributeParserBlock( parserUnitNormalDirectX, TextureContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
 			else
 			{
-				params[0]->get( parsingContext.sceneImportConfig.textureRemapIt->second.normal2Channels );
+				params[0]->get( blockContext->configuration.normalDirectX );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserUnitNormal2Channels, TextureContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				params[0]->get( blockContext->configuration.normal2Channels );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserTexRemapNormal, SceneImportContext )
+		{
+			auto & plugin = blockContext->root->engine->getPassComponentsRegister().getPlugin( NormalMapComponent::TypeName );
+			blockContext->textureRemapIt = blockContext->textureRemaps.emplace( plugin.getTextureFlags(), TextureConfiguration{} ).first;
+			blockContext->textureRemapIt->second = TextureConfiguration{};
+		}
+		CU_EndAttributePushBlock( CSCNSection::eTextureRemapChannel, blockContext )
+
+		static CU_ImplementAttributeParserBlock( parserTexRemapNormalMask, SceneImportContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				auto & plugin = blockContext->root->engine->getPassComponentsRegister().getPlugin( NormalMapComponent::TypeName );
+				plugin.fillTextureConfiguration( blockContext->textureRemapIt->second
+					, params[0]->get< uint32_t >() );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserTexRemapNormalDirectX, SceneImportContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				params[0]->get( blockContext->textureRemapIt->second.normalDirectX );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserTexRemapNormal2Channels, SceneImportContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				params[0]->get( blockContext->textureRemapIt->second.normal2Channels );
 			}
 		}
 		CU_EndAttribute()
@@ -252,10 +237,10 @@ namespace castor3d
 		, ChannelFillers & channelFillers )const
 	{
 		channelFillers.emplace( "normal", ChannelFiller{ getTextureFlags()
-			, []( SceneFileContext & parsingContext )
+			, []( TextureContext & blockContext )
 			{
-				auto & component = getPassComponent< NormalMapComponent >( parsingContext );
-				component.fillChannel( parsingContext.texture.configuration
+				auto & component = getPassComponent< NormalMapComponent >( blockContext );
+				component.fillChannel( blockContext.configuration
 					, 0x00FFFFFF );
 			} } );
 

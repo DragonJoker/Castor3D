@@ -26,76 +26,81 @@ namespace diamond_square_terrain
 		{
 			castor::AttributeParsers result;
 
-			addParser( result
-				, uint32_t( castor3d::CSCNSection::eMesh )
+			addParserT( result
+				, castor3d::CSCNSection::eMesh
+				, DiamondSquareSection::eRoot
 				, Generator::Type
 				, &parserDiamondSquareTerrain );
-			addParser( result, uint32_t( DiamondSquareSection::eRoot )
+			addParserT( result
+				, DiamondSquareSection::eRoot
+				, castor3d::CSCNSection::eMesh
 				, cuT( "}" )
 				, &parserDiamondSquareTerrainEnd );
-			addParser( result
-				, uint32_t( DiamondSquareSection::eRoot )
+			addParserT( result
+				, DiamondSquareSection::eRoot
 				, Generator::ParamRandomSeed
 				, &parserRandomSeed
 				, { castor::makeParameter< castor::ParameterType::eBool >() } );
-			addParser( result
-				, uint32_t( DiamondSquareSection::eRoot )
+			addParserT( result
+				, DiamondSquareSection::eRoot
 				, Generator::ParamIsland
 				, &parserIsland
 				, { castor::makeParameter< castor::ParameterType::eBool >() } );
-			addParser( result
-				, uint32_t( DiamondSquareSection::eRoot )
+			addParserT( result
+				, DiamondSquareSection::eRoot
 				, Generator::ParamXzScale
 				, &parserXzScale
 				, { castor::makeParameter< castor::ParameterType::ePoint2F >() } );
-			addParser( result
-				, uint32_t( DiamondSquareSection::eRoot )
+			addParserT( result
+				, DiamondSquareSection::eRoot
 				, Generator::ParamUvScale
 				, &parserUvScale
 				, { castor::makeParameter< castor::ParameterType::ePoint2F >() } );
-			addParser( result
-				, uint32_t( DiamondSquareSection::eRoot )
+			addParserT( result
+				, DiamondSquareSection::eRoot
 				, Generator::ParamHeightRange
 				, &parserHeightRange
 				, { castor::makeParameter< castor::ParameterType::ePoint2F >() } );
-			addParser( result
-				, uint32_t( DiamondSquareSection::eRoot )
+			addParserT( result
+				, DiamondSquareSection::eRoot
 				, Generator::ParamDetail
 				, &parserDetail
 				, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-			addParser( result
-				, uint32_t( DiamondSquareSection::eRoot )
+			addParserT( result
+				, DiamondSquareSection::eRoot
 				, Generator::ParamHeatOffset
 				, &parserHeatOffset
 				, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-			addParser( result
-				, uint32_t( DiamondSquareSection::eRoot )
+			addParserT( result
+				, DiamondSquareSection::eRoot
+				, DiamondSquareSection::eBiome
 				, Generator::Biome
 				, &parserBiome
 				, { castor::makeParameter< castor::ParameterType::eName >() } );
-			addParser( result
-				, uint32_t( DiamondSquareSection::eBiome )
+			addParserT( result
+				, DiamondSquareSection::eBiome
+				, DiamondSquareSection::eRoot
 				, cuT( "}" )
 				, &parserBiomeEnd );
-			addParser( result
-				, uint32_t( DiamondSquareSection::eBiome )
+			addParserT( result
+				, DiamondSquareSection::eBiome
 				, Generator::BiomeRange
 				, &parserBiomeRange
 				, { castor::makeParameter< castor::ParameterType::ePoint2F >() } );
-			addParser( result
-				, uint32_t( DiamondSquareSection::eBiome )
+			addParserT( result
+				, DiamondSquareSection::eBiome
 				, Generator::BiomeLowSteepness
 				, &parserBiomeLowSteepness
 				, { castor::makeParameter< castor::ParameterType::eUInt32 >()
 					, castor::makeParameter< castor::ParameterType::ePoint2F >() } );
-			addParser( result
-				, uint32_t( DiamondSquareSection::eBiome )
+			addParserT( result
+				, DiamondSquareSection::eBiome
 				, Generator::BiomeMediumSteepness
 				, &parserBiomeMedSteepness
 				, { castor::makeParameter< castor::ParameterType::eUInt32 >()
 					, castor::makeParameter< castor::ParameterType::ePoint2F >() } );
-			addParser( result
-				, uint32_t( DiamondSquareSection::eBiome )
+			addParserT( result
+				, DiamondSquareSection::eBiome
 				, Generator::BiomeHighSteepness
 				, &parserBiomeHigSteepness
 				, { castor::makeParameter< castor::ParameterType::eUInt32 >()
@@ -111,13 +116,6 @@ namespace diamond_square_terrain
 				{ uint32_t( DiamondSquareSection::eRoot ), Generator::Type },
 				{ uint32_t( DiamondSquareSection::eBiome ), Generator::Biome },
 			};
-		}
-
-		static void * createContext( castor::FileParserContext & context )
-		{
-			auto userContext = new ParserContext;
-			userContext->engine = static_cast< castor3d::SceneFileParser * >( context.parser )->getEngine();
-			return userContext;
 		}
 	}
 }
@@ -150,7 +148,7 @@ extern "C"
 		engine->registerParsers( diamond_square_terrain::Generator::Type
 			, diamond_square_terrain::parser::createParsers()
 			, diamond_square_terrain::parser::createSections()
-			, &diamond_square_terrain::parser::createContext );
+			, nullptr );
 		engine->getMeshFactory().registerType( diamond_square_terrain::Generator::Type
 			, &diamond_square_terrain::Generator::create );
 	}

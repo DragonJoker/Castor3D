@@ -15,6 +15,55 @@ See LICENSE file in root folder
 
 namespace castor
 {
+	struct ContextDeleter
+	{
+		CU_API virtual ~ContextDeleter() = default;
+		CU_API virtual void destroy( void * data ) = 0;
+	};
+
+	using ContextDeleterPtr = std::unique_ptr< ContextDeleter >;
+
+	template< typename ContextT >
+	struct ContextDeleterT
+		: public ContextDeleter
+	{
+		void destroy( void * data )override
+		{
+			delete reinterpret_cast< ContextT * >( data );
+		}
+	};
+
+	template< typename ContextT >
+	ContextDeleterPtr makeContextDeleter()
+	{
+		return std::make_unique< ContextDeleterT< ContextT > >();
+	}
+
+	struct BlockContext
+	{
+		BlockContext( BlockContext const & rhs ) = delete;
+		BlockContext & operator=( BlockContext const & rhs ) = delete;
+		CU_API BlockContext( BlockContext && rhs ) = default;
+		CU_API BlockContext & operator=( BlockContext && rhs ) = default;
+
+		BlockContext( void * pcontext
+			, ContextDeleterPtr pdtor )
+			: context{ pcontext }
+			, dtor{ std::move( pdtor ) }
+		{
+		}
+
+		~BlockContext()
+		{
+			if ( dtor && context )
+			{
+				dtor->destroy( context );
+			}
+		}
+
+		void * context;
+		ContextDeleterPtr dtor;
+	};
 	class FileParserContext
 	{
 	public:
@@ -92,9 +141,15 @@ namespace castor
 		//!\~english	The sections stack.
 		//!\~french		La pile de sections.
 		std::deque< SectionId > sections{};
-		//!\~english	The sections stack.
-		//!\~french		La pile de sections.
+		//!\~english	The context blocks stack.
+		//!\~french		La pile de contextes de blocs.
+		std::deque< void * > blocks{};
+		//!\~english	The section to push on the stack.
+		//!\~french		La section à mettre sur la pile.
 		SectionId pendingSection{};
+		//!\~english	The block context to push on the stack.
+		//!\~french		Le contexte de bloc à mettre sur la pile.
+		void * pendingBlock{};
 		//!\~english	The current function name.
 		//!\~french		Le nom de la fonction actuelle.
 		String functionName{};
@@ -107,7 +162,12 @@ namespace castor
 		//!\~english	The logger instance.
 		//!\~french		L'instance de logger.
 		LoggerInstance * logger{};
+		//!\~english	The preprocessed file.
+		//!\~french		Le fichier prétraité.
 		PreprocessedFile * preprocessed{};
+		//!\~english	The allocated block contexts.
+		//!\~french		Les contextes de bloc alloués.
+		std::vector< BlockContext > allocatedBlocks;
 	};
 }
 

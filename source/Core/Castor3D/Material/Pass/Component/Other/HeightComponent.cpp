@@ -44,11 +44,9 @@ namespace castor3d
 
 	namespace hgtcmp
 	{
-		static CU_ImplementAttributeParser( parserPassParallaxOcclusion )
+		static CU_ImplementAttributeParserBlock( parserPassParallaxOcclusion, PassContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
@@ -56,7 +54,7 @@ namespace castor3d
 			{
 				auto value = uint32_t( ParallaxOcclusionMode::eNone );
 				params[0]->get( value );
-				auto & component = getPassComponent< HeightComponent >( parsingContext );
+				auto & component = getPassComponent< HeightComponent >( *blockContext );
 				component.setParallaxOcclusion( ParallaxOcclusionMode( value ) );
 			}
 		}

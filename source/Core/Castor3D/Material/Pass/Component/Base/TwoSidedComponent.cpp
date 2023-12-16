@@ -35,11 +35,9 @@ namespace castor3d
 
 	namespace tws
 	{
-		static CU_ImplementAttributeParser( parserPassTwoSided )
+		static CU_ImplementAttributeParserBlock( parserPassTwoSided, PassContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
@@ -47,7 +45,7 @@ namespace castor3d
 			{
 				bool value;
 				params[0]->get( value );
-				auto & component = getPassComponent< TwoSidedComponent >( parsingContext );
+				auto & component = getPassComponent< TwoSidedComponent >( *blockContext );
 				component.setTwoSided( value );
 			}
 		}

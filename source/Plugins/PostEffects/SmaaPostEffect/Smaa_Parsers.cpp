@@ -14,23 +14,27 @@
 
 namespace smaa
 {
-	namespace
+	CU_ImplementAttributeParserNewBlock( parserSmaa, castor3d::TargetContext, SmaaContext )
 	{
-		ParserContext & getParserContext( castor::FileParserContext & context )
+		newBlockContext->renderTarget = blockContext->renderTarget;
+	}
+	CU_EndAttributePushNewBlock( SmaaSection::eRoot )
+
+	CU_ImplementAttributeParserBlock( parserMode, SmaaContext )
+	{
+		if ( params.empty() )
 		{
-			return *static_cast< ParserContext * >( context.getUserContext( PostEffect::Type ) );
+			CU_ParsingError( "Missing parameter" );
+		}
+		else
+		{
+			blockContext->data.mode = Mode( params[0]->get< uint32_t >() );
 		}
 	}
+	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserSmaa )
+	CU_ImplementAttributeParserBlock( parserPreset, SmaaContext )
 	{
-	}
-	CU_EndAttributePush( SmaaSection::eRoot )
-
-	CU_ImplementAttributeParser( parserMode )
-	{
-		auto & smaaContext = getParserContext( context );
-
 		if ( params.empty() )
 		{
 			CU_ParsingError( "Missing parameter" );
@@ -39,15 +43,13 @@ namespace smaa
 		{
 			uint32_t value{ 0u };
 			params[0]->get( value );
-			smaaContext.data.mode = Mode( value );
+			blockContext->preset = Preset( params[0]->get< uint32_t >() );
 		}
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserPreset )
+	CU_ImplementAttributeParserBlock( parserEdgeDetection, SmaaContext )
 	{
-		auto & smaaContext = getParserContext( context );
-
 		if ( params.empty() )
 		{
 			CU_ParsingError( "Missing parameter" );
@@ -56,258 +58,211 @@ namespace smaa
 		{
 			uint32_t value{ 0u };
 			params[0]->get( value );
-			smaaContext.preset = Preset( value );
+			blockContext->data.edgeDetection = EdgeDetectionType( params[0]->get< uint32_t >() );
 		}
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserEdgeDetection )
+	CU_ImplementAttributeParserBlock( parserDisableDiagonalDetection, SmaaContext )
 	{
-		auto & smaaContext = getParserContext( context );
-
 		if ( params.empty() )
 		{
 			CU_ParsingError( "Missing parameter" );
 		}
 		else
 		{
-			uint32_t value{ 0u };
-			params[0]->get( value );
-			smaaContext.data.edgeDetection = EdgeDetectionType( value );
+			params[0]->get( blockContext->data.disableDiagonalDetection );
 		}
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserDisableDiagonalDetection )
+	CU_ImplementAttributeParserBlock( parserDisableCornerDetection, SmaaContext )
 	{
-		auto & smaaContext = getParserContext( context );
-
 		if ( params.empty() )
 		{
 			CU_ParsingError( "Missing parameter" );
 		}
 		else
 		{
-			params[0]->get( smaaContext.data.disableDiagonalDetection );
+			params[0]->get( blockContext->data.disableCornerDetection );
 		}
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserDisableCornerDetection )
+	CU_ImplementAttributeParserBlock( parserThreshold, SmaaContext )
 	{
-		auto & smaaContext = getParserContext( context );
-
 		if ( params.empty() )
 		{
 			CU_ParsingError( "Missing parameter" );
 		}
 		else
 		{
-			params[0]->get( smaaContext.data.disableCornerDetection );
+			params[0]->get( blockContext->data.threshold );
 		}
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserThreshold )
+	CU_ImplementAttributeParserBlock( parserMaxSearchSteps, SmaaContext )
 	{
-		auto & smaaContext = getParserContext( context );
-
 		if ( params.empty() )
 		{
 			CU_ParsingError( "Missing parameter" );
 		}
 		else
 		{
-			params[0]->get( smaaContext.data.threshold );
+			params[0]->get( blockContext->data.maxSearchSteps );
 		}
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserMaxSearchSteps )
+	CU_ImplementAttributeParserBlock( parserMaxSearchStepsDiag, SmaaContext )
 	{
-		auto & smaaContext = getParserContext( context );
-
 		if ( params.empty() )
 		{
 			CU_ParsingError( "Missing parameter" );
 		}
 		else
 		{
-			params[0]->get( smaaContext.data.maxSearchSteps );
+			params[0]->get( blockContext->data.maxSearchStepsDiag );
 		}
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserMaxSearchStepsDiag )
+	CU_ImplementAttributeParserBlock( parserCornerRounding, SmaaContext )
 	{
-		auto & smaaContext = getParserContext( context );
-
 		if ( params.empty() )
 		{
 			CU_ParsingError( "Missing parameter" );
 		}
 		else
 		{
-			params[0]->get( smaaContext.data.maxSearchStepsDiag );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserCornerRounding )
-	{
-		auto & smaaContext = getParserContext( context );
-
-		if ( params.empty() )
-		{
-			CU_ParsingError( "Missing parameter" );
-		}
-		else
-		{
-			params[0]->get( smaaContext.data.cornerRounding );
+			params[0]->get( blockContext->data.cornerRounding );
 		}
 	}
 	CU_EndAttribute()
 		
-	CU_ImplementAttributeParser( parserPredication )
+	CU_ImplementAttributeParserBlock( parserPredication, SmaaContext )
 	{
-		auto & smaaContext = getParserContext( context );
-
 		if ( params.empty() )
 		{
 			CU_ParsingError( "Missing parameter" );
 		}
 		else
 		{
-			params[0]->get( smaaContext.data.enablePredication );
+			params[0]->get( blockContext->data.enablePredication );
 		}
 	}
 	CU_EndAttribute()
 		
-	CU_ImplementAttributeParser( parserReprojection )
+	CU_ImplementAttributeParserBlock( parserReprojection, SmaaContext )
 	{
-		auto & smaaContext = getParserContext( context );
-
 		if ( params.empty() )
 		{
 			CU_ParsingError( "Missing parameter" );
 		}
 		else
 		{
-			params[0]->get( smaaContext.data.enableReprojection );
+			params[0]->get( blockContext->data.enableReprojection );
 		}
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserReprojectionWeightScale )
+	CU_ImplementAttributeParserBlock( parserReprojectionWeightScale, SmaaContext )
 	{
-		auto & smaaContext = getParserContext( context );
-
 		if ( params.empty() )
 		{
 			CU_ParsingError( "Missing parameter" );
 		}
 		else
 		{
-			params[0]->get( smaaContext.data.reprojectionWeightScale );
+			params[0]->get( blockContext->data.reprojectionWeightScale );
 		}
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserLocalContrastAdaptationFactor )
+	CU_ImplementAttributeParserBlock( parserLocalContrastAdaptationFactor, SmaaContext )
 	{
-		auto & smaaContext = getParserContext( context );
-
 		if ( params.empty() )
 		{
 			CU_ParsingError( "Missing parameter" );
 		}
 		else
 		{
-			params[0]->get( smaaContext.data.localContrastAdaptationFactor );
+			params[0]->get( blockContext->data.localContrastAdaptationFactor );
 		}
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserPredicationScale )
+	CU_ImplementAttributeParserBlock( parserPredicationScale, SmaaContext )
 	{
-		auto & smaaContext = getParserContext( context );
-
 		if ( params.empty() )
 		{
 			CU_ParsingError( "Missing parameter" );
 		}
 		else
 		{
-			params[0]->get( smaaContext.data.predicationScale );
+			params[0]->get( blockContext->data.predicationScale );
 		}
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserPredicationStrength )
+	CU_ImplementAttributeParserBlock( parserPredicationStrength, SmaaContext )
 	{
-		auto & smaaContext = getParserContext( context );
-
 		if ( params.empty() )
 		{
 			CU_ParsingError( "Missing parameter" );
 		}
 		else
 		{
-			params[0]->get( smaaContext.data.predicationStrength );
+			params[0]->get( blockContext->data.predicationStrength );
 		}
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserPredicationThreshold )
+	CU_ImplementAttributeParserBlock( parserPredicationThreshold, SmaaContext )
 	{
-		auto & smaaContext = getParserContext( context );
-
 		if ( params.empty() )
 		{
 			CU_ParsingError( "Missing parameter" );
 		}
 		else
 		{
-			params[0]->get( smaaContext.data.predicationThreshold );
+			params[0]->get( blockContext->data.predicationThreshold );
 		}
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserSmaaEnd )
+	CU_ImplementAttributeParserBlock( parserSmaaEnd, SmaaContext )
 	{
-		auto & smaaContext = getParserContext( context );
-		auto & parsingContext = castor3d::getParserContext( context );
 		castor3d::Parameters parameters;
-		parameters.add( cuT( "mode" ), getName( smaaContext.data.mode ) );
-		parameters.add( cuT( "preset" ), getName( smaaContext.preset ) );
-		parameters.add( cuT( "edgeDetection" ), getName( smaaContext.data.edgeDetection ) );
-		parameters.add( cuT( "disableDiagonalDetection" ), smaaContext.data.disableDiagonalDetection );
-		parameters.add( cuT( "disableCornerDetection" ), smaaContext.data.disableCornerDetection );
-		parameters.add( cuT( "localContrastAdaptationFactor" ), smaaContext.data.localContrastAdaptationFactor );
-		parameters.add( cuT( "enablePredication" ), smaaContext.data.enablePredication );
-		parameters.add( cuT( "predicationScale" ), smaaContext.data.predicationScale );
-		parameters.add( cuT( "predicationStrength" ), smaaContext.data.predicationStrength );
-		parameters.add( cuT( "predicationThreshold" ), smaaContext.data.predicationThreshold );
+		parameters.add( cuT( "mode" ), getName( blockContext->data.mode ) );
+		parameters.add( cuT( "preset" ), getName( blockContext->preset ) );
+		parameters.add( cuT( "edgeDetection" ), getName( blockContext->data.edgeDetection ) );
+		parameters.add( cuT( "disableDiagonalDetection" ), blockContext->data.disableDiagonalDetection );
+		parameters.add( cuT( "disableCornerDetection" ), blockContext->data.disableCornerDetection );
+		parameters.add( cuT( "localContrastAdaptationFactor" ), blockContext->data.localContrastAdaptationFactor );
+		parameters.add( cuT( "enablePredication" ), blockContext->data.enablePredication );
+		parameters.add( cuT( "predicationScale" ), blockContext->data.predicationScale );
+		parameters.add( cuT( "predicationStrength" ), blockContext->data.predicationStrength );
+		parameters.add( cuT( "predicationThreshold" ), blockContext->data.predicationThreshold );
 
-		if ( smaaContext.preset == Preset::eCustom )
+		if ( blockContext->preset == Preset::eCustom )
 		{
-			parameters.add( cuT( "threshold" ), smaaContext.data.threshold );
-			parameters.add( cuT( "maxSearchSteps" ), smaaContext.data.maxSearchSteps );
-			parameters.add( cuT( "maxSearchStepsDiag" ), smaaContext.data.maxSearchStepsDiag );
-			parameters.add( cuT( "cornerRounding" ), smaaContext.data.cornerRounding );
+			parameters.add( cuT( "threshold" ), blockContext->data.threshold );
+			parameters.add( cuT( "maxSearchSteps" ), blockContext->data.maxSearchSteps );
+			parameters.add( cuT( "maxSearchStepsDiag" ), blockContext->data.maxSearchStepsDiag );
+			parameters.add( cuT( "cornerRounding" ), blockContext->data.cornerRounding );
 		}
 
-		if ( smaaContext.data.mode == Mode::eT2X )
+		if ( blockContext->data.mode == Mode::eT2X )
 		{
-			parameters.add( cuT( "enableReprojection" ), smaaContext.data.enableReprojection );
-			parameters.add( cuT( "reprojectionWeightScale" ), smaaContext.data.reprojectionWeightScale );
+			parameters.add( cuT( "enableReprojection" ), blockContext->data.enableReprojection );
+			parameters.add( cuT( "reprojectionWeightScale" ), blockContext->data.reprojectionWeightScale );
 		}
 
-		auto effect = parsingContext.renderTarget->getPostEffect( PostEffect::Type );
+		auto effect = blockContext->renderTarget->getPostEffect( PostEffect::Type );
 		effect->enable( true );
 		effect->setParameters( parameters );
-
-		delete reinterpret_cast< ParserContext * >( context.unregisterUserContext( PostEffect::Type ) );
 	}
 	CU_EndAttributePop()
 }

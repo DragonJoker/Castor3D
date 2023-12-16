@@ -21,6 +21,7 @@ using Bool = int;
 #include <Castor3D/Cache/PluginCache.hpp>
 #include <Castor3D/Event/Frame/GpuFunctorEvent.hpp>
 #include <Castor3D/Event/Frame/CpuFunctorEvent.hpp>
+#include <Castor3D/Gui/Gui_Parsers.hpp>
 #include <Castor3D/Material/Material.hpp>
 #include <Castor3D/Miscellaneous/ProgressBar.hpp>
 #include <Castor3D/Model/Mesh/Mesh.hpp>
@@ -42,7 +43,7 @@ using Bool = int;
 
 namespace GuiCommon
 {
-	namespace
+	namespace helpers
 	{
 		struct wxWidgetsFontImpl
 			: public castor::Font::SFontImpl
@@ -68,7 +69,7 @@ namespace GuiCommon
 			wxFont m_font;
 		};
 
-		castor::PathArray listPluginsFiles( castor::Path const & folder )
+		static castor::PathArray listPluginsFiles( castor::Path const & folder )
 		{
 			static castor::String castor3DLibPrefix{ CU_LibPrefix + castor::String{ cuT( "castor3d" ) } };
 			castor::PathArray files;
@@ -93,6 +94,255 @@ namespace GuiCommon
 
 			return result;
 		}
+
+		class PreprocessedSceneFile
+			: public castor::PreprocessedFile
+		{
+			enum Category : uint32_t
+			{
+				eSampler,
+				eLight,
+				eNode,
+				eObject,
+				eMesh,
+				eMaterial,
+				eTexture,
+				eOverlay,
+				eGui,
+				eImport,
+				eOther,
+				eCount,
+			};
+
+		public:
+			explicit PreprocessedSceneFile( castor::FileParser & parser )
+				: castor::PreprocessedFile{ parser }
+			{
+			}
+
+			PreprocessedSceneFile( castor::FileParser & parser
+				, castor::FileParserContextUPtr context )
+				: castor::PreprocessedFile{ parser, std::move( context ) }
+			{
+			}
+
+			castor::SectionId getCategory( castor::String const & name
+				, castor::SectionId curSection
+				, castor::SectionId nextSection
+				, bool implicit )
+			{
+				using namespace castor3d;
+
+				if ( name == "}" )
+				{
+					std::swap( curSection, nextSection );
+				}
+
+				if ( implicit )
+				{
+					nextSection = curSection;
+				}
+
+				auto simplifySection = []( castor::SectionId section )
+					{
+						switch ( section )
+						{
+						case uint32_t( CSCNSection::eSampler ):
+							return uint32_t( Category::eSampler );
+						case uint32_t( CSCNSection::eLight ):
+						case uint32_t( CSCNSection::eShadows ):
+						case uint32_t( CSCNSection::eRsm ):
+						case uint32_t( CSCNSection::eLpv ):
+						case uint32_t( CSCNSection::eRaw ):
+						case uint32_t( CSCNSection::ePcf ):
+						case uint32_t( CSCNSection::eVsm ):
+							return uint32_t( Category::eLight );
+						case uint32_t( CSCNSection::eNode ):
+							return uint32_t( Category::eNode );
+						case uint32_t( CSCNSection::eObject ):
+						case uint32_t( CSCNSection::eObjectMaterials ):
+							return uint32_t( Category::eObject );
+						case uint32_t( CSCNSection::eMesh ):
+						case uint32_t( CSCNSection::eSubmesh ):
+						case uint32_t( CSCNSection::eBillboard ):
+						case uint32_t( CSCNSection::eBillboardList ):
+						case uint32_t( CSCNSection::eParticleSystem ):
+						case uint32_t( CSCNSection::eParticle ):
+						case uint32_t( CSCNSection::eMeshDefaultMaterials ):
+						case uint32_t( CSCNSection::eSkeleton ):
+						case uint32_t( CSCNSection::eMorphAnimation ):
+							return uint32_t( Category::eMesh );
+						case uint32_t( CSCNSection::eMaterial ):
+						case uint32_t( CSCNSection::ePass ):
+						case uint32_t( CSCNSection::eTextureUnit ):
+						case uint32_t( CSCNSection::eShaderProgram ):
+						case uint32_t( CSCNSection::eShaderStage ):
+						case uint32_t( CSCNSection::eShaderUBO ):
+						case uint32_t( CSCNSection::eUBOVariable ):
+						case uint32_t( CSCNSection::eTextureAnimation ):
+						case uint32_t( CSCNSection::eTextureTransform ):
+							return uint32_t( Category::eMaterial );
+						case uint32_t( CSCNSection::eTexture ):
+							return uint32_t( Category::eTexture );
+						case uint32_t( CSCNSection::ePanelOverlay ):
+						case uint32_t( CSCNSection::eBorderPanelOverlay ):
+						case uint32_t( CSCNSection::eTextOverlay ):
+							return uint32_t( Category::eOverlay );
+						case uint32_t( GUISection::eGUI ):
+						case uint32_t( GUISection::eTheme ):
+						case uint32_t( GUISection::eButtonStyle ):
+						case uint32_t( GUISection::eEditStyle ):
+						case uint32_t( GUISection::eComboStyle ):
+						case uint32_t( GUISection::eListStyle ):
+						case uint32_t( GUISection::eSliderStyle ):
+						case uint32_t( GUISection::eStaticStyle ):
+						case uint32_t( GUISection::ePanelStyle ):
+						case uint32_t( GUISection::eProgressStyle ):
+						case uint32_t( GUISection::eExpandablePanelStyle ):
+						case uint32_t( GUISection::eFrameStyle ):
+						case uint32_t( GUISection::eScrollBarStyle ):
+						case uint32_t( GUISection::eButton ):
+						case uint32_t( GUISection::eStatic ):
+						case uint32_t( GUISection::eSlider ):
+						case uint32_t( GUISection::eComboBox ):
+						case uint32_t( GUISection::eListBox ):
+						case uint32_t( GUISection::eEdit ):
+						case uint32_t( GUISection::ePanel ):
+						case uint32_t( GUISection::eProgress ):
+						case uint32_t( GUISection::eExpandablePanel ):
+						case uint32_t( GUISection::eExpandablePanelHeader ):
+						case uint32_t( GUISection::eExpandablePanelExpand ):
+						case uint32_t( GUISection::eExpandablePanelContent ):
+						case uint32_t( GUISection::eFrame ):
+						case uint32_t( GUISection::eFrameContent ):
+						case uint32_t( GUISection::eBoxLayout ):
+						case uint32_t( GUISection::eLayoutCtrl ):
+							return uint32_t( Category::eGui );
+						case uint32_t( CSCNSection::eSceneImport ):
+							return uint32_t( Category::eImport );
+						default:
+							return uint32_t( Category::eOther );
+						}
+					};
+				curSection = simplifySection( curSection );
+				nextSection = simplifySection( nextSection );
+
+				switch ( nextSection )
+				{
+				case uint32_t( Category::eSampler ):
+					return uint32_t( Category::eSampler );
+				case uint32_t( Category::eLight ):
+					return uint32_t( Category::eLight );
+				case uint32_t( Category::eNode ):
+					return uint32_t( Category::eNode );
+				case uint32_t( Category::eObject ):
+					return uint32_t( Category::eObject );
+				case uint32_t( Category::eMesh ):
+					return uint32_t( Category::eMesh );
+				case uint32_t( Category::eMaterial ):
+					return uint32_t( Category::eMaterial );
+				case uint32_t( Category::eTexture ):
+					return uint32_t( Category::eTexture );
+				case uint32_t( Category::eOverlay ):
+					return uint32_t( Category::eOverlay );
+				case uint32_t( Category::eImport ):
+					return uint32_t( Category::eImport );
+				case uint32_t( Category::eGui ):
+					return uint32_t( Category::eGui );
+				default:
+					switch ( curSection )
+					{
+					case uint32_t( Category::eSampler ):
+						return uint32_t( Category::eSampler );
+					case uint32_t( Category::eLight ):
+						return uint32_t( Category::eLight );
+					case uint32_t( Category::eNode ):
+						return uint32_t( Category::eNode );
+					case uint32_t( Category::eObject ):
+						return uint32_t( Category::eObject );
+					case uint32_t( Category::eMesh ):
+						return uint32_t( Category::eMesh );
+					case uint32_t( Category::eMaterial ):
+						return uint32_t( Category::eMaterial );
+					case uint32_t( Category::eTexture ):
+						return uint32_t( Category::eTexture );
+					case uint32_t( Category::eOverlay ):
+						return uint32_t( Category::eOverlay );
+					case uint32_t( Category::eImport ):
+						return uint32_t( Category::eImport );
+					case uint32_t( Category::eGui ):
+						return uint32_t( Category::eGui );
+					default:
+						return uint32_t( Category::eOther );
+					}
+				}
+			}
+
+			uint32_t getCategoryActionsCount( castor::SectionId section )const
+			{
+				return m_total[section];
+			}
+
+			uint32_t incCategoryActions( castor::SectionId section, uint32_t count = 1u )
+			{
+				return m_current[section] += count;
+			}
+
+			castor::xchar const * getCategoryName( castor::SectionId section )const
+			{
+				using namespace castor3d;
+				switch ( section )
+				{
+				case uint32_t( Category::eSampler ):
+					return "Loading Samplers";
+				case uint32_t( Category::eLight ):
+					return "Loading Lights";
+				case uint32_t( Category::eNode ):
+					return "Loading Nodes";
+				case uint32_t( Category::eObject ):
+					return "Loading Objects";
+				case uint32_t( Category::eMesh ):
+					return "Loading Meshes";
+				case uint32_t( Category::eMaterial ):
+					return "Loading Materials";
+				case uint32_t( Category::eTexture ):
+					return "Loading Textures";
+				case uint32_t( Category::eOverlay ):
+					return "Loading Overlays";
+				case uint32_t( Category::eImport ):
+					return "Processing Imports";
+				case uint32_t( Category::eGui ):
+					return "Loading GUI";
+				default:
+					return "Others";
+				}
+			}
+
+		protected:
+			void doAddParserAction( castor::Path file
+				, uint64_t line
+				, castor::String name
+				, castor::SectionId section
+				, castor::ParserFunctionAndParams function
+				, castor::String params
+				, bool implicit )override
+			{
+				using namespace castor3d;
+				auto category = getCategory( name, section, function.resultSection, implicit );
+				m_total[category]++;
+				castor::PreprocessedFile::doAddParserAction( std::move( file )
+					, line
+					, std::move( name )
+					, section
+					, std::move( function )
+					, std::move( params )
+					, implicit );
+			}
+
+		private:
+			std::array< uint32_t, Category::eCount > m_total{};
+			std::array< uint32_t, Category::eCount > m_current{};
+		};
 	}
 
 	void createBitmapFromBuffer( uint8_t const * buffer
@@ -245,25 +495,48 @@ namespace GuiCommon
 			{
 				try
 				{
-					castor3d::SceneFileParser parser( engine );
-					auto preprocessed = parser.processFile( appName, fileName );
+					castor3d::SceneFileParser parser{ engine };
 
 					if ( progress )
 					{
 						castor3d::stepProgressBarGlobal( progress
 							, "Loading scene..." );
 						castor3d::initProgressBarLocalRange( progress
+							, "Preprocessing Scene File..."
+							, 1u );
+
+						helpers::PreprocessedSceneFile preprocessed{ parser, parser.initialiseParser( fileName ) };
+						parser.processFile( appName, fileName, preprocessed );
+
+						castor3d::stepProgressBarLocal( progress
+							, "Done" );
+						castor3d::initProgressBarLocalRange( progress
 							, "Loading scene..."
 							, preprocessed.getCount() );
-					}
+						auto actionConnection = preprocessed.onAction.connect( [progress, &preprocessed]( castor::SectionId section
+							, castor::PreprocessedFile::Action const & action )
+							{
+									section = preprocessed.getCategory( action.name, section, action.function.resultSection, action.implicit );
+									auto status = preprocessed.incCategoryActions( section );
+									auto total = preprocessed.getCategoryActionsCount( section );
+									castor3d::initProgressBarLocalRange( progress
+										, preprocessed.getCategoryName( section )
+										, total );
+									castor3d::setProgressBarLocalStep( progress
+										, castor::string::toString( status ) + " / " + castor::string::toString( total )
+										, status );
+							} );
 
-					auto actionConnection = preprocessed.onAction.connect( [progress]( castor::String const & section
-						, castor::PreprocessedFile::Action const & action )
+						if ( preprocessed.parse() )
 						{
-							castor3d::stepProgressBarLocal( progress, section );
-						} );
-
-					if ( preprocessed.parse() )
+							result = parser.getRenderWindow();
+						}
+						else
+						{
+							castor::Logger::logWarning( cuT( "Can't read scene file" ) );
+						}
+					}
+					else if ( parser.parseFile( appName, fileName ) )
 					{
 						result = parser.getRenderWindow();
 					}
@@ -313,7 +586,7 @@ namespace GuiCommon
 
 	void loadPlugins( castor3d::Engine & engine )
 	{
-		castor::PathArray arrayKept = listPluginsFiles( castor3d::Engine::getPluginsDirectory() );
+		castor::PathArray arrayKept = helpers::listPluginsFiles( castor3d::Engine::getPluginsDirectory() );
 
 #if !defined( NDEBUG )
 
@@ -433,7 +706,7 @@ namespace GuiCommon
 		{
 			castor::String name = make_String( wxfont.GetFaceName() ) + castor::string::toString( wxfont.GetPointSize() );
 			font = castor::makeUnique< castor::Font >( name, wxfont.GetPointSize() );
-			font->setGlyphLoader( std::make_unique< wxWidgetsFontImpl >( wxfont ) );
+			font->setGlyphLoader( std::make_unique< helpers::wxWidgetsFontImpl >( wxfont ) );
 			castor::Font::BinaryLoader{}( *font
 				, castor::Path{ castor::String{ wxfont.GetFaceName() } }
 				, uint32_t( std::abs( wxfont.GetPointSize() ) ) );

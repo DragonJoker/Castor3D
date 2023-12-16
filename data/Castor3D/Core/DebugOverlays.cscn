@@ -1,105 +1,81 @@
-default_font "Arial16"
-
-theme "Debug"
+gui
 {
-	panel_style "Main"
+	default_font "Arial16"
+
+	theme "Debug"
 	{
-		background_invisible true
-		foreground_invisible true
-
-		expandable_panel_style "Container"
-		{
-			background_material "AlphaDarkBlue"
-			foreground_invisible true
-
-			header_style
-			{
-				background_material "AlphaDarkBlue"
-				foreground_invisible true
-
-				static_style "Title"
-				{
-					background_invisible true
-					foreground_invisible true
-					text_material "White"
-				}
-			}
-
-			expand_style
-			{
-				background_material "AlphaDarkBlue"
-				foreground_material "White"
-				text_material "White"
-				highlighted_background_material "DarkBlue"
-				highlighted_foreground_material "White"
-				highlighted_text_material "White"
-				pushed_background_material "DarkBlue"
-				pushed_foreground_material "White"
-				pushed_text_material "White"
-			}
-
-			content_style
-			{
-				background_invisible true
-				foreground_invisible true
-
-				panel_style "Entry"
-				{
-					background_invisible true
-					foreground_invisible true
-
-					static_style "Label"
-					{
-						background_invisible true
-						foreground_invisible true
-						text_material "White"
-					}
-
-					static_style "Value"
-					{
-						background_invisible true
-						foreground_invisible true
-						text_material "White"
-					}
-				}
-			}
-		}
-	}
-
-	panel_style "RenderPasses"
-	{
-		background_invisible true
-		foreground_invisible true
-
-		panel_style "Pass"
+		panel_style "Main"
 		{
 			background_invisible true
 			foreground_invisible true
 
-			static_style "Name"
+			expandable_panel_style "Container"
 			{
-				background_invisible true
+				background_material "AlphaDarkBlue"
 				foreground_invisible true
-				text_material "White"
-			}
 
-			static_style "Counter"
-			{
-				background_invisible true
-				foreground_invisible true
-				text_material "White"
-				font "Arial10"
+				header_style
+				{
+					background_material "AlphaDarkBlue"
+					foreground_invisible true
+
+					static_style "Title"
+					{
+						background_invisible true
+						foreground_invisible true
+						text_material "White"
+					}
+				}
+
+				expand_style
+				{
+					background_material "AlphaDarkBlue"
+					foreground_material "White"
+					text_material "White"
+					highlighted_background_material "DarkBlue"
+					highlighted_foreground_material "White"
+					highlighted_text_material "White"
+					pushed_background_material "DarkBlue"
+					pushed_foreground_material "White"
+					pushed_text_material "White"
+				}
+
+				content_style
+				{
+					background_invisible true
+					foreground_invisible true
+
+					panel_style "Entry"
+					{
+						background_invisible true
+						foreground_invisible true
+
+						static_style "Label"
+						{
+							background_invisible true
+							foreground_invisible true
+							text_material "White"
+						}
+
+						static_style "Value"
+						{
+							background_invisible true
+							foreground_invisible true
+							text_material "White"
+						}
+					}
+				}
 			}
 		}
 
-		expandable_panel_style "Category"
+		panel_style "RenderPasses"
 		{
-			background_material "AlphaDarkBlue"
+			background_invisible true
 			foreground_invisible true
 
-			header_style
+			panel_style "Pass"
 			{
-				background_material "AlphaDarkBlue"
+				background_invisible true
 				foreground_invisible true
 
 				static_style "Name"
@@ -118,23 +94,50 @@ theme "Debug"
 				}
 			}
 
-			expand_style
+			expandable_panel_style "Category"
 			{
 				background_material "AlphaDarkBlue"
-				foreground_material "White"
-				text_material "White"
-				highlighted_background_material "DarkBlue"
-				highlighted_foreground_material "White"
-				highlighted_text_material "White"
-				pushed_background_material "DarkBlue"
-				pushed_foreground_material "White"
-				pushed_text_material "White"
-			}
-
-			content_style
-			{
-				background_invisible true
 				foreground_invisible true
+
+				header_style
+				{
+					background_material "AlphaDarkBlue"
+					foreground_invisible true
+
+					static_style "Name"
+					{
+						background_invisible true
+						foreground_invisible true
+						text_material "White"
+					}
+
+					static_style "Counter"
+					{
+						background_invisible true
+						foreground_invisible true
+						text_material "White"
+						font "Arial10"
+					}
+				}
+
+				expand_style
+				{
+					background_material "AlphaDarkBlue"
+					foreground_material "White"
+					text_material "White"
+					highlighted_background_material "DarkBlue"
+					highlighted_foreground_material "White"
+					highlighted_text_material "White"
+					pushed_background_material "DarkBlue"
+					pushed_foreground_material "White"
+					pushed_text_material "White"
+				}
+
+				content_style
+				{
+					background_invisible true
+					foreground_invisible true
+				}
 			}
 		}
 	}

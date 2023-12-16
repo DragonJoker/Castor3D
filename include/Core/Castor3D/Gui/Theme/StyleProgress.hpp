@@ -32,9 +32,10 @@ namespace castor3d
 			, m_titleMaterial{ getEngine().findMaterial( cuT( "White" ) ) }
 			, m_containerStyle{ name + "/Container", scene, engine }
 			, m_progressStyle{ name + "/Progress", scene, engine }
-			, m_textFontName{ fontName }
-			, m_textMaterial{ m_titleMaterial }
+			, m_labelStyle{ name + "/Label", scene, engine, fontName }
 		{
+			setTextMaterial( m_titleMaterial );
+			m_labelStyle.setBackgroundInvisible( true );
 		}
 
 		castor::String const & getTitleFontName()const
@@ -59,12 +60,12 @@ namespace castor3d
 
 		castor::String const & getTextFontName()const
 		{
-			return m_textFontName;
+			return m_labelStyle.getFontName();
 		}
 
 		MaterialObs getTextMaterial()const
 		{
-			return m_textMaterial;
+			return m_labelStyle.getForegroundMaterial();
 		}
 
 		void setTitleFontName( castor::String value )
@@ -87,14 +88,19 @@ namespace castor3d
 			return m_progressStyle;
 		}
 
+		StaticStyle & getLabelStyle()
+		{
+			return m_labelStyle;
+		}
+
 		void setTextFontName( castor::String value )
 		{
-			m_textFontName = std::move( value );
+			m_labelStyle.setFont( std::move( value ) );
 		}
 
 		void setTextMaterial( MaterialObs value )
 		{
-			m_textMaterial = value;
+			m_labelStyle.setTextMaterial( value );
 		}
 
 	private:
@@ -111,8 +117,7 @@ namespace castor3d
 		MaterialObs m_titleMaterial{};
 		PanelStyle m_containerStyle;
 		PanelStyle m_progressStyle;
-		castor::String m_textFontName{};
-		MaterialObs m_textMaterial{};
+		StaticStyle m_labelStyle;
 	};
 }
 

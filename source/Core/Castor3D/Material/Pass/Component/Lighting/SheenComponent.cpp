@@ -44,11 +44,9 @@ namespace castor3d
 
 	namespace sheen
 	{
-		static CU_ImplementAttributeParser( parserPassSheenFactor )
+		static CU_ImplementAttributeParserBlock( parserPassSheenFactor, PassContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
@@ -58,17 +56,15 @@ namespace castor3d
 			}
 			else
 			{
-				auto & component = getPassComponent< SheenComponent >( parsingContext );
+				auto & component = getPassComponent< SheenComponent >( *blockContext );
 				component.setSheenFactor( params[0]->get< castor::HdrRgbColour >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserPassRoughnessFactor )
+		static CU_ImplementAttributeParserBlock( parserPassRoughnessFactor, PassContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
@@ -78,7 +74,7 @@ namespace castor3d
 			}
 			else
 			{
-				auto & component = getPassComponent< SheenComponent >( parsingContext );
+				auto & component = getPassComponent< SheenComponent >( *blockContext );
 				component.setRoughnessFactor( params[0]->get< float >() );
 			}
 		}

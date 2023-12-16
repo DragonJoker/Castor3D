@@ -10,315 +10,273 @@ namespace castor3d
 {
 	namespace clrgrdcfg
 	{
-		static CU_ImplementAttributeParser( parserColourGrading )
+		static CU_ImplementAttributeParserBlock( parserColourGrading, CameraContext )
 		{
 		}
-		CU_EndAttributePush( CSCNSection::eColourGrading )
+		CU_EndAttributePushBlock( CSCNSection::eColourGrading, blockContext )
 
-		static CU_ImplementAttributeParser( parserPostExposure )
+		static CU_ImplementAttributeParserBlock( parserPostExposure, CameraContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
 			else
 			{
-				params[0]->get( parsingContext.colourGradingConfig.postExposure );
+				params[0]->get( blockContext->colourGradingConfig.postExposure );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserEnabled )
+		static CU_ImplementAttributeParserBlock( parserEnabled, CameraContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
 			else
 			{
-				params[0]->get( parsingContext.colourGradingConfig.enabled );
+				params[0]->get( blockContext->colourGradingConfig.enabled );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserEnableSplitToning )
+		static CU_ImplementAttributeParserBlock( parserEnableSplitToning, CameraContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
 			else
 			{
-				params[0]->get( parsingContext.colourGradingConfig.enableSplitToning );
+				params[0]->get( blockContext->colourGradingConfig.enableSplitToning );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserEnableShadowMidToneHighlight )
+		static CU_ImplementAttributeParserBlock( parserEnableShadowMidToneHighlight, CameraContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
 			else
 			{
-				params[0]->get( parsingContext.colourGradingConfig.enableShadowMidToneHighlight );
+				params[0]->get( blockContext->colourGradingConfig.enableShadowMidToneHighlight );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserEnableChannelMix )
+		static CU_ImplementAttributeParserBlock( parserEnableChannelMix, CameraContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
 			else
 			{
-				params[0]->get( parsingContext.colourGradingConfig.enableChannelMix );
+				params[0]->get( blockContext->colourGradingConfig.enableChannelMix );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserEnableWhiteBalance )
+		static CU_ImplementAttributeParserBlock( parserEnableWhiteBalance, CameraContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
 			else
 			{
-				params[0]->get( parsingContext.colourGradingConfig.enableWhiteBalance );
+				params[0]->get( blockContext->colourGradingConfig.enableWhiteBalance );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserEnableHueShift )
+		static CU_ImplementAttributeParserBlock( parserEnableHueShift, CameraContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
 			else
 			{
-				params[0]->get( parsingContext.colourGradingConfig.enableHueShift );
+				params[0]->get( blockContext->colourGradingConfig.enableHueShift );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserEnableContrast )
+		static CU_ImplementAttributeParserBlock( parserEnableContrast, CameraContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
 			else
 			{
-				params[0]->get( parsingContext.colourGradingConfig.enableContrast );
+				params[0]->get( blockContext->colourGradingConfig.enableContrast );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserWhiteBalance )
+		static CU_ImplementAttributeParserBlock( parserWhiteBalance, CameraContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
 			else
 			{
-				params[0]->get( parsingContext.colourGradingConfig.whiteBalance );
+				params[0]->get( blockContext->colourGradingConfig.whiteBalance );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserFilter )
+		static CU_ImplementAttributeParserBlock( parserFilter, CameraContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
 			else
 			{
-				params[0]->get( parsingContext.colourGradingConfig.colourFilter );
+				params[0]->get( blockContext->colourGradingConfig.colourFilter );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserMidGray )
+		static CU_ImplementAttributeParserBlock( parserMidGray, CameraContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
 			else
 			{
-				params[0]->get( parsingContext.colourGradingConfig.midGray );
+				params[0]->get( blockContext->colourGradingConfig.midGray );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserContrast )
+		static CU_ImplementAttributeParserBlock( parserContrast, CameraContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
 			else
 			{
-				params[0]->get( parsingContext.colourGradingConfig.contrast );
+				params[0]->get( blockContext->colourGradingConfig.contrast );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserSaturation )
+		static CU_ImplementAttributeParserBlock( parserSaturation, CameraContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
 			else
 			{
-				params[0]->get( parsingContext.colourGradingConfig.saturation );
+				params[0]->get( blockContext->colourGradingConfig.saturation );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserHueShift )
+		static CU_ImplementAttributeParserBlock( parserHueShift, CameraContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
 			else
 			{
-				params[0]->get( parsingContext.colourGradingConfig.hueShift );
+				params[0]->get( blockContext->colourGradingConfig.hueShift );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserSplitToningShadows )
+		static CU_ImplementAttributeParserBlock( parserSplitToningShadows, CameraContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
 			else
 			{
-				params[0]->get( parsingContext.colourGradingConfig.splitToningShadows );
+				params[0]->get( blockContext->colourGradingConfig.splitToningShadows );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserSplitToningHighlights )
+		static CU_ImplementAttributeParserBlock( parserSplitToningHighlights, CameraContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
 			else
 			{
-				params[0]->get( parsingContext.colourGradingConfig.splitToningHighlights );
+				params[0]->get( blockContext->colourGradingConfig.splitToningHighlights );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserSplitToningBalance )
+		static CU_ImplementAttributeParserBlock( parserSplitToningBalance, CameraContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
 			else
 			{
-				params[0]->get( parsingContext.colourGradingConfig.splitToningBalance );
+				params[0]->get( blockContext->colourGradingConfig.splitToningBalance );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserChannelMixRed )
+		static CU_ImplementAttributeParserBlock( parserChannelMixRed, CameraContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
 			else
 			{
-				params[0]->get( parsingContext.colourGradingConfig.channelMixRed );
+				params[0]->get( blockContext->colourGradingConfig.channelMixRed );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserChannelMixGreen )
+		static CU_ImplementAttributeParserBlock( parserChannelMixGreen, CameraContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
 			else
 			{
-				params[0]->get( parsingContext.colourGradingConfig.channelMixGreen );
+				params[0]->get( blockContext->colourGradingConfig.channelMixGreen );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserChannelMixBlue )
+		static CU_ImplementAttributeParserBlock( parserChannelMixBlue, CameraContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
 			else
 			{
-				params[0]->get( parsingContext.colourGradingConfig.channelMixBlue );
+				params[0]->get( blockContext->colourGradingConfig.channelMixBlue );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserShadowsRange )
+		static CU_ImplementAttributeParserBlock( parserShadowsRange, CameraContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
@@ -327,16 +285,14 @@ namespace castor3d
 			{
 				castor::Point2f range;
 				params[0]->get( range );
-				parsingContext.colourGradingConfig.shadowsStart = range->x;
-				parsingContext.colourGradingConfig.shadowsEnd = range->y;
+				blockContext->colourGradingConfig.shadowsStart = range->x;
+				blockContext->colourGradingConfig.shadowsEnd = range->y;
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserHighlightsRange )
+		static CU_ImplementAttributeParserBlock( parserHighlightsRange, CameraContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
@@ -345,53 +301,47 @@ namespace castor3d
 			{
 				castor::Point2f range;
 				params[0]->get( range );
-				parsingContext.colourGradingConfig.highlightsStart = range->x;
-				parsingContext.colourGradingConfig.highlightsEnd = range->y;
+				blockContext->colourGradingConfig.highlightsStart = range->x;
+				blockContext->colourGradingConfig.highlightsEnd = range->y;
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserShadows )
+		static CU_ImplementAttributeParserBlock( parserShadows, CameraContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
 			else
 			{
-				params[0]->get( parsingContext.colourGradingConfig.shadows );
+				params[0]->get( blockContext->colourGradingConfig.shadows );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserMidtones )
+		static CU_ImplementAttributeParserBlock( parserMidtones, CameraContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
 			else
 			{
-				params[0]->get( parsingContext.colourGradingConfig.midtones );
+				params[0]->get( blockContext->colourGradingConfig.midtones );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserHighlights )
+		static CU_ImplementAttributeParserBlock( parserHighlights, CameraContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
 			else
 			{
-				params[0]->get( parsingContext.colourGradingConfig.highlights );
+				params[0]->get( blockContext->colourGradingConfig.highlights );
 			}
 		}
 		CU_EndAttribute()
@@ -481,31 +431,35 @@ namespace castor3d
 	void ColourGradingConfig::addParsers( castor::AttributeParsers & result )
 	{
 		using namespace castor;
-		addParser( result, uint32_t( CSCNSection::eCamera ), cuT( "colour_grading" ), clrgrdcfg::parserColourGrading );
-		addParser( result, uint32_t( CSCNSection::eColourGrading ), cuT( "enabled" ), clrgrdcfg::parserEnabled, { makeParameter< ParameterType::eBool >() } );
-		addParser( result, uint32_t( CSCNSection::eColourGrading ), cuT( "enable_split_toning" ), clrgrdcfg::parserEnableSplitToning, { makeParameter< ParameterType::eBool >() } );
-		addParser( result, uint32_t( CSCNSection::eColourGrading ), cuT( "enable_contrast" ), clrgrdcfg::parserEnableContrast, { makeParameter< ParameterType::eBool >() } );
-		addParser( result, uint32_t( CSCNSection::eColourGrading ), cuT( "enable_white_balance" ), clrgrdcfg::parserEnableWhiteBalance, { makeParameter< ParameterType::eBool >() } );
-		addParser( result, uint32_t( CSCNSection::eColourGrading ), cuT( "enable_channel_mix" ), clrgrdcfg::parserEnableChannelMix, { makeParameter< ParameterType::eBool >() } );
-		addParser( result, uint32_t( CSCNSection::eColourGrading ), cuT( "enable_shadow_midtone_hilight" ), clrgrdcfg::parserEnableShadowMidToneHighlight, { makeParameter< ParameterType::eBool >() } );
-		addParser( result, uint32_t( CSCNSection::eColourGrading ), cuT( "enable_hue_shift" ), clrgrdcfg::parserEnableHueShift, { makeParameter< ParameterType::eBool >() } );
-		addParser( result, uint32_t( CSCNSection::eColourGrading ), cuT( "post_exposure" ), clrgrdcfg::parserPostExposure, { makeParameter< ParameterType::eFloat >() } );
-		addParser( result, uint32_t( CSCNSection::eColourGrading ), cuT( "mid_gray" ), clrgrdcfg::parserMidGray, { makeParameter< ParameterType::eFloat >() } );
-		addParser( result, uint32_t( CSCNSection::eColourGrading ), cuT( "contrast" ), clrgrdcfg::parserContrast, { makeParameter< ParameterType::eFloat >() } );
-		addParser( result, uint32_t( CSCNSection::eColourGrading ), cuT( "split_toning_balance" ), clrgrdcfg::parserSplitToningBalance, { makeParameter< ParameterType::eFloat >() } );
-		addParser( result, uint32_t( CSCNSection::eColourGrading ), cuT( "saturation" ), clrgrdcfg::parserSaturation, { makeParameter< ParameterType::eFloat >() } );
-		addParser( result, uint32_t( CSCNSection::eColourGrading ), cuT( "hue_shift" ), clrgrdcfg::parserHueShift, { makeParameter< ParameterType::eFloat >() } );
-		addParser( result, uint32_t( CSCNSection::eColourGrading ), cuT( "shadows_range" ), clrgrdcfg::parserShadowsRange, { makeParameter< ParameterType::ePoint2F >() } );
-		addParser( result, uint32_t( CSCNSection::eColourGrading ), cuT( "highlights_range" ), clrgrdcfg::parserHighlightsRange, { makeParameter< ParameterType::ePoint2F >() } );
-		addParser( result, uint32_t( CSCNSection::eColourGrading ), cuT( "white_balance" ), clrgrdcfg::parserWhiteBalance, { makeParameter< ParameterType::ePoint3F >() } );
-		addParser( result, uint32_t( CSCNSection::eColourGrading ), cuT( "colour_filter" ), clrgrdcfg::parserFilter, { makeParameter< ParameterType::ePoint3F >() } );
-		addParser( result, uint32_t( CSCNSection::eColourGrading ), cuT( "split_toning_shadows" ), clrgrdcfg::parserSplitToningShadows, { makeParameter< ParameterType::ePoint3F >() } );
-		addParser( result, uint32_t( CSCNSection::eColourGrading ), cuT( "split_toning_highlights" ), clrgrdcfg::parserSplitToningHighlights, { makeParameter< ParameterType::ePoint3F >() } );
-		addParser( result, uint32_t( CSCNSection::eColourGrading ), cuT( "channel_mix_red" ), clrgrdcfg::parserChannelMixRed, { makeParameter< ParameterType::ePoint3F >() } );
-		addParser( result, uint32_t( CSCNSection::eColourGrading ), cuT( "channel_mix_green" ), clrgrdcfg::parserChannelMixGreen, { makeParameter< ParameterType::ePoint3F >() } );
-		addParser( result, uint32_t( CSCNSection::eColourGrading ), cuT( "channel_mix_blue" ), clrgrdcfg::parserChannelMixBlue, { makeParameter< ParameterType::ePoint3F >() } );
-		addParser( result, uint32_t( CSCNSection::eColourGrading ), cuT( "shadows" ), clrgrdcfg::parserShadows, { makeParameter< ParameterType::ePoint3F >() } );
-		addParser( result, uint32_t( CSCNSection::eColourGrading ), cuT( "midtones" ), clrgrdcfg::parserMidtones, { makeParameter< ParameterType::ePoint3F >() } );
-		addParser( result, uint32_t( CSCNSection::eColourGrading ), cuT( "highlights" ), clrgrdcfg::parserHighlights, { makeParameter< ParameterType::ePoint3F >() } );
+		BlockParserContextT< CameraContext > cameraContext{ result, CSCNSection::eCamera, CSCNSection::eScene };
+		BlockParserContextT< CameraContext > gradingContext{ result, CSCNSection::eColourGrading, CSCNSection::eCamera };
+
+		cameraContext.addPushParser( cuT( "colour_grading" ), CSCNSection::eColourGrading, clrgrdcfg::parserColourGrading );
+		gradingContext.addParser( cuT( "enabled" ), clrgrdcfg::parserEnabled, { makeParameter< ParameterType::eBool >() } );
+		gradingContext.addParser( cuT( "enable_split_toning" ), clrgrdcfg::parserEnableSplitToning, { makeParameter< ParameterType::eBool >() } );
+		gradingContext.addParser( cuT( "enable_contrast" ), clrgrdcfg::parserEnableContrast, { makeParameter< ParameterType::eBool >() } );
+		gradingContext.addParser( cuT( "enable_white_balance" ), clrgrdcfg::parserEnableWhiteBalance, { makeParameter< ParameterType::eBool >() } );
+		gradingContext.addParser( cuT( "enable_channel_mix" ), clrgrdcfg::parserEnableChannelMix, { makeParameter< ParameterType::eBool >() } );
+		gradingContext.addParser( cuT( "enable_shadow_midtone_hilight" ), clrgrdcfg::parserEnableShadowMidToneHighlight, { makeParameter< ParameterType::eBool >() } );
+		gradingContext.addParser( cuT( "enable_hue_shift" ), clrgrdcfg::parserEnableHueShift, { makeParameter< ParameterType::eBool >() } );
+		gradingContext.addParser( cuT( "post_exposure" ), clrgrdcfg::parserPostExposure, { makeParameter< ParameterType::eFloat >() } );
+		gradingContext.addParser( cuT( "mid_gray" ), clrgrdcfg::parserMidGray, { makeParameter< ParameterType::eFloat >() } );
+		gradingContext.addParser( cuT( "contrast" ), clrgrdcfg::parserContrast, { makeParameter< ParameterType::eFloat >() } );
+		gradingContext.addParser( cuT( "split_toning_balance" ), clrgrdcfg::parserSplitToningBalance, { makeParameter< ParameterType::eFloat >() } );
+		gradingContext.addParser( cuT( "saturation" ), clrgrdcfg::parserSaturation, { makeParameter< ParameterType::eFloat >() } );
+		gradingContext.addParser( cuT( "hue_shift" ), clrgrdcfg::parserHueShift, { makeParameter< ParameterType::eFloat >() } );
+		gradingContext.addParser( cuT( "shadows_range" ), clrgrdcfg::parserShadowsRange, { makeParameter< ParameterType::ePoint2F >() } );
+		gradingContext.addParser( cuT( "highlights_range" ), clrgrdcfg::parserHighlightsRange, { makeParameter< ParameterType::ePoint2F >() } );
+		gradingContext.addParser( cuT( "white_balance" ), clrgrdcfg::parserWhiteBalance, { makeParameter< ParameterType::ePoint3F >() } );
+		gradingContext.addParser( cuT( "colour_filter" ), clrgrdcfg::parserFilter, { makeParameter< ParameterType::ePoint3F >() } );
+		gradingContext.addParser( cuT( "split_toning_shadows" ), clrgrdcfg::parserSplitToningShadows, { makeParameter< ParameterType::ePoint3F >() } );
+		gradingContext.addParser( cuT( "split_toning_highlights" ), clrgrdcfg::parserSplitToningHighlights, { makeParameter< ParameterType::ePoint3F >() } );
+		gradingContext.addParser( cuT( "channel_mix_red" ), clrgrdcfg::parserChannelMixRed, { makeParameter< ParameterType::ePoint3F >() } );
+		gradingContext.addParser( cuT( "channel_mix_green" ), clrgrdcfg::parserChannelMixGreen, { makeParameter< ParameterType::ePoint3F >() } );
+		gradingContext.addParser( cuT( "channel_mix_blue" ), clrgrdcfg::parserChannelMixBlue, { makeParameter< ParameterType::ePoint3F >() } );
+		gradingContext.addParser( cuT( "shadows" ), clrgrdcfg::parserShadows, { makeParameter< ParameterType::ePoint3F >() } );
+		gradingContext.addParser( cuT( "midtones" ), clrgrdcfg::parserMidtones, { makeParameter< ParameterType::ePoint3F >() } );
+		gradingContext.addParser( cuT( "highlights" ), clrgrdcfg::parserHighlights, { makeParameter< ParameterType::ePoint3F >() } );
+		gradingContext.addDefaultPopParser();
 	}
 }

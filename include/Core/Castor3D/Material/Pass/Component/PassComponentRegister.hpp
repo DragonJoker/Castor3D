@@ -187,7 +187,7 @@ namespace castor3d
 			, castor::String const & tabs
 			, castor::StringStream & file )const;
 		C3D_API void fillChannels( PassComponentTextureFlag const & flags
-			, SceneFileContext & parsingContext );
+			, TextureContext & parsingContext );
 		C3D_API TextureCombine filterTextureFlags( ComponentModeFlags filter
 			, TextureCombine const & combine )const;
 		C3D_API PassComponentTextureFlag getColourMapFlags()const;

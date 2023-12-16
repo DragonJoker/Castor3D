@@ -39,11 +39,9 @@ namespace castor3d
 
 	namespace reflcmp
 	{
-		static CU_ImplementAttributeParser( parserPassReflections )
+		static CU_ImplementAttributeParserBlock( parserPassReflections, PassContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
@@ -53,7 +51,7 @@ namespace castor3d
 			}
 			else
 			{
-				auto & component = getPassComponent< ReflectionComponent >( parsingContext );
+				auto & component = getPassComponent< ReflectionComponent >( *blockContext );
 				component.enableReflections( params[0]->get< bool >() );
 			}
 		}

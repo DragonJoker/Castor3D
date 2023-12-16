@@ -44,11 +44,9 @@ namespace castor3d
 
 	namespace irid
 	{
-		static CU_ImplementAttributeParser( parserPassIridescenceFactor )
+		static CU_ImplementAttributeParserBlock( parserPassIridescenceFactor, PassContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
@@ -58,17 +56,15 @@ namespace castor3d
 			}
 			else
 			{
-				auto & component = getPassComponent< IridescenceComponent >( parsingContext );
+				auto & component = getPassComponent< IridescenceComponent >( *blockContext );
 				component.setFactor( params[0]->get< float >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserPassIridescenceIor )
+		static CU_ImplementAttributeParserBlock( parserPassIridescenceIor, PassContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
@@ -78,17 +74,15 @@ namespace castor3d
 			}
 			else
 			{
-				auto & component = getPassComponent< IridescenceComponent >( parsingContext );
+				auto & component = getPassComponent< IridescenceComponent >( *blockContext );
 				component.setIor( params[0]->get< float >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserPassIridescenceMinThickness )
+		static CU_ImplementAttributeParserBlock( parserPassIridescenceMinThickness, PassContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
@@ -98,17 +92,15 @@ namespace castor3d
 			}
 			else
 			{
-				auto & component = getPassComponent< IridescenceComponent >( parsingContext );
+				auto & component = getPassComponent< IridescenceComponent >( *blockContext );
 				component.setMinThickness( params[0]->get< float >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserPassIridescenceMaxThickness )
+		static CU_ImplementAttributeParserBlock( parserPassIridescenceMaxThickness, PassContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
@@ -118,7 +110,7 @@ namespace castor3d
 			}
 			else
 			{
-				auto & component = getPassComponent< IridescenceComponent >( parsingContext );
+				auto & component = getPassComponent< IridescenceComponent >( *blockContext );
 				component.setMaxThickness( params[0]->get< float >() );
 			}
 		}

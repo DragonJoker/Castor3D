@@ -71,26 +71,29 @@ namespace castor3d
 			eTransmittanceProfile = CU_MakeSectionName( 'T', 'R', 'P', 'R' ),
 		};
 
-		static CU_ImplementAttributeParser( parserPassSubsurfaceScattering )
+		struct SubsurfaceScatteringContext
 		{
-			auto & parsingContext = getParserContext( context );
+			SubsurfaceScatteringUPtr subsurfaceScattering{};
+			PassContext * pass{};
+		};
 
-			if ( !parsingContext.pass )
+		static CU_ImplementAttributeParserNewBlock( parserPassSubsurfaceScattering, PassContext, SubsurfaceScatteringContext )
+		{
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
 			else
 			{
-				parsingContext.subsurfaceScattering = castor::makeUnique< SubsurfaceScattering >();
+				newBlockContext->pass = blockContext;
+				newBlockContext->subsurfaceScattering = castor::makeUnique< SubsurfaceScattering >();
 			}
 		}
-		CU_EndAttributePush( Section::eSubsurfaceScattering )
+		CU_EndAttributePushNewBlock( Section::eSubsurfaceScattering )
 
-		static CU_ImplementAttributeParser( parserSubsurfaceScatteringStrength )
+		static CU_ImplementAttributeParserBlock( parserSubsurfaceScatteringStrength, SubsurfaceScatteringContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.subsurfaceScattering )
+			if ( !blockContext->subsurfaceScattering )
 			{
 				CU_ParsingError( cuT( "No SubsurfaceScattering initialised." ) );
 			}
@@ -100,16 +103,14 @@ namespace castor3d
 			}
 			else
 			{
-				parsingContext.subsurfaceScattering->setStrength( params[0]->get< float >() );
+				blockContext->subsurfaceScattering->setStrength( params[0]->get< float >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserSubsurfaceScatteringGaussianWidth )
+		static CU_ImplementAttributeParserBlock( parserSubsurfaceScatteringGaussianWidth, SubsurfaceScatteringContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.subsurfaceScattering )
+			if ( !blockContext->subsurfaceScattering )
 			{
 				CU_ParsingError( cuT( "No SubsurfaceScattering initialised." ) );
 			}
@@ -119,16 +120,14 @@ namespace castor3d
 			}
 			else
 			{
-				parsingContext.subsurfaceScattering->setGaussianWidth( params[0]->get< float >() );
+				blockContext->subsurfaceScattering->setGaussianWidth( params[0]->get< float >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserSubsurfaceScatteringThicknessScale )
+		static CU_ImplementAttributeParserBlock( parserSubsurfaceScatteringThicknessScale, SubsurfaceScatteringContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.subsurfaceScattering )
+			if ( !blockContext->subsurfaceScattering )
 			{
 				CU_ParsingError( cuT( "No SubsurfaceScattering initialised." ) );
 			}
@@ -138,43 +137,37 @@ namespace castor3d
 			}
 			else
 			{
-				parsingContext.subsurfaceScattering->setThicknessScale( params[0]->get< float >() );
+				blockContext->subsurfaceScattering->setThicknessScale( params[0]->get< float >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserSubsurfaceScatteringTransmittanceProfile )
+		static CU_ImplementAttributeParserBlock( parserSubsurfaceScatteringTransmittanceProfile, SubsurfaceScatteringContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.subsurfaceScattering )
+			if ( !blockContext->subsurfaceScattering )
 			{
 				CU_ParsingError( cuT( "No SubsurfaceScattering initialised." ) );
 			}
 		}
-		CU_EndAttributePush( Section::eTransmittanceProfile )
+		CU_EndAttributePushBlock( Section::eTransmittanceProfile, blockContext )
 
-		static CU_ImplementAttributeParser( parserSubsurfaceScatteringEnd )
+		static CU_ImplementAttributeParserBlock( parserSubsurfaceScatteringEnd, SubsurfaceScatteringContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.subsurfaceScattering )
+			if ( !blockContext->subsurfaceScattering )
 			{
 				CU_ParsingError( cuT( "No SubsurfaceScattering initialised." ) );
 			}
 			else
 			{
-				auto & component = getPassComponent< SubsurfaceScatteringComponent >( parsingContext );
-				component.setSubsurfaceScattering( std::move( parsingContext.subsurfaceScattering ) );
+				auto & component = getPassComponent< SubsurfaceScatteringComponent >( *blockContext->pass );
+				component.setSubsurfaceScattering( std::move( blockContext->subsurfaceScattering ) );
 			}
 		}
 		CU_EndAttributePop()
 
-		static CU_ImplementAttributeParser( parserTransmittanceProfileFactor )
+		static CU_ImplementAttributeParserBlock( parserTransmittanceProfileFactor, SubsurfaceScatteringContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.subsurfaceScattering )
+			if ( !blockContext->subsurfaceScattering )
 			{
 				CU_ParsingError( cuT( "No SubsurfaceScattering initialised." ) );
 			}
@@ -186,7 +179,7 @@ namespace castor3d
 			{
 				castor::Point4f value;
 				params[0]->get( value );
-				parsingContext.subsurfaceScattering->addProfileFactor( value );
+				blockContext->subsurfaceScattering->addProfileFactor( value );
 			}
 		}
 		CU_EndAttribute()
@@ -269,6 +262,7 @@ namespace castor3d
 	{
 		castor::addParserT( parsers
 			, CSCNSection::ePass
+			, sss::Section::eSubsurfaceScattering
 			, cuT( "subsurface_scattering" )
 			, sss::parserPassSubsurfaceScattering );
 
@@ -289,10 +283,12 @@ namespace castor3d
 			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
 		castor::addParserT( parsers
 			, sss::Section::eSubsurfaceScattering
+			, sss::Section::eTransmittanceProfile
 			, cuT( "transmittance_profile" )
 			, sss::parserSubsurfaceScatteringTransmittanceProfile );
 		castor::addParserT( parsers
 			, sss::Section::eSubsurfaceScattering
+			, CSCNSection::ePass
 			, cuT( "}" )
 			, sss::parserSubsurfaceScatteringEnd );
 

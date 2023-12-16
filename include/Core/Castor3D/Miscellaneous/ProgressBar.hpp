@@ -29,6 +29,7 @@ namespace castor3d
 		C3D_API void initLocalRange( castor::String const & globalLabel
 			, uint32_t value );
 		C3D_API void stepLocal( castor::String const & label );
+		C3D_API void setLocalStep( castor::String const & label, uint32_t count );
 
 		void lock()
 		{
@@ -49,6 +50,7 @@ namespace castor3d
 			void setLabel( castor::String const & value );
 			void step( castor::String const & label );
 			void step();
+			void setStep( castor::String const & label, int32_t value );
 			void setRange( int32_t max );
 			void incRange( int32_t mod );
 			int32_t getIndex()const;

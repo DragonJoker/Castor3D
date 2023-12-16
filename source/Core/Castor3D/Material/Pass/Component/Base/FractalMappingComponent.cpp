@@ -38,11 +38,9 @@ namespace castor3d
 
 	namespace fractal
 	{
-		static CU_ImplementAttributeParser( parserPassFractal )
+		static CU_ImplementAttributeParserBlock( parserPassFractal, PassContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
@@ -54,7 +52,7 @@ namespace castor3d
 			{
 				bool value{ false };
 				params[0]->get( value );
-				auto & component = getPassComponent< FractalMappingComponent >( parsingContext );
+				auto & component = getPassComponent< FractalMappingComponent >( *blockContext );
 				component.setFractal( value );
 			}
 		}

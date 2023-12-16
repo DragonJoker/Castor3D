@@ -9,6 +9,7 @@ See LICENSE file in root folder
 #include "WeatherConfig.hpp"
 
 #include <Castor3D/Miscellaneous/Parameter.hpp>
+#include <Castor3D/Scene/SceneFileParser.hpp>
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/FileParser/FileParserContext.hpp>
@@ -18,9 +19,9 @@ namespace atmosphere_scattering
 	static castor::String const PluginType = "atmospheric_scattering";
 	static castor::String const PluginName = "Atmospheric Scattering";
 
-	struct ParserContext
+	struct AtmosphereContext
 	{
-		castor3d::Engine * engine{ nullptr };
+		castor3d::SceneRPtr scene{};
 		castor::Point2ui transmittanceDim{ 256u, 64u };
 		uint32_t multiScatterDim{ 32u };
 		uint32_t atmosphereVolumeDim{ 32u };
@@ -33,7 +34,7 @@ namespace atmosphere_scattering
 		WeatherConfig weather{};
 		CloudsConfig clouds{};
 		DensityProfileLayer * densityLayer{};
-		AtmosphereBackgroundUPtr background;
+		AtmosphereBackgroundUPtr background{};
 	};
 
 	enum class AtmosphereSection
@@ -45,65 +46,65 @@ namespace atmosphere_scattering
 		eClouds = CU_MakeSectionName( 'A', 'T', 'C', 'L' ),
 	};
 
-	CU_DeclareAttributeParser( parserAtmosphereScattering )
-	CU_DeclareAttributeParser( parserAtmosphereScatteringEnd )
-	CU_DeclareAttributeParser( parserSunNode )
-	CU_DeclareAttributeParser( parserPlanetNode )
-	CU_DeclareAttributeParser( parserTransmittanceResolution )
-	CU_DeclareAttributeParser( parserMultiScatterResolution )
-	CU_DeclareAttributeParser( parserAtmosphereVolumeResolution )
-	CU_DeclareAttributeParser( parserSkyViewResolution )
-	CU_DeclareAttributeParser( parserSunIlluminance )
-	CU_DeclareAttributeParser( parserSunIlluminanceScale )
-	CU_DeclareAttributeParser( parserRayMarchMinSPP )
-	CU_DeclareAttributeParser( parserRayMarchMaxSPP )
-	CU_DeclareAttributeParser( parserMultipleScatteringFactor )
-	CU_DeclareAttributeParser( parserSolarIrradiance )
-	CU_DeclareAttributeParser( parserSunAngularRadius )
-	CU_DeclareAttributeParser( parserAbsorptionExtinction )
-	CU_DeclareAttributeParser( parserMaxSunZenithAngle )
-	CU_DeclareAttributeParser( parserRayleighScattering )
-	CU_DeclareAttributeParser( parserMieScattering )
-	CU_DeclareAttributeParser( parserMiePhaseFunctionG )
-	CU_DeclareAttributeParser( parserMieExtinction )
-	CU_DeclareAttributeParser( parserBottomRadius )
-	CU_DeclareAttributeParser( parserTopRadius )
-	CU_DeclareAttributeParser( parserGroundAlbedo )
-	CU_DeclareAttributeParser( parserMinRayleighDensity )
-	CU_DeclareAttributeParser( parserMaxRayleighDensity )
-	CU_DeclareAttributeParser( parserMinMieDensity )
-	CU_DeclareAttributeParser( parserMaxMieDensity )
-	CU_DeclareAttributeParser( parserMinAbsorptionDensity )
-	CU_DeclareAttributeParser( parserMaxAbsorptionDensity )
-	CU_DeclareAttributeParser( parserDensityLayerWidth )
-	CU_DeclareAttributeParser( parserDensityExpTerm )
-	CU_DeclareAttributeParser( parserDensityExpScale )
-	CU_DeclareAttributeParser( parserDensityLinearTerm )
-	CU_DeclareAttributeParser( parserDensityConstantTerm )
-	CU_DeclareAttributeParser( parserDensityEnd )
-	CU_DeclareAttributeParser( parserWeather )
-	CU_DeclareAttributeParser( parserWeatherAmplitude )
-	CU_DeclareAttributeParser( parserWeatherFrequency )
-	CU_DeclareAttributeParser( parserWeatherScale )
-	CU_DeclareAttributeParser( parserWeatherOctaves )
-	CU_DeclareAttributeParser( parserWorleyResolution )
-	CU_DeclareAttributeParser( parserPerlinWorleyResolution )
-	CU_DeclareAttributeParser( parserCurlResolution )
-	CU_DeclareAttributeParser( parserWeatherResolution )
-	CU_DeclareAttributeParser( parserClouds )
-	CU_DeclareAttributeParser( parserCloudsWindDirection )
-	CU_DeclareAttributeParser( parserCloudsSpeed )
-	CU_DeclareAttributeParser( parserCloudsCoverage )
-	CU_DeclareAttributeParser( parserCloudsCrispiness )
-	CU_DeclareAttributeParser( parserCloudsCurliness )
-	CU_DeclareAttributeParser( parserCloudsDensity )
-	CU_DeclareAttributeParser( parserCloudsAbsorption )
-	CU_DeclareAttributeParser( parserCloudsInnerRadius )
-	CU_DeclareAttributeParser( parserCloudsOuterRadius )
-	CU_DeclareAttributeParser( parserCloudsTopColour )
-	CU_DeclareAttributeParser( parserCloudsBottomColour )
-	CU_DeclareAttributeParser( parserCloudsEnablePowder )
-	CU_DeclareAttributeParser( parserCloudsTopOffset )
+	CU_DeclareAttributeParserBlock( parserAtmosphereScattering, castor3d::SceneContext )
+	CU_DeclareAttributeParserBlock( parserAtmosphereScatteringEnd, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserSunNode, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserPlanetNode, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserTransmittanceResolution, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserMultiScatterResolution, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserAtmosphereVolumeResolution, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserSkyViewResolution, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserSunIlluminance, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserSunIlluminanceScale, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserRayMarchMinSPP, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserRayMarchMaxSPP, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserMultipleScatteringFactor, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserSolarIrradiance, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserSunAngularRadius, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserAbsorptionExtinction, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserMaxSunZenithAngle, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserRayleighScattering, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserMieScattering, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserMiePhaseFunctionG, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserMieExtinction, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserBottomRadius, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserTopRadius, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserGroundAlbedo, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserMinRayleighDensity, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserMaxRayleighDensity, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserMinMieDensity, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserMaxMieDensity, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserMinAbsorptionDensity, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserMaxAbsorptionDensity, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserDensityLayerWidth, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserDensityExpTerm, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserDensityExpScale, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserDensityLinearTerm, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserDensityConstantTerm, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserDensityEnd, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserWeather, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserWeatherAmplitude, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserWeatherFrequency, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserWeatherScale, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserWeatherOctaves, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserWorleyResolution, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserPerlinWorleyResolution, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserCurlResolution, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserWeatherResolution, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserClouds, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserCloudsWindDirection, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserCloudsSpeed, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserCloudsCoverage, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserCloudsCrispiness, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserCloudsCurliness, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserCloudsDensity, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserCloudsAbsorption, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserCloudsInnerRadius, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserCloudsOuterRadius, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserCloudsTopColour, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserCloudsBottomColour, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserCloudsEnablePowder, AtmosphereContext )
+	CU_DeclareAttributeParserBlock( parserCloudsTopOffset, AtmosphereContext )
 }
 
 #endif

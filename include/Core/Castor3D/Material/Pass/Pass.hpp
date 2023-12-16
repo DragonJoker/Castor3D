@@ -335,7 +335,8 @@ namespace castor3d
 		C3D_API void fillConfig( TextureConfiguration & config
 			, ConfigurationVisitorBase & vis );
 
-		C3D_API static void addParsers( castor::AttributeParsers & result );
+		C3D_API static void addParsers( castor::AttributeParsers & result
+			, castor::UInt32StrMap const & textureChannels );
 
 		C3D_API static float computeRoughnessFromGlossiness( float glossiness );
 		C3D_API static float computeGlossinessFromRoughness( float roughness );

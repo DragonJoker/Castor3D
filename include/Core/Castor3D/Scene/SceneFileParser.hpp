@@ -22,6 +22,7 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/ParticleSystem/ParticleModule.hpp"
 
 #include "Castor3D/Buffer/UniformBuffer.hpp"
+#include "Castor3D/Gui/Layout/LayoutItemFlags.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
@@ -38,6 +39,8 @@ See LICENSE file in root folder
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/FileParser/FileParserContext.hpp>
+
+#include <stack>
 
 namespace castor3d
 {
@@ -105,162 +108,394 @@ namespace castor3d
 		eColourGrading = CU_MakeSectionName( 'C', 'L', 'G', 'D' ),
 	};
 
-	class SceneFileContext
+	struct RootContext;
+
+	struct OverlayContext
 	{
-	public:
-		/**
-		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	logger	The logger instance.
-		 *\param[in]	parser	The parser.
-		 *\~french
-		 *\brief		Constructeur.
-		 *\param[in]	logger	L'instance du logger.
-		 *\param[in]	parser	L'analyseur.
-		 */
-		C3D_API SceneFileContext( castor::LoggerInstance & logger
-			, SceneFileParser * parser );
-		/**
-		 *\~english
-		 *\brief		Initialises all variables.
-		 *\~french
-		 *\brief		Initialise toutes les variables.
-		 */
-		C3D_API void initialise();
-
-	public:
-		struct SceneImportConfig
-		{
-			castor::PathArray files;
-			castor::PathArray animFiles;
-			castor::String prefix;
-			std::map< PassComponentTextureFlag, TextureConfiguration > textureRemaps;
-			float rescale{ 1.0f };
-			float pitch{ 0.0f };
-			float yaw{ 0.0f };
-			float roll{ 0.0f };
-			bool noOptimisations{ false };
-			float emissiveMult{ 1.0f };
-			std::map< PassComponentTextureFlag, TextureConfiguration >::iterator textureRemapIt;
-			castor::String centerCamera;
-			castor::String preferredImporter{ cuT( "any" ) };
-		};
-
-		struct SceneNodeConfig
-		{
-			bool isCameraNode{};
-			bool isStatic{};
-			castor::String name;
-			SceneNode * parent{};
-			castor::Point3f position{};
-			castor::Quaternion orientation{ castor::Quaternion::identity() };
-			castor::Point3f scale{ 1.0f, 1.0f, 1.0f };
-		};
-
-		struct TextureConfig
-		{
-			castor::Path folder{};
-			castor::Path relative{};
-			castor::ImageRPtr image{};
-			TextureConfiguration configuration{};
-			RenderTargetRPtr renderTarget{};
-		};
-
-		castor::LoggerInstance * logger{};
-		castor::PathArray files;
-		castor::PathArray csnaFiles;
-		SceneRPtr scene{};
-		SceneUPtr ownScene{};
-		RenderWindowDesc window{};
-		bool inWindow{};
-		SceneNodeConfig nodeConfig{};
-		SceneNodeRPtr parentNode{};
-		GeometryUPtr ownGeometry{};
-		GeometryRPtr geometry{};
-		SkeletonRPtr skeleton{};
-		MeshResPtr mesh{};
-		MeshRes ownMesh{};
-		SubmeshRPtr submesh{};
-		LightUPtr ownLight{};
-		LightRPtr light{};
-		castor::PixelFormat hdrPixelFormat{};
-		castor::PixelFormat srgbPixelFormat{};
-		MaterialObs material{};
-		MaterialPtr ownMaterial{};
-		bool createMaterial{ true };
-		bool enableFullLoading{ false };
-		uint32_t passIndex{};
-		SamplerObs sampler{};
-		SamplerPtr ownSampler{};
-		TargetType targetType{};
-		RenderTargetRPtr renderTarget{};
-		PassRPtr pass{};
-		PassComponent * passComponent{};
-		SubmeshComponent * submeshComponent{};
-		bool createPass{ true };
-		uint32_t mipLevels{};
-		uint32_t unitIndex{};
-		ShaderProgramRPtr shaderProgram{};
-		castor::PxBufferBaseUPtr buffer{};
-		VkShaderStageFlagBits shaderStage{};
-		UniformBufferBaseUPtr uniformBuffer{};
 		struct OverlayPtr
 		{
 			OverlayUPtr uptr{};
 			OverlayRPtr rptr{};
 		};
+		SceneRPtr scene{};
 		OverlayPtr overlay;
 		std::vector< OverlayPtr > parentOverlays{};
+	};
+
+	struct MaterialContext
+	{
+		SceneRPtr scene{};
+		castor::String name{};
+		MaterialObs material{};
+		MaterialPtr ownMaterial{};
+		uint32_t passIndex{};
+		bool createMaterial{ true };
+		RootContext * root{};
+	};
+
+	struct PassContext
+	{
+		SceneRPtr scene{};
+		PassRPtr pass{};
+		PassComponent * passComponent{};
+		bool createPass{ true };
+		uint32_t unitIndex{};
+		MaterialContext * material{};
+		RootContext * root{};
+	};
+
+	struct TextureContext
+	{
+		SceneRPtr scene{};
+		castor::String name{};
+		castor::Path folder{};
+		castor::Path relative{};
+		castor::ImageRPtr image{};
+		uint32_t mipLevels{ ashes::RemainingArrayLayers };
+		uint32_t texcoordSet{};
+		TextureConfiguration configuration{};
+		TextureAnimationUPtr textureAnimation{};
+		SamplerObs sampler{};
+		TextureTransform textureTransform{};
+		RenderTargetRPtr renderTarget{};
+		PassContext * pass{};
+		RootContext * root{};
+	};
+
+	struct WindowContext
+	{
+		RenderWindowDesc window{};
+		RootContext * root{};
+	};
+
+	struct TargetContext
+	{
+		RenderWindowDesc * window{};
+		TextureContext * texture{};
+		TargetType targetType{};
+		SsaoConfig ssaoConfig{};
+		castor::Size size{};
+		castor::PixelFormat hdrPixelFormat{};
+		castor::PixelFormat srgbPixelFormat{};
+		RenderTargetRPtr renderTarget{};
+		RootContext * root{};
+	};
+
+	struct SamplerContext
+	{
+		SamplerObs sampler{};
+		SamplerPtr ownSampler{};
+	};
+
+	struct SceneContext
+	{
+		SceneRPtr scene{};
+		SceneUPtr ownScene{};
+		castor::String fontName{};
+		OverlayContext overlays{};
+		RootContext * root{};
+	};
+
+	struct MovableContext
+	{
+		castor::String name{};
+		SceneRPtr scene{};
+		SceneNodeRPtr parentNode{};
+	};
+
+	struct SceneImportContext
+	{
+		SceneRPtr scene{};
+		castor::PathArray files{};
+		castor::PathArray animFiles{};
+		castor::String prefix{};
+		std::map< PassComponentTextureFlag, TextureConfiguration > textureRemaps;
+		float rescale{ 1.0f };
+		float pitch{ 0.0f };
+		float yaw{ 0.0f };
+		float roll{ 0.0f };
+		bool noOptimisations{ false };
+		float emissiveMult{ 1.0f };
+		std::map< PassComponentTextureFlag, TextureConfiguration >::iterator textureRemapIt;
+		castor::String centerCamera{};
+		castor::String preferredImporter{ cuT( "any" ) };
+		RootContext * root{};
+	};
+
+	struct CameraContext
+		: public MovableContext
+	{
+		ViewportUPtr viewport{};
+		VkPrimitiveTopology primitiveType{ VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST };
+		HdrConfig hdrConfig{};
+		ColourGradingConfig colourGradingConfig{};
+	};
+
+	struct LightContext
+		: public MovableContext
+	{
+		LightUPtr ownLight{};
+		LightRPtr light{};
+		LightType lightType{ LightType::eCount };
+		ShadowConfigUPtr shadowConfig;
+	};
+
+	struct NodeContext
+		: public MovableContext
+	{
+		bool isCameraNode{};
+		bool isStatic{};
+		castor::Point3f position{};
+		castor::Quaternion orientation{ castor::Quaternion::identity() };
+		castor::Point3f scale{ 1.0f, 1.0f, 1.0f };
+		RootContext * root{};
+	};
+
+	struct ObjectContext
+		: public MovableContext
+	{
+		GeometryUPtr ownGeometry{};
+		GeometryRPtr geometry{};
+		RootContext * root{};
+	};
+
+	struct BillboardsContext
+		: public MovableContext
+	{
 		BillboardListUPtr ownBillboards{};
 		BillboardListRPtr billboards{};
-		int face1{ -1 };
-		int face2{ -1 };
-		LightType lightType{ LightType::eCount };
-		VkPrimitiveTopology primitiveType{ VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST };
-		ViewportUPtr viewport{};
-		castor::String strName{};
-		castor::String strName2{};
-		castor::Path path{};
-		castor::Size size{};
-		castor::Point2f point2f{};
-		uint32_t particleCount{};
-		int16_t fontHeight{};
-		ScenePtrStrMap mapScenes{};
-		SceneFileParser * parser{};
-		FloatArray vertexPos{};
-		FloatArray vertexNml{};
-		FloatArray vertexTan{};
-		FloatArray vertexTex{};
-		UInt32Array faces{};
+	};
+
+	struct AnimGroupContext
+	{
+		SceneRPtr scene{};
 		AnimatedObjectGroupRPtr animGroup{};
 		AnimatedObjectRPtr animSkeleton{};
 		AnimatedObjectRPtr animMesh{};
 		AnimatedObjectRPtr animNode{};
 		AnimatedObjectRPtr animTexture{};
-		TextureAnimationUPtr textureAnimation{};
-		MeshAnimationUPtr morphAnimation{};
-		SceneBackgroundUPtr background{};
+		castor::String animName{};
+	};
+
+	struct SkyboxContext
+	{
+		SkyboxBackgroundUPtr skybox{};
+	};
+
+	struct ParticleSystemContext
+		: public MovableContext
+	{
+		MaterialObs material{};
+		castor::Point2f dimensions{};
+		uint32_t particleCount{};
 		ParticleSystemUPtr ownParticleSystem{};
 		ParticleSystemRPtr particleSystem{};
-		SsaoConfig ssaoConfig{};
-		SubsurfaceScatteringUPtr subsurfaceScattering{};
-		SkyboxBackgroundUPtr skybox{};
-		TextureTransform textureTransform{};
-		uint32_t texcoordSet{};
-		SceneImportConfig sceneImportConfig;
-		MeshImporterUPtr importer;
-		ClustersConfigUPtr clustersConfig;
-		HdrConfig hdrConfig;
-		ColourGradingConfig colourGradingConfig;
-		ShadowConfigUPtr shadowConfig;
-		TextureConfig texture;
+	};
+
+	struct MeshContext
+	{
+		MeshResPtr mesh{};
+		MeshRes ownMesh{};
+		MeshAnimationUPtr morphAnimation{};
+		SubmeshRPtr submesh{};
+		SubmeshComponent * submeshComponent{};
+		GeometryRPtr geometry{};
+		SceneRPtr scene{};
+		RootContext * root{};
+	};
+
+	struct SkeletonContext
+	{
+		SceneRPtr scene{};
+		SkeletonRPtr skeleton{};
+	};
+
+	struct SubmeshContext
+	{
+		SubmeshRPtr submesh{};
+		int face1{ -1 };
+		int face2{ -1 };
+		FloatArray vertexPos{};
+		FloatArray vertexNml{};
+		FloatArray vertexTan{};
+		FloatArray vertexTex{};
+		UInt32Array faces{};
+		RootContext * root{};
+	};
+
+	struct ProgramContext
+	{
+		castor::String name{};
+		ShaderProgramRPtr shaderProgram{};
+		VkShaderStageFlagBits shaderStage{};
+		ParticleSystemContext * particleSystem{};
+	};
+
+	struct FontContext
+	{
+		SceneRPtr scene{};
+		castor::String name{};
+		castor::Path path{};
+		int16_t fontHeight{};
+		RootContext * root{};
+	};
+
+	struct GuiContext
+	{
+		SceneRPtr scene{};
+		ControlsManager * controls{};
+		std::stack< ControlRPtr > parents{};
+		std::stack< ControlStyleRPtr > styles{};
+		std::stack< StylesHolderRPtr > stylesHolder{};
+		castor::String controlName{};
+		ButtonCtrlRPtr button{};
+		ComboBoxCtrlRPtr combo{};
+		EditCtrlRPtr edit{};
+		ListBoxCtrlRPtr listbox{};
+		SliderCtrlRPtr slider{};
+		StaticCtrlRPtr staticTxt{};
+		PanelCtrlRPtr panel{};
+		ProgressCtrlRPtr progress{};
+		ExpandablePanelCtrlRPtr expandablePanel{};
+		FrameCtrlRPtr frame{};
+		ScrollableCtrlRPtr scrollable{};
+		ThemeRPtr theme{};
+		ButtonStyleRPtr buttonStyle{};
+		ComboBoxStyleRPtr comboStyle{};
+		EditStyleRPtr editStyle{};
+		ListBoxStyleRPtr listboxStyle{};
+		SliderStyleRPtr sliderStyle{};
+		StaticStyleRPtr staticStyle{};
+		PanelStyleRPtr panelStyle{};
+		ProgressStyleRPtr progressStyle{};
+		ExpandablePanelStyleRPtr expandablePanelStyle{};
+		FrameStyleRPtr frameStyle{};
+		ScrollBarStyleRPtr scrollBarStyle{};
+		ScrollableStyleRPtr scrollableStyle{};
+		LayoutUPtr layout{};
+		LayoutItemFlags layoutCtrlFlags{};
+
+		C3D_API ControlRPtr getTopControl()const;
+		C3D_API void popControl();
+		C3D_API void pushStylesHolder( StylesHolder * style );
+		C3D_API void popStylesHolder( StylesHolder const * style );
+		C3D_API ControlStyleRPtr getTopStyle()const;
+		C3D_API void popStyle();
+
+		template< typename StyleT >
+		void pushStyle( StyleT * style
+			, StyleT *& result )
+		{
+			styles.push( style );
+			result = style;
+
+			if constexpr ( std::is_base_of_v< StylesHolder, StyleT > )
+			{
+				pushStylesHolder( style );
+			}
+
+			if constexpr ( std::is_base_of_v< ScrollableStyle, StyleT > )
+			{
+				scrollableStyle = style;
+			}
+		}
+	};
+	struct RootContext
+	{
+		Engine * engine{};
+		OverlayContext overlays{};
+		GuiContext gui{};
+		bool enableFullLoading{ false };
+		ScenePtrStrMap mapScenes{};
+		RenderWindowDesc window{};
+		castor::LoggerInstance * logger{};
+		castor::PathArray files;
+		castor::PathArray csnaFiles;
 		std::map< castor::String, TextureSourceInfoUPtr > sourceInfos{};
 	};
 
-	C3D_API SceneFileContext & getSceneParserContext( castor::FileParserContext & context );
+	template< typename BlockContextT >
+	using ParserFunctionT = bool( * )( castor::FileParserContext &, BlockContextT *, castor::ParserParameterArray const & );
+
+	static CU_ImplementAttributeParser( parserdefaultEnd )
+	{
+	}
+	CU_EndAttributePop()
+
+	template< typename BlockContextT >
+	struct BlockParserContextT
+	{
+		template< typename SectionT, typename SectionU >
+		explicit BlockParserContextT( castor::AttributeParsers & pparsers
+			, SectionT psection
+			, SectionU poldSection )
+			: section{ uint32_t( psection ) }
+			, oldSection{ uint32_t( poldSection ) }
+			, parsers{ pparsers }
+		{
+		}
+
+		template< typename SectionT >
+		explicit BlockParserContextT( castor::AttributeParsers & pparsers
+			, SectionT psection )
+			: BlockParserContextT{ pparsers, psection, castor::PreviousSection }
+		{
+		}
+
+		template< typename BlockContextU >
+		void addParser( castor::String name
+			, ParserFunctionT< BlockContextU > function
+			, castor::ParserParameterArray params = castor::ParserParameterArray{} )
+		{
+			castor::addParser( parsers
+				, section
+				, std::move( name )
+				, reinterpret_cast< ParserFunctionT< void > >( function )
+				, std::move( params ) );
+		}
+
+		template< typename BlockContextU, typename SectionT >
+		void addPushParser( castor::String name
+			, SectionT newSection
+			, ParserFunctionT< BlockContextU > function
+			, castor::ParserParameterArray params = castor::ParserParameterArray{} )
+		{
+			castor::addParser( parsers
+				, section
+				, uint32_t( newSection )
+				, std::move( name )
+				, reinterpret_cast< ParserFunctionT< void > >( function )
+				, std::move( params ) );
+		}
+
+		template< typename BlockContextU >
+		void addPopParser( castor::String name
+			, ParserFunctionT< BlockContextU > function )
+		{
+			castor::addParser( parsers
+				, section
+				, oldSection
+				, std::move( name )
+				, reinterpret_cast< ParserFunctionT< void > >( function ) );
+		}
+
+		void addDefaultPopParser()
+		{
+			castor::addParser( parsers
+				, section
+				, oldSection
+				, "}"
+				, parserdefaultEnd );
+		}
+
+		uint32_t section;
+		uint32_t oldSection;
+		castor::AttributeParsers & parsers;
+	};
 
 	class SceneFileParser
 		: public castor::OwnedBy< Engine >
+		, public castor::DataHolderT< RootContext >
 		, public castor::FileParser
 	{
 	public:
@@ -273,30 +508,35 @@ namespace castor3d
 		 *\param[in]	engine	Le moteur.
 		 */
 		C3D_API explicit SceneFileParser( Engine & engine );
+		C3D_API castor::FileParserContextUPtr initialiseParser( castor::Path const & path );
 		/**
 		 *\~english
 		 *\return		The render window defined by the scene.
 		 *\~french
 		 *\return		La fenêtre de rendu définie par la scène.
 		 */
-		C3D_API RenderWindowDesc getRenderWindow();
+		RenderWindowDesc getRenderWindow()
+		{
+			return getData().window;
+		}
 
 		ScenePtrStrMap::iterator scenesBegin()
 		{
-			return m_mapScenes.begin();
+			return getData().mapScenes.begin();
 		}
 
 		ScenePtrStrMap::const_iterator scenesBegin()const
 		{
-			return m_mapScenes.begin();
+			return getData().mapScenes.begin();
 		}
 
 		ScenePtrStrMap::const_iterator scenesEnd()const
 		{
-			return m_mapScenes.end();
+			return getData().mapScenes.end();
 		}
 
 	private:
+		C3D_API castor::FileParserContextUPtr doInitialiseParser( castor::Path const & path )override;
 		C3D_API void doCleanupParser( castor::PreprocessedFile & preprocessed )override;
 		C3D_API void doValidate( castor::PreprocessedFile & preprocessed )override;
 		C3D_API castor::String doGetSectionName( castor::SectionId section )const override;
@@ -304,58 +544,60 @@ namespace castor3d
 
 	private:
 		castor::String m_strSceneFilePath;
-		ScenePtrStrMap m_mapScenes;
-		RenderWindowDesc m_renderWindow;
 
 	public:
 		C3D_API static UInt32StrMap comparisonModes;
 	};
 
-	C3D_API SceneFileContext & getParserContext( castor::FileParserContext & context );
-
 	template< typename ComponentT >
-	ComponentT & getPassComponent( SceneFileContext & parsingContext )
+	ComponentT & getPassComponent( PassContext & context )
 	{
-		if ( !parsingContext.passComponent
-			|| parsingContext.passComponent->getOwner() != parsingContext.pass
-			|| getPassComponentType( *parsingContext.passComponent ) != ComponentT::TypeName )
+		if ( !context.passComponent
+			|| context.passComponent->getOwner() != context.pass
+			|| getPassComponentType( *context.passComponent ) != ComponentT::TypeName )
 		{
-			if ( parsingContext.pass->template hasComponent< ComponentT >() )
+			if ( context.pass->template hasComponent< ComponentT >() )
 			{
-				parsingContext.passComponent = parsingContext.pass->template getComponent< ComponentT >();
+				context.passComponent = context.pass->template getComponent< ComponentT >();
 			}
 			else
 			{
-				parsingContext.passComponent = parsingContext.pass->template createComponent< ComponentT >();
+				context.passComponent = context.pass->template createComponent< ComponentT >();
 			}
 		}
 
-		return static_cast< ComponentT & >( *parsingContext.passComponent );
+		return static_cast< ComponentT & >( *context.passComponent );
 	}
 
 	template< typename ComponentT >
-	ComponentT & getSubmeshComponent( SceneFileContext & parsingContext )
+	ComponentT & getPassComponent( TextureContext & context )
 	{
-		if ( !parsingContext.submesh )
+		return getPassComponent< ComponentT >( *context.pass );
+	}
+
+	template< typename ComponentT >
+	ComponentT & getSubmeshComponent( MeshContext & context )
+	{
+		if ( !context.submesh )
 		{
-			parsingContext.submesh = parsingContext.mesh->createSubmesh();
+			context.submesh = context.mesh->createSubmesh();
 		}
 
-		if ( !parsingContext.submeshComponent
-			|| parsingContext.submeshComponent->getOwner() != parsingContext.submesh
-			|| getSubmeshComponentType( *parsingContext.submeshComponent ) != ComponentT::TypeName )
+		if ( !context.submeshComponent
+			|| context.submeshComponent->getOwner() != context.submesh
+			|| getSubmeshComponentType( *context.submeshComponent ) != ComponentT::TypeName )
 		{
-			if ( parsingContext.submesh->template hasComponent< ComponentT >() )
+			if ( context.submesh->template hasComponent< ComponentT >() )
 			{
-				parsingContext.submeshComponent = parsingContext.submesh->template getComponent< ComponentT >();
+				context.submeshComponent = context.submesh->template getComponent< ComponentT >();
 			}
 			else
 			{
-				parsingContext.submeshComponent = parsingContext.submesh->template createComponent< ComponentT >();
+				context.submeshComponent = context.submesh->template createComponent< ComponentT >();
 			}
 		}
 
-		return static_cast< ComponentT & >( *parsingContext.submeshComponent );
+		return static_cast< ComponentT & >( *context.submeshComponent );
 	}
 
 	template< typename Type >

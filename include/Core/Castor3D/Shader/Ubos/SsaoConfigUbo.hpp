@@ -42,15 +42,15 @@ namespace castor3d
 			sdw::Float intensityDivR6;
 			sdw::Float farPlaneZ;
 			sdw::Float edgeSharpness;
-			sdw::Int blurStepSize;
-			sdw::Int blurRadius;
+			sdw::UInt blurStepSize;
+			sdw::UInt blurRadius;
 			sdw::Int highQuality;
 			sdw::Int blurHighQuality;
 			sdw::Int logMaxOffset;
 			sdw::Int maxMipLevel;
 			sdw::Float minRadius;
 			sdw::Int variation;
-			sdw::Int bendStepCount;
+			sdw::UInt bendStepCount;
 			sdw::Float bendStepSize;
 
 		private:
@@ -108,9 +108,9 @@ namespace castor3d
 			// Morgan found that a scale of 3 left a 1-pixel checkerboard grid that was
 			// unobjectionable after shading was applied but eliminated most temporal incoherence
 			// from using small numbers of sample taps.
-			int32_t blurStepSize;
+			uint32_t blurStepSize;
 			// Filter radius in pixels. This will be multiplied by blurStepSize.
-			int32_t blurRadius;
+			uint32_t blurRadius;
 			int32_t highQuality;
 			int32_t blurHighQuality;
 			// If using depth mip levels, the log of the maximum pixel offset before we need to switch to a lower
@@ -124,7 +124,7 @@ namespace castor3d
 			float minRadius;
 			int32_t variation;
 			// The bending normals ray steps count.
-			int32_t bendStepCount;
+			uint32_t bendStepCount;
 			// The bending normals ray step size.
 			float bendStepSize;
 		};

@@ -43,9 +43,9 @@ namespace ocean_fft
 
 	namespace parse
 	{
-		struct ParserContext
+		struct OceanContext
 		{
-			castor3d::Engine * engine{ nullptr };
+			castor3d::MeshRPtr mesh{};
 			OceanFFTConfig fftConfig{};
 			std::vector< castor3d::MaterialObs > materials;
 		};
@@ -56,30 +56,20 @@ namespace ocean_fft
 			eWaves = CU_MakeSectionName( 'O', 'C', 'N', 'R' ),
 		};
 
-		static void * createContext( castor::FileParserContext & context )
+		static CU_ImplementAttributeParserNewBlock( parserFftWavesComponent, castor3d::MeshContext, OceanContext )
 		{
-			auto userContext = new ParserContext;
-			userContext->engine = static_cast< castor3d::SceneFileParser * >( context.parser )->getEngine();
-			return userContext;
-		}
-
-		static ParserContext & getParserContext( castor::FileParserContext & context )
-		{
-			return *static_cast< ParserContext * >( context.getUserContext( FFTWavesComponent::TypeName ) );
-		}
-
-		static CU_ImplementAttributeParser( parserFftWavesComponent )
-		{
-			auto & parsingContext = getSceneParserContext( context );
-
-			if ( !parsingContext.mesh )
+			if ( !blockContext->mesh )
 			{
 				CU_ParsingError( "Mesh not initialised" );
 			}
+			else
+			{
+				newBlockContext->mesh = blockContext->mesh;
+			}
 		}
-		CU_EndAttributePush( FFTWavesSection::eWaves )
+		CU_EndAttributePushNewBlock( FFTWavesSection::eWaves )
 
-		static CU_ImplementAttributeParser( parserFftDisableRandomSeed )
+		static CU_ImplementAttributeParserBlock( parserFftDisableRandomSeed, OceanContext )
 		{
 			if ( params.empty() )
 			{
@@ -87,13 +77,12 @@ namespace ocean_fft
 			}
 			else
 			{
-				auto & oceanContext = getParserContext( context );
-				params[0]->get( oceanContext.fftConfig.disableRandomSeed );
+				params[0]->get( blockContext->fftConfig.disableRandomSeed );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserFftSize )
+		static CU_ImplementAttributeParserBlock( parserFftSize, OceanContext )
 		{
 			if ( params.empty() )
 			{
@@ -101,13 +90,12 @@ namespace ocean_fft
 			}
 			else
 			{
-				auto & oceanContext = getParserContext( context );
-				params[0]->get( oceanContext.fftConfig.size );
+				params[0]->get( blockContext->fftConfig.size );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserFftHeightMapSamples )
+		static CU_ImplementAttributeParserBlock( parserFftHeightMapSamples, OceanContext )
 		{
 			if ( params.empty() )
 			{
@@ -115,13 +103,12 @@ namespace ocean_fft
 			}
 			else
 			{
-				auto & oceanContext = getParserContext( context );
-				params[0]->get( oceanContext.fftConfig.heightMapSamples );
+				params[0]->get( blockContext->fftConfig.heightMapSamples );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserFftDisplacementDownsample )
+		static CU_ImplementAttributeParserBlock( parserFftDisplacementDownsample, OceanContext )
 		{
 			if ( params.empty() )
 			{
@@ -129,13 +116,12 @@ namespace ocean_fft
 			}
 			else
 			{
-				auto & oceanContext = getParserContext( context );
-				params[0]->get( oceanContext.fftConfig.displacementDownsample );
+				params[0]->get( blockContext->fftConfig.displacementDownsample );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserFftNormalMapFreqMod )
+		static CU_ImplementAttributeParserBlock( parserFftNormalMapFreqMod, OceanContext )
 		{
 			if ( params.empty() )
 			{
@@ -143,13 +129,12 @@ namespace ocean_fft
 			}
 			else
 			{
-				auto & oceanContext = getParserContext( context );
-				params[0]->get( oceanContext.fftConfig.normalFreqMod );
+				params[0]->get( blockContext->fftConfig.normalFreqMod );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserFftAmplitude )
+		static CU_ImplementAttributeParserBlock( parserFftAmplitude, OceanContext )
 		{
 			if ( params.empty() )
 			{
@@ -157,13 +142,12 @@ namespace ocean_fft
 			}
 			else
 			{
-				auto & oceanContext = getParserContext( context );
-				params[0]->get( oceanContext.fftConfig.amplitude );
+				params[0]->get( blockContext->fftConfig.amplitude );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserFftWindDirection )
+		static CU_ImplementAttributeParserBlock( parserFftWindDirection, OceanContext )
 		{
 			if ( params.empty() )
 			{
@@ -171,13 +155,12 @@ namespace ocean_fft
 			}
 			else
 			{
-				auto & oceanContext = getParserContext( context );
-				params[0]->get( oceanContext.fftConfig.windDirection );
+				params[0]->get( blockContext->fftConfig.windDirection );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserFftWindVelocity )
+		static CU_ImplementAttributeParserBlock( parserFftWindVelocity, OceanContext )
 		{
 			if ( params.empty() )
 			{
@@ -185,13 +168,12 @@ namespace ocean_fft
 			}
 			else
 			{
-				auto & oceanContext = getParserContext( context );
-				params[0]->get( oceanContext.fftConfig.windVelocity );
+				params[0]->get( blockContext->fftConfig.windVelocity );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserFftPatchSize )
+		static CU_ImplementAttributeParserBlock( parserFftPatchSize, OceanContext )
 		{
 			if ( params.empty() )
 			{
@@ -199,13 +181,12 @@ namespace ocean_fft
 			}
 			else
 			{
-				auto & oceanContext = getParserContext( context );
-				params[0]->get( oceanContext.fftConfig.patchSize );
+				params[0]->get( blockContext->fftConfig.patchSize );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserFftBlocksCount )
+		static CU_ImplementAttributeParserBlock( parserFftBlocksCount, OceanContext )
 		{
 			if ( params.empty() )
 			{
@@ -213,13 +194,12 @@ namespace ocean_fft
 			}
 			else
 			{
-				auto & oceanContext = getParserContext( context );
-				params[0]->get( oceanContext.fftConfig.blocksCount );
+				params[0]->get( blockContext->fftConfig.blocksCount );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserFftLOD0Distance )
+		static CU_ImplementAttributeParserBlock( parserFftLOD0Distance, OceanContext )
 		{
 			if ( params.empty() )
 			{
@@ -227,33 +207,30 @@ namespace ocean_fft
 			}
 			else
 			{
-				auto & oceanContext = getParserContext( context );
-				params[0]->get( oceanContext.fftConfig.lod0Distance );
+				params[0]->get( blockContext->fftConfig.lod0Distance );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserFftWavesComponentEnd )
+		static CU_ImplementAttributeParserBlock( parserFftWavesComponentEnd, OceanContext )
 		{
-			auto & parsingContext = getSceneParserContext( context );
-			auto & wavesContext = getParserContext( context );
-			auto & factory = wavesContext.engine->getMeshFactory();
+			auto & factory = blockContext->mesh->getOwner()->getMeshFactory();
 			castor3d::Parameters parameters;
 			parameters.add( "width_subdiv"
-				, castor::string::toString( wavesContext.fftConfig.blocksCount->x - 1u ) );
+				, castor::string::toString( blockContext->fftConfig.blocksCount->x - 1u ) );
 			parameters.add( "depth_subdiv"
-				, castor::string::toString( wavesContext.fftConfig.blocksCount->y - 1u ) );
+				, castor::string::toString( blockContext->fftConfig.blocksCount->y - 1u ) );
 			parameters.add( "width"
-				, castor::string::toString( float( wavesContext.fftConfig.blocksCount->x ) * wavesContext.fftConfig.patchSize->x ) );
+				, castor::string::toString( float( blockContext->fftConfig.blocksCount->x ) * blockContext->fftConfig.patchSize->x ) );
 			parameters.add( "depth"
-				, castor::string::toString( float( wavesContext.fftConfig.blocksCount->y ) * wavesContext.fftConfig.patchSize->y ) );
+				, castor::string::toString( float( blockContext->fftConfig.blocksCount->y ) * blockContext->fftConfig.patchSize->y ) );
 			parameters.add( cuT( "flipYZ" ), true );
 			parameters.add( cuT( "sort_around_center" ), true );
-			factory.create( "plane" )->generate( *parsingContext.mesh, parameters );
+			factory.create( "plane" )->generate( *blockContext->mesh, parameters );
 
-			auto submesh = parsingContext.mesh->getSubmesh( 0u );
+			auto submesh = blockContext->mesh->getSubmesh( 0u );
 			auto & component = *submesh->createComponent< FFTWavesComponent >();
-			component.setFftConfig( std::move( wavesContext.fftConfig ) );
+			component.setFftConfig( std::move( blockContext->fftConfig ) );
 		}
 		CU_EndAttributePop()
 	}
@@ -859,27 +836,29 @@ namespace ocean_fft
 	//*********************************************************************************************
 
 	FFTWavesComponent::Plugin::Plugin( castor3d::SubmeshComponentRegister const & submeshComponents )
-		: castor3d::SubmeshComponentPlugin{ submeshComponents, &parse::createContext }
+		: castor3d::SubmeshComponentPlugin{ submeshComponents, nullptr }
 	{
 	}
 
 	void FFTWavesComponent::Plugin::createParsers( castor::AttributeParsers & parsers )const
 	{
-		addParser( parsers, uint32_t( castor3d::CSCNSection::eMesh ), cuT( "fft_waves" ), &parse::parserFftWavesComponent );
+		castor3d::BlockParserContextT< MeshContext > meshContext{ parsers, castor3d::CSCNSection::eMesh };
+		castor3d::BlockParserContextT< parse::OceanContext > wavesContext{ parsers, parse::FFTWavesSection::eWaves, castor3d::CSCNSection::eMesh };
 
-		addParser( parsers, uint32_t( parse::FFTWavesSection::eWaves ), cuT( "disableRandomSeed" ), &parse::parserFftDisableRandomSeed, { castor::makeParameter< castor::ParameterType::eBool >() } );
-		addParser( parsers, uint32_t( parse::FFTWavesSection::eWaves ), cuT( "size" ), &parse::parserFftSize, { castor::makeParameter< castor::ParameterType::ePoint2F >() } );
-		addParser( parsers, uint32_t( parse::FFTWavesSection::eWaves ), cuT( "heightMapSamples" ), &parse::parserFftHeightMapSamples, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		addParser( parsers, uint32_t( parse::FFTWavesSection::eWaves ), cuT( "displacementDownsample" ), &parse::parserFftDisplacementDownsample, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		addParser( parsers, uint32_t( parse::FFTWavesSection::eWaves ), cuT( "normalMapFreqMod" ), &parse::parserFftNormalMapFreqMod, { castor::makeParameter< castor::ParameterType::ePoint2F >() } );
-		addParser( parsers, uint32_t( parse::FFTWavesSection::eWaves ), cuT( "amplitude" ), &parse::parserFftAmplitude, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		addParser( parsers, uint32_t( parse::FFTWavesSection::eWaves ), cuT( "windDirection" ), &parse::parserFftWindDirection, { castor::makeParameter< castor::ParameterType::ePoint2F >() } );
-		addParser( parsers, uint32_t( parse::FFTWavesSection::eWaves ), cuT( "windVelocity" ), &parse::parserFftWindVelocity, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		addParser( parsers, uint32_t( parse::FFTWavesSection::eWaves ), cuT( "patchSize" ), &parse::parserFftPatchSize, { castor::makeParameter< castor::ParameterType::ePoint2F >() } );
-		addParser( parsers, uint32_t( parse::FFTWavesSection::eWaves ), cuT( "blocksCount" ), &parse::parserFftBlocksCount, { castor::makeParameter< castor::ParameterType::ePoint2U >() } );
-		addParser( parsers, uint32_t( parse::FFTWavesSection::eWaves ), cuT( "lod0Distance" ), &parse::parserFftLOD0Distance, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		addParser( parsers, uint32_t( parse::FFTWavesSection::eWaves ), cuT( "}" ), &parse::parserFftWavesComponentEnd );
+		meshContext.addPushParser( cuT( "fft_waves" ), parse::FFTWavesSection::eWaves, &parse::parserFftWavesComponent );
 
+		wavesContext.addParser( cuT( "disableRandomSeed" ), &parse::parserFftDisableRandomSeed, { castor::makeParameter< castor::ParameterType::eBool >() } );
+		wavesContext.addParser( cuT( "size" ), &parse::parserFftSize, { castor::makeParameter< castor::ParameterType::ePoint2F >() } );
+		wavesContext.addParser( cuT( "heightMapSamples" ), &parse::parserFftHeightMapSamples, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+		wavesContext.addParser( cuT( "displacementDownsample" ), &parse::parserFftDisplacementDownsample, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+		wavesContext.addParser( cuT( "normalMapFreqMod" ), &parse::parserFftNormalMapFreqMod, { castor::makeParameter< castor::ParameterType::ePoint2F >() } );
+		wavesContext.addParser( cuT( "amplitude" ), &parse::parserFftAmplitude, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+		wavesContext.addParser( cuT( "windDirection" ), &parse::parserFftWindDirection, { castor::makeParameter< castor::ParameterType::ePoint2F >() } );
+		wavesContext.addParser( cuT( "windVelocity" ), &parse::parserFftWindVelocity, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+		wavesContext.addParser( cuT( "patchSize" ), &parse::parserFftPatchSize, { castor::makeParameter< castor::ParameterType::ePoint2F >() } );
+		wavesContext.addParser( cuT( "blocksCount" ), &parse::parserFftBlocksCount, { castor::makeParameter< castor::ParameterType::ePoint2U >() } );
+		wavesContext.addParser( cuT( "lod0Distance" ), &parse::parserFftLOD0Distance, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+		wavesContext.addPopParser( cuT( "}" ), &parse::parserFftWavesComponentEnd );
 	}
 
 	void FFTWavesComponent::Plugin::createSections( castor::StrUInt32Map & sections )const

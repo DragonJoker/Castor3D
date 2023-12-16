@@ -11,11 +11,9 @@ namespace castor3d
 {
 	namespace lpvcfg
 	{
-		static CU_ImplementAttributeParser( parserGlobalIndirectAttenuation )
+		static CU_ImplementAttributeParserBlock( parserGlobalIndirectAttenuation, SceneContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.scene )
+			if ( !blockContext->scene )
 			{
 				CU_ParsingError( cuT( "No Scene initialised." ) );
 			}
@@ -23,48 +21,42 @@ namespace castor3d
 			{
 				float value{ 0u };
 				params[0]->get( value );
-				parsingContext.scene->setLpvIndirectAttenuation( value );
+				blockContext->scene->setLpvIndirectAttenuation( value );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserConfig )
+		static CU_ImplementAttributeParserBlock( parserConfig, LightContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.shadowConfig )
+			if ( !blockContext->shadowConfig )
 			{
 				CU_ParsingError( cuT( "No shadow configuration initialised." ) );
 			}
 		}
-		CU_EndAttributePush( CSCNSection::eLpv )
+		CU_EndAttributePushBlock( CSCNSection::eLpv, blockContext )
 
-		static CU_ImplementAttributeParser( parserIndirectAttenuation )
+		static CU_ImplementAttributeParserBlock( parserIndirectAttenuation, LightContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.shadowConfig )
+			if ( !blockContext->shadowConfig )
 			{
 				CU_ParsingError( cuT( "No shadow configuration initialised." ) );
 			}
 			else
 			{
-				params[0]->get( *parsingContext.shadowConfig->lpvConfig.indirectAttenuation );
+				params[0]->get( *blockContext->shadowConfig->lpvConfig.indirectAttenuation );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserTexelAreaModifier )
+		static CU_ImplementAttributeParserBlock( parserTexelAreaModifier, LightContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.shadowConfig )
+			if ( !blockContext->shadowConfig )
 			{
 				CU_ParsingError( cuT( "No shadow configuration initialised." ) );
 			}
 			else
 			{
-				params[0]->get( *parsingContext.shadowConfig->lpvConfig.texelAreaModifier );
+				params[0]->get( *blockContext->shadowConfig->lpvConfig.texelAreaModifier );
 			}
 		}
 		CU_EndAttribute()
@@ -80,9 +72,14 @@ namespace castor3d
 	void LpvConfig::addParsers( castor::AttributeParsers & result )
 	{
 		using namespace castor;
-		addParser( result, uint32_t( CSCNSection::eScene ), cuT( "lpv_indirect_attenuation" ), lpvcfg::parserGlobalIndirectAttenuation, { makeParameter< ParameterType::eFloat >() } );
-		addParser( result, uint32_t( CSCNSection::eShadows ), cuT( "lpv_config" ), lpvcfg::parserConfig );
-		addParser( result, uint32_t( CSCNSection::eLpv ), cuT( "indirect_attenuation" ), lpvcfg::parserIndirectAttenuation, { makeParameter< ParameterType::eFloat >() } );
-		addParser( result, uint32_t( CSCNSection::eLpv ), cuT( "texel_area_modifier" ), lpvcfg::parserTexelAreaModifier, { makeParameter< ParameterType::eFloat >() } );
+		BlockParserContextT< SceneContext > sceneContext{ result, CSCNSection::eScene };
+		BlockParserContextT< LightContext > shadowContext{ result, CSCNSection::eShadows, CSCNSection::eLight };
+		BlockParserContextT< LightContext > lpvContext{ result, CSCNSection::eLpv, CSCNSection::eShadows };
+
+		sceneContext.addParser( cuT( "lpv_indirect_attenuation" ), lpvcfg::parserGlobalIndirectAttenuation, { makeParameter< ParameterType::eFloat >() } );
+		shadowContext.addPushParser( cuT( "lpv_config" ), CSCNSection::eLpv, lpvcfg::parserConfig );
+		lpvContext.addParser( cuT( "indirect_attenuation" ), lpvcfg::parserIndirectAttenuation, { makeParameter< ParameterType::eFloat >() } );
+		lpvContext.addParser( cuT( "texel_area_modifier" ), lpvcfg::parserTexelAreaModifier, { makeParameter< ParameterType::eFloat >() } );
+		lpvContext.addDefaultPopParser();
 	}
 }

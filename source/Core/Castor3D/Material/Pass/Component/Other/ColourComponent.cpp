@@ -41,11 +41,9 @@ namespace castor3d
 
 	namespace albcmp
 	{
-		static CU_ImplementAttributeParser( parserPassHdrColour )
+		static CU_ImplementAttributeParserBlock( parserPassHdrColour, PassContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
@@ -53,17 +51,15 @@ namespace castor3d
 			{
 				castor::HdrRgbColour value;
 				params[0]->get( value );
-				auto & component = getPassComponent< ColourComponent >( parsingContext );
+				auto & component = getPassComponent< ColourComponent >( *blockContext );
 				component.setColour( value );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserPassSrgbColour )
+		static CU_ImplementAttributeParserBlock( parserPassSrgbColour, PassContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
@@ -71,7 +67,7 @@ namespace castor3d
 			{
 				castor::RgbColour value;
 				params[0]->get( value );
-				auto & component = getPassComponent< ColourComponent >( parsingContext );
+				auto & component = getPassComponent< ColourComponent >( *blockContext );
 				component.setColour( value );
 			}
 		}
