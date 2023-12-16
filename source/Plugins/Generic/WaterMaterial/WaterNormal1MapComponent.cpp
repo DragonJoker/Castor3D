@@ -56,50 +56,45 @@ namespace water
 
 	namespace trscmp
 	{
-		static CU_ImplementAttributeParser( parserUnitWaterNormal1Mask )
+		static CU_ImplementAttributeParserBlock( parserUnitWaterNormal1Mask, TextureContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
-			else if ( !parsingContext.pass )
+			else if ( !blockContext->pass )
 			{
-				auto & plugin = parsingContext.parser->getEngine()->getPassComponentsRegister().getPlugin( WaterNormal1MapComponent::TypeName );
-				plugin.fillTextureConfiguration( parsingContext.texture.configuration
+				auto & plugin = blockContext->root->engine->getPassComponentsRegister().getPlugin( WaterNormal1MapComponent::TypeName );
+				plugin.fillTextureConfiguration( blockContext->configuration
 					, params[0]->get< uint32_t >() );
 			}
 			else
 			{
-				auto & plugin = parsingContext.pass->getComponentPlugin( WaterNormal1MapComponent::TypeName );
-				plugin.fillTextureConfiguration( parsingContext.texture.configuration
+				auto & plugin = blockContext->pass->pass->getComponentPlugin( WaterNormal1MapComponent::TypeName );
+				plugin.fillTextureConfiguration( blockContext->configuration
 					, params[0]->get< uint32_t >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserTexRemapWaterNormal1 )
+		static CU_ImplementAttributeParserBlock( parserTexRemapWaterNormal1, SceneImportContext )
 		{
-			auto & parsingContext = getParserContext( context );
-			auto & plugin = parsingContext.parser->getEngine()->getPassComponentsRegister().getPlugin( WaterNormal1MapComponent::TypeName );
-			parsingContext.sceneImportConfig.textureRemapIt = parsingContext.sceneImportConfig.textureRemaps.emplace( plugin.getTextureFlags(), TextureConfiguration{} ).first;
-			parsingContext.sceneImportConfig.textureRemapIt->second = TextureConfiguration{};
+			auto & plugin = blockContext->root->engine->getPassComponentsRegister().getPlugin( WaterNormal1MapComponent::TypeName );
+			blockContext->textureRemapIt = blockContext->textureRemaps.emplace( plugin.getTextureFlags(), TextureConfiguration{} ).first;
+			blockContext->textureRemapIt->second = TextureConfiguration{};
 		}
-		CU_EndAttributePush( CSCNSection::eTextureRemapChannel )
+		CU_EndAttributePushBlock( CSCNSection::eTextureRemapChannel, blockContext )
 
-		static CU_ImplementAttributeParser( parserTexRemapWaterNormal1Mask )
+		static CU_ImplementAttributeParserBlock( parserTexRemapWaterNormal1Mask, SceneImportContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
 			else
 			{
-				auto & plugin = parsingContext.parser->getEngine()->getPassComponentsRegister().getPlugin( WaterNormal1MapComponent::TypeName );
-				plugin.fillTextureConfiguration( parsingContext.sceneImportConfig.textureRemapIt->second
+				auto & plugin = blockContext->root->engine->getPassComponentsRegister().getPlugin( WaterNormal1MapComponent::TypeName );
+				plugin.fillTextureConfiguration( blockContext->textureRemapIt->second
 					, params[0]->get< uint32_t >() );
 			}
 		}
@@ -214,10 +209,10 @@ namespace water
 		, ChannelFillers & channelFillers )const
 	{
 		channelFillers.emplace( "water_normal1", ChannelFiller{ getTextureFlags()
-			, []( SceneFileContext & parsingContext )
+			, []( TextureContext & blockContext )
 			{
-				auto & component = getPassComponent< WaterNormal1MapComponent >( parsingContext );
-				component.fillChannel( parsingContext.texture.configuration
+				auto & component = getPassComponent< WaterNormal1MapComponent >( blockContext );
+				component.fillChannel( blockContext.configuration
 					, 0x00FFFFFFu );
 			} } );
 

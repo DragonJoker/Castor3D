@@ -37,11 +37,9 @@ namespace castor3d
 
 	namespace unt
 	{
-		static CU_ImplementAttributeParser( parserPassUntile )
+		static CU_ImplementAttributeParserBlock( parserPassUntile, PassContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
@@ -53,7 +51,7 @@ namespace castor3d
 			{
 				bool value{ false };
 				params[0]->get( value );
-				auto & component = getPassComponent< UntileMappingComponent >( parsingContext );
+				auto & component = getPassComponent< UntileMappingComponent >( *blockContext );
 				component.setUntiling( value );
 			}
 		}

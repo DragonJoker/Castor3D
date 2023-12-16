@@ -41,11 +41,9 @@ namespace castor3d
 
 	namespace rghcmp
 	{
-		static CU_ImplementAttributeParser( parserPassGlossiness )
+		static CU_ImplementAttributeParserBlock( parserPassGlossiness, PassContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
@@ -53,19 +51,17 @@ namespace castor3d
 			{
 				float value;
 				params[0]->get( value );
-				getPassComponent< SpecularComponent >( parsingContext );
-				getPassComponent< MetalnessComponent >( parsingContext );
-				auto & component = getPassComponent< RoughnessComponent >( parsingContext );
+				getPassComponent< SpecularComponent >( *blockContext );
+				getPassComponent< MetalnessComponent >( *blockContext );
+				auto & component = getPassComponent< RoughnessComponent >( *blockContext );
 				component.setGlossiness( value );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserPassShininess )
+		static CU_ImplementAttributeParserBlock( parserPassShininess, PassContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
@@ -73,18 +69,16 @@ namespace castor3d
 			{
 				float value;
 				params[0]->get( value );
-				getPassComponent< SpecularComponent >( parsingContext );
-				auto & component = getPassComponent< RoughnessComponent >( parsingContext );
+				getPassComponent< SpecularComponent >( *blockContext );
+				auto & component = getPassComponent< RoughnessComponent >( *blockContext );
 				component.setShininess( value );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserPassRoughness )
+		static CU_ImplementAttributeParserBlock( parserPassRoughness, PassContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
@@ -92,7 +86,7 @@ namespace castor3d
 			{
 				float value;
 				params[0]->get( value );
-				auto & component = getPassComponent< RoughnessComponent >( parsingContext );
+				auto & component = getPassComponent< RoughnessComponent >( *blockContext );
 				component.setRoughness( value );
 			}
 		}

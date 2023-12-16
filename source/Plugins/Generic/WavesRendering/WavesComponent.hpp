@@ -11,11 +11,11 @@ See LICENSE file in root folder
 
 namespace waves
 {
-	struct ParserContext
+	struct WavesContext
 	{
-		castor3d::Engine * engine{ nullptr };
-		WavesConfiguration config;
-		castor3d::Parameters parameters;
+		castor3d::MeshRPtr mesh{};
+		WavesConfiguration config{};
+		castor3d::Parameters parameters{};
 		uint32_t wave{};
 	};
 

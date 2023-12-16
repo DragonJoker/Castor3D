@@ -52,50 +52,45 @@ namespace castor3d
 
 	namespace occcmp
 	{
-		static CU_ImplementAttributeParser( parserUnitOcclusionMask )
+		static CU_ImplementAttributeParserBlock( parserUnitOcclusionMask, TextureContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
-			else if ( !parsingContext.pass )
+			else if ( !blockContext->pass )
 			{
-				auto & plugin = parsingContext.parser->getEngine()->getPassComponentsRegister().getPlugin( OcclusionMapComponent::TypeName );
-				plugin.fillTextureConfiguration( parsingContext.texture.configuration
+				auto & plugin = blockContext->root->engine->getPassComponentsRegister().getPlugin( OcclusionMapComponent::TypeName );
+				plugin.fillTextureConfiguration( blockContext->configuration
 					, params[0]->get< uint32_t >() );
 			}
 			else
 			{
-				auto & plugin = parsingContext.pass->getComponentPlugin( OcclusionMapComponent::TypeName );
-				plugin.fillTextureConfiguration( parsingContext.texture.configuration
+				auto & plugin = blockContext->pass->pass->getComponentPlugin( OcclusionMapComponent::TypeName );
+				plugin.fillTextureConfiguration( blockContext->configuration
 					, params[0]->get< uint32_t >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserTexRemapOcclusion )
+		static CU_ImplementAttributeParserBlock( parserTexRemapOcclusion, SceneImportContext )
 		{
-			auto & parsingContext = getParserContext( context );
-			auto & plugin = parsingContext.parser->getEngine()->getPassComponentsRegister().getPlugin( OcclusionMapComponent::TypeName );
-			parsingContext.sceneImportConfig.textureRemapIt = parsingContext.sceneImportConfig.textureRemaps.emplace( plugin.getTextureFlags(), TextureConfiguration{} ).first;
-			parsingContext.sceneImportConfig.textureRemapIt->second = TextureConfiguration{};
+			auto & plugin = blockContext->root->engine->getPassComponentsRegister().getPlugin( OcclusionMapComponent::TypeName );
+			blockContext->textureRemapIt = blockContext->textureRemaps.emplace( plugin.getTextureFlags(), TextureConfiguration{} ).first;
+			blockContext->textureRemapIt->second = TextureConfiguration{};
 		}
-		CU_EndAttributePush( CSCNSection::eTextureRemapChannel )
+		CU_EndAttributePushBlock( CSCNSection::eTextureRemapChannel, blockContext )
 
-		static CU_ImplementAttributeParser( parserTexRemapOcclusionMask )
+		static CU_ImplementAttributeParserBlock( parserTexRemapOcclusionMask, SceneImportContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
 			else
 			{
-				auto & plugin = parsingContext.parser->getEngine()->getPassComponentsRegister().getPlugin( OcclusionMapComponent::TypeName );
-				plugin.fillTextureConfiguration( parsingContext.sceneImportConfig.textureRemapIt->second
+				auto & plugin = blockContext->root->engine->getPassComponentsRegister().getPlugin( OcclusionMapComponent::TypeName );
+				plugin.fillTextureConfiguration( blockContext->textureRemapIt->second
 					, params[0]->get< uint32_t >() );
 			}
 		}
@@ -170,10 +165,10 @@ namespace castor3d
 		, ChannelFillers & channelFillers )const
 	{
 		channelFillers.emplace( "occlusion", ChannelFiller{ getTextureFlags()
-			, []( SceneFileContext & parsingContext )
+			, []( TextureContext & blockContext )
 			{
-				auto & component = getPassComponent< OcclusionMapComponent >( parsingContext );
-				component.fillChannel( parsingContext.texture.configuration
+				auto & component = getPassComponent< OcclusionMapComponent >( blockContext );
+				component.fillChannel( blockContext.configuration
 					, 0x00FF0000 );
 			} } );
 

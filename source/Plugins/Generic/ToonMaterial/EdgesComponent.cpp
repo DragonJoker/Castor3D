@@ -48,110 +48,86 @@ namespace toon
 
 	namespace toonpass
 	{
-		static CU_ImplementAttributeParser( parserPassEdgeColour )
+		static CU_ImplementAttributeParserBlock( parserPassEdgeColour, castor3d::PassContext )
 		{
-			auto & parsingContext = castor3d::getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
 			else if ( !params.empty() )
 			{
-				castor::HdrRgbaColour value;
-				params[0]->get( value );
-				auto & component = castor3d::getPassComponent< EdgesComponent >( parsingContext );
-				component.setEdgeColour( value );
+				auto & component = castor3d::getPassComponent< EdgesComponent >( *blockContext );
+				component.setEdgeColour( params[0]->get< castor::HdrRgbaColour >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserPassEdgeWidth )
+		static CU_ImplementAttributeParserBlock( parserPassEdgeWidth, castor3d::PassContext )
 		{
-			auto & parsingContext = castor3d::getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
 			else if ( !params.empty() )
 			{
-				float value;
-				params[0]->get( value );
-				auto & component = castor3d::getPassComponent< EdgesComponent >( parsingContext );
-				component.setEdgeWidth( value );
+				auto & component = castor3d::getPassComponent< EdgesComponent >( *blockContext );
+				component.setEdgeWidth( params[0]->get< float >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserPassDepthFactor )
+		static CU_ImplementAttributeParserBlock( parserPassDepthFactor, castor3d::PassContext )
 		{
-			auto & parsingContext = castor3d::getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
 			else if ( !params.empty() )
 			{
-				float value;
-				params[0]->get( value );
-				auto & component = castor3d::getPassComponent< EdgesComponent >( parsingContext );
-				component.setDepthFactor( value );
+				auto & component = castor3d::getPassComponent< EdgesComponent >( *blockContext );
+				component.setDepthFactor( params[0]->get< float >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserPassNormalFactor )
+		static CU_ImplementAttributeParserBlock( parserPassNormalFactor, castor3d::PassContext )
 		{
-			auto & parsingContext = castor3d::getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
 			else if ( !params.empty() )
 			{
-				float value;
-				params[0]->get( value );
-				auto & component = castor3d::getPassComponent< EdgesComponent >( parsingContext );
-				component.setNormalFactor( value );
+				auto & component = castor3d::getPassComponent< EdgesComponent >( *blockContext );
+				component.setNormalFactor( params[0]->get< float >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserPassObjectFactor )
+		static CU_ImplementAttributeParserBlock( parserPassObjectFactor, castor3d::PassContext )
 		{
-			auto & parsingContext = castor3d::getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
 			else if ( !params.empty() )
 			{
-				float value;
-				params[0]->get( value );
-				auto & component = castor3d::getPassComponent< EdgesComponent >( parsingContext );
-				component.setObjectFactor( value );
+				auto & component = castor3d::getPassComponent< EdgesComponent >( *blockContext );
+				component.setObjectFactor( params[0]->get< float >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserPassSmoothBandWidth )
+		static CU_ImplementAttributeParserBlock( parserPassSmoothBandWidth, castor3d::PassContext )
 		{
-			auto & parsingContext = castor3d::getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
 			else if ( !params.empty() )
 			{
-				float value;
-				params[0]->get( value );
-				auto & component = castor3d::getPassComponent< EdgesComponent >( parsingContext );
-				component.setSmoothBandWidth( value );
+				auto & component = castor3d::getPassComponent< EdgesComponent >( *blockContext );
+				component.setSmoothBandWidth( params[0]->get< float >() );
 			}
 		}
 		CU_EndAttribute()

@@ -14,7 +14,7 @@
 
 #include <ShaderWriter/Source.hpp>
 
-#define C3D_UseWaveIntrinsics 1
+#define C3D_UseWaveIntrinsics 0
 
 namespace castor3d::shader
 {
@@ -105,7 +105,7 @@ namespace castor3d::shader
 			FOR( writer, sdw::UInt, i, 0_u, i < spotLightCount, ++i )
 			{
 				auto lightIndex = writer.declLocale( "lightIndex"
-					, pointLightIndices[spotStartOffset + i] );
+					, spotLightIndices[spotStartOffset + i] );
 				computeSpotLight( lights.retrieveSpotLight( lightIndex ) );
 			}
 			ROF;

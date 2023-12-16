@@ -515,7 +515,7 @@ namespace castor3d
 	}
 
 	void PassComponentRegister::fillChannels( PassComponentTextureFlag const & flags
-		, SceneFileContext & parsingContext )
+		, TextureContext & parsingContext )
 	{
 		for ( auto & channelFiller : m_channelsFillers )
 		{

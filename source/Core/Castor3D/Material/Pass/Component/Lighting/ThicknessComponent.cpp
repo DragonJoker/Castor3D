@@ -41,11 +41,9 @@ namespace castor3d
 
 	namespace trsatt
 	{
-		static CU_ImplementAttributeParser( parserPassThicknessFactor )
+		static CU_ImplementAttributeParserBlock( parserPassThicknessFactor, PassContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
@@ -55,7 +53,7 @@ namespace castor3d
 			}
 			else
 			{
-				auto & component = getPassComponent< ThicknessComponent >( parsingContext );
+				auto & component = getPassComponent< ThicknessComponent >( *blockContext );
 				component.setThicknessFactor( params[0]->get< float >() );
 			}
 		}

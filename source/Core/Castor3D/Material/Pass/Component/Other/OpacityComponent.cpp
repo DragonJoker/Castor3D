@@ -50,11 +50,9 @@ namespace castor3d
 
 	namespace opacmp
 	{
-		static CU_ImplementAttributeParser( parserPassAlpha )
+		static CU_ImplementAttributeParserBlock( parserPassAlpha, PassContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
@@ -62,17 +60,15 @@ namespace castor3d
 			{
 				float value;
 				params[0]->get( value );
-				auto & component = getPassComponent< OpacityComponent >( parsingContext );
+				auto & component = getPassComponent< OpacityComponent >( *blockContext );
 				component.setOpacity( value );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserPassMixedInterpolative )
+		static CU_ImplementAttributeParserBlock( parserPassMixedInterpolative, PassContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
@@ -83,26 +79,24 @@ namespace castor3d
 
 				if ( value )
 				{
-					auto & alphaTest = getPassComponent< AlphaTestComponent >( parsingContext );
+					auto & alphaTest = getPassComponent< AlphaTestComponent >( *blockContext );
 					alphaTest.setAlphaRefValue( 0.95f );
 					alphaTest.setAlphaFunc( VK_COMPARE_OP_GREATER );
 					alphaTest.setBlendAlphaFunc( VK_COMPARE_OP_LESS_OR_EQUAL );
 
-					auto & blend = getPassComponent< BlendComponent >( parsingContext );
+					auto & blend = getPassComponent< BlendComponent >( *blockContext );
 					blend.setAlphaBlendMode( BlendMode::eInterpolative );
 
-					getPassComponent< OpacityComponent >( parsingContext );
+					getPassComponent< OpacityComponent >( *blockContext );
 				}
 
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserPassBWAccumulationOperator )
+		static CU_ImplementAttributeParserBlock( parserPassBWAccumulationOperator, PassContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
@@ -110,7 +104,7 @@ namespace castor3d
 			{
 				uint32_t value = 0u;
 				params[0]->get( value );
-				auto & component = getPassComponent< OpacityComponent >( parsingContext );
+				auto & component = getPassComponent< OpacityComponent >( *blockContext );
 				component.setBWAccumulationOperator( uint8_t( value ) );
 			}
 		}

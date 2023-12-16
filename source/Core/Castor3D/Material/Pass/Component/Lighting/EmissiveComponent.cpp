@@ -40,33 +40,29 @@ namespace castor3d
 
 	namespace emscmp
 	{
-		static CU_ImplementAttributeParser( parserPassEmissive )
+		static CU_ImplementAttributeParserBlock( parserPassEmissive, PassContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
 			else if ( !params.empty() )
 			{
-				auto & component = getPassComponent< EmissiveComponent >( parsingContext );
+				auto & component = getPassComponent< EmissiveComponent >( *blockContext );
 				component.setEmissiveFactor( params[0]->get< float >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserPassEmissiveColour )
+		static CU_ImplementAttributeParserBlock( parserPassEmissiveColour, PassContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
 			else if ( !params.empty() )
 			{
-				auto & component = getPassComponent< EmissiveComponent >( parsingContext );
+				auto & component = getPassComponent< EmissiveComponent >( *blockContext );
 				component.setEmissive( params[0]->get< castor::RgbColour >() );
 			}
 		}

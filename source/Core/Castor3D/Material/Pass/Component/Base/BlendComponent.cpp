@@ -48,11 +48,9 @@ namespace castor3d
 
 	namespace bldcmp
 	{
-		static CU_ImplementAttributeParser( parserPassAlphaBlendMode )
+		static CU_ImplementAttributeParserBlock( parserPassAlphaBlendMode, PassContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
@@ -60,17 +58,15 @@ namespace castor3d
 			{
 				uint32_t mode = 0;
 				params[0]->get( mode );
-				auto & component = getPassComponent< BlendComponent >( parsingContext );
+				auto & component = getPassComponent< BlendComponent >( *blockContext );
 				component.setAlphaBlendMode( BlendMode( mode ) );
 			}
 		}
 		CU_EndAttribute()
 
-			static CU_ImplementAttributeParser( parserPassColourBlendMode )
+		static CU_ImplementAttributeParserBlock( parserPassColourBlendMode, PassContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
@@ -78,7 +74,7 @@ namespace castor3d
 			{
 				uint32_t mode = 0;
 				params[0]->get( mode );
-				auto & component = getPassComponent< BlendComponent >( parsingContext );
+				auto & component = getPassComponent< BlendComponent >( *blockContext );
 				component.setColourBlendMode( BlendMode( mode ) );
 			}
 		}

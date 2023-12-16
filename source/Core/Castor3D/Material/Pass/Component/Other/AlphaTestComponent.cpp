@@ -63,11 +63,9 @@ namespace castor3d
 
 	namespace alptst
 	{
-		static CU_ImplementAttributeParser( parserPassAlphaFunc )
+		static CU_ImplementAttributeParserBlock( parserPassAlphaFunc, PassContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
@@ -77,18 +75,16 @@ namespace castor3d
 				float fFloat;
 				params[0]->get( uiFunc );
 				params[1]->get( fFloat );
-				auto & component = getPassComponent< AlphaTestComponent >( parsingContext );
+				auto & component = getPassComponent< AlphaTestComponent >( *blockContext );
 				component.setAlphaFunc( VkCompareOp( uiFunc ) );
 				component.setAlphaRefValue( fFloat );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserPassBlendAlphaFunc )
+		static CU_ImplementAttributeParserBlock( parserPassBlendAlphaFunc, PassContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
@@ -98,7 +94,7 @@ namespace castor3d
 				float fFloat;
 				params[0]->get( uiFunc );
 				params[1]->get( fFloat );
-				auto & component = getPassComponent< AlphaTestComponent >( parsingContext );
+				auto & component = getPassComponent< AlphaTestComponent >( *blockContext );
 				component.setBlendAlphaFunc( VkCompareOp( uiFunc ) );
 				component.setAlphaRefValue( fFloat );
 			}

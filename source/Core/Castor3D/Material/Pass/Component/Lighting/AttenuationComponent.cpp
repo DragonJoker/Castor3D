@@ -42,11 +42,9 @@ namespace castor3d
 
 	namespace trsatt
 	{
-		static CU_ImplementAttributeParser( parserPassAttenuationColour )
+		static CU_ImplementAttributeParserBlock( parserPassAttenuationColour, PassContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
@@ -56,17 +54,15 @@ namespace castor3d
 			}
 			else
 			{
-				auto & component = getPassComponent< AttenuationComponent >( parsingContext );
+				auto & component = getPassComponent< AttenuationComponent >( *blockContext );
 				component.setAttenuationColour( params[0]->get< castor::RgbColour >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserPassAttenuationDistance )
+		static CU_ImplementAttributeParserBlock( parserPassAttenuationDistance, PassContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
@@ -76,7 +72,7 @@ namespace castor3d
 			}
 			else
 			{
-				auto & component = getPassComponent< AttenuationComponent >( parsingContext );
+				auto & component = getPassComponent< AttenuationComponent >( *blockContext );
 				component.setAttenuationDistance( params[0]->get< float >() );
 			}
 		}

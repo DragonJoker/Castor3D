@@ -50,11 +50,9 @@ namespace ocean_fft
 
 	namespace parse
 	{
-		static CU_ImplementAttributeParser( parserPassWaterDensity )
+		static CU_ImplementAttributeParserBlock( parserPassWaterDensity, castor3d::PassContext )
 		{
-			auto & parsingContext = getSceneParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
@@ -62,7 +60,7 @@ namespace ocean_fft
 			{
 				float value;
 				params[0]->get( value );
-				auto & component = getPassComponent< FFTWaterComponent >( parsingContext );
+				auto & component = getPassComponent< FFTWaterComponent >( *blockContext );
 				component.setWaterDensity( value );
 			}
 		}

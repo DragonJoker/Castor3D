@@ -531,10 +531,15 @@ namespace castor3d
 	TextureData & TextureUnitCache::getSourceData( TextureSourceInfo const & sourceInfo )
 	{
 		auto realSource = sourceInfo;
-		realSource.allowSRGB( realSource.allowSRGB()
-			&& checkFlag( sourceInfo.textureConfig().textureSpace, TextureSpace::eAllowSRGB ) );
-		realSource.allowCompression( realSource.allowCompression()
-			&& !checkFlag( sourceInfo.textureConfig().textureSpace, TextureSpace::eTangentSpace ) );
+
+		if ( !realSource.isRenderTarget() )
+		{
+			realSource.allowSRGB( realSource.allowSRGB()
+				&& checkFlag( sourceInfo.textureConfig().textureSpace, TextureSpace::eAllowSRGB ) );
+			realSource.allowCompression( realSource.allowCompression()
+				&& !checkFlag( sourceInfo.textureConfig().textureSpace, TextureSpace::eTangentSpace ) );
+		}
+
 		auto hash = cachetex::makeHash( realSource );
 		auto ires = m_datas.emplace( hash, nullptr );
 
@@ -647,12 +652,12 @@ namespace castor3d
 		, PassTextureConfig const & passConfig
 		, TextureAnimationUPtr animation )
 	{
-		auto & sourceData = getSourceData( sourceInfo );
 		auto hash = cachetex::makeHash( sourceInfo, passConfig );
 		auto ires = m_unitDatas.emplace( hash, nullptr );
 
 		if ( ires.second )
 		{
+			auto & sourceData = getSourceData( sourceInfo );
 			ires.first->second = castor::makeUnique< TextureUnitData >( &sourceData
 				, passConfig
 				, std::move( animation ) );

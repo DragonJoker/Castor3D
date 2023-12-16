@@ -230,7 +230,6 @@ namespace castor3d
 
 		C3D_API static castor::AttributeParsers createParsers( castor3d::Engine & engine );
 		C3D_API static castor::StrUInt32Map createSections();
-		C3D_API static void * createContext( castor::FileParserContext & context );
 
 	private:
 		/** Sets the control that is currently moved (only one at a time is allowed).

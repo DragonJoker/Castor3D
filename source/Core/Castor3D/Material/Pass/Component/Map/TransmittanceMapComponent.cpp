@@ -53,50 +53,45 @@ namespace castor3d
 
 	namespace trscmp
 	{
-		static CU_ImplementAttributeParser( parserUnitTransmittanceMask )
+		static CU_ImplementAttributeParserBlock( parserUnitTransmittanceMask, TextureContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
-			else if ( !parsingContext.pass )
+			else if ( !blockContext->pass )
 			{
-				auto & plugin = parsingContext.parser->getEngine()->getPassComponentsRegister().getPlugin( TransmittanceMapComponent::TypeName );
-				plugin.fillTextureConfiguration( parsingContext.texture.configuration
+				auto & plugin = blockContext->root->engine->getPassComponentsRegister().getPlugin( TransmittanceMapComponent::TypeName );
+				plugin.fillTextureConfiguration( blockContext->configuration
 					, params[0]->get< uint32_t >() );
 			}
 			else
 			{
-				auto & plugin = parsingContext.pass->getComponentPlugin( TransmittanceMapComponent::TypeName );
-				plugin.fillTextureConfiguration( parsingContext.texture.configuration
+				auto & plugin = blockContext->pass->pass->getComponentPlugin( TransmittanceMapComponent::TypeName );
+				plugin.fillTextureConfiguration( blockContext->configuration
 					, params[0]->get< uint32_t >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserTexRemapTransmittance )
+		static CU_ImplementAttributeParserBlock( parserTexRemapTransmittance, SceneImportContext )
 		{
-			auto & parsingContext = getParserContext( context );
-			auto & plugin = parsingContext.parser->getEngine()->getPassComponentsRegister().getPlugin( TransmittanceMapComponent::TypeName );
-			parsingContext.sceneImportConfig.textureRemapIt = parsingContext.sceneImportConfig.textureRemaps.emplace( plugin.getTextureFlags(), TextureConfiguration{} ).first;
-			parsingContext.sceneImportConfig.textureRemapIt->second = TextureConfiguration{};
+			auto & plugin = blockContext->root->engine->getPassComponentsRegister().getPlugin( TransmittanceMapComponent::TypeName );
+			blockContext->textureRemapIt = blockContext->textureRemaps.emplace( plugin.getTextureFlags(), TextureConfiguration{} ).first;
+			blockContext->textureRemapIt->second = TextureConfiguration{};
 		}
-		CU_EndAttributePush( CSCNSection::eTextureRemapChannel )
+		CU_EndAttributePushBlock( CSCNSection::eTextureRemapChannel, blockContext )
 
-		static CU_ImplementAttributeParser( parserTexRemapTransmittanceMask )
+		static CU_ImplementAttributeParserBlock( parserTexRemapTransmittanceMask, SceneImportContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
 			else
 			{
-				auto & plugin = parsingContext.parser->getEngine()->getPassComponentsRegister().getPlugin( TransmittanceMapComponent::TypeName );
-				plugin.fillTextureConfiguration( parsingContext.sceneImportConfig.textureRemapIt->second
+				auto & plugin = blockContext->root->engine->getPassComponentsRegister().getPlugin( TransmittanceMapComponent::TypeName );
+				plugin.fillTextureConfiguration( blockContext->textureRemapIt->second
 					, params[0]->get< uint32_t >() );
 			}
 		}
@@ -128,10 +123,10 @@ namespace castor3d
 		, ChannelFillers & channelFillers )const
 	{
 		channelFillers.emplace( "transmittance", ChannelFiller{ getTextureFlags()
-			, []( SceneFileContext & parsingContext )
+			, []( TextureContext & blockContext )
 			{
-				auto & component = getPassComponent< TransmittanceMapComponent >( parsingContext );
-				component.fillChannel( parsingContext.texture.configuration
+				auto & component = getPassComponent< TransmittanceMapComponent >( blockContext );
+				component.fillChannel( blockContext.configuration
 					, 0xFF000000 );
 			} } );
 

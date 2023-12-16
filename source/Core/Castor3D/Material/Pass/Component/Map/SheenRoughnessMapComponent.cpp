@@ -53,50 +53,45 @@ namespace castor3d
 
 	namespace trscmp
 	{
-		static CU_ImplementAttributeParser( parserUnitSheenRoughnessMask )
+		static CU_ImplementAttributeParserBlock( parserUnitSheenRoughnessMask, TextureContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
-			else if ( !parsingContext.pass )
+			else if ( !blockContext->pass )
 			{
-				auto & plugin = parsingContext.parser->getEngine()->getPassComponentsRegister().getPlugin( SheenRoughnessMapComponent::TypeName );
-				plugin.fillTextureConfiguration( parsingContext.texture.configuration
+				auto & plugin = blockContext->root->engine->getPassComponentsRegister().getPlugin( SheenRoughnessMapComponent::TypeName );
+				plugin.fillTextureConfiguration( blockContext->configuration
 					, params[0]->get< uint32_t >() );
 			}
 			else
 			{
-				auto & plugin = parsingContext.pass->getComponentPlugin( SheenRoughnessMapComponent::TypeName );
-				plugin.fillTextureConfiguration( parsingContext.texture.configuration
+				auto & plugin = blockContext->pass->pass->getComponentPlugin( SheenRoughnessMapComponent::TypeName );
+				plugin.fillTextureConfiguration( blockContext->configuration
 					, params[0]->get< uint32_t >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserTexRemapSheenRoughness )
+		static CU_ImplementAttributeParserBlock( parserTexRemapSheenRoughness, SceneImportContext )
 		{
-			auto & parsingContext = getParserContext( context );
-			auto & plugin = parsingContext.parser->getEngine()->getPassComponentsRegister().getPlugin( SheenRoughnessMapComponent::TypeName );
-			parsingContext.sceneImportConfig.textureRemapIt = parsingContext.sceneImportConfig.textureRemaps.emplace( plugin.getTextureFlags(), TextureConfiguration{} ).first;
-			parsingContext.sceneImportConfig.textureRemapIt->second = TextureConfiguration{};
+			auto & plugin = blockContext->root->engine->getPassComponentsRegister().getPlugin( SheenRoughnessMapComponent::TypeName );
+			blockContext->textureRemapIt = blockContext->textureRemaps.emplace( plugin.getTextureFlags(), TextureConfiguration{} ).first;
+			blockContext->textureRemapIt->second = TextureConfiguration{};
 		}
-		CU_EndAttributePush( CSCNSection::eTextureRemapChannel )
+		CU_EndAttributePushBlock( CSCNSection::eTextureRemapChannel, blockContext )
 
-		static CU_ImplementAttributeParser( parserTexRemapSheenRoughnessMask )
+		static CU_ImplementAttributeParserBlock( parserTexRemapSheenRoughnessMask, SceneImportContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
 			else
 			{
-				auto & plugin = parsingContext.parser->getEngine()->getPassComponentsRegister().getPlugin( SheenRoughnessMapComponent::TypeName );
-				plugin.fillTextureConfiguration( parsingContext.sceneImportConfig.textureRemapIt->second
+				auto & plugin = blockContext->root->engine->getPassComponentsRegister().getPlugin( SheenRoughnessMapComponent::TypeName );
+				plugin.fillTextureConfiguration( blockContext->textureRemapIt->second
 					, params[0]->get< uint32_t >() );
 			}
 		}
@@ -128,10 +123,10 @@ namespace castor3d
 		, ChannelFillers & channelFillers )const
 	{
 		channelFillers.emplace( "sheen_roughness", ChannelFiller{ getTextureFlags()
-			, []( SceneFileContext & parsingContext )
+			, []( TextureContext & blockContext )
 			{
-				auto & component = getPassComponent< SheenRoughnessMapComponent >( parsingContext );
-				component.fillChannel( parsingContext.texture.configuration
+				auto & component = getPassComponent< SheenRoughnessMapComponent >( blockContext );
+				component.fillChannel( blockContext.configuration
 					, 0xFF000000u );
 			} } );
 

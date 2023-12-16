@@ -30,22 +30,24 @@ namespace
 		using namespace draw_edges;
 		castor::AttributeParsers result;
 
-		addParser( result
-			, uint32_t( castor3d::CSCNSection::eRenderTarget )
+		addParserT( result
+			, castor3d::CSCNSection::eRenderTarget
+			, Section::eRoot
 			, PostEffect::Type
 			, &parserDrawEdges );
-		addParser( result
-			, uint32_t( Section::eRoot )
+		addParserT( result
+			, Section::eRoot
 			, PostEffect::NormalDepthWidth
 			, &parserNormalDepthWidth
 			, { castor::makeParameter< castor::ParameterType::eInt32 >( castor::makeRange( 0, 1000 ) ) } );
-		addParser( result
-			, uint32_t( Section::eRoot )
+		addParserT( result
+			, Section::eRoot
 			, PostEffect::ObjectWidth
 			, &parserObjectWidth
 			, { castor::makeParameter< castor::ParameterType::eInt32 >( castor::makeRange( 0, 1000 ) ) } );
-		addParser( result
-			, uint32_t( Section::eRoot )
+		addParserT( result
+			, Section::eRoot
+			, castor3d::CSCNSection::eRenderTarget
 			, cuT( "}" )
 			, &parserDrawEdgesEnd );
 		return result;
@@ -57,13 +59,6 @@ namespace
 		{
 			{ uint32_t( draw_edges::Section::eRoot ), draw_edges::PostEffect::Type },
 		};
-	}
-
-	void * createContext( castor::FileParserContext & context )
-	{
-		draw_edges::ParserContext * userContext = new draw_edges::ParserContext;
-		userContext->engine = static_cast< castor3d::SceneFileParser * >( context.parser )->getEngine();
-		return userContext;
 	}
 }
 
@@ -97,7 +92,7 @@ extern "C"
 		engine->registerParsers( draw_edges::PostEffect::Type
 			, createParsers()
 			, createSections()
-			, &createContext );
+			, nullptr );
 	}
 
 	C3D_DrawEdges_API void OnUnload( castor3d::Engine * engine )

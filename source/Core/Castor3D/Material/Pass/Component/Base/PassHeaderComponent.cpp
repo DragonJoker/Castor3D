@@ -38,11 +38,9 @@ namespace castor3d
 
 	namespace phcmp
 	{
-		static CU_ImplementAttributeParser( parserPassLighting )
+		static CU_ImplementAttributeParserBlock( parserPassLighting, PassContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
@@ -50,7 +48,7 @@ namespace castor3d
 			{
 				bool value{ true };
 				params[0]->get( value );
-				auto & component = getPassComponent< PassHeaderComponent >( parsingContext );
+				auto & component = getPassComponent< PassHeaderComponent >( *blockContext );
 				component.enableLighting( value );
 			}
 		}

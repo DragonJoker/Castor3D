@@ -41,33 +41,29 @@ namespace castor3d
 
 	namespace refrcmp
 	{
-		static CU_ImplementAttributeParser( parserPassRefractionRatio )
+		static CU_ImplementAttributeParserBlock( parserPassRefractionRatio, PassContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
 			else if ( !params.empty() )
 			{
-				auto & component = getPassComponent< RefractionComponent >( parsingContext );
+				auto & component = getPassComponent< RefractionComponent >( *blockContext );
 				component.setRefractionRatio( params[0]->get< float >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserPassHasRefraction )
+		static CU_ImplementAttributeParserBlock( parserPassHasRefraction, PassContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
 			else if ( !params.empty() )
 			{
-				auto & component = getPassComponent< RefractionComponent >( parsingContext );
+				auto & component = getPassComponent< RefractionComponent >( *blockContext );
 				component.enableRefraction( params[0]->get< bool >() );
 			}
 		}

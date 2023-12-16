@@ -54,6 +54,20 @@ namespace castor3d
 		doStep();
 	}
 
+	void ProgressBar::ProgressLabel::setStep( castor::String const & text, int32_t value )
+	{
+		listener->postEvent( makeCpuFunctorEvent( CpuEventType::ePostCpuStep
+			, [this, value]()
+			{
+				if ( progress )
+				{
+					progress->setProgress( value );
+				}
+			} ) );
+		label = text;
+		doSetLabel( castor::string::toU32String( label ) );
+	}
+
 	void ProgressBar::ProgressLabel::setRange( int32_t value )
 	{
 		if ( rangeEvent )
@@ -189,6 +203,12 @@ namespace castor3d
 		m_local.step( localLabel );
 	}
 
+	void ProgressBar::setLocalStep( castor::String const & label, uint32_t count )
+	{
+		auto lock( castor::makeUniqueLock( *this ) );
+		m_local.setStep( label, int32_t( count ) );
+	}
+
 	//*********************************************************************************************
 
 	void initProgressBarGlobalRange( ProgressBar * progress
@@ -225,6 +245,16 @@ namespace castor3d
 		if ( progress )
 		{
 			progress->stepLocal( localLabel );
+		}
+	}
+
+	void setProgressBarLocalStep( ProgressBar * progress
+		, castor::String const & localLabel
+		, uint32_t count )
+	{
+		if ( progress )
+		{
+			progress->setLocalStep( localLabel, count );
 		}
 	}
 

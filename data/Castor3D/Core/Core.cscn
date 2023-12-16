@@ -10,6 +10,12 @@ font "Arial10"
 	height 10
 }
 
+font "Arial12"
+{
+	file "arial.ttf"
+	height 12
+}
+
 font "Arial16"
 {
 	file "arial.ttf"

@@ -56,11 +56,9 @@ namespace water
 
 	namespace waterpass
 	{
-		static CU_ImplementAttributeParser( parserDampeningFactor )
+		static CU_ImplementAttributeParserBlock( parserDampeningFactor, castor3d::PassContext )
 		{
-			auto & parsingContext = castor3d::getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
@@ -70,19 +68,15 @@ namespace water
 			}
 			else
 			{
-				float value;
-				params[0]->get( value );
-				auto & component = castor3d::getPassComponent< WaterComponent >( parsingContext );
-				component.setDampeningFactor( value );
+				auto & component = castor3d::getPassComponent< WaterComponent >( *blockContext );
+				component.setDampeningFactor( params[0]->get< float >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserDepthSofteningDistance )
+		static CU_ImplementAttributeParserBlock( parserDepthSofteningDistance, castor3d::PassContext )
 		{
-			auto & parsingContext = castor3d::getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
@@ -92,19 +86,15 @@ namespace water
 			}
 			else
 			{
-				float value;
-				params[0]->get( value );
-				auto & component = castor3d::getPassComponent< WaterComponent >( parsingContext );
-				component.setDepthSofteningDistance( value );
+				auto & component = castor3d::getPassComponent< WaterComponent >( *blockContext );
+				component.setDepthSofteningDistance( params[0]->get< float >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserNoiseTiling )
+		static CU_ImplementAttributeParserBlock( parserNoiseTiling, castor3d::PassContext )
 		{
-			auto & parsingContext = castor3d::getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
@@ -114,19 +104,15 @@ namespace water
 			}
 			else
 			{
-				float value;
-				params[0]->get( value );
-				auto & component = castor3d::getPassComponent< WaterComponent >( parsingContext );
-				component.setNoiseTiling( value );
+				auto & component = castor3d::getPassComponent< WaterComponent >( *blockContext );
+				component.setNoiseTiling( params[0]->get< float >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserRefrDistortionFactor )
+		static CU_ImplementAttributeParserBlock( parserRefrDistortionFactor, castor3d::PassContext )
 		{
-			auto & parsingContext = castor3d::getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
@@ -136,19 +122,15 @@ namespace water
 			}
 			else
 			{
-				float value;
-				params[0]->get( value );
-				auto & component = castor3d::getPassComponent< WaterComponent >( parsingContext );
-				component.setRefractionDistortionFactor( value );
+				auto & component = castor3d::getPassComponent< WaterComponent >( *blockContext );
+				component.setRefractionDistortionFactor( params[0]->get< float >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserRefrHeightFactor )
+		static CU_ImplementAttributeParserBlock( parserRefrHeightFactor, castor3d::PassContext )
 		{
-			auto & parsingContext = castor3d::getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
@@ -158,19 +140,15 @@ namespace water
 			}
 			else
 			{
-				float value;
-				params[0]->get( value );
-				auto & component = castor3d::getPassComponent< WaterComponent >( parsingContext );
-				component.setRefractionHeightFactor( value );
+				auto & component = castor3d::getPassComponent< WaterComponent >( *blockContext );
+				component.setRefractionHeightFactor( params[0]->get< float >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserRefrDistanceFactor )
+		static CU_ImplementAttributeParserBlock( parserRefrDistanceFactor, castor3d::PassContext )
 		{
-			auto & parsingContext = castor3d::getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
@@ -180,19 +158,15 @@ namespace water
 			}
 			else
 			{
-				float value;
-				params[0]->get( value );
-				auto & component = castor3d::getPassComponent< WaterComponent >( parsingContext );
-				component.setRefractionDistanceFactor( value );
+				auto & component = castor3d::getPassComponent< WaterComponent >( *blockContext );
+				component.setRefractionDistanceFactor( params[0]->get< float >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserSsrStepSize )
+		static CU_ImplementAttributeParserBlock( parserSsrStepSize, castor3d::PassContext )
 		{
-			auto & parsingContext = castor3d::getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
@@ -202,19 +176,15 @@ namespace water
 			}
 			else
 			{
-				float value;
-				params[0]->get( value );
-				auto & component = castor3d::getPassComponent< WaterComponent >( parsingContext );
-				component.setSsrStepSize( value );
+				auto & component = castor3d::getPassComponent< WaterComponent >( *blockContext );
+				component.setSsrStepSize( params[0]->get< float >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserSsrFwdStepCount )
+		static CU_ImplementAttributeParserBlock( parserSsrFwdStepCount, castor3d::PassContext )
 		{
-			auto & parsingContext = castor3d::getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
@@ -224,19 +194,15 @@ namespace water
 			}
 			else
 			{
-				uint32_t value;
-				params[0]->get( value );
-				auto & component = castor3d::getPassComponent< WaterComponent >( parsingContext );
-				component.setSsrForwardStepsCount( value );
+				auto & component = castor3d::getPassComponent< WaterComponent >( *blockContext );
+				component.setSsrForwardStepsCount( params[0]->get< uint32_t >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserSsrBckStepCount )
+		static CU_ImplementAttributeParserBlock( parserSsrBckStepCount, castor3d::PassContext )
 		{
-			auto & parsingContext = castor3d::getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
@@ -246,19 +212,15 @@ namespace water
 			}
 			else
 			{
-				uint32_t value;
-				params[0]->get( value );
-				auto & component = castor3d::getPassComponent< WaterComponent >( parsingContext );
-				component.setSsrBackwardStepsCount( value );
+				auto & component = castor3d::getPassComponent< WaterComponent >( *blockContext );
+				component.setSsrBackwardStepsCount( params[0]->get< uint32_t >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserSsrDepthMult )
+		static CU_ImplementAttributeParserBlock( parserSsrDepthMult, castor3d::PassContext )
 		{
-			auto & parsingContext = castor3d::getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
@@ -268,19 +230,15 @@ namespace water
 			}
 			else
 			{
-				float value;
-				params[0]->get( value );
-				auto & component = castor3d::getPassComponent< WaterComponent >( parsingContext );
-				component.setSsrDepthMult( value );
+				auto & component = castor3d::getPassComponent< WaterComponent >( *blockContext );
+				component.setSsrDepthMult( params[0]->get< float >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserFoamHeightStart )
+		static CU_ImplementAttributeParserBlock( parserFoamHeightStart, castor3d::PassContext )
 		{
-			auto & parsingContext = castor3d::getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
@@ -290,19 +248,15 @@ namespace water
 			}
 			else
 			{
-				float value;
-				params[0]->get( value );
-				auto & component = castor3d::getPassComponent< WaterComponent >( parsingContext );
-				component.setFoamHeightStart( value );
+				auto & component = castor3d::getPassComponent< WaterComponent >( *blockContext );
+				component.setFoamHeightStart( params[0]->get< float >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserFoamFadeDistance )
+		static CU_ImplementAttributeParserBlock( parserFoamFadeDistance, castor3d::PassContext )
 		{
-			auto & parsingContext = castor3d::getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
@@ -312,19 +266,15 @@ namespace water
 			}
 			else
 			{
-				float value;
-				params[0]->get( value );
-				auto & component = castor3d::getPassComponent< WaterComponent >( parsingContext );
-				component.setFoamFadeDistance( value );
+				auto & component = castor3d::getPassComponent< WaterComponent >( *blockContext );
+				component.setFoamFadeDistance( params[0]->get< float >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserFoamTiling )
+		static CU_ImplementAttributeParserBlock( parserFoamTiling, castor3d::PassContext )
 		{
-			auto & parsingContext = castor3d::getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
@@ -334,19 +284,15 @@ namespace water
 			}
 			else
 			{
-				float value;
-				params[0]->get( value );
-				auto & component = castor3d::getPassComponent< WaterComponent >( parsingContext );
-				component.setFoamTiling( value );
+				auto & component = castor3d::getPassComponent< WaterComponent >( *blockContext );
+				component.setFoamTiling( params[0]->get< float >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserFoamNoiseTiling )
+		static CU_ImplementAttributeParserBlock( parserFoamNoiseTiling, castor3d::PassContext )
 		{
-			auto & parsingContext = castor3d::getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
@@ -356,19 +302,15 @@ namespace water
 			}
 			else
 			{
-				float value;
-				params[0]->get( value );
-				auto & component = castor3d::getPassComponent< WaterComponent >( parsingContext );
-				component.setFoamNoiseTiling( value );
+				auto & component = castor3d::getPassComponent< WaterComponent >( *blockContext );
+				component.setFoamNoiseTiling( params[0]->get< float >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserFoamAngleExponent )
+		static CU_ImplementAttributeParserBlock( parserFoamAngleExponent, castor3d::PassContext )
 		{
-			auto & parsingContext = castor3d::getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
@@ -378,19 +320,15 @@ namespace water
 			}
 			else
 			{
-				float value;
-				params[0]->get( value );
-				auto & component = castor3d::getPassComponent< WaterComponent >( parsingContext );
-				component.setFoamAngleExponent( value );
+				auto & component = castor3d::getPassComponent< WaterComponent >( *blockContext );
+				component.setFoamAngleExponent( params[0]->get< float >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserFoamBrightness )
+		static CU_ImplementAttributeParserBlock( parserFoamBrightness, castor3d::PassContext )
 		{
-			auto & parsingContext = castor3d::getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
@@ -400,10 +338,8 @@ namespace water
 			}
 			else
 			{
-				float value;
-				params[0]->get( value );
-				auto & component = castor3d::getPassComponent< WaterComponent >( parsingContext );
-				component.setFoamBrightness( value );
+				auto & component = castor3d::getPassComponent< WaterComponent >( *blockContext );
+				component.setFoamBrightness( params[0]->get< float >() );
 			}
 		}
 		CU_EndAttribute()

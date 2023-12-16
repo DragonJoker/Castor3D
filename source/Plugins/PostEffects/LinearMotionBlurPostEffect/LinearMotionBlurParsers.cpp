@@ -15,84 +15,61 @@
 
 namespace motion_blur
 {
-	namespace
+	CU_ImplementAttributeParserNewBlock( parserMotionBlur, castor3d::TargetContext, BlurContext )
 	{
-		ParserContext & getParserContext( castor::FileParserContext & context )
-		{
-			return *static_cast< ParserContext * >( context.getUserContext( PostEffect::Type ) );
-		}
+		newBlockContext->renderTarget = blockContext->renderTarget;
 	}
+	CU_EndAttributePushNewBlock( MotionBlurSection::eRoot )
 
-	CU_ImplementAttributeParser( parserMotionBlur )
+	CU_ImplementAttributeParserBlock( parserDivider, BlurContext )
 	{
-	}
-	CU_EndAttributePush( MotionBlurSection::eRoot )
-
-	CU_ImplementAttributeParser( parserDivider )
-	{
-		auto & blurContext = getParserContext( context );
-
 		if ( params.empty() )
 		{
 			CU_ParsingError( "Missing parameter" );
 		}
 		else
 		{
-			float value{ 0.0f };
-			params[0]->get( value );
-			blurContext.data.vectorDivider = value;
+			params[0]->get( blockContext->data.vectorDivider );
 		}
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserSamples )
+	CU_ImplementAttributeParserBlock( parserSamples, BlurContext )
 	{
-		auto & blurContext = getParserContext( context );
-
 		if ( params.empty() )
 		{
 			CU_ParsingError( "Missing parameter" );
 		}
 		else
 		{
-			uint32_t value{ 0u };
-			params[0]->get( value );
-			blurContext.data.samplesCount = value;
+			params[0]->get( blockContext->data.samplesCount );
 		}
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserFpsScale )
+	CU_ImplementAttributeParserBlock( parserFpsScale, BlurContext )
 	{
-		auto & blurContext = getParserContext( context );
-
 		if ( params.empty() )
 		{
 			CU_ParsingError( "Missing parameter" );
 		}
 		else
 		{
-			bool value{ 0u };
-			params[0]->get( value );
-			blurContext.fpsScale = value;
+			params[0]->get( blockContext->fpsScale );
 		}
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserMotionBlurEnd )
+	CU_ImplementAttributeParserBlock( parserMotionBlurEnd, BlurContext )
 	{
-		auto & blurContext = getParserContext( context );
-		auto & parsingContext = castor3d::getParserContext( context );
 		castor3d::Parameters parameters;
-		parameters.add( cuT( "vectorDivider" ), blurContext.data.vectorDivider );
-		parameters.add( cuT( "samplesCount" ), blurContext.data.samplesCount );
-		parameters.add( cuT( "fpsScale" ), blurContext.fpsScale );
+		parameters.add( cuT( "vectorDivider" ), blockContext->data.vectorDivider );
+		parameters.add( cuT( "samplesCount" ), blockContext->data.samplesCount );
+		parameters.add( cuT( "fpsScale" ), blockContext->fpsScale );
 
-		auto effect = parsingContext.renderTarget->getPostEffect( PostEffect::Type );
+		auto effect = blockContext->renderTarget->getPostEffect( PostEffect::Type );
 		effect->enable( true );
 		effect->setParameters( parameters );
-
-		delete reinterpret_cast< ParserContext * >( context.unregisterUserContext( PostEffect::Type ) );
 	}
 	CU_EndAttributePop()
 }

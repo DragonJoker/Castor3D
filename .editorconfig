@@ -9,6 +9,10 @@ tab_width = 4
 trim_trailing_whitespace = true
 insert_final_newline = true
 
+[*.{c++,cc,cpp,cppm,cu,cuh,cxx,fx,h,h++,hh,hlsl,hpp,hxx,inl,ipp,ixx,tlh,tli}]
+# Visual C++ Code Style settings
+cpp_generate_documentation_comments = doxygen_slash_star
+# Visual C++ Formatting settings
 cpp_indent_braces = false
 cpp_indent_multi_line_relative_to = innermost_parenthesis
 cpp_indent_within_parentheses = indent
@@ -33,8 +37,8 @@ cpp_new_line_close_brace_same_line_empty_function = false
 cpp_new_line_before_catch = true
 cpp_new_line_before_else = true
 cpp_new_line_before_while_in_do_while = true
-cpp_space_within_parameter_list_parentheses = true
 cpp_space_before_function_open_parenthesis = remove
+cpp_space_within_parameter_list_parentheses = true
 cpp_space_between_empty_parameter_list_parentheses = false
 cpp_space_after_keywords_in_control_flow_statements = true
 cpp_space_within_control_flow_statement_parentheses = true
@@ -66,4 +70,8 @@ cpp_space_around_binary_operator = insert
 cpp_space_around_assignment_operator = insert
 cpp_space_pointer_reference_alignment = center
 cpp_space_around_ternary_operator = insert
+cpp_use_unreal_engine_macro_formatting = true
 cpp_wrap_preserve_blocks = never
+# Visual C++ Inlcude Cleanup settings
+cpp_include_cleanup_add_missing_error_tag_type = suggestion
+cpp_include_cleanup_remove_unused_error_tag_type = dimmed

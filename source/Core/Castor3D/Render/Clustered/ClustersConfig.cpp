@@ -27,242 +27,223 @@ namespace castor3d
 {
 	namespace clscfg
 	{
-		static CU_ImplementAttributeParser( parserRenderTargetClusters )
+		struct ClustersContext
 		{
-			auto & parsingContext = getParserContext( context );
+			ClustersConfigUPtr clustersConfig{};
+			RenderTargetRPtr renderTarget{};
+		};
 
-			if ( !parsingContext.renderTarget )
+		static CU_ImplementAttributeParserNewBlock( parserRenderTargetClusters, TargetContext, ClustersContext )
+		{
+			if ( !blockContext->renderTarget )
 			{
 				CU_ParsingError( cuT( "Render target not initialised." ) );
 			}
 			else
 			{
-				parsingContext.clustersConfig = castor::makeUnique< ClustersConfig >();
+				newBlockContext->renderTarget = blockContext->renderTarget;
+				newBlockContext->clustersConfig = castor::makeUnique< ClustersConfig >();
 			}
 		}
-		CU_EndAttributePush( CSCNSection::eClusters )
+		CU_EndAttributePushNewBlock( CSCNSection::eClusters )
 
-		static CU_ImplementAttributeParser( parserClustersEnabled )
+		static CU_ImplementAttributeParserBlock( parserClustersEnabled, ClustersContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
-			else if ( !parsingContext.clustersConfig )
+			else if ( !blockContext->clustersConfig )
 			{
 				CU_ParsingError( cuT( "Clusters configuration not initialised." ) );
 			}
 			else
 			{
-				params[0]->get( parsingContext.clustersConfig->enabled );
+				params[0]->get( blockContext->clustersConfig->enabled );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserClustersUseBVH )
+		static CU_ImplementAttributeParserBlock( parserClustersUseBVH, ClustersContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
-			else if ( !parsingContext.clustersConfig )
+			else if ( !blockContext->clustersConfig )
 			{
 				CU_ParsingError( cuT( "Clusters configuration not initialised." ) );
 			}
 			else
 			{
-				params[0]->get( parsingContext.clustersConfig->useLightsBVH );
+				params[0]->get( blockContext->clustersConfig->useLightsBVH );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserClustersSortLights )
+		static CU_ImplementAttributeParserBlock( parserClustersSortLights, ClustersContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
-			else if ( !parsingContext.clustersConfig )
+			else if ( !blockContext->clustersConfig )
 			{
 				CU_ParsingError( cuT( "Clusters configuration not initialised." ) );
 			}
 			else
 			{
-				params[0]->get( parsingContext.clustersConfig->sortLights );
+				params[0]->get( blockContext->clustersConfig->sortLights );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserClustersLimitClusters )
+		static CU_ImplementAttributeParserBlock( parserClustersLimitClusters, ClustersContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
-			else if ( !parsingContext.clustersConfig )
+			else if ( !blockContext->clustersConfig )
 			{
 				CU_ParsingError( cuT( "Clusters configuration not initialised." ) );
 			}
 			else
 			{
-				params[0]->get( parsingContext.clustersConfig->limitClustersToLightsAABB );
+				params[0]->get( blockContext->clustersConfig->limitClustersToLightsAABB );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserClustersParseDepth )
+		static CU_ImplementAttributeParserBlock( parserClustersParseDepth, ClustersContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
-			else if ( !parsingContext.clustersConfig )
+			else if ( !blockContext->clustersConfig )
 			{
 				CU_ParsingError( cuT( "Clusters configuration not initialised." ) );
 			}
 			else
 			{
-				params[0]->get( parsingContext.clustersConfig->parseDepthBuffer );
+				params[0]->get( blockContext->clustersConfig->parseDepthBuffer );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserClustersSpotCone )
+		static CU_ImplementAttributeParserBlock( parserClustersSpotCone, ClustersContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
-			else if ( !parsingContext.clustersConfig )
+			else if ( !blockContext->clustersConfig )
 			{
 				CU_ParsingError( cuT( "Clusters configuration not initialised." ) );
 			}
 			else
 			{
-				params[0]->get( parsingContext.clustersConfig->useSpotBoundingCone );
+				params[0]->get( blockContext->clustersConfig->useSpotBoundingCone );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserClustersSpotTightAABB )
+		static CU_ImplementAttributeParserBlock( parserClustersSpotTightAABB, ClustersContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
-			else if ( !parsingContext.clustersConfig )
+			else if ( !blockContext->clustersConfig )
 			{
 				CU_ParsingError( cuT( "Clusters configuration not initialised." ) );
 			}
 			else
 			{
-				params[0]->get( parsingContext.clustersConfig->useSpotTightBoundingBox );
+				params[0]->get( blockContext->clustersConfig->useSpotTightBoundingBox );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserClustersReduceWarpOptimisation )
+		static CU_ImplementAttributeParserBlock( parserClustersReduceWarpOptimisation, ClustersContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
-			else if ( !parsingContext.clustersConfig )
+			else if ( !blockContext->clustersConfig )
 			{
 				CU_ParsingError( cuT( "Clusters configuration not initialised." ) );
 			}
 			else
 			{
-				params[0]->get( parsingContext.clustersConfig->enableReduceWarpOptimisation );
+				params[0]->get( blockContext->clustersConfig->enableReduceWarpOptimisation );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserClustersBVHWarpOptimisation )
+		static CU_ImplementAttributeParserBlock( parserClustersBVHWarpOptimisation, ClustersContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
-			else if ( !parsingContext.clustersConfig )
+			else if ( !blockContext->clustersConfig )
 			{
 				CU_ParsingError( cuT( "Clusters configuration not initialised." ) );
 			}
 			else
 			{
-				params[0]->get( parsingContext.clustersConfig->enableBVHWarpOptimisation );
+				params[0]->get( blockContext->clustersConfig->enableBVHWarpOptimisation );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserClustersSplitScheme )
+		static CU_ImplementAttributeParserBlock( parserClustersSplitScheme, ClustersContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
-			else if ( !parsingContext.clustersConfig )
+			else if ( !blockContext->clustersConfig )
 			{
 				CU_ParsingError( cuT( "Clusters configuration not initialised." ) );
 			}
 			else
 			{
-				parsingContext.clustersConfig->splitScheme = ClusterSplitScheme( params[0]->get< uint32_t >() );
+				blockContext->clustersConfig->splitScheme = ClusterSplitScheme( params[0]->get< uint32_t >() );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserClustersBias )
+		static CU_ImplementAttributeParserBlock( parserClustersBias, ClustersContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
 			if ( params.empty() )
 			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
-			else if ( !parsingContext.clustersConfig )
+			else if ( !blockContext->clustersConfig )
 			{
 				CU_ParsingError( cuT( "Clusters configuration not initialised." ) );
 			}
 			else
 			{
-				params[0]->get( parsingContext.clustersConfig->bias );
+				params[0]->get( blockContext->clustersConfig->bias );
 			}
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserClustersEnd )
+		static CU_ImplementAttributeParserBlock( parserClustersEnd, ClustersContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.clustersConfig )
+			if ( !blockContext->clustersConfig )
 			{
 				CU_ParsingError( cuT( "Clusters configuration not initialised." ) );
 			}
 			else
 			{
-				parsingContext.renderTarget->setClustersConfig( *parsingContext.clustersConfig );
-				parsingContext.clustersConfig.reset();
+				blockContext->renderTarget->setClustersConfig( *blockContext->clustersConfig );
+				blockContext->clustersConfig.reset();
 			}
 		}
 		CU_EndAttributePop()
@@ -318,19 +299,22 @@ namespace castor3d
 	void ClustersConfig::addParsers( castor::AttributeParsers & result )
 	{
 		using namespace castor;
-		addParser( result, uint32_t( CSCNSection::eRenderTarget ), cuT( "clusters" ), clscfg::parserRenderTargetClusters );
-		addParser( result, uint32_t( CSCNSection::eClusters ), cuT( "enabled" ), clscfg::parserClustersEnabled, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
-		addParser( result, uint32_t( CSCNSection::eClusters ), cuT( "use_lights_bvh" ), clscfg::parserClustersUseBVH, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
-		addParser( result, uint32_t( CSCNSection::eClusters ), cuT( "sort_lights" ), clscfg::parserClustersSortLights, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
-		addParser( result, uint32_t( CSCNSection::eClusters ), cuT( "limit_clusters_to_lights_aabb" ), clscfg::parserClustersLimitClusters, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
-		addParser( result, uint32_t( CSCNSection::eClusters ), cuT( "parse_depth_buffer" ), clscfg::parserClustersParseDepth, { makeDefaultedParameter< ParameterType::eBool >( false ) } );
-		addParser( result, uint32_t( CSCNSection::eClusters ), cuT( "use_spot_bounding_cone" ), clscfg::parserClustersSpotCone, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
-		addParser( result, uint32_t( CSCNSection::eClusters ), cuT( "use_spot_tight_aabb" ), clscfg::parserClustersSpotTightAABB, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
-		addParser( result, uint32_t( CSCNSection::eClusters ), cuT( "enable_reduce_warp_optimisation" ), clscfg::parserClustersReduceWarpOptimisation, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
-		addParser( result, uint32_t( CSCNSection::eClusters ), cuT( "enable_bvh_warp_optimisation" ), clscfg::parserClustersBVHWarpOptimisation, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
-		addParser( result, uint32_t( CSCNSection::eClusters ), cuT( "split_scheme" ), clscfg::parserClustersSplitScheme, { makeParameter< ParameterType::eCheckedText, ClusterSplitScheme >() } );
-		addParser( result, uint32_t( CSCNSection::eClusters ), cuT( "bias" ), clscfg::parserClustersBias, { makeDefaultedParameter< ParameterType::eFloat >( 1.0f ) } );
-		addParser( result, uint32_t( CSCNSection::eClusters ), cuT( "}" ), clscfg::parserClustersEnd );
+		BlockParserContextT< TargetContext > targetContext{ result, CSCNSection::eRenderTarget };
+		BlockParserContextT< clscfg::ClustersContext > clustersContext{ result, CSCNSection::eClusters, CSCNSection::eRenderTarget };
+
+		targetContext.addPushParser( cuT( "clusters" ), CSCNSection::eClusters, clscfg::parserRenderTargetClusters );
+		clustersContext.addParser( cuT( "enabled" ), clscfg::parserClustersEnabled, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
+		clustersContext.addParser( cuT( "use_lights_bvh" ), clscfg::parserClustersUseBVH, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
+		clustersContext.addParser( cuT( "sort_lights" ), clscfg::parserClustersSortLights, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
+		clustersContext.addParser( cuT( "limit_clusters_to_lights_aabb" ), clscfg::parserClustersLimitClusters, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
+		clustersContext.addParser( cuT( "parse_depth_buffer" ), clscfg::parserClustersParseDepth, { makeDefaultedParameter< ParameterType::eBool >( false ) } );
+		clustersContext.addParser( cuT( "use_spot_bounding_cone" ), clscfg::parserClustersSpotCone, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
+		clustersContext.addParser( cuT( "use_spot_tight_aabb" ), clscfg::parserClustersSpotTightAABB, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
+		clustersContext.addParser( cuT( "enable_reduce_warp_optimisation" ), clscfg::parserClustersReduceWarpOptimisation, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
+		clustersContext.addParser( cuT( "enable_bvh_warp_optimisation" ), clscfg::parserClustersBVHWarpOptimisation, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
+		clustersContext.addParser( cuT( "split_scheme" ), clscfg::parserClustersSplitScheme, { makeParameter< ParameterType::eCheckedText, ClusterSplitScheme >() } );
+		clustersContext.addParser( cuT( "bias" ), clscfg::parserClustersBias, { makeDefaultedParameter< ParameterType::eFloat >( 1.0f ) } );
+		clustersContext.addPopParser( cuT( "}" ), clscfg::parserClustersEnd );
 	}
 
 	bool operator==( ClustersConfig const & lhs, ClustersConfig const & rhs )

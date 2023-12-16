@@ -6,14 +6,16 @@ See LICENSE file in root folder
 
 #include "DrawEdgesUbo.hpp"
 
+#include <Castor3D/Scene/SceneFileParser.hpp>
+
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/FileParser/FileParserContext.hpp>
 
 namespace draw_edges
 {
-	struct ParserContext
+	struct EdgesContext
 	{
-		castor3d::Engine * engine{ nullptr };
+		castor3d::RenderTargetRPtr renderTarget{};
 		DrawEdgesUboConfiguration data{};
 	};
 
@@ -23,10 +25,10 @@ namespace draw_edges
 		eRoot = CU_MakeSectionName( 'D', 'R', 'E', 'D' ),
 	};
 
-	CU_DeclareAttributeParser( parserDrawEdges )
-	CU_DeclareAttributeParser( parserNormalDepthWidth )
-	CU_DeclareAttributeParser( parserObjectWidth )
-	CU_DeclareAttributeParser( parserDrawEdgesEnd )
+	CU_DeclareAttributeParserBlock( parserDrawEdges, castor3d::TargetContext )
+	CU_DeclareAttributeParserBlock( parserNormalDepthWidth, EdgesContext )
+	CU_DeclareAttributeParserBlock( parserObjectWidth, EdgesContext )
+	CU_DeclareAttributeParserBlock( parserDrawEdgesEnd, EdgesContext )
 }
 
 #endif

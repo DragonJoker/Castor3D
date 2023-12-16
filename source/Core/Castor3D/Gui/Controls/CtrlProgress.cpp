@@ -61,22 +61,12 @@ namespace castor3d
 			, m_container ) );
 		m_progress->setVisible( true );
 
-		auto text = m_scene
-			? m_scene->addNewOverlay( getName() + cuT( "/Text" )
-				, getEngine()
-				, OverlayType::eText
-				, nullptr
-				, &m_container->getBackgroundOverlay() )->getTextOverlay()
-			: getEngine().addNewOverlay( getName() + cuT( "/Text" )
-				, getEngine()
-				, OverlayType::eText
-				, nullptr
-				, &m_container->getBackgroundOverlay() )->getTextOverlay();
-		m_text = text;
-		text->setPixelSize( getClientSize() );
-		text->setVisible( true );
-		text->setHAlign( HAlign::eCenter );
-		text->setVAlign( VAlign::eCenter );
+		m_text = manager.registerControlT( castor::makeUnique< StaticCtrl >( m_scene
+			, cuT( "Label" )
+			, &style->getLabelStyle()
+			, m_container ) );
+		m_text->setHAlign( HAlign::eCenter );
+		m_text->setVAlign( VAlign::eCenter );
 
 		setStyle( style );
 		doUpdateFlags();
@@ -247,8 +237,7 @@ namespace castor3d
 
 		if ( auto text = m_text )
 		{
-			text->setFont( style.getTextFontName() );
-			text->setMaterial( style.getTextMaterial() );
+			text->setStyle( &style.getLabelStyle() );
 		}
 	}
 
@@ -297,11 +286,6 @@ namespace castor3d
 				title->setOrder( index++, 0u );
 			}
 		}
-
-		if ( auto text = m_text )
-		{
-			text->setOrder( index++, 0u );
-		}
 	}
 
 	void ProgressCtrl::doAdjustZIndex( uint32_t offset )
@@ -312,11 +296,6 @@ namespace castor3d
 			{
 				title->setOrder( title->getLevel() + offset, 0u );
 			}
-		}
-
-		if ( auto text = m_text )
-		{
-			text->setOrder( text->getLevel() + offset, 0u );
 		}
 	}
 
@@ -403,8 +382,8 @@ namespace castor3d
 			{
 				if ( auto text = m_text )
 				{
-					text->setPixelPosition( m_container->getClientOffset() );
-					text->setPixelSize( m_container->getClientSize() );
+					text->setPosition( m_container->getClientOffset() );
+					text->setSize( m_container->getClientSize() );
 				}
 			}
 		}

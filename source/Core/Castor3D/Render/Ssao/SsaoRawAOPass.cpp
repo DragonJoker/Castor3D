@@ -326,7 +326,7 @@ namespace castor3d
 					auto currentOcclusion = writer.declLocale( "currentOcclusion"
 						, 0.0_f );
 					auto stepIdx = writer.declLocale( "stepIdx"
-						, 0_i );
+						, 0_u );
 
 					WHILE( writer, stepIdx < c3d_ssaoConfigData.bendStepCount && currentOcclusion == 0.0_f )
 					{

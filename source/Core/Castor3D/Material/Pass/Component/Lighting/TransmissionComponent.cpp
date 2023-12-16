@@ -41,11 +41,9 @@ namespace castor3d
 
 	namespace trs
 	{
-		static CU_ImplementAttributeParser( parserPassTransmission )
+		static CU_ImplementAttributeParserBlock( parserPassTransmission, PassContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
@@ -55,7 +53,7 @@ namespace castor3d
 			}
 			else
 			{
-				auto & component = getPassComponent< TransmissionComponent >( parsingContext );
+				auto & component = getPassComponent< TransmissionComponent >( *blockContext );
 				component.setTransmission( params[0]->get< float >() );
 			}
 		}

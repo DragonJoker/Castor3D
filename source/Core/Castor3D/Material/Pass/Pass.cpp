@@ -105,16 +105,41 @@ namespace castor3d
 			return std::next( it );
 		}
 
-		static CU_ImplementAttributeParser( parserShader )
+		static CU_ImplementAttributeParserNewBlock( parserPass, MaterialContext, PassContext )
 		{
-			auto & parsingContext = getParserContext( context );
-			parsingContext.shaderProgram = {};
-			parsingContext.shaderStage = VkShaderStageFlagBits( 0u );
-
-			if ( parsingContext.pass )
+			if ( blockContext->material )
 			{
-				auto & cache = parsingContext.parser->getEngine()->getShaderProgramCache();
-				parsingContext.shaderProgram = cache.getNewProgram( parsingContext.material->getName() + castor::string::toString( parsingContext.pass->getId() )
+				if ( blockContext->createMaterial
+					|| blockContext->material->getPassCount() < blockContext->passIndex )
+				{
+					newBlockContext->pass = blockContext->material->createPass();
+					newBlockContext->createPass = true;
+
+				}
+				else
+				{
+					newBlockContext->pass = blockContext->material->getPass( blockContext->passIndex );
+					newBlockContext->createPass = false;
+				}
+
+				++blockContext->passIndex;
+				newBlockContext->root = blockContext->root;
+				newBlockContext->scene = blockContext->scene;
+				newBlockContext->material = blockContext;
+			}
+			else
+			{
+				CU_ParsingError( cuT( "Material not initialised" ) );
+			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::ePass )
+
+		static CU_ImplementAttributeParserNewBlock( parserShader, PassContext, ProgramContext )
+		{
+			if ( blockContext->pass )
+			{
+				auto & cache = blockContext->pass->getOwner()->getEngine()->getShaderProgramCache();
+				newBlockContext->shaderProgram = cache.getNewProgram( blockContext->material->material->getName() + castor::string::toString( blockContext->pass->getId() )
 					, true );
 			}
 			else
@@ -122,23 +147,19 @@ namespace castor3d
 				CU_ParsingError( cuT( "Pass not initialised" ) );
 			}
 		}
-		CU_EndAttributePush( CSCNSection::eShaderProgram )
+		CU_EndAttributePushNewBlock( CSCNSection::eShaderProgram )
 
-		static CU_ImplementAttributeParser( parserEnd )
+		static CU_ImplementAttributeParserBlock( parserEnd, PassContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
 			else
 			{
-				parsingContext.pass->prepareTextures();
-				log::info << "Loaded pass [" << parsingContext.material->getName()
-					<< ", " << parsingContext.pass->getIndex() << "]" << std::endl;
-				parsingContext.pass = {};
-				parsingContext.passComponent = nullptr;
+				blockContext->pass->prepareTextures();
+				log::info << "Loaded pass [" << blockContext->material->material->getName()
+					<< ", " << blockContext->pass->getIndex() << "]" << std::endl;
 			}
 		}
 		CU_EndAttributePop()
@@ -677,11 +698,18 @@ namespace castor3d
 		}
 	}
 
-	void Pass::addParsers( castor::AttributeParsers & result )
+	void Pass::addParsers( castor::AttributeParsers & result
+			, castor::UInt32StrMap const & textureChannels )
 	{
 		using namespace castor;
-		addParser( result, uint32_t( CSCNSection::ePass ), cuT( "shader_program" ), matpass::parserShader );
-		addParser( result, uint32_t( CSCNSection::ePass ), cuT( "}" ), matpass::parserEnd );
+		BlockParserContextT< MaterialContext > materialContext{ result, CSCNSection::eMaterial };
+		BlockParserContextT< PassContext > passContext{ result, CSCNSection::ePass, CSCNSection::eMaterial };
+
+		materialContext.addPushParser( cuT( "pass" ), CSCNSection::ePass, matpass::parserPass );
+		passContext.addPushParser( cuT( "shader_program" ), CSCNSection::eShaderProgram, matpass::parserShader );
+		passContext.addPopParser( cuT( "}" ), matpass::parserEnd );
+
+		TextureUnit::addParsers( result, textureChannels );
 	}
 
 	float Pass::computeRoughnessFromGlossiness( float glossiness )

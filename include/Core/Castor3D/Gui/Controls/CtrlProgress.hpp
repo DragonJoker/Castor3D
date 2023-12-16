@@ -155,7 +155,7 @@ namespace castor3d
 		TextOverlayRPtr m_title{};
 		PanelCtrlRPtr m_container{};
 		PanelCtrlRPtr m_progress{};
-		TextOverlayRPtr m_text{};
+		StaticCtrlRPtr m_text{};
 		castor::RangedValue< int32_t > m_value;
 	};
 }

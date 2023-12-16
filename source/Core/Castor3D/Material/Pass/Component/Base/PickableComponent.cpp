@@ -35,11 +35,9 @@ namespace castor3d
 
 	namespace tws
 	{
-		static CU_ImplementAttributeParser( parserPassPickable )
+		static CU_ImplementAttributeParserBlock( parserPassPickable, PassContext )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.pass )
+			if ( !blockContext->pass )
 			{
 				CU_ParsingError( cuT( "No Pass initialised." ) );
 			}
@@ -47,7 +45,7 @@ namespace castor3d
 			{
 				bool value;
 				params[0]->get( value );
-				auto & component = getPassComponent< PickableComponent >( parsingContext );
+				auto & component = getPassComponent< PickableComponent >( *blockContext );
 				component.setPickable( value );
 			}
 		}
