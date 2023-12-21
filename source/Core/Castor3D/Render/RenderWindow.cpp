@@ -459,16 +459,17 @@ namespace castor3d
 			}
 
 			auto progress = m_progressBar.get();
-			initProgressBarGlobalRange( progress
-				, 6u + m_renderTarget->countInitialisationSteps() );
+			incProgressBarGlobalRange( progress
+				, 1u + m_renderTarget->countInitialisationSteps() );
 			getEngine()->postEvent( makeCpuFunctorEvent( CpuEventType::ePreGpuStep
 				, [this]()
 				{
 					if ( m_renderTarget )
 					{
 						auto progress = m_progressBar.get();
-						m_renderTarget->initialise( [this, progress]( RenderTarget const & rt, QueueData const & queue )
+						m_renderTarget->initialise( [this]( RenderTarget const & rt, QueueData const & queue )
 							{
+								auto progress = m_progressBar.get();
 								stepProgressBarGlobalStartLocal( progress
 									, "Initialising: Render Window"
 									, 6u );
