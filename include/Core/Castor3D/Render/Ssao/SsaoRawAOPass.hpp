@@ -82,6 +82,7 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
+		static uint32_t countInitialisationSteps()noexcept;
 		Texture const & getResult()const
 		{
 			return m_result;

@@ -159,7 +159,7 @@ namespace castor3d
 		{
 		}
 
-		static uint32_t countInitialisationSteps()
+		static uint32_t countInitialisationSteps()noexcept
 		{
 			uint32_t result = 0u;
 			++result;// light injection;

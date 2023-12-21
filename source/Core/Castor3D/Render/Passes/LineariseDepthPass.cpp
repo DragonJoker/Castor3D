@@ -308,4 +308,9 @@ namespace castor3d
 			m_mipViews.push_back( destination );
 		}
 	}
+
+	uint32_t LineariseDepthPass::countInitialisationSteps()noexcept
+	{
+		return MaxLinearizedDepthMipLevel + 1u;
+	}
 }

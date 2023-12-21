@@ -138,7 +138,7 @@ namespace castor3d
 			, getOwner()->getCameraUbo() );
 	}
 
-	uint32_t OpaqueRendering::countInitialisationSteps()
+	uint32_t OpaqueRendering::countInitialisationSteps()noexcept
 	{
 		uint32_t result = 0u;
 		result += SsaoPass::countInitialisationSteps();

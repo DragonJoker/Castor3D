@@ -263,6 +263,20 @@ namespace castor3d
 		return result;
 	}
 
+	uint32_t Voxelizer::countInitialisationSteps()noexcept
+	{
+		uint32_t result = 0u;
+		result += 1;// clear static pass
+		result += 1;// voxelize static pass
+		result += 1;// copy static to dynamic pass
+		result += 1;// voxelize dynamic pass
+		result += 1;// voxel buffer to texture pass
+		result += 1;// primary voxel mipmap generation pass
+		result += 1;// voxel secondary bounce pass
+		result += 1;// secondary voxel mipmap generation pass
+		return result;
+	}
+
 	crg::FramePass & Voxelizer::doCreateVoxelizePass( crg::FramePassArray const & previousPasses
 		, ProgressBar * progress
 		, ashes::Buffer< Voxel > const & outVoxels

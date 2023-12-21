@@ -8,6 +8,7 @@
 #include "Castor3D/Overlay/TextOverlay.hpp"
 
 #include <CastorUtils/Design/ResourceCache.hpp>
+#include <CastorUtils/Miscellaneous/Debug.hpp>
 
 CU_ImplementSmartPtr( castor3d, ProgressBar )
 
@@ -15,145 +16,147 @@ namespace castor3d
 {
 	//*********************************************************************************************
 
-	void ProgressBar::ProgressLabel::update( ProgressCtrlRPtr value )
+	void ProgressBar::ProgressLabel::update( ProgressCtrlRPtr ctrl )
 	{
-		progress = value;
-		doSetTitle( castor::string::toU32String( title ) );
-		doSetLabel( castor::string::toU32String( label ) );
-	}
+		progress = ctrl;
 
-	void ProgressBar::ProgressLabel::initRange( int32_t mod )
-	{
 		if ( progress )
 		{
-			setRange( mod );
+			doUpdate();
 		}
 	}
 
-	void ProgressBar::ProgressLabel::setTitle( castor::String const & value )
+	void ProgressBar::ProgressLabel::initRange( int32_t newRangeMax )
 	{
-		title = value;
-		doSetTitle( castor::string::toU32String( title ) );
+		data.value = 0;
+		data.rangeMax = newRangeMax;
+
+		if ( progress )
+		{
+			doUpdate();
+		}
 	}
 
-	void ProgressBar::ProgressLabel::setLabel( castor::String const & value )
+	void ProgressBar::ProgressLabel::setTitle( castor::String const & newTitle )
 	{
-		label = value;
-		doSetLabel( castor::string::toU32String( label ) );
+		data.title = newTitle;
+
+		if ( progress )
+		{
+			doUpdate();
+		}
 	}
 
-	void ProgressBar::ProgressLabel::step( castor::String const & value )
+	void ProgressBar::ProgressLabel::setLabel( castor::String const & newLabel )
 	{
-		doStep();
-		label = value;
-		doSetLabel( castor::string::toU32String( label ) );
+		data.label = newLabel;
+
+		if ( progress )
+		{
+			doUpdate();
+		}
+	}
+
+	void ProgressBar::ProgressLabel::step( castor::String const & newLabel )
+	{
+		data.label = newLabel;
+		++data.value;
+
+		if ( progress )
+		{
+			doUpdate();
+		}
 	}
 
 	void ProgressBar::ProgressLabel::step()
 	{
-		doStep();
-	}
+		++data.value;
 
-	void ProgressBar::ProgressLabel::setStep( castor::String const & text, int32_t value )
-	{
-		listener->postEvent( makeCpuFunctorEvent( CpuEventType::ePostCpuStep
-			, [this, value]()
-			{
-				if ( progress )
-				{
-					progress->setProgress( value );
-				}
-			} ) );
-		label = text;
-		doSetLabel( castor::string::toU32String( label ) );
-	}
-
-	void ProgressBar::ProgressLabel::setRange( int32_t value )
-	{
-		if ( rangeEvent )
-		{
-			rangeEvent->skip();
-			rangeEvent = nullptr;
-		}
-
-		rangeEvent = listener->postEvent( makeCpuFunctorEvent( CpuEventType::ePostCpuStep
-			, [this, value]()
-			{
-				rangeEvent = nullptr;
-
-				if ( progress )
-				{
-					progress->setRange( castor::makeRange( 0, value ) );
-				}
-			} ) );
-	}
-
-	void ProgressBar::ProgressLabel::incRange( int32_t mod )
-	{
 		if ( progress )
 		{
-			setRange( progress->getRange().getMax() + mod );
+			doUpdate();
 		}
+	}
+
+	void ProgressBar::ProgressLabel::setStep( castor::String const & newLabel, int32_t newValue )
+	{
+		data.label = newLabel;
+		setStep( newValue );
+	}
+
+	void ProgressBar::ProgressLabel::setStep( int32_t newValue )
+	{
+		data.value = newValue;
+
+		if ( progress )
+		{
+			doUpdate();
+		}
+	}
+
+	void ProgressBar::ProgressLabel::setRange( int32_t newRangeMax )
+	{
+		data.rangeMax = newRangeMax;
+
+		if ( progress )
+		{
+			doUpdate();
+		}
+	}
+
+	int32_t ProgressBar::ProgressLabel::incRange( int32_t mod )
+	{
+		data.rangeMax += mod;
+
+		if ( progress )
+		{
+			doUpdate();
+		}
+
+		return getIndex();
 	}
 
 	int32_t ProgressBar::ProgressLabel::getIndex()const
 	{
+		return data.value;
+	}
+
+	void ProgressBar::ProgressLabel::set( castor::String const & newLabel
+		, int32_t newRangeMax
+		, int32_t newValue )
+	{
+		data.label = newLabel;
+		data.rangeMax = newRangeMax;
+		data.value = newValue;
+
 		if ( progress )
 		{
-			return progress->getProgress();
+			doUpdate();
 		}
-
-		return 0;
 	}
 
-	void ProgressBar::ProgressLabel::doSetTitle( castor::U32String const & value )
+	void ProgressBar::ProgressLabel::doUpdate()
 	{
-		if ( titleEvent )
+		if ( updateEvent )
 		{
-			titleEvent->skip();
-			titleEvent = nullptr;
+			updateEvent->skip();
+			updateEvent = nullptr;
 		}
 
-		titleEvent = listener->postEvent( makeCpuFunctorEvent( CpuEventType::ePostCpuStep
-			, [this, value]()
+		CU_Require( data.value <= data.rangeMax );
+		auto update = data;
+		updateEvent = listener->postEvent( makeCpuFunctorEvent( CpuEventType::ePostCpuStep
+			, [this, update]()
 			{
-				titleEvent = nullptr;
+				updateEvent = nullptr;
 
 				if ( progress )
 				{
-					progress->setTitle( value );
-				}
-			} ) );
-	}
-
-	void ProgressBar::ProgressLabel::doSetLabel( castor::U32String const & value )
-	{
-		if ( labelEvent )
-		{
-			labelEvent->skip();
-			labelEvent = nullptr;
-		}
-
-		labelEvent = listener->postEvent( makeCpuFunctorEvent( CpuEventType::ePostCpuStep
-			, [this, value]()
-			{
-				labelEvent = nullptr;
-
-				if ( progress )
-				{
-					progress->setCaption( value );
-				}
-			} ) );
-	}
-
-	void ProgressBar::ProgressLabel::doStep()
-	{
-		listener->postEvent( makeCpuFunctorEvent( CpuEventType::ePostCpuStep
-			, [this]()
-			{
-				if ( progress )
-				{
-					progress->incProgress();
+					progress->setTitle( castor::string::toU32String( update.title ) );
+					progress->setCaption( castor::string::toU32String( update.label ) );
+					progress->setProgress( 0 );
+					progress->setRange( castor::makeRange( 0, update.rangeMax ) );
+					progress->setProgress( update.value );
 				}
 			} ) );
 	}
@@ -172,7 +175,6 @@ namespace castor3d
 	void ProgressBar::update( ProgressCtrlRPtr globalProgress
 		, ProgressCtrlRPtr localProgress )
 	{
-		auto lock( castor::makeUniqueLock( *this ) );
 		m_global.update( globalProgress );
 		m_local.update( localProgress );
 	}
@@ -182,31 +184,59 @@ namespace castor3d
 		m_global.initRange( int32_t( value ) );
 	}
 
+	uint32_t ProgressBar::incGlobalRange( uint32_t value )
+	{
+		return uint32_t( m_global.incRange( int32_t( value ) ) );
+	}
+
 	void ProgressBar::stepGlobal( castor::String const & globalTitle )
 	{
-		auto lock( castor::makeUniqueLock( *this ) );
 		m_global.setTitle( globalTitle );
 		m_global.step();
+	}
+
+	void ProgressBar::setGlobalStep( castor::String const & title, uint32_t count )
+	{
+		m_global.setTitle( title );
+		m_global.setStep( int32_t( count ) );
 	}
 
 	void ProgressBar::initLocalRange( castor::String const & globalLabel
 		, uint32_t value )
 	{
-		auto lock( castor::makeUniqueLock( *this ) );
 		m_global.setLabel( globalLabel );
 		m_local.initRange( int32_t( value ) );
 	}
 
 	void ProgressBar::stepLocal( castor::String const & localLabel )
 	{
-		auto lock( castor::makeUniqueLock( *this ) );
 		m_local.step( localLabel );
 	}
 
 	void ProgressBar::setLocalStep( castor::String const & label, uint32_t count )
 	{
-		auto lock( castor::makeUniqueLock( *this ) );
 		m_local.setStep( label, int32_t( count ) );
+	}
+
+	void ProgressBar::setGlobalTitle( castor::String const & globalTitle )
+	{
+		m_global.setTitle( globalTitle );
+	}
+
+	void ProgressBar::stepGlobalStartLocal( castor::String const & globalLabel
+			, uint32_t rangeMax )
+	{
+		m_global.setLabel( globalLabel );
+		m_local.initRange( int32_t( rangeMax ) );
+	}
+
+	void ProgressBar::setLocal( castor::String const & globalLabel
+			, castor::String const & localLabel
+			, uint32_t rangeMax
+			, uint32_t value )
+	{
+		m_global.setLabel( globalLabel );
+		m_local.set( localLabel, int32_t( rangeMax ), int32_t( value ) );
 	}
 
 	//*********************************************************************************************
@@ -220,22 +250,33 @@ namespace castor3d
 		}
 	}
 
-	void stepProgressBarGlobal( ProgressBar * progress
+	uint32_t incProgressBarGlobalRange( ProgressBar * progress
+		, uint32_t increment )
+	{
+		if ( progress )
+		{
+			return progress->incGlobalRange( increment );
+		}
+
+		return 0u;
+	}
+
+	void setProgressBarGlobalTitle( ProgressBar * progress
 		, castor::String const & globalTitle )
 	{
 		if ( progress )
 		{
-			progress->stepGlobal( globalTitle );
+			progress->setGlobalTitle( globalTitle );
 		}
 	}
 
-	void initProgressBarLocalRange( ProgressBar * progress
-		, castor::String const & globalLabel
-		, uint32_t value )
+	void setProgressBarGlobalStep( ProgressBar * progress
+		, castor::String const & globalTitle
+		, uint32_t count )
 	{
 		if ( progress )
 		{
-			progress->initLocalRange( globalLabel, value );
+			progress->setGlobalStep( globalTitle, count );
 		}
 	}
 
@@ -248,13 +289,28 @@ namespace castor3d
 		}
 	}
 
-	void setProgressBarLocalStep( ProgressBar * progress
-		, castor::String const & localLabel
-		, uint32_t count )
+	void stepProgressBarGlobalStartLocal( ProgressBar * progress
+		, castor::String const & globalLabel
+		, uint32_t rangeMax )
 	{
 		if ( progress )
 		{
-			progress->setLocalStep( localLabel, count );
+			progress->stepGlobalStartLocal( globalLabel, rangeMax );
+		}
+	}
+
+	void setProgressBarLocal( ProgressBar * progress
+		, castor::String const & globalLabel
+		, castor::String const & localLabel
+		, uint32_t rangeMax
+		, uint32_t value )
+	{
+		if ( progress )
+		{
+			progress->setLocal( globalLabel
+				, localLabel
+				, rangeMax
+				, value );
 		}
 	}
 

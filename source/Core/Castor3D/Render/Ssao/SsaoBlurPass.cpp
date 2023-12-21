@@ -598,4 +598,9 @@ namespace castor3d
 
 		config.accept( visitor );
 	}
+
+	uint32_t SsaoBlurPass::countInitialisationSteps()noexcept
+	{
+		return 1u;
+	}
 }

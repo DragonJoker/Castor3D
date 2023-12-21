@@ -78,6 +78,7 @@ namespace castor3d
 		/**@{*/
 		C3D_API Texture const & getResult()const;
 		C3D_API Texture const & getBentNormals()const;
+		static uint32_t countInitialisationSteps()noexcept;
 
 		SsaoConfig const & getConfig()const
 		{
@@ -87,16 +88,6 @@ namespace castor3d
 		crg::FramePass const & getLastPass()const
 		{
 			return *m_lastPass;
-		}
-
-		static uint32_t countInitialisationSteps()
-		{
-			uint32_t result = 0u;
-			result += 12;// m_linearisePass;
-			result += 2;// m_rawAoPass;
-			result += 2;// m_horizontalBlur;
-			result += 2;// m_verticalBlur;
-			return result;
 		}
 		/**@}*/
 

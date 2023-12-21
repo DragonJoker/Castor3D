@@ -86,11 +86,12 @@ namespace castor3d
 		m_transparentPassResult.reset();
 	}
 
-	uint32_t TransparentRendering::countInitialisationSteps()
+	uint32_t TransparentRendering::countInitialisationSteps()noexcept
 	{
 		uint32_t result = 0u;
-		result += 2;// m_mipgenPass;
-		result += 2;// m_transparentPass;
+		result += 1;// colour copy pass;
+		result += 1;// mips generation pass;
+		result += 1;// accuumulation pass;
 		result += WeightedBlendRendering::countInitialisationSteps();
 		return result;
 	}
@@ -176,6 +177,7 @@ namespace castor3d
 		copy.addTransferInputView( getOwner()->getTargetResult() );
 		copy.addTransferOutputView( m_mippedColour.targetViewId );
 
+		stepProgressBarLocal( progress, "Creating mips generation pass" );
 		auto & result = m_graph.createPass( "MipsGenPass"
 			, [this, progress]( crg::FramePass const & framePass
 				, crg::GraphContext & context
