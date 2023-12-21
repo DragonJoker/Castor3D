@@ -220,9 +220,9 @@ namespace castor
 	*/
 	struct ParserFunctionAndParams
 	{
-		ParserFunction function;
-		uint32_t resultSection;
-		ParserParameterArray params;
+		ParserFunction function{};
+		uint32_t resultSection{};
+		ParserParameterArray params{};
 	};
 	/**
 	*\~english

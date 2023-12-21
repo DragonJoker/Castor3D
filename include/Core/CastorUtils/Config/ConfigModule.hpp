@@ -56,6 +56,7 @@ namespace castor
 	using Nanoseconds = std::chrono::nanoseconds;
 
 	CU_DeclareVector( String, String );
+	CU_DeclareVector( StringView, StringView );
 	CU_DeclareMap( String, uint32_t, UInt32Str );
 	CU_DeclareMap( String, uint64_t, UInt64Str );
 	CU_DeclareMap( String, bool, BoolStr );

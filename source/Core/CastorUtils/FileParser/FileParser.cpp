@@ -3,28 +3,179 @@
 #include "CastorUtils/FileParser/ParserParameter.hpp"
 #include "CastorUtils/Data/ZipArchive.hpp"
 
+#define CU_DisplayLines 0
+
 namespace castor
 {
 	namespace fileprs
 	{
-		static String doStripComments( String const & line )
+		static void trimLine( StringView & text
+			, StringView seps = " \t\r" )
 		{
-			String result = line;
-			auto index = result.find( "//" );
-
-			if ( index != String::npos )
+			if ( !text.empty() )
 			{
-				result = result.substr( 0, index );
+				auto index = text.find_first_not_of( seps );
+
+				if ( index > 0 )
+				{
+					if ( index != String::npos )
+					{
+						text = text.substr( index, String::npos );
+					}
+					else
+					{
+						text = text.substr( 0, 0 );
+					}
+				}
+
+				if ( !text.empty() )
+				{
+					index = text.find_last_not_of( seps );
+
+					if ( index < text.size() - 1 )
+					{
+						if ( index != String::npos )
+						{
+							text = text.substr( 0, index + 1 );
+						}
+						else
+						{
+							text = text.substr( 0, 0 );
+						}
+					}
+				}
+			}
+		}
+
+		static StringView getLine( LoggerInstance & logger
+			, String const & content
+			, uint64_t & lineIndex
+			, size_t & offset )
+		{
+			auto current = std::next( content.begin(), ptrdiff_t( offset ) );
+			auto it = std::find_if( current
+				, content.end()
+				, []( xchar const & c )
+				{
+					return c == '\n' || c == '\r';
+				} );
+			offset = size_t( std::distance( content.begin(), it ) );
+			StringView result{ current, it };
+
+			if ( it != content.end() && *it == '\r' )
+			{
+				++offset;
+				++it;
 			}
 
-			index = result.find( "/*" );
-
-			if ( index != String::npos )
+			if ( it != content.end() && *it == '\n' )
 			{
-				result = result.substr( index, result.find( "*/", index ) - index );
+				++offset;
+				++it;
+			}
+
+#if CU_DisplayLines
+			std::stringstream idx;
+			idx << std::setw( 8 ) << std::left << std::setfill( ' ' ) << ( lineIndex + 1u );
+			logger.logDebug( idx.str() + String{ result } );
+#endif
+			trimLine( result );
+			// Trim RHS of inline comment start
+			result = result.substr( 0, result.find( "//" ) );
+
+			if ( result.empty() && it != content.end() )
+			{
+				result = getLine( logger, content, ++lineIndex, offset );
 			}
 
 			return result;
+		}
+
+		static void splitLineCommentBlock( StringView text
+			, std::vector< StringView > & work )
+		{
+			trimLine( text );
+			auto commentBegin = text.find( cuT( "/*" ) );
+			auto commentEnd = text.find( cuT( "*/" ) );
+
+			if ( commentBegin != StringView::npos
+				|| commentEnd != StringView::npos )
+			{
+				auto min = std::min( commentBegin, commentEnd );
+				auto max = std::max( commentBegin, commentEnd );
+				auto before = text.substr( 0, min );
+				trimLine( before );
+
+				if ( !before.empty() )
+				{
+					work.emplace_back( before );
+				}
+
+				work.emplace_back( text.substr( min, 2 ) );
+
+				if ( max != StringView::npos )
+				{
+					min += 2;
+					auto between = text.substr( min, max - min );
+					auto after = text.substr( max + 2 );
+					trimLine( between );
+					trimLine( after );
+
+					if ( !between.empty() )
+					{
+						work.emplace_back( between );
+					}
+
+					work.emplace_back( text.substr( max, 2 ) );
+
+					if ( !after.empty() )
+					{
+						work.emplace_back( after );
+					}
+				}
+				else
+				{
+					auto after = text.substr( min + 2 );
+					trimLine( after );
+
+					if ( !after.empty() )
+					{
+						work.emplace_back( after );
+					}
+				}
+			}
+			else if ( !text.empty() )
+			{
+				work.emplace_back( text );
+			}
+		}
+
+		static void splitLine( StringView text
+			, std::vector< StringView > & work )
+		{
+			std::size_t pos = 0;
+			std::size_t start = 0;
+
+			do
+			{
+				pos = text.find_first_of( "{}", start );
+
+				if ( pos == std::string::npos )
+				{
+					splitLineCommentBlock( text.substr( start ), work );
+				}
+				else
+				{
+					if ( pos != start )
+					{
+						splitLineCommentBlock( text.substr( start, pos - start ), work );
+					}
+
+					start = pos + 1;
+					work.emplace_back( &text[pos], 1u );
+				}
+			}
+			while ( pos != std::string::npos );
 		}
 	}
 
@@ -131,7 +282,11 @@ namespace castor
 
 				try
 				{
-					m_parser.getLogger().logTrace( action.file + cuT( ":" ) + string::toString( action.line ) + cuT( " (" ) + action.name + cuT( ")" ) );
+#if CU_DisplayLines
+					std::stringstream idx;
+					idx << std::setw( 8 ) << std::left << std::setfill( ' ' ) << action.line;
+					m_parser.getLogger().logDebug( action.file + cuT( ":" ) + idx.str() + cuT( " (" ) + action.name + cuT( ")" ) );
+#endif
 					action.function.function( *m_context, block, filled );
 					CU_Require( m_context->sections.size() == m_context->blocks.size() );
 				}
@@ -369,21 +524,22 @@ namespace castor
 			}
 		}
 
+		String content;
+
 		if ( TextFile file{ path, File::OpenMode::eRead } )
 		{
-			String content;
 			file.copyToString( content );
-
-			if ( !content.empty() )
-			{
-				m_logger.logInfo( cuT( "FileParser : Preprocessing file [" ) + path.getFileName( true ) + cuT( "]." ) );
-				processFile( path, content, preprocessed );
-				m_logger.logInfo( cuT( "FileParser : Finished preprocessing file [" ) + path.getFileName( true ) + cuT( "]." ) );
-			}
 		}
 		else
 		{
 			m_logger.logError( cuT( "FileParser : Couldn't open file [" ) + path.getFileName( true ) + cuT( "]." ) );
+		}
+
+		if ( !content.empty() )
+		{
+			m_logger.logInfo( cuT( "FileParser : Preprocessing file [" ) + path.getFileName( true ) + cuT( "]." ) );
+			processFile( path, content, preprocessed );
+			m_logger.logInfo( cuT( "FileParser : Finished preprocessing file [" ) + path.getFileName( true ) + cuT( "]." ) );
 		}
 	}
 
@@ -406,157 +562,77 @@ namespace castor
 		m_fileName = path.getFileName( true );
 		bool isNextOpenBrace = false;
 		SectionId pendingSection{};
-		bool bCommented = false;
+		bool commented = false;
 		auto lineIndex = 0ull;
 
-		bool bReuse = false;
-		String strLine;
-		String strLine2;
-		String file = content;
-		string::replace( file, cuT( "\r\n" ), cuT( "\n" ) );
-		StringArray lines = string::split( file, cuT( "\n" ), uint32_t( std::count( file.begin(), file.end(), '\n' ) + 1 ), true );
-		auto it = lines.begin();
+		std::vector< StringView > work;
+		std::vector< StringView > nextWork;
+		size_t offset = 0u;
+		auto nxtLine = fileprs::getLine( m_logger, content, lineIndex, offset );
+		fileprs::splitLine( nxtLine, nextWork );
 
-		while ( it != lines.end() )
+		while ( !nxtLine.empty() )
 		{
-			if ( !bReuse )
+			if ( work.empty() )
 			{
-				strLine = *it++;
-				lineIndex++;
-			}
-			else
-			{
-				bReuse = false;
+				++lineIndex;
+				std::swap( work, nextWork );
+				nxtLine = fileprs::getLine( m_logger, content, lineIndex, offset );
+				fileprs::splitLine( nxtLine, nextWork );
 			}
 
-			//m_logger.logDebug( string::toString( m_context->m_line ) + cuT( " - " ) + strLine.c_str() );
-			string::trim( strLine );
-
-			if ( !strLine.empty() )
+			while ( !work.empty() )
 			{
-				if ( strLine.size() < 2 || strLine.substr( 0, 2 ) != cuT( "//" ) )
+				auto curLine = work.front();
+				work.erase( work.begin() );
+#if CU_DisplayLines
+				m_logger.logDebug( "[" + String{ curLine } + "]" );
+#endif
+
+				if ( !commented )
 				{
-					if ( !bCommented )
+					commented = curLine == "/*";
+
+					if ( !commented )
 					{
-						std::size_t uiCommentBegin = strLine.find( cuT( "/*" ) );
-
-						if ( uiCommentBegin != String::npos )
+						if ( curLine == "{" )
 						{
-							std::size_t uiCommentEnd = strLine.find( cuT( "*/" ) );
-
-							if ( uiCommentEnd < strLine.size() - 3 )
-							{
-								if ( uiCommentBegin > 0 )
-								{
-									strLine = strLine.substr( 0, uiCommentBegin ) + strLine.substr( uiCommentEnd + 2 );
-								}
-								else
-								{
-									strLine = strLine.substr( uiCommentEnd + 2 );
-								}
-							}
-							else if ( uiCommentEnd != String::npos )
-							{
-								if ( uiCommentBegin > 0 )
-								{
-									strLine = strLine.substr( 0, uiCommentBegin );
-								}
-								else
-								{
-									strLine.clear();
-								}
-							}
-							else if ( uiCommentBegin > 0 )
-							{
-								strLine = strLine.substr( 0, uiCommentBegin );
-								bCommented = true;
-							}
-							else
-							{
-								bCommented = true;
-							}
-
-							if ( !strLine.empty() && !bCommented )
-							{
-								bReuse = true;
-							}
+							isNextOpenBrace = false;
+							doEnterBlock( preprocessed, pendingSection, lineIndex, false );
 						}
 						else
 						{
-							if ( strLine.find( cuT( "{" ) ) == strLine.size() - 1 && strLine.size() > 1 )
+							// No opening brace on the line
+							if ( isNextOpenBrace )
 							{
-								// We got a "{" at the end of the line, so we split the line in two and reuse the line
-								strLine2 = strLine.substr( 0, strLine.size() - 1 );
-								string::trim( strLine2 );
-								auto [nextOpenBrace, newSection] = doParseScriptLine( preprocessed, strLine2, lineIndex );
+								// Optional block not filled, emulate block end.
+								doEnterBlock( preprocessed, pendingSection, lineIndex, true );
+								doLeaveBlock( preprocessed, lineIndex, true );
+								isNextOpenBrace = false;
+							}
+
+							if ( curLine == "}" )
+							{
+								doLeaveBlock( preprocessed, lineIndex, false );
+							}
+							else
+							{
+								auto [nextOpenBrace, newSection] = doInvokeParser( preprocessed, curLine, lineIndex );
 								isNextOpenBrace = nextOpenBrace;
 
 								if ( isNextOpenBrace )
 								{
 									pendingSection = newSection;
 								}
-
-								strLine = cuT( "{" );
-								bReuse = true;
-							}
-							else
-							{
-								if ( isNextOpenBrace )
-								{
-									if ( strLine != cuT( "{" ) )
-									{
-										// Optional block not filled, emulate block end.
-										doEnterBlock( preprocessed, pendingSection, lineIndex, true );
-										doLeaveBlock( preprocessed, lineIndex, true );
-										bReuse = true;
-									}
-									else
-									{
-										doEnterBlock( preprocessed, pendingSection, lineIndex, false );
-									}
-
-									isNextOpenBrace = false;
-								}
-								else if ( strLine == cuT( "{" ) )
-								{
-									doEnterBlock( preprocessed, m_sections.back(), lineIndex, false );
-								}
-								else
-								{
-									auto [nextOpenBrace, newSection] = doParseScriptLine( preprocessed, strLine, lineIndex );
-									isNextOpenBrace = nextOpenBrace;
-
-									if ( isNextOpenBrace )
-									{
-										pendingSection = newSection;
-									}
-								}
-
-								if ( m_ignoreLevel > 0 )
-								{
-									if ( !strLine.empty() && strLine.find( cuT( "}" ) ) == strLine.size() - 1 )
-									{
-										doLeaveBlock( preprocessed, lineIndex, false );
-									}
-								}
 							}
 						}
 					}
-					else
+				}
+				else
+				{
+					if ( curLine == "*/" )
 					{
-						std::size_t uiCommentEnd = strLine.find( cuT( "*/" ) );
-
-						if ( uiCommentEnd < strLine.size() - 3 )
-						{
-							strLine = strLine.substr( uiCommentEnd + 2 );
-							bCommented = false;
-							bReuse = true;
-						}
-						else if ( uiCommentEnd != String::npos )
-						{
-							strLine.clear();
-							bCommented = false;
-						}
+						commented = false;
 					}
 				}
 			}
@@ -652,78 +728,13 @@ namespace castor
 		addParser( section, section, name, std::move( function ), std::move( params ) );
 	}
 
-	std::pair< bool, SectionId > FileParser::doParseScriptLine( PreprocessedFile & preprocessed
-		, String & line
-		, uint64_t lineIndex )
-	{
-		bool carryOn = true;
-		bool result = false;
-		std::size_t blockEndIndex = line.find( cuT( "}" ) );
-		line = fileprs::doStripComments( line );
-
-		if ( blockEndIndex != String::npos )
-		{
-			if ( blockEndIndex == 0 )
-			{
-				// Block end at the beginning of the line, we process it then we parse the line
-				line = line.substr( 1 );
-				string::trim( line );
-				doLeaveBlock( preprocessed, lineIndex, false );
-
-				if ( !line.empty() )
-				{
-					auto [nextOpenBrace, _] = doParseScriptLine( preprocessed, line, lineIndex );
-					result = nextOpenBrace;
-				}
-				else
-				{
-					result = false;
-				}
-
-				carryOn = false;
-			}
-			else if ( blockEndIndex == line.size() - 1 )
-			{
-				// Block end at the end of the line : we process the line then the block end
-				line = line.substr( 0, blockEndIndex );
-				string::trim( line );
-
-				if ( !line.empty() )
-				{
-					doParseScriptLine( preprocessed, line, lineIndex );
-				}
-
-				doLeaveBlock( preprocessed, lineIndex, false );
-				result = false;
-				carryOn = false;
-			}
-			else
-			{
-				// Block end in the middle of the line, we don't process it, we parse the line
-				carryOn = true;
-			}
-		}
-		else
-		{
-			// No block end, we parse the line
-			carryOn = true;
-		}
-
-		if ( carryOn )
-		{
-			return doInvokeParser( preprocessed, line, lineIndex );
-		}
-
-		return { result, m_sections.back() };
-	}
-
 	bool FileParser::doDiscardParser( PreprocessedFile & preprocessed
-		, String const & value )
+		, StringView value )
 	{
 		auto & context = preprocessed.getContext();
 		Logger::logWarning( makeStringStream()
 			<< cuT( "Parser not found @ line " ) << context.line
-			<< cuT( " : " ) + value );
+			<< cuT( " : " ) + String{ value } );
 		return false;
 	}
 
@@ -801,7 +812,7 @@ namespace castor
 	}
 
 	std::pair< bool, SectionId > FileParser::doInvokeParser( PreprocessedFile & preprocessed
-		, String & line
+		, StringView & line
 		, uint64_t lineIndex )
 	{
 		bool result = false;
@@ -810,8 +821,8 @@ namespace castor
 		if ( !doIsInIgnoredBlock() )
 		{
 			m_ignored = false;
-			StringArray splitCmd = string::split( line, cuT( " \t" ), 1, false );
-			auto functionName = splitCmd[0];
+			auto splitCmd = string::split( line, cuT( " \t" ), 1, false );
+			String functionName{ splitCmd[0] };
 			auto iter = m_parsers.find( functionName );
 			bool found = false;
 
@@ -910,13 +921,12 @@ namespace castor
 
 	void FileParser::doIncludeFile( PreprocessedFile & preprocessed
 		, uint64_t CU_UnusedParam( lineIndex )
-		, String const & param )
+		, StringView param )
 	{
-		String params = param;
+		String params{ param };
 		Path path;
-		if ( ValueParser< ParameterType::ePath >::parse( m_logger
-			, params
-			, path ) )
+
+		if ( ValueParser< ParameterType::ePath >::parse( m_logger, params, path ) )
 		{
 			auto subparser = doCreateParser();
 			subparser->doInitialiseParser( m_path / path );
@@ -926,7 +936,7 @@ namespace castor
 	}
 
 	void FileParser::doAddDefine( uint64_t lineIndex
-		, String const & param )
+		, StringView param )
 	{
 		auto functionName = "define";
 		auto values = string::split( param, cuT( " \t" ), 1 );

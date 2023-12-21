@@ -134,148 +134,98 @@ namespace GuiCommon
 			{
 				using namespace castor3d;
 
-				if ( name == "}" )
-				{
-					std::swap( curSection, nextSection );
-				}
-
 				if ( implicit )
 				{
-					nextSection = curSection;
+					if ( name == "}" )
+					{
+						curSection = nextSection;
+					}
+				}
+				else
+				{
+					if ( name != "}" )
+					{
+						curSection = nextSection;
+					}
 				}
 
-				auto simplifySection = []( castor::SectionId section )
-					{
-						switch ( section )
-						{
-						case uint32_t( CSCNSection::eSampler ):
-							return uint32_t( Category::eSampler );
-						case uint32_t( CSCNSection::eLight ):
-						case uint32_t( CSCNSection::eShadows ):
-						case uint32_t( CSCNSection::eRsm ):
-						case uint32_t( CSCNSection::eLpv ):
-						case uint32_t( CSCNSection::eRaw ):
-						case uint32_t( CSCNSection::ePcf ):
-						case uint32_t( CSCNSection::eVsm ):
-							return uint32_t( Category::eLight );
-						case uint32_t( CSCNSection::eNode ):
-							return uint32_t( Category::eNode );
-						case uint32_t( CSCNSection::eObject ):
-						case uint32_t( CSCNSection::eObjectMaterials ):
-							return uint32_t( Category::eObject );
-						case uint32_t( CSCNSection::eMesh ):
-						case uint32_t( CSCNSection::eSubmesh ):
-						case uint32_t( CSCNSection::eBillboard ):
-						case uint32_t( CSCNSection::eBillboardList ):
-						case uint32_t( CSCNSection::eParticleSystem ):
-						case uint32_t( CSCNSection::eParticle ):
-						case uint32_t( CSCNSection::eMeshDefaultMaterials ):
-						case uint32_t( CSCNSection::eSkeleton ):
-						case uint32_t( CSCNSection::eMorphAnimation ):
-							return uint32_t( Category::eMesh );
-						case uint32_t( CSCNSection::eMaterial ):
-						case uint32_t( CSCNSection::ePass ):
-						case uint32_t( CSCNSection::eTextureUnit ):
-						case uint32_t( CSCNSection::eShaderProgram ):
-						case uint32_t( CSCNSection::eShaderStage ):
-						case uint32_t( CSCNSection::eShaderUBO ):
-						case uint32_t( CSCNSection::eUBOVariable ):
-						case uint32_t( CSCNSection::eTextureAnimation ):
-						case uint32_t( CSCNSection::eTextureTransform ):
-							return uint32_t( Category::eMaterial );
-						case uint32_t( CSCNSection::eTexture ):
-							return uint32_t( Category::eTexture );
-						case uint32_t( CSCNSection::ePanelOverlay ):
-						case uint32_t( CSCNSection::eBorderPanelOverlay ):
-						case uint32_t( CSCNSection::eTextOverlay ):
-							return uint32_t( Category::eOverlay );
-						case uint32_t( GUISection::eGUI ):
-						case uint32_t( GUISection::eTheme ):
-						case uint32_t( GUISection::eButtonStyle ):
-						case uint32_t( GUISection::eEditStyle ):
-						case uint32_t( GUISection::eComboStyle ):
-						case uint32_t( GUISection::eListStyle ):
-						case uint32_t( GUISection::eSliderStyle ):
-						case uint32_t( GUISection::eStaticStyle ):
-						case uint32_t( GUISection::ePanelStyle ):
-						case uint32_t( GUISection::eProgressStyle ):
-						case uint32_t( GUISection::eExpandablePanelStyle ):
-						case uint32_t( GUISection::eFrameStyle ):
-						case uint32_t( GUISection::eScrollBarStyle ):
-						case uint32_t( GUISection::eButton ):
-						case uint32_t( GUISection::eStatic ):
-						case uint32_t( GUISection::eSlider ):
-						case uint32_t( GUISection::eComboBox ):
-						case uint32_t( GUISection::eListBox ):
-						case uint32_t( GUISection::eEdit ):
-						case uint32_t( GUISection::ePanel ):
-						case uint32_t( GUISection::eProgress ):
-						case uint32_t( GUISection::eExpandablePanel ):
-						case uint32_t( GUISection::eExpandablePanelHeader ):
-						case uint32_t( GUISection::eExpandablePanelExpand ):
-						case uint32_t( GUISection::eExpandablePanelContent ):
-						case uint32_t( GUISection::eFrame ):
-						case uint32_t( GUISection::eFrameContent ):
-						case uint32_t( GUISection::eBoxLayout ):
-						case uint32_t( GUISection::eLayoutCtrl ):
-							return uint32_t( Category::eGui );
-						case uint32_t( CSCNSection::eSceneImport ):
-							return uint32_t( Category::eImport );
-						default:
-							return uint32_t( Category::eOther );
-						}
-					};
-				curSection = simplifySection( curSection );
-				nextSection = simplifySection( nextSection );
-
-				switch ( nextSection )
+				switch ( curSection )
 				{
-				case uint32_t( Category::eSampler ):
+				case uint32_t( CSCNSection::eSampler ):
 					return uint32_t( Category::eSampler );
-				case uint32_t( Category::eLight ):
+				case uint32_t( CSCNSection::eLight ):
+				case uint32_t( CSCNSection::eShadows ):
+				case uint32_t( CSCNSection::eRsm ):
+				case uint32_t( CSCNSection::eLpv ):
+				case uint32_t( CSCNSection::eRaw ):
+				case uint32_t( CSCNSection::ePcf ):
+				case uint32_t( CSCNSection::eVsm ):
 					return uint32_t( Category::eLight );
-				case uint32_t( Category::eNode ):
+				case uint32_t( CSCNSection::eNode ):
 					return uint32_t( Category::eNode );
-				case uint32_t( Category::eObject ):
+				case uint32_t( CSCNSection::eObject ):
+				case uint32_t( CSCNSection::eObjectMaterials ):
 					return uint32_t( Category::eObject );
-				case uint32_t( Category::eMesh ):
+				case uint32_t( CSCNSection::eMesh ):
+				case uint32_t( CSCNSection::eSubmesh ):
+				case uint32_t( CSCNSection::eBillboard ):
+				case uint32_t( CSCNSection::eBillboardList ):
+				case uint32_t( CSCNSection::eParticleSystem ):
+				case uint32_t( CSCNSection::eParticle ):
+				case uint32_t( CSCNSection::eMeshDefaultMaterials ):
+				case uint32_t( CSCNSection::eSkeleton ):
+				case uint32_t( CSCNSection::eMorphAnimation ):
 					return uint32_t( Category::eMesh );
-				case uint32_t( Category::eMaterial ):
+				case uint32_t( CSCNSection::eMaterial ):
+				case uint32_t( CSCNSection::ePass ):
+				case uint32_t( CSCNSection::eTextureUnit ):
+				case uint32_t( CSCNSection::eShaderProgram ):
+				case uint32_t( CSCNSection::eShaderStage ):
+				case uint32_t( CSCNSection::eShaderUBO ):
+				case uint32_t( CSCNSection::eUBOVariable ):
+				case uint32_t( CSCNSection::eTextureAnimation ):
+				case uint32_t( CSCNSection::eTextureTransform ):
 					return uint32_t( Category::eMaterial );
-				case uint32_t( Category::eTexture ):
+				case uint32_t( CSCNSection::eTexture ):
 					return uint32_t( Category::eTexture );
-				case uint32_t( Category::eOverlay ):
+				case uint32_t( CSCNSection::ePanelOverlay ):
+				case uint32_t( CSCNSection::eBorderPanelOverlay ):
+				case uint32_t( CSCNSection::eTextOverlay ):
 					return uint32_t( Category::eOverlay );
-				case uint32_t( Category::eImport ):
-					return uint32_t( Category::eImport );
-				case uint32_t( Category::eGui ):
+				case uint32_t( GUISection::eGUI ):
+				case uint32_t( GUISection::eTheme ):
+				case uint32_t( GUISection::eButtonStyle ):
+				case uint32_t( GUISection::eEditStyle ):
+				case uint32_t( GUISection::eComboStyle ):
+				case uint32_t( GUISection::eListStyle ):
+				case uint32_t( GUISection::eSliderStyle ):
+				case uint32_t( GUISection::eStaticStyle ):
+				case uint32_t( GUISection::ePanelStyle ):
+				case uint32_t( GUISection::eProgressStyle ):
+				case uint32_t( GUISection::eExpandablePanelStyle ):
+				case uint32_t( GUISection::eFrameStyle ):
+				case uint32_t( GUISection::eScrollBarStyle ):
+				case uint32_t( GUISection::eButton ):
+				case uint32_t( GUISection::eStatic ):
+				case uint32_t( GUISection::eSlider ):
+				case uint32_t( GUISection::eComboBox ):
+				case uint32_t( GUISection::eListBox ):
+				case uint32_t( GUISection::eEdit ):
+				case uint32_t( GUISection::ePanel ):
+				case uint32_t( GUISection::eProgress ):
+				case uint32_t( GUISection::eExpandablePanel ):
+				case uint32_t( GUISection::eExpandablePanelHeader ):
+				case uint32_t( GUISection::eExpandablePanelExpand ):
+				case uint32_t( GUISection::eExpandablePanelContent ):
+				case uint32_t( GUISection::eFrame ):
+				case uint32_t( GUISection::eFrameContent ):
+				case uint32_t( GUISection::eBoxLayout ):
+				case uint32_t( GUISection::eLayoutCtrl ):
 					return uint32_t( Category::eGui );
+				case uint32_t( CSCNSection::eSceneImport ):
+					return uint32_t( Category::eImport );
 				default:
-					switch ( curSection )
-					{
-					case uint32_t( Category::eSampler ):
-						return uint32_t( Category::eSampler );
-					case uint32_t( Category::eLight ):
-						return uint32_t( Category::eLight );
-					case uint32_t( Category::eNode ):
-						return uint32_t( Category::eNode );
-					case uint32_t( Category::eObject ):
-						return uint32_t( Category::eObject );
-					case uint32_t( Category::eMesh ):
-						return uint32_t( Category::eMesh );
-					case uint32_t( Category::eMaterial ):
-						return uint32_t( Category::eMaterial );
-					case uint32_t( Category::eTexture ):
-						return uint32_t( Category::eTexture );
-					case uint32_t( Category::eOverlay ):
-						return uint32_t( Category::eOverlay );
-					case uint32_t( Category::eImport ):
-						return uint32_t( Category::eImport );
-					case uint32_t( Category::eGui ):
-						return uint32_t( Category::eGui );
-					default:
-						return uint32_t( Category::eOther );
-					}
+					return uint32_t( Category::eOther );
 				}
 			}
 
@@ -338,7 +288,10 @@ namespace GuiCommon
 				, bool implicit )override
 			{
 				using namespace castor3d;
-				auto category = getCategory( name, section, function.resultSection, implicit );
+				auto category = getCategory( name
+					, section
+					, function.resultSection
+					, implicit );
 				m_total[category]++;
 				castor::PreprocessedFile::doAddParserAction( std::move( file )
 					, line
@@ -512,7 +465,7 @@ namespace GuiCommon
 						castor3d::setProgressBarGlobalTitle( progress
 							, "Loading scene..." );
 						castor3d::stepProgressBarGlobalStartLocal( progress
-							, "Preprocessing"
+							, "Preprocessing scene file"
 							, 1u );
 
 						helpers::PreprocessedSceneFile preprocessed{ parser, parser.initialiseParser( fileName ) };
