@@ -63,11 +63,11 @@ namespace castor3d
 	{
 	}
 
-	uint32_t PrepassRendering::countInitialisationSteps()
+	uint32_t PrepassRendering::countInitialisationSteps()noexcept
 	{
 		uint32_t result = 0u;
-		result += 2;// m_depthPass;
-		result += 2;// m_computeDepthRange;
+		result += 1;// m_depthPass;
+		result += 1;// m_computeDepthRange;
 		return result;
 	}
 

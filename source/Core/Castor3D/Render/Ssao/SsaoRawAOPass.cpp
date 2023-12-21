@@ -641,4 +641,9 @@ namespace castor3d
 		visitor.visit( m_programs[index].shader );
 		config.accept( visitor );
 	}
+
+	uint32_t SsaoRawAOPass::countInitialisationSteps()noexcept
+	{
+		return 1u;
+	}
 }

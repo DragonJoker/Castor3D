@@ -139,4 +139,12 @@ namespace castor3d
 		return m_rawAoPass->getBentResult();
 #endif
 	}
+
+	uint32_t SsaoPass::countInitialisationSteps()noexcept
+	{
+		return LineariseDepthPass::countInitialisationSteps()
+			+ SsaoRawAOPass::countInitialisationSteps()
+			+ SsaoBlurPass::countInitialisationSteps()
+			+ SsaoBlurPass::countInitialisationSteps();
+	}
 }

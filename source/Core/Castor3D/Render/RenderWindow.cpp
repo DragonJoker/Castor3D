@@ -467,9 +467,11 @@ namespace castor3d
 					if ( m_renderTarget )
 					{
 						auto progress = m_progressBar.get();
-						initProgressBarLocalRange( progress, "Initialising: Render Window", 6u );
 						m_renderTarget->initialise( [this, progress]( RenderTarget const & rt, QueueData const & queue )
 							{
+								stepProgressBarGlobalStartLocal( progress
+									, "Initialising: Render Window"
+									, 6u );
 								stepProgressBarLocal( progress, "Loading picking" );
 								doCreatePickingPass( queue );
 								stepProgressBarLocal( progress, "Loading intermediate views" );

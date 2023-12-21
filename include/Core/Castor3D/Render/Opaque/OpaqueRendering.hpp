@@ -75,7 +75,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le nombre d'étapes nécessaires à l'initialisation, pour en montrer la progression.
 		 */
-		C3D_API static uint32_t countInitialisationSteps();
+		static uint32_t countInitialisationSteps()noexcept;
 		/**
 		 *\~english
 		 *\brief		Lists the intermediate view used by the whole technique.

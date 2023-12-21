@@ -87,6 +87,7 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
+		static uint32_t countInitialisationSteps()noexcept;
 		crg::ImageViewIdArray const & getResult()const
 		{
 			return m_mipViews;

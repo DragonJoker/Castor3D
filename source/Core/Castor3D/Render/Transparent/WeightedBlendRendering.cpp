@@ -160,6 +160,13 @@ namespace castor3d
 		visitor.visit( m_shader );
 	}
 
+	uint32_t WeightedBlendRendering::countInitialisationSteps()noexcept
+	{
+		uint32_t result = 0u;
+		result += 1;// transparent resolve pass;
+		return result;
+	}
+
 	crg::FramePass & WeightedBlendRendering::doCreateFinalCombine( crg::FramePassGroup & graph
 		, crg::FramePass const & transparentPassDesc
 		, crg::ImageViewId const & depthObj

@@ -548,12 +548,12 @@ namespace castor3d
 		m_spotShadowMap.reset();
 	}
 
-	uint32_t RenderTechnique::countInitialisationSteps()
+	uint32_t RenderTechnique::countInitialisationSteps()noexcept
 	{
 		uint32_t result = 0u;
 		result += PrepassRendering::countInitialisationSteps();
 		result += Voxelizer::countInitialisationSteps();
-		result += 2;// m_backgroundRenderer;
+		result += 1;// m_backgroundRenderer;
 		++result;// m_directionalShadowMap;
 		++result;// m_pointShadowMap;
 		++result;// m_spotShadowMap;

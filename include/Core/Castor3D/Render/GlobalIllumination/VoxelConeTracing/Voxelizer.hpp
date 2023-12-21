@@ -88,6 +88,8 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
+		static uint32_t countInitialisationSteps()noexcept;
+
 		Texture const & getFirstBounce()const
 		{
 			return m_firstBounce;
@@ -101,17 +103,6 @@ namespace castor3d
 		crg::FrameGraph const & getGraph()const
 		{
 			return m_graph;
-		}
-
-		static uint32_t countInitialisationSteps()
-		{
-			uint32_t result = 0u;
-			result += 2;// m_voxelizePass;
-			result += 2;// m_voxelToTexture;
-			result += 2;// m_voxelMipGen;
-			result += 2;// m_voxelSecondaryBounce;
-			result += 2;// m_voxelSecondaryMipGen;
-			return result;
 		}
 		/**@}*/
 

@@ -24,12 +24,22 @@ namespace castor3d
 			, ProgressCtrlRPtr localProgress = nullptr );
 
 		C3D_API void initGlobalRange( uint32_t value );
+		C3D_API uint32_t incGlobalRange( uint32_t value );
 		C3D_API void stepGlobal( castor::String const & globalTitle );
+		C3D_API void setGlobalStep( castor::String const & globalTitle, uint32_t count );
 
 		C3D_API void initLocalRange( castor::String const & globalLabel
 			, uint32_t value );
 		C3D_API void stepLocal( castor::String const & label );
 		C3D_API void setLocalStep( castor::String const & label, uint32_t count );
+
+		C3D_API void setGlobalTitle( castor::String const & globalTitle );
+		C3D_API void stepGlobalStartLocal( castor::String const & globalLabel
+			, uint32_t rangeMax );
+		C3D_API void setLocal( castor::String const & globalLabel
+			, castor::String const & localLabel
+			, uint32_t rangeMax
+			, uint32_t value );
 
 		void lock()
 		{
@@ -42,6 +52,14 @@ namespace castor3d
 		}
 
 	private:
+		struct ProgressData
+		{
+			castor::String title{};
+			castor::String label{};
+			int32_t value{};
+			int32_t rangeMax{};
+		};
+
 		struct ProgressLabel
 		{
 			void update( ProgressCtrlRPtr progress );
@@ -51,22 +69,21 @@ namespace castor3d
 			void step( castor::String const & label );
 			void step();
 			void setStep( castor::String const & label, int32_t value );
+			void setStep( int32_t value );
 			void setRange( int32_t max );
-			void incRange( int32_t mod );
+			int32_t incRange( int32_t mod );
 			int32_t getIndex()const;
+			void set( castor::String const & label
+				, int32_t rangeMax
+				, int32_t value );
 
 			FrameListenerRPtr listener;
 			ProgressCtrlRPtr progress;
-			castor::String title;
-			castor::String label;
-			CpuFrameEvent * titleEvent{};
-			CpuFrameEvent * labelEvent{};
-			CpuFrameEvent * rangeEvent{};
+			ProgressData data;
+			CpuFrameEvent * updateEvent{};
 
 		private:
-			void doSetTitle( castor::U32String const & value );
-			void doSetLabel( castor::U32String const & value );
-			void doStep();
+			void doUpdate();
 		};
 
 	private:

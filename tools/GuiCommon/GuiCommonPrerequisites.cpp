@@ -98,15 +98,16 @@ namespace GuiCommon
 		class PreprocessedSceneFile
 			: public castor::PreprocessedFile
 		{
+		public:
 			enum Category : uint32_t
 			{
+				eTexture,
 				eSampler,
-				eLight,
+				eMaterial,
+				eMesh,
 				eNode,
 				eObject,
-				eMesh,
-				eMaterial,
-				eTexture,
+				eLight,
 				eOverlay,
 				eGui,
 				eImport,
@@ -286,6 +287,15 @@ namespace GuiCommon
 			uint32_t incCategoryActions( castor::SectionId section, uint32_t count = 1u )
 			{
 				return m_current[section] += count;
+			}
+
+			uint32_t getCategoriesCount()const
+			{
+				return uint32_t( std::count_if( m_total.begin(), m_total.end()
+					, []( uint32_t value )
+					{
+						return value > 0u;
+					} ) );
 			}
 
 			castor::xchar const * getCategoryName( castor::SectionId section )const
@@ -499,31 +509,30 @@ namespace GuiCommon
 
 					if ( progress )
 					{
-						castor3d::stepProgressBarGlobal( progress
+						castor3d::setProgressBarGlobalTitle( progress
 							, "Loading scene..." );
-						castor3d::initProgressBarLocalRange( progress
-							, "Preprocessing Scene File..."
+						castor3d::stepProgressBarGlobalStartLocal( progress
+							, "Preprocessing"
 							, 1u );
 
 						helpers::PreprocessedSceneFile preprocessed{ parser, parser.initialiseParser( fileName ) };
 						parser.processFile( appName, fileName, preprocessed );
 
-						castor3d::stepProgressBarLocal( progress
-							, "Done" );
-						castor3d::initProgressBarLocalRange( progress
-							, "Loading scene..."
-							, preprocessed.getCount() );
-						auto actionConnection = preprocessed.onAction.connect( [progress, &preprocessed]( castor::SectionId section
+						auto index = castor3d::incProgressBarGlobalRange( progress
+							, uint32_t( helpers::PreprocessedSceneFile::Category::eCount ) );
+						auto actionConnection = preprocessed.onAction.connect( [progress, index, &preprocessed]( castor::SectionId section
 							, castor::PreprocessedFile::Action const & action )
 							{
 									section = preprocessed.getCategory( action.name, section, action.function.resultSection, action.implicit );
 									auto status = preprocessed.incCategoryActions( section );
 									auto total = preprocessed.getCategoryActionsCount( section );
-									castor3d::initProgressBarLocalRange( progress
+									castor3d::setProgressBarGlobalStep( progress
+										, "Loading scene..."
+										, index + section );
+									castor3d::setProgressBarLocal( progress
 										, preprocessed.getCategoryName( section )
-										, total );
-									castor3d::setProgressBarLocalStep( progress
 										, castor::string::toString( status ) + " / " + castor::string::toString( total )
+										, total
 										, status );
 							} );
 
@@ -601,7 +610,7 @@ namespace GuiCommon
 			}
 
 			castor::Path pathUsr = pathBin.getPath();
-			arrayKept = listPluginsFiles( pathUsr / cuT( "lib" ) / cuT( "Castor3D" ) );
+			arrayKept = helpers::listPluginsFiles( pathUsr / cuT( "lib" ) / cuT( "Castor3D" ) );
 		}
 
 #endif
