@@ -550,7 +550,8 @@ namespace castor
 			, uint64_t lineIndex
 			, bool implicit );
 		std::pair< bool, SectionId > doInvokeParser( PreprocessedFile & preprocessed
-			, StringView & line
+			, StringView line
+			, StringView nextToken
 			, uint64_t lineIndex );
 		void doEnterBlock( PreprocessedFile & preprocessed
 			, SectionId newSection

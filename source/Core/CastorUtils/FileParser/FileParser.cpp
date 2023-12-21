@@ -617,7 +617,12 @@ namespace castor
 							}
 							else
 							{
-								auto [nextOpenBrace, newSection] = doInvokeParser( preprocessed, curLine, lineIndex );
+								auto [nextOpenBrace, newSection] = doInvokeParser( preprocessed
+									, curLine
+									, ( work.empty()
+										? nextWork.empty() ? "" : nextWork.front()
+										: work.front() )
+									, lineIndex );
 								isNextOpenBrace = nextOpenBrace;
 
 								if ( isNextOpenBrace )
@@ -812,7 +817,8 @@ namespace castor
 	}
 
 	std::pair< bool, SectionId > FileParser::doInvokeParser( PreprocessedFile & preprocessed
-		, StringView & line
+		, StringView line
+		, StringView nextToken
 		, uint64_t lineIndex )
 	{
 		bool result = false;
@@ -840,15 +846,22 @@ namespace castor
 						doCheckDefines( parameters );
 					}
 
+					result = itFunc->second.resultSection != section
+						&& functionName != "}";
+					auto nextSection = itFunc->second.resultSection;
+
+					if ( result && nextToken != "{" )
+					{
+						nextSection = section;
+					}
+
 					preprocessed.addParserAction( m_path / m_fileName
 						, lineIndex
 						, functionName
 						, section
-						, itFunc->second
+						, { itFunc->second.function, nextSection, itFunc->second.params }
 						, parameters
 						, false );
-					result = itFunc->second.resultSection != section
-						&& functionName != "}";
 					section = itFunc->second.resultSection;
 					found = true;
 				}
