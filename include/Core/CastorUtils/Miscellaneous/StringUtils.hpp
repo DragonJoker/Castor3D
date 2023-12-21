@@ -274,7 +274,24 @@ namespace castor
 		 *\param[in]	keepEmpty	Dit si la fonction garde les sous-chaînes vides ou pas
 		 *\return		Le tableau contenant les sous-chaînes
 		 */
-		CU_API StringArray split( String const & str, String const & delims, uint32_t maxSplits = 10, bool keepEmpty = true );
+		CU_API StringArray split( String const & str, StringView delims, uint32_t maxSplits = 10, bool keepEmpty = true );
+		/**
+		 *\~english
+		 *\brief		Cuts a String into substrings, using delimiter(s)
+		 *\param[in]	str			The String to cut
+		 *\param[in]	delims		The delimiter(s)
+		 *\param[in]	maxSplits	The max splits count (the return will contain 0 < x < maxSplits substrings)
+		 *\param[in]	keepEmpty	Tells if the function keeps empty substrings or not
+		 *\return		The array containing the substrings
+		 *\~french
+		 *\brief		Découpe une chaîne en plusieurs sous-chaînes, en utilisant un/des délimiteur(s)
+		 *\param[in]	str			Le String à découper
+		 *\param[in]	delims		Le(s) délimiteur(s)
+		 *\param[in]	maxSplits	Le nombre maximal de découpes (le retour contiendra 0 < x < maxSplits sous-chaînes)
+		 *\param[in]	keepEmpty	Dit si la fonction garde les sous-chaînes vides ou pas
+		 *\return		Le tableau contenant les sous-chaînes
+		 */
+		CU_API StringViewArray split( StringView str, StringView delims, uint32_t maxSplits = 10, bool keepEmpty = true );
 		/**
 		 *\~english
 		 *\brief			Replaces all occurences of a xchar by another one in a String
@@ -361,7 +378,24 @@ namespace castor
 		 *\param[in]		seps	Les caractères à supprimer
 		 *\return			La chaîne sans espaces
 		 */
-		CU_API String & trim( String & str, bool left = true, bool right = true, String seps = " \t\r" );
+		CU_API String & trim( String & str, bool left = true, bool right = true, StringView seps = " \t\r" );
+		/**
+		 *\~english
+		 *\brief			Removes spaces on the left and/or on the right of the given String
+		 *\param[in,out]	str		The String to trim, receives the trimmed string
+		 *\param[in]		left	Tells if we remove the left spaces
+		 *\param[in]		right	Tells if we remove the right spaces
+		 *\param[in]		seps	The characters to trim
+		 *\return			The trimmed String
+		 *\~french
+		 *\brief			Supprime les espaces à gauche et/ou à droite dans la chaîne donnée
+		 *\param[in,out]	str		La chaîne à modifier, reçoit la chaîne modifiée
+		 *\param[in]		left	Dit si on enlève les espaces à gauche
+		 *\param[in]		right	Dit si on enlève les espaces à droite
+		 *\param[in]		seps	Les caractères à supprimer
+		 *\return			La chaîne sans espaces
+		 */
+		CU_API StringView & trim( StringView & str, bool left = true, bool right = true, StringView seps = " \t\r" );
 		/**
 		 *\~english
 		 *\brief		Puts a value into a String

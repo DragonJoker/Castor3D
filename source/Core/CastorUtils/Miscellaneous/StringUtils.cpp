@@ -6,6 +6,108 @@ namespace castor
 {
 	namespace string
 	{
+		namespace helpers
+		{
+			template< typename StringT >
+			std::vector< StringT > split( StringT const & text
+				, StringView delims
+				, uint32_t maxSplits
+				, bool keepEmpty )
+			{
+				std::vector< StringT >	result;
+
+				if ( !text.empty() && !delims.empty() && maxSplits > 0 )
+				{
+					result.reserve( maxSplits + 1 );
+					std::size_t pos = 0;
+					std::size_t start = 0;
+
+					do
+					{
+						pos = text.find_first_of( delims, start );
+
+						if ( pos == start )
+						{
+							start = pos + 1;
+
+							if ( keepEmpty )
+							{
+								result.push_back( StringT() );
+							}
+						}
+						else if ( pos == std::string::npos || result.size() == maxSplits )
+						{
+							StringT remnants = text.substr( start );
+
+							if ( !remnants.empty() || keepEmpty )
+							{
+								result.push_back( remnants );
+							}
+
+							pos = String::npos;
+						}
+						else
+						{
+							result.push_back( text.substr( start, pos - start ) );
+							start = pos + 1;
+						}
+
+					}
+					while ( pos != std::string::npos );
+				}
+
+				return result;
+			}
+
+			template< typename StringT >
+			StringT & trim( StringT & text
+				, bool left
+				, bool right
+				, StringView seps )
+			{
+				if ( !text.empty() )
+				{
+					std::size_t index;
+
+					if ( left )
+					{
+						index = text.find_first_not_of( seps );
+
+						if ( index > 0 )
+						{
+							if ( index != String::npos )
+							{
+								text = text.substr( index, String::npos );
+							}
+							else
+							{
+								text = text.substr( 0, 0 );
+							}
+						}
+					}
+
+					if ( right && !text.empty() )
+					{
+						index = text.find_last_not_of( seps );
+
+						if ( index < text.size() - 1 )
+						{
+							if ( index != String::npos )
+							{
+								text = text.substr( 0, index + 1 );
+							}
+							else
+							{
+								text = text.substr( 0, 0 );
+							}
+						}
+					}
+				}
+
+				return text;
+			}
+		}
+
 		bool isInteger( String const & text, std::locale const & CU_UnusedParam( locale ) )
 		{
 			bool result = false;
@@ -259,100 +361,35 @@ namespace castor
 		}
 
 		StringArray split( String const & text
-			, String const & delims
+			, StringView delims
 			, uint32_t maxSplits
 			, bool keepEmpty )
 		{
-			StringArray	result;
+			return helpers::split( text, delims, maxSplits, keepEmpty );
+		}
 
-			if ( !text.empty() && !delims.empty() && maxSplits > 0 )
-			{
-				result.reserve( maxSplits + 1 );
-				std::size_t pos = 0;
-				std::size_t start = 0;
-
-				do
-				{
-					pos = text.find_first_of( delims, start );
-
-					if ( pos == start )
-					{
-						start = pos + 1;
-
-						if ( keepEmpty )
-						{
-							result.push_back( String() );
-						}
-					}
-					else if ( pos == std::string::npos || result.size() == maxSplits )
-					{
-						String remnants = text.substr( start );
-
-						if ( !remnants.empty() || keepEmpty )
-						{
-							result.push_back( remnants );
-						}
-
-						pos = String::npos;
-					}
-					else
-					{
-						result.push_back( text.substr( start, pos - start ) );
-						start = pos + 1;
-					}
-
-				}
-				while ( pos != std::string::npos );
-			}
-
-			return result;
+		StringViewArray split( StringView text
+			, StringView delims
+			, uint32_t maxSplits
+			, bool keepEmpty )
+		{
+			return helpers::split( text, delims, maxSplits, keepEmpty );
 		}
 
 		String & trim( String & text
 			, bool left
 			, bool right
-			, String seps )
+			, StringView seps )
 		{
-			if ( !text.empty() )
-			{
-				std::size_t index;
+			return helpers::trim( text, left, right, seps );
+		}
 
-				if ( left )
-				{
-					index = text.find_first_not_of( seps );
-
-					if ( index > 0 )
-					{
-						if ( index != String::npos )
-						{
-							text = text.substr( index, String::npos );
-						}
-						else
-						{
-							text.clear();
-						}
-					}
-				}
-
-				if ( right && !text.empty() )
-				{
-					index = text.find_last_not_of( seps );
-
-					if ( index < text.size() - 1 )
-					{
-						if ( index != String::npos )
-						{
-							text = text.substr( 0, index + 1 );
-						}
-						else
-						{
-							text.clear();
-						}
-					}
-				}
-			}
-
-			return text;
+		StringView & trim( StringView & text
+			, bool left
+			, bool right
+			, StringView seps )
+		{
+			return helpers::trim( text, left, right, seps );
 		}
 
 		String toString( char32_t value )

@@ -17,7 +17,7 @@ namespace castor3d
 		{
 			if ( message.find_first_of( "|\n" ) == message.find( "\n" ) )
 			{
-				auto split = castor::string::split( message.data(), "\n", ~( 0u ), false );
+				auto split = castor::string::split( castor::StringView{ message.data() }, "\n", ~( 0u ), false );
 				std::stringstream stream;
 
 				for ( auto & str : split )
@@ -28,7 +28,7 @@ namespace castor3d
 				return stream.str();
 			}
 
-			auto split = castor::string::split( message.data(), "|", ~( 0u ), false );
+			auto split = castor::string::split( castor::StringView{ message.data() }, "|", ~( 0u ), false );
 			std::stringstream stream;
 
 			if ( !split.empty() )

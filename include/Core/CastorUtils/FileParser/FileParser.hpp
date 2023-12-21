@@ -126,13 +126,13 @@ namespace castor
 	public:
 		struct Action
 		{
-			Path file;
-			uint64_t line;
-			String name;
-			uint32_t section;
-			ParserFunctionAndParams function;
-			String params;
-			bool implicit;
+			Path file{};
+			uint64_t line{};
+			String name{};
+			uint32_t section{};
+			ParserFunctionAndParams function{};
+			String params{};
+			bool implicit{};
 		};
 
 	public:
@@ -520,7 +520,7 @@ namespace castor
 		 *\return		false si la ligne doit être ignorée.
 		 */
 		CU_API virtual bool doDiscardParser( PreprocessedFile & preprocessed
-			, String const & line );
+			, StringView line );
 		/**
 		 *\~english
 		 *\brief		Function called when file parsing is completed with no error.
@@ -542,9 +542,6 @@ namespace castor
 		CU_API virtual std::unique_ptr< FileParser > doCreateParser()const = 0;
 
 	private:
-		std::pair< bool, SectionId > doParseScriptLine( PreprocessedFile & preprocessed
-			, String & line
-			, uint64_t lineIndex );
 		void doParseScriptBlockBegin( PreprocessedFile & preprocessed
 			, uint32_t newSection
 			, uint64_t lineIndex
@@ -553,7 +550,7 @@ namespace castor
 			, uint64_t lineIndex
 			, bool implicit );
 		std::pair< bool, SectionId > doInvokeParser( PreprocessedFile & preprocessed
-			, String & line
+			, StringView & line
 			, uint64_t lineIndex );
 		void doEnterBlock( PreprocessedFile & preprocessed
 			, SectionId newSection
@@ -565,9 +562,9 @@ namespace castor
 		bool doIsInIgnoredBlock();
 		void doIncludeFile( PreprocessedFile & preprocessed
 			, uint64_t lineIndex
-			, String const & param );
+			, StringView param );
 		void doAddDefine( uint64_t lineIndex
-			, String const & param );
+			, StringView param );
 		void doCheckDefines( String & text );
 
 	private:
