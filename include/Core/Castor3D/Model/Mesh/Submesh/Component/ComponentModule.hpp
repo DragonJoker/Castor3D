@@ -172,13 +172,6 @@ namespace castor3d
 	class MorphComponent;
 	/**
 	\~english
-	\brief		Component for a submesh.
-	\~french
-	\brief		Composant pour un sous-maillage.
-	*/
-	class SubmeshComponent;
-	/**
-	\~english
 	\brief		Submesh component data holder.
 	\~french
 	\brief		Détient les données d'un composant de sous-maillage.
@@ -312,8 +305,6 @@ namespace castor3d
 	CU_DeclareVector( Face, Face );
 
 	CU_DeclareMap( SubmeshComponentID, SubmeshComponentUPtr, SubmeshComponentID );
-
-	C3D_API castor::String const & getSubmeshComponentType( SubmeshComponent const & component );
 
 	using CreateSubmeshComponentPlugin = std::function< SubmeshComponentPluginUPtr( SubmeshComponentRegister const & ) >;
 

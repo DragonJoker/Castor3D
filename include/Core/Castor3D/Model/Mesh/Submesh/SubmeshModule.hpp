@@ -284,6 +284,13 @@ namespace castor3d
 	*	Un sous-maillage est sous partie d'un maillage. Il possede ses propres tampons (vertex, normales et texture coords) et ses combobox.
 	*/
 	class Submesh;
+	/**
+	\~english
+	\brief		Component for a submesh.
+	\~french
+	\brief		Composant pour un sous-maillage.
+	*/
+	class SubmeshComponent;
 
 	struct SubmeshAnimationBuffer
 	{
@@ -330,6 +337,9 @@ namespace castor3d
 	CU_DeclareMap( Submesh const *, castor::BoundingSphere, SubmeshBoundingSphere );
 	CU_DeclareMap( uint32_t, std::vector< float >, SubmeshTargetWeight );
 	using SubmeshBoundingBoxList = std::vector< std::pair< Submesh const *, castor::BoundingBox > >;
+
+	C3D_API Submesh * getComponentSubmesh( SubmeshComponent const & component );
+	C3D_API castor::String const & getSubmeshComponentType( SubmeshComponent const & component );
 	
 	//@}
 	//@}

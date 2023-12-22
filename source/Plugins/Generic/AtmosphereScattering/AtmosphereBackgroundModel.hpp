@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3DAS_AtmosphereBackgroundModel_H___
@@ -60,6 +60,9 @@ namespace atmosphere_scattering
 
 	public:
 		static castor::String const Name;
+		static castor::String const PluginType;
+		static castor::String const PluginName;
+
 		sdw::UniformBuffer cameraBuffer;
 		CameraData cameraData;
 		sdw::UniformBuffer atmosphereBuffer;

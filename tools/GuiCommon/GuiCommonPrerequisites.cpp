@@ -155,7 +155,6 @@ namespace GuiCommon
 					return uint32_t( Category::eSampler );
 				case uint32_t( CSCNSection::eLight ):
 				case uint32_t( CSCNSection::eShadows ):
-				case uint32_t( CSCNSection::eRsm ):
 				case uint32_t( CSCNSection::eLpv ):
 				case uint32_t( CSCNSection::eRaw ):
 				case uint32_t( CSCNSection::ePcf ):

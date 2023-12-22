@@ -11,6 +11,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Data/TextWriter.hpp>
 #include <CastorUtils/Design/Named.hpp>
+#include <CastorUtils/FileParser/FileParserModule.hpp>
 
 namespace castor3d
 {
@@ -180,6 +181,32 @@ namespace castor3d
 		{
 			element.detach();
 		}
+	};
+
+	struct SceneContext;
+
+	struct MovableContext
+	{
+		SceneContext * scene{};
+		castor::String name{};
+		SceneNodeRPtr parentNode{};
+	};
+
+	C3D_API Engine * getEngine( MovableContext const & context );
+}
+
+namespace castor
+{
+	template<>
+	struct ParserEnumTraits< castor3d::MovableType >
+	{
+		static inline xchar const * const Name = cuT( "MovableType" );
+		static inline UInt32StrMap const Values = []()
+			{
+				UInt32StrMap result;
+				result = castor3d::getEnumMapT< castor3d::MovableType >();
+				return result;
+			}( );
 	};
 }
 

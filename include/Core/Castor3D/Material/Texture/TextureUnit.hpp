@@ -331,6 +331,40 @@ namespace castor3d
 		bool m_needsUpload{ false };
 		uint32_t m_setIndex{};
 	};
+
+	class RenderTarget;
+
+	struct PassContext;
+	struct RootContext;
+	struct SceneContext;
+
+	struct TextureContext
+	{
+		SceneContext * scene{};
+		RootContext * root{};
+		PassContext * pass{};
+
+		castor::String name{};
+		castor::Path folder{};
+		castor::Path relative{};
+		castor::ImageRPtr image{};
+		TextureConfiguration configuration{};
+		RenderTarget * renderTarget{};
+
+		uint32_t mipLevels{ ashes::RemainingArrayLayers };
+		uint32_t texcoordSet{};
+		TextureAnimationUPtr textureAnimation{};
+		SamplerObs sampler{};
+		TextureTransform textureTransform{};
+	};
+
+	C3D_API Engine * getEngine( TextureContext const & context );
+
+	template< typename ComponentT >
+	ComponentT & getPassComponent( TextureContext & context )
+	{
+		return getPassComponent< ComponentT >( *context.pass );
+	}
 }
 
 #endif

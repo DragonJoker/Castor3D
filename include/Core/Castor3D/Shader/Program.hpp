@@ -176,6 +176,16 @@ namespace castor3d
 			, std::move( mainFuncName )
 			, std::move( specialization ) );
 	}
+
+	struct ParticleSystemContext;
+
+	struct ProgramContext
+	{
+		ParticleSystemContext * particleSystem{};
+		castor::String name{};
+		ShaderProgramRPtr shaderProgram{};
+		VkShaderStageFlagBits shaderStage{};
+	};
 }
 
 #endif

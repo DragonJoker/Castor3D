@@ -12,6 +12,7 @@ See LICENSE file in root folder
 #include <CastorUtils/Data/TextWriter.hpp>
 #include <CastorUtils/Data/Loader.hpp>
 #include <CastorUtils/Design/Named.hpp>
+#include <CastorUtils/FileParser/FileParserModule.hpp>
 #include <CastorUtils/Miscellaneous/PreciseTimer.hpp>
 
 namespace castor3d
@@ -284,6 +285,36 @@ namespace castor3d
 		GroupAnimationMap m_animations;
 		AnimatedObjectMap m_objects;
 		castor::PreciseTimer m_timer;
+	};
+
+	struct SceneContext;
+
+	struct AnimGroupContext
+	{
+		SceneContext * scene{};
+		AnimatedObjectGroupRPtr animGroup{};
+		AnimatedObjectRPtr animSkeleton{};
+		AnimatedObjectRPtr animMesh{};
+		AnimatedObjectRPtr animNode{};
+		AnimatedObjectRPtr animTexture{};
+		castor::String animName{};
+	};
+
+	C3D_API Engine * getEngine( AnimGroupContext const & context );
+}
+
+namespace castor
+{
+	template<>
+	struct ParserEnumTraits< castor3d::InterpolatorType >
+	{
+		static inline xchar const * const Name = cuT( "InterpolatorType" );
+		static inline UInt32StrMap const Values = []()
+			{
+				UInt32StrMap result;
+				result = castor3d::getEnumMapT< castor3d::InterpolatorType >();
+				return result;
+			}( );
 	};
 }
 

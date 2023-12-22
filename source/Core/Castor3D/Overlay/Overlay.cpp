@@ -6,8 +6,10 @@
 #include "Castor3D/Overlay/PanelOverlay.hpp"
 #include "Castor3D/Overlay/TextOverlay.hpp"
 #include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Scene/SceneFileParserData.hpp"
 
 CU_ImplementSmartPtr( castor3d, Overlay )
+CU_ImplementSmartPtr( castor3d, OverlayContext )
 
 namespace castor3d
 {
@@ -169,5 +171,10 @@ namespace castor3d
 		}
 
 		m_children.clear();
+	}
+
+	Engine * getEngine( OverlayContext const & context )
+	{
+		return getEngine( *context.root );
 	}
 }

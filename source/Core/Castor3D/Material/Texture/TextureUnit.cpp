@@ -5,13 +5,15 @@
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Cache/TargetCache.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
+#include "Castor3D/Material/Material.hpp"
+#include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Material/Texture/Animation/TextureAnimation.hpp"
 #include "Castor3D/Scene/Scene.hpp"
-#include "Castor3D/Scene/SceneFileParser.hpp"
+#include "Castor3D/Scene/SceneFileParserData.hpp"
 
 #include <CastorUtils/Design/ResourceCache.hpp>
 #include <CastorUtils/FileParser/FileParser.hpp>
@@ -69,7 +71,21 @@ namespace castor3d
 			return castor::cuEmptyString;
 		}
 
-		static CU_ImplementAttributeParserNewBlock( parserTexture, SceneContext, TextureContext )
+		static CU_ImplementAttributeParserNewBlock( parserRootTexture, RootContext, TextureContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				params[0]->get( newBlockContext->name );
+				newBlockContext->root = blockContext;
+			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eTexture )
+
+		static CU_ImplementAttributeParserNewBlock( parserSceneTexture, SceneContext, TextureContext )
 		{
 			if ( params.empty() )
 			{
@@ -79,6 +95,7 @@ namespace castor3d
 			{
 				params[0]->get( newBlockContext->name );
 				newBlockContext->root = blockContext->root;
+				newBlockContext->scene = blockContext;
 			}
 		}
 		CU_EndAttributePushNewBlock( CSCNSection::eTexture )
@@ -98,7 +115,7 @@ namespace castor3d
 				if ( castor::File::fileExists( context.file.getPath() / relative ) )
 				{
 					folder = context.file.getPath();
-					auto & engine = *blockContext->root->engine;
+					auto & engine = *getEngine( *blockContext );
 					blockContext->image = engine.tryFindImage( relative.getFileName() );
 
 					if ( !blockContext->image )
@@ -127,7 +144,6 @@ namespace castor3d
 		static CU_ImplementAttributeParserNewBlock( parserRenderTarget, TextureContext, TargetContext )
 		{
 			newBlockContext->targetType = TargetType::eTexture;
-			newBlockContext->root = blockContext->root;
 			newBlockContext->texture = blockContext;
 		}
 		CU_EndAttributePushNewBlock( CSCNSection::eRenderTarget )
@@ -196,11 +212,9 @@ namespace castor3d
 
 		static CU_ImplementAttributeParserBlock( parserTextureEnd, TextureContext )
 		{
-			blockContext->configuration.transform = blockContext->textureTransform;
-
 			if ( auto sourceInfo = getSourceInfo( context, blockContext->name, *blockContext ) )
 			{
-				blockContext->root->engine->getTextureUnitCache().getSourceData( *sourceInfo );
+				getEngine( *blockContext )->getTextureUnitCache().getSourceData( *sourceInfo );
 				blockContext->root->sourceInfos.emplace( blockContext->name, std::move( sourceInfo ) );
 			}
 		}
@@ -211,8 +225,8 @@ namespace castor3d
 			if ( blockContext->pass )
 			{
 				newBlockContext->pass = blockContext;
-				newBlockContext->root = blockContext->root;
-				newBlockContext->scene = blockContext->scene;
+				newBlockContext->root = blockContext->material->root;
+				newBlockContext->scene = blockContext->material->scene;
 
 				if ( blockContext->createPass
 					|| blockContext->pass->getTextureUnitsCount() <= blockContext->unitIndex )
@@ -239,7 +253,7 @@ namespace castor3d
 			{
 				PassComponentTextureFlag textures;
 				params[0]->get( textures );
-				auto & engine = *blockContext->root->engine;
+				auto & engine = *getEngine( *blockContext );
 				engine.getPassComponentsRegister().fillChannels( textures, *blockContext );
 			}
 		}
@@ -300,7 +314,7 @@ namespace castor3d
 			else
 			{
 				castor::String name;
-				auto sampler = blockContext->root->engine->findSampler( params[0]->get( name ) );
+				auto sampler = getEngine( *blockContext )->findSampler( params[0]->get( name ) );
 
 				if ( sampler )
 				{
@@ -325,7 +339,7 @@ namespace castor3d
 			{
 				if ( !blockContext->sampler )
 				{
-					blockContext->sampler = blockContext->root->engine->getDefaultSampler();
+					blockContext->sampler = getEngine( *blockContext )->getDefaultSampler();
 				}
 
 				TextureSourceInfo * sourceInfoPtr{};
@@ -357,7 +371,7 @@ namespace castor3d
 
 					if ( blockContext->textureAnimation && blockContext->scene )
 					{
-						auto animated = blockContext->scene->addAnimatedTexture( sourceInfo
+						auto animated = blockContext->scene->scene->addAnimatedTexture( sourceInfo
 							, blockContext->configuration
 							, *blockContext->pass->pass );
 						blockContext->textureAnimation->addPendingAnimated( *animated );
@@ -422,7 +436,7 @@ namespace castor3d
 		{
 			if ( blockContext->pass )
 			{
-				blockContext->textureAnimation = castor::makeUnique< TextureAnimation >( *blockContext->root->engine
+				blockContext->textureAnimation = castor::makeUnique< TextureAnimation >( *getEngine( *blockContext )
 					, "Default" );
 			}
 		}
@@ -651,8 +665,8 @@ namespace castor3d
 		BlockParserContextT< TextureContext > transformContext{ result, CSCNSection::eTextureTransform, CSCNSection::eTextureUnit };
 		BlockParserContextT< TextureContext > animContext{ result, CSCNSection::eTextureAnimation, CSCNSection::eTextureUnit };
 
-		rootContext.addPushParser( cuT( "texture" ), CSCNSection::eTexture, texunit::parserTexture, { makeParameter< ParameterType::eName >() } );
-		sceneContext.addPushParser( cuT( "texture" ), CSCNSection::eTexture, texunit::parserTexture, { makeParameter< ParameterType::eName >() } );
+		rootContext.addPushParser( cuT( "texture" ), CSCNSection::eTexture, texunit::parserRootTexture, { makeParameter< ParameterType::eName >() } );
+		sceneContext.addPushParser( cuT( "texture" ), CSCNSection::eTexture, texunit::parserSceneTexture, { makeParameter< ParameterType::eName >() } );
 
 		textureContext.addParser( cuT( "image" ), texunit::parserImage, { makeParameter< ParameterType::ePath >() } );
 		textureContext.addParser( cuT( "invert_y" ), texunit::parserInvertY, { makeParameter< ParameterType::eBool >() } );
@@ -870,5 +884,10 @@ namespace castor3d
 		m_configuration.transform.scale->z = scale->z;
 
 		onChanged( *this );
+	}
+
+	Engine * getEngine( TextureContext const & context )
+	{
+		return getEngine( *context.root );
 	}
 }

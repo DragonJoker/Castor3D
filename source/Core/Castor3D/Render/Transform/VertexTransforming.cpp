@@ -426,7 +426,8 @@ namespace castor3d
 				auto index = writer.declLocale( "index"
 					, in.globalInvocationID.x() );
 				auto position = writer.declLocale( "position"
-					, vec4( c3d_inPosition[index].xyz(), 1.0_f ) );
+					, c3d_inPosition[index] );
+				position = vec4( position.xyz(), 1.0_f );
 				auto oldPosition = writer.declLocale( "oldPosition"
 					, c3d_outPosition[index] );
 				auto normal = writer.declLocale( "normal"

@@ -444,6 +444,22 @@ namespace castor3d
 			ires.first->second->rename( name );
 		}
 	};
+
+	struct SceneContext;
+
+	struct NodeContext
+	{
+		SceneContext * scene{};
+		castor::String name{};
+		SceneNodeRPtr parentNode{};
+		bool isCameraNode{};
+		bool isStatic{};
+		castor::Point3f position{};
+		castor::Quaternion orientation{ castor::Quaternion::identity() };
+		castor::Point3f scale{ 1.0f, 1.0f, 1.0f };
+	};
+
+	C3D_API Engine * getEngine( NodeContext const & context );
 }
 
 #endif

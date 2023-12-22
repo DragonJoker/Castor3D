@@ -97,6 +97,11 @@ namespace castor3d
 		return result;
 	}
 
+	Submesh * getComponentSubmesh( SubmeshComponent const & component )
+	{
+		return component.getOwner();
+	}
+
 	castor::String const & getSubmeshComponentType( SubmeshComponent const & component )
 	{
 		return component.getType();

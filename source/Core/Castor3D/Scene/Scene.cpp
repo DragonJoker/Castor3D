@@ -30,6 +30,7 @@
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
+#include "Castor3D/Scene/SceneFileParserData.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Animation/AnimatedObjectGroup.hpp"
 #include "Castor3D/Scene/Background/BackgroundTextWriter.hpp"
@@ -1183,5 +1184,10 @@ namespace castor3d
 	void Scene::onMaterialChanged( Material const & material )
 	{
 		m_dirtyMaterials = true;
+	}
+
+	Engine * getEngine( SceneContext const & context )
+	{
+		return getEngine( *context.root );
 	}
 }

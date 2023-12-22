@@ -10,6 +10,7 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/MovableObject.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleDeclaration.hpp"
 
+#include <CastorUtils/FileParser/FileParserModule.hpp>
 #include <CastorUtils/Miscellaneous/PreciseTimer.hpp>
 
 namespace castor3d
@@ -265,6 +266,31 @@ namespace castor3d
 		//!\~english	The implementation chosen after initialisation.
 		//!\~french		L'implémentation choisie après initialisation.
 		ParticleSystemImpl * m_impl{ nullptr };
+	};
+
+	struct ParticleSystemContext
+		: public MovableContext
+	{
+		MaterialObs material{};
+		castor::Point2f dimensions{};
+		uint32_t particleCount{};
+		ParticleSystemUPtr ownParticleSystem{};
+		ParticleSystemRPtr particleSystem{};
+	};
+}
+
+namespace castor
+{
+	template<>
+	struct ParserEnumTraits< castor3d::ParticleFormat >
+	{
+		static inline xchar const * const Name = cuT( "ParticleFormat" );
+		static inline UInt32StrMap const Values = []()
+			{
+				UInt32StrMap result;
+				result = castor3d::getEnumMapT< castor3d::ParticleFormat >();
+				return result;
+			}( );
 	};
 }
 

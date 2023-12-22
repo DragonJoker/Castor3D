@@ -496,5 +496,10 @@ namespace castor3d
 		}
 	}
 
+	Engine * getEngine( SceneImportContext const & context )
+	{
+		return getEngine( *context.scene );
+	}
+
 	//*********************************************************************************************
 }

@@ -122,9 +122,4 @@ namespace castor3d
 
 		return result;
 	}
-
-	castor::String const & getPassComponentType( PassComponent const & component )
-	{
-		return component.getType();
-	}
 }

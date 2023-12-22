@@ -187,6 +187,16 @@ namespace castor3d
 		friend class BinaryWriter< Skeleton >;
 		friend class BinaryParser< Skeleton >;
 	};
+
+	struct SceneContext;
+
+	struct SkeletonContext
+	{
+		SceneContext * scene{};
+		SkeletonRPtr skeleton{};
+	};
+
+	C3D_API Engine * getEngine( SkeletonContext const & context );
 }
 
 #endif

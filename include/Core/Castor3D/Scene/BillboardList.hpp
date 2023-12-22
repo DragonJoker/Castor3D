@@ -16,6 +16,8 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/MovableObject.hpp"
 #include "Castor3D/Scene/RenderedObject.hpp"
 
+#include <CastorUtils/FileParser/FileParserModule.hpp>
+
 #include <ashespp/Buffer/VertexBuffer.hpp>
 #include <ashespp/Pipeline/PipelineVertexInputStateCreateInfo.hpp>
 
@@ -426,6 +428,40 @@ namespace castor3d
 
 	protected:
 		castor::Point3fArray m_arrayPositions;
+	};
+
+	struct BillboardsContext
+		: public MovableContext
+	{
+		BillboardListUPtr ownBillboards{};
+		BillboardListRPtr billboards{};
+	};
+}
+
+namespace castor
+{
+	template<>
+	struct ParserEnumTraits< castor3d::BillboardType >
+	{
+		static inline xchar const * const Name = cuT( "BillboardType" );
+		static inline UInt32StrMap const Values = []()
+			{
+				UInt32StrMap result;
+				result = castor3d::getEnumMapT< castor3d::BillboardType >();
+				return result;
+			}( );
+	};
+
+	template<>
+	struct ParserEnumTraits< castor3d::BillboardSize >
+	{
+		static inline xchar const * const Name = cuT( "BillboardSize" );
+		static inline UInt32StrMap const Values = []()
+			{
+				UInt32StrMap result;
+				result = castor3d::getEnumMapT< castor3d::BillboardSize >();
+				return result;
+			}( );
 	};
 }
 

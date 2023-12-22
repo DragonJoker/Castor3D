@@ -3,7 +3,7 @@
 #include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LpvConfig.hpp"
-#include "Castor3D/Scene/SceneFileParser.hpp"
+#include "Castor3D/Scene/SceneFileParserData.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
 
 #include <CastorUtils/FileParser/ParserParameter.hpp>

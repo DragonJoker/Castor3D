@@ -7,7 +7,7 @@
 #include "Castor3D/Material/Pass/PassFactory.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Scene.hpp"
-#include "Castor3D/Scene/SceneFileParser.hpp"
+#include "Castor3D/Scene/SceneFileParserData.hpp"
 
 #include <CastorUtils/FileParser/ParserParameter.hpp>
 
@@ -17,6 +17,59 @@ namespace castor3d
 {
 	namespace mat
 	{
+		static CU_ImplementAttributeParserNewBlock( parserRootMaterial, RootContext, MaterialContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				auto & engine = *getEngine( *blockContext );
+				castor::String name;
+				newBlockContext->root = blockContext;
+				newBlockContext->material = engine.tryFindMaterial( params[0]->get( name ) );
+				newBlockContext->passIndex = 0u;
+				newBlockContext->createMaterial = newBlockContext->material == nullptr;
+
+				if ( newBlockContext->createMaterial )
+				{
+					newBlockContext->ownMaterial = engine.createMaterial( name
+						, engine
+						, engine.getDefaultLightingModel() );
+					newBlockContext->material = newBlockContext->ownMaterial.get();
+				}
+			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eMaterial )
+
+		static CU_ImplementAttributeParserNewBlock( parserSceneMaterial, SceneContext, MaterialContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				auto & engine = *getEngine( *blockContext );
+				auto name = params[0]->get< castor::String >();
+				newBlockContext->root = blockContext->root;
+				newBlockContext->scene = blockContext;
+				newBlockContext->material = engine.tryFindMaterial( name );
+				newBlockContext->passIndex = 0u;
+				newBlockContext->createMaterial = newBlockContext->material == nullptr;
+
+				if ( newBlockContext->createMaterial )
+				{
+					newBlockContext->ownMaterial = engine.createMaterial( name
+						, engine
+						, engine.getDefaultLightingModel() );
+					newBlockContext->material = newBlockContext->ownMaterial.get();
+				}
+			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eMaterial )
+
 		static CU_ImplementAttributeParserBlock( parserRenderPass, MaterialContext )
 		{
 			if ( params.empty() )
@@ -27,7 +80,7 @@ namespace castor3d
 			{
 				castor::String typeName;
 				params[0]->get( typeName );
-				blockContext->material->setRenderPassInfo( blockContext->material->getEngine()->getRenderPassInfo( typeName ) );
+				blockContext->material->setRenderPassInfo( getEngine( *blockContext )->getRenderPassInfo( typeName ) );
 			}
 		}
 		CU_EndAttribute()
@@ -45,13 +98,13 @@ namespace castor3d
 
 				if ( blockContext->scene )
 				{
-					blockContext->scene->addMaterial( blockContext->material->getName()
+					blockContext->scene->scene->addMaterial( blockContext->material->getName()
 						, blockContext->ownMaterial
 						, true );
 				}
 				else
 				{
-					blockContext->material->getEngine()->addMaterial( blockContext->material->getName()
+					getEngine( *blockContext )->addMaterial( blockContext->material->getName()
 						, blockContext->ownMaterial
 						, true );
 				}
@@ -226,10 +279,22 @@ namespace castor3d
 			, castor::UInt32StrMap const & textureChannels )
 	{
 		using namespace castor;
-		BlockParserContextT< MaterialContext > context{ result, CSCNSection::eMaterial };
-		context.addParser( cuT( "render_pass" ), mat::parserRenderPass, { makeParameter< ParameterType::eText >() } );
-		context.addPopParser( cuT( "}" ), mat::parserEnd );
+		BlockParserContextT< RootContext > rootContext{ result, CSCNSection::eRoot };
+		BlockParserContextT< SceneContext > sceneContext{ result, CSCNSection::eScene, CSCNSection::eRoot };
+		BlockParserContextT< MaterialContext > materialContext{ result, CSCNSection::eMaterial };
+
+		rootContext.addPushParser( cuT( "material" ), CSCNSection::eMaterial, mat::parserRootMaterial, { makeParameter< ParameterType::eName >() } );
+
+		sceneContext.addPushParser( cuT( "material" ), CSCNSection::eMaterial, mat::parserSceneMaterial, { makeParameter< ParameterType::eName >() } );
+
+		materialContext.addParser( cuT( "render_pass" ), mat::parserRenderPass, { makeParameter< ParameterType::eText >() } );
+		materialContext.addPopParser( cuT( "}" ), mat::parserEnd );
 
 		Pass::addParsers( result, textureChannels );
+	}
+
+	Engine * getEngine( MaterialContext const & context )
+	{
+		return getEngine( *context.root );
 	}
 }

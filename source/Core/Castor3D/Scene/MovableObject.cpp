@@ -77,4 +77,9 @@ namespace castor3d
 	{
 		return getScene()->getEngine();
 	}
+
+	Engine * getEngine( MovableContext const & context )
+	{
+		return getEngine( *context.scene );
+	}
 }

@@ -210,6 +210,22 @@ namespace castor3d
 		bool m_serialisable{ true };
 		bool m_initialised{};
 	};
+
+	struct RootContext;
+	struct SceneContext;
+
+	struct MaterialContext
+	{
+		RootContext * root{};
+		SceneContext * scene{};
+		castor::String name{};
+		MaterialObs material{};
+		MaterialPtr ownMaterial{};
+		uint32_t passIndex{};
+		bool createMaterial{ true };
+	};
+
+	C3D_API Engine * getEngine( MaterialContext const & context );
 }
 
 #endif

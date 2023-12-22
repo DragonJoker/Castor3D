@@ -243,6 +243,13 @@ namespace castor3d
 		castor::BoundingSphere m_sphere;
 		std::unordered_map< Pass const *, SubmeshIdRenderNodeMap > m_ids{};
 	};
+
+	struct ObjectContext
+		: public MovableContext
+	{
+		GeometryUPtr ownGeometry{};
+		GeometryRPtr geometry{};
+	};
 }
 
 #endif

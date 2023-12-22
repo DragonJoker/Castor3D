@@ -3,6 +3,7 @@
 #include "WaterReflRefrComponent.hpp"
 #include "Shaders/GlslWaterProfile.hpp"
 
+#include <Castor3D/Material/Pass/Pass.hpp>
 #include <Castor3D/Material/Pass/Component/Base/BlendComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/TransmissionComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Other/OpacityComponent.hpp>

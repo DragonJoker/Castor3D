@@ -4,7 +4,6 @@
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Model/Mesh/MeshFactory.hpp>
-#include <Castor3D/Scene/SceneFileParser.hpp>
 
 #include <CastorUtils/FileParser/ParserParameter.hpp>
 
@@ -17,108 +16,6 @@
 #		define C3D_DiamondSquareTerrain_API __declspec( dllimport )
 #	endif
 #endif
-
-namespace diamond_square_terrain
-{
-	namespace parser
-	{
-		static castor::AttributeParsers createParsers()
-		{
-			castor::AttributeParsers result;
-
-			addParserT( result
-				, castor3d::CSCNSection::eMesh
-				, DiamondSquareSection::eRoot
-				, Generator::Type
-				, &parserDiamondSquareTerrain );
-			addParserT( result
-				, DiamondSquareSection::eRoot
-				, castor3d::CSCNSection::eMesh
-				, cuT( "}" )
-				, &parserDiamondSquareTerrainEnd );
-			addParserT( result
-				, DiamondSquareSection::eRoot
-				, Generator::ParamRandomSeed
-				, &parserRandomSeed
-				, { castor::makeParameter< castor::ParameterType::eBool >() } );
-			addParserT( result
-				, DiamondSquareSection::eRoot
-				, Generator::ParamIsland
-				, &parserIsland
-				, { castor::makeParameter< castor::ParameterType::eBool >() } );
-			addParserT( result
-				, DiamondSquareSection::eRoot
-				, Generator::ParamXzScale
-				, &parserXzScale
-				, { castor::makeParameter< castor::ParameterType::ePoint2F >() } );
-			addParserT( result
-				, DiamondSquareSection::eRoot
-				, Generator::ParamUvScale
-				, &parserUvScale
-				, { castor::makeParameter< castor::ParameterType::ePoint2F >() } );
-			addParserT( result
-				, DiamondSquareSection::eRoot
-				, Generator::ParamHeightRange
-				, &parserHeightRange
-				, { castor::makeParameter< castor::ParameterType::ePoint2F >() } );
-			addParserT( result
-				, DiamondSquareSection::eRoot
-				, Generator::ParamDetail
-				, &parserDetail
-				, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-			addParserT( result
-				, DiamondSquareSection::eRoot
-				, Generator::ParamHeatOffset
-				, &parserHeatOffset
-				, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-			addParserT( result
-				, DiamondSquareSection::eRoot
-				, DiamondSquareSection::eBiome
-				, Generator::Biome
-				, &parserBiome
-				, { castor::makeParameter< castor::ParameterType::eName >() } );
-			addParserT( result
-				, DiamondSquareSection::eBiome
-				, DiamondSquareSection::eRoot
-				, cuT( "}" )
-				, &parserBiomeEnd );
-			addParserT( result
-				, DiamondSquareSection::eBiome
-				, Generator::BiomeRange
-				, &parserBiomeRange
-				, { castor::makeParameter< castor::ParameterType::ePoint2F >() } );
-			addParserT( result
-				, DiamondSquareSection::eBiome
-				, Generator::BiomeLowSteepness
-				, &parserBiomeLowSteepness
-				, { castor::makeParameter< castor::ParameterType::eUInt32 >()
-					, castor::makeParameter< castor::ParameterType::ePoint2F >() } );
-			addParserT( result
-				, DiamondSquareSection::eBiome
-				, Generator::BiomeMediumSteepness
-				, &parserBiomeMedSteepness
-				, { castor::makeParameter< castor::ParameterType::eUInt32 >()
-					, castor::makeParameter< castor::ParameterType::ePoint2F >() } );
-			addParserT( result
-				, DiamondSquareSection::eBiome
-				, Generator::BiomeHighSteepness
-				, &parserBiomeHigSteepness
-				, { castor::makeParameter< castor::ParameterType::eUInt32 >()
-					, castor::makeParameter< castor::ParameterType::ePoint2F >() } );
-
-			return result;
-		}
-
-		static castor::StrUInt32Map createSections()
-		{
-			return
-			{
-				{ uint32_t( DiamondSquareSection::eRoot ), Generator::Type },
-				{ uint32_t( DiamondSquareSection::eBiome ), Generator::Biome },
-			};
-		}
-	}
-}
 
 extern "C"
 {
@@ -146,8 +43,8 @@ extern "C"
 	C3D_DiamondSquareTerrain_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * plugin )
 	{
 		engine->registerParsers( diamond_square_terrain::Generator::Type
-			, diamond_square_terrain::parser::createParsers()
-			, diamond_square_terrain::parser::createSections()
+			, diamond_square_terrain::createParsers()
+			, diamond_square_terrain::createSections()
 			, nullptr );
 		engine->getMeshFactory().registerType( diamond_square_terrain::Generator::Type
 			, &diamond_square_terrain::Generator::create );

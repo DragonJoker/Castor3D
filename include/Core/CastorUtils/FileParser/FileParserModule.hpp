@@ -10,6 +10,113 @@ See LICENSE file in root folder
 #include <functional>
 #include <regex>
 
+#define CU_DO_WRITE_PARSER_NAME( funcname )\
+	funcname( castor::FileParserContext & context\
+		, void *\
+		, castor::ParserParameterArray const & params )
+
+#define CU_DO_WRITE_BLOCK_PARSER_NAME( funcname, block )\
+	funcname( castor::FileParserContext & context\
+		, block * blockContext\
+		, castor::ParserParameterArray const & params )
+
+#define CU_DO_WRITE_PARSER_CONTENT\
+		bool result = false;
+
+#define CU_DO_WRITE_PARSER_END( retval )\
+		result = retval;
+
+	//!\~english	Define to ease the declaration of a parser.
+	//!\~french		Un define pour faciliter la déclaration d'un analyseur.
+#define CU_DeclareAttributeParser( funcname )\
+	bool CU_DO_WRITE_PARSER_NAME( funcname );
+
+	//!\~english	Define to ease the declaration of a parser.
+	//!\~french		Un define pour faciliter la déclaration d'un analyseur.
+#define CU_DeclareAttributeParserBlock( funcname, block )\
+	bool CU_DO_WRITE_BLOCK_PARSER_NAME( funcname, block );
+
+	//!\~english	Define to ease the implementation of a parser.
+	//!\~french		Un define pour faciliter l'implémentation d'un analyseur.
+#define CU_ImplementAttributeParser( funcname )\
+	bool CU_DO_WRITE_PARSER_NAME( funcname )\
+	{\
+		CU_DO_WRITE_PARSER_CONTENT
+
+	//!\~english	Define to ease the implementation of a parser.
+	//!\~french		Un define pour faciliter l'implémentation d'un analyseur.
+#define CU_EndAttribute()\
+		CU_DO_WRITE_PARSER_END( false )\
+		return result;\
+	}
+
+	//!\~english	Define to ease the implementation of a parser.
+	//!\~french		Un define pour faciliter l'implémentation d'un analyseur.
+#define CU_EndAttributePush( section )\
+		CU_DO_WRITE_PARSER_END( true )\
+		context.pendingSection = castor::SectionId( section );\
+		context.pendingBlock = nullptr;\
+		return result;\
+	}
+
+	//!\~english	Define to ease the implementation of a parser.
+	//!\~french		Un define pour faciliter l'implémentation d'un analyseur.
+#define CU_ImplementAttributeParserBlock( funcname, block )\
+	bool CU_DO_WRITE_BLOCK_PARSER_NAME( funcname, block )\
+	{\
+		CU_DO_WRITE_PARSER_CONTENT
+
+	//!\~english	Define to ease the implementation of a parser.
+	//!\~french		Un define pour faciliter l'implémentation d'un analyseur.
+#define CU_EndAttributePushBlock( section, block )\
+		CU_DO_WRITE_PARSER_END( false )\
+		context.pendingSection = castor::SectionId( section );\
+		context.pendingBlock = block;\
+		return result;\
+	}
+
+	//!\~english	Define to ease the implementation of a parser.
+	//!\~french		Un define pour faciliter l'implémentation d'un analyseur.
+#define CU_ImplementAttributeParserNewBlock( funcname, oldBlock, newBlock )\
+	bool CU_DO_WRITE_BLOCK_PARSER_NAME( funcname, oldBlock )\
+	{\
+		auto newBlockContext = new newBlock{};\
+		context.allocatedBlocks.emplace_back( newBlockContext, castor::makeContextDeleter< newBlock >() );\
+		CU_DO_WRITE_PARSER_CONTENT
+
+	//!\~english	Define to ease the implementation of a parser.
+	//!\~french		Un define pour faciliter l'implémentation d'un analyseur.
+#define CU_EndAttributePushNewBlock( section )\
+		CU_DO_WRITE_PARSER_END( true )\
+		context.pendingSection = castor::SectionId( section );\
+		context.pendingBlock = newBlockContext;\
+		return result;\
+	}
+
+	//!\~english	Define to ease the implementation of a parser.
+	//!\~french		Un define pour faciliter l'implémentation d'un analyseur.
+#define CU_EndAttributePop()\
+		CU_DO_WRITE_PARSER_END( false )\
+		context.sections.pop_back();\
+		context.blocks.pop_back();\
+		return result;\
+	}
+
+	//!\~english	Define to ease the call to FileParser::parseError.
+	//!\~french		Un define pour faciliter l'appel de FileParser::parseError.
+#define CU_ParsingError( error )\
+	context.preprocessed->parseError( error )
+
+	//!\~english	Define to ease the call to FileParser::parseWarning.
+	//!\~french		Un define pour faciliter l'appel de FileParser::parseWarning.
+#define CU_ParsingWarning( warning )\
+	context.preprocessed->parseWarning( warning )
+
+	//!\~english	Define to ease creation of a section name.
+	//!\~french		Un define pour faciliter la création d'un nom de section.
+#define CU_MakeSectionName( a, b, c, d )\
+	( (castor::SectionId( a ) << 24 ) | ( castor::SectionId( b ) << 16 ) | ( castor::SectionId( c ) << 8 ) | ( castor::SectionId( d ) << 0 ) )
+
 namespace castor
 {
 	/**@name File Parser */
@@ -80,6 +187,15 @@ namespace castor
 	*	Le type d'un ID de section.
 	*/
 	using SectionId = uint32_t;
+	/**
+	*\~english
+	*\brief
+	*	Indicates that the next section for a parser is the previous one.
+	*\~french
+	*\brief
+	*	Indique que la prochaine section d'un parser est la précédente.
+	*/
+	static constexpr SectionId PreviousSection = CU_MakeSectionName( 'P', 'R', 'E', 'V' );
 	//@}
 	/**
 	\~english

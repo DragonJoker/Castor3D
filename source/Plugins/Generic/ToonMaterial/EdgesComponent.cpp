@@ -2,6 +2,7 @@
 
 #include "Shaders/GlslToonProfile.hpp"
 
+#include <Castor3D/Material/Pass/Pass.hpp>
 #include <Castor3D/Miscellaneous/ConfigurationVisitor.hpp>
 #include <Castor3D/Miscellaneous/Logger.hpp>
 #include <Castor3D/Scene/SceneFileParser.hpp>

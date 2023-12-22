@@ -30,7 +30,6 @@ namespace castor3d
 	//@{
 	/**@name Pass */
 	//@{
-
 	/**
 	*\~english
 	*\brief
@@ -89,6 +88,13 @@ namespace castor3d
 	*/
 	class Pass;
 	/**
+	\~english
+	\brief		Pass component base class.
+	\~french
+	\brief		Classe de base d'un composant de passe.
+	*/
+	struct PassComponent;
+	/**
 	*\~english
 	*\brief
 	*	Factory for material passes.
@@ -108,6 +114,7 @@ namespace castor3d
 	class SubsurfaceScattering;
 
 	CU_DeclareSmartPtr( castor3d, Pass, C3D_API );
+	CU_DeclareSmartPtr( castor3d, PassComponent, C3D_API );
 	CU_DeclareSmartPtr( castor3d, PassFactory, C3D_API );
 	CU_DeclareSmartPtr( castor3d, SubsurfaceScattering, C3D_API );
 
@@ -115,6 +122,8 @@ namespace castor3d
 	CU_DeclareVector( Pass, Pass );
 	//! Pass pointer array
 	CU_DeclareVector( PassUPtr, PassPtr );
+
+	CU_DeclareMap( PassComponentID, PassComponentUPtr, PassComponent );
 
 	using OnPassChangedFunction = std::function< void( Pass const & pass
 		, PassComponentCombineID oldComponents
@@ -159,6 +168,9 @@ namespace castor3d
 	using SpecificsBuffers = std::map< std::string, std::pair< SpecificsBuffer, ShaderBufferUPtr > >;
 
 	CU_DeclareSmartPtr( castor3d, RenderPassRegisterInfo, C3D_API );
+
+	C3D_API PassRPtr getComponentPass( PassComponent & component );
+	C3D_API castor::String const & getPassComponentType( PassComponent const & component );
 	//@}
 	//@}
 }

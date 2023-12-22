@@ -258,6 +258,15 @@ namespace castor3d
 	*/
 	class TextOverlay;
 	/**
+	*\~english
+	*\brief
+	*	Overlays parsing context.
+	*\~french
+	*\brief
+	*	Contexte de parsing des overlays.
+	*/
+	struct OverlayContext;
+	/**
 	\~english
 	\brief		A character, along with its size and relative position.
 	\~french
@@ -429,6 +438,7 @@ namespace castor3d
 	CU_DeclareSmartPtr( castor3d, OverlayFactory, C3D_API );
 	CU_DeclareSmartPtr( castor3d, PanelOverlay, C3D_API );
 	CU_DeclareSmartPtr( castor3d, TextOverlay, C3D_API );
+	CU_DeclareSmartPtr( castor3d, OverlayContext, C3D_API );
 	/**
 	*\~english
 	*	Helper structure to specialise a cache behaviour.
@@ -465,7 +475,6 @@ namespace castor3d
 
 	CU_DeclareVector( OverlayRPtr, OverlayPtr );
 	CU_DeclareMap( castor::String, OverlayResPtr, OverlayPtrStr );
-
 	//@}
 }
 

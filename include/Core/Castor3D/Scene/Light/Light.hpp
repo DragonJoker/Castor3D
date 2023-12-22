@@ -14,6 +14,7 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/Light/LightCategory.hpp"
 
 #include <CastorUtils/Data/TextWriter.hpp>
+#include <CastorUtils/FileParser/FileParserModule.hpp>
 #include <CastorUtils/Graphics/RgbColour.hpp>
 
 #include <CastorUtils/Config/BeginExternHeaderGuard.hpp>
@@ -448,6 +449,30 @@ namespace castor3d
 		std::atomic< GlobalIlluminationType > m_currentGlobalIllumination{};
 		uint32_t m_bufferIndex{ InvalidIndex };
 		VkDeviceSize m_bufferOffset{};
+	};
+
+	struct LightContext
+		: public MovableContext
+	{
+		LightUPtr ownLight{};
+		LightRPtr light{};
+		LightType lightType{ LightType::eCount };
+		ShadowConfigUPtr shadowConfig;
+	};
+}
+
+namespace castor
+{
+	template<>
+	struct ParserEnumTraits< castor3d::LightType >
+	{
+		static inline xchar const * const Name = cuT( "LightType" );
+		static inline UInt32StrMap const Values = []()
+			{
+				UInt32StrMap result;
+				result = castor3d::getEnumMapT< castor3d::LightType >();
+				return result;
+			}( );
 	};
 }
 
