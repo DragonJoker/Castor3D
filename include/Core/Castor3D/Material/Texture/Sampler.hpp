@@ -284,6 +284,17 @@ namespace castor3d
 		std::atomic_bool m_initialised;
 		std::atomic_bool m_initialising;
 	};
+
+	struct SamplerContext
+	{
+		SamplerObs sampler{};
+		SamplerPtr ownSampler{};
+	};
+
+	inline Engine * getEngine( SamplerContext const & context )
+	{
+		return context.sampler->getEngine();
+	}
 }
 
 #endif

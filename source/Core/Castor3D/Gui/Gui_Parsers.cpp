@@ -19,7 +19,7 @@
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Overlay/BorderPanelOverlay.hpp"
 #include "Castor3D/Scene/Scene.hpp"
-#include "Castor3D/Scene/SceneFileParser.hpp"
+#include "Castor3D/Scene/SceneFileParserData.hpp"
 
 #include <CastorUtils/FileParser/FileParserContext.hpp>
 
@@ -69,12 +69,12 @@ namespace castor3d
 
 		GuiContext * getGuiContext( RootContext * context )
 		{
-			return &context->gui;
+			return context->gui.get();
 		}
 
 		GuiContext * getGuiContext( SceneContext * context )
 		{
-			return &context->root->gui;
+			return context->root->gui.get();
 		}
 
 		GuiContext * getGuiContext( GuiContext * context )
@@ -82,59 +82,66 @@ namespace castor3d
 			return context;
 		}
 
+		template< typename ContextT >
+		Scene * getScene( ContextT * context )
+		{
+			auto gui = getGuiContext( context );
+			return gui->scene ? gui->scene->scene : nullptr;
+		}
+
 		//*********************************************************************************************
 
 		static CU_ImplementAttributeParserBlock( parserRootGui, RootContext )
 		{
-			blockContext->gui.scene = {};
+			blockContext->gui->scene = {};
 		}
-		CU_EndAttributePushBlock( GUISection::eGUI, &blockContext->gui )
+		CU_EndAttributePushBlock( GUISection::eGUI, blockContext->gui.get() )
 
 		static CU_ImplementAttributeParserBlock( parserSceneGui, SceneContext )
 		{
-			blockContext->root->gui.scene = blockContext->scene;
+			blockContext->root->gui->scene = blockContext;
 		}
-		CU_EndAttributePushBlock( GUISection::eGUI, &blockContext->root->gui )
+		CU_EndAttributePushBlock( GUISection::eGUI, blockContext->root->gui.get() )
 
 		static CU_ImplementAttributeParserBlock( parserRootTheme, RootContext )
 		{
-			blockContext->gui.scene = {};
-			blockContext->gui.theme = blockContext->gui.controls->createTheme( params[0]->get< castor::String >()
-				, blockContext->gui.scene );
-			blockContext->gui.pushStylesHolder( blockContext->gui.theme );
+			blockContext->gui->scene = {};
+			blockContext->gui->theme = blockContext->gui->controls->createTheme( params[0]->get< castor::String >()
+				, getScene( blockContext ) );
+			blockContext->gui->pushStylesHolder( blockContext->gui->theme );
 		}
-		CU_EndAttributePushBlock( GUISection::eTheme, &blockContext->gui )
+		CU_EndAttributePushBlock( GUISection::eTheme, blockContext->gui.get() )
 
 		static CU_ImplementAttributeParserBlock( parserSceneTheme, SceneContext )
 		{
-			blockContext->root->gui.scene = blockContext->scene;
-			blockContext->root->gui.theme = blockContext->root->gui.controls->createTheme( params[0]->get< castor::String >()
+			blockContext->root->gui->scene = blockContext;
+			blockContext->root->gui->theme = blockContext->root->gui->controls->createTheme( params[0]->get< castor::String >()
 				, blockContext->scene );
-			blockContext->root->gui.pushStylesHolder( blockContext->root->gui.theme );
+			blockContext->root->gui->pushStylesHolder( blockContext->root->gui->theme );
 		}
-		CU_EndAttributePushBlock( GUISection::eTheme, &blockContext->root->gui )
+		CU_EndAttributePushBlock( GUISection::eTheme, blockContext->root->gui.get() )
 
 		static CU_ImplementAttributeParserBlock( parserGuiTheme, GuiContext )
 		{
 			blockContext->theme = blockContext->controls->createTheme( params[0]->get< castor::String >()
-				, blockContext->scene );
+				, getScene( blockContext ) );
 			blockContext->pushStylesHolder( blockContext->theme );
 		}
 		CU_EndAttributePushBlock( GUISection::eTheme, blockContext )
 
 		static CU_ImplementAttributeParserBlock( parserRootGlobalBoxLayout, RootContext )
 		{
-			blockContext->gui.scene = {};
-			blockContext->gui.layout = castor::makeUniqueDerived< Layout, LayoutBox >( *blockContext->gui.controls );
+			blockContext->gui->scene = {};
+			blockContext->gui->layout = castor::makeUniqueDerived< Layout, LayoutBox >( *blockContext->gui->controls );
 		}
-		CU_EndAttributePushBlock( GUISection::eBoxLayout, &blockContext->gui )
+		CU_EndAttributePushBlock( GUISection::eBoxLayout, blockContext->gui.get() )
 
 		static CU_ImplementAttributeParserBlock( parserSceneGlobalBoxLayout, SceneContext )
 		{
-			blockContext->root->gui.scene = blockContext->scene;
-			blockContext->root->gui.layout = castor::makeUniqueDerived< Layout, LayoutBox >( *blockContext->root->gui.controls );
+			blockContext->root->gui->scene = blockContext;
+			blockContext->root->gui->layout = castor::makeUniqueDerived< Layout, LayoutBox >( *blockContext->root->gui->controls );
 		}
-		CU_EndAttributePushBlock( GUISection::eBoxLayout, &blockContext->root->gui )
+		CU_EndAttributePushBlock( GUISection::eBoxLayout, blockContext->root->gui.get() )
 
 		static CU_ImplementAttributeParserBlock( parserGuiGlobalBoxLayout, GuiContext )
 		{
@@ -153,7 +160,7 @@ namespace castor3d
 		{
 			guiparse::createControl< ButtonStyle >( context
 				, *blockContext
-				, blockContext->scene
+				, getScene( blockContext )
 				, blockContext->controlName
 				, params[0]->get< castor::String >() + "/Button"
 				, blockContext->button );
@@ -164,7 +171,7 @@ namespace castor3d
 		{
 			guiparse::createControl< ButtonStyle >( context
 				, *blockContext
-				, blockContext->scene
+				, getScene( blockContext )
 				, blockContext->controlName
 				, params[0]->get< castor::String >()
 				, blockContext->button );
@@ -221,7 +228,7 @@ namespace castor3d
 		{
 			guiparse::createControl< ComboBoxStyle >( context
 				, *blockContext
-				, blockContext->scene
+				, getScene( blockContext )
 				, blockContext->controlName
 				, params[0]->get< castor::String >() + "/ComboBox"
 				, blockContext->combo );
@@ -232,7 +239,7 @@ namespace castor3d
 		{
 			guiparse::createControl< ComboBoxStyle >( context
 				, *blockContext
-				, blockContext->scene
+				, getScene( blockContext )
 				, blockContext->controlName
 				, params[0]->get< castor::String >()
 				, blockContext->combo );
@@ -263,7 +270,7 @@ namespace castor3d
 		{
 			guiparse::createControl< EditStyle >( context
 				, *blockContext
-				, blockContext->scene
+				, getScene( blockContext )
 				, blockContext->controlName
 				, params[0]->get< castor::String >() + "/Edit"
 				, blockContext->edit );
@@ -275,7 +282,7 @@ namespace castor3d
 		{
 			guiparse::createControl< EditStyle >( context
 				, *blockContext
-				, blockContext->scene
+				, getScene( blockContext )
 				, blockContext->controlName
 				, params[0]->get< castor::String >()
 				, blockContext->edit );
@@ -336,7 +343,7 @@ namespace castor3d
 		{
 			guiparse::createControl< ListBoxStyle >( context
 				, *blockContext
-				, blockContext->scene
+				, getScene( blockContext )
 				, blockContext->controlName
 				, params[0]->get< castor::String >() + "/ListBox"
 				, blockContext->listbox );
@@ -347,7 +354,7 @@ namespace castor3d
 		{
 			guiparse::createControl< ListBoxStyle >( context
 				, *blockContext
-				, blockContext->scene
+				, getScene( blockContext )
 				, blockContext->controlName
 				, params[0]->get< castor::String >()
 				, blockContext->listbox );
@@ -378,7 +385,7 @@ namespace castor3d
 		{
 			guiparse::createControl< SliderStyle >( context
 				, *blockContext
-				, blockContext->scene
+				, getScene( blockContext )
 				, blockContext->controlName
 				, params[0]->get< castor::String >() + "/Slider"
 				, blockContext->slider );
@@ -389,7 +396,7 @@ namespace castor3d
 		{
 			guiparse::createControl< SliderStyle >( context
 				, *blockContext
-				, blockContext->scene
+				, getScene( blockContext )
 				, blockContext->controlName
 				, params[0]->get< castor::String >()
 				, blockContext->slider );
@@ -407,7 +414,7 @@ namespace castor3d
 		{
 			guiparse::createControl< StaticStyle >( context
 				, *blockContext
-				, blockContext->scene
+				, getScene( blockContext )
 				, blockContext->controlName
 				, params[0]->get< castor::String >() + "/Static"
 				, blockContext->staticTxt );
@@ -418,7 +425,7 @@ namespace castor3d
 		{
 			guiparse::createControl< StaticStyle >( context
 				, *blockContext
-				, blockContext->scene
+				, getScene( blockContext )
 				, blockContext->controlName
 				, params[0]->get< castor::String >()
 				, blockContext->staticTxt );
@@ -475,7 +482,7 @@ namespace castor3d
 		{
 			guiparse::createControl< PanelStyle >( context
 				, *blockContext
-				, blockContext->scene
+				, getScene( blockContext )
 				, blockContext->controlName
 				, params[0]->get< castor::String >() + "/Panel"
 				, blockContext->panel );
@@ -487,7 +494,7 @@ namespace castor3d
 		{
 			guiparse::createControl< PanelStyle >( context
 				, *blockContext
-				, blockContext->scene
+				, getScene( blockContext )
 				, blockContext->controlName
 				, params[0]->get< castor::String >()
 				, blockContext->panel );
@@ -506,7 +513,7 @@ namespace castor3d
 		{
 			guiparse::createControl< ProgressStyle >( context
 				, *blockContext
-				, blockContext->scene
+				, getScene( blockContext )
 				, blockContext->controlName
 				, params[0]->get< castor::String >() + "/Progress"
 				, blockContext->progress );
@@ -517,7 +524,7 @@ namespace castor3d
 		{
 			guiparse::createControl< ProgressStyle >( context
 				, *blockContext
-				, blockContext->scene
+				, getScene( blockContext )
 				, blockContext->controlName
 				, params[0]->get< castor::String >()
 				, blockContext->progress );
@@ -626,7 +633,7 @@ namespace castor3d
 		{
 			guiparse::createControl< ExpandablePanelStyle >( context
 				, *blockContext
-				, blockContext->scene
+				, getScene( blockContext )
 				, blockContext->controlName
 				, params[0]->get< castor::String >() + "/ExpandablePanel"
 				, blockContext->expandablePanel );
@@ -637,7 +644,7 @@ namespace castor3d
 		{
 			guiparse::createControl< ExpandablePanelStyle >( context
 				, *blockContext
-				, blockContext->scene
+				, getScene( blockContext )
 				, blockContext->controlName
 				, params[0]->get< castor::String >()
 				, blockContext->expandablePanel );
@@ -710,7 +717,7 @@ namespace castor3d
 		{
 			guiparse::createControl< FrameStyle >( context
 				, *blockContext
-				, blockContext->scene
+				, getScene( blockContext )
 				, blockContext->controlName
 				, params[0]->get< castor::String >() + "/Frame"
 				, blockContext->frame );
@@ -721,7 +728,7 @@ namespace castor3d
 		{
 			guiparse::createControl< FrameStyle >( context
 				, *blockContext
-				, blockContext->scene
+				, getScene( blockContext )
 				, blockContext->controlName
 				, params[0]->get< castor::String >()
 				, blockContext->frame );
@@ -1721,7 +1728,7 @@ namespace castor3d
 		{
 			auto guiContext = getGuiContext( blockContext );
 			guiContext->pushStyle( guiContext->stylesHolder.top()->createButtonStyle( params[0]->get< castor::String >()
-					, guiContext->scene )
+					, getScene( guiContext ) )
 				, guiContext->buttonStyle );
 		}
 		CU_EndAttributePushBlock( GUISection::eButtonStyle, getGuiContext( blockContext ) )
@@ -1731,7 +1738,7 @@ namespace castor3d
 		{
 			auto guiContext = getGuiContext( blockContext );
 			guiContext->pushStyle( guiContext->stylesHolder.top()->createComboBoxStyle( params[0]->get< castor::String >()
-					, guiContext->scene )
+					, getScene( guiContext ) )
 				, guiContext->comboStyle );
 		}
 		CU_EndAttributePushBlock( GUISection::eComboStyle, getGuiContext( blockContext ) )
@@ -1741,7 +1748,7 @@ namespace castor3d
 		{
 			auto guiContext = getGuiContext( blockContext );
 			guiContext->pushStyle( guiContext->stylesHolder.top()->createEditStyle( params[0]->get< castor::String >()
-					, guiContext->scene )
+					, getScene( guiContext ) )
 				, guiContext->editStyle );
 		}
 		CU_EndAttributePushBlock( GUISection::eEditStyle, getGuiContext( blockContext ) )
@@ -1751,7 +1758,7 @@ namespace castor3d
 		{
 			auto guiContext = getGuiContext( blockContext );
 			guiContext->pushStyle( guiContext->stylesHolder.top()->createListBoxStyle( params[0]->get< castor::String >()
-					, guiContext->scene )
+					, getScene( guiContext ) )
 				, guiContext->listboxStyle );
 		}
 		CU_EndAttributePushBlock( GUISection::eListStyle, getGuiContext( blockContext ) )
@@ -1761,7 +1768,7 @@ namespace castor3d
 		{
 			auto guiContext = getGuiContext( blockContext );
 			guiContext->pushStyle( guiContext->stylesHolder.top()->createSliderStyle( params[0]->get< castor::String >()
-					, guiContext->scene )
+					, getScene( guiContext ) )
 				, guiContext->sliderStyle );
 		}
 		CU_EndAttributePushBlock( GUISection::eSliderStyle, getGuiContext( blockContext ) )
@@ -1771,7 +1778,7 @@ namespace castor3d
 		{
 			auto guiContext = getGuiContext( blockContext );
 			guiContext->pushStyle( guiContext->stylesHolder.top()->createStaticStyle( params[0]->get< castor::String >()
-					, guiContext->scene )
+					, getScene( guiContext ) )
 				, guiContext->staticStyle );
 		}
 		CU_EndAttributePushBlock( GUISection::eStaticStyle, getGuiContext( blockContext ) )
@@ -1781,7 +1788,7 @@ namespace castor3d
 		{
 			auto guiContext = getGuiContext( blockContext );
 			guiContext->pushStyle( guiContext->stylesHolder.top()->createPanelStyle( params[0]->get< castor::String >()
-					, guiContext->scene )
+					, getScene( guiContext ) )
 				, guiContext->panelStyle );
 		}
 		CU_EndAttributePushBlock( GUISection::ePanelStyle, getGuiContext( blockContext ) )
@@ -1791,7 +1798,7 @@ namespace castor3d
 		{
 			auto guiContext = getGuiContext( blockContext );
 			guiContext->pushStyle( guiContext->stylesHolder.top()->createProgressStyle( params[0]->get< castor::String >()
-					, guiContext->scene )
+					, getScene( guiContext ) )
 				, guiContext->progressStyle );
 		}
 		CU_EndAttributePushBlock( GUISection::eProgressStyle, getGuiContext( blockContext ) )
@@ -1801,7 +1808,7 @@ namespace castor3d
 		{
 			auto guiContext = getGuiContext( blockContext );
 			guiContext->pushStyle( guiContext->stylesHolder.top()->createExpandablePanelStyle( params[0]->get< castor::String >()
-					, guiContext->scene )
+					, getScene( guiContext ) )
 				, guiContext->expandablePanelStyle );
 		}
 		CU_EndAttributePushBlock( GUISection::eExpandablePanelStyle, getGuiContext( blockContext ) )
@@ -1811,7 +1818,7 @@ namespace castor3d
 		{
 			auto guiContext = getGuiContext( blockContext );
 			guiContext->pushStyle( guiContext->stylesHolder.top()->createFrameStyle( params[0]->get< castor::String >()
-					, guiContext->scene )
+					, getScene( guiContext ) )
 				, guiContext->frameStyle );
 		}
 		CU_EndAttributePushBlock( GUISection::eFrameStyle, getGuiContext( blockContext ) )
@@ -1821,7 +1828,7 @@ namespace castor3d
 		{
 			auto guiContext = getGuiContext( blockContext );
 			guiContext->pushStyle( guiContext->stylesHolder.top()->createScrollBarStyle( params[0]->get< castor::String >()
-				, guiContext->scene )
+				, getScene( guiContext ) )
 				, guiContext->scrollBarStyle );
 		}
 		CU_EndAttributePushBlock( GUISection::eScrollBarStyle, getGuiContext( blockContext ) )
@@ -2097,7 +2104,7 @@ namespace castor3d
 			}
 			else
 			{
-				addParserT( parsers, newSection, oldSection, cuT( "}" ), parserdefaultEnd );
+				addParserT( parsers, newSection, oldSection, cuT( "}" ), parserDefaultEnd );
 			}
 		}
 

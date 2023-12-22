@@ -1,4 +1,5 @@
 #include "Castor3D/Material/Pass/PassModule.hpp"
+#include "Castor3D/Material/Pass/Component/PassComponent.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 
 CU_ImplementSmartPtr( castor3d, RenderPassRegisterInfo )
@@ -41,5 +42,15 @@ namespace castor3d
 			CU_Failure( "Unsupported BlendMode" );
 			return castor::cuEmptyString;
 		}
+	}
+
+	PassRPtr getComponentPass( PassComponent & component )
+	{
+		return component.getOwner();
+	}
+
+	castor::String const & getPassComponentType( PassComponent const & component )
+	{
+		return component.getType();
 	}
 }

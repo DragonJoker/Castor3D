@@ -32,7 +32,7 @@
 #include "Castor3D/Material/Texture/Animation/TextureAnimation.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Scene.hpp"
-#include "Castor3D/Scene/SceneFileParser.hpp"
+#include "Castor3D/Scene/SceneFileParserData.hpp"
 #include "Castor3D/Scene/Animation/AnimatedObject.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/ShaderBuffers/SssProfileBuffer.hpp"
@@ -123,8 +123,6 @@ namespace castor3d
 				}
 
 				++blockContext->passIndex;
-				newBlockContext->root = blockContext->root;
-				newBlockContext->scene = blockContext->scene;
 				newBlockContext->material = blockContext;
 			}
 			else
@@ -1053,5 +1051,10 @@ namespace castor3d
 		}
 
 		doUpdateTextureFlags();
+	}
+
+	Engine * getEngine( PassContext const & context )
+	{
+		return getEngine( *context.material );
 	}
 }

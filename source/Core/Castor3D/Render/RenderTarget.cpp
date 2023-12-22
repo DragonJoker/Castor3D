@@ -17,6 +17,7 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTechnique.hpp"
 #include "Castor3D/Render/RenderTechniqueVisitor.hpp"
+#include "Castor3D/Render/RenderWindow.hpp"
 #include "Castor3D/Render/Clustered/FrustumClusters.hpp"
 #include "Castor3D/Render/Culling/FrustumCuller.hpp"
 #include "Castor3D/Render/Debug/DebugDrawer.hpp"
@@ -29,6 +30,7 @@
 #include "Castor3D/Render/ToTexture/Texture3DTo2D.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Scene/SceneFileParserData.hpp"
 #include "Castor3D/Scene/Background/Background.hpp"
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
 #include "Castor3D/Shader/Program.hpp"
@@ -1355,5 +1357,17 @@ namespace castor3d
 		}
 
 		rendtgt::IntermediatesLister::submit( *getScene(), *getScene()->getBackground(), result );
+	}
+
+	Engine * getEngine( TargetContext const & context )
+	{
+		return getEngine( *getRootContext( context ) );
+	}
+
+	RootContext * getRootContext( TargetContext const & context )
+	{
+		return context.window
+			? context.window->root
+			: context.texture->root;
 	}
 }

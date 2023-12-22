@@ -2,6 +2,7 @@
 
 #include "FFTOceanRendering/OceanFFTUbo.hpp"
 
+#include <Castor3D/Material/Pass/Pass.hpp>
 #include <Castor3D/Miscellaneous/ConfigurationVisitor.hpp>
 #include <Castor3D/Render/RenderPipeline.hpp>
 #include <Castor3D/Scene/SceneFileParser.hpp>

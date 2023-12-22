@@ -5,12 +5,15 @@ See LICENSE file in root folder
 #define ___C3D_ControlsManager_H___
 
 #include "Castor3D/Gui/GuiModule.hpp"
+#include "Castor3D/Gui/Layout/LayoutItemFlags.hpp"
 #include "Castor3D/Gui/Theme/Theme.hpp"
 
 #include "Castor3D/Event/UserInput/UserInputListener.hpp"
 #include "Castor3D/Event/UserInput/EventHandler.hpp"
 
 #include <CastorUtils/Graphics/Position.hpp>
+
+#include <stack>
 
 namespace castor3d
 {
@@ -389,6 +392,72 @@ namespace castor3d
 		castor::Size m_size;
 		LayoutUPtr m_layout;
 	};
+
+	struct SceneContext;
+
+	struct GuiContext
+	{
+		RootContext * root{};
+		SceneContext * scene{};
+		ControlsManager * controls{};
+		std::stack< ControlRPtr > parents{};
+		std::stack< ControlStyleRPtr > styles{};
+		std::stack< StylesHolderRPtr > stylesHolder{};
+		castor::String controlName{};
+		ButtonCtrlRPtr button{};
+		ComboBoxCtrlRPtr combo{};
+		EditCtrlRPtr edit{};
+		ListBoxCtrlRPtr listbox{};
+		SliderCtrlRPtr slider{};
+		StaticCtrlRPtr staticTxt{};
+		PanelCtrlRPtr panel{};
+		ProgressCtrlRPtr progress{};
+		ExpandablePanelCtrlRPtr expandablePanel{};
+		FrameCtrlRPtr frame{};
+		ScrollableCtrlRPtr scrollable{};
+		ThemeRPtr theme{};
+		ButtonStyleRPtr buttonStyle{};
+		ComboBoxStyleRPtr comboStyle{};
+		EditStyleRPtr editStyle{};
+		ListBoxStyleRPtr listboxStyle{};
+		SliderStyleRPtr sliderStyle{};
+		StaticStyleRPtr staticStyle{};
+		PanelStyleRPtr panelStyle{};
+		ProgressStyleRPtr progressStyle{};
+		ExpandablePanelStyleRPtr expandablePanelStyle{};
+		FrameStyleRPtr frameStyle{};
+		ScrollBarStyleRPtr scrollBarStyle{};
+		ScrollableStyleRPtr scrollableStyle{};
+		LayoutUPtr layout{};
+		LayoutItemFlags layoutCtrlFlags{};
+
+		C3D_API ControlRPtr getTopControl()const;
+		C3D_API void popControl();
+		C3D_API void pushStylesHolder( StylesHolder * style );
+		C3D_API void popStylesHolder( StylesHolder const * style );
+		C3D_API ControlStyleRPtr getTopStyle()const;
+		C3D_API void popStyle();
+
+		template< typename StyleT >
+		void pushStyle( StyleT * style
+			, StyleT *& result )
+		{
+			styles.push( style );
+			result = style;
+
+			if constexpr ( std::is_base_of_v< StylesHolder, StyleT > )
+			{
+				pushStylesHolder( style );
+			}
+
+			if constexpr ( std::is_base_of_v< ScrollableStyle, StyleT > )
+			{
+				scrollableStyle = style;
+			}
+		}
+	};
+
+	C3D_API Engine * getEngine( GuiContext const & context );
 }
 
 #endif

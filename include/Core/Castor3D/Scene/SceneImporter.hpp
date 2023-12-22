@@ -147,6 +147,28 @@ namespace castor3d
 		ImporterFile * m_file;
 		SceneNodePtrArray m_nodes;
 	};
+
+	struct SceneContext;
+
+	struct SceneImportContext
+	{
+		SceneContext * scene{};
+		castor::PathArray files{};
+		castor::PathArray animFiles{};
+		castor::String prefix{};
+		std::map< PassComponentTextureFlag, TextureConfiguration > textureRemaps;
+		float rescale{ 1.0f };
+		float pitch{ 0.0f };
+		float yaw{ 0.0f };
+		float roll{ 0.0f };
+		bool noOptimisations{ false };
+		float emissiveMult{ 1.0f };
+		std::map< PassComponentTextureFlag, TextureConfiguration >::iterator textureRemapIt;
+		castor::String centerCamera{};
+		castor::String preferredImporter{ cuT( "any" ) };
+	};
+
+	C3D_API Engine * getEngine( SceneImportContext const & context );
 }
 
 #endif

@@ -8,7 +8,7 @@
 #include "Castor3D/Material/Pass/PhongPass.hpp"
 #include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
-#include "Castor3D/Scene/SceneFileParser.hpp"
+#include "Castor3D/Scene/SceneFileParserData.hpp"
 #include "Castor3D/Shader/LightingModelFactory.hpp"
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
@@ -73,7 +73,7 @@ namespace castor3d
 			else
 			{
 				auto name = LightingModelFactory::normaliseName( params[0]->get< castor::String >() );
-				auto & engine = *blockContext->root->engine;
+				auto & engine = *getEngine( *blockContext );
 				auto & component = getPassComponent< LightingModelComponent >( *blockContext );
 				component.setLightingModelId( engine.getLightingModelFactory().getNameId( name ) );
 			}

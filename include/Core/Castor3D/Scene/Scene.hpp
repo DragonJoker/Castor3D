@@ -36,6 +36,7 @@ See LICENSE file in root folder
 #include <CastorUtils/Data/TextWriter.hpp>
 #include <CastorUtils/Design/Named.hpp>
 #include <CastorUtils/Design/Signal.hpp>
+#include <CastorUtils/FileParser/FileParserModule.hpp>
 #include <CastorUtils/Graphics/FontCache.hpp>
 #include <CastorUtils/Graphics/Font.hpp>
 #include <CastorUtils/Graphics/ImageCache.hpp>
@@ -541,6 +542,34 @@ namespace castor3d
 		//!\~english	The root node name.
 		//!\~french		Le nom du noeud de scène racine.
 		C3D_API static castor::String RootNode;
+	};
+
+	struct RootContext;
+
+	struct SceneContext
+	{
+		RootContext * root{};
+		SceneRPtr scene{};
+		SceneUPtr ownScene{};
+		castor::String fontName{};
+		OverlayContextUPtr overlays{};
+	};
+
+	C3D_API Engine * getEngine( SceneContext const & context );
+}
+
+namespace castor
+{
+	template<>
+	struct ParserEnumTraits< castor3d::FogType >
+	{
+		static inline xchar const * const Name = cuT( "FogType" );
+		static inline UInt32StrMap const Values = []()
+			{
+				UInt32StrMap result;
+				result = castor3d::getEnumMapT< castor3d::FogType >();
+				return result;
+			}( );
 	};
 }
 

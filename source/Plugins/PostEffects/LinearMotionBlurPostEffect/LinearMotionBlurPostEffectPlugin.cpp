@@ -6,7 +6,6 @@
 #include <Castor3D/Plugin/PostFxPlugin.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
-#include <Castor3D/Scene/SceneFileParser.hpp>
 
 #include <CastorUtils/FileParser/ParserParameter.hpp>
 #include <CastorUtils/Log/Logger.hpp>
@@ -20,48 +19,6 @@
 #		define C3D_LinearMotionBlur_API __declspec( dllimport )
 #	endif
 #endif
-
-namespace
-{
-	castor::AttributeParsers createParsers()
-	{
-		castor::AttributeParsers result;
-
-		addParserT( result
-			, castor3d::CSCNSection::eRenderTarget
-			, motion_blur::MotionBlurSection::eRoot
-			, cuT( "linear_motion_blur" )
-			, &motion_blur::parserMotionBlur );
-
-		addParserT( result
-			, motion_blur::MotionBlurSection::eRoot
-			, cuT( "vectorDivider" )
-			, &motion_blur::parserDivider, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		addParserT( result
-			, motion_blur::MotionBlurSection::eRoot
-			, cuT( "samples" )
-			, &motion_blur::parserSamples, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		addParserT( result
-			, motion_blur::MotionBlurSection::eRoot
-			, cuT( "fpsScale" )
-			, &motion_blur::parserFpsScale, { castor::makeParameter< castor::ParameterType::eBool >() } );
-		addParserT( result
-			, motion_blur::MotionBlurSection::eRoot
-			, castor3d::CSCNSection::eRenderTarget
-			, cuT( "}" )
-			, &motion_blur::parserMotionBlurEnd );
-
-		return result;
-	}
-
-	castor::StrUInt32Map createSections()
-	{
-		return
-		{
-			{ uint32_t( motion_blur::MotionBlurSection::eRoot ), cuT( "motion_blur" ) },
-		};
-	}
-}
 
 extern "C"
 {
@@ -91,8 +48,8 @@ extern "C"
 		engine->getPostEffectFactory().registerType( motion_blur::PostEffect::Type
 			, &motion_blur::PostEffect::create );
 		engine->registerParsers( motion_blur::PostEffect::Type
-			, createParsers()
-			, createSections()
+			, motion_blur::createParsers()
+			, motion_blur::createSections()
 			, nullptr );
 	}
 

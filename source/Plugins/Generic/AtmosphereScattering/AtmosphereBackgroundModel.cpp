@@ -22,6 +22,8 @@ namespace atmosphere_scattering
 	}
 
 	castor::String const AtmosphereBackgroundModel::Name = cuT( "c3d.atmosphere" );
+	castor::String const AtmosphereBackgroundModel::PluginType = "atmospheric_scattering";
+	castor::String const AtmosphereBackgroundModel::PluginName = "Atmospheric Scattering";
 
 	AtmosphereBackgroundModel::AtmosphereBackgroundModel( castor3d::Engine const & engine
 		, sdw::ShaderWriter & writer

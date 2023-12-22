@@ -523,4 +523,9 @@ namespace castor3d
 			}
 		}
 	}
+
+	Engine * getEngine( NodeContext const & context )
+	{
+		return getEngine( *context.scene );
+	}
 }

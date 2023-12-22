@@ -1308,5 +1308,10 @@ namespace castor3d
 		}
 	}
 
+	Engine * getEngine( SubmeshContext const & context )
+	{
+		return getEngine( *context.mesh );
+	}
+
 	//*********************************************************************************************
 }

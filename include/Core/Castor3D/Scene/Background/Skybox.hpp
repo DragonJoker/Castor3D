@@ -306,6 +306,11 @@ namespace castor3d
 		static std::array< castor::ImageUPtr, 6u > splitCrossImageBuffer( Engine & engine
 			, castor::Image const & cross );
 	};
+
+	struct SkyboxContext
+	{
+		SkyboxBackgroundUPtr skybox{};
+	};
 }
 
 #endif

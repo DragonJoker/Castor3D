@@ -6,7 +6,8 @@
 #include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
 #include "Castor3D/Material/Pass/Component/Base/NormalComponent.hpp"
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
-#include "Castor3D/Scene/SceneFileParser.hpp"
+#include "Castor3D/Scene/SceneFileParserData.hpp"
+#include "Castor3D/Scene/SceneImporter.hpp"
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
@@ -69,7 +70,7 @@ namespace castor3d
 			}
 			else if ( !blockContext->pass )
 			{
-				auto & plugin = blockContext->root->engine->getPassComponentsRegister().getPlugin( NormalMapComponent::TypeName );
+				auto & plugin = getEngine( *blockContext )->getPassComponentsRegister().getPlugin( NormalMapComponent::TypeName );
 				plugin.fillTextureConfiguration( blockContext->configuration
 					, params[0]->get< uint32_t >() );
 			}
@@ -123,7 +124,7 @@ namespace castor3d
 
 		static CU_ImplementAttributeParserBlock( parserTexRemapNormal, SceneImportContext )
 		{
-			auto & plugin = blockContext->root->engine->getPassComponentsRegister().getPlugin( NormalMapComponent::TypeName );
+			auto & plugin = getEngine( *blockContext )->getPassComponentsRegister().getPlugin( NormalMapComponent::TypeName );
 			blockContext->textureRemapIt = blockContext->textureRemaps.emplace( plugin.getTextureFlags(), TextureConfiguration{} ).first;
 			blockContext->textureRemapIt->second = TextureConfiguration{};
 		}
@@ -137,7 +138,7 @@ namespace castor3d
 			}
 			else
 			{
-				auto & plugin = blockContext->root->engine->getPassComponentsRegister().getPlugin( NormalMapComponent::TypeName );
+				auto & plugin = getEngine( *blockContext )->getPassComponentsRegister().getPlugin( NormalMapComponent::TypeName );
 				plugin.fillTextureConfiguration( blockContext->textureRemapIt->second
 					, params[0]->get< uint32_t >() );
 			}

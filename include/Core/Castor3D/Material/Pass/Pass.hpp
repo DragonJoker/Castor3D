@@ -569,6 +569,67 @@ namespace castor3d
 		PassComponentTextureFlag m_occlusionMapFlag{};
 		PassComponentFlag m_reflRefrFlag{};
 	};
+
+	struct SceneContext;
+	struct MaterialContext;
+
+	struct PassContext
+	{
+		MaterialContext * material{};
+		Pass * pass{};
+		PassComponent * passComponent{};
+		bool createPass{ true };
+		uint32_t unitIndex{};
+	};
+
+	C3D_API Engine * getEngine( PassContext const & context );
+
+	template< typename ComponentT >
+	ComponentT & getPassComponent( PassContext & context )
+	{
+		if ( !context.passComponent
+			|| getComponentPass( *context.passComponent ) != context.pass
+			|| getPassComponentType( *context.passComponent ) != ComponentT::TypeName )
+		{
+			if ( context.pass->template hasComponent< ComponentT >() )
+			{
+				context.passComponent = context.pass->template getComponent< ComponentT >();
+			}
+			else
+			{
+				context.passComponent = context.pass->template createComponent< ComponentT >();
+			}
+		}
+
+		return static_cast< ComponentT & >( *context.passComponent );
+	}
+}
+
+namespace castor
+{
+	template<>
+	struct ParserEnumTraits< castor3d::BlendMode >
+	{
+		static inline xchar const * const Name = cuT( "BlendMode" );
+		static inline UInt32StrMap const Values = []()
+			{
+				UInt32StrMap result;
+				result = castor3d::getEnumMapT< castor3d::BlendMode >();
+				return result;
+			}( );
+	};
+
+	template<>
+	struct ParserEnumTraits< castor3d::ParallaxOcclusionMode >
+	{
+		static inline xchar const * const Name = cuT( "ParallaxOcclusionMode" );
+		static inline UInt32StrMap const Values = []()
+			{
+				UInt32StrMap result;
+				result = castor3d::getEnumMapT< castor3d::ParallaxOcclusionMode >();
+				return result;
+			}( );
+	};
 }
 
 #endif

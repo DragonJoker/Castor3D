@@ -1,6 +1,5 @@
 #include "Castor3D/Overlay/OverlayModule.hpp"
 
-
 namespace castor3d
 {
 	castor::String getName( OverlayType value )

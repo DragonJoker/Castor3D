@@ -19,21 +19,31 @@ namespace castor3d
 			RootContext result{};
 			result.engine = &engine;
 			result.logger = &engine.getLogger();
-			result.gui.controls = &static_cast< ControlsManager & >( *engine.getUserInputListener() );
-			result.gui.stylesHolder.push( result.gui.controls );
+			result.overlays = castor::makeUnique< OverlayContext >();
+			result.gui = castor::makeUnique< GuiContext >();
+			result.gui->controls = &static_cast< ControlsManager & >( *engine.getUserInputListener() );
+			result.gui->stylesHolder.push( result.gui->controls );
 			return result;
 		}
 	}
 
 	//****************************************************************************************************
 
-	UInt32StrMap SceneFileParser::comparisonModes;
+	CU_ImplementAttributeParser( parserDefaultEnd )
+	{
+	}
+	CU_EndAttributePop()
+
+	//****************************************************************************************************
 
 	SceneFileParser::SceneFileParser( Engine & engine )
 		: OwnedBy< Engine >( engine )
 		, DataHolderT< RootContext >{ scnfile::createContext( engine ) }
 		, FileParser{ engine.getLogger(), getSceneFileRootSection(), &getData() }
 	{
+		getData().overlays->root = &getData();
+		getData().gui->root = &getData();
+
 		for ( auto const & it : getEngine()->getAdditionalParsers() )
 		{
 			registerParsers( it.first, it.second );

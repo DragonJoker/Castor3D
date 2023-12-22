@@ -27,6 +27,7 @@
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
 #include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Scene/SceneFileParserData.hpp"
 #include "Castor3D/Shader/Program.hpp"
 
 #include <CastorUtils/Design/ResourceCache.hpp>
@@ -1998,5 +1999,10 @@ namespace castor3d
 			}
 		}
 #endif
+	}
+
+	Engine * getEngine( WindowContext const & context )
+	{
+		return getEngine( *context.root );
 	}
 }

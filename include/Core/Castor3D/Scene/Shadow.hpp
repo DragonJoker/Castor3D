@@ -9,6 +9,7 @@ See LICENSE file in root folder
 #include "Castor3D/Limits.hpp"
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LpvConfig.hpp"
 
+#include <CastorUtils/FileParser/FileParserModule.hpp>
 #include <CastorUtils/Math/RangedValue.hpp>
 
 namespace castor3d
@@ -48,6 +49,33 @@ namespace castor3d
 			&& lhs.pcfSampleCount == rhs.pcfSampleCount
 			&& lhs.lpvConfig == rhs.lpvConfig;
 	}
+}
+
+namespace castor
+{
+	template<>
+	struct ParserEnumTraits< castor3d::ShadowType >
+	{
+		static inline xchar const * const Name = cuT( "ShadowType" );
+		static inline UInt32StrMap const Values = []()
+			{
+				UInt32StrMap result;
+				result = castor3d::getEnumMapT< castor3d::ShadowType >();
+				return result;
+			}( );
+	};
+
+	template<>
+	struct ParserEnumTraits< castor3d::GlobalIlluminationType >
+	{
+		static inline xchar const * const Name = cuT( "GlobalIlluminationType" );
+		static inline UInt32StrMap const Values = []()
+			{
+				UInt32StrMap result;
+				result = castor3d::getEnumMapT< castor3d::GlobalIlluminationType >();
+				return result;
+			}( );
+	};
 }
 
 #endif

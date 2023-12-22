@@ -216,4 +216,9 @@ namespace castor3d
 			doRemoveAnimation( name );
 		}
 	}
+
+	Engine * getEngine( MeshContext const & context )
+	{
+		return context.scene->scene->getEngine();
+	}
 }

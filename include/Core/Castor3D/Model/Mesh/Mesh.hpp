@@ -319,6 +319,24 @@ namespace castor3d
 		friend class BinaryWriter< Mesh >;
 		friend class BinaryParser< Mesh >;
 	};
+
+	struct ObjectContext;
+	struct RootContext;
+	struct SceneContext;
+
+	struct MeshContext
+	{
+		SceneContext * scene{};
+		RootContext * root{};
+		ObjectContext * geometry{};
+		MeshResPtr mesh{};
+		MeshRes ownMesh{};
+		MeshAnimationUPtr morphAnimation{};
+		Submesh * submesh{};
+		SubmeshComponent * submeshComponent{};
+	};
+
+	C3D_API Engine * getEngine( MeshContext const & context );
 }
 
 #endif

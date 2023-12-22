@@ -10,6 +10,7 @@ See LICENSE file in root folder
 #include "Castor3D/Overlay/OverlayCategory.hpp"
 
 #include <CastorUtils/Data/TextWriter.hpp>
+#include <CastorUtils/FileParser/FileParserModule.hpp>
 
 namespace castor3d
 {
@@ -326,6 +327,99 @@ namespace castor3d
 		OverlayCategoryUPtr m_category;
 		Scene * m_scene;
 		RenderSystem * m_renderSystem;
+	};
+
+	struct RootContext;
+	struct SceneContext;
+
+	struct OverlayContext
+	{
+		struct OverlayPtr
+		{
+			OverlayUPtr uptr{};
+			OverlayRPtr rptr{};
+		};
+		SceneContext * scene{};
+		RootContext * root{};
+		OverlayPtr overlay;
+		std::vector< OverlayPtr > parentOverlays{};
+	};
+
+	C3D_API Engine * getEngine( OverlayContext const & context );
+}
+
+namespace castor
+{
+	template<>
+	struct ParserEnumTraits< castor3d::TextWrappingMode >
+	{
+		static inline xchar const * const Name = cuT( "TextWrappingMode" );
+		static inline UInt32StrMap const Values = []()
+			{
+				UInt32StrMap result;
+				result = castor3d::getEnumMapT< castor3d::TextWrappingMode >();
+				return result;
+			}( );
+	};
+
+	template<>
+	struct ParserEnumTraits< castor3d::BorderPosition >
+	{
+		static inline xchar const * const Name = cuT( "BorderPosition" );
+		static inline UInt32StrMap const Values = []()
+			{
+				UInt32StrMap result;
+				result = castor3d::getEnumMapT< castor3d::BorderPosition >();
+				return result;
+			}( );
+	};
+
+	template<>
+	struct ParserEnumTraits< castor3d::VAlign >
+	{
+		static inline xchar const * const Name = cuT( "VAlign" );
+		static inline UInt32StrMap const Values = []()
+			{
+				UInt32StrMap result;
+				result = castor3d::getEnumMapT< castor3d::VAlign >();
+				return result;
+			}( );
+	};
+
+	template<>
+	struct ParserEnumTraits< castor3d::HAlign >
+	{
+		static inline xchar const * const Name = cuT( "HAlign" );
+		static inline UInt32StrMap const Values = []()
+			{
+				UInt32StrMap result;
+				result = castor3d::getEnumMapT< castor3d::HAlign >();
+				return result;
+			}( );
+	};
+
+	template<>
+	struct ParserEnumTraits< castor3d::TextTexturingMode >
+	{
+		static inline xchar const * const Name = cuT( "TextTexturingMode" );
+		static inline UInt32StrMap const Values = []()
+			{
+				UInt32StrMap result;
+				result = castor3d::getEnumMapT< castor3d::TextTexturingMode >();
+				return result;
+			}( );
+	};
+
+	template<>
+	struct ParserEnumTraits< castor3d::TextLineSpacingMode >
+	{
+		static inline xchar const * const Name = cuT( "TextLineSpacingMode" );
+		static inline UInt32StrMap const Values = []()
+			{
+				UInt32StrMap result;
+				result = castor3d::getEnumMapT< castor3d::TextLineSpacingMode >();
+				return result;
+			}( );
 	};
 }
 

@@ -88,13 +88,6 @@ namespace castor3d
 	struct BaseDataPassComponentT;
 	/**
 	\~english
-	\brief		Pass component base class.
-	\~french
-	\brief		Classe de base d'un composant de passe.
-	*/
-	struct PassComponent;
-	/**
-	\~english
 	\brief		Pass component base class for texture component.
 	\~french
 	\brief		Classe de base d'un composant de passe contenant une texture.
@@ -637,14 +630,9 @@ namespace castor3d
 	C3D_API bool contains( PassComponentCombine const & cont
 		, PassComponentCombine const & test )noexcept;
 
-	CU_DeclareSmartPtr( castor3d, PassComponent, C3D_API );
 	CU_DeclareSmartPtr( castor3d, PassComponentRegister, C3D_API );
 	CU_DeclareSmartPtr( castor3d, PassComponentPlugin, C3D_API );
 	CU_DeclareSmartPtr( castor3d, PassMapComponent, C3D_API );
-
-	CU_DeclareMap( PassComponentID, PassComponentUPtr, PassComponent );
-
-	C3D_API castor::String const & getPassComponentType( PassComponent const & component );
 
 	using SssProfileChangedFunc = std::function< void( SubsurfaceScatteringComponent const & ) >;
 	using OnSssProfileChanged = castor::SignalT< SssProfileChangedFunc >;

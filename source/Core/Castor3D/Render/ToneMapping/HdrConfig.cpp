@@ -1,8 +1,9 @@
 #include "Castor3D/Render/ToneMapping/HdrConfig.hpp"
 
 #include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
+#include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
-#include "Castor3D/Scene/SceneFileParser.hpp"
+#include "Castor3D/Scene/SceneFileParserData.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
 
 #include <CastorUtils/FileParser/ParserParameter.hpp>
@@ -56,6 +57,6 @@ namespace castor3d
 		addParserT( result, CSCNSection::eCamera, CSCNSection::eHdrConfig, cuT( "hdr_config" ), hdrcfg::parserHdrConfig );
 		addParserT( result, CSCNSection::eHdrConfig, cuT( "exposure" ), hdrcfg::parserExponent, { makeParameter< ParameterType::eFloat >() } );
 		addParserT( result, CSCNSection::eHdrConfig, cuT( "gamma" ), hdrcfg::parserGamma, { makeParameter< ParameterType::eFloat >() } );
-		addParserT( result, CSCNSection::eHdrConfig, CSCNSection::eCamera, cuT( "}" ), parserdefaultEnd );
+		addParserT( result, CSCNSection::eHdrConfig, CSCNSection::eCamera, cuT( "}" ), parserDefaultEnd );
 	}
 }

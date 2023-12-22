@@ -151,4 +151,9 @@ namespace castor3d
 			}
 		}
 	}
+
+	Engine * getEngine( SkeletonContext const & context )
+	{
+		return getEngine( *context.scene );
+	}
 }

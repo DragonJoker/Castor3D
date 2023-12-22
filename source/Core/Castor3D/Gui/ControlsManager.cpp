@@ -29,6 +29,7 @@
 #include <CastorUtils/Graphics/FontCache.hpp>
 
 CU_ImplementSmartPtr( castor3d, ControlsManager )
+CU_ImplementSmartPtr( castor3d, GuiContext )
 
 namespace castor3d
 {
@@ -671,5 +672,10 @@ namespace castor3d
 					}
 				} ) );
 		}
+	}
+
+	Engine * getEngine( GuiContext const & context )
+	{
+		return context.controls->getEngine();
 	}
 }

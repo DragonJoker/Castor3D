@@ -14,6 +14,7 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/MovableObject.hpp"
 
 #include <CastorUtils/Data/TextWriter.hpp>
+#include <CastorUtils/FileParser/FileParserModule.hpp>
 #include <CastorUtils/Graphics/Size.hpp>
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
@@ -286,6 +287,30 @@ namespace castor3d
 		ColourGradingConfig m_colourGradingConfig;
 		bool m_ownProjection{ false };
 		castor::Matrix4x4f m_projection;
+	};
+
+	struct CameraContext
+		: public MovableContext
+	{
+		ViewportUPtr viewport{};
+		VkPrimitiveTopology primitiveType{ VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST };
+		HdrConfig hdrConfig{};
+		ColourGradingConfig colourGradingConfig{};
+	};
+}
+
+namespace castor
+{
+	template<>
+	struct ParserEnumTraits< castor3d::ViewportType >
+	{
+		static inline xchar const * const Name = cuT( "ViewportType" );
+		static inline UInt32StrMap const Values = []()
+			{
+				UInt32StrMap result;
+				result = castor3d::getEnumMapT< castor3d::ViewportType >();
+				return result;
+			}( );
 	};
 }
 

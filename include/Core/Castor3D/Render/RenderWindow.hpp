@@ -577,6 +577,16 @@ namespace castor3d
 		bool m_allowHdrSwapchain{};
 		bool m_hasHdrSupport{};
 	};
+
+	struct RootContext;
+
+	struct WindowContext
+	{
+		RootContext * root{};
+		RenderWindowDesc window{};
+	};
+
+	C3D_API Engine * getEngine( WindowContext const & context );
 }
 
 #endif

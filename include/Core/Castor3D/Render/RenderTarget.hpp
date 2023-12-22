@@ -557,6 +557,25 @@ namespace castor3d
 		};
 		StereoConfig m_stereo;
 	};
+
+	struct RootContext;
+	struct TextureContext;
+	struct WindowContext;
+
+	struct TargetContext
+	{
+		TextureContext * texture{};
+		WindowContext * window{};
+		TargetType targetType{};
+		SsaoConfig ssaoConfig{};
+		castor::Size size{};
+		castor::PixelFormat hdrPixelFormat{};
+		castor::PixelFormat srgbPixelFormat{};
+		RenderTargetRPtr renderTarget{};
+	};
+
+	C3D_API Engine * getEngine( TargetContext const & context );
+	C3D_API RootContext * getRootContext( TargetContext const & context );
 }
 
 #endif

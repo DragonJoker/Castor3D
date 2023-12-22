@@ -7,7 +7,6 @@
 #include <Castor3D/Plugin/PostFxPlugin.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
-#include <Castor3D/Scene/SceneFileParser.hpp>
 
 #include <CastorUtils/FileParser/ParserParameter.hpp>
 #include <CastorUtils/Log/Logger.hpp>
@@ -22,45 +21,6 @@
 #		define C3D_DrawEdges_API __declspec( dllimport )
 #	endif
 #endif
-
-namespace
-{
-	castor::AttributeParsers createParsers()
-	{
-		using namespace draw_edges;
-		castor::AttributeParsers result;
-
-		addParserT( result
-			, castor3d::CSCNSection::eRenderTarget
-			, Section::eRoot
-			, PostEffect::Type
-			, &parserDrawEdges );
-		addParserT( result
-			, Section::eRoot
-			, PostEffect::NormalDepthWidth
-			, &parserNormalDepthWidth
-			, { castor::makeParameter< castor::ParameterType::eInt32 >( castor::makeRange( 0, 1000 ) ) } );
-		addParserT( result
-			, Section::eRoot
-			, PostEffect::ObjectWidth
-			, &parserObjectWidth
-			, { castor::makeParameter< castor::ParameterType::eInt32 >( castor::makeRange( 0, 1000 ) ) } );
-		addParserT( result
-			, Section::eRoot
-			, castor3d::CSCNSection::eRenderTarget
-			, cuT( "}" )
-			, &parserDrawEdgesEnd );
-		return result;
-	}
-
-	castor::StrUInt32Map createSections()
-	{
-		return
-		{
-			{ uint32_t( draw_edges::Section::eRoot ), draw_edges::PostEffect::Type },
-		};
-	}
-}
 
 extern "C"
 {
@@ -90,8 +50,8 @@ extern "C"
 		engine->getPostEffectFactory().registerType( draw_edges::PostEffect::Type
 			, &draw_edges::PostEffect::create );
 		engine->registerParsers( draw_edges::PostEffect::Type
-			, createParsers()
-			, createSections()
+			, draw_edges::createParsers()
+			, draw_edges::createSections()
 			, nullptr );
 	}
 

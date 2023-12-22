@@ -420,6 +420,23 @@ namespace castor3d
 		friend class BinaryWriter< Submesh >;
 		friend class BinaryParser< Submesh >;
 	};
+
+	struct MeshContext;
+
+	struct SubmeshContext
+	{
+		MeshContext * mesh{};
+		SubmeshRPtr submesh{};
+		int face1{ -1 };
+		int face2{ -1 };
+		FloatArray vertexPos{};
+		FloatArray vertexNml{};
+		FloatArray vertexTan{};
+		FloatArray vertexTex{};
+		UInt32Array faces{};
+	};
+
+	C3D_API Engine * getEngine( SubmeshContext const & context );
 }
 
 #include "Submesh.inl"

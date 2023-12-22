@@ -262,6 +262,10 @@ namespace castor3d
 	*/
 	struct LayoutItemFlags;
 	/**
+	*\brief		GUI parsing context.
+	*/
+	struct GuiContext;
+	/**
 	*\brief		Class used to to manage the controls: events and all GUI related stuff.
 	*/
 	class ControlsManager;
@@ -433,6 +437,7 @@ namespace castor3d
 
 	CU_DeclareSmartPtr( castor3d, Layout, C3D_API );
 	CU_DeclareSmartPtr( castor3d, Spacer, C3D_API );
+	CU_DeclareSmartPtr( castor3d, GuiContext, C3D_API );
 
 	CU_DeclareSmartPtr( castor3d, ControlsManager, C3D_API );
 	CU_DeclareSmartPtr( castor3d, Control, C3D_API );
