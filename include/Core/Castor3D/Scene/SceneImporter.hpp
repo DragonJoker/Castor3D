@@ -66,7 +66,8 @@ namespace castor3d
 		C3D_API bool import( Scene & scene
 			, castor::Path const & pathFile
 			, Parameters const & parameters
-			, std::map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps );
+			, std::map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps
+			, ProgressBar * progress = nullptr );
 		/**
 		 *\~english
 		 *\brief		Scene animations import Function.
@@ -100,7 +101,8 @@ namespace castor3d
 		 */
 		C3D_API bool importAnimations( Scene & scene
 			, castor::Path const & pathFile
-			, Parameters const & parameters );
+			, Parameters const & parameters
+			, ProgressBar * progress = nullptr );
 
 	private:
 		void doImportMaterials( Scene & scene

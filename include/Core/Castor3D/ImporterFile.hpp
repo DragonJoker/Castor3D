@@ -107,7 +107,8 @@ namespace castor3d
 		C3D_API ImporterFile( Engine & engine
 			, Scene * scene
 			, castor::Path const & path
-			, Parameters const & parameters );
+			, Parameters const & parameters
+			, ProgressBar * progress );
 
 	public:
 		C3D_API virtual ~ImporterFile() = default;
@@ -122,6 +123,9 @@ namespace castor3d
 		C3D_API virtual std::vector< castor::String > listMeshAnimations( Mesh const & mesh ) = 0;
 		C3D_API virtual std::vector< castor::String > listSkeletonAnimations( Skeleton const & skeleton ) = 0;
 		C3D_API virtual std::vector< castor::String > listSceneNodeAnimations( SceneNode const & node ) = 0;
+		C3D_API virtual std::vector< castor::String > listAllMeshAnimations() = 0;
+		C3D_API virtual std::vector< castor::String > listAllSkeletonAnimations() = 0;
+		C3D_API virtual std::vector< castor::String > listAllSceneNodeAnimations() = 0;
 
 		C3D_API virtual MaterialImporterUPtr createMaterialImporter() = 0;
 		C3D_API virtual AnimationImporterUPtr createAnimationImporter() = 0;
@@ -131,27 +135,27 @@ namespace castor3d
 		C3D_API virtual LightImporterUPtr createLightImporter() = 0;
 		C3D_API virtual CameraImporterUPtr createCameraImporter() = 0;
 
-		castor::String const & getExtension()const
+		castor::String const & getExtension()const noexcept
 		{
 			return m_extension;
 		}
 
-		castor::String getName()const
+		castor::String getName()const noexcept
 		{
 			return m_fileName.getFileName();
 		}
 
-		castor::Path const & getFileName()const
+		castor::Path const & getFileName()const noexcept
 		{
 			return m_fileName;
 		}
 
-		castor::Path const & getFilePath()const
+		castor::Path const & getFilePath()const noexcept
 		{
 			return m_filePath;
 		}
 
-		Parameters const & getParameters()const
+		Parameters const & getParameters()const noexcept
 		{
 			return m_parameters;
 		}
@@ -171,14 +175,19 @@ namespace castor3d
 			return m_prefix + name;
 		}
 
-		void setScene( Scene & scene )
+		void setScene( Scene & scene )noexcept
 		{
 			m_scene = &scene;
 		}
 
-		Scene * getScene()const
+		Scene * getScene()const noexcept
 		{
 			return m_scene;
+		}
+
+		ProgressBar * getProgressBar()const noexcept
+		{
+			return m_progress;
 		}
 
 	private:
@@ -192,11 +201,12 @@ namespace castor3d
 		castor::String m_extension;
 		Parameters m_parameters;
 		castor::String m_prefix;
+		ProgressBar * m_progress;
 	};
 
 	class ImporterFileFactory
 	{
-		using Creator = std::function< ImporterFileUPtr( Engine &, Scene *, castor::Path const &, Parameters const & ) >;
+		using Creator = std::function< ImporterFileUPtr( Engine &, Scene *, castor::Path const &, Parameters const &, ProgressBar * ) >;
 
 	public:
 		C3D_API ImporterFileFactory();
@@ -218,12 +228,14 @@ namespace castor3d
 			, castor::String const & name
 			, Engine & engine
 			, castor::Path const & file
-			, Parameters const & parameters );
+			, Parameters const & parameters
+			, ProgressBar * progress = nullptr );
 		C3D_API ImporterFileUPtr create( castor::String const & type
 			, castor::String const & name
 			, Scene & scene
 			, castor::Path const & file
-			, Parameters const & parameters );
+			, Parameters const & parameters
+			, ProgressBar * progress = nullptr );
 		/**
 		 *\~english
 		 *\brief		Creates an importer from a file type.
@@ -239,11 +251,13 @@ namespace castor3d
 		C3D_API ImporterFileUPtr create( castor::String const & type
 			, Engine & engine
 			, castor::Path const & file
-			, Parameters const & parameters );
+			, Parameters const & parameters
+			, ProgressBar * progress = nullptr );
 		C3D_API ImporterFileUPtr create( castor::String const & type
 			, Scene & scene
 			, castor::Path const & file
-			, Parameters const & parameters );
+			, Parameters const & parameters
+			, ProgressBar * progress = nullptr );
 		/**
 		 *\~english
 		 *\brief		Registers an file type.
@@ -315,7 +329,8 @@ namespace castor3d
 			, Engine & engine
 			, Scene * scene
 			, castor::Path const & file
-			, Parameters const & parameters )const;
+			, Parameters const & parameters
+			, ProgressBar * progress )const;
 
 	private:
 		std::unordered_map< castor::String, std::unordered_map< castor::String, Creator > > m_registered;

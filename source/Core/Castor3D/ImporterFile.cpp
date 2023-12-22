@@ -60,13 +60,15 @@ namespace castor3d
 	ImporterFile::ImporterFile( Engine & engine
 		, Scene * scene
 		, castor::Path const & path
-		, Parameters const & parameters )
+		, Parameters const & parameters
+		, ProgressBar * progress )
 		: castor::OwnedBy< Engine >{ engine }
 		, m_scene{ scene }
 		, m_fileName{ path }
 		, m_filePath{ m_fileName.getPath() }
 		, m_extension{ castor::string::lowerCase( m_fileName.getExtension() ) }
 		, m_parameters{ parameters }
+		, m_progress{ progress }
 	{
 		castor::String prefix;
 
@@ -90,53 +92,61 @@ namespace castor3d
 	ImporterFileUPtr ImporterFileFactory::create( castor::String const & type
 		, Engine & engine
 		, castor::Path const & file
-		, Parameters const & parameters )
+		, Parameters const & parameters
+		, ProgressBar * progress )
 	{
 		return create( type
 			, "any"
 			, engine
 			, file
-			, parameters );
+			, parameters
+			, progress );
 	}
 
 	ImporterFileUPtr ImporterFileFactory::create( castor::String const & type
 		, Scene & scene
 		, castor::Path const & file
-		, Parameters const & parameters )
+		, Parameters const & parameters
+		, ProgressBar * progress )
 	{
 		return create( type
 			, "any"
 			, scene
 			, file
-			, parameters );
+			, parameters
+			, progress );
 	}
 
 	ImporterFileUPtr ImporterFileFactory::create( castor::String const & type
 		, castor::String const & name
 		, Engine & engine
 		, castor::Path const & file
-		, Parameters const & parameters )
+		, Parameters const & parameters
+		, ProgressBar * progress )
 	{
 		return doCreate( type
 			, name
 			, engine
 			, nullptr
 			, file
-			, parameters );
+			, parameters
+			, progress );
 	}
 
 	ImporterFileUPtr ImporterFileFactory::create( castor::String const & type
 		, castor::String const & name
 		, Scene & scene
 		, castor::Path const & file
-		, Parameters const & parameters )
+		, Parameters const & parameters
+		, ProgressBar * progress )
 	{
 		return doCreate( type
 			, name
 			, *scene.getEngine()
 			, &scene
 			, file
-			, parameters );
+			, parameters
+			, progress );
 	}
 
 	ImporterFileUPtr ImporterFileFactory::doCreate( castor::String const & type
@@ -144,7 +154,8 @@ namespace castor3d
 		, Engine & engine
 		, Scene * scene
 		, castor::Path const & file
-		, Parameters const & parameters )const
+		, Parameters const & parameters
+		, ProgressBar * progress )const
 	{
 		auto it = m_registered.find( type );
 
@@ -159,10 +170,10 @@ namespace castor3d
 
 			if ( tit != it->second.end() )
 			{
-				return tit->second( engine, scene, file, parameters );
+				return tit->second( engine, scene, file, parameters, progress );
 			}
 
-			return it->second.begin()->second( engine, scene, file, parameters );
+			return it->second.begin()->second( engine, scene, file, parameters, progress );
 		}
 
 		auto tit = it->second.find( name );
@@ -172,7 +183,7 @@ namespace castor3d
 			CU_Exception( castor::ERROR_UNKNOWN_OBJECT );
 		}
 
-		return tit->second( engine, scene, file, parameters );
+		return tit->second( engine, scene, file, parameters, progress );
 	}
 
 	//*********************************************************************************************

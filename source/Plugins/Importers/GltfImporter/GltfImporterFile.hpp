@@ -152,12 +152,14 @@ namespace c3d_gltf
 			, castor3d::Scene * scene
 			, castor::Path const & path
 			, castor3d::Parameters const & parameters
+			, castor3d::ProgressBar * progress
 			, fastgltf::Category category = fastgltf::Category::All );
 
 		static castor3d::ImporterFileUPtr create( castor3d::Engine & engine
 			, castor3d::Scene * scene
 			, castor::Path const & path
-			, castor3d::Parameters const & parameters );
+			, castor3d::Parameters const & parameters
+			, castor3d::ProgressBar * progress );
 
 		using castor3d::ImporterFile::getInternalName;
 
@@ -191,6 +193,9 @@ namespace c3d_gltf
 		std::vector< castor::String > listMeshAnimations( castor3d::Mesh const & mesh )override;
 		std::vector< castor::String > listSkeletonAnimations( castor3d::Skeleton const & skeleton )override;
 		std::vector< castor::String > listSceneNodeAnimations( castor3d::SceneNode const & node )override;
+		std::vector< castor::String > listAllMeshAnimations()override;
+		std::vector< castor::String > listAllSkeletonAnimations()override;
+		std::vector< castor::String > listAllSceneNodeAnimations()override;
 
 		castor3d::MaterialImporterUPtr createMaterialImporter()override;
 		castor3d::AnimationImporterUPtr createAnimationImporter()override;

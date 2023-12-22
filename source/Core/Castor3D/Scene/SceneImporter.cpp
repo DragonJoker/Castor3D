@@ -55,6 +55,7 @@ namespace castor3d
 	{
 		m_file = file;
 		m_file->setScene( scene );
+		castor3d::incProgressBarGlobalRange( m_file->getProgressBar(), 7u );
 		doImportMaterials( scene, parameters, textureRemaps );
 		auto skeletons = doImportSkeletons( scene );
 		auto meshes = doImportMeshes( scene, skeletons );
@@ -63,7 +64,13 @@ namespace castor3d
 		doImportCameras( scene );
 		doCreateGeometries( scene, meshes, nodes );
 		importAnimations( scene, file, parameters );
-		doTransformScene( scene, parameters, nodes );
+
+		if ( !nodes.empty() )
+		{
+			castor3d::incProgressBarGlobalRange( m_file->getProgressBar(), 1u );
+			doTransformScene( scene, parameters, nodes );
+		}
+
 		doCenterCamera( scene, parameters );
 		return true;
 	}
@@ -71,7 +78,8 @@ namespace castor3d
 	bool SceneImporter::import( Scene & scene
 		, castor::Path const & path
 		, Parameters const & parameters
-		, std::map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps )
+		, std::map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps
+		, ProgressBar * progress )
 	{
 		auto & engine = *scene.getEngine();
 		auto extension = castor::string::lowerCase( path.getExtension() );
@@ -82,13 +90,18 @@ namespace castor3d
 			return false;
 		}
 
+		castor3d::incProgressBarGlobalRange( progress, 1u );
+		castor3d::stepProgressBarGlobalStartLocal( progress
+			, "Creating import file"
+			, 1u);
 		castor::String preferredImporter = cuT( "any" );
 		parameters.get( "preferred_importer", preferredImporter );
 		auto file = engine.getImporterFileFactory().create( extension
 			, preferredImporter
 			, engine
 			, path
-			, parameters );
+			, parameters
+			, progress );
 		return import( scene, file.get(), parameters, textureRemaps );
 	}
 
@@ -101,6 +114,7 @@ namespace castor3d
 
 		if ( importer )
 		{
+			castor3d::incProgressBarGlobalRange( m_file->getProgressBar(), 4u );
 			std::map< castor::String, AnimObjects > anims;
 			doImportSkeletonsAnims( scene, *importer, anims );
 			doImportMeshesAnims( scene, *importer, anims );
@@ -113,7 +127,8 @@ namespace castor3d
 
 	bool SceneImporter::importAnimations( Scene & scene
 		, castor::Path const & path
-		, Parameters const & parameters )
+		, Parameters const & parameters
+		, ProgressBar * progress )
 	{
 		auto & engine = *scene.getEngine();
 		auto extension = castor::string::lowerCase( path.getExtension() );
@@ -124,13 +139,18 @@ namespace castor3d
 			return false;
 		}
 
+		castor3d::incProgressBarGlobalRange( progress, 1u );
+		castor3d::stepProgressBarGlobalStartLocal( progress
+			, "Creating import file"
+			, 1u );
 		castor::String preferredImporter = cuT( "any" );
 		parameters.get( "preferred_importer", preferredImporter );
 		auto file = engine.getImporterFileFactory().create( extension
 			, preferredImporter
 			, engine
 			, path
-			, parameters );
+			, parameters
+			, progress );
 		return importAnimations( scene, file.get(), parameters );
 	}
 
@@ -140,20 +160,34 @@ namespace castor3d
 	{
 		if ( auto materialImporter = m_file->createMaterialImporter() )
 		{
-			for ( auto name : m_file->listMaterials() )
-			{
-				if ( !getOwner()->hasMaterial( name ) )
-				{
-					auto material = getOwner()->createMaterial( name
-						, *getOwner()
-						, getOwner()->getDefaultLightingModel() );
+			auto toImport = m_file->listMaterials();
 
-					if ( materialImporter->import( *material
-						, m_file
-						, parameters
-						, textureRemaps ) )
+			if ( !toImport.empty() )
+			{
+				auto total = uint32_t( toImport.size() );
+				castor3d::stepProgressBarGlobalStartLocal( m_file->getProgressBar()
+					, "Importing scene materials"
+					, total );
+				uint32_t index{};
+
+				for ( auto & name : toImport )
+				{
+					castor3d::stepProgressBarLocal( m_file->getProgressBar()
+						, castor::string::toString( ++index ) + " / " + castor::string::toString( total ) );
+
+					if ( !getOwner()->hasMaterial( name ) )
 					{
-						scene.getMaterialView().add( name, material, true );
+						auto material = getOwner()->createMaterial( name
+							, *getOwner()
+							, getOwner()->getDefaultLightingModel() );
+
+						if ( materialImporter->import( *material
+							, m_file
+							, parameters
+							, textureRemaps ) )
+						{
+							scene.getMaterialView().add( name, material, true );
+						}
 					}
 				}
 			}
@@ -167,16 +201,29 @@ namespace castor3d
 
 		if ( auto skeletonImporter = m_file->createSkeletonImporter() )
 		{
-			for ( auto name : m_file->listSkeletons() )
-			{
-				auto skeleton = scene.createSkeleton( name, scene );
+			auto toImport = m_file->listSkeletons();
 
-				if ( skeletonImporter->import( *skeleton
-					, m_file
-					, emptyParams ) )
+			if ( !toImport.empty() )
+			{
+				auto total = uint32_t( toImport.size() );
+				castor3d::stepProgressBarGlobalStartLocal( m_file->getProgressBar()
+					, "Importing scene skeletons"
+					, total );
+				uint32_t index{};
+
+				for ( auto & name : toImport )
 				{
-					result.emplace( name, skeleton.get() );
-					scene.addSkeleton( name, skeleton, true );
+					castor3d::stepProgressBarLocal( m_file->getProgressBar()
+						, castor::string::toString( ++index ) + " / " + castor::string::toString( total ) );
+					auto skeleton = scene.createSkeleton( name, scene );
+
+					if ( skeletonImporter->import( *skeleton
+						, m_file
+						, emptyParams ) )
+					{
+						result.emplace( name, skeleton.get() );
+						scene.addSkeleton( name, skeleton, true );
+					}
 				}
 			}
 		}
@@ -192,24 +239,37 @@ namespace castor3d
 
 		if ( auto meshImporter = m_file->createMeshImporter() )
 		{
-			for ( auto & data : m_file->listMeshes() )
+			auto toImport = m_file->listMeshes();
+
+			if ( !toImport.empty() )
 			{
-				auto mesh = scene.createMesh( data.name, scene );
+				auto total = uint32_t( toImport.size() );
+				castor3d::stepProgressBarGlobalStartLocal( m_file->getProgressBar()
+					, "Importing scene meshes"
+					, total );
+				uint32_t index{};
 
-				if ( meshImporter->import( *mesh
-					, m_file
-					, emptyParams
-					, true ) )
+				for ( auto & data : toImport )
 				{
-					if ( !data.skeleton.empty() )
-					{
-						auto skelIt = skeletons.find( data.skeleton );
-						CU_Require( skelIt != skeletons.end() );
-						mesh->setSkeleton( skelIt->second );
-					}
+					castor3d::stepProgressBarLocal( m_file->getProgressBar()
+						, castor::string::toString( ++index ) + " / " + castor::string::toString( total ) );
+					auto mesh = scene.createMesh( data.name, scene );
 
-					result.emplace( data.name, mesh.get() );
-					scene.addMesh( data.name, mesh, true );
+					if ( meshImporter->import( *mesh
+						, m_file
+						, emptyParams
+						, true ) )
+					{
+						if ( !data.skeleton.empty() )
+						{
+							auto skelIt = skeletons.find( data.skeleton );
+							CU_Require( skelIt != skeletons.end() );
+							mesh->setSkeleton( skelIt->second );
+						}
+
+						result.emplace( data.name, mesh.get() );
+						scene.addMesh( data.name, mesh, true );
+					}
 				}
 			}
 		}
@@ -224,31 +284,45 @@ namespace castor3d
 
 		if ( auto nodeImporter = m_file->createSceneNodeImporter() )
 		{
-			for ( auto & data : m_file->listSceneNodes() )
+			auto toImport = m_file->listSceneNodes();
+
+			if ( !toImport.empty() )
 			{
-				if ( !scene.hasSceneNode( data.name ) )
+				auto total = uint32_t( toImport.size() );
+				castor3d::stepProgressBarGlobalStartLocal( m_file->getProgressBar()
+					, "Importing scene nodes"
+					, total );
+				uint32_t index{};
+
+				for ( auto & data : toImport )
 				{
-					auto node = scene.createSceneNode( data.name, scene );
+					castor3d::stepProgressBarLocal( m_file->getProgressBar()
+						, castor::string::toString( ++index ) + " / " + castor::string::toString( total ) );
 
-					if ( nodeImporter->import( *node
-						, m_file
-						, emptyParams ) )
+					if ( !scene.hasSceneNode( data.name ) )
 					{
-						if ( auto parent = scene.tryFindSceneNode( data.parent ) )
-						{
-							node->attachTo( *parent );
-						}
-						else if ( data.isCamera )
-						{
-							node->attachTo( *scene.getCameraRootNode() );
-						}
-						else
-						{
-							node->attachTo( *scene.getObjectRootNode() );
-						}
+						auto node = scene.createSceneNode( data.name, scene );
 
-						result.emplace( data.name, node.get() );
-						scene.addSceneNode( data.name, node, true );
+						if ( nodeImporter->import( *node
+							, m_file
+							, emptyParams ) )
+						{
+							if ( auto parent = scene.tryFindSceneNode( data.parent ) )
+							{
+								node->attachTo( *parent );
+							}
+							else if ( data.isCamera )
+							{
+								node->attachTo( *scene.getCameraRootNode() );
+							}
+							else
+							{
+								node->attachTo( *scene.getObjectRootNode() );
+							}
+
+							result.emplace( data.name, node.get() );
+							scene.addSceneNode( data.name, node, true );
+						}
 					}
 				}
 			}
@@ -263,19 +337,33 @@ namespace castor3d
 
 		if ( auto lightImporter = m_file->createLightImporter() )
 		{
-			for ( auto & data : m_file->listLights() )
-			{
-				auto light = scene.createLight( data.name
-					, scene
-					, *scene.getObjectRootNode()
-					, scene.getLightsFactory()
-					, data.type );
+			auto toImport = m_file->listLights();
 
-				if ( lightImporter->import( *light
-					, m_file
-					, emptyParams ) )
+			if ( !toImport.empty() )
+			{
+				auto total = uint32_t( toImport.size() );
+				castor3d::stepProgressBarGlobalStartLocal( m_file->getProgressBar()
+					, "Importing scene lights"
+					, total );
+				uint32_t index{};
+
+				for ( auto & data : toImport )
 				{
-					scene.addLight( data.name, light, true );
+					castor3d::stepProgressBarLocal( m_file->getProgressBar()
+						, castor::string::toString( ++index ) + " / " + castor::string::toString( total ) );
+
+					auto light = scene.createLight( data.name
+						, scene
+						, *scene.getObjectRootNode()
+						, scene.getLightsFactory()
+						, data.type );
+
+					if ( lightImporter->import( *light
+						, m_file
+						, emptyParams ) )
+					{
+						scene.addLight( data.name, light, true );
+					}
 				}
 			}
 		}
@@ -287,17 +375,31 @@ namespace castor3d
 
 		if ( auto cameraImporter = m_file->createCameraImporter() )
 		{
-			for ( auto & data : m_file->listCameras() )
-			{
-				auto camera = scene.createCamera( data.name
-					, scene
-					, *scene.getCameraRootNode() );
+			auto toImport = m_file->listCameras();
 
-				if ( cameraImporter->import( *camera
-					, m_file
-					, emptyParams ) )
+			if ( !toImport.empty() )
+			{
+				auto total = uint32_t( toImport.size() );
+				castor3d::stepProgressBarGlobalStartLocal( m_file->getProgressBar()
+					, "Importing scene cameras"
+					, total );
+				uint32_t index{};
+
+				for ( auto & data : toImport )
 				{
-					scene.addCamera( data.name, camera, true );
+					castor3d::stepProgressBarLocal( m_file->getProgressBar()
+						, castor::string::toString( ++index ) + " / " + castor::string::toString( total ) );
+
+					auto camera = scene.createCamera( data.name
+						, scene
+						, *scene.getCameraRootNode() );
+
+					if ( cameraImporter->import( *camera
+						, m_file
+						, emptyParams ) )
+					{
+						scene.addCamera( data.name, camera, true );
+					}
 				}
 			}
 		}
@@ -307,16 +409,30 @@ namespace castor3d
 		, std::map< castor::String, MeshResPtr > const & meshes
 		, std::map< castor::String, SceneNodeRPtr > const & nodes )
 	{
-		for ( auto geom : m_file->listGeometries() )
+		auto toImport = m_file->listGeometries();
+
+		if ( !toImport.empty() )
 		{
-			auto meshIt = meshes.find( geom.mesh );
-			CU_Require( meshIt != meshes.end() );
-			auto nodeIt = nodes.find( geom.node );
-			CU_Require( nodeIt != nodes.end() );
-			scene.addGeometry( scene.createGeometry( geom.name
-				, scene
-				, *nodeIt->second
-				, meshIt->second ) );
+			auto total = uint32_t( toImport.size() );
+			castor3d::stepProgressBarGlobalStartLocal( m_file->getProgressBar()
+				, "Creating scene objects"
+				, total );
+			uint32_t index{};
+
+			for ( auto & geom : toImport )
+			{
+				castor3d::stepProgressBarLocal( m_file->getProgressBar()
+					, castor::string::toString( ++index ) + " / " + castor::string::toString( total ) );
+
+				auto meshIt = meshes.find( geom.mesh );
+				CU_Require( meshIt != meshes.end() );
+				auto nodeIt = nodes.find( geom.node );
+				CU_Require( nodeIt != nodes.end() );
+				scene.addGeometry( scene.createGeometry( geom.name
+					, scene
+					, *nodeIt->second
+					, meshIt->second ) );
+			}
 		}
 	}
 
@@ -325,6 +441,11 @@ namespace castor3d
 		, std::map< castor::String, AnimObjects > & anims )
 	{
 		Parameters emptyParams;
+		auto total = uint32_t( m_file->listAllSkeletonAnimations().size() );
+		castor3d::stepProgressBarGlobalStartLocal( m_file->getProgressBar()
+			, "Importing scene skeletons animations"
+			, total );
+		uint32_t index{};
 
 		for ( auto & skelIt : scene.getSkeletonCache() )
 		{
@@ -332,6 +453,8 @@ namespace castor3d
 
 			for ( auto animName : m_file->listSkeletonAnimations( *skeleton ) )
 			{
+				castor3d::stepProgressBarLocal( m_file->getProgressBar()
+					, castor::string::toString( ++index ) + " / " + castor::string::toString( total ) );
 				auto animation = castor::makeUnique< SkeletonAnimation >( *skeleton, animName );
 
 				if ( importer.import( *animation, m_file, emptyParams ) )
@@ -349,6 +472,11 @@ namespace castor3d
 		, std::map< castor::String, AnimObjects > & anims )
 	{
 		Parameters emptyParams;
+		auto total = uint32_t( m_file->listAllMeshAnimations().size() );
+		castor3d::stepProgressBarGlobalStartLocal( m_file->getProgressBar()
+			, "Importing scene meshes animations"
+			, total );
+		uint32_t index{};
 
 		for ( auto & meshIt : scene.getMeshCache() )
 		{
@@ -356,6 +484,8 @@ namespace castor3d
 
 			for ( auto animName : m_file->listMeshAnimations( *mesh ) )
 			{
+				castor3d::stepProgressBarLocal( m_file->getProgressBar()
+					, castor::string::toString( ++index ) + " / " + castor::string::toString( total ) );
 				auto animation = castor::makeUnique< MeshAnimation >( *mesh, animName );
 
 				if ( importer.import( *animation, m_file, emptyParams ) )
@@ -373,6 +503,11 @@ namespace castor3d
 		, std::map< castor::String, AnimObjects > & anims )
 	{
 		Parameters emptyParams;
+		auto total = uint32_t( m_file->listAllSceneNodeAnimations().size() );
+		castor3d::stepProgressBarGlobalStartLocal( m_file->getProgressBar()
+			, "Importing scene nodes animations"
+			, total );
+		uint32_t index{};
 
 		for ( auto & nodeIt : scene.getSceneNodeCache() )
 		{
@@ -380,6 +515,8 @@ namespace castor3d
 
 			for ( auto animName : m_file->listSceneNodeAnimations( *node ) )
 			{
+				castor3d::stepProgressBarLocal( m_file->getProgressBar()
+					, castor::string::toString( ++index ) + " / " + castor::string::toString( total ) );
 				auto animation = castor::makeUnique< SceneNodeAnimation >( *node, animName );
 
 				if ( importer.import( *animation, m_file, emptyParams ) )
@@ -395,8 +532,17 @@ namespace castor3d
 	void SceneImporter::doCreateAnimationGroups( Scene & scene
 		, std::map< castor::String, AnimObjects > & anims )
 	{
+		auto total = uint32_t( anims.size() );
+		castor3d::stepProgressBarGlobalStartLocal( m_file->getProgressBar()
+			, "Creating scene animations groups"
+			, total );
+		uint32_t index{};
+
 		for ( auto & animIt : anims )
 		{
+			castor3d::stepProgressBarLocal( m_file->getProgressBar()
+				, castor::string::toString( ++index ) + " / " + castor::string::toString( total ) );
+
 			for ( auto & geometry : scene.getGeometryCache() )
 			{
 				auto & mesh = *geometry.second->getMesh();
@@ -450,6 +596,11 @@ namespace castor3d
 	{
 		castor::Point3f scale{ 1.0f, 1.0f, 1.0f };
 		castor::Quaternion orientation{ castor::Quaternion::identity() };
+		auto total = uint32_t( nodes.size() );
+		castor3d::stepProgressBarGlobalStartLocal( m_file->getProgressBar()
+			, "Transforming scene nodes"
+			, total );
+		uint32_t index{};
 
 		if ( parseImportParameters( parameters, scale, orientation ) )
 		{
@@ -460,6 +611,9 @@ namespace castor3d
 
 			for ( auto & nodeIt : nodes )
 			{
+				castor3d::stepProgressBarLocal( m_file->getProgressBar()
+					, castor::string::toString( ++index ) + " / " + castor::string::toString( total ) );
+
 				if ( nodeIt.second->getParent() == scene.getObjectRootNode() )
 				{
 					nodeIt.second->attachTo( *transformNode );

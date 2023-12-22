@@ -23,7 +23,8 @@ namespace castor3d
 		CmshImporterFile( Engine & engine
 			, Scene * scene
 			, castor::Path const & path
-			, Parameters const & parameters );
+			, Parameters const & parameters
+			, ProgressBar * progress );
 
 	public:
 		std::vector< castor::String > listMaterials()override;
@@ -36,6 +37,9 @@ namespace castor3d
 		std::vector< castor::String > listMeshAnimations( Mesh const & mesh )override;
 		std::vector< castor::String > listSkeletonAnimations( Skeleton const & skeleton )override;
 		std::vector< castor::String > listSceneNodeAnimations( SceneNode const & node )override;
+		std::vector< castor::String > listAllMeshAnimations()override;
+		std::vector< castor::String > listAllSkeletonAnimations()override;
+		std::vector< castor::String > listAllSceneNodeAnimations()override;
 
 		MaterialImporterUPtr createMaterialImporter()override;
 		AnimationImporterUPtr createAnimationImporter()override;
@@ -48,7 +52,8 @@ namespace castor3d
 		static ImporterFileUPtr create( Engine & engine
 			, Scene * scene
 			, castor::Path const & path
-			, Parameters const & parameters );
+			, Parameters const & parameters
+			, ProgressBar * progress );
 	};
 
 	class CmshMeshImporter

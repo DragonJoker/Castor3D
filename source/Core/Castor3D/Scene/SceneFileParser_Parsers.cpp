@@ -1693,7 +1693,8 @@ namespace castor3d
 					if ( !importer.import( *blockContext->scene->scene
 						, file
 						, parameters
-						, blockContext->textureRemaps ) )
+						, blockContext->textureRemaps
+						, blockContext->scene->root->progress ) )
 					{
 						CU_ParsingError( cuT( "External scene Import failed" ) );
 					}
@@ -1703,7 +1704,8 @@ namespace castor3d
 				{
 					if ( !importer.importAnimations( *blockContext->scene->scene
 						, file
-						, parameters ) )
+						, parameters
+						, blockContext->scene->root->progress ) )
 					{
 						CU_ParsingError( cuT( "External scene Import failed" ) );
 					}
