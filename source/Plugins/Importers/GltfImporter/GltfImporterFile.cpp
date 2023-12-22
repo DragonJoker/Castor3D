@@ -556,8 +556,9 @@ namespace c3d_gltf
 		, castor3d::Scene * scene
 		, castor::Path const & path
 		, castor3d::Parameters const & parameters
+		, castor3d::ProgressBar * progress
 		, fastgltf::Category category )
-		: castor3d::ImporterFile{ engine, scene, path, parameters }
+		: castor3d::ImporterFile{ engine, scene, path, parameters, progress }
 		, m_expAsset{ file::loadScene( getFileName(), getParameters(), category ) }
 	{
 		if ( isValid() )
@@ -1005,6 +1006,68 @@ namespace c3d_gltf
 		return result;
 	}
 
+	std::vector< castor::String > GltfImporterFile::listAllMeshAnimations()
+	{
+		std::vector< castor::String > result;
+
+		for ( auto & [_, mesh] : m_sceneData.meshes )
+		{
+			for ( auto & submesh : mesh.submeshes )
+			{
+				for ( auto & anim : submesh.anims )
+				{
+					result.emplace_back( anim.first );
+				}
+			}
+		}
+
+		return result;
+	}
+
+	std::vector< castor::String > GltfImporterFile::listAllSkeletonAnimations()
+	{
+		std::set< castor::String > result;
+
+		if ( isValid() )
+		{
+			size_t index{};
+
+			for ( auto & animation : m_asset->animations )
+			{
+				for ( auto & channel : animation.channels )
+				{
+					if ( ( channel.path == fastgltf::AnimationPath::Rotation
+						|| channel.path == fastgltf::AnimationPath::Scale
+						|| channel.path == fastgltf::AnimationPath::Translation )
+						&& isSkeletonNode( channel.nodeIndex ) )
+					{
+						result.insert( getAnimationName( index ) );
+					}
+				}
+
+				++index;
+			}
+		}
+
+		return std::vector< castor::String >{ result.begin()
+			, result.end() };
+	}
+
+	std::vector< castor::String > GltfImporterFile::listAllSceneNodeAnimations()
+	{
+		std::vector< castor::String > result;
+
+		for ( auto & node : m_sceneData.nodes )
+		{
+			for ( auto & anim : node.anims )
+			{
+				result.push_back( anim.first );
+			}
+		}
+
+		return result;
+	}
+
 	castor3d::MaterialImporterUPtr GltfImporterFile::createMaterialImporter()
 	{
 		return castor::makeUniqueDerived< castor3d::MaterialImporter, GltfMaterialImporter >( *getOwner() );
@@ -1043,9 +1106,10 @@ namespace c3d_gltf
 	castor3d::ImporterFileUPtr GltfImporterFile::create( castor3d::Engine & engine
 		, castor3d::Scene * scene
 		, castor::Path const & path
-		, castor3d::Parameters const & parameters )
+		, castor3d::Parameters const & parameters
+		, castor3d::ProgressBar * progress )
 	{
-		return castor::makeUniqueDerived< castor3d::ImporterFile, GltfImporterFile >( engine, scene, path, parameters );
+		return castor::makeUniqueDerived< castor3d::ImporterFile, GltfImporterFile >( engine, scene, path, parameters, progress );
 	}
 
 	void GltfImporterFile::doPrelistNodes()

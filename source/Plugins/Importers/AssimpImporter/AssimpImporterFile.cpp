@@ -388,8 +388,9 @@ namespace c3d_assimp
 	AssimpImporterFile::AssimpImporterFile( castor3d::Engine & engine
 		, castor3d::Scene * scene
 		, castor::Path const & path
-		, castor3d::Parameters const & parameters )
-		: castor3d::ImporterFile{ engine, scene, path, parameters }
+		, castor3d::Parameters const & parameters
+		, castor3d::ProgressBar * progress )
+		: castor3d::ImporterFile{ engine, scene, path, parameters, progress }
 		, m_aiScene{ file::loadScene( m_importer, getFileName(), getParameters() ) }
 	{
 		if ( m_aiScene )
@@ -651,6 +652,54 @@ namespace c3d_assimp
 		return result;
 	}
 
+	std::vector< castor::String > AssimpImporterFile::listAllMeshAnimations()
+	{
+		std::vector< castor::String > result;
+
+		for ( auto & [_, mesh] : m_sceneData.meshes )
+		{
+			for ( auto & submesh : mesh.submeshes )
+			{
+				for ( auto & anim : submesh.anims )
+				{
+					result.emplace_back( anim.first );
+				}
+			}
+		}
+
+		return result;
+	}
+
+	std::vector< castor::String > AssimpImporterFile::listAllSkeletonAnimations()
+	{
+		std::vector< castor::String > result;
+
+		for ( auto & [_, skeleton] : m_sceneData.skeletons )
+		{
+			for ( auto & anim : skeleton.anims )
+			{
+				result.push_back( anim.first );
+			}
+		}
+
+		return result;
+	}
+
+	std::vector< castor::String > AssimpImporterFile::listAllSceneNodeAnimations()
+	{
+		std::vector< castor::String > result;
+
+		for ( auto & node : m_sceneData.nodes )
+		{
+			for ( auto & anim : node.anims )
+			{
+				result.push_back( anim.first );
+			}
+		}
+
+		return result;
+	}
+
 	castor3d::MaterialImporterUPtr AssimpImporterFile::createMaterialImporter()
 	{
 		return castor::makeUniqueDerived< castor3d::MaterialImporter, AssimpMaterialImporter >( *getOwner() );
@@ -689,9 +738,10 @@ namespace c3d_assimp
 	castor3d::ImporterFileUPtr AssimpImporterFile::create( castor3d::Engine & engine
 		, castor3d::Scene * scene
 		, castor::Path const & path
-		, castor3d::Parameters const & parameters )
+		, castor3d::Parameters const & parameters
+		, castor3d::ProgressBar * progress )
 	{
-		return castor::makeUniqueDerived< castor3d::ImporterFile, AssimpImporterFile >( engine, scene, path, parameters );
+		return castor::makeUniqueDerived< castor3d::ImporterFile, AssimpImporterFile >( engine, scene, path, parameters, progress );
 	}
 
 	void AssimpImporterFile::doPrelistMaterials()

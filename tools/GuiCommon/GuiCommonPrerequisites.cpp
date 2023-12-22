@@ -457,7 +457,7 @@ namespace GuiCommon
 			{
 				try
 				{
-					castor3d::SceneFileParser parser{ engine };
+					castor3d::SceneFileParser parser{ engine, progress };
 
 					if ( progress )
 					{

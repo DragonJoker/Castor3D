@@ -46,8 +46,9 @@ namespace castor3d
 	CmshImporterFile::CmshImporterFile( Engine & engine
 		, Scene * scene
 		, castor::Path const & path
-		, Parameters const & parameters )
-		: ImporterFile{ engine, scene, path, parameters }
+		, Parameters const & parameters
+		, ProgressBar * progress )
+		: ImporterFile{ engine, scene, path, parameters, progress }
 	{
 	}
 
@@ -157,6 +158,42 @@ namespace castor3d
 		return result;
 	}
 
+	std::vector< castor::String > CmshImporterFile::listAllMeshAnimations()
+	{
+		std::vector< castor::String > result;
+
+		if ( getExtension() == CmshAnimationImporter::MeshAnimType )
+		{
+			result.push_back( getName() );
+		}
+
+		return result;
+	}
+
+	std::vector< castor::String > CmshImporterFile::listAllSkeletonAnimations()
+	{
+		std::vector< castor::String > result;
+
+		if ( getExtension() == CmshAnimationImporter::SkeletonAnimType )
+		{
+			result.push_back( getName() );
+		}
+
+		return result;
+	}
+
+	std::vector< castor::String > CmshImporterFile::listAllSceneNodeAnimations()
+	{
+		std::vector< castor::String > result;
+
+		if ( getExtension() == CmshAnimationImporter::NodeAnimType )
+		{
+			result.push_back( getName() );
+		}
+
+		return result;
+	}
+
 	MaterialImporterUPtr CmshImporterFile::createMaterialImporter()
 	{
 		return nullptr;
@@ -195,9 +232,10 @@ namespace castor3d
 	ImporterFileUPtr CmshImporterFile::create( Engine & engine
 		, Scene * scene
 		, castor::Path const & path
-		, Parameters const & parameters )
+		, Parameters const & parameters
+		, ProgressBar * progress )
 	{
-		return ImporterFileUPtr( new CmshImporterFile{ engine, scene, path, parameters } );
+		return ImporterFileUPtr( new CmshImporterFile{ engine, scene, path, parameters, progress } );
 	}
 
 	//*********************************************************************************************

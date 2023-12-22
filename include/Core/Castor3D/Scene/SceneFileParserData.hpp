@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_SceneFileParserData_H___
 
 #include "Castor3D/Gui/GuiModule.hpp"
+#include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 #include "Castor3D/Overlay/OverlayModule.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 
@@ -82,13 +83,14 @@ namespace castor3d
 		Engine * engine{};
 		OverlayContextUPtr overlays{};
 		GuiContextUPtr gui{};
-		bool enableFullLoading{ false };
+		bool enableFullLoading{};
 		ScenePtrStrMap mapScenes{};
 		RenderWindowDesc window{};
 		castor::LoggerInstance * logger{};
-		castor::PathArray files;
-		castor::PathArray csnaFiles;
+		castor::PathArray files{};
+		castor::PathArray csnaFiles{};
 		std::map< castor::String, TextureSourceInfoUPtr > sourceInfos{};
+		ProgressBar * progress{};
 	};
 
 	inline Engine * getEngine( RootContext const & context )

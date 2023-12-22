@@ -36,13 +36,15 @@ namespace castor3d
 
 	//****************************************************************************************************
 
-	SceneFileParser::SceneFileParser( Engine & engine )
+	SceneFileParser::SceneFileParser( Engine & engine
+		, ProgressBar * progress )
 		: OwnedBy< Engine >( engine )
 		, DataHolderT< RootContext >{ scnfile::createContext( engine ) }
 		, FileParser{ engine.getLogger(), getSceneFileRootSection(), &getData() }
 	{
 		getData().overlays->root = &getData();
 		getData().gui->root = &getData();
+		getData().progress = progress;
 
 		for ( auto const & it : getEngine()->getAdditionalParsers() )
 		{

@@ -28,7 +28,8 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	engine	Le moteur.
 		 */
-		C3D_API explicit SceneFileParser( Engine & engine );
+		C3D_API explicit SceneFileParser( Engine & engine
+			, ProgressBar * progress = nullptr );
 		C3D_API castor::FileParserContextUPtr initialiseParser( castor::Path const & path );
 		/**
 		 *\~english
