@@ -28,13 +28,7 @@ namespace CastorViewer
 {
 	typedef enum eTIMER_ID
 	{
-		eTIMER_ID_FORWARD = 1,
-		eTIMER_ID_BACK,
-		eTIMER_ID_LEFT,
-		eTIMER_ID_RIGHT,
-		eTIMER_ID_UP,
-		eTIMER_ID_DOWN,
-		eTIMER_ID_MOUSE,
+		eTIMER_ID_MOUSE = 1,
 		eTIMER_ID_MOVEMENT,
 		eTIMER_ID_COUNT,
 		eCLIPBOARD_CHANGE,
@@ -142,6 +136,12 @@ namespace CastorViewer
 		bool m_mouseLeftDown{};
 		bool m_mouseRightDown{};
 		bool m_mouseMiddleDown{};
+		bool m_keyUp{};
+		bool m_keyDown{};
+		bool m_keyLeft{};
+		bool m_keyRight{};
+		bool m_keyPageUp{};
+		bool m_keyPageDown{};
 		bool m_resizeWindow{ true };
 		bool m_extraSpeed{};
 		std::atomic_bool m_movementStarted{};

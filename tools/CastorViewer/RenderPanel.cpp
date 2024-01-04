@@ -277,7 +277,10 @@ namespace CastorViewer
 
 	void RenderPanel::doStartTimer( int id )
 	{
-		m_timers[size_t( id )]->Start( 10 );
+		if ( !m_timers[size_t( id )]->Start( 10 ) )
+		{
+			castor3d::log::error << "Couldn't start timer: " << castor::System::getLastErrorText() << "\n";
+		}
 	}
 
 	void RenderPanel::doStopTimer( int id )
@@ -532,12 +535,6 @@ namespace CastorViewer
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
 	BEGIN_EVENT_TABLE( RenderPanel, wxPanel )
-		EVT_TIMER( eTIMER_ID_FORWARD, RenderPanel::onTimerFwd )
-		EVT_TIMER( eTIMER_ID_BACK, RenderPanel::onTimerBck )
-		EVT_TIMER( eTIMER_ID_LEFT, RenderPanel::onTimerLft )
-		EVT_TIMER( eTIMER_ID_RIGHT, RenderPanel::onTimerRgt )
-		EVT_TIMER( eTIMER_ID_UP, RenderPanel::onTimerUp )
-		EVT_TIMER( eTIMER_ID_DOWN, RenderPanel::onTimerDwn )
 		EVT_TIMER( eTIMER_ID_MOUSE, RenderPanel::onTimerMouse )
 		EVT_TIMER( eTIMER_ID_MOVEMENT, RenderPanel::onTimerMovement )
 		EVT_SIZE( RenderPanel::onSize )
@@ -565,72 +562,6 @@ namespace CastorViewer
 	END_EVENT_TABLE()
 #pragma GCC diagnostic pop
 
-	void RenderPanel::onTimerFwd( wxTimerEvent & event )
-	{
-		if ( m_currentState )
-		{
-			auto speed = doGetRealSpeed();
-			m_currentState->addScalarVelocity( castor::Point3f{ 0.0f, 0.0f, speed } );
-		}
-
-		event.Skip();
-	}
-
-	void RenderPanel::onTimerBck( wxTimerEvent & event )
-	{
-		if ( m_currentState )
-		{
-			auto speed = doGetRealSpeed();
-			m_currentState->addScalarVelocity( castor::Point3f{ 0.0f, 0.0f, -speed } );
-		}
-
-		event.Skip();
-	}
-
-	void RenderPanel::onTimerLft( wxTimerEvent & event )
-	{
-		if ( m_currentState )
-		{
-			auto speed = doGetRealSpeed();
-			m_currentState->addScalarVelocity( castor::Point3f{ speed, 0.0f, 0.0f } );
-		}
-
-		event.Skip();
-	}
-
-	void RenderPanel::onTimerRgt( wxTimerEvent & event )
-	{
-		if ( m_currentState )
-		{
-			auto speed = doGetRealSpeed();
-			m_currentState->addScalarVelocity( castor::Point3f{ -speed, 0.0f, 0.0f } );
-		}
-
-		event.Skip();
-	}
-
-	void RenderPanel::onTimerUp( wxTimerEvent & event )
-	{
-		if ( m_currentState )
-		{
-			auto speed = doGetRealSpeed();
-			m_currentState->addScalarVelocity( castor::Point3f{ 0.0f, speed, 0.0f } );
-		}
-
-		event.Skip();
-	}
-
-	void RenderPanel::onTimerDwn( wxTimerEvent & event )
-	{
-		if ( m_currentState )
-		{
-			auto speed = doGetRealSpeed();
-			m_currentState->addScalarVelocity( castor::Point3f{ 0.0f, -speed, 0.0f } );
-		}
-
-		event.Skip();
-	}
-
 	void RenderPanel::onTimerMouse( wxTimerEvent & event )
 	{
 		event.Skip();
@@ -640,6 +571,43 @@ namespace CastorViewer
 	{
 		if ( m_currentState )
 		{
+			if ( m_keyUp || m_keyDown || m_keyLeft || m_keyRight || m_keyPageUp || m_keyPageDown )
+			{
+				auto speed = doGetRealSpeed();
+				auto xSpeed = 0.0f;
+				auto ySpeed = 0.0f;
+				auto zSpeed = 0.0f;
+
+				if ( m_keyUp && !m_keyDown )
+				{
+					zSpeed = speed;
+				}
+				else if ( m_keyDown && !m_keyUp )
+				{
+					zSpeed = -speed;
+				}
+
+				if ( m_keyPageUp && !m_keyPageDown )
+				{
+					ySpeed = speed;
+				}
+				else if ( m_keyPageDown && !m_keyPageUp )
+				{
+					ySpeed = -speed;
+				}
+
+				if ( m_keyLeft && !m_keyRight )
+				{
+					xSpeed = speed;
+				}
+				else if ( m_keyRight && !m_keyLeft )
+				{
+					xSpeed = -speed;
+				}
+
+				m_currentState->addScalarVelocity( castor::Point3f{ xSpeed, ySpeed, zSpeed } );
+			}
+
 			m_currentState->update();
 		}
 
@@ -704,30 +672,30 @@ namespace CastorViewer
 			{
 			case WXK_LEFT:
 			case 'Q':
-				doStartTimer( eTIMER_ID_LEFT );
+				m_keyLeft = true;
 				break;
 
 			case WXK_RIGHT:
 			case 'D':
-				doStartTimer( eTIMER_ID_RIGHT );
+				m_keyRight = true;
 				break;
 
 			case WXK_UP:
 			case 'Z':
-				doStartTimer( eTIMER_ID_FORWARD );
+				m_keyUp = true;
 				break;
 
 			case WXK_DOWN:
 			case 'S':
-				doStartTimer( eTIMER_ID_BACK );
+				m_keyDown = true;
 				break;
 
 			case WXK_PAGEUP:
-				doStartTimer( eTIMER_ID_UP );
+				m_keyPageUp = true;
 				break;
 
 			case WXK_PAGEDOWN:
-				doStartTimer( eTIMER_ID_DOWN );
+				m_keyPageDown = true;
 				break;
 
 			case WXK_ALT:
@@ -786,30 +754,30 @@ namespace CastorViewer
 
 			case WXK_LEFT:
 			case 'Q':
-				doStopTimer( eTIMER_ID_LEFT );
+				m_keyLeft = false;
 				break;
 
 			case WXK_RIGHT:
 			case 'D':
-				doStopTimer( eTIMER_ID_RIGHT );
+				m_keyRight = false;
 				break;
 
 			case WXK_UP:
 			case 'Z':
-				doStopTimer( eTIMER_ID_FORWARD );
+				m_keyUp = false;
 				break;
 
 			case WXK_DOWN:
 			case 'S':
-				doStopTimer( eTIMER_ID_BACK );
+				m_keyDown = false;
 				break;
 
 			case WXK_PAGEUP:
-				doStopTimer( eTIMER_ID_UP );
+				m_keyPageUp = false;
 				break;
 
 			case WXK_PAGEDOWN:
-				doStopTimer( eTIMER_ID_DOWN );
+				m_keyPageDown = false;
 				break;
 
 			case WXK_ALT:
