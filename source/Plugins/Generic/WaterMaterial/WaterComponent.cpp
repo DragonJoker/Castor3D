@@ -599,10 +599,13 @@ namespace water
 				, castor3d::TransmissionComponent::TypeName
 				, WaterReflRefrComponent::TypeName } }
 	{
-		auto blend = pass.createComponent< castor3d::BlendComponent >();
-		blend->setAlphaBlendMode( castor3d::BlendMode::eInterpolative );
-		auto transmission = pass.createComponent< castor3d::TransmissionComponent >();
-		transmission->setTransmission( 1.0f );
+	}
+
+	void WaterComponent::onAddToPass()const
+	{
+		auto & pass = *getOwner();
+		pass.getComponent< castor3d::BlendComponent >()->setAlphaBlendMode( castor3d::BlendMode::eInterpolative );
+		pass.getComponent< castor3d::TransmissionComponent >()->setTransmission( 1.0f );
 	}
 
 	void WaterComponent::accept( castor3d::ConfigurationVisitorBase & vis )

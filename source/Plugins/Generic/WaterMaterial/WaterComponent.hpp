@@ -119,6 +119,8 @@ namespace water
 		static bool isComponentAvailable( castor3d::ComponentModeFlags componentsMask
 			, castor3d::shader::Materials const & materials );
 
+		void onAddToPass()const;
+
 		void accept( castor3d::ConfigurationVisitorBase & vis )override;
 
 		void fillProfileBuffer( WaterProfileData & buffer )const;

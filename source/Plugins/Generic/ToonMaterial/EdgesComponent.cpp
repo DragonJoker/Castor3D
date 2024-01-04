@@ -271,23 +271,17 @@ namespace toon
 	{
 		vis.visit( cuT( "Toon" ) );
 		vis.visit( cuT( "Edge colour" )
-			, *m_value.edgeColour
-			, &m_value.edgeColour.control() );
+			, m_value.edgeColour );
 		vis.visit( cuT( "Edge width" )
-			, *m_value.edgeWidth
-			, &m_value.edgeWidth.control() );
+			, m_value.edgeWidth );
 		vis.visit( cuT( "Depth factor" )
-			, *m_value.depthFactor
-			, &m_value.depthFactor.control() );
+			, m_value.depthFactor );
 		vis.visit( cuT( "Normal factor" )
-			, *m_value.normalFactor
-			, &m_value.normalFactor.control() );
+			, m_value.normalFactor );
 		vis.visit( cuT( "Object factor" )
-			, *m_value.objectFactor
-			, &m_value.objectFactor.control() );
+			, m_value.objectFactor );
 		vis.visit( cuT( "Smooth band width" )
-			, *m_value.smoothBand
-			, &m_value.smoothBand.control() );
+			, m_value.smoothBand );
 	}
 
 	void EdgesComponent::fillProfileBuffer( ToonProfileData & data )const

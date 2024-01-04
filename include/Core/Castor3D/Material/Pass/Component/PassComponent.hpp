@@ -1060,6 +1060,15 @@ namespace castor3d
 		 *\param[in,out]	pass	Reçoit le composant cloné.
 		 */
 		C3D_API PassComponentUPtr clone( Pass & pass )const;
+		/**
+		 *\~english
+		 *\brief			Called when the component is added to the pass.
+		 *\~french
+		 *\brief			Appelé lorsque le composant est ajouté à la passe.
+		 */
+		C3D_API virtual void onAddToPass()const
+		{
+		}
 		/**@}*/
 		/**
 		*\name
