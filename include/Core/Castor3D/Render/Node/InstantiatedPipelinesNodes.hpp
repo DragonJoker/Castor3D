@@ -19,7 +19,7 @@ namespace castor3d
 
 		auto emplace( RenderedNode node )
 		{
-			auto data = &node.culled->node->data;
+			auto data = &node.node->data;
 			auto it = std::find_if( begin()
 				, end()
 				, [&data]( std::pair< NodeObject const *, RenderedNode > const & lookup )
@@ -235,7 +235,6 @@ namespace castor3d
 		void emplace( PipelineAndID const & pipeline
 			, ashes::BufferBase const & buffer
 			, CulledNode const & culled
-			, GeometryBuffers const & geometryBuffers
 			, NodeCommand command
 			, bool isFrontCulled )
 		{
@@ -257,8 +256,8 @@ namespace castor3d
 #endif
 				auto it = emplace( pipeline, isFrontCulled );
 				it->nodes.emplace( buffer
-					, RenderedNode{ &culled
-						, &geometryBuffers
+					, RenderedNode{ culled.node
+						, culled.visible
 						, std::move( command ) } );
 			}
 		}

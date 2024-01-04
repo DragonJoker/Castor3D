@@ -17,9 +17,9 @@ namespace castor3d
 	template< typename NodeT >
 	struct RenderedNodeT
 	{
-		CulledNodeT< NodeT > const * culled;
-		GeometryBuffers const * geometryBuffers;
-		NodeCommandT< NodeT > command;
+		NodeT const * node{};
+		bool visible{};
+		NodeCommandT< NodeT > command{};
 	};
 
 	template< typename NodeT >
@@ -244,7 +244,6 @@ namespace castor3d
 		void emplace( PipelineAndID const & pipeline
 			, ashes::BufferBase const & buffer
 			, CulledNode const & culled
-			, GeometryBuffers const & geometryBuffers
 			, NodeCommand command
 			, bool isFrontCulled )
 		{
@@ -264,9 +263,13 @@ namespace castor3d
 #endif
 				auto it = emplace( pipeline, isFrontCulled );
 				ires.first->second = it->nodes.emplace( buffer
-					, RenderedNode{ &culled
-						, &geometryBuffers
+					, RenderedNode{ culled.node
+						, culled.visible
 						, std::move( command ) } );
+			}
+			else
+			{
+				ires.first->second->visible = culled.visible;
 			}
 		}
 

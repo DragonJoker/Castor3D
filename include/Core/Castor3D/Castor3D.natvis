@@ -131,42 +131,15 @@
 	</Type>
 
 	<Type Name="castor3d::BuffersNodesViewT&lt;*&gt;">
-		<DisplayString>{{ size={m_count} }}</DisplayString>
 		<Expand>
-			<Item Name="[size]">m_count</Item>
-			<Item Name="[capacity]">maxBuffers</Item>
-			<ArrayItems>
-				<Size>m_count</Size>
-				<ValuePointer>m_buffers._Elems</ValuePointer>
-			</ArrayItems>
+			<Item Name="[buffers]">m_buffers</Item>
 		</Expand>
 	</Type>
 
 	<Type Name="castor3d::PipelinesNodesT&lt;*&gt;">
-		<DisplayString>{{ size={m_count} }}</DisplayString>
 		<Expand>
-			<Synthetic Name="nodes">
-				<DisplayString>{{ size={m_nodeCount} }}</DisplayString>
-				<Expand>
-					<Item Name="[size]">m_nodeCount</Item>
-					<Item Name="[capacity]">maxCount</Item>
-					<ArrayItems>
-						<Size>m_nodeCount</Size>
-						<ValuePointer>m_nodes._Elems</ValuePointer>
-					</ArrayItems>
-				</Expand>
-			</Synthetic>
-			<Synthetic Name="pipelines">
-				<DisplayString>{{ size={m_count} }}</DisplayString>
-				<Expand>
-					<Item Name="[size]">m_count</Item>
-					<Item Name="[capacity]">maxPipelines</Item>
-					<ArrayItems>
-						<Size>m_count</Size>
-						<ValuePointer>m_pipelines._Elems</ValuePointer>
-					</ArrayItems>
-				</Expand>
-			</Synthetic>
+			<Item Name="[pipelines]">m_pipelines</Item>
+			<Item Name="[countedNodes]">m_countedNodes</Item>
 		</Expand>
 	</Type>
 
