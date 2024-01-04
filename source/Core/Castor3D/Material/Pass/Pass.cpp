@@ -383,6 +383,7 @@ namespace castor3d
 			m_reflRefrFlag = component->getPlugin().getComponentFlags();
 		}
 
+		component->onAddToPass();
 		m_components.emplace( id, std::move( component ) );
 		m_dirty = true;
 	}
