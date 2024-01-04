@@ -54,17 +54,15 @@ namespace GuiCommon
 		void select( castor3d::MaterialRPtr material );
 
 	protected:
-		void doAddSubmesh( castor3d::GeometryRPtr geometry
-			, castor3d::SubmeshRPtr submesh
-			, wxTreeItemId id );
-		void doAddSkeleton( castor3d::Skeleton const & skeleton
-			, wxTreeItemId id );
+		void doAddSubmesh( wxTreeItemId id
+			, castor3d::GeometryRPtr geometry
+			, castor3d::SubmeshRPtr submesh );
+		void doAddSkeleton( wxTreeItemId id
+			, castor3d::Skeleton const & skeleton );
 		void doAddGeometry( wxTreeItemId id
 			, castor3d::Geometry & geometry );
 		void doAddCamera( wxTreeItemId id
 			, castor3d::Camera & camera );
-		void doAddLight( wxTreeItemId id
-			, castor3d::Light & light );
 		void doAddBillboard( wxTreeItemId id
 			, castor3d::BillboardList & billboard );
 		void doAddNode( wxTreeItemId id
