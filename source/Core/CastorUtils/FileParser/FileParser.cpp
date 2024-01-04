@@ -846,8 +846,9 @@ namespace castor
 						doCheckDefines( parameters );
 					}
 
-					result = itFunc->second.resultSection != section
-						&& functionName != "}";
+					result = nextToken == "{"
+						|| ( itFunc->second.resultSection != section
+							&& functionName != "}" );
 					auto nextSection = itFunc->second.resultSection;
 
 					if ( result && nextToken != "{" )
