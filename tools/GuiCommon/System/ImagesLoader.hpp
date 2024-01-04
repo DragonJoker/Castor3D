@@ -25,6 +25,11 @@ namespace GuiCommon
 		static wxImage * getBitmap( uint32_t id );
 		static void waitAsyncLoads();
 
+		static ImageIdMap const & getBitmaps()noexcept
+		{
+			return doGetInstance()->m_mapImages;
+		}
+
 	private:
 		void doCleanup();
 		void doAddBitmap( uint32_t id, char const * const * pBits );

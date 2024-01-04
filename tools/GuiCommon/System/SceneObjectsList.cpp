@@ -70,6 +70,8 @@
 
 namespace GuiCommon
 {
+	static constexpr uint32_t maxElemCount = std::numeric_limits< uint32_t >::max() - 1u;
+
 	SceneObjectsList::SceneObjectsList( PropertiesContainer * propertiesHolder
 		, wxWindow * parent
 		, wxPoint const & ptPos
@@ -78,85 +80,9 @@ namespace GuiCommon
 		, m_engine( nullptr )
 		, m_propertiesHolder( propertiesHolder )
 	{
-		wxImage * icons[] =
-		{
-			ImagesLoader::getBitmap( eBMP_ANIMATED_OBJECTGROUP ),
-			ImagesLoader::getBitmap( eBMP_ANIMATED_OBJECTGROUP_SEL ),
-			ImagesLoader::getBitmap( eBMP_ANIMATED_OBJECT ),
-			ImagesLoader::getBitmap( eBMP_ANIMATED_OBJECT_SEL ),
-			ImagesLoader::getBitmap( eBMP_ANIMATION ),
-			ImagesLoader::getBitmap( eBMP_ANIMATION_SEL ),
-			ImagesLoader::getBitmap( eBMP_SCENE ),
-			ImagesLoader::getBitmap( eBMP_SCENE_SEL ),
-			ImagesLoader::getBitmap( eBMP_VIEWPORT ),
-			ImagesLoader::getBitmap( eBMP_VIEWPORT_SEL ),
-			ImagesLoader::getBitmap( eBMP_RENDER_TARGET ),
-			ImagesLoader::getBitmap( eBMP_RENDER_TARGET_SEL ),
-			ImagesLoader::getBitmap( eBMP_RENDER_WINDOW ),
-			ImagesLoader::getBitmap( eBMP_RENDER_WINDOW_SEL ),
-			ImagesLoader::getBitmap( eBMP_FRAME_VARIABLE ),
-			ImagesLoader::getBitmap( eBMP_FRAME_VARIABLE_SEL ),
-			ImagesLoader::getBitmap( eBMP_FRAME_VARIABLE_BUFFER ),
-			ImagesLoader::getBitmap( eBMP_FRAME_VARIABLE_BUFFER_SEL ),
-			ImagesLoader::getBitmap( eBMP_NODE ),
-			ImagesLoader::getBitmap( eBMP_NODE_SEL ),
-			ImagesLoader::getBitmap( eBMP_CAMERA ),
-			ImagesLoader::getBitmap( eBMP_CAMERA_SEL ),
-			ImagesLoader::getBitmap( eBMP_GEOMETRY ),
-			ImagesLoader::getBitmap( eBMP_GEOMETRY_SEL ),
-			ImagesLoader::getBitmap( eBMP_DIRECTIONAL_LIGHT ),
-			ImagesLoader::getBitmap( eBMP_DIRECTIONAL_LIGHT_SEL ),
-			ImagesLoader::getBitmap( eBMP_POINT_LIGHT ),
-			ImagesLoader::getBitmap( eBMP_POINT_LIGHT_SEL ),
-			ImagesLoader::getBitmap( eBMP_SPOT_LIGHT ),
-			ImagesLoader::getBitmap( eBMP_SPOT_LIGHT_SEL ),
-			ImagesLoader::getBitmap( eBMP_SUBMESH ),
-			ImagesLoader::getBitmap( eBMP_SUBMESH_SEL ),
-			ImagesLoader::getBitmap( eBMP_PANEL_OVERLAY ),
-			ImagesLoader::getBitmap( eBMP_PANEL_OVERLAY_SEL ),
-			ImagesLoader::getBitmap( eBMP_BORDER_PANEL_OVERLAY ),
-			ImagesLoader::getBitmap( eBMP_BORDER_PANEL_OVERLAY_SEL ),
-			ImagesLoader::getBitmap( eBMP_TEXT_OVERLAY ),
-			ImagesLoader::getBitmap( eBMP_TEXT_OVERLAY_SEL ),
-			ImagesLoader::getBitmap( eBMP_MATERIAL ),
-			ImagesLoader::getBitmap( eBMP_MATERIAL_SEL ),
-			ImagesLoader::getBitmap( eBMP_PASS ),
-			ImagesLoader::getBitmap( eBMP_PASS_SEL ),
-			ImagesLoader::getBitmap( eBMP_TEXTURE ),
-			ImagesLoader::getBitmap( eBMP_TEXTURE_SEL ),
-			ImagesLoader::getBitmap( eBMP_BILLBOARD ),
-			ImagesLoader::getBitmap( eBMP_BILLBOARD_SEL ),
-			ImagesLoader::getBitmap( eBMP_POST_EFFECT ),
-			ImagesLoader::getBitmap( eBMP_POST_EFFECT_SEL ),
-			ImagesLoader::getBitmap( eBMP_TONE_MAPPING ),
-			ImagesLoader::getBitmap( eBMP_TONE_MAPPING_SEL ),
-			ImagesLoader::getBitmap( eBMP_SKELETON ),
-			ImagesLoader::getBitmap( eBMP_SKELETON_SEL ),
-			ImagesLoader::getBitmap( eBMP_BONE ),
-			ImagesLoader::getBitmap( eBMP_BONE_SEL ),
-			ImagesLoader::getBitmap( eBMP_BACKGROUND ),
-			ImagesLoader::getBitmap( eBMP_BACKGROUND_SEL ),
-			ImagesLoader::getBitmap( eBMP_SSAO_CONFIG ),
-			ImagesLoader::getBitmap( eBMP_SSAO_CONFIG_SEL ),
-			ImagesLoader::getBitmap( eBMP_COLOURGRADING_CONFIG ),
-			ImagesLoader::getBitmap( eBMP_COLOURGRADING_CONFIG_SEL ),
-			ImagesLoader::getBitmap( eBMP_COLLAPSE_ALL ),
-			ImagesLoader::getBitmap( eBMP_EXPAND_ALL ),
-			ImagesLoader::getBitmap( eBMP_CONTROLS ),
-			ImagesLoader::getBitmap( eBMP_CONTROLS_SEL ),
-			ImagesLoader::getBitmap( eBMP_CONTROL ),
-			ImagesLoader::getBitmap( eBMP_CONTROL_SEL ),
-			ImagesLoader::getBitmap( eBMP_STYLES ),
-			ImagesLoader::getBitmap( eBMP_STYLES_SEL ),
-			ImagesLoader::getBitmap( eBMP_STYLE ),
-			ImagesLoader::getBitmap( eBMP_STYLE_SEL ),
-			ImagesLoader::getBitmap( eBMP_THEME ),
-			ImagesLoader::getBitmap( eBMP_THEME_SEL ),
-		};
-
 		auto * imageList = new wxImageList( GC_IMG_SIZE, GC_IMG_SIZE, true );
 
-		for ( auto image : icons )
+		for ( auto [id, image] : ImagesLoader::getBitmaps() )
 		{
 			int sizeOrig = image->GetWidth();
 
@@ -433,16 +359,78 @@ namespace GuiCommon
 				, eBMP_RENDER_WINDOW_SEL
 				, new RenderWindowTreeItemProperty( m_propertiesHolder->isEditable(), window ) );
 			uint32_t count{};
+			auto directional = scene->getLightCache().getLights( castor3d::LightType::eDirectional );
 
-			scene->getLightCache().forEach( [this, rootId, &count]( castor3d::Light & elem )
+			if ( !directional.empty() )
+			{
+				auto lightsId = AppendItem( rootId
+					, _( "Directional Lights" )
+					, eBMP_DIRECTIONAL_LIGHT
+					, eBMP_DIRECTIONAL_LIGHT_SEL );
+
+				for ( auto light : directional )
 				{
-					if ( ++count <= 500u )
+					if ( ++count <= maxElemCount )
 					{
-						doAddLight( rootId, elem );
+						AppendItem( lightsId
+							, light->getName()
+							, -1
+							, -1
+							, new LightTreeItemProperty{ m_propertiesHolder->isEditable(), *light } );
 					}
-				} );
+				}
 
-			CollapseAll();
+				Collapse( lightsId );
+			}
+
+			auto point = scene->getLightCache().getLights( castor3d::LightType::ePoint );
+
+			if ( !point.empty() )
+			{
+				auto lightsId = AppendItem( rootId
+					, _( "Point Lights" )
+					, eBMP_POINT_LIGHT
+					, eBMP_POINT_LIGHT_SEL );
+
+				for ( auto light : point )
+				{
+					if ( ++count <= maxElemCount )
+					{
+						AppendItem( lightsId
+							, light->getName()
+							, -1
+							, -1
+							, new LightTreeItemProperty{ m_propertiesHolder->isEditable(), *light } );
+					}
+				}
+
+				Collapse( lightsId );
+			}
+
+			auto spot = scene->getLightCache().getLights( castor3d::LightType::eSpot );
+
+			if ( !spot.empty() )
+			{
+				auto lightsId = AppendItem( rootId
+					, _( "Spot Lights" )
+					, eBMP_SPOT_LIGHT
+					, eBMP_SPOT_LIGHT_SEL );
+
+				for ( auto light : spot )
+				{
+					if ( ++count <= maxElemCount )
+					{
+						AppendItem( lightsId
+							, light->getName()
+							, -1
+							, -1
+							, new LightTreeItemProperty{ m_propertiesHolder->isEditable(), *light } );
+					}
+				}
+
+				Collapse( lightsId );
+			}
+
 			Expand( rootId );
 		}
 	}
@@ -464,7 +452,7 @@ namespace GuiCommon
 
 			scene->getGeometryCache().forEach( [this, rootId, &count]( castor3d::Geometry & elem )
 				{
-					if ( ++count <= 500u )
+					if ( ++count <= maxElemCount )
 					{
 						doAddGeometry( rootId, elem );
 					}
@@ -507,9 +495,9 @@ namespace GuiCommon
 		}
 	}
 
-	void SceneObjectsList::doAddSubmesh( castor3d::GeometryRPtr geometry
-		, castor3d::SubmeshRPtr submesh
-		, wxTreeItemId id )
+	void SceneObjectsList::doAddSubmesh( wxTreeItemId id
+		, castor3d::GeometryRPtr geometry
+		, castor3d::SubmeshRPtr submesh )
 	{
 		auto itg = m_objects.insert( { geometry, SubmeshIdMap{} } ).first;
 		itg->second.insert( { submesh, id } );
@@ -537,9 +525,9 @@ namespace GuiCommon
 					, eBMP_SUBMESH
 					, eBMP_SUBMESH_SEL
 					, new SubmeshTreeItemProperty( m_propertiesHolder->isEditable(), geometry, *submesh ) );
-				doAddSubmesh( &geometry
-					, submesh.get()
-					, idSubmesh );
+				doAddSubmesh( idSubmesh
+					, &geometry
+					, submesh.get() );
 			}
 
 			auto skeleton = mesh->getSkeleton();
@@ -551,13 +539,13 @@ namespace GuiCommon
 					, eBMP_SKELETON
 					, eBMP_SKELETON_SEL
 					, new SkeletonTreeItemProperty( m_propertiesHolder->isEditable(), *skeleton ) );
-				doAddSkeleton( *skeleton, idSkeleton );
+				doAddSkeleton( idSkeleton , *skeleton );
 			}
 		}
 	}
 
-	void SceneObjectsList::doAddSkeleton( castor3d::Skeleton const & skeleton
-		, wxTreeItemId idSkeleton )
+	void SceneObjectsList::doAddSkeleton( wxTreeItemId idSkeleton
+		, castor3d::Skeleton const & skeleton )
 	{
 		for ( auto & node : skeleton.getNodes() )
 		{
@@ -618,47 +606,13 @@ namespace GuiCommon
 			, new BillboardTreeItemProperty( m_propertiesHolder->isEditable(), billboard ) );
 	}
 
-	void SceneObjectsList::doAddLight( wxTreeItemId id
-		, castor3d::Light & light )
-	{
-		switch ( light.getLightType() )
-		{
-		case castor3d::LightType::eDirectional:
-			AppendItem( id
-				, light.getName()
-				, eBMP_DIRECTIONAL_LIGHT
-				, eBMP_DIRECTIONAL_LIGHT_SEL
-				, new LightTreeItemProperty( m_propertiesHolder->isEditable(), light ) );
-			break;
-
-		case castor3d::LightType::ePoint:
-			AppendItem( id
-				, light.getName()
-				, eBMP_POINT_LIGHT
-				, eBMP_POINT_LIGHT_SEL
-				, new LightTreeItemProperty( m_propertiesHolder->isEditable(), light ) );
-			break;
-
-		case castor3d::LightType::eSpot:
-			AppendItem( id
-				, light.getName()
-				, eBMP_SPOT_LIGHT
-				, eBMP_SPOT_LIGHT_SEL
-				, new LightTreeItemProperty( m_propertiesHolder->isEditable(), light ) );
-			break;
-		default:
-			CU_Failure( "Unsupported LightType" );
-			break;
-		}
-	}
-
 	void SceneObjectsList::doAddNode( wxTreeItemId id
 		, castor3d::SceneNode & node
 		, uint32_t & count )
 	{
 		for ( auto pair : node.getChildren() )
 		{
-			if ( ++count <= 500u )
+			if ( ++count <= maxElemCount )
 			{
 				doAddNode( AppendItem( id
 						, pair.first
