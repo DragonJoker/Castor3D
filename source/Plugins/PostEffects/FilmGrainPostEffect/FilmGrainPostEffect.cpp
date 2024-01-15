@@ -255,10 +255,10 @@ namespace film_grain
 				auto & device = getRenderSystem()->getRenderDevice();
 				auto staging = device->createStagingTexture( format
 					, VkExtent2D{ dim.getWidth(), dim.getHeight() } );
-				ashes::ImagePtr noiseImg = std::make_unique< ashes::Image >( *device
+				auto noiseImg = std::make_unique< ashes::Image >( *device
 					, graph.createImage( m_noiseImg )
-					, m_noiseImg.data->info );
-				ashes::ImageView noiseView{ ashes::ImageViewCreateInfo{ *noiseImg, m_noiseView.data->info }
+					, ashes::ImageCreateInfo{ m_noiseImg.data->info } );
+				ashes::ImageView noiseView{ ashes::ImageViewCreateInfo{ m_noiseView.data->info }
 					, graph.createImageView( m_noiseView )
 					, noiseImg.get() };
 				auto data = device.graphicsData();

@@ -182,9 +182,10 @@ namespace castor3d
 
 		sdw::Float ColourGradingData::rotateHue( sdw::Float const & value, sdw::Float const & low, sdw::Float const & hi )
 		{
-			return ( ( value < low )
-				? value + hi
-				: ( ( value > hi ) ? value - hi : value ) );
+			auto & writer = sdw::findWriterMandat( value, low, hi );
+			return writer.ternary( value < low
+				, value + hi
+				, writer.ternary( value > hi, value - hi, value ) );
 		}
 
 		sdw::Vec3 ColourGradingData::linearToLms( sdw::Vec3 const & colour )

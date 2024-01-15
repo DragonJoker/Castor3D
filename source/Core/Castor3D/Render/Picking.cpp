@@ -165,7 +165,7 @@ namespace castor3d
 		printGraph( *m_runnable );
 		m_colourTexture = std::make_unique< ashes::Image >( *m_device
 			, m_runnable->createImage( m_colourImage )
-			, m_colourImage.data->info );
+			, ashes::ImageCreateInfo{ m_colourImage.data->info } );
 		m_colourView = ashes::ImageView{ m_colourImageView.data->info
 			, m_runnable->createImageView( m_colourImageView )
 			, m_colourTexture.get() };

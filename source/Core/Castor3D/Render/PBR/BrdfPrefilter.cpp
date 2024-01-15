@@ -36,7 +36,7 @@ namespace castor3d
 		, m_device{ device }
 		, m_image{ std::make_unique< ashes::Image >( *m_device
 			, *dstTexture.image
-			, dstTexture.imageId.data->info ) }
+			, ashes::ImageCreateInfo{ dstTexture.imageId.data->info } ) }
 		, m_view{ dstTexture.targetViewId.data->info
 			, dstTexture.targetView
 			, m_image.get() }

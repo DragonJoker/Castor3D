@@ -40,7 +40,7 @@ namespace
 		{
 		}
 
-		operator bool()override
+		operator bool()noexcept override
 		{
 			return true;
 		}

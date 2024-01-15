@@ -228,8 +228,7 @@ namespace castor3d
 		{
 			if ( !m_renderQuad.isInitialised() )
 			{
-				m_renderQuad.initialise( *this
-					, m_renderSize
+				m_renderQuad.initialise( m_renderSize
 					, m_renderPass
 					, RenderNodesPass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 1u )
 					, index );

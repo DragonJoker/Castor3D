@@ -196,7 +196,7 @@ namespace castor3d
 	{
 		ashes::PipelineShaderStageCreateInfoArray result;
 		{
-			auto entryPoints = ast::listEntryPoints( programModule.shader->getStatements() );
+			auto entryPoints = ast::listEntryPoints( *programModule.shader->getStatements() );
 
 			for ( auto entryPoint : entryPoints )
 			{

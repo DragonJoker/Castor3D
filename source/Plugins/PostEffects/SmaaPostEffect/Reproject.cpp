@@ -165,7 +165,7 @@ namespace smaa
 		{
 			ashes::ImagePtr image = std::make_unique< ashes::Image >( *device
 				, renderTarget.getResources().createImage( context, view.data->image )
-				, view.data->image.data->info );
+				, ashes::ImageCreateInfo{ view.data->image.data->info } );
 			auto createInfo = view.data->info;
 			createInfo.image = *image;
 			auto imageView = image->createView( createInfo );
