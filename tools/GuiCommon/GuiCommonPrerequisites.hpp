@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Config/BeginExternHeaderGuard.hpp>
 #include <wx/wx.h>
+#include <wx/windowptr.h>
 #include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
 #include <Castor3D/Castor3DPrerequisites.hpp>
@@ -14,7 +15,7 @@ See LICENSE file in root folder
 
 namespace GuiCommon
 {
-	typedef enum eBMP
+	enum eBMP
 	{
 		eBMP_ANIMATED_OBJECTGROUP,
 		eBMP_ANIMATED_OBJECTGROUP_SEL,
@@ -93,7 +94,7 @@ namespace GuiCommon
 		eBMP_THEME,
 		eBMP_THEME_SEL,
 		eBMP_COUNT,
-	}	eBMP;
+	};
 
 	enum class ShaderLanguage
 	{
@@ -327,6 +328,12 @@ namespace GuiCommon
 
 	static const wxString CSCN_WILDCARD = wxT( " (*.cscn)|*.cscn|" );
 	static const wxString ZIP_WILDCARD = wxT( " (*.zip)|*.zip|" );
+
+	template< typename WindowT, typename ... ParamsT >
+	wxWindowPtr< WindowT > wxMakeWindowPtr( ParamsT && ... params )
+	{
+		return wxWindowPtr< WindowT >{ new WindowT{ std::forward< ParamsT >( params )... } };
+	}
 }
 
 #if !wxCHECK_VERSION( 3, 1, 0 )

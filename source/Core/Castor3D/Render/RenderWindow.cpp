@@ -1130,7 +1130,6 @@ namespace castor3d
 			<< ", IMGS(" << m_swapChain->getImageCount() << ")"
 			<< ", DIM(" << makeSize( m_swapChain->getDimensions() ) << ")"
 			<< ", MODE(" << ashes::getName( m_swapChain->getPresentMode() ) << ")]" << std::endl;
-		m_swapChainImages = m_swapChain->getImages();
 
 		if ( !m_renderPass
 			|| m_swapChain->getFormat() != m_swapchainFormat )
@@ -1161,14 +1160,13 @@ namespace castor3d
 
 		doDestroyFrameBuffers();
 		doDestroyRenderingResources();
-		m_swapChainImages.clear();
 		m_swapChain.reset();
 		log::info << "Destroyed SwapChain [" << getName() << "]" << std::endl;
 	}
 
 	void RenderWindow::doCreateRenderingResources( QueueData const & queueData )
 	{
-		for ( uint32_t i = 0u; i < uint32_t( m_swapChainImages.size() ); ++i )
+		for ( uint32_t i = 0u; i < uint32_t( m_swapChain->getImageCount() ); ++i )
 		{
 			m_renderingResources.emplace_back( std::make_unique< RenderingResources >( getDevice()->createSemaphore( getName() + castor::string::toString( i ) + "ImageAvailable" )
 				, getDevice()->createSemaphore( getName() + castor::string::toString( i ) + "FinishedRendering" )
@@ -1186,7 +1184,7 @@ namespace castor3d
 	ashes::ImageViewCRefArray RenderWindow::doPrepareAttaches( size_t index )
 	{
 		ashes::ImageViewCRefArray attaches;
-		auto & image = m_swapChainImages[index];
+		auto & image = *m_swapChain->getImages()[index];
 
 		for ( size_t i = 0u; i < m_renderPass->getAttachments().size(); ++i )
 		{
@@ -1209,8 +1207,8 @@ namespace castor3d
 
 	void RenderWindow::doCreateFrameBuffers()
 	{
-		m_swapchainViews.resize( m_swapChainImages.size() );
-		m_frameBuffers.resize( m_swapChainImages.size() );
+		m_swapchainViews.resize( m_swapChain->getImageCount() );
+		m_frameBuffers.resize( m_swapChain->getImageCount() );
 
 		for ( size_t i = 0u; i < m_frameBuffers.size(); ++i )
 		{
@@ -1455,7 +1453,7 @@ namespace castor3d
 
 		for ( auto & commandBuffers : m_commandBuffers )
 		{
-			commandBuffers.resize( m_swapChainImages.size() );
+			commandBuffers.resize( m_swapChain->getImageCount() );
 		}
 	}
 

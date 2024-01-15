@@ -13,7 +13,7 @@ See LICENSE file in root folder
 
 namespace GuiCommon
 {
-	class SceneObjectsList
+	class SceneObjectsList final
 		: public wxTreeCtrl
 	{
 	private:
@@ -56,7 +56,7 @@ namespace GuiCommon
 	protected:
 		void doAddSubmesh( wxTreeItemId id
 			, castor3d::GeometryRPtr geometry
-			, castor3d::SubmeshRPtr submesh );
+			, castor3d::Submesh const * submesh );
 		void doAddSkeleton( wxTreeItemId id
 			, castor3d::Skeleton const & skeleton );
 		void doAddGeometry( wxTreeItemId id
@@ -73,7 +73,7 @@ namespace GuiCommon
 		void doAddOverlay( wxTreeItemId id
 			, castor3d::OverlayCategory & overlay );
 		void doAddStyles( wxTreeItemId id
-			, castor3d::StylesHolder & styles
+			, castor3d::StylesHolder const & styles
 			, castor3d::SceneRPtr scene );
 		void doAddStyle( wxTreeItemId id
 			, castor::String const & name
@@ -93,6 +93,13 @@ namespace GuiCommon
 			, uint32_t index
 			, castor3d::Pass & pass
 			, castor3d::TextureUnit & texture );
+		void doLoadSceneLights( wxTreeItemId parentId
+			, castor3d::SceneRPtr scene
+			, wxString const & name
+			, castor3d::LightType type
+			, int icon
+			, int iconSel
+			, uint32_t & count );
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wmissing-override"
@@ -100,14 +107,14 @@ namespace GuiCommon
 #pragma clang diagnostic pop
 		void onClose( wxCloseEvent & event );
 		void onSelectItem( wxTreeEvent & event );
-		void onMouseRButtonUp( wxTreeEvent & event );
 
 	private:
-		castor3d::SceneRPtr m_scene;
-		castor3d::Engine * m_engine;
-		PropertiesContainer * m_propertiesHolder;
-		GeometrySubmeshIdMap m_objects;
-		MaterialIdMap m_materials;
+		castor3d::SceneRPtr m_scene{};
+		castor3d::Engine * m_engine{};
+		PropertiesContainer * m_propertiesHolder{};
+		wxImageList m_images{};
+		GeometrySubmeshIdMap m_objects{};
+		MaterialIdMap m_materials{};
 	};
 }
 

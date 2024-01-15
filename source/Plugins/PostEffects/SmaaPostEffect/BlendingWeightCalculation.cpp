@@ -831,8 +831,8 @@ namespace smaa
 			auto staging = device->createStagingTexture( format, dimensions );
 			auto image = std::make_unique< ashes::Image >( *device
 				, resources.createImage( context, imageId )
-				, imageId.data->info );
-			ashes::ImageView view{ ashes::ImageViewCreateInfo{ *image, result.data->info }
+				, ashes::ImageCreateInfo{ imageId.data->info } );
+			ashes::ImageView view{ ashes::ImageViewCreateInfo{ result.data->info }
 				, resources.createImageView( context, result )
 				, image.get() };
 			auto data = device.graphicsData();

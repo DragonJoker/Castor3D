@@ -539,7 +539,6 @@ namespace castor3d
 		QueueData const * m_reservedQueue{};
 		ashes::CommandPoolPtr m_commandBufferPool;
 		ashes::SwapChainPtr m_swapChain;
-		ashes::ImageArray m_swapChainImages;
 		std::vector< ashes::ImageViewArray > m_swapchainViews;
 		VkFormat m_swapchainFormat;
 		RenderingResourcesArray m_renderingResources;

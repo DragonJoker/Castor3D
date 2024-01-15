@@ -398,17 +398,17 @@ namespace castor3d
 
 	private:
 		std::recursive_mutex m_mutex;
-		Renderer m_renderer;
-		GpuInformations m_gpuInformations;
-		DebugCallbacksPtr m_debug;
-		VkPhysicalDeviceMemoryProperties m_memoryProperties;
-		VkPhysicalDeviceProperties m_properties;
-		VkPhysicalDeviceFeatures m_features;
-		RenderDeviceUPtr m_device;
-		std::stack< SceneRPtr > m_stackScenes;
-		ashes::BufferPtr< castor::Point4f > m_randomStorage;
+		Renderer m_renderer{};
+		GpuInformations m_gpuInformations{};
+		DebugCallbacksPtr m_debug{};
+		VkPhysicalDeviceMemoryProperties m_memoryProperties{};
+		VkPhysicalDeviceProperties m_properties{};
+		VkPhysicalDeviceFeatures m_features{};
+		RenderDeviceUPtr m_device{};
+		std::stack< SceneRPtr > m_stackScenes{};
+		ashes::BufferPtr< castor::Point4f > m_randomStorage{};
 		std::mutex m_allocMutex;
-		std::unordered_map< std::thread::id, std::unique_ptr< ast::ShaderAllocator > > m_shaderCompileAllocator;
+		std::unordered_map< std::thread::id, std::unique_ptr< ast::ShaderAllocator > > m_shaderCompileAllocator{};
 	};
 }
 

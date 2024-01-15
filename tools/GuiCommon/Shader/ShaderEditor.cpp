@@ -252,14 +252,14 @@ namespace GuiCommon
 		static int constexpr ListWidth = 200;
 		wxSize size = GetClientSize();
 		// The editor
-		m_editor = new StcTextEditor( m_stcContext, this, wxID_ANY, wxDefaultPosition, size );
+		m_editor = wxMakeWindowPtr< StcTextEditor >( m_stcContext, this, wxID_ANY, wxDefaultPosition, size );
 		m_editor->Show();
 #if wxMAJOR_VERSION >= 3 || ( wxMAJOR_VERSION == 2 && wxMINOR_VERSION >= 9 )
 		m_editor->AlwaysShowScrollbars( true, true );
 #endif
 
 		// The frame variable properties holder
-		m_frameVariablesProperties = new PropertiesContainer( m_canEdit, this, wxDefaultPosition, wxSize( ListWidth, 0 ) );
+		m_frameVariablesProperties = wxMakeWindowPtr< PropertiesContainer >( m_canEdit, this, wxDefaultPosition, wxSize( ListWidth, 0 ) );
 		m_frameVariablesProperties->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
 		m_frameVariablesProperties->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
 		m_frameVariablesProperties->SetCaptionBackgroundColour( PANEL_BACKGROUND_COLOUR );
@@ -272,14 +272,14 @@ namespace GuiCommon
 		m_frameVariablesProperties->SetMarginColour( BORDER_COLOUR );
 //
 		// The frame variables list
-		m_frameVariablesList = new FrameVariablesList( engine, m_frameVariablesProperties, this, wxPoint( 0, 25 ), wxSize( ListWidth, 0 ) );
+		m_frameVariablesList = wxMakeWindowPtr< FrameVariablesList >( engine, &*m_frameVariablesProperties, this, wxPoint( 0, 25 ), wxSize( ListWidth, 0 ) );
 		m_frameVariablesList->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
 		m_frameVariablesList->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
 		m_frameVariablesList->Enable( m_canEdit );
 
 		// Put all that in the AUI manager
 		m_auiManager.SetArtProvider( new AuiDockArt );
-		m_auiManager.AddPane( m_editor
+		m_auiManager.AddPane( &*m_editor
 			, wxAuiPaneInfo()
 				.CaptionVisible( false )
 				.CloseButton( false )
@@ -290,7 +290,7 @@ namespace GuiCommon
 				.Movable( false )
 				.PaneBorder( false )
 				.Dockable( false ) );
-		m_auiManager.AddPane( m_frameVariablesList
+		m_auiManager.AddPane( &*m_frameVariablesList
 			, wxAuiPaneInfo()
 				.CaptionVisible( false )
 				.CloseButton( false )
@@ -305,7 +305,7 @@ namespace GuiCommon
 				.Layer( 2 )
 				.PaneBorder( false )
 				.MinSize( ListWidth, 0 ) );
-		m_auiManager.AddPane( m_frameVariablesProperties
+		m_auiManager.AddPane( &*m_frameVariablesProperties
 			, wxAuiPaneInfo()
 				.CaptionVisible( false )
 				.CloseButton( false )
@@ -374,7 +374,7 @@ namespace GuiCommon
 
 	void ShaderEditor::doCleanup()
 	{
-		m_auiManager.DetachPane( m_editor );
+		m_auiManager.DetachPane( &*m_editor );
 	}
 
 	void ShaderEditor::doListAvailableLanguages()
@@ -382,7 +382,7 @@ namespace GuiCommon
 		if ( m_shader.shader )
 		{
 			auto stage = getShaderStage( m_shader.entryPoint );
-			auto entryPoints = ast::listEntryPoints( m_shader.shader->getStatements() );
+			auto entryPoints = ast::listEntryPoints( *m_shader.shader->getStatements() );
 			auto it = std::find_if( entryPoints.begin()
 				, entryPoints.end()
 				, [stage]( ast::EntryPointConfig const & lookup )
@@ -402,66 +402,61 @@ namespace GuiCommon
 			auto statements = ast::selectEntryPoint( compileStmtCache
 				, compileExprCache
 				, *it
-				, m_shader.shader->getStatements() );
-			{
-				spirv::SpirVConfig spvConfig{ spirv::v1_5 };
-				spvConfig.allocator = &shaderAllocator;
-				m_sources.emplace( ShaderLanguage::SPIRV
-					, make_wxString( spirv::writeSpirv( *m_shader.shader
-						, statements.get()
-						, stage
-						, spvConfig
-						, true ) ) );
-			}
+				, *m_shader.shader->getStatements() );
+
+			spirv::SpirVConfig spvConfig{ spirv::v1_5 };
+			spvConfig.allocator = &shaderAllocator;
+			m_sources.try_emplace( ShaderLanguage::SPIRV
+				, make_wxString( spirv::writeSpirv( *m_shader.shader
+					, statements.get()
+					, stage
+					, spvConfig
+					, true ) ) );
 #if GC_HasGLSL
-			{
-				glsl::GlslConfig config{ stage
-					, glsl::v4_6
-					, shdedt::getGLSLExtensions( glsl::v4_6 )
-					, false
-					, false
-					, true
-					, true
-					, true
-					, true };
-				config.allocator = &shaderAllocator;
-				m_sources.emplace( ShaderLanguage::GLSL
-					, make_wxString( glsl::compileGlsl( *m_shader.shader
-						, statements.get()
-						, stage
-						, {}
-						, config ) ) );
-			}
+			glsl::GlslConfig glslConfig{ stage
+				, glsl::v4_6
+				, shdedt::getGLSLExtensions( glsl::v4_6 )
+				, false
+				, false
+				, true
+				, true
+				, true
+				, true };
+			glslConfig.allocator = &shaderAllocator;
+			m_sources.try_emplace( ShaderLanguage::GLSL
+				, make_wxString( glsl::compileGlsl( *m_shader.shader
+					, statements.get()
+					, stage
+					, {}
+					, glslConfig ) ) );
 #endif
 #if GC_HasHLSL
-			{
-				hlsl::HlslConfig config{ hlsl::v6_6
+			hlsl::HlslConfig hlslConfig{ hlsl::v6_6
+				, stage
+				, false };
+			hlslConfig.allocator = &shaderAllocator;
+			m_sources.try_emplace( ShaderLanguage::HLSL
+				, make_wxString( hlsl::compileHlsl( *m_shader.shader
+					, statements.get()
 					, stage
-					, false };
-				config.allocator = &shaderAllocator;
-				m_sources.emplace( ShaderLanguage::HLSL
-					, make_wxString( hlsl::compileHlsl( *m_shader.shader
-						, statements.get()
-						, stage
-						, {}
-						, config ) ) );
-			}
+					, {}
+					, hlslConfig ) ) );
 #endif
 			return;
 		}
 
-		auto glslIndex = m_shader.source.text.find( '#' );
 		auto spirvIndex = m_shader.source.text.find( "; Magic:" );
 
-		if ( glslIndex == 0u
-			&& spirvIndex != std::string::npos
-			&& spirvIndex > glslIndex )
+		if ( auto glslIndex = m_shader.source.text.find( '#' );
+			glslIndex == 0u
+				&& spirvIndex != std::string::npos
+				&& spirvIndex > glslIndex )
 		{
 #if GC_HasGLSL
-			m_sources.emplace( ShaderLanguage::GLSL
+			m_sources.try_emplace( ShaderLanguage::GLSL
 				, make_wxString( m_shader.source.text.substr( 0u, spirvIndex ) ) );
 #endif
-			m_sources.emplace( ShaderLanguage::SPIRV
+			m_sources.try_emplace( ShaderLanguage::SPIRV
 				, make_wxString( m_shader.source.text.substr( spirvIndex ) ) );
 			return;
 		}
@@ -470,7 +465,7 @@ namespace GuiCommon
 		ast::ShaderAllocator shaderAllocator{ ast::AllocationMode::eIncremental };
 		auto allocator = shaderAllocator.getBlock();
 		spvConfig.allocator = &shaderAllocator;
-		m_sources.emplace( ShaderLanguage::SPIRV
+		m_sources.try_emplace( ShaderLanguage::SPIRV
 			, make_wxString( spirv::displaySpirv( *allocator
 				, m_shader.source.spirv ) ) );
 	}

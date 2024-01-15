@@ -39,12 +39,12 @@ namespace GuiCommon
 #pragma clang diagnostic pop
 		void onClose( wxCloseEvent & event );
 
-	protected:
+	private:
 		wxAuiManager m_auiManager;
 		StcContext & m_stcContext;
-		StcTextEditor * m_editor;
-		FrameVariablesList * m_frameVariablesList;
-		PropertiesContainer * m_frameVariablesProperties;
+		wxWindowPtr< StcTextEditor > m_editor;
+		wxWindowPtr< FrameVariablesList > m_frameVariablesList;
+		wxWindowPtr< PropertiesContainer > m_frameVariablesProperties;
 		ShaderEntryPoint const & m_shader;
 		std::vector< UniformBufferValues > & m_ubos;
 		std::map< ShaderLanguage, wxString > m_sources;

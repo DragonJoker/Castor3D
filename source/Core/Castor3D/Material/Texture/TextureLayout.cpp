@@ -643,7 +643,7 @@ namespace castor3d
 			, std::make_unique< ashes::Image >( *renderSystem.getRenderDevice()
 				, name
 				, image
-				, imageView.data->image.data->info )
+				, ashes::ImageCreateInfo{ imageView.data->image.data->info } )
 			, imageView.data->image.data->info }
 	{
 	}

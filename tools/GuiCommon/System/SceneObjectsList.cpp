@@ -70,31 +70,29 @@
 
 namespace GuiCommon
 {
-	static constexpr uint32_t maxElemCount = std::numeric_limits< uint32_t >::max() - 1u;
+	static constexpr uint32_t maxElemCount = 500u;
 
 	SceneObjectsList::SceneObjectsList( PropertiesContainer * propertiesHolder
 		, wxWindow * parent
 		, wxPoint const & ptPos
 		, wxSize const & size )
 		: wxTreeCtrl( parent, wxID_ANY, ptPos, size, wxTR_DEFAULT_STYLE | wxNO_BORDER )
-		, m_engine( nullptr )
-		, m_propertiesHolder( propertiesHolder )
+		, m_propertiesHolder{ propertiesHolder }
+		, m_images{ GC_IMG_SIZE, GC_IMG_SIZE, true }
 	{
-		auto * imageList = new wxImageList( GC_IMG_SIZE, GC_IMG_SIZE, true );
 
-		for ( auto [id, image] : ImagesLoader::getBitmaps() )
+		for ( auto const & [id, image] : ImagesLoader::getBitmaps() )
 		{
-			int sizeOrig = image->GetWidth();
-
-			if ( sizeOrig != GC_IMG_SIZE )
+			if ( int sizeOrig = image->GetWidth();
+				sizeOrig != GC_IMG_SIZE )
 			{
 				image->Rescale( GC_IMG_SIZE, GC_IMG_SIZE, wxIMAGE_QUALITY_HIGHEST );
 			}
 
-			imageList->Add( *image );
+			m_images.Add( *image );
 		}
 
-		AssignImageList( imageList );
+		SetImageList( &m_images );
 	}
 
 	void SceneObjectsList::loadScene( castor3d::Engine * engine
@@ -178,7 +176,7 @@ namespace GuiCommon
 				, eBMP_RENDER_WINDOW_SEL
 				, new RenderWindowTreeItemProperty( m_propertiesHolder->isEditable(), window ) );
 
-			for ( auto materialName : scene->getMaterialView() )
+			for ( auto const & materialName : scene->getMaterialView() )
 			{
 				auto material = engine->findMaterial( materialName );
 				doAddMaterial( rootId
@@ -252,7 +250,7 @@ namespace GuiCommon
 
 		if ( scene )
 		{
-			auto & controlsManager = static_cast< castor3d::ControlsManager & >( *scene->getEngine()->getUserInputListener() );
+			auto & controlsManager = static_cast< castor3d::ControlsManager const & >( *scene->getEngine()->getUserInputListener() );
 
 			auto rootId = AddRoot( make_wxString( window.getName() )
 				, eBMP_RENDER_WINDOW
@@ -265,15 +263,15 @@ namespace GuiCommon
 				, eBMP_STYLES_SEL );
 			doAddStyles( catId, controlsManager, nullptr );
 
-			for ( auto & theme : controlsManager.getThemes() )
+			for ( auto const & [name, theme] : controlsManager.getThemes() )
 			{
-				if ( theme.first != "Debug" )
+				if ( name != "Debug" )
 				{
 					auto themeId = AppendItem( catId
-						, theme.first
+						, name
 						, eBMP_THEME
 						, eBMP_THEME_SEL );
-					doAddStyles( themeId, *theme.second, nullptr );
+					doAddStyles( themeId, *theme, nullptr );
 				}
 			}
 
@@ -282,7 +280,7 @@ namespace GuiCommon
 				, eBMP_CONTROLS
 				, eBMP_CONTROLS_SEL );
 
-			for ( auto & control : controlsManager.getRootControls() )
+			for ( auto const & control : controlsManager.getRootControls() )
 			{
 				if ( control
 					&& !control->hasScene()
@@ -304,7 +302,7 @@ namespace GuiCommon
 				, eBMP_CONTROLS
 				, eBMP_CONTROLS_SEL );
 
-			for ( auto & control : static_cast< castor3d::ControlsManager const & >( *scene->getEngine()->getUserInputListener() ).getRootControls() )
+			for ( auto const & control : static_cast< castor3d::ControlsManager const & >( *scene->getEngine()->getUserInputListener() ).getRootControls() )
 			{
 				if ( control
 					&& control->hasScene()
@@ -359,78 +357,27 @@ namespace GuiCommon
 				, eBMP_RENDER_WINDOW_SEL
 				, new RenderWindowTreeItemProperty( m_propertiesHolder->isEditable(), window ) );
 			uint32_t count{};
-			auto directional = scene->getLightCache().getLights( castor3d::LightType::eDirectional );
-
-			if ( !directional.empty() )
-			{
-				auto lightsId = AppendItem( rootId
-					, _( "Directional Lights" )
-					, eBMP_DIRECTIONAL_LIGHT
-					, eBMP_DIRECTIONAL_LIGHT_SEL );
-
-				for ( auto light : directional )
-				{
-					if ( ++count <= maxElemCount )
-					{
-						AppendItem( lightsId
-							, light->getName()
-							, -1
-							, -1
-							, new LightTreeItemProperty{ m_propertiesHolder->isEditable(), *light } );
-					}
-				}
-
-				Collapse( lightsId );
-			}
-
-			auto point = scene->getLightCache().getLights( castor3d::LightType::ePoint );
-
-			if ( !point.empty() )
-			{
-				auto lightsId = AppendItem( rootId
-					, _( "Point Lights" )
-					, eBMP_POINT_LIGHT
-					, eBMP_POINT_LIGHT_SEL );
-
-				for ( auto light : point )
-				{
-					if ( ++count <= maxElemCount )
-					{
-						AppendItem( lightsId
-							, light->getName()
-							, -1
-							, -1
-							, new LightTreeItemProperty{ m_propertiesHolder->isEditable(), *light } );
-					}
-				}
-
-				Collapse( lightsId );
-			}
-
-			auto spot = scene->getLightCache().getLights( castor3d::LightType::eSpot );
-
-			if ( !spot.empty() )
-			{
-				auto lightsId = AppendItem( rootId
-					, _( "Spot Lights" )
-					, eBMP_SPOT_LIGHT
-					, eBMP_SPOT_LIGHT_SEL );
-
-				for ( auto light : spot )
-				{
-					if ( ++count <= maxElemCount )
-					{
-						AppendItem( lightsId
-							, light->getName()
-							, -1
-							, -1
-							, new LightTreeItemProperty{ m_propertiesHolder->isEditable(), *light } );
-					}
-				}
-
-				Collapse( lightsId );
-			}
-
+			doLoadSceneLights( rootId
+				, scene
+				, _( "Directional Lights" )
+				, castor3d::LightType::eDirectional
+				, eBMP_DIRECTIONAL_LIGHT
+				, eBMP_DIRECTIONAL_LIGHT_SEL
+				, count );
+			doLoadSceneLights( rootId
+				, scene
+				, _( "Point Lights" )
+				, castor3d::LightType::ePoint
+				, eBMP_POINT_LIGHT
+				, eBMP_POINT_LIGHT_SEL
+				, count );
+			doLoadSceneLights( rootId
+				, scene
+				, _( "Spot Lights" )
+				, castor3d::LightType::eSpot
+				, eBMP_SPOT_LIGHT
+				, eBMP_SPOT_LIGHT_SEL
+				, count );
 			Expand( rootId );
 		}
 	}
@@ -472,13 +419,11 @@ namespace GuiCommon
 	void SceneObjectsList::select( castor3d::GeometryRPtr geometry
 		, castor3d::Submesh const * submesh )
 	{
-		auto itg = m_objects.find( geometry );
-
-		if ( itg != m_objects.end() )
+		if ( auto itg = m_objects.find( geometry );
+			itg != m_objects.end() )
 		{
-			auto its = itg->second.find( submesh );
-
-			if ( its != itg->second.end() )
+			if ( auto its = itg->second.find( submesh );
+				its != itg->second.end() )
 			{
 				SelectItem( its->second );
 			}
@@ -487,9 +432,8 @@ namespace GuiCommon
 
 	void SceneObjectsList::select( castor3d::MaterialRPtr material )
 	{
-		auto itm = m_materials.find( material );
-
-		if ( itm != m_materials.end() )
+		if ( auto itm = m_materials.find( material );
+			itm != m_materials.end() )
 		{
 			SelectItem( itm->second );
 		}
@@ -497,10 +441,10 @@ namespace GuiCommon
 
 	void SceneObjectsList::doAddSubmesh( wxTreeItemId id
 		, castor3d::GeometryRPtr geometry
-		, castor3d::SubmeshRPtr submesh )
+		, castor3d::Submesh const * submesh )
 	{
-		auto itg = m_objects.insert( { geometry, SubmeshIdMap{} } ).first;
-		itg->second.insert( { submesh, id } );
+		auto itg = m_objects.try_emplace( geometry ).first;
+		itg->second.try_emplace( submesh, id );
 	}
 
 	void SceneObjectsList::doAddGeometry( wxTreeItemId id
@@ -512,11 +456,11 @@ namespace GuiCommon
 			, eBMP_GEOMETRY_SEL
 			, new GeometryTreeItemProperty( m_propertiesHolder->isEditable(), geometry ) );
 
-		if ( auto mesh = geometry.getMesh() )
+		if ( auto const & mesh = geometry.getMesh() )
 		{
 			int count = 0;
 
-			for ( auto & submesh : *mesh )
+			for ( auto const & submesh : *mesh )
 			{
 				wxString name = _( "Submesh " );
 				name << count++;
@@ -530,9 +474,8 @@ namespace GuiCommon
 					, submesh.get() );
 			}
 
-			auto skeleton = mesh->getSkeleton();
-
-			if ( skeleton )
+			if ( auto skeleton = mesh->getSkeleton();
+				skeleton )
 			{
 				wxTreeItemId idSkeleton = AppendItem( geometryId
 					, mesh->getName()
@@ -547,7 +490,7 @@ namespace GuiCommon
 	void SceneObjectsList::doAddSkeleton( wxTreeItemId idSkeleton
 		, castor3d::Skeleton const & skeleton )
 	{
-		for ( auto & node : skeleton.getNodes() )
+		for ( auto const & node : skeleton.getNodes() )
 		{
 			if ( node->getType() == castor3d::SkeletonNodeType::eBone )
 			{
@@ -610,16 +553,16 @@ namespace GuiCommon
 		, castor3d::SceneNode & node
 		, uint32_t & count )
 	{
-		for ( auto pair : node.getChildren() )
+		for ( auto const & [name, child] : node.getChildren() )
 		{
 			if ( ++count <= maxElemCount )
 			{
 				doAddNode( AppendItem( id
-						, pair.first
+						, name
 						, eBMP_NODE
 						, eBMP_NODE_SEL
-						, new NodeTreeItemProperty( m_propertiesHolder->isEditable(), m_engine, *pair.second ) )
-					, *pair.second
+						, new NodeTreeItemProperty( m_propertiesHolder->isEditable(), m_engine, *child ) )
+					, *child
 					, count );
 			}
 		}
@@ -628,10 +571,10 @@ namespace GuiCommon
 	void SceneObjectsList::doAddAnimatedObjectGroup( wxTreeItemId id
 		, castor3d::AnimatedObjectGroup & group )
 	{
-		for ( auto it : group.getAnimations() )
+		for ( auto const & [name, anim] : group.getAnimations() )
 		{
 			AppendItem( id
-				, it.first
+				, name
 				, eBMP_ANIMATION
 				, eBMP_ANIMATION_SEL
 				, new AnimationTreeItemProperty
@@ -639,8 +582,8 @@ namespace GuiCommon
 					m_engine,
 					m_propertiesHolder->isEditable(),
 					group,
-					it.first,
-					it.second,
+					name,
+					anim,
 				} );
 		}
 	}
@@ -684,52 +627,52 @@ namespace GuiCommon
 	}
 
 	void SceneObjectsList::doAddStyles( wxTreeItemId parentId
-		, castor3d::StylesHolder & styles
+		, castor3d::StylesHolder const & styles
 		, castor3d::SceneRPtr scene )
 	{
-		for ( auto & sub : styles.getButtonStyles() )
+		for ( auto const & [name, style] : styles.getButtonStyles() )
 		{
-			doAddStyle( parentId, sub.first, *sub.second, scene );
+			doAddStyle( parentId, name, *style, scene );
 		}
 
-		for ( auto & sub : styles.getComboBoxStyles() )
+		for ( auto const & [name, style] : styles.getComboBoxStyles() )
 		{
-			doAddStyle( parentId, sub.first, *sub.second, scene );
+			doAddStyle( parentId, name, *style, scene );
 		}
 
-		for ( auto & sub : styles.getEditStyles() )
+		for ( auto const & [name, style] : styles.getEditStyles() )
 		{
-			doAddStyle( parentId, sub.first, *sub.second, scene );
+			doAddStyle( parentId, name, *style, scene );
 		}
 
-		for ( auto & sub : styles.getExpandablePanelStyles() )
+		for ( auto const & [name, style] : styles.getExpandablePanelStyles() )
 		{
-			doAddStyle( parentId, sub.first, *sub.second, scene );
+			doAddStyle( parentId, name, *style, scene );
 		}
 
-		for ( auto & sub : styles.getFrameStyles() )
+		for ( auto const & [name, style] : styles.getFrameStyles() )
 		{
-			doAddStyle( parentId, sub.first, *sub.second, scene );
+			doAddStyle( parentId, name, *style, scene );
 		}
 
-		for ( auto & sub : styles.getListBoxStyles() )
+		for ( auto const & [name, style] : styles.getListBoxStyles() )
 		{
-			doAddStyle( parentId, sub.first, *sub.second, scene );
+			doAddStyle( parentId, name, *style, scene );
 		}
 
-		for ( auto & sub : styles.getPanelStyles() )
+		for ( auto const & [name, style] : styles.getPanelStyles() )
 		{
-			doAddStyle( parentId, sub.first, *sub.second, scene );
+			doAddStyle( parentId, name, *style, scene );
 		}
 
-		for ( auto & sub : styles.getSliderStyles() )
+		for ( auto const & [name, style] : styles.getSliderStyles() )
 		{
-			doAddStyle( parentId, sub.first, *sub.second, scene );
+			doAddStyle( parentId, name, *style, scene );
 		}
 
-		for ( auto & sub : styles.getStaticStyles() )
+		for ( auto const & [name, style] : styles.getStaticStyles() )
 		{
-			doAddStyle( parentId, sub.first, *sub.second, scene );
+			doAddStyle( parentId, name, *style, scene );
 		}
 	}
 
@@ -752,7 +695,7 @@ namespace GuiCommon
 
 		if ( isStylesHolder( style ) )
 		{
-			castor3d::StylesHolder * holder{};
+			castor3d::StylesHolder const * holder{};
 
 			if ( style.getType() == castor3d::ControlType::ePanel )
 			{
@@ -806,7 +749,7 @@ namespace GuiCommon
 
 		if ( isLayoutControl( control ) )
 		{
-			auto & layout = static_cast< castor3d::LayoutControl & >( control );
+			auto & layout = static_cast< castor3d::LayoutControl const & >( control );
 
 			for ( auto ctrl : layout.getChildren() )
 			{
@@ -818,14 +761,14 @@ namespace GuiCommon
 		}
 		else if ( control.getType() == castor3d::ControlType::eExpandablePanel )
 		{
-			auto & expandable = static_cast< castor3d::ExpandablePanelCtrl & >( control );
+			auto & expandable = static_cast< castor3d::ExpandablePanelCtrl const & >( control );
 			doAddControl( parentId, "Header", *expandable.getHeader(), false, false );
 			doAddControl( parentId, "Expand", *expandable.getExpand(), false, false );
 			doAddControl( parentId, "Content", *expandable.getContent(), false, false );
 		}
 		else if ( control.getType() == castor3d::ControlType::eFrame )
 		{
-			auto & frame = static_cast< castor3d::FrameCtrl & >( control );
+			auto & frame = static_cast< castor3d::FrameCtrl const & >( control );
 			doAddControl( parentId, "Content", *frame.getContent(), false, false );
 		}
 	}
@@ -839,12 +782,13 @@ namespace GuiCommon
 			, int( eBMP_MATERIAL_SEL )
 			, new MaterialTreeItemProperty{ m_propertiesHolder->isEditable(), *material } );
 		uint32_t passIndex = 0;
-		m_materials.emplace( material, materialId );
+		m_materials.try_emplace( material, materialId );
 
-		for ( auto & pass : *material )
+		for ( auto const & pass : *material )
 		{
+			++passIndex;
 			doAddPass( materialId
-				, ++passIndex
+				, passIndex
 				, *pass );
 		}
 	}
@@ -865,8 +809,9 @@ namespace GuiCommon
 
 		for ( auto unit : pass )
 		{
+			++unitIndex;
 			doAddTexture( passId
-				, ++unitIndex
+				, unitIndex
 				, pass
 				, *unit );
 		}
@@ -895,12 +840,43 @@ namespace GuiCommon
 		}
 	}
 
+	void SceneObjectsList::doLoadSceneLights( wxTreeItemId parentId
+		, castor3d::SceneRPtr scene
+		, wxString const & name
+		, castor3d::LightType type
+		, int icon
+		, int iconSel
+		, uint32_t & count )
+	{
+		if ( auto lights = scene->getLightCache().getLights( type );
+			!lights.empty() )
+		{
+			auto lightsId = AppendItem( parentId
+				, name
+				, icon
+				, iconSel );
+
+			for ( auto light : lights )
+			{
+				if ( ++count <= maxElemCount )
+				{
+					AppendItem( lightsId
+						, light->getName()
+						, -1
+						, -1
+						, new LightTreeItemProperty{ m_propertiesHolder->isEditable(), *light } );
+				}
+			}
+
+			Collapse( lightsId );
+		}
+	}
+
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
 	BEGIN_EVENT_TABLE( SceneObjectsList, wxTreeCtrl )
 		EVT_CLOSE( SceneObjectsList::onClose )
 		EVT_TREE_SEL_CHANGED( wxID_ANY, SceneObjectsList::onSelectItem )
-		EVT_TREE_ITEM_RIGHT_CLICK( wxID_ANY, SceneObjectsList::onMouseRButtonUp )
 	END_EVENT_TABLE()
 #pragma GCC diagnostic pop
 
@@ -912,12 +888,8 @@ namespace GuiCommon
 
 	void SceneObjectsList::onSelectItem( wxTreeEvent & event )
 	{
-		TreeItemProperty * data = static_cast< TreeItemProperty * >( event.GetClientObject() );
+		auto data = static_cast< TreeItemProperty * >( event.GetClientObject() );
 		m_propertiesHolder->setPropertyData( data );
 		event.Skip();
-	}
-
-	void SceneObjectsList::onMouseRButtonUp( wxTreeEvent & event )
-	{
 	}
 }

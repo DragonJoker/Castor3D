@@ -155,7 +155,7 @@ namespace castor3d
 		, VkImage image
 		, crg::ImageId data )
 	{
-		return ashes::Image{ device, image, data.data->info };
+		return ashes::Image{ device, image, ashes::ImageCreateInfo{ data.data->info } };
 	}
 
 	ashes::ImageView makeImageView( ashes::Device const & device

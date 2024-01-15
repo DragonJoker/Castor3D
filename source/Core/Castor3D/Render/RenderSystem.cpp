@@ -235,30 +235,27 @@ namespace castor3d
 
 		//*************************************************************************
 
-		static bool isValidationLayer( std::string const & name
-			, std::string const & description )
+		static bool isValidationLayer( std::string const & name )
 		{
-			static std::set< std::string > const validNames
+			static std::set< std::string, std::less<> > const validNames
 			{
 				"VK_LAYER_KHRONOS_validation",
 			};
 			return validNames.find( name ) != validNames.end();
 		}
 
-		static bool isSynchronisationLayer( std::string const & name
-			, std::string const & description )
+		static bool isSynchronisationLayer( std::string const & name )
 		{
-			static std::set< std::string > const validNames
+			static std::set< std::string, std::less<> > const validNames
 			{
 				"VK_LAYER_KHRONOS_synchronization2",
 			};
 			return validNames.find( name ) != validNames.end();
 		}
 
-		static bool isApiTraceLayer( std::string const & name
-			, std::string const & description )
+		static bool isApiTraceLayer( std::string const & name )
 		{
-			static std::set< std::string > const validNames
+			static std::set< std::string, std::less<> > const validNames
 			{
 				"VK_LAYER_LUNARG_api_dump",
 			};
@@ -389,7 +386,7 @@ namespace castor3d
 			return result;
 		}
 
-		static ashes::ApplicationInfo createApplicationInfo( Engine & engine
+		static ashes::ApplicationInfo createApplicationInfo( Engine const & engine
 			, uint32_t vkApiVersion )
 		{
 			return ashes::ApplicationInfo
@@ -578,7 +575,6 @@ namespace castor3d
 		, Extensions pdeviceExtensions )
 		: OwnedBy< Engine >{ engine }
 		, m_renderer{ std::move( renderer ) }
-		, m_gpuInformations{}
 	{
 		if ( !m_renderer.gpu )
 		{
@@ -617,10 +613,10 @@ namespace castor3d
 			{ 0x8086, cuT( "INTEL" ) },
 			{ 0x13B5, cuT( "ARM" ) },
 		};
-		auto & device = *m_device;
-		auto & features = device.features;
-		auto & properties = device.properties;
-		auto & limits = properties.limits;
+		auto const & device = *m_device;
+		auto const & features = device.features;
+		auto const & properties = device.properties;
+		auto const & limits = properties.limits;
 		castor::StringStream stream( castor::makeStringStream() );
 		stream << ( properties.apiVersion >> 22 ) << cuT( "." ) << ( ( properties.apiVersion >> 12 ) & 0x0FFF );
 		m_gpuInformations.setVendor( vendors[properties.vendorID] );
@@ -716,10 +712,10 @@ namespace castor3d
 			, globalLayer.layerName );
 
 		// On récupère la liste d'extensions pour chaque couche de l'instance.
-		std::map< std::string, ashes::VkExtensionPropertiesArray > layersExtensions;
+		std::map< std::string, ashes::VkExtensionPropertiesArray, std::less<> > layersExtensions;
 		for ( auto layerProperties : layers )
 		{
-			layersExtensions.emplace( layerProperties.layerName
+			layersExtensions.try_emplace( layerProperties.layerName
 				, rendsys::enumerateExtensionProperties( enumInstanceExtensionProperties
 					, layerProperties.layerName ) );
 		}
@@ -845,58 +841,58 @@ namespace castor3d
 		for ( auto const & props : layers )
 		{
 			if ( ( engine.isValidationEnabled()
-				&& ( rendsys::isValidationLayer( props.layerName, props.description )
-					|| rendsys::isSynchronisationLayer( props.layerName, props.description ) ) )
+				&& ( rendsys::isValidationLayer( props.layerName )
+					|| rendsys::isSynchronisationLayer( props.layerName ) ) )
 				|| ( engine.isApiTraceEnabled()
-					&& rendsys::isApiTraceLayer( props.layerName, props.description ) ) )
+					&& rendsys::isApiTraceLayer( props.layerName ) ) )
 			{
-				names.push_back( props.layerName );
+				names.emplace_back( props.layerName );
 			}
 		}
 	}
 
-	SpirVShader const & RenderSystem::compileShader( castor3d::ShaderModule & module )
+	SpirVShader const & RenderSystem::compileShader( castor3d::ShaderModule & shaderModule )
 	{
 		SpirVShader result;
 
-		if ( module.shader )
+		if ( shaderModule.shader )
 		{
-			result = compileShader( module.stage
-				, module.name
-				, *module.shader
-				, ast::EntryPointConfig{ module.shader->getType(), "main" } );
-			module.shader.reset();
-			module.compiled = result;
-			CU_Require( !module.compiled.spirv.empty() );
+			result = compileShader( shaderModule.stage
+				, shaderModule.name
+				, *shaderModule.shader
+				, ast::EntryPointConfig{ shaderModule.shader->getType(), "main" } );
+			shaderModule.shader.reset();
+			shaderModule.compiled = result;
+			CU_Require( !shaderModule.compiled.spirv.empty() );
 		}
-		else if ( !module.source.empty() )
+		else if ( !shaderModule.source.empty() )
 		{
-			result = compileShader( module.stage
-				, module.name
-				, module.source );
-			module.source.clear();
-			module.compiled = result;
-			CU_Require( !module.compiled.spirv.empty() );
+			result = compileShader( shaderModule.stage
+				, shaderModule.name
+				, shaderModule.source );
+			shaderModule.source.clear();
+			shaderModule.compiled = result;
+			CU_Require( !shaderModule.compiled.spirv.empty() );
 		}
 
-		return module.compiled;
+		return shaderModule.compiled;
 	}
 
-	SpirVShader const & RenderSystem::compileShader( ProgramModule & module
+	SpirVShader const & RenderSystem::compileShader( ProgramModule & shaderModule
 		, ast::EntryPointConfig const & entryPoint )
 	{
-		auto ires = module.compiled.emplace( entryPoint.stage, SpirVShader{} );
+		auto [it, res] = shaderModule.compiled.try_emplace( entryPoint.stage );
 
-		if ( ires.second )
+		if ( res )
 		{
 			auto result = compileShader( getVkShaderStage( entryPoint.stage )
-				, module.name
-				, *module.shader
+				, shaderModule.name
+				, *shaderModule.shader
 				, entryPoint );
-			ires.first->second = result;
+			it->second = result;
 		}
 
-		return ires.first->second;
+		return it->second;
 	}
 
 	SpirVShader RenderSystem::compileShader( VkShaderStageFlagBits stage
@@ -915,9 +911,9 @@ namespace castor3d
 		auto allocator = shaderAllocator.getBlock();
 		ast::stmt::StmtCache compileStmtCache{ *allocator };
 		ast::expr::ExprCache compileExprCache{ *allocator };
-		auto statements = ast::selectEntryPoint( compileStmtCache, compileExprCache, entryPoint, shader.getStatements() );
-		auto module = spirv::compileSpirV( *allocator, shader, statements.get(), entryPoint.stage, spirvConfig );
-		result.spirv = spirv::serialiseModule( *module );
+		auto statements = ast::selectEntryPoint( compileStmtCache, compileExprCache, entryPoint, *shader.getStatements() );
+		auto shaderModule = spirv::compileSpirV( *allocator, shader, statements.get(), entryPoint.stage, spirvConfig );
+		result.spirv = spirv::serialiseModule( *shaderModule );
 		std::string glsl;
 
 #if C3D_HasGLSL
@@ -982,7 +978,7 @@ namespace castor3d
 		if ( getEngine()->areTextShadersKept() )
 		{
 			log::debug << " Text SPIRV ...";
-			result.text = spirv::writeModule( *module );
+			result.text = spirv::writeModule( *shaderModule );
 #if C3D_HasGLSL
 			if ( spirvConfig.debugLevel != spirv::DebugLevel::eDebugInfo )
 			{
@@ -1087,14 +1083,14 @@ namespace castor3d
 	ast::ShaderAllocator & RenderSystem::doGetShaderAllocator()
 	{
 		auto lock = castor::makeUniqueLock( m_allocMutex );
-		auto ires = m_shaderCompileAllocator.emplace( std::this_thread::get_id(), nullptr );
+		auto [it, res] = m_shaderCompileAllocator.try_emplace( std::this_thread::get_id() );
 
-		if ( ires.second )
+		if ( res )
 		{
-			ires.first->second = std::make_unique< ast::ShaderAllocator >( ast::AllocationMode::eIncremental );
+			it->second = std::make_unique< ast::ShaderAllocator >( ast::AllocationMode::eIncremental );
 		}
 
-		return *ires.first->second;
+		return *it->second;
 	}
 
 	//*************************************************************************
