@@ -16,9 +16,11 @@ namespace castor
 	public:
 		CU_API Grid() = default;
 		CU_API Grid( Grid const & ) = default;
-		CU_API Grid( Grid && ) = default;
+		CU_API Grid( Grid && )noexcept = default;
 		CU_API Grid & operator=( Grid const & ) = default;
-		CU_API Grid & operator=( Grid && ) = default;
+		CU_API Grid & operator=( Grid && )noexcept = default;
+		CU_API ~Grid()noexcept = default;
+
 		CU_API Grid( uint32_t gridSize
 			, float cellSize
 			, Point3f max
@@ -26,41 +28,40 @@ namespace castor
 			, float scale );
 		CU_API Grid( Grid const & old
 			, float scale );
-		CU_API ~Grid() = default;
 
 		CU_API void transform( Point3f pos, Point3f dir );
 
-		inline Point3f const & getMin()const
+		Point3f const & getMin()const
 		{
 			return m_min;
 		}
 
-		inline Point3f const & getMax()const
+		Point3f const & getMax()const
 		{
 			return m_max;
 		}
 
-		inline Point3ui const & getDimensions()const
+		Point3ui const & getDimensions()const
 		{
 			return m_dimensions;
 		}
 
-		inline float getScale()const
+		float getScale()const
 		{
 			return m_scale;
 		}
 
-		inline float getCellSize()const
+		float getCellSize()const
 		{
 			return m_cellSize;
 		}
 
-		inline Matrix4x4f const & getModelMatrix()const
+		Matrix4x4f const & getModelMatrix()const
 		{
 			return m_matrix;
 		}
 
-		inline Point3f getCenter()const
+		Point3f getCenter()const
 		{
 			return m_center;
 		}

@@ -19,7 +19,8 @@ namespace castor
 			, uint32_t size )
 		{
 			const char * error{ nullptr };
-			int w, h;
+			int w{};
+			int h{};
 			float * data{ nullptr };
 			LoadEXRFromMemory( &data
 				, &w
@@ -35,9 +36,10 @@ namespace castor
 				CU_LoaderError( String( cuT( "Can't load image:\n" ) ) + msg );
 			}
 
+			using ByteCPtr = uint8_t const *;
 			auto result = PxBufferBase::create( Size{ uint32_t( w ), uint32_t( h ) }
 				, PixelFormat::eR32G32B32A32_SFLOAT
-				, reinterpret_cast< uint8_t * >( data )
+				, ByteCPtr( data )
 				, PixelFormat::eR32G32B32A32_SFLOAT );
 			result->flip();
 			free( data );
@@ -45,13 +47,14 @@ namespace castor
 			return result;
 		}
 
+		static StringArray const ExrExtensions
+		{
+			cuT( "exr" ),
+		};
+
 		static StringArray const & listExtensions()
 		{
-			static StringArray const list
-			{
-				cuT( "exr" ),
-			};
-			return list;
+			return ExrExtensions;
 		}
 	}
 

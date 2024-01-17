@@ -14,6 +14,6 @@ namespace castor
 	Pixel< FT > PxBuffer< FT >::at( uint32_t x, uint32_t y )const
 	{
 		CU_Require( x < getWidth() && y < getHeight() );
-		return *( begin() + doConvert( x, y ) );
+		return *( pixelsBegin() + doConvert( x, y ) );
 	}
 }

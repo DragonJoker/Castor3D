@@ -9,7 +9,7 @@ See LICENSE file in root folder
 namespace castor
 {
 	CU_API bool convertToNormalMap( float strength
-		, castor::Image & image );
+		, castor::Image & image )noexcept;
 }
 
 #endif

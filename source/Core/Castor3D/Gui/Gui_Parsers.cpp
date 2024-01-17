@@ -67,12 +67,12 @@ namespace castor3d
 			}
 		}
 
-		GuiContext * getGuiContext( RootContext * context )
+		GuiContext * getGuiContext( RootContext const * context )
 		{
 			return context->gui.get();
 		}
 
-		GuiContext * getGuiContext( SceneContext * context )
+		GuiContext * getGuiContext( SceneContext const * context )
 		{
 			return context->root->gui.get();
 		}
@@ -295,16 +295,16 @@ namespace castor3d
 			if ( auto edit = blockContext->edit )
 			{
 				auto text = params[0]->get< castor::String >();
-				castor::string::replace( text, "\\?", "\?" );
-				castor::string::replace( text, "\\\\", "\\" );
-				castor::string::replace( text, "\\\"", "\"" );
-				castor::string::replace( text, "\\a", "\a" );
-				castor::string::replace( text, "\\b", "\b" );
-				castor::string::replace( text, "\\f", "\f" );
-				castor::string::replace( text, "\\n", "\n" );
-				castor::string::replace( text, "\\r", "\r" );
-				castor::string::replace( text, "\\t", "\t" );
-				castor::string::replace( text, "\\v", "\v" );
+				castor::string::replace( text, R"(\?)", "\?" );
+				castor::string::replace( text, R"(\\)", "\\" );
+				castor::string::replace( text, R"(\")", "\"" );
+				castor::string::replace( text, R"(\a)", "\a" );
+				castor::string::replace( text, R"(\b)", "\b" );
+				castor::string::replace( text, R"(\f)", "\f" );
+				castor::string::replace( text, R"(\n)", "\n" );
+				castor::string::replace( text, R"(\r)", "\r" );
+				castor::string::replace( text, R"(\t)", "\t" );
+				castor::string::replace( text, R"(\v)", "\v" );
 				edit->setCaption( castor::string::toU32String( text ) );
 			}
 			else
@@ -320,9 +320,7 @@ namespace castor3d
 			{
 				if ( params[0]->get< bool >() )
 				{
-					edit->addFlag( EditFlag::eMultiline/*
-						| EditFlag::eProcessEnter
-						| EditFlag::eProcessTab*/ );
+					edit->addFlag( EditFlag::eMultiline );
 				}
 			}
 			else

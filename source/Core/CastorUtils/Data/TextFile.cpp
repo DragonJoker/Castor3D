@@ -11,13 +11,9 @@ namespace castor
 	{
 	}
 
-	TextFile::~TextFile()
-	{
-	}
-
 	uint64_t TextFile::readLine( String & toRead
 		, uint64_t size
-		, String strSeparators )
+		, StringView strSeparators )
 	{
 		CU_CheckInvariants();
 		CU_Require( checkFlag( m_mode, OpenMode::eRead ) );
@@ -49,18 +45,6 @@ namespace castor
 				if ( bContinue )
 				{
 					bContinue = strSeparators.find( cChar ) == String::npos;
-
-					//if ( ! bContinue)
-					//{
-					//	if (m_encoding == eASCII)
-					//	{
-					//		ungetc( int( String( cChar).char_str()[0]), m_file);
-					//	}
-					//	else
-					//	{
-					//		ungetwc( wint_t( String( cChar).wchar_str()[0]), m_file);
-					//	}
-					//}
 				}
 
 				if ( bContinue )
@@ -112,6 +96,8 @@ namespace castor
 
 	uint64_t TextFile::writeText( String const & line )
 	{
+		using ByteCPtr = uint8_t const *;
+
 		CU_CheckInvariants();
 		CU_Require( checkFlag( m_mode, OpenMode::eWrite ) || checkFlag( m_mode, OpenMode::eAppend ) );
 		uint64_t uiReturn = 0;
@@ -120,12 +106,12 @@ namespace castor
 		{
 			if ( m_encoding != EncodingMode::eASCII )
 			{
-				uiReturn =  doWrite( reinterpret_cast< uint8_t const * >( line.c_str() ), sizeof( xchar ) * line.size() );
+				uiReturn =  doWrite( ByteCPtr( line.c_str() ), sizeof( xchar ) * line.size() );
 			}
 			else
 			{
 				auto ln = string::stringCast< char >( line );
-				uiReturn =  doWrite( reinterpret_cast< uint8_t const * >( ln.c_str() ), sizeof( char ) * ln.size() );
+				uiReturn =  doWrite( ByteCPtr( ln.c_str() ), sizeof( char ) * ln.size() );
 			}
 		}
 
@@ -156,18 +142,18 @@ namespace castor
 		CU_CheckInvariants();
 		CU_Require( checkFlag( m_mode, OpenMode::eWrite ) || checkFlag( m_mode, OpenMode::eAppend ) );
 		uint64_t uiReturn = 0;
-		xchar * text = new xchar[size_t( uiMaxSize )];
+		std::vector< xchar > text;
+		text.resize( size_t( uiMaxSize ) );
 
 		if ( pFormat )
 		{
 			va_list vaList;
 			va_start( vaList, pFormat );
-			vsnprintf( text, size_t( uiMaxSize ), pFormat, vaList );
+			vsnprintf( text.data(), size_t( uiMaxSize ), pFormat, vaList );
 			va_end( vaList );
-			uiReturn = writeText( text );
+			uiReturn = writeText( text.data() );
 		}
 
-		delete [] text;
 		CU_Ensure( uiReturn <= uiMaxSize );
 		CU_CheckInvariants();
 		return uiReturn;

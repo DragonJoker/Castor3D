@@ -65,7 +65,7 @@ namespace castor
 	}
 
 	template< typename T, uint32_t Columns, uint32_t Rows >
-	Matrix< T, Columns, Rows >::Matrix( Matrix< T, Columns, Rows > && rhs )
+	Matrix< T, Columns, Rows >::Matrix( Matrix< T, Columns, Rows > && rhs )noexcept
 		: m_data{ rhs.m_data }
 	{
 	}
@@ -99,11 +99,6 @@ namespace castor
 				++it;
 			}
 		}
-	}
-
-	template< typename T, uint32_t Columns, uint32_t Rows >
-	Matrix< T, Columns, Rows >::~Matrix()
-	{
 	}
 
 	template< typename T, uint32_t Columns, uint32_t Rows >
@@ -310,7 +305,7 @@ namespace castor
 	}
 
 	template< typename T, uint32_t Columns, uint32_t Rows >
-	inline Matrix< T, Columns, Rows > & Matrix< T, Columns, Rows >::operator=( Matrix< T, Columns, Rows > && rhs )
+	inline Matrix< T, Columns, Rows > & Matrix< T, Columns, Rows >::operator=( Matrix< T, Columns, Rows > && rhs )noexcept
 	{
 		if ( this != &rhs )
 		{

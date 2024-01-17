@@ -12,21 +12,21 @@ namespace castor
 		, parser{ &pparser }
 		, logger{ &parser->getLogger() }
 	{
-		for ( auto & parsers : parser->getAdditionalParsers() )
+		for ( auto const & [name, parsers] : parser->getAdditionalParsers() )
 		{
-			if ( parsers.second.contextCreator )
+			if ( parsers.contextCreator )
 			{
-				registerUserContext( parsers.first
-					, parsers.second.contextCreator( *this ) );
+				registerUserContext( name
+					, parsers.contextCreator( *this ) );
 			}
 		}
 	}
 
 	void FileParserContext::registerUserContext( String const & name, void * data )
 	{
-		auto ires = userContexts.insert( std::make_pair( name, data ) );
+		auto [it, res] = userContexts.try_emplace( name, data );
 
-		if ( !ires.second )
+		if ( !res )
 		{
 			CU_Exception( "A user context with name [" + string::stringCast< char >( name ) + "] already exists." );
 		}

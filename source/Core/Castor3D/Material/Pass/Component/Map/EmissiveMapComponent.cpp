@@ -14,7 +14,7 @@
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 
-#include <CastorUtils/FileParser/ParserParameter.hpp>
+#include <CastorUtils/FileParser/FileParser.hpp>
 
 CU_ImplementSmartPtr( castor3d, EmissiveMapComponent )
 

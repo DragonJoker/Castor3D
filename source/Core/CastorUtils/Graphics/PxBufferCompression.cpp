@@ -38,17 +38,17 @@ namespace castor
 		template< typename TypeT >
 		using BlockTypeT = typename BlockTyperT< TypeT >::Type;
 
-		template< typename TypeT >
+		template< typename TypeT, typename GetRT, typename GetGT, typename GetBT, typename GetAT >
 		static void getLinePixels( BlockTypeT< TypeT > & block
 			, uint32_t x
 			, uint32_t w
 			, uint32_t srcPixelSize
 			, uint32_t lineIndex
 			, uint8_t const *& linePtr
-			, TypeT( *getR )( uint8_t const * )
-			, TypeT( *getG )( uint8_t const * )
-			, TypeT( *getB )( uint8_t const * )
-			, TypeT( *getA )( uint8_t const * ) )
+			, GetRT getR
+			, GetGT getG
+			, GetBT getB
+			, GetAT getA )
 		{
 			auto baseIndex = lineIndex * 4u;
 			block.m_pixels[baseIndex + 0][0] = getR( linePtr );
@@ -73,16 +73,16 @@ namespace castor
 			linePtr += ( x + 3 >= w ) ? 0 : srcPixelSize;
 		}
 
-		template< typename TypeT >
+		template< typename TypeT, typename GetRT, typename GetGT, typename GetBT, typename GetAT >
 		static std::vector< BlockTypeT< TypeT > > extractBlocks( std::atomic_bool const * interrupt
 			, Size const & srcDimensions
 			, uint32_t srcPixelSize
 			, uint8_t const * srcBuffer
-			, uint32_t srcSize
-			, TypeT( *getR )( uint8_t const * )
-			, TypeT( *getG )( uint8_t const * )
-			, TypeT( *getB )( uint8_t const * )
-			, TypeT( *getA )( uint8_t const * ) )
+			, CU_UnusedParam( uint32_t, srcSize )
+			, GetRT getR
+			, GetGT getG
+			, GetBT getB
+			, GetAT getA )
 		{
 #if !defined( NDEBUG )
 			auto origin = srcBuffer;
@@ -118,10 +118,10 @@ namespace castor
 					}
 
 					BlockTypeT< TypeT > block;
-					getLinePixels( block, x, w, srcPixelSize, 0u, line0Ptr, getR, getG, getB, getA );
-					getLinePixels( block, x, w, srcPixelSize, 1u, line1Ptr, getR, getG, getB, getA );
-					getLinePixels( block, x, w, srcPixelSize, 2u, line2Ptr, getR, getG, getB, getA );
-					getLinePixels( block, x, w, srcPixelSize, 3u, line3Ptr, getR, getG, getB, getA );
+					getLinePixels< TypeT >( block, x, w, srcPixelSize, 0u, line0Ptr, getR, getG, getB, getA );
+					getLinePixels< TypeT >( block, x, w, srcPixelSize, 1u, line1Ptr, getR, getG, getB, getA );
+					getLinePixels< TypeT >( block, x, w, srcPixelSize, 2u, line2Ptr, getR, getG, getB, getA );
+					getLinePixels< TypeT >( block, x, w, srcPixelSize, 3u, line3Ptr, getR, getG, getB, getA );
 					result.push_back( block );
 				}
 			}
@@ -136,12 +136,12 @@ namespace castor
 			return result;
 		}
 
-		static void * allocETC2( void * CU_UnusedParam( context ), size_t size )
+		static void * allocETC2( CU_UnusedParam( void *, context ), size_t size )
 		{
 			return alignedAlloc( 16u, size );
 		}
 
-		static void freeETC2( void * CU_UnusedParam( context ), void * ptr, size_t CU_UnusedParam( size ) )
+		static void freeETC2( CU_UnusedParam( void *, context ), void * ptr, CU_UnusedParam( size_t, size ) )
 		{
 			alignedFree( ptr );
 		}
@@ -165,7 +165,7 @@ namespace castor
 		cvtt::Kernels::ConfigureBC7EncodingPlanFromQuality( encodingPlan, 70 );
 	}
 
-	CVTTOptions::~CVTTOptions()
+	CVTTOptions::~CVTTOptions()noexcept
 	{
 		cvtt::Kernels::ReleaseETC2Data( etc2CompressionData, pxcomp::freeETC2 );
 	}
@@ -182,7 +182,7 @@ namespace castor
 		, X8UGetter getB
 		, X8UGetter getA )
 	{
-		return pxcomp::extractBlocks( interrupt
+		return pxcomp::extractBlocks< uint8_t >( interrupt
 			, srcDimensions
 			, srcPixelSize
 			, srcBuffer
@@ -203,7 +203,7 @@ namespace castor
 		, X8SGetter getB
 		, X8SGetter getA )
 	{
-		return pxcomp::extractBlocks( interrupt
+		return pxcomp::extractBlocks< int8_t >( interrupt
 			, srcDimensions
 			, srcPixelSize
 			, srcBuffer
@@ -224,7 +224,7 @@ namespace castor
 		, X16FGetter getB
 		, X16FGetter getA )
 	{
-		return pxcomp::extractBlocks( interrupt
+		return pxcomp::extractBlocks< int16_t >( interrupt
 			, srcDimensions
 			, srcPixelSize
 			, srcBuffer
@@ -240,7 +240,7 @@ namespace castor
 		, std::vector< cvtt::PixelBlockU8 > const & blocksCont
 		, PixelFormat dstFormat
 		, uint8_t * dstBuffer
-		, uint32_t dstSize )
+		, CU_UnusedParam( uint32_t, dstSize ) )
 	{
 		using namespace cvtt::Kernels;
 		auto blocks = blocksCont.data();
@@ -313,7 +313,7 @@ namespace castor
 		, std::vector< cvtt::PixelBlockS8 > const & blocksCont
 		, PixelFormat dstFormat
 		, uint8_t * dstBuffer
-		, uint32_t dstSize )
+		, CU_UnusedParam( uint32_t, dstSize ) )
 	{
 		using namespace cvtt::Kernels;
 		auto blocks = blocksCont.data();
@@ -353,7 +353,7 @@ namespace castor
 		, std::vector< cvtt::PixelBlockF16 > const & blocksCont
 		, PixelFormat dstFormat
 		, uint8_t * dstBuffer
-		, uint32_t dstSize )
+		, CU_UnusedParam( uint32_t, dstSize ) )
 	{
 		using namespace cvtt::Kernels;
 		auto blocks = blocksCont.data();

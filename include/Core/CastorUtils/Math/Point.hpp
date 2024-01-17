@@ -51,6 +51,7 @@ namespace castor
 		 **/
 		/**@{*/
 		constexpr Point()noexcept;
+		constexpr ~Point()noexcept = default;
 		constexpr Point( Point const & rhs )noexcept;
 		constexpr Point( Point && rhs )noexcept;
 		explicit Point( T const * rhs )noexcept;
@@ -126,58 +127,16 @@ namespace castor
 		 *\brief		Echange les données de c epoint avec celles du point donné
 		 *\param[in]	rhs	Le point à échanger
 		 */
-		void swap( Point & rhs );
-		/**
-		 *\~english
-		 *\brief		Inverts data in the point
-		 *\remarks		The first becomes last and so on
-		 *\~french
-		 *\brief		Inverse les données dans ce point
-		 *\remarks		Les premiers deviennent les derniers
-		 */
-		void flip();
-		/**
-		 *\~english
-		 *\brief			Retrieves data from the point and put it into an array
-		 *\param[in,out]	result	Receives the point data, needs to be allocated by the caller
-		 *\~french
-		 *\brief			Récupère les données et les place dans un tableau
-		 *\param[in,out]	result	Reçoit les données, doit être alloué par l'appelant
-		 */
-		void toValues( T * result )const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the number of coordinates
-		 *\return		The number of coordinates
-		 *\~french
-		 *\brief		Récupère le nombre de coordonnées
-		 *\return		Le nombre de coordonnées
-		 */
-		inline uint32_t count()const
-		{
-			return TCount;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the coordinate type size
-		 *\return		The data type size
-		 *\~french
-		 *\brief		Récupère la taille du type données
-		 *\return		La taille du type de données
-		 */
-		inline std::size_t elemSize()const
-		{
-			return sizeof( T );
-		}
+		void swap( Point & rhs )noexcept;
 		/**
 		 *\~english
 		 *\brief		Retrieves the total size of the point
-		 *\return		count() * elemSize()
+		 *\return		count * elemSize
 		 *\~french
 		 *\brief		Récupère la taille totale du point
-		 *\return		count() * elemSize()
+		 *\return		count * elemSize
 		 */
-		inline	std::size_t	size()const
+		std::size_t	size()const
 		{
 			return binary_size;
 		}
@@ -189,7 +148,7 @@ namespace castor
 		 *\brief		Récupère le pointeur sur les données
 		 *\return		Le pointeur
 		 */
-		inline T * ptr()
+		T * ptr()
 		{
 			return m_data.coords.data();
 		}
@@ -201,7 +160,7 @@ namespace castor
 		 *\brief		Récupère un pointeur constant sur les données
 		 *\return		Le pointeur
 		 */
-		inline T const * constPtr()const
+		T const * constPtr()const
 		{
 			return m_data.coords.data();
 		}
@@ -212,45 +171,42 @@ namespace castor
 		 *name Accesseurs de tableau.
 		**/
 		/**@{*/
-		inline T const & operator[]( uint32_t index )const
+		T const & operator[]( uint32_t index )const
 		{
 			return m_data.coords[index];
 		}
 
-		inline T & operator[]( uint32_t index )
+		T & operator[]( uint32_t index )
 		{
 			return m_data.coords[index];
 		}
 
-		inline iterator begin()
+		iterator begin()
 		{
 			return &m_data.coords[0];
 		}
 
-		inline const_iterator begin()const
+		const_iterator begin()const
 		{
 			return &m_data.coords[0];
 		}
 
-		inline const_iterator end()const
+		const_iterator end()const
 		{
 			return &m_data.coords[0] + TCount;
 		}
 
-		inline iterator end()
+		iterator end()
 		{
 			return &m_data.coords[0] + TCount;
 		}
 
-		T const & at( uint32_t index )const;
-		T & at( uint32_t index );
-
-		inline PointData< T, TCount > * operator->()
+		PointData< T, TCount > * operator->()
 		{
 			return &m_data.data;
 		}
 
-		inline PointData< T, TCount > const * operator->()const
+		PointData< T, TCount > const * operator->()const
 		{
 			return &m_data.data;
 		}
@@ -261,7 +217,7 @@ namespace castor
 		{
 			std::array< T, TCount > coords;
 			PointData< T, TCount > data;
-		} m_data;
+		} m_data{};
 	};
 	/**
 	 *\~english
@@ -293,52 +249,52 @@ namespace castor
 	**/
 	/**@{*/
 	template< typename T, uint32_t TCount >
-	Point< typename std::remove_cv< T >::type, TCount > operator-( Point< T, TCount > const & rhs );
+	Point< std::remove_cv_t< T >, TCount > operator-( Point< T, TCount > const & rhs );
 
 	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	Point< typename std::remove_cv< T >::type, TCount > operator+( Point< T, TCount > const & lhs, Point< U, UCount > const & rhs );
+	Point< std::remove_cv_t< T >, TCount > operator+( Point< T, TCount > const & lhs, Point< U, UCount > const & rhs );
 	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	Point< typename std::remove_cv< T >::type, TCount > operator-( Point< T, TCount > const & lhs, Point< U, UCount > const & rhs );
+	Point< std::remove_cv_t< T >, TCount > operator-( Point< T, TCount > const & lhs, Point< U, UCount > const & rhs );
 	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	Point< typename std::remove_cv< T >::type, TCount > operator*( Point< T, TCount > const & lhs, Point< U, UCount > const & rhs );
+	Point< std::remove_cv_t< T >, TCount > operator*( Point< T, TCount > const & lhs, Point< U, UCount > const & rhs );
 	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	Point< typename std::remove_cv< T >::type, TCount > operator/( Point< T, TCount > const & lhs, Point< U, UCount > const & rhs );
+	Point< std::remove_cv_t< T >, TCount > operator/( Point< T, TCount > const & lhs, Point< U, UCount > const & rhs );
 
 	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	Point< typename std::remove_cv< T >::type, TCount > operator+( Point< T, TCount > const & lhs, Coords< U, UCount > const & rhs );
+	Point< std::remove_cv_t< T >, TCount > operator+( Point< T, TCount > const & lhs, Coords< U, UCount > const & rhs );
 	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	Point< typename std::remove_cv< T >::type, TCount > operator-( Point< T, TCount > const & lhs, Coords< U, UCount > const & rhs );
+	Point< std::remove_cv_t< T >, TCount > operator-( Point< T, TCount > const & lhs, Coords< U, UCount > const & rhs );
 	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	Point< typename std::remove_cv< T >::type, TCount > operator*( Point< T, TCount > const & lhs, Coords< U, UCount > const & rhs );
+	Point< std::remove_cv_t< T >, TCount > operator*( Point< T, TCount > const & lhs, Coords< U, UCount > const & rhs );
 	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	Point< typename std::remove_cv< T >::type, TCount > operator/( Point< T, TCount > const & lhs, Coords< U, UCount > const & rhs );
+	Point< std::remove_cv_t< T >, TCount > operator/( Point< T, TCount > const & lhs, Coords< U, UCount > const & rhs );
 
 	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	Point< typename std::remove_cv< T >::type, TCount > operator+( Coords< T, TCount > const & lhs, Point< U, UCount > const & rhs );
+	Point< std::remove_cv_t< T >, TCount > operator+( Coords< T, TCount > const & lhs, Point< U, UCount > const & rhs );
 	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	Point< typename std::remove_cv< T >::type, TCount > operator-( Coords< T, TCount > const & lhs, Point< U, UCount > const & rhs );
+	Point< std::remove_cv_t< T >, TCount > operator-( Coords< T, TCount > const & lhs, Point< U, UCount > const & rhs );
 	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	Point< typename std::remove_cv< T >::type, TCount > operator*( Coords< T, TCount > const & lhs, Point< U, UCount > const & rhs );
+	Point< std::remove_cv_t< T >, TCount > operator*( Coords< T, TCount > const & lhs, Point< U, UCount > const & rhs );
 	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	Point< typename std::remove_cv< T >::type, TCount > operator/( Coords< T, TCount > const & lhs, Point< U, UCount > const & rhs );
+	Point< std::remove_cv_t< T >, TCount > operator/( Coords< T, TCount > const & lhs, Point< U, UCount > const & rhs );
 
 	template< typename T, uint32_t TCount, typename U >
-	Point< typename std::remove_cv< T >::type, TCount > operator+( Point< T, TCount > const & lhs, U const * rhs );
+	Point< std::remove_cv_t< T >, TCount > operator+( Point< T, TCount > const & lhs, U const * rhs );
 	template< typename T, uint32_t TCount, typename U >
-	Point< typename std::remove_cv< T >::type, TCount > operator-( Point< T, TCount > const & lhs, U const * rhs );
+	Point< std::remove_cv_t< T >, TCount > operator-( Point< T, TCount > const & lhs, U const * rhs );
 	template< typename T, uint32_t TCount, typename U >
-	Point< typename std::remove_cv< T >::type, TCount > operator*( Point< T, TCount > const & lhs, U const * rhs );
+	Point< std::remove_cv_t< T >, TCount > operator*( Point< T, TCount > const & lhs, U const * rhs );
 	template< typename T, uint32_t TCount, typename U >
-	Point< typename std::remove_cv< T >::type, TCount > operator/( Point< T, TCount > const & lhs, U const * rhs );
+	Point< std::remove_cv_t< T >, TCount > operator/( Point< T, TCount > const & lhs, U const * rhs );
 
 	template< typename T, uint32_t TCount >
-	Point< typename std::remove_cv< T >::type, TCount > operator+( Point< T, TCount > const & lhs, T const & rhs );
+	Point< std::remove_cv_t< T >, TCount > operator+( Point< T, TCount > const & lhs, T const & rhs );
 	template< typename T, uint32_t TCount >
-	Point< typename std::remove_cv< T >::type, TCount > operator-( Point< T, TCount > const & lhs, T const & rhs );
+	Point< std::remove_cv_t< T >, TCount > operator-( Point< T, TCount > const & lhs, T const & rhs );
 	template< typename T, uint32_t TCount >
-	Point< typename std::remove_cv< T >::type, TCount > operator*( Point< T, TCount > const & lhs, T const & rhs );
+	Point< std::remove_cv_t< T >, TCount > operator*( Point< T, TCount > const & lhs, T const & rhs );
 	template< typename T, uint32_t TCount >
-	Point< typename std::remove_cv< T >::type, TCount > operator/( Point< T, TCount > const & lhs, T const & rhs );
+	Point< std::remove_cv_t< T >, TCount > operator/( Point< T, TCount > const & lhs, T const & rhs );
 
 	template< typename DstCompT, typename SrcT >
 	PointTypeT< SrcT, DstCompT > pointCast( SrcT const & src );
@@ -505,7 +461,7 @@ namespace castor
 		 *\return		Le vecteur résultant.
 		 */
 		template< Vector3T LhsT, Vector3T RhsT >
-		LhsT cross( LhsT const & lhs, RhsT const & rhs );
+		static LhsT cross( LhsT const & lhs, RhsT const & rhs );
 		/**
 		 *\~english
 		 *\brief		Computes the trigonometric cosine of the angle between 2 points

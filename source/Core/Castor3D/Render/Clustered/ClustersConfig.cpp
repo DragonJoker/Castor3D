@@ -4,7 +4,7 @@
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Scene/SceneFileParserData.hpp"
 
-#include <CastorUtils/FileParser/ParserParameter.hpp>
+#include <CastorUtils/FileParser/FileParser.hpp>
 
 CU_ImplementSmartPtr( castor3d, ClustersConfig )
 

@@ -92,18 +92,19 @@ namespace castor
 
 #endif
 
+		static StringArray const FIExtensions
+#if C3D_UseFreeImage
+		{
+			cuT( "tif" ),
+			cuT( "png" ),
+			cuT( "raw" ),
+		}
+#endif
+		;
+
 		static StringArray const & listExtensions()
 		{
-			static StringArray const list
-#if C3D_UseFreeImage
-			{
-				cuT( "tif" ),
-				cuT( "png" ),
-				cuT( "raw" ),
-			}
-#endif
-			;
-			return list;
+			return FIExtensions;
 		}
 	}
 
@@ -120,7 +121,7 @@ namespace castor
 		reg.unregisterLoader( freeimgl::listExtensions() );
 	}
 
-	ImageLayout FreeImageLoader::load( String const & CU_UnusedParam( imageFormat )
+	ImageLayout FreeImageLoader::load( CU_UnusedParam( String const &, imageFormat )
 		, uint8_t const * data
 		, uint32_t size
 		, PxBufferBaseUPtr & buffer )const

@@ -382,7 +382,7 @@ namespace test_launcher
 
 			if ( stream.is_open() )
 			{
-				stream << castor::System::getOSName() << "\n";
+				stream << castor::system::getOSName() << "\n";
 				stream << m_engine.getCpuInformations().getModel() << "\n";
 				stream << m_engine.getRenderSystem()->getGpuInformations().getRenderer() << "\n";
 				stream << totalTime.count()

@@ -15,7 +15,7 @@ namespace castor
 	*/
 	template< typename T, int N > struct Fact
 	{
-		inline T operator()()
+		inline T operator()()const
 		{
 			return N * Fact < T, N - 1 > ()();
 		}
@@ -28,7 +28,7 @@ namespace castor
 	*/
 	template< typename T > struct Fact< T, 0 >
 	{
-		inline T operator()()
+		inline T operator()()const
 		{
 			return T( 1 );
 		}
@@ -42,9 +42,9 @@ namespace castor
 	*/
 	template< typename T, int N > struct Power
 	{
-		inline T operator()( T x )
+		inline T operator()( T x )const
 		{
-			return Power < T, N / 2 > ()( x ) * Power < T, N / 2 > ()( x ) * Power < T, N % 2 > ()( x );
+			return Power< T, N / 2 > ()( x ) * Power< T, N / 2 > ()( x ) * Power< T, N % 2 > ()( x );
 		}
 	};
 	/**
@@ -55,7 +55,7 @@ namespace castor
 	*/
 	template< typename T > struct Power< T, 1 >
 	{
-		inline T operator()( T x )
+		inline T operator()( T x )const
 		{
 			return x;
 		}
@@ -68,7 +68,7 @@ namespace castor
 	*/
 	template< typename T > struct Power< T, 0 >
 	{
-		inline T operator()( T x )
+		inline T operator()( T )const
 		{
 			return T( 1 );
 		}
@@ -82,7 +82,7 @@ namespace castor
 	*/
 	template <int N, typename T> struct LogN
 	{
-		inline double operator()( T x )
+		inline double operator()( T x )const
 		{
 			return LogN < N - 1, T > ()( x ) + Power < double, 2 * N + 1 > ()( ( double( x ) - 1 ) / ( double( x ) + 1 ) ) / ( 2 * N + 1 );
 		}
@@ -95,7 +95,7 @@ namespace castor
 	*/
 	template< typename T > struct LogN<0, T>
 	{
-		inline double operator()( T x )
+		inline double operator()( T x )const
 		{
 			return ( double( x ) - 1 ) / ( double( x ) + 1 );
 		}
@@ -114,7 +114,7 @@ namespace castor
 			Precision = 20
 		};
 	public:
-		inline double operator()( T x )
+		inline double operator()( T x )const
 		{
 			return 2.0 * LogN<Precision, T>()( x );
 		}
@@ -183,54 +183,12 @@ namespace castor
 
 	/**
 	 *\~english
-	 *\brief		Tests if a double is a number
-	 *\remarks		It is a number as long as x==x
-	 *\param[in]	x	Number to test
-	 *\return		The result
-	 *\~french
-	 *\brief		Teste si un double est un nombre
-	 *\remarks		C'est un nombre tant que x==x
-	 *\param[in]	x	Le nombre à tester
-	 *\return		Le résultat
-	 */
-	inline bool isNan( double x )
-	{
-		volatile double temp = x;
-		return temp != x;
-	}
-	/**
-	 *\~english
-	 *\brief		Tests if a double is infinite
-	 *\remarks		It is infinite if x==x and x-x!=0
-	 *\param[in]	x	Number to test
-	 *\return		-1 if negative infinite, 1 if positive infinite, 0 if not infinite
-	 *\~french
-	 *\brief		Teste si un double est infini
-	 *\remarks		Il est infini si x==x et x-x!=0
-	 *\param[in]	x	Le nombre à tester
-	 *\return		-1 si infini négatif, 1 si infini positif, 0 si fini
-	 */
-	inline int isInf( double x )
-	{
-		volatile double temp = x;
-
-		if ( ( temp == x ) && ( ( temp - x ) != 0.0 ) )
-		{
-			return ( x < 0.0 ? -1 : 1 );
-		}
-		else
-		{
-			return 0;
-		}
-	}
-	/**
-	 *\~english
 	 *\brief		Division rounded up.
 	 *\~french
 	 *\brief		Division arrondie au supérieur.
 	 */
 	template< std::integral TypeT >
-	inline constexpr TypeT divRoundUp( TypeT num, TypeT denom )
+	constexpr TypeT divRoundUp( TypeT num, TypeT denom )
 	{
 		return num / denom + ( num % denom != 0 );
 	}

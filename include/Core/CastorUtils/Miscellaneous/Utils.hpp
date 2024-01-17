@@ -12,7 +12,7 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	namespace System
+	namespace system
 	{
 		/**
 		 *\~english
@@ -68,7 +68,6 @@ namespace castor
 	{
 		return N;
 	}
-
 }
 
 #endif

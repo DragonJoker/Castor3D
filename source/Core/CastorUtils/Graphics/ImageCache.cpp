@@ -37,7 +37,7 @@ namespace castor
 			, params.loadConfig ) );
 	}
 
-	ResourceCacheTraitsT< Image, String >::ElementPtrT ResourceCacheTraitsT< Image, String >::makeElement( ResourceCacheBaseT< Image, String, ResourceCacheTraitsT< Image, String > > const & cache
+	ResourceCacheTraitsT< Image, String >::ElementPtrT ResourceCacheTraitsT< Image, String >::makeElement( ResourceCacheBaseT< Image, String, ResourceCacheTraitsT< Image, String > > const &
 		, String const & name
 		, Path const & path
 		, ImageLayout layout
@@ -58,7 +58,7 @@ namespace castor
 	{
 	}
 
-	PixelFormat ResourceCacheT< Image, String, ImageCacheTraits >::getImageFormat( String const & name )
+	PixelFormat ResourceCacheT< Image, String, ImageCacheTraits >::getImageFormat( String const & name )const
 	{
 		if ( auto image = tryFind( name ) )
 		{

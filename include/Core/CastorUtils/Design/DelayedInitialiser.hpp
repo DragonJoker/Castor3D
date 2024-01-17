@@ -21,6 +21,12 @@ namespace castor
 		template< typename RhsT >
 		friend class DelayedInitialiserT;
 
+		DelayedInitialiserT( DelayedInitialiserT const & rhs ) = delete;
+		DelayedInitialiserT & operator=( DelayedInitialiserT const & rhs ) = delete;
+		DelayedInitialiserT( DelayedInitialiserT && rhs )noexcept = default;
+		DelayedInitialiserT & operator=( DelayedInitialiserT && rhs )noexcept = default;
+		~DelayedInitialiserT()noexcept = default;
+
 		explicit DelayedInitialiserT( std::unique_ptr< TypeT > ptr = nullptr )
 			: m_ptr{ std::move( ptr ) }
 		{
@@ -31,14 +37,6 @@ namespace castor
 		{
 			static_assert( std::is_same_v< TypeT, RhsT > || std::is_base_of_v< TypeT, RhsT > );
 			return DelayedInitialiserT{ std::make_unique< RhsT >( std::forward< ParamsT >( params )... ) };
-		}
-
-		DelayedInitialiserT( DelayedInitialiserT const & rhs ) = delete;
-		DelayedInitialiserT & operator=( DelayedInitialiserT const & rhs ) = delete;
-
-		DelayedInitialiserT( DelayedInitialiserT && rhs )
-			: m_ptr{ std::move( rhs.m_ptr ) }
-		{
 		}
 
 		template< typename RhsT >
@@ -120,6 +118,12 @@ namespace castor
 		template< typename RhsT >
 		friend class DelayedInitialiserT;
 
+		DelayedInitialiserT( DelayedInitialiserT const & rhs ) = delete;
+		DelayedInitialiserT & operator=( DelayedInitialiserT const & rhs ) = delete;
+		DelayedInitialiserT( DelayedInitialiserT && rhs )noexcept = default;
+		DelayedInitialiserT & operator=( DelayedInitialiserT && rhs )noexcept = default;
+		~DelayedInitialiserT()noexcept = default;
+
 		explicit DelayedInitialiserT( std::unique_ptr< TypeT > ptr = nullptr )
 			: m_ptr{ std::move( ptr ) }
 		{
@@ -130,17 +134,6 @@ namespace castor
 		{
 			static_assert( std::is_same_v< TypeT, RhsT > || std::is_base_of_v< TypeT, RhsT > );
 			return DelayedInitialiserT{ std::make_unique< RhsT >( std::forward< ParamsT && >( params )... ) };
-		}
-
-		DelayedInitialiserT( DelayedInitialiserT const & rhs ) = delete;
-		DelayedInitialiserT & operator=( DelayedInitialiserT const & rhs ) = delete;
-
-		DelayedInitialiserT( DelayedInitialiserT && rhs )
-			: m_ptr{ std::move( rhs.m_ptr ) }
-			, m_initialised{ rhs.m_initialised.exchange( false ) }
-			, m_initialiseExecuted{ rhs.m_initialiseExecuted.exchange( false ) }
-			, m_initialise{ std::move( rhs.m_initialise ) }
-		{
 		}
 
 		template< typename RhsT >

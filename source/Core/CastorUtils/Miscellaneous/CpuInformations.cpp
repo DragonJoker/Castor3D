@@ -4,16 +4,9 @@
 
 namespace castor
 {
-	namespace Platform
+	namespace cpuinf
 	{
-		void callCpuid( uint32_t func, std::array< int32_t, 4 > & data );
-		uint32_t getCoreCount();
-		std::string getCPUModel();
-	}
-
-	CpuInformations::CpuInformationsInternal::CpuInformationsInternal()
-	{
-		auto makeString = []( int32_t v )
+		static std::string makeString( int32_t v )
 		{
 			std::string result;
 			auto c = char( ( v >> 0 ) & 0xff );
@@ -43,23 +36,33 @@ namespace castor
 
 			return result;
 		};
+	}
 
-		std::vector< std::array< int, 4 > > datas{};
+	namespace platform
+	{
+		void callCpuid( uint32_t func, std::array< int32_t, 4 > & data );
+		uint32_t getCoreCount();
+		std::string getCPUModel();
+	}
+
+	CpuInformations::CpuInformationsInternal::CpuInformationsInternal()
+	{
+		std::vector< std::array< int32_t, 4 > > datas{};
 		std::array< int32_t, 4 > data;
-		Platform::callCpuid( 0u, data );
+		platform::callCpuid( 0u, data );
 		auto ids = data[0];
 
 		for ( int32_t i = 0; i < ids; ++i )
 		{
-			Platform::callCpuid( uint32_t( i ), data );
+			platform::callCpuid( uint32_t( i ), data );
 			datas.push_back( data );
 		}
 
 		if ( !datas.empty() )
 		{
-			m_vendor = makeString( datas[0][1] );
-			m_vendor += makeString( datas[0][3] );
-			m_vendor += makeString( datas[0][2] );
+			m_vendor = cpuinf::makeString( datas[0][1] );
+			m_vendor += cpuinf::makeString( datas[0][3] );
+			m_vendor += cpuinf::makeString( datas[0][2] );
 
 			if ( m_vendor == "GenuineIntel" )
 			{
@@ -85,19 +88,11 @@ namespace castor
 			m_f_7_ECX = uint64_t( datas[7][2] );
 		}
 
-		m_coreCount = Platform::getCoreCount();
-		m_model = Platform::getCPUModel();
+		m_coreCount = platform::getCoreCount();
+		m_model = platform::getCPUModel();
 	}
 
 	CpuInformations::CpuInformationsInternal const CpuInformations::m_internal;
-
-	CpuInformations::CpuInformations()
-	{
-	}
-
-	CpuInformations::~CpuInformations()
-	{
-	}
 
 	std::ostream & operator<<( std::ostream & stream, CpuInformations const & object )
 	{

@@ -16,7 +16,7 @@
 #include <Castor3D/Shader/Shaders/GlslUtils.hpp>
 #include <Castor3D/Shader/Shaders/GlslSurface.hpp>
 
-#include <CastorUtils/FileParser/ParserParameter.hpp>
+#include <CastorUtils/FileParser/FileParser.hpp>
 
 #include <ShaderWriter/Source.hpp>
 

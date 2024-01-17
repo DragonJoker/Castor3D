@@ -28,14 +28,14 @@ namespace castor
 	 *\brief		Fonction de récuperation du nombre de composantes d'un format de pixel.
 	 *\param[in]	format	Le format de pixels
 	 */
-	inline constexpr uint8_t getComponentsCount( PixelFormat format );
+	constexpr uint8_t getComponentsCount( PixelFormat format );
 	/**
 	 *\~english
 	 *\return		\p false if format is depth, stencil or one without alpha.
 	 *\~french
 	 *\return		\p false si le format est depth, stencil ou un format sans alpha.
 	 */
-	inline constexpr bool hasAlpha( PixelFormat format );
+	constexpr bool hasAlpha( PixelFormat format );
 	/**
 	 *\~english
 	 *\param[in]	format		The pixel format.
@@ -46,7 +46,7 @@ namespace castor
 	 *\param[in]	component	La composante de pixels.
 	 *\return		\p true si le format de pixel donné contient la composante de pixel voulue.
 	 */
-	inline constexpr bool hasComponent( PixelFormat format
+	constexpr bool hasComponent( PixelFormat format
 		, PixelComponent component );
 	/**
 	 *\~english
@@ -54,15 +54,15 @@ namespace castor
 	 *\~french
 	 *\return		Le format à composante unique correspondant au format donné.
 	 */
-	inline constexpr PixelFormat getSingleComponent( PixelFormat format );
+	constexpr PixelFormat getSingleComponent( PixelFormat format );
 	/**
 	 *\~english
 	 *\return		\p true if the given pixel format is a int8 one.
 	 *\~french
 	 *\return		\p true si le format donné est un format en int8.
 	 */
-	inline constexpr bool isInt8( PixelFormat format );
-	inline constexpr bool isInt8( VkFormat format )
+	constexpr bool isInt8( PixelFormat format );
+	constexpr bool isInt8( VkFormat format )
 	{
 		return isInt8( PixelFormat( format ) );
 	}
@@ -72,8 +72,8 @@ namespace castor
 	 *\~french
 	 *\return		\p true si le format donné est un format en int16.
 	 */
-	inline constexpr bool isInt16( PixelFormat format );
-	inline constexpr bool isInt16( VkFormat format )
+	constexpr bool isInt16( PixelFormat format );
+	constexpr bool isInt16( VkFormat format )
 	{
 		return isInt16( PixelFormat( format ) );
 	}
@@ -83,8 +83,8 @@ namespace castor
 	 *\~french
 	 *\return		\p true si le format donné est un format en int32.
 	 */
-	inline constexpr bool isInt32( PixelFormat format );
-	inline constexpr bool isInt32( VkFormat format )
+	constexpr bool isInt32( PixelFormat format );
+	constexpr bool isInt32( VkFormat format )
 	{
 		return isInt32( PixelFormat( format ) );
 	}
@@ -94,8 +94,8 @@ namespace castor
 	 *\~french
 	 *\return		\p true si le format donné est un format en nombres flottants.
 	 */
-	inline constexpr bool isFloatingPoint( PixelFormat format );
-	inline constexpr bool isFloatingPoint( VkFormat format )
+	constexpr bool isFloatingPoint( PixelFormat format );
+	constexpr bool isFloatingPoint( VkFormat format )
 	{
 		return isFloatingPoint( PixelFormat( format ) );
 	}
@@ -105,7 +105,7 @@ namespace castor
 	 *\~french
 	 *\return		\p true si le format donné est un format compressé.
 	 */
-	inline constexpr bool isCompressed( PixelFormat format );
+	constexpr bool isCompressed( PixelFormat format );
 	/**
 	 *\~english
 	 *\brief		Tells if the given format is an SRGB one.
@@ -114,77 +114,77 @@ namespace castor
 	 *\brief		Dit si le format donné est un format SRGB.
 	 *\param[in]	format	Le format de pixels
 	 */
-	inline constexpr bool isSRGBFormat( PixelFormat format );
+	constexpr bool isSRGBFormat( PixelFormat format );
 	/**
 	 *\~english
 	 *\return		\p true if format is an RG format.
 	 *\~french
 	 *\return		\p false si le format est en RG.
 	 */
-	inline constexpr bool isRGFormat( PixelFormat format );
+	constexpr bool isRGFormat( PixelFormat format );
 	/**
 	 *\~english
 	 *\return		\p true if format is an RGB format.
 	 *\~french
 	 *\return		\p false si le format est en RGB.
 	 */
-	inline constexpr bool isRGBFormat( PixelFormat format );
+	constexpr bool isRGBFormat( PixelFormat format );
 	/**
 	 *\~english
 	 *\return		\p true if format is an BGR format.
 	 *\~french
 	 *\return		\p false si le format est en BGR.
 	 */
-	inline constexpr bool isBGRFormat( PixelFormat format );
+	constexpr bool isBGRFormat( PixelFormat format );
 	/**
 	 *\~english
 	 *\return		\p true if format is an RGBA format.
 	 *\~french
 	 *\return		\p false si le format est en RGBA.
 	 */
-	inline constexpr bool isRGBAFormat( PixelFormat format );
+	constexpr bool isRGBAFormat( PixelFormat format );
 	/**
 	 *\~english
 	 *\return		\p true if format is an ARGB format.
 	 *\~french
 	 *\return		\p false si le format est en ARGB.
 	 */
-	inline constexpr bool isARGBFormat( PixelFormat format );
+	constexpr bool isARGBFormat( PixelFormat format );
 	/**
 	 *\~english
 	 *\return		\p true if format is an BGRA format.
 	 *\~french
 	 *\return		\p false si le format est en BGRA.
 	 */
-	inline constexpr bool isBGRAFormat( PixelFormat format );
+	constexpr bool isBGRAFormat( PixelFormat format );
 	/**
 	 *\~english
 	 *\return		\p true if format is an ABGR format.
 	 *\~french
 	 *\return		\p false si le format est en ABGR.
 	 */
-	inline constexpr bool isABGRFormat( PixelFormat format );
+	constexpr bool isABGRFormat( PixelFormat format );
 	/**
 	 *\~english
 	 *\return		The SRGB format matching \p format, \p format if not found.
 	 *\~french
 	 *\return		Le format SRGB correspondant à \p format, \p format si non trouvé.
 	 */
-	inline constexpr PixelFormat getSRGBFormat( PixelFormat format );
+	constexpr PixelFormat getSRGBFormat( PixelFormat format );
 	/**
 	 *\~english
 	 *\return		The non SRGB format matching \p format, \p format if not found.
 	 *\~french
 	 *\return		Le format non SRGB correspondant à \p format, \p format si non trouvé.
 	 */
-	inline constexpr PixelFormat getNonSRGBFormat( PixelFormat format );
+	constexpr PixelFormat getNonSRGBFormat( PixelFormat format );
 	/**
 	 *\~english
 	 *\return		\p true if format is a depth and/or stencil format.
 	 *\~french
 	 *\return		\p false si le format est un format depth et/ou stencil.
 	 */
-	inline constexpr bool isDepthOrStencilFormat( PixelFormat format );
+	constexpr bool isDepthOrStencilFormat( PixelFormat format );
 	/**
 	 *\~english
 	 *\brief		Retrieves the pixel format without alpha that is close to the one given
@@ -195,7 +195,7 @@ namespace castor
 	 *\param[in]	format	Le format de pixel
 	 *\return		Le format de pixels donné si non trouvé
 	 */
-	inline constexpr PixelFormat getPFWithoutAlpha( PixelFormat format );
+	constexpr PixelFormat getPFWithoutAlpha( PixelFormat format );
 	/**
 	 *\~english
 	 *\brief		Retrieves the pixel format with alpha that is close to the one given
@@ -206,21 +206,21 @@ namespace castor
 	 *\param[in]	format	Le format de pixel
 	 *\return		Le format de pixels donné si non trouvé
 	 */
-	inline constexpr PixelFormat getPFWithAlpha( PixelFormat format );
+	constexpr PixelFormat getPFWithAlpha( PixelFormat format );
 	/**
 	 *\~english
 	 *\return		The index matching the given PixelComponent.
 	 *\~french
 	 *\return		L'index correspondant au PixelComponent donné.
 	 */
-	inline constexpr uint32_t getComponentIndex( PixelComponent component );
+	constexpr uint32_t getComponentIndex( PixelComponent component );
 	/**
 	 *\~english
 	 *\return		The index matching the given PixelComponent and PixelFormat.
 	 *\~french
 	 *\return		L'index correspondant au PixelComponent et au PixelFormat donnés.
 	 */
-	inline constexpr uint32_t getComponentIndex( PixelComponent component
+	constexpr uint32_t getComponentIndex( PixelComponent component
 		, PixelFormat format );
 	/**
 	 *\~english
@@ -228,7 +228,7 @@ namespace castor
 	 *\~french
 	 *\return		Le PixelComponent correspondant à l'index et au PixelFormat donnés.
 	 */
-	inline constexpr PixelComponent getIndexComponent( uint32_t index
+	constexpr PixelComponent getIndexComponent( uint32_t index
 		, PixelFormat format );
 	/**
 	 *\~english
@@ -236,7 +236,7 @@ namespace castor
 	 *\~french
 	 *\return		Le PixelComponents correspondant au PixelFormat donné.
 	 */
-	inline constexpr castor::PixelComponents getComponents( castor::PixelFormat format );
+	constexpr castor::PixelComponents getComponents( castor::PixelFormat format );
 
 	/**
 	 *\~english
@@ -246,7 +246,7 @@ namespace castor
 	 *\brief		Fonction de récuperation d'un format de pixel par son nom
 	 *\param[in]	formatName	Le nom du format de pixels
 	 */
-	CU_API PixelFormat getFormatByName( String const & formatName );
+	CU_API PixelFormat getFormatByName( StringView formatName );
 	/**
 	 *\~english
 	 *\return		The pixel format matching the given format and components.
@@ -385,7 +385,7 @@ namespace castor
 	 *\param[in]	src	Le tampon de pixels compressé.
 	 *\return		Le tampon de pixels décompressé.
 	 */
-	CU_API PxBufferBaseUPtr decompressBuffer( PxBufferBaseRPtr src );
+	CU_API PxBufferBaseUPtr decompressBuffer( PxBufferBase const & src );
 	/**
 	 *\~english
 	 *\brief		Extracts pixel component values from a source buffer holding alpha and puts it in a destination buffer.

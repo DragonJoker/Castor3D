@@ -17,7 +17,7 @@
 
 #include <CastorUtils/Design/ResourceCache.hpp>
 #include <CastorUtils/FileParser/FileParser.hpp>
-#include <CastorUtils/FileParser/ParserParameter.hpp>
+#include <CastorUtils/FileParser/FileParser.hpp>
 
 CU_ImplementSmartPtr( castor3d, TextureData )
 CU_ImplementSmartPtr( castor3d, TextureUnit )

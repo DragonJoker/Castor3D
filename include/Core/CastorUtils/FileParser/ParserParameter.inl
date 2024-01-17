@@ -10,8 +10,8 @@ namespace castor
 
 	namespace details
 	{
-		static xchar const * const VALUE_SEPARATOR = cuT( "[ \\t]*[ \\t,;][ \\t]*" );
-		static xchar const * const IGNORED_END = cuT( "([^\\r\\n]*)" );
+		static StringView const VALUE_SEPARATOR = cuT( "[ \\t]*[ \\t,;][ \\t]*" );
+		static StringView const IGNORED_END = cuT( "([^\\r\\n]*)" );
 	}
 
 	//*************************************************************************************************
@@ -256,19 +256,73 @@ namespace castor
 			, value.ptr() );
 	}
 
+	inline void parseHexColour( std::ssub_match const & match
+		, uint32_t & colour )
+	{
+		if ( match.matched )
+		{
+			String text = match;
+
+			if ( text.size() == 6 )
+			{
+				text = "FF" + text;
+			}
+
+			InputStringStream stream{ text };
+			stream >> std::hex >> colour;
+		}
+	}
+
+	template< typename ValueT >
+	inline void parseColour( LoggerInstance & logger
+		, String & params
+		, ValueT & value
+		, bool & result )
+	{
+		try
+		{
+			String regexString = RegexFormat< ValueT >::Value;
+			regexString += details::IGNORED_END;
+
+			const Regex regex{ regexString };
+			auto begin = std::begin( params );
+			auto end = std::end( params );
+			const RegexIterator it( begin, end, regex );
+			const RegexIterator endit;
+			result = it != endit && it->size() >= 1;
+
+			if ( result )
+			{
+				uint32_t colour{ 0u };
+
+				for ( size_t i = 0; i < it->size() && colour == 0u; ++i )
+				{
+					parseHexColour( ( *it )[i], colour );
+				}
+
+				value = ValueT::fromARGB( colour );
+			}
+			else
+			{
+				logger.logWarning( makeStringStream() << cuT( "Couldn't parse from " ) << params );
+			}
+		}
+		catch ( std::exception & exc )
+		{
+			logger.logError( makeStringStream() << cuT( "Couldn't parse from " ) << params << cuT( ": " ) << string::stringCast< xchar >( exc.what() ) );
+		}
+	}
+
 	//*************************************************************************************************
 
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		ValueParser specialisation for signed integer types.
 	\~french
 	\brief		Spécialisation de ValueParser pour les type entiers signés.
 	*/
 	template< ParameterType Type >
-	struct ValueParser < Type, typename std::enable_if < ( Type >= ParameterType::eInt8 && Type <= ParameterType::eLongDouble ) >::type >
+	struct ValueParser < Type, std::enable_if_t< ( Type >= ParameterType::eInt8 && Type <= ParameterType::eLongDouble ) > >
 	{
 		using ValueType = typename ParserParameterHelper< Type >::ValueType;
 		/**
@@ -290,16 +344,13 @@ namespace castor
 		}
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		ValueParser specialisation for point types.
 	\~french
 	\brief		Spécialisation de ValueParser pour les type points.
 	*/
 	template< ParameterType Type >
-	struct ValueParser < Type, typename std::enable_if < ( Type >= ParameterType::ePoint2I && Type <= ParameterType::eRectangle && Type != ParameterType::eSize ) >::type >
+	struct ValueParser < Type, std::enable_if_t< ( Type >= ParameterType::ePoint2I && Type <= ParameterType::eRectangle && Type != ParameterType::eSize ) > >
 	{
 		using ValueType = typename ParserParameterHelper< Type >::ValueType;
 		/**
@@ -320,16 +371,13 @@ namespace castor
 		}
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		ValueParser specialisation for ParameterType::eText.
 	\~french
 	\brief		Spécialisation de ValueParser pour ParameterType::eText.
 	*/
 	template< ParameterType Type >
-	struct ValueParser< Type, typename std::enable_if< Type == ParameterType::eText >::type >
+	struct ValueParser< Type, std::enable_if_t< Type == ParameterType::eText > >
 	{
 		using ValueType = typename ParserParameterHelper< Type >::ValueType;
 		/**
@@ -342,26 +390,22 @@ namespace castor
 		 *\param[in]	params	La ligne contenant la valeur.
 		 *\param[out]	value		Reçoit le résultat.
 		 */
-		static inline bool parse( LoggerInstance & CU_UnusedParam( logger )
+		static inline bool parse( CU_UnusedParam( LoggerInstance &, logger )
 			, String & params
 			, ValueType & value )
 		{
 			value = params;
 			params.clear();
 
-			if ( !value.empty() )
+			if ( !value.empty()
+				&& value[0] == cuT( '\"' ) )
 			{
-				if ( value[0] == cuT( '\"' ) )
-				{
-					value = value.substr( 1 );
+				value = value.substr( 1 );
 
-					if ( !value.empty() )
-					{
-						if ( value[value.size() - 1] == cuT( '\"' ) )
-						{
-							value = value.substr( 0, value.size() - 1 );
-						}
-					}
+				if ( !value.empty()
+					&& value[value.size() - 1] == cuT( '\"' ) )
+				{
+					value = value.substr( 0, value.size() - 1 );
 				}
 			}
 
@@ -369,16 +413,13 @@ namespace castor
 		}
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		ValueParser specialisation for ParameterType::ePath.
 	\~french
 	\brief		Spécialisation de ValueParser pour ParameterType::ePath.
 	*/
 	template< ParameterType Type >
-	struct ValueParser< Type, typename std::enable_if< Type == ParameterType::ePath >::type >
+	struct ValueParser< Type, std::enable_if_t< Type == ParameterType::ePath > >
 	{
 		using ValueType = typename ParserParameterHelper< Type >::ValueType;
 		/**
@@ -391,33 +432,30 @@ namespace castor
 		 *\param[in]	params	La ligne contenant la valeur.
 		 *\param[out]	value		Reçoit le résultat.
 		 */
-		static inline bool parse( LoggerInstance & CU_UnusedParam( logger )
+		static inline bool parse( CU_UnusedParam( LoggerInstance &, logger )
 			, String & params
 			, ValueType & value )
 		{
 			value = Path{ params };
 			params.clear();
 
-			if ( !value.empty() )
+			if ( !value.empty()
+				&& value[0] == cuT( '\"' ) )
 			{
-				if ( value[0] == cuT( '\"' ) )
+				value = Path{ value.substr( 1 ) };
+
+				if ( !value.empty() )
 				{
-					value = Path{ value.substr( 1 ) };
-
-					if ( !value.empty() )
+					if ( std::size_t index = value.find( cuT( '\"' ) );
+						index != String::npos )
 					{
-						std::size_t index = value.find( cuT( '\"' ) );
-
-						if ( index != String::npos )
+						if ( index != value.size() - 1 )
 						{
-							if ( index != value.size() - 1 )
-							{
-								params = value.substr( index + 1 );
-								string::trim( params );
-							}
-
-							value = Path{ value.substr( 0, index ) };
+							params = value.substr( index + 1 );
+							string::trim( params );
 						}
+
+						value = Path{ value.substr( 0, index ) };
 					}
 				}
 			}
@@ -426,16 +464,13 @@ namespace castor
 		}
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		ValueParser specialisation for ParameterType::eBool.
 	\~french
 	\brief		Spécialisation de ValueParser pour ParameterType::eBool.
 	*/
 	template< ParameterType Type >
-	struct ValueParser< Type, typename std::enable_if< Type == ParameterType::eBool >::type >
+	struct ValueParser< Type, std::enable_if_t< Type == ParameterType::eBool > >
 	{
 		using ValueType = typename ParserParameterHelper< Type >::ValueType;
 		/**
@@ -448,7 +483,7 @@ namespace castor
 		 *\param[in]	params	La ligne contenant la valeur.
 		 *\param[out]	value		Reçoit le résultat.
 		 */
-		static inline bool parse( LoggerInstance & CU_UnusedParam( logger )
+		static inline bool parse( CU_UnusedParam( LoggerInstance &, logger )
 			, String & params
 			, ValueType & value )
 		{
@@ -471,16 +506,13 @@ namespace castor
 		}
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		ValueParser specialisation for ParameterType::ePixelFormat.
 	\~french
 	\brief		Spécialisation de ValueParser pour ParameterType::ePixelFormat.
 	*/
 	template< ParameterType Type >
-	struct ValueParser< Type, typename std::enable_if< Type == ParameterType::ePixelFormat >::type >
+	struct ValueParser< Type, std::enable_if_t< Type == ParameterType::ePixelFormat > >
 	{
 		using ValueType = typename ParserParameterHelper< Type >::ValueType;
 		/**
@@ -493,7 +525,7 @@ namespace castor
 		 *\param[in]	params	La ligne contenant la valeur.
 		 *\param[out]	value		Reçoit le résultat.
 		 */
-		static inline bool parse( LoggerInstance & CU_UnusedParam( logger )
+		static inline bool parse( CU_UnusedParam( LoggerInstance &, logger )
 			, String & params
 			, ValueType & value )
 		{
@@ -516,16 +548,13 @@ namespace castor
 		}
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		ValueParser specialisation for ParameterType::eSize.
 	\~french
 	\brief		Spécialisation de ValueParser pour ParameterType::eSize.
 	*/
 	template< ParameterType Type >
-	struct ValueParser< Type, typename std::enable_if< Type == ParameterType::eSize >::type >
+	struct ValueParser< Type, std::enable_if_t< Type == ParameterType::eSize > >
 	{
 		using ValueType = typename ParserParameterHelper< Type >::ValueType;
 		/**
@@ -546,11 +575,11 @@ namespace castor
 
 			if ( params == cuT( "screen_size" ) )
 			{
-				result = castor::System::getScreenSize( 0, value );
+				result = castor::system::getScreenSize( 0, value );
 
 				if ( !result )
 				{
-					logger.logError( castor::System::getLastErrorText() );
+					logger.logError( castor::system::getLastErrorText() );
 				}
 			}
 			else
@@ -562,16 +591,13 @@ namespace castor
 		}
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		ValueParser specialisation for ParameterType::eColour.
 	\~french
 	\brief		Spécialisation de ValueParser pour ParameterType::eColour.
 	*/
 	template< ParameterType Type >
-	struct ValueParser< Type, typename std::enable_if< Type == ParameterType::eRgbColour >::type >
+	struct ValueParser< Type, std::enable_if_t< Type == ParameterType::eRgbColour > >
 	{
 		using ValueType = typename ParserParameterHelper< Type >::ValueType;
 		/**
@@ -589,9 +615,9 @@ namespace castor
 			, ValueType & value )
 		{
 			bool result = false;
-			StringArray values = string::split( params, cuT( " \t,;" ), 5, false );
 
-			if ( values.size() >= size_t( RgbComponent::eCount ) )
+			if ( StringArray values = string::split( params, cuT( " \t,;" ), 5, false );
+				values.size() >= size_t( RgbComponent::eCount ) )
 			{
 				Point3f colour;
 				result = parseValues( logger, params, colour );
@@ -606,52 +632,7 @@ namespace castor
 			}
 			else
 			{
-				try
-				{
-					String regexString = RegexFormat< RgbColour >::Value;
-					regexString += details::IGNORED_END;
-
-					const Regex regex{ regexString };
-					auto begin = std::begin( params );
-					auto end = std::end( params );
-					const RegexIterator it( begin, end, regex );
-					const RegexIterator endit;
-					result = it != endit && it->size() >= 1;
-
-					if ( result )
-					{
-						uint32_t colour{ 0u };
-
-						for ( size_t i = 0; i < it->size() && colour == 0u; ++i )
-						{
-							auto match = ( *it )[i];
-
-							if ( match.matched )
-							{
-								String text = match;
-
-								if ( text.size() == 6 )
-								{
-									text = "FF" + text;
-								}
-
-								InputStringStream stream{ text };
-								stream >> std::hex >> colour;
-							}
-						}
-
-						value = RgbColour::fromARGB( colour );
-					}
-					else
-					{
-						logger.logWarning( makeStringStream() << cuT( "Couldn't parse from " ) << params );
-					}
-				}
-				catch ( std::exception & exc )
-				{
-					logger.logError( makeStringStream() << cuT( "Couldn't parse from " ) << params << cuT( ": " ) << string::stringCast< xchar >( exc.what() ) );
-				}
-
+				parseColour( logger, params, value, result );
 				return result;
 			}
 
@@ -659,16 +640,13 @@ namespace castor
 		}
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		ValueParser specialisation for ParameterType::eColour.
 	\~french
 	\brief		Spécialisation de ValueParser pour ParameterType::eColour.
 	*/
 	template< ParameterType Type >
-	struct ValueParser< Type, typename std::enable_if< Type == ParameterType::eRgbaColour >::type >
+	struct ValueParser< Type, std::enable_if_t< Type == ParameterType::eRgbaColour > >
 	{
 		using ValueType = typename ParserParameterHelper< Type >::ValueType;
 		/**
@@ -686,9 +664,9 @@ namespace castor
 			, ValueType & value )
 		{
 			bool result = false;
-			StringArray values = string::split( params, cuT( " \t,;" ), 5, false );
 
-			if ( values.size() >= size_t( RgbaComponent::eCount ) )
+			if ( StringArray values = string::split( params, cuT( " \t,;" ), 5, false );
+				values.size() >= size_t( RgbaComponent::eCount ) )
 			{
 				Point4f colour;
 				result = parseValues( logger, params, colour );
@@ -718,52 +696,7 @@ namespace castor
 			}
 			else
 			{
-				try
-				{
-					String regexString = RegexFormat< RgbaColour >::Value;
-					regexString += details::IGNORED_END;
-
-					const Regex regex{ regexString };
-					auto begin = std::begin( params );
-					auto end = std::end( params );
-					const RegexIterator it( begin, end, regex );
-					const RegexIterator endit;
-					result = it != endit && it->size() >= 1;
-
-					if ( result )
-					{
-						uint32_t colour{ 0u };
-
-						for ( size_t i = 0; i < it->size() && colour == 0u; ++i )
-						{
-							auto match = ( *it )[i];
-
-							if ( match.matched )
-							{
-								String text = match;
-
-								if ( text.size() == 6 )
-								{
-									text = "FF" + text;
-								}
-
-								InputStringStream stream{ text };
-								stream >> std::hex >> colour;
-							}
-						}
-
-						value = RgbaColour::fromARGB( colour );
-					}
-					else
-					{
-						logger.logWarning( makeStringStream() << cuT( "Couldn't parse from " ) << params );
-					}
-				}
-				catch ( std::exception & exc )
-				{
-					logger.logError( makeStringStream() << cuT( "Couldn't parse from " ) << params << cuT( ": " ) << string::stringCast< xchar >( exc.what() ) );
-				}
-
+				parseColour( logger, params, value, result );
 				return result;
 			}
 
@@ -771,16 +704,13 @@ namespace castor
 		}
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		ValueParser specialisation for ParameterType::eColour.
 	\~french
 	\brief		Spécialisation de ValueParser pour ParameterType::eColour.
 	*/
 	template< ParameterType Type >
-	struct ValueParser< Type, typename std::enable_if< Type == ParameterType::eHdrRgbColour >::type >
+	struct ValueParser< Type, std::enable_if_t< Type == ParameterType::eHdrRgbColour > >
 	{
 		using ValueType = typename ParserParameterHelper< Type >::ValueType;
 		/**
@@ -798,9 +728,9 @@ namespace castor
 			, ValueType & value )
 		{
 			bool result = false;
-			StringArray values = string::split( params, cuT( " \t,;" ), 5, false );
 
-			if ( values.size() >= size_t( RgbComponent::eCount ) )
+			if ( StringArray values = string::split( params, cuT( " \t,;" ), 5, false );
+				values.size() >= size_t( RgbComponent::eCount ) )
 			{
 				Point3f colour;
 				result = parseValues( logger, params, colour );
@@ -815,52 +745,7 @@ namespace castor
 			}
 			else
 			{
-				try
-				{
-					String regexString = RegexFormat< HdrRgbColour >::Value;
-					regexString += details::IGNORED_END;
-
-					const Regex regex{ regexString };
-					auto begin = std::begin( params );
-					auto end = std::end( params );
-					const RegexIterator it( begin, end, regex );
-					const RegexIterator endit;
-					result = it != endit && it->size() >= 1;
-
-					if ( result )
-					{
-						uint32_t colour{ 0u };
-
-						for ( size_t i = 0; i < it->size() && colour == 0u; ++i )
-						{
-							auto match = ( *it )[i];
-
-							if ( match.matched )
-							{
-								String text = match;
-
-								if ( text.size() == 6 )
-								{
-									text = "FF" + text;
-								}
-
-								InputStringStream stream{ text };
-								stream >> std::hex >> colour;
-							}
-						}
-
-						value = HdrRgbColour::fromARGB( colour );
-					}
-					else
-					{
-						logger.logWarning( makeStringStream() << cuT( "Couldn't parse from " ) << params );
-					}
-				}
-				catch ( std::exception & exc )
-				{
-					logger.logError( makeStringStream() << cuT( "Couldn't parse from " ) << params << cuT( ": " ) << string::stringCast< xchar >( exc.what() ) );
-				}
-
+				parseColour( logger, params, value, result );
 				return result;
 			}
 
@@ -868,16 +753,13 @@ namespace castor
 		}
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		ValueParser specialisation for ParameterType::eColour.
 	\~french
 	\brief		Spécialisation de ValueParser pour ParameterType::eColour.
 	*/
 	template< ParameterType Type >
-	struct ValueParser< Type, typename std::enable_if< Type == ParameterType::eHdrRgbaColour >::type >
+	struct ValueParser< Type, std::enable_if_t< Type == ParameterType::eHdrRgbaColour > >
 	{
 		using ValueType = typename ParserParameterHelper< Type >::ValueType;
 		/**
@@ -895,9 +777,9 @@ namespace castor
 			, ValueType & value )
 		{
 			bool result = false;
-			StringArray values = string::split( params, cuT( " \t,;" ), 5, false );
 
-			if ( values.size() >= size_t( RgbaComponent::eCount ) )
+			if ( StringArray values = string::split( params, cuT( " \t,;" ), 5, false );
+				values.size() >= size_t( RgbaComponent::eCount ) )
 			{
 				Point4f colour;
 				result = parseValues( logger, params, colour );
@@ -927,52 +809,7 @@ namespace castor
 			}
 			else
 			{
-				try
-				{
-					String regexString = RegexFormat< HdrRgbaColour >::Value;
-					regexString += details::IGNORED_END;
-
-					const Regex regex{ regexString };
-					auto begin = std::begin( params );
-					auto end = std::end( params );
-					const RegexIterator it( begin, end, regex );
-					const RegexIterator endit;
-					result = it != endit && it->size() >= 1;
-
-					if ( result )
-					{
-						uint32_t colour{ 0u };
-
-						for ( size_t i = 0; i < it->size() && colour == 0u; ++i )
-						{
-							auto match = ( *it )[i];
-
-							if ( match.matched )
-							{
-								String text = match;
-
-								if ( text.size() == 6 )
-								{
-									text = "FF" + text;
-								}
-
-								InputStringStream stream{ text };
-								stream >> std::hex >> colour;
-							}
-						}
-
-						value = HdrRgbaColour::fromARGB( colour );
-					}
-					else
-					{
-						logger.logWarning( makeStringStream() << cuT( "Couldn't parse from " ) << params );
-					}
-				}
-				catch ( std::exception & exc )
-				{
-					logger.logError( makeStringStream() << cuT( "Couldn't parse from " ) << params << cuT( ": " ) << string::stringCast< xchar >( exc.what() ) );
-				}
-
+				parseColour( logger, params, value, result );
 				return result;
 			}
 
@@ -989,7 +826,7 @@ namespace castor
 
 	inline ParameterType ParserParameter< ParameterType::eName >::getType()const
 	{
-		return ParserParameterHelper< ParameterType::eName >::ParamType;
+		return ParserParameterParamType< ParameterType::eName >;
 	}
 
 	inline ParameterType ParserParameter< ParameterType::eName >::getBaseType()const
@@ -997,7 +834,7 @@ namespace castor
 		return ParserParameterHelper< ParameterType::eName >::ParameterBaseType;
 	}
 
-	inline xchar const * ParserParameter< ParameterType::eName >::getStrType()const
+	inline StringView ParserParameter< ParameterType::eName >::getStrType()const
 	{
 		return ParserParameterHelper< ParameterType::eName >::StringType;
 	}
@@ -1007,7 +844,7 @@ namespace castor
 		return std::make_shared< ParserParameter< ParameterType::eName > >( *this );
 	}
 
-	inline bool ParserParameter< ParameterType::eName >::parse( LoggerInstance & CU_UnusedParam( logger )
+	inline bool ParserParameter< ParameterType::eName >::parse( CU_UnusedParam( LoggerInstance &, logger )
 		, String & params )
 	{
 		Regex regex{ cuT( "[^\"]*\"([^\"]*)\"" ) + String{ details::IGNORED_END } };
@@ -1029,7 +866,7 @@ namespace castor
 	//*************************************************************************************************
 
 	inline ParserParameter< ParameterType::eCheckedText >::ParserParameter( UInt32StrMap const & values
-		, xchar const * name )
+		, StringView name )
 		: ParserParameter< ParameterType::eUInt32 >()
 		, m_name( name )
 		, m_values( values )
@@ -1038,7 +875,7 @@ namespace castor
 
 	inline ParameterType ParserParameter< ParameterType::eCheckedText >::getType()const
 	{
-		return ParserParameterHelper< ParameterType::eCheckedText >::ParamType;
+		return ParserParameterParamType< ParameterType::eCheckedText >;
 	}
 
 	inline ParameterType ParserParameter< ParameterType::eCheckedText >::getBaseType()const
@@ -1046,7 +883,7 @@ namespace castor
 		return ParserParameterHelper< ParameterType::eCheckedText >::ParameterBaseType;
 	}
 
-	inline xchar const * ParserParameter< ParameterType::eCheckedText >::getStrType()const
+	inline StringView ParserParameter< ParameterType::eCheckedText >::getStrType()const
 	{
 		return m_name;
 	}
@@ -1056,7 +893,7 @@ namespace castor
 		return std::make_shared< ParserParameter< ParameterType::eCheckedText > >( *this );
 	}
 
-	inline bool ParserParameter< ParameterType::eCheckedText >::parse( LoggerInstance & CU_UnusedParam( logger )
+	inline bool ParserParameter< ParameterType::eCheckedText >::parse( CU_UnusedParam( LoggerInstance &, logger )
 		, String & params )
 	{
 		bool result = false;
@@ -1086,7 +923,7 @@ namespace castor
 	//*************************************************************************************************
 
 	inline ParserParameter< ParameterType::eBitwiseOred32BitsCheckedText >::ParserParameter( UInt32StrMap const & values
-		, xchar const * name )
+		, StringView name )
 		: ParserParameter< ParameterType::eUInt32 >()
 		, m_name( name )
 		, m_values( values )
@@ -1095,7 +932,7 @@ namespace castor
 
 	inline ParameterType ParserParameter< ParameterType::eBitwiseOred32BitsCheckedText >::getType()const
 	{
-		return ParserParameterHelper< ParameterType::eBitwiseOred32BitsCheckedText >::ParamType;
+		return ParserParameterParamType< ParameterType::eBitwiseOred32BitsCheckedText >;
 	}
 
 	inline ParameterType ParserParameter< ParameterType::eBitwiseOred32BitsCheckedText >::getBaseType()const
@@ -1103,7 +940,7 @@ namespace castor
 		return ParserParameterHelper< ParameterType::eBitwiseOred32BitsCheckedText >::ParameterBaseType;
 	}
 
-	inline xchar const * ParserParameter< ParameterType::eBitwiseOred32BitsCheckedText >::getStrType()const
+	inline StringView ParserParameter< ParameterType::eBitwiseOred32BitsCheckedText >::getStrType()const
 	{
 		return m_name;
 	}
@@ -1113,7 +950,7 @@ namespace castor
 		return std::make_shared< ParserParameter< ParameterType::eBitwiseOred32BitsCheckedText > >( *this );
 	}
 
-	inline bool ParserParameter< ParameterType::eBitwiseOred32BitsCheckedText >::parse( LoggerInstance & CU_UnusedParam( logger )
+	inline bool ParserParameter< ParameterType::eBitwiseOred32BitsCheckedText >::parse( CU_UnusedParam( LoggerInstance &, logger )
 		, String & params )
 	{
 		static uint32_t constexpr Infinite = ~( 0u );
@@ -1167,7 +1004,7 @@ namespace castor
 	//*************************************************************************************************
 
 	inline ParserParameter< ParameterType::eBitwiseOred64BitsCheckedText >::ParserParameter( UInt64StrMap const & values
-		, xchar const * name )
+		, StringView name )
 		: ParserParameter< ParameterType::eUInt64 >()
 		, m_name( name )
 		, m_values( values )
@@ -1176,7 +1013,7 @@ namespace castor
 
 	inline ParameterType ParserParameter< ParameterType::eBitwiseOred64BitsCheckedText >::getType()const
 	{
-		return ParserParameterHelper< ParameterType::eBitwiseOred64BitsCheckedText >::ParamType;
+		return ParserParameterParamType< ParameterType::eBitwiseOred64BitsCheckedText >;
 	}
 
 	inline ParameterType ParserParameter< ParameterType::eBitwiseOred64BitsCheckedText >::getBaseType()const
@@ -1184,7 +1021,7 @@ namespace castor
 		return ParserParameterHelper< ParameterType::eBitwiseOred64BitsCheckedText >::ParameterBaseType;
 	}
 
-	inline xchar const * ParserParameter< ParameterType::eBitwiseOred64BitsCheckedText >::getStrType()const
+	inline StringView ParserParameter< ParameterType::eBitwiseOred64BitsCheckedText >::getStrType()const
 	{
 		return m_name;
 	}
@@ -1194,7 +1031,7 @@ namespace castor
 		return std::make_shared< ParserParameter< ParameterType::eBitwiseOred64BitsCheckedText > >( *this );
 	}
 
-	inline bool ParserParameter< ParameterType::eBitwiseOred64BitsCheckedText >::parse( LoggerInstance & CU_UnusedParam( logger )
+	inline bool ParserParameter< ParameterType::eBitwiseOred64BitsCheckedText >::parse( CU_UnusedParam( LoggerInstance &, logger )
 		, String & params )
 	{
 		static uint32_t constexpr Infinite = ~( 0u );

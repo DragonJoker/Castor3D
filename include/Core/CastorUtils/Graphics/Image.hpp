@@ -47,8 +47,8 @@ namespace castor
 			, ImageLayout layout
 			, PxBufferBaseUPtr buffer = nullptr );
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		Image( String const & name
-			, Path const & path
+		Image( String name
+			, Path path
 			, Size const & size
 			, uint8_t const * buffer = nullptr )
 			: Named{ std::move( name ) }
@@ -85,20 +85,21 @@ namespace castor
 		Image( String const & name
 			, ImageLayout layout
 			, PxBufferBaseUPtr buffer )
-			: Image{ name, {}, layout, std::move( buffer ) }
+			: Image{ name, {}, std::move( layout ), std::move( buffer ) }
 		{
 		}
 
-		CU_API virtual ~Image() = default;
+		// Virtual dtor to enable use as ResourceT
+		CU_API virtual ~Image()noexcept = default;
 		//@}
 		/**
 		 *\name		Copy/Move.
 		 */
 		//@{
 		CU_API Image( Image const & image );
-		CU_API Image( Image && image ) = default;
+		CU_API Image( Image && image )noexcept = default;
 		CU_API Image & operator=( Image const & image );
-		CU_API Image & operator=( Image && image ) = default;
+		CU_API Image & operator=( Image && image )noexcept = default;
 		//@}
 		/**
 		 *\name		Modification.
@@ -248,32 +249,32 @@ namespace castor
 		*	Accesseurs.
 		*/
 		/**@{*/
-		uint32_t getLevels()const
+		uint32_t getLevels()const noexcept
 		{
 			return m_layout.levels;
 		}
 		
-		Size getDimensions()const
+		Size getDimensions()const noexcept
 		{
 			return m_layout.dimensions();
 		}
 
-		std::size_t getSize( uint32_t level = 0u )const
+		std::size_t getSize( uint32_t level = 0u )const noexcept
 		{
 			return size_t( m_layout.layerMipSize( level ) );
 		}
 
-		uint32_t getWidth()const
+		uint32_t getWidth()const noexcept
 		{
 			return getDimensions().getWidth();
 		}
 
-		uint32_t getHeight()const
+		uint32_t getHeight()const noexcept
 		{
 			return getDimensions().getHeight();
 		}
 
-		Path getPath()const
+		Path getPath()const noexcept
 		{
 			return m_pathFile;
 		}
@@ -320,48 +321,48 @@ namespace castor
 			return getLayerMipBuffer( m_layout, buffer, index, level );
 		}
 
-		bool hasBuffer()const
+		bool hasBuffer()const noexcept
 		{
 			return m_buffer != nullptr;
 		}
 
-		PxBufferBase const & getPxBuffer()const
+		PxBufferBase const & getPxBuffer()const noexcept
 		{
 			CU_Require( hasBuffer() );
 			return *m_buffer;
 		}
 
-		PxBufferBase & getPxBuffer()
+		PxBufferBase & getPxBuffer()noexcept
 		{
 			CU_Require( hasBuffer() );
 			return *m_buffer;
 		}
 
-		PxBufferBaseRPtr getPixels()const
+		PxBufferBaseRPtr getPixels()const noexcept
 		{
 			return m_buffer.get();
 		}
 
-		ImageLayout const & getLayout()const
+		ImageLayout const & getLayout()const noexcept
 		{
 			return m_layout;
 		}
 
-		ImageLayout & getLayout()
+		ImageLayout & getLayout()noexcept
 		{
 			return m_layout;
 		}
 
-		PixelFormat getPixelFormat()const
+		PixelFormat getPixelFormat()const noexcept
 		{
 			return m_layout.format;
 		}
 
-		void initialise()
+		void initialise()const noexcept
 		{
 		}
 
-		void cleanup()
+		void cleanup()const noexcept
 		{
 		}
 		/**@}*/

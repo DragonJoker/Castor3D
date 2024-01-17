@@ -21,14 +21,14 @@ namespace castor
 			, std::function< void() > callback = {} )noexcept
 			: m_value{}
 			, m_dirty{ dirty }
-			, m_callback{ callback }
+			, m_callback{ std::move( callback ) }
 		{
 		}
 
 		GroupChangeTrackedT( GroupChangeTrackedT && rhs )noexcept
 			: m_value{ std::move( rhs.m_value ) }
 			, m_dirty{ rhs.m_dirty }
-			, m_callback{ rhs.m_callback }
+			, m_callback{ std::move( rhs.m_callback ) }
 		{
 		}
 
@@ -44,11 +44,11 @@ namespace castor
 			, std::function< void() > callback = {} )noexcept
 			: m_value{ std::move( rhs ) }
 			, m_dirty{ dirty }
-			, m_callback{ callback }
+			, m_callback{ std::move( callback ) }
 		{
 		}
 
-		~GroupChangeTrackedT() = default;
+		~GroupChangeTrackedT()noexcept = default;
 
 		GroupChangeTrackedT & operator=( ValueT const & rhs )noexcept
 		{
@@ -136,7 +136,7 @@ namespace castor
 
 	private:
 		void doCopy( std::atomic_bool & lhs
-			, std::atomic_bool const & rhs )
+			, std::atomic_bool const & rhs )const
 		{
 			lhs = rhs.load();
 
@@ -147,7 +147,7 @@ namespace castor
 		}
 
 		void doCopy( bool & lhs
-			, bool const & rhs )
+			, bool const & rhs )const
 		{
 			lhs = rhs;
 

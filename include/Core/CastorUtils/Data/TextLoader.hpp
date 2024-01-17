@@ -32,7 +32,7 @@ namespace castor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~TextLoaderT() = default;
+		virtual ~TextLoaderT()noexcept = default;
 	};
 }
 

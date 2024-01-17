@@ -9,7 +9,7 @@
 #include <Castor3D/Shader/Shaders/GlslBlendComponents.hpp>
 #include <Castor3D/Shader/Shaders/GlslMaterial.hpp>
 
-#include <CastorUtils/FileParser/ParserParameter.hpp>
+#include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Data/Text/TextPoint.hpp>
 #include <CastorUtils/Data/Text/TextRgbColour.hpp>
 #include <CastorUtils/Data/Text/TextRgbaColour.hpp>

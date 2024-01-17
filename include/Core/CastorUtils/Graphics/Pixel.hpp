@@ -64,7 +64,7 @@ namespace castor
 		 *\brief		Constructeur par déplacement
 		 *\param[in]	pxl	L'objet Pixel à déplacer
 		 */
-		Pixel( Pixel && pxl );
+		Pixel( Pixel && pxl )noexcept;
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -93,7 +93,7 @@ namespace castor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~Pixel();
+		~Pixel()noexcept;
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator
@@ -104,7 +104,7 @@ namespace castor
 		 *\param[in]	pxl	L'objet Pixel à copier
 		 *\return		Une référence sur cet objet Pixel
 		 */
-		Pixel & operator=( Pixel && pxl );
+		Pixel & operator=( Pixel && pxl )noexcept;
 		/**
 		 *\~english
 		 *\brief		Move assignment operator
@@ -156,7 +156,7 @@ namespace castor
 		 *\~french
 		 *\brief		Désalloue les composantes de ce pixel
 		 */
-		void clear();
+		void clear()noexcept;
 		/**
 		 *\~english
 		 *\brief		Links the data pointer to the one given in parameter
@@ -165,7 +165,7 @@ namespace castor
 		 *\brief		Lie les données de ce pixel à celles données en paramètre
 		 *\remarks		Le pixel perd la responsabilité de ses données
 		 */
-		void link( uint8_t * components );
+		void link( uint8_t * components )noexcept;
 		/**
 		 *\~english
 		 *\brief		Unlinks the data pointer from the ones previously given
@@ -174,7 +174,7 @@ namespace castor
 		 *\brief		Délie les données de ce pixel de celles données précédemment
 		 *\remarks		Le pixel regagne la responsabilité de ses données
 		 */
-		void unlink();
+		void unlink()noexcept;
 		/**
 		 *\~english
 		 *\brief		Converts given data and copies it into this pixel's components

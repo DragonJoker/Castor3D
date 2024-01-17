@@ -32,7 +32,7 @@ namespace castor
 	struct CVTTOptions
 	{
 		CU_API CVTTOptions();
-		CU_API ~CVTTOptions();
+		CU_API ~CVTTOptions()noexcept;
 
 		cvtt::Options options;
 		cvtt::ETC2CompressionData * etc2CompressionData;
@@ -100,7 +100,7 @@ namespace castor
 
 		void compress( PixelFormat dstFormat
 			, Size const & srcDimensions
-			, Size const & CU_UnusedParam( dstDimensions )
+			, CU_UnusedParam( Size const &, dstDimensions )
 			, uint8_t const * srcBuffer
 			, uint32_t srcSize
 			, uint8_t * dstBuffer
@@ -143,7 +143,7 @@ namespace castor
 
 		void compress( PixelFormat dstFormat
 			, Size const & srcDimensions
-			, Size const & CU_UnusedParam( dstDimensions )
+			, CU_UnusedParam( Size const &, dstDimensions )
 			, uint8_t const * srcBuffer
 			, uint32_t srcSize
 			, uint8_t * dstBuffer
@@ -186,7 +186,7 @@ namespace castor
 
 		void compress( PixelFormat dstFormat
 			, Size const & srcDimensions
-			, Size const & CU_UnusedParam( dstDimensions )
+			, CU_UnusedParam( Size const &, dstDimensions )
 			, uint8_t const * srcBuffer
 			, uint32_t srcSize
 			, uint8_t * dstBuffer

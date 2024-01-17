@@ -9,21 +9,24 @@ See LICENSE file in root folder
 
 namespace castor
 {
+	union RectangleData
+	{
+		struct Mbr
+		{
+			int32_t left;
+			int32_t top;
+			int32_t right;
+			int32_t bottom;
+		};
+		Mbr rect;
+		std::array< int32_t, 4u > buffer;
+	};
+
 	class Rectangle
-		: public Coords4i
+		: private DataHolderT< RectangleData >
+		, public Coords4i
 	{
 	private:
-		union
-		{
-			struct
-			{
-				int32_t left;
-				int32_t top;
-				int32_t right;
-				int32_t bottom;
-			} rect;
-			int32_t buffer[4];
-		}	m_data;
 
 	public :
 		/**
@@ -48,24 +51,6 @@ namespace castor
 		 *\param[in]	right, bottom	Point bas droit
 		 */
 		CU_API Rectangle( int32_t left, int32_t top, int32_t right, int32_t bottom );
-		/**
-		 *\~english
-		 *\brief		Copy constructor
-		 *\param[in]	rhs	The other object
-		 *\~french
-		 *\brief		Constructeur par copie
-		 *\param[in]	rhs	l'autre object
-		 */
-		CU_API Rectangle( Rectangle const & rhs );
-		/**
-		 *\~english
-		 *\brief		Copy assignment operator
-		 *\param[in]	rhs	The other object
-		 *\~french
-		 *\brief		Opérateur d'affectation par copie
-		 *\param[in]	rhs	l'autre object
-		 */
-		CU_API Rectangle & operator=( Rectangle const & rhs );
 		/**
 		 *\~english
 		 *\brief		Test if the givent point is onto or into this rectangle
@@ -116,9 +101,9 @@ namespace castor
 		 *\brief		Récupère la coordonnée gauche
 		 *\return		La coordonnée gauche du rectangle
 		 */
-		inline int left()const
+		int left()const
 		{
-			return m_data.rect.left;
+			return getData().rect.left;
 		}
 		/**
 		 *\~english
@@ -128,9 +113,9 @@ namespace castor
 		 *\brief		Récupère la coordonnée gauche
 		 *\return		La coordonnée gauche du rectangle
 		 */
-		inline int & left()
+		int & left()
 		{
-			return m_data.rect.left;
+			return getData().rect.left;
 		}
 		/**
 		 *\~english
@@ -140,9 +125,9 @@ namespace castor
 		 *\brief		Récupère la coordonnée droite
 		 *\return		La coordonnée droite du rectangle
 		 */
-		inline int right()const
+		int right()const
 		{
-			return m_data.rect.right;
+			return getData().rect.right;
 		}
 		/**
 		 *\~english
@@ -152,9 +137,9 @@ namespace castor
 		 *\brief		Récupère la coordonnée droite
 		 *\return		La coordonnée droite du rectangle
 		 */
-		inline int & right()
+		int & right()
 		{
-			return m_data.rect.right;
+			return getData().rect.right;
 		}
 		/**
 		 *\~english
@@ -164,9 +149,9 @@ namespace castor
 		 *\brief		Récupère la coordonnée haute
 		 *\return		La coordonnée haute du rectangle
 		 */
-		inline int top()const
+		int top()const
 		{
-			return m_data.rect.top;
+			return getData().rect.top;
 		}
 		/**
 		 *\~english
@@ -176,9 +161,9 @@ namespace castor
 		 *\brief		Récupère la coordonnée haute
 		 *\return		La coordonnée haute du rectangle
 		 */
-		inline int & top()
+		int & top()
 		{
-			return m_data.rect.top;
+			return getData().rect.top;
 		}
 		/**
 		 *\~english
@@ -188,9 +173,9 @@ namespace castor
 		 *\brief		Récupère la coordonnée basse
 		 *\return		La coordonnée basse du rectangle
 		 */
-		inline int bottom()const
+		int bottom()const
 		{
-			return m_data.rect.bottom;
+			return getData().rect.bottom;
 		}
 		/**
 		 *\~english
@@ -200,9 +185,9 @@ namespace castor
 		 *\brief		Récupère la coordonnée basse
 		 *\return		La coordonnée basse du rectangle
 		 */
-		inline int & bottom()
+		int & bottom()
 		{
-			return m_data.rect.bottom;
+			return getData().rect.bottom;
 		}
 		/**
 		 *\~english
@@ -212,9 +197,9 @@ namespace castor
 		 *\brief		Récupère la largeur
 		 *\return		La largeur du rectangle
 		 */
-		inline int getWidth()const
+		int getWidth()const
 		{
-			return m_data.rect.right - m_data.rect.left;
+			return getData().rect.right - getData().rect.left;
 		}
 		/**
 		 *\~english
@@ -224,9 +209,9 @@ namespace castor
 		 *\brief		Récupère la hauteur
 		 *\return		La hauteur du rectangle
 		 */
-		inline int getHeight()const
+		int getHeight()const
 		{
-			return m_data.rect.bottom - m_data.rect.top;
+			return getData().rect.bottom - getData().rect.top;
 		}
 	};
 }

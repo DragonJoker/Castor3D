@@ -34,7 +34,7 @@ namespace castor
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			CU_API BinaryLoader();
+			CU_API BinaryLoader() = default;
 			/**
 			 *\~english
 			 *\brief			Loads a font
@@ -56,12 +56,9 @@ namespace castor
 		private:
 			//!\~english	Font wanted height.
 			//!\~french		Hauteur voulue pour la police
-			uint32_t m_height;
+			uint32_t m_height{};
 		};
 		/**
-		\author		Sylvain DOREMUS
-		\version	0.6.1.0
-		\date		17/01/2011
 		\~english
 		\brief		Structure used to load glyphs on demand
 		\remark		PImpl to hide FreeType inclusions
@@ -70,8 +67,9 @@ namespace castor
 		\remark		PImpl pour cacher les inclusions de FreeType
 		*/
 		struct SFontImpl
+			: public NonMovable
 		{
-			virtual ~SFontImpl() = default;
+			virtual ~SFontImpl()noexcept = default;
 			/**
 			 *\~english
 			 *\brief		Initialises the loader
@@ -129,10 +127,12 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Destructor
+		 *\remarks		Virtual to enable use as ResourceT.
 		 *\~french
 		 *\brief		Destructeur
+		 *\remarks		Virtual pour permettre l'utilisation en tant que ResourceT.
 		 */
-		CU_API virtual ~Font() = default;
+		CU_API virtual ~Font()noexcept = default;
 		/**
 		 *\~english
 		 *\brief		Loads wanted glyph.
@@ -156,7 +156,7 @@ namespace castor
 		 */
 		CU_API TextMetrics getTextMetrics( std::u32string const & v
 			, uint32_t maxWidth
-			, bool splitLines );
+			, bool splitLines )const;
 		/**
 		 *\~english
 		 *\brief		Tells if the font already has load ed the wanted glyph.
@@ -439,11 +439,11 @@ namespace castor
 			return m_pathFile;
 		}
 
-		void initialise()
+		void initialise()const noexcept
 		{
 		}
 
-		void cleanup()
+		void cleanup()const noexcept
 		{
 		}
 
@@ -473,25 +473,25 @@ namespace castor
 	private:
 		//!\~english	The height of the font.
 		//!\~french		La hauteur de la police.
-		uint32_t m_height;
+		uint32_t m_height{};
 		//!\~english	The path of the font file.
 		//!\~french		Le chemin du fichier de la police.
-		Path m_pathFile;
+		Path m_pathFile{};
 		//!\~english	The array of loaded glyphs.
 		//!\~french		Le tableau de glyphes chargées.
-		GlyphArray m_loadedGlyphs;
+		GlyphArray m_loadedGlyphs{};
 		//!\~english	The max size of the glyphs.
 		//!\~french		La dimension maximale des glyphes.
-		castor::Point2i m_maxSize;
+		castor::Point2i m_maxSize{};
 		//!\~english	The max bearing range of the glyphs.
 		//!\~french		L'intervalle maximal de bearing des glyphes.
-		castor::Point2i m_maxRange;
+		castor::Point2i m_maxRange{ 100, 0 };
 		//!\~english	The font face name.
 		//!\~french		Le nom de la police.
-		String m_faceName;
+		String m_faceName{};
 		//!\~english	The glyph loader.
 		//!\~french		Le chargeur de glyphes.
-		std::unique_ptr< SFontImpl > m_glyphLoader;
+		std::unique_ptr< SFontImpl > m_glyphLoader{};
 		bool m_serialisable{ true };
 	};
 }

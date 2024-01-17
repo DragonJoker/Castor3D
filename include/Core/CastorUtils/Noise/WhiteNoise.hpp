@@ -21,6 +21,7 @@ namespace castor
 			uint8_t B;
 			uint8_t A;
 		};
+		using ColorPtr = Color *;
 
 	public:
 		static PxBufferBaseUPtr generate( uint32_t imgSize )
@@ -29,7 +30,7 @@ namespace castor
 
 			auto buffer = PxBufferBase::create( Size{ imgSize, imgSize }
 				, PixelFormat::eR8G8B8A8_UNORM );
-			uint32_t bpp = getBytesPerPixel( buffer->getFormat() );
+			auto bpp = uint32_t( getBytesPerPixel( buffer->getFormat() ) );
 			auto pitch = imgSize * bpp;
 
 			// init random number generator
@@ -42,7 +43,7 @@ namespace castor
 				uint32_t x = dist( rng );
 				uint32_t y = dist( rng );
 
-				Color * pixel = ( Color * )&buffer->getPtr()[y * pitch + x * bpp];
+				auto pixel = ColorPtr( &buffer->getPtr()[y * pitch + x * bpp] );
 				pixel->R = 255;
 				pixel->G = 255;
 				pixel->B = 255;

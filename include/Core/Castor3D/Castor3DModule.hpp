@@ -48,7 +48,7 @@ namespace castor3d
 	static uint32_t constexpr InvalidIndex = ~( 0u );
 	static VkColorComponentFlags const defaultColorWriteMask{ VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT };
 
-	using ast::StringHash;
+	using castor::StringHash;
 
 	using castor::xchar;
 	using castor::ychar;

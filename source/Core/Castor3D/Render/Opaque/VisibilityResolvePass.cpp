@@ -145,17 +145,17 @@ namespace castor3d
 				, bool isDeferredLighting
 				, bool outputScattering
 				, uint32_t stride
-				, sdw::RUImage2DRg32 c3d_imgData
-				, sdw::RWImage2DRgba32 c3d_imgDiffuse
-				, sdw::UInt pipelineId
-				, sdw::UInt billboardNodeId
+				, sdw::RUImage2DRg32 const & c3d_imgData
+				, sdw::RWImage2DRgba32 const & c3d_imgDiffuse
+				, sdw::UInt const &
+				, sdw::UInt const & billboardNodeId
 				, ShadeFunc const & shade )
 			{
 				uint32_t idx = 0u;
-				auto c3d_imgOutResult = writer.declOutput< sdw::Vec4 >( "c3d_imgOutResult", sdw::EntryPoint::eFragment, idx++ );
-				auto c3d_imgOutScattering = writer.declOutput< sdw::Vec4 >( "c3d_imgOutScattering", sdw::EntryPoint::eFragment, idx++, outputScattering );
+				auto c3d_imgOutResult = writer.declOutput< sdw::Vec4 >( "c3d_imgOutResult", sdw::EntryPoint::eFragment, idx ); ++idx;
+				auto c3d_imgOutScattering = writer.declOutput< sdw::Vec4 >( "c3d_imgOutScattering", sdw::EntryPoint::eFragment, idx, outputScattering ); ++idx;
 
-				writer.implementEntryPoint( [&]( sdw::VertexIn in
+				writer.implementEntryPoint( [&]( sdw::VertexIn const & in
 					, sdw::VertexOut out )
 					{
 						auto position = writer.declLocale( "position"
@@ -163,8 +163,8 @@ namespace castor3d
 						out.vtx.position = vec4( position * 2.0_f - 1.0_f, 0.0_f, 1.0_f );
 					} );
 
-				writer.implementEntryPoint( [&]( sdw::FragmentIn in
-					, sdw::FragmentOut out )
+				writer.implementEntryPoint( [&]( sdw::FragmentIn const & in
+					, sdw::FragmentOut )
 					{
 						auto pos = ivec2( in.fragCoord.xy() );
 						auto indata = writer.declLocale( "indata"
@@ -216,10 +216,10 @@ namespace castor3d
 				, bool isDeferredLighting
 				, bool outputScattering
 				, uint32_t stride
-				, sdw::RUImage2DRg32 c3d_imgData
-				, sdw::RWImage2DRgba32 c3d_imgDiffuse
-				, sdw::UInt pipelineId
-				, sdw::UInt billboardNodeId
+				, sdw::RUImage2DRg32 const & c3d_imgData
+				, sdw::RWImage2DRgba32 const & c3d_imgDiffuse
+				, sdw::UInt const & pipelineId
+				, sdw::UInt const & billboardNodeId
 				, ShadeFunc const & shade )
 			{
 				auto MaterialsCounts = writer.declStorageBuffer<>( "MaterialsCounts", InOutBindings::eMaterialsCounts, Sets::eInOuts );
@@ -238,7 +238,7 @@ namespace castor3d
 				auto c3d_imgOutScattering = writer.declStorageImg< sdw::WImage2DRgba32 >( "c3d_imgOutScattering", uint32_t( InOutBindings::eOutScattering ), Sets::eInOuts, outputScattering );
 
 				writer.implementMainT< sdw::VoidT >( sdw::ComputeIn{ writer, 16u, 4u, 1u }
-					, [&]( sdw::ComputeIn in )
+					, [&]( sdw::ComputeIn const & in )
 					{
 						auto pos = in.globalInvocationID.xy();
 						auto index = pos.y() * ( in.numWorkGroups.x() * in.workGroupSize.x() ) + pos.x();
@@ -317,7 +317,7 @@ namespace castor3d
 
 			sdw::Vec3 interpolate( sdw::Vec3 const & v0
 				, sdw::Vec3 const & v1
-				, sdw::Vec3 const & v2 )
+				, sdw::Vec3 const & v2 )const
 			{
 				return vec3( interpolate( vec3( v0.x(), v1.x(), v2.x() ) )
 					, interpolate( vec3( v0.y(), v1.y(), v2.y() ) )
@@ -326,7 +326,7 @@ namespace castor3d
 
 			sdw::Vec4 interpolate( sdw::Vec4 const & v0
 				, sdw::Vec4 const & v1
-				, sdw::Vec4 const & v2 )
+				, sdw::Vec4 const & v2 )const
 			{
 				return vec4( interpolate( vec3( v0.x(), v1.x(), v2.x() ) )
 					, interpolate( vec3( v0.y(), v1.y(), v2.y() ) )
@@ -349,7 +349,7 @@ namespace castor3d
 				{
 					auto & writer = *getWriter();
 					m_computeGradient = writer.implementFunction< shader::DerivTex >( "computeGradient"
-						, [&]( BarycentricFullDerivatives const & derivatives
+						, [&writer]( BarycentricFullDerivatives const & derivatives
 							, sdw::Vec2 const & v0tex
 							, sdw::Vec2 const & v1tex
 							, sdw::Vec2 const & v2tex )
@@ -459,7 +459,7 @@ namespace castor3d
 				if ( !m_calcFullBarycentric )
 				{
 					m_calcFullBarycentric = m_writer.implementFunction< BarycentricFullDerivatives >( "calcFullBarycentric"
-						, [&]( sdw::Vec4 const & pt0
+						, [this]( sdw::Vec4 const & pt0
 							, sdw::Vec4 const & pt1
 							, sdw::Vec4 const & pt2
 							, sdw::Vec2 const & pixelNdc
@@ -522,9 +522,9 @@ namespace castor3d
 									result.dx() = interpW_ddx * ( result.lambda() * interpInvW + result.dx() ) - result.lambda();
 									result.dy() = interpW_ddy * ( result.lambda() * interpInvW + result.dy() ) - result.lambda();
 								}
-								FI;
+								FI
 							}
-							FI;
+							FI
 
 							m_writer.returnStmt( result );
 						}
@@ -542,9 +542,9 @@ namespace castor3d
 				, sdw::UInt const & pprimitiveId
 				, sdw::UInt const & pmeshletId
 				, shader::ModelData const & pmodelData
-				, shader::MeshVertex & pv0
-				, shader::MeshVertex & pv1
-				, shader::MeshVertex & pv2 )
+				, shader::MeshVertex const & pv0
+				, shader::MeshVertex const & pv1
+				, shader::MeshVertex const & pv2 )
 			{
 				if ( !m_loadVertices )
 				{
@@ -622,9 +622,9 @@ namespace castor3d
 			void loadVertices( sdw::UInt const & pnodeId
 				, sdw::UInt const & pprimitiveId
 				, shader::ModelData const & pmodelData
-				, shader::MeshVertex & pv0
-				, shader::MeshVertex & pv1
-				, shader::MeshVertex & pv2
+				, shader::MeshVertex const & pv0
+				, shader::MeshVertex const & pv1
+				, shader::MeshVertex const & pv2
 				, shader::CameraData const & c3d_cameraData
 				, sdw::Array< shader::BillboardData > const & c3d_billboardData )
 			{
@@ -633,7 +633,7 @@ namespace castor3d
 					m_loadVertices = m_writer.implementFunction< sdw::Void >( "loadVertices"
 						, [&]( sdw::UInt const & nodeId
 							, sdw::UInt const & primitiveId
-							, sdw::UInt const & meshletId
+							, sdw::UInt const &
 							, shader::ModelData const & modelData
 							, shader::MeshVertex v0
 							, shader::MeshVertex v1
@@ -720,10 +720,10 @@ namespace castor3d
 				, sdw::Vec2 const & ppixelCoord
 				, shader::ModelData const & pmodelData
 				, shader::Material const & pmaterial
-				, sdw::Float & pdepth
+				, sdw::Float const & pdepth
 				, shader::CameraData const & c3d_cameraData
 				, sdw::Array< shader::BillboardData > const & c3d_billboardData
-				, shader::DerivFragmentSurface & presult )
+				, shader::DerivFragmentSurface const & presult )
 			{
 				if ( !m_loadSurface )
 				{
@@ -899,7 +899,7 @@ namespace castor3d
 							{
 								curProjPosition.w() = 1.0_f;
 							}
-							FI;
+							FI
 
 							depth = ( curProjPosition.z() / curProjPosition.w() );
 							auto curPosition = m_writer.declLocale( "curPosition"
@@ -1072,7 +1072,8 @@ namespace castor3d
 			auto c3d_mapBrdf = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapBrdf"
 				, InOutBindings::eMapBrdf
 				, Sets::eInOuts );
-			auto lightsIndex = index++;
+			auto lightsIndex = index;
+			++index;
 			auto c3d_mapOcclusion = writer.declCombinedImg< FImg2DR32 >( "c3d_mapOcclusion"
 				, ( hasSsao ? index++ : 0u )
 				, Sets::eInOuts
@@ -1125,10 +1126,10 @@ namespace castor3d
 
 			auto shade = writer.implementFunction< sdw::Boolean >( "shade"
 				, [&]( sdw::IVec2 const & ipixel
-					, sdw::UInt curNodeId
-					, sdw::UInt curPipelineId
-					, sdw::UInt primitiveId
-					, sdw::UInt meshletId
+					, sdw::UInt const & curNodeId
+					, sdw::UInt const & curPipelineId
+					, sdw::UInt const & primitiveId
+					, sdw::UInt const & meshletId
 					, sdw::Vec4 outResult
 					, sdw::Vec4 inoutDiffuse
 					, sdw::Vec4 outScattering )
@@ -1206,7 +1207,7 @@ namespace castor3d
 							{
 								writer.returnStmt( 0_b );
 							}
-							FI;
+							FI
 						}
 
 						if ( auto lightingModel = lights.getLightingModel() )
@@ -1372,7 +1373,7 @@ namespace castor3d
 									inoutDiffuse = vec4( 0.0_f );
 								}
 							}
-							FI;
+							FI
 						}
 						else
 						{
@@ -1516,19 +1517,21 @@ namespace castor3d
 					, stages ) );
 			}
 
-			auto & engine = *device.renderSystem.getEngine();
+			auto const & engine = *device.renderSystem.getEngine();
 			auto index = uint32_t( InOutBindings::eCount );
 			engine.addSpecificsBuffersBindings( bindings
 				, stages
 				, index );
 			bindings.emplace_back( scene.getLightCache().createLayoutBinding( stages
-				, index++ ) );
+				, index ) );
+			++index;
 
 			if ( ssao )
 			{
-				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				bindings.emplace_back( makeDescriptorSetLayoutBinding( index
 					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 					, stages ) ); // c3d_mapOcclusion
+				++index;
 			}
 
 			if ( technique.hasShadowBuffer() )
@@ -1538,9 +1541,10 @@ namespace castor3d
 					, index );
 			}
 
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++ // c3d_mapEnvironment
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( index // c3d_mapEnvironment
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, stages ) );
+			++index;
 
 			if ( auto background = scene.getBackground() )
 			{
@@ -1582,8 +1586,8 @@ namespace castor3d
 			, IndirectLightingData const * indirectLighting
 			, DeferredLightingFilter deferredLighting )
 		{
-			auto & engine = *scene.getOwner();
-			auto & matCache = engine.getMaterialCache();
+			auto const & engine = *scene.getOwner();
+			auto const & matCache = engine.getMaterialCache();
 			ashes::WriteDescriptorSetArray writes;
 			writes.push_back( cameraUbo.getDescriptorWrite( InOutBindings::eCamera ) );
 			writes.push_back( sceneUbo.getDescriptorWrite( InOutBindings::eScene ) );
@@ -1640,7 +1644,8 @@ namespace castor3d
 
 			auto index = uint32_t( InOutBindings::eCount );
 			engine.addSpecificsBuffersDescriptors( writes, index );
-			writes.push_back( scene.getLightCache().getBinding( index++ ) );
+			writes.push_back( scene.getLightCache().getBinding( index ) );
+			++index;
 
 			if ( ssao )
 			{
@@ -1838,7 +1843,7 @@ namespace castor3d
 
 			if ( isMeshShading )
 			{
-				auto & buffer = modelBuffers.buffers[size_t( SubmeshData::eMeshlets )]->getBuffer();
+				auto const & buffer = modelBuffers.buffers[size_t( SubmeshData::eMeshlets )]->getBuffer();
 				writes.emplace_back( makeDescriptorWrite( buffer, VtxBindings::eInMeshlets, 0u, buffer.getSize() ) );
 			}
 
@@ -1850,67 +1855,67 @@ namespace castor3d
 
 			if ( flags.enablePosition() )
 			{
-				auto & buffer = modelBuffers.buffers[size_t( SubmeshData::ePositions )]->getBuffer();
+				auto const & buffer = modelBuffers.buffers[size_t( SubmeshData::ePositions )]->getBuffer();
 				writes.emplace_back( makeDescriptorWrite( buffer, VtxBindings::eInPosition, 0u, buffer.getSize() ) );
 			}
 
 			if ( flags.enableNormal() )
 			{
-				auto & buffer = modelBuffers.buffers[size_t( SubmeshData::eNormals )]->getBuffer();
+				auto const & buffer = modelBuffers.buffers[size_t( SubmeshData::eNormals )]->getBuffer();
 				writes.emplace_back( makeDescriptorWrite( buffer, VtxBindings::eInNormal, 0u, buffer.getSize() ) );
 			}
 
 			if ( flags.enableTangentSpace() )
 			{
-				auto & buffer = modelBuffers.buffers[size_t( SubmeshData::eTangents )]->getBuffer();
+				auto const & buffer = modelBuffers.buffers[size_t( SubmeshData::eTangents )]->getBuffer();
 				writes.emplace_back( makeDescriptorWrite( buffer, VtxBindings::eInTangent, 0u, buffer.getSize() ) );
 			}
 
 			if ( flags.enableBitangent() )
 			{
-				auto & buffer = modelBuffers.buffers[size_t( SubmeshData::eBitangents )]->getBuffer();
+				auto const & buffer = modelBuffers.buffers[size_t( SubmeshData::eBitangents )]->getBuffer();
 				writes.emplace_back( makeDescriptorWrite( buffer, VtxBindings::eInBitangent, 0u, buffer.getSize() ) );
 			}
 
 			if ( flags.enableTexcoord0() )
 			{
-				auto & buffer = modelBuffers.buffers[size_t( SubmeshData::eTexcoords0 )]->getBuffer();
+				auto const & buffer = modelBuffers.buffers[size_t( SubmeshData::eTexcoords0 )]->getBuffer();
 				writes.emplace_back( makeDescriptorWrite( buffer, VtxBindings::eInTexcoord0, 0u, buffer.getSize() ) );
 			}
 
 			if ( flags.enableTexcoord1() )
 			{
-				auto & buffer = modelBuffers.buffers[size_t( SubmeshData::eTexcoords1 )]->getBuffer();
+				auto const & buffer = modelBuffers.buffers[size_t( SubmeshData::eTexcoords1 )]->getBuffer();
 				writes.emplace_back( makeDescriptorWrite( buffer, VtxBindings::eInTexcoord1, 0u, buffer.getSize() ) );
 			}
 
 			if ( flags.enableTexcoord2() )
 			{
-				auto & buffer = modelBuffers.buffers[size_t( SubmeshData::eTexcoords2 )]->getBuffer();
+				auto const & buffer = modelBuffers.buffers[size_t( SubmeshData::eTexcoords2 )]->getBuffer();
 				writes.emplace_back( makeDescriptorWrite( buffer, VtxBindings::eInTexcoord2, 0u, buffer.getSize() ) );
 			}
 
 			if ( flags.enableTexcoord3() )
 			{
-				auto & buffer = modelBuffers.buffers[size_t( SubmeshData::eTexcoords3 )]->getBuffer();
+				auto const & buffer = modelBuffers.buffers[size_t( SubmeshData::eTexcoords3 )]->getBuffer();
 				writes.emplace_back( makeDescriptorWrite( buffer, VtxBindings::eInTexcoord3, 0u, buffer.getSize() ) );
 			}
 
 			if ( flags.enableColours() )
 			{
-				auto & buffer = modelBuffers.buffers[size_t( SubmeshData::eColours )]->getBuffer();
+				auto const & buffer = modelBuffers.buffers[size_t( SubmeshData::eColours )]->getBuffer();
 				writes.emplace_back( makeDescriptorWrite( buffer, VtxBindings::eInColour, 0u, buffer.getSize() ) );
 			}
 
 			if ( flags.enablePassMasks() )
 			{
-				auto & buffer = modelBuffers.buffers[size_t( SubmeshData::ePassMasks )]->getBuffer();
+				auto const & buffer = modelBuffers.buffers[size_t( SubmeshData::ePassMasks )]->getBuffer();
 				writes.emplace_back( makeDescriptorWrite( buffer, VtxBindings::eInPassMasks, 0u, buffer.getSize() ) );
 			}
 
 			if ( flags.enableVelocity() )
 			{
-				auto & buffer = modelBuffers.buffers[size_t( SubmeshData::eVelocity )]->getBuffer();
+				auto const & buffer = modelBuffers.buffers[size_t( SubmeshData::eVelocity )]->getBuffer();
 				writes.emplace_back( makeDescriptorWrite( buffer, VtxBindings::eInVelocity, 0u, buffer.getSize() ) );
 			}
 
@@ -1944,7 +1949,7 @@ namespace castor3d
 				? VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
 				: VK_ACCESS_SHADER_READ_BIT );
 			ashes::VkAttachmentDescriptionArray attaches;
-			attaches.push_back( { 0u
+			attaches.emplace_back( VkAttachmentDescription{ 0u
 				, targetImage.front().data->info.format
 				, VK_SAMPLE_COUNT_1_BIT
 				, VK_ATTACHMENT_LOAD_OP_LOAD
@@ -1956,7 +1961,7 @@ namespace castor3d
 
 			if ( scattering )
 			{
-				attaches.push_back( { 0u
+				attaches.emplace_back( VkAttachmentDescription{ 0u
 					, scattering->getFormat()
 					, VK_SAMPLE_COUNT_1_BIT
 					, ( first ? VK_ATTACHMENT_LOAD_OP_CLEAR : VK_ATTACHMENT_LOAD_OP_LOAD )
@@ -2001,7 +2006,6 @@ namespace castor3d
 
 		static ashes::FrameBufferPtr createFrameBuffer( ashes::RenderPass const & renderPass
 			, std::string const & name
-			, RenderTechnique const & technique
 			, crg::RunnableGraph & graph
 			, crg::ImageViewIdArray const & targetImage
 			, Texture const * scattering )
@@ -2030,7 +2034,6 @@ namespace castor3d
 			, ashes::PipelineShaderStageCreateInfoArray stages
 			, ashes::PipelineLayout const & pipelineLayout
 			, ashes::RenderPass const & renderPass
-			, crg::ImageViewIdArray const & targetImage
 			, Texture const * scattering
 			, bool blend )
 		{
@@ -2096,7 +2099,7 @@ namespace castor3d
 		, crg::RunnablePass{ pass
 			, context
 			, graph
-			, { []( uint32_t index ){}
+			, { []( uint32_t ){}
 				, GetPipelineStateCallback( [](){ return crg::getPipelineState( useCompute() ? VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT : VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT ); } )
 				, [this]( crg::RecordContext & recContext, VkCommandBuffer cb, uint32_t i ){ doRecordInto( recContext, cb, i ); }
 				, GetPassIndexCallback( [](){ return 0u; } )
@@ -2119,7 +2122,7 @@ namespace castor3d
 			: visres::createRenderPass( m_device, getName(), m_targetImage, m_outputScattering ? &parent->getScattering() : nullptr, true, m_deferredLightingFilter ) ) }
 		, m_framebuffer{ ( useCompute()
 			? nullptr
-			: visres::createFrameBuffer( *m_renderPass, getName(), *m_parent, graph, m_targetImage, m_outputScattering ? &parent->getScattering() : nullptr ) ) }
+			: visres::createFrameBuffer( *m_renderPass, getName(), graph, m_targetImage, m_outputScattering ? &parent->getScattering() : nullptr ) ) }
 		, m_clustersConfig{ techniquePassDesc.m_clustersConfig }
 		, m_maxPipelineId{}
 	{
@@ -2140,7 +2143,7 @@ namespace castor3d
 			m_activePipelines.clear();
 			m_activeBillboardPipelines.clear();
 
-			for ( auto [pipelineHash, buffer] : m_nodesPass.getPassPipelineNodes() )
+			for ( auto const & [pipelineHash, buffer] : m_nodesPass.getPassPipelineNodes() )
 			{
 				auto pipelineId = m_nodesPass.getPipelineNodesIndex( pipelineHash, *buffer );
 				PipelineFlags pipelineFlags{ getPipelineHiHashDetails( *this
@@ -2165,13 +2168,12 @@ namespace castor3d
 				}
 
 				auto & pipeline = doCreatePipeline( pipelineFlags );
-				auto it = m_activePipelines.emplace( &pipeline
-					, SubmeshPipelinesNodesDescriptors{} ).first;
+				auto it = m_activePipelines.try_emplace( &pipeline ).first;
 
 				auto hash = std::hash< ashes::BufferBase const * >{}( buffer );
-				auto ires = pipeline.vtxDescriptorSets.emplace( hash, ashes::DescriptorSetPtr{} );
+				auto [pit, res] = pipeline.vtxDescriptorSets.try_emplace( hash );
 
-				if ( ires.second )
+				if ( res )
 				{
 					auto & modelBuffers = m_device.geometryPools->getBuffers( *buffer );
 					ashes::BufferBase const * indexBuffer{};
@@ -2181,7 +2183,7 @@ namespace castor3d
 						indexBuffer = &m_device.geometryPools->getIndexBuffer( *buffer );
 					}
 
-					ires.first->second = visres::createVtxDescriptorSet( getName()
+					pit->second = visres::createVtxDescriptorSet( getName()
 						, pipelineFlags
 						, m_nodesPass.isMeshShading()
 						, *pipeline.vtxDescriptorPool
@@ -2189,7 +2191,7 @@ namespace castor3d
 						, indexBuffer );
 				}
 
-				auto & pipelines = it->second.emplace( ires.first->second.get(), UInt32Array{} ).first->second;
+				auto & pipelines = it->second.try_emplace( pit->second.get() ).first->second;
 				pipelines.push_back( pipelineId );
 			}
 
@@ -2221,24 +2223,23 @@ namespace castor3d
 						auto & positionsBuffer = node.node->data.getVertexBuffer();
 						auto & pipeline = doCreatePipeline( pipelineFlags
 							, node.node->data.getVertexStride() );
-						auto it = m_activeBillboardPipelines.emplace( &pipeline
-							, BillboardPipelinesNodesDescriptors{} ).first;
+						auto it = m_activeBillboardPipelines.try_emplace( &pipeline ).first;
 						auto hash = size_t( positionsBuffer.getOffset() );
 						hash = castor::hashCombinePtr( hash, positionsBuffer.getBuffer().getBuffer() );
-						auto ires = pipeline.vtxDescriptorSets.emplace( hash, ashes::DescriptorSetPtr{} );
+						auto [pit, res] = pipeline.vtxDescriptorSets.try_emplace( hash );
 						auto pipelineId = m_nodesPass.getPipelineNodesIndex( pipelineHash, *buffer );
 
-						if ( ires.second )
+						if ( res )
 						{
-							ires.first->second = visres::createVtxDescriptorSet( getName()
+							pit->second = visres::createVtxDescriptorSet( getName()
 								, *pipeline.vtxDescriptorPool
 								, positionsBuffer.getBuffer().getBuffer()
 								, positionsBuffer.getOffset()
 								, positionsBuffer.getSize() );
 						}
 
-						it->second.emplace( node.node->getId()
-							, PipelineNodesDescriptors{ pipelineId, ires.first->second.get() } );
+						it->second.try_emplace( node.node->getId()
+							, PipelineNodesDescriptors{ pipelineId, pit->second.get() } );
 					}
 				}
 			}
@@ -2350,7 +2351,7 @@ namespace castor3d
 				return;
 			}
 
-			ShaderModule module{ ( useCompute() ? VK_SHADER_STAGE_COMPUTE_BIT : VK_SHADER_STAGE_FRAGMENT_BIT )
+			ShaderModule shaderModule{ ( useCompute() ? VK_SHADER_STAGE_COMPUTE_BIT : VK_SHADER_STAGE_FRAGMENT_BIT )
 				, getName()
 				, visres::getProgram( m_device
 					, getScene()
@@ -2366,8 +2367,8 @@ namespace castor3d
 					, m_deferredLightingFilter
 					, m_nodesPass.isMeshShading()
 					, areDebugTargetsEnabled() ) };
-			makeShaderState( m_device, module );
-			visitor.visit( module );
+			makeShaderState( m_device, shaderModule );
+			visitor.visit( shaderModule );
 		}
 	}
 
@@ -2379,7 +2380,7 @@ namespace castor3d
 
 	void VisibilityResolvePass::doRecordInto( crg::RecordContext & context
 		, VkCommandBuffer commandBuffer
-		, uint32_t index )
+		, uint32_t )
 	{
 		if ( useCompute() )
 		{
@@ -2393,7 +2394,7 @@ namespace castor3d
 		m_commandsChanged = false;
 	}
 
-	void VisibilityResolvePass::doRecordCompute( crg::RecordContext & context
+	void VisibilityResolvePass::doRecordCompute( crg::RecordContext const & context
 		, VkCommandBuffer commandBuffer )
 	{
 		m_drawCalls = {};
@@ -2402,30 +2403,30 @@ namespace castor3d
 			, *getScene().getBindlessTexDescriptorSet() };
 		visres::PushData pushData{ 0u, 0u };
 
-		for ( auto & pipelineIt : m_activePipelines )
+		for ( auto const & [pipeline, descriptors] : m_activePipelines )
 		{
 			context.getContext().vkCmdBindPipeline( commandBuffer
 				, VK_PIPELINE_BIND_POINT_COMPUTE
-				, *pipelineIt.first->pipeline );
-			descriptorSets[0] = *pipelineIt.first->ioDescriptorSet;
+				, *pipeline->pipeline );
+			descriptorSets[0] = *pipeline->ioDescriptorSet;
 
-			for ( auto & descriptorSetIt : pipelineIt.second )
+			for ( auto const & [descriptor, ids] : descriptors )
 			{
-				descriptorSets[1] = *descriptorSetIt.first;
+				descriptorSets[1] = *descriptor;
 				context.getContext().vkCmdBindDescriptorSets( commandBuffer
 					, VK_PIPELINE_BIND_POINT_COMPUTE
-					, *pipelineIt.first->pipelineLayout
+					, *pipeline->pipelineLayout
 					, 0u
 					, uint32_t( descriptorSets.size() )
 					, descriptorSets.data()
 					, 0u
 					, nullptr );
 
-				for ( auto pipelineId : descriptorSetIt.second )
+				for ( auto pipelineId : ids )
 				{
 					pushData.pipelineId = pipelineId;
 					context.getContext().vkCmdPushConstants( commandBuffer
-						, *pipelineIt.first->pipelineLayout
+						, *pipeline->pipelineLayout
 						, VK_SHADER_STAGE_COMPUTE_BIT
 						, 0u
 						, sizeof( visres::PushData )
@@ -2436,27 +2437,27 @@ namespace castor3d
 			}
 		}
 
-		for ( auto & pipelineIt : m_activeBillboardPipelines )
+		for ( auto const & [pipeline, descriptors] : m_activeBillboardPipelines )
 		{
 			context.getContext().vkCmdBindPipeline( commandBuffer
 				, VK_PIPELINE_BIND_POINT_COMPUTE
-				, *pipelineIt.first->pipeline );
-			descriptorSets[0] = *pipelineIt.first->ioDescriptorSet;
+				, *pipeline->pipeline );
+			descriptorSets[0] = *pipeline->ioDescriptorSet;
 
-			for ( auto & descriptorSetIt : pipelineIt.second )
+			for ( auto & [id, descriptor] : descriptors )
 			{
-				descriptorSets[1] = *descriptorSetIt.second.vtxDescriptorSet;
-				pushData.pipelineId = descriptorSetIt.second.pipelineId;
-				pushData.billboardNodeId = descriptorSetIt.first;
+				descriptorSets[1] = *descriptor.vtxDescriptorSet;
+				pushData.pipelineId = descriptor.pipelineId;
+				pushData.billboardNodeId = id;
 				context.getContext().vkCmdPushConstants( commandBuffer
-					, *pipelineIt.first->pipelineLayout
+					, *pipeline->pipelineLayout
 					, VK_SHADER_STAGE_COMPUTE_BIT
 					, 0u
 					, sizeof( visres::PushData )
 					, &pushData );
 				context.getContext().vkCmdBindDescriptorSets( commandBuffer
 					, VK_PIPELINE_BIND_POINT_COMPUTE
-					, *pipelineIt.first->pipelineLayout
+					, *pipeline->pipelineLayout
 					, 0u
 					, uint32_t( descriptorSets.size() )
 					, descriptorSets.data()
@@ -2493,30 +2494,30 @@ namespace castor3d
 			, &beginInfo
 			, VK_SUBPASS_CONTENTS_INLINE );
 
-		for ( auto & pipelineIt : m_activePipelines )
+		for ( auto const & [pipeline, descriptors] : m_activePipelines )
 		{
 			context.getContext().vkCmdBindPipeline( commandBuffer
 				, VK_PIPELINE_BIND_POINT_GRAPHICS
-				, *pipelineIt.first->pipeline );
-			descriptorSets[0] = *pipelineIt.first->ioDescriptorSet;
+				, *pipeline->pipeline );
+			descriptorSets[0] = *pipeline->ioDescriptorSet;
 
-			for ( auto & descriptorSetIt : pipelineIt.second )
+			for ( auto & [descriptor, ids] : descriptors )
 			{
-				descriptorSets[1] = *descriptorSetIt.first;
+				descriptorSets[1] = *descriptor;
 				context.getContext().vkCmdBindDescriptorSets( commandBuffer
 					, VK_PIPELINE_BIND_POINT_GRAPHICS
-					, *pipelineIt.first->pipelineLayout
+					, *pipeline->pipelineLayout
 					, 0u
 					, uint32_t( descriptorSets.size() )
 					, descriptorSets.data()
 					, 0u
 					, nullptr );
 
-				for ( auto pipelineId : descriptorSetIt.second )
+				for ( auto pipelineId : ids )
 				{
 					pushData.pipelineId = pipelineId;
 					context.getContext().vkCmdPushConstants( commandBuffer
-						, *pipelineIt.first->pipelineLayout
+						, *pipeline->pipelineLayout
 						, VK_SHADER_STAGE_FRAGMENT_BIT
 						, 0u
 						, sizeof( visres::PushData )
@@ -2527,27 +2528,27 @@ namespace castor3d
 			}
 		}
 
-		for ( auto & pipelineIt : m_activeBillboardPipelines )
+		for ( auto const & [pipeline, descriptors] : m_activeBillboardPipelines )
 		{
 			context.getContext().vkCmdBindPipeline( commandBuffer
 				, VK_PIPELINE_BIND_POINT_GRAPHICS
-				, *pipelineIt.first->pipeline );
-			descriptorSets[0] = *pipelineIt.first->ioDescriptorSet;
+				, *pipeline->pipeline );
+			descriptorSets[0] = *pipeline->ioDescriptorSet;
 
-			for ( auto & descriptorSetIt : pipelineIt.second )
+			for ( auto & [id, descriptor] : descriptors )
 			{
-				descriptorSets[1] = *descriptorSetIt.second.vtxDescriptorSet;
-				pushData.pipelineId = descriptorSetIt.second.pipelineId;
-				pushData.billboardNodeId = descriptorSetIt.first;
+				descriptorSets[1] = *descriptor.vtxDescriptorSet;
+				pushData.pipelineId = descriptor.pipelineId;
+				pushData.billboardNodeId = id;
 				context.getContext().vkCmdPushConstants( commandBuffer
-					, *pipelineIt.first->pipelineLayout
+					, *pipeline->pipelineLayout
 					, VK_SHADER_STAGE_FRAGMENT_BIT
 					, 0u
 					, sizeof( visres::PushData )
 					, &pushData );
 				context.getContext().vkCmdBindDescriptorSets( commandBuffer
 					, VK_PIPELINE_BIND_POINT_GRAPHICS
-					, *pipelineIt.first->pipelineLayout
+					, *pipeline->pipelineLayout
 					, 0u
 					, uint32_t( descriptorSets.size() )
 					, descriptorSets.data()
@@ -2637,7 +2638,6 @@ namespace castor3d
 					, std::move( stages )
 					, *result->pipelineLayout
 					, *m_renderPass
-					, m_targetImage
 					, m_outputScattering ? &getTechnique().getScattering() : nullptr
 					, false );
 			}

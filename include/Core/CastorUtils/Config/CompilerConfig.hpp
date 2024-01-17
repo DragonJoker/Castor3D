@@ -4,8 +4,6 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_COMPILER_CONFIG_H___
 #define ___CASTOR_COMPILER_CONFIG_H___
 
-#undef CASTOR_HAS_ALIGNAS
-
 #if defined( _MSC_VER )
 
 #	define CU_CompilerMSVC

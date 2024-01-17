@@ -10,7 +10,7 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	C3D_API castor::AdditionalParsers createSceneFileParsers( Engine & engine );
+	C3D_API castor::AdditionalParsers createSceneFileParsers( Engine const & engine );
 	C3D_API castor::StrUInt32Map registerSceneFileSections();
 	C3D_API uint32_t getSceneFileRootSection();
 }

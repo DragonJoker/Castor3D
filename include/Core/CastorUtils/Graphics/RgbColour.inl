@@ -9,30 +9,47 @@ namespace castor
 {
 	//*************************************************************************************************
 
-	String getPredefinedName( PredefinedRgbColour predefined )
+	namespace rgb
 	{
-		static std::map< PredefinedRgbColour, String > mapNames;
-		typedef std::map< PredefinedRgbColour, String >::iterator MapIt;
-
-		if ( mapNames.empty() )
+		static std::map< PredefinedRgbColour, String > const PredefinedNames
 		{
-			mapNames[PredefinedRgbColour::eBlack] = cuT( "black" );
-			mapNames[PredefinedRgbColour::eDarkBlue] = cuT( "darkblue" );
-			mapNames[PredefinedRgbColour::eBlue] = cuT( "blue" );
-			mapNames[PredefinedRgbColour::eDarkGreen] = cuT( "darkgreen" );
-			mapNames[PredefinedRgbColour::eGreen] = cuT( "green" );
-			mapNames[PredefinedRgbColour::eDarkRed] = cuT( "darkred" );
-			mapNames[PredefinedRgbColour::eRed] = cuT( "red" );
-			mapNames[PredefinedRgbColour::eLightBlue] = cuT( "lightblue" );
-			mapNames[PredefinedRgbColour::eLightGreen] = cuT( "lightgreen" );
-			mapNames[PredefinedRgbColour::eLightRed] = cuT( "lightred" );
-			mapNames[PredefinedRgbColour::eWhite] = cuT( "white" );
-		}
+			{ PredefinedRgbColour::eBlack, cuT( "black" ) },
+			{ PredefinedRgbColour::eDarkBlue, cuT( "darkblue" ) },
+			{ PredefinedRgbColour::eBlue, cuT( "blue" ) },
+			{ PredefinedRgbColour::eDarkGreen, cuT( "darkgreen" ) },
+			{ PredefinedRgbColour::eGreen, cuT( "green" ) },
+			{ PredefinedRgbColour::eDarkRed, cuT( "darkred" ) },
+			{ PredefinedRgbColour::eRed, cuT( "red" ) },
+			{ PredefinedRgbColour::eLightBlue, cuT( "lightblue" ) },
+			{ PredefinedRgbColour::eLightGreen, cuT( "lightgreen" ) },
+			{ PredefinedRgbColour::eLightRed, cuT( "lightred" ) },
+			{ PredefinedRgbColour::eWhite, cuT( "white" ) },
+		};
 
-		MapIt it = mapNames.find( predefined );
+		static std::map< String, PredefinedRgbColour, std::less<> > const PredefinedColours
+		{
+			{ cuT( "black" ), PredefinedRgbColour::eBlack },
+			{ cuT( "darkblue" ), PredefinedRgbColour::eDarkBlue },
+			{ cuT( "blue" ), PredefinedRgbColour::eBlue },
+			{ cuT( "darkgreen" ), PredefinedRgbColour::eDarkGreen },
+			{ cuT( "green" ), PredefinedRgbColour::eGreen },
+			{ cuT( "darkred" ), PredefinedRgbColour::eDarkRed },
+			{ cuT( "red" ), PredefinedRgbColour::eRed },
+			{ cuT( "lightblue" ), PredefinedRgbColour::eLightBlue },
+			{ cuT( "lightgreen" ), PredefinedRgbColour::eLightGreen },
+			{ cuT( "lightred" ), PredefinedRgbColour::eLightRed },
+			{ cuT( "white" ), PredefinedRgbColour::eWhite },
+		};
+	}
+
+	//*************************************************************************************************
+
+	inline String getPredefinedName( PredefinedRgbColour predefined )
+	{
 		String result = cuT( "black" );
 
-		if ( it != mapNames.end() )
+		if ( auto it = rgb::PredefinedNames.find( predefined );
+			it != rgb::PredefinedNames.end() )
 		{
 			result = it->second;
 		}
@@ -40,40 +57,24 @@ namespace castor
 		return result;
 	}
 
-	PredefinedRgbColour getPredefinedRgb( String const & name )
+	inline PredefinedRgbColour getPredefinedRgb( String const & name )
 	{
-		static std::map< String, PredefinedRgbColour > mapNames;
-		typedef std::map< String, PredefinedRgbColour >::iterator MapIt;
-
-		if ( mapNames.empty() )
-		{
-			mapNames[cuT( "black" )] = PredefinedRgbColour::eBlack;
-			mapNames[cuT( "darkblue" )] = PredefinedRgbColour::eDarkBlue;
-			mapNames[cuT( "blue" )] = PredefinedRgbColour::eBlue;
-			mapNames[cuT( "darkgreen" )] = PredefinedRgbColour::eDarkGreen;
-			mapNames[cuT( "green" )] = PredefinedRgbColour::eGreen;
-			mapNames[cuT( "darkred" )] = PredefinedRgbColour::eDarkRed;
-			mapNames[cuT( "red" )] = PredefinedRgbColour::eRed;
-			mapNames[cuT( "lightblue" )] = PredefinedRgbColour::eLightBlue;
-			mapNames[cuT( "lightgreen" )] = PredefinedRgbColour::eLightGreen;
-			mapNames[cuT( "lightred" )] = PredefinedRgbColour::eLightRed;
-			mapNames[cuT( "white" )] = PredefinedRgbColour::eWhite;
-		}
-
-		MapIt it = mapNames.find( name );
 		PredefinedRgbColour result = PredefinedRgbColour::eBlack;
 
-		if ( it != mapNames.end() )
+		if ( auto it = rgb::PredefinedColours.find( name );
+			it != rgb::PredefinedColours.end() )
 		{
 			result = it->second;
 		}
 
 		return result;
 	}
+
+	//*************************************************************************************************
 
 	template< typename ComponentType >
 	template< typename ComponentU >
-	RgbColourT< ComponentType >::RgbColourT( RgbColourT< ComponentU > const & rhs
+	inline RgbColourT< ComponentType >::RgbColourT( RgbColourT< ComponentU > const & rhs
 		, float gamma )
 		: m_components{ ComponentType{ rhs.m_components[0u], gamma }
 			, ComponentType{ rhs.m_components[1u], gamma }
@@ -82,157 +83,157 @@ namespace castor
 	}
 
 	template< typename ComponentType >
-	RgbColourT< ComponentType >::RgbColourT( float r, float g, float b )
+	inline RgbColourT< ComponentType >::RgbColourT( float r, float g, float b )
 		: m_components{ ComponentType{ r }, ComponentType{ g }, ComponentType{ b } }
 	{
 	}
 
 	template< typename ComponentType >
-	RgbColourT< ComponentType > RgbColourT< ComponentType >::fromRGB( Point3ub const & colour )
+	inline RgbColourT< ComponentType > RgbColourT< ComponentType >::fromRGB( Point3ub const & colour )
 	{
 		return fromComponents( colour[0], colour[1], colour[2] );
 	}
 
 	template< typename ComponentType >
-	RgbColourT< ComponentType > RgbColourT< ComponentType >::fromBGR( Point3ub const & colour )
+	inline RgbColourT< ComponentType > RgbColourT< ComponentType >::fromBGR( Point3ub const & colour )
 	{
 		return fromComponents( colour[2], colour[1], colour[0] );
 	}
 
 	template< typename ComponentType >
-	RgbColourT< ComponentType > RgbColourT< ComponentType >::fromRGBA( Point4ub const & colour )
+	inline RgbColourT< ComponentType > RgbColourT< ComponentType >::fromRGBA( Point4ub const & colour )
 	{
 		return fromComponents( colour[0], colour[1], colour[2] );
 	}
 
 	template< typename ComponentType >
-	RgbColourT< ComponentType > RgbColourT< ComponentType >::fromABGR( Point4ub const & colour )
+	inline RgbColourT< ComponentType > RgbColourT< ComponentType >::fromABGR( Point4ub const & colour )
 	{
 		return fromComponents( colour[3], colour[2], colour[1] );
 	}
 
 	template< typename ComponentType >
-	RgbColourT< ComponentType > RgbColourT< ComponentType >::fromBGRA( Point4ub const & colour )
+	inline RgbColourT< ComponentType > RgbColourT< ComponentType >::fromBGRA( Point4ub const & colour )
 	{
 		return fromComponents( colour[2], colour[1], colour[0] );
 	}
 
 	template< typename ComponentType >
-	RgbColourT< ComponentType > RgbColourT< ComponentType >::fromARGB( Point4ub const & colour )
+	inline RgbColourT< ComponentType > RgbColourT< ComponentType >::fromARGB( Point4ub const & colour )
 	{
 		return fromComponents( colour[1], colour[2], colour[3] );
 	}
 
 	template< typename ComponentType >
-	RgbColourT< ComponentType > RgbColourT< ComponentType >::fromRGB( Point3f const & colour )
+	inline RgbColourT< ComponentType > RgbColourT< ComponentType >::fromRGB( Point3f const & colour )
 	{
 		return fromComponents( colour[0], colour[1], colour[2] );
 	}
 
 	template< typename ComponentType >
-	RgbColourT< ComponentType > RgbColourT< ComponentType >::fromBGR( Point3f const & colour )
+	inline RgbColourT< ComponentType > RgbColourT< ComponentType >::fromBGR( Point3f const & colour )
 	{
 		return fromComponents( colour[2], colour[1], colour[0] );
 	}
 
 	template< typename ComponentType >
-	RgbColourT< ComponentType > RgbColourT< ComponentType >::fromRGBA( Point4f const & colour )
+	inline RgbColourT< ComponentType > RgbColourT< ComponentType >::fromRGBA( Point4f const & colour )
 	{
 		return fromComponents( colour[0], colour[1], colour[2] );
 	}
 
 	template< typename ComponentType >
-	RgbColourT< ComponentType > RgbColourT< ComponentType >::fromABGR( Point4f const & colour )
+	inline RgbColourT< ComponentType > RgbColourT< ComponentType >::fromABGR( Point4f const & colour )
 	{
 		return fromComponents( colour[3], colour[2], colour[1] );
 	}
 
 	template< typename ComponentType >
-	RgbColourT< ComponentType > RgbColourT< ComponentType >::fromBGRA( Point4f const & colour )
+	inline RgbColourT< ComponentType > RgbColourT< ComponentType >::fromBGRA( Point4f const & colour )
 	{
 		return fromComponents( colour[2], colour[1], colour[0] );
 	}
 
 	template< typename ComponentType >
-	RgbColourT< ComponentType > RgbColourT< ComponentType >::fromARGB( Point4f const & colour )
+	inline RgbColourT< ComponentType > RgbColourT< ComponentType >::fromARGB( Point4f const & colour )
 	{
 		return fromComponents( colour[1], colour[2], colour[3] );
 	}
 
 	template< typename ComponentType >
-	RgbColourT< ComponentType > RgbColourT< ComponentType >::fromRGB( uint8_t const( & colour )[3] )
+	inline RgbColourT< ComponentType > RgbColourT< ComponentType >::fromRGB( uint8_t const( & colour )[3] )
 	{
 		return fromComponents( colour[0], colour[1], colour[2] );
 	}
 
 	template< typename ComponentType >
-	RgbColourT< ComponentType > RgbColourT< ComponentType >::fromBGR( uint8_t const( & colour )[3] )
+	inline RgbColourT< ComponentType > RgbColourT< ComponentType >::fromBGR( uint8_t const( & colour )[3] )
 	{
 		return fromComponents( colour[2], colour[1], colour[0] );
 	}
 
 	template< typename ComponentType >
-	RgbColourT< ComponentType > RgbColourT< ComponentType >::fromRGBA( uint8_t const( & colour )[4] )
+	inline RgbColourT< ComponentType > RgbColourT< ComponentType >::fromRGBA( uint8_t const( & colour )[4] )
 	{
 		return fromComponents( colour[0], colour[1], colour[2] );
 	}
 
 	template< typename ComponentType >
-	RgbColourT< ComponentType > RgbColourT< ComponentType >::fromABGR( uint8_t const( & colour )[4] )
+	inline RgbColourT< ComponentType > RgbColourT< ComponentType >::fromABGR( uint8_t const( & colour )[4] )
 	{
 		return fromComponents( colour[3], colour[2], colour[1] );
 	}
 
 	template< typename ComponentType >
-	RgbColourT< ComponentType > RgbColourT< ComponentType >::fromBGRA( uint8_t const( & colour )[4] )
+	inline RgbColourT< ComponentType > RgbColourT< ComponentType >::fromBGRA( uint8_t const( & colour )[4] )
 	{
 		return fromComponents( colour[2], colour[1], colour[0] );
 	}
 
 	template< typename ComponentType >
-	RgbColourT< ComponentType > RgbColourT< ComponentType >::fromARGB( uint8_t const( & colour )[4] )
+	inline RgbColourT< ComponentType > RgbColourT< ComponentType >::fromARGB( uint8_t const( & colour )[4] )
 	{
 		return fromComponents( colour[1], colour[2], colour[3] );
 	}
 
 	template< typename ComponentType >
-	RgbColourT< ComponentType > RgbColourT< ComponentType >::fromRGB( float const( & colour )[3] )
+	inline RgbColourT< ComponentType > RgbColourT< ComponentType >::fromRGB( float const( & colour )[3] )
 	{
 		return fromComponents( colour[0], colour[1], colour[2] );
 	}
 
 	template< typename ComponentType >
-	RgbColourT< ComponentType > RgbColourT< ComponentType >::fromBGR( float const( & colour )[3] )
+	inline RgbColourT< ComponentType > RgbColourT< ComponentType >::fromBGR( float const( & colour )[3] )
 	{
 		return fromComponents( colour[2], colour[1], colour[0] );
 	}
 
 	template< typename ComponentType >
-	RgbColourT< ComponentType > RgbColourT< ComponentType >::fromRGBA( float const( & colour )[4] )
+	inline RgbColourT< ComponentType > RgbColourT< ComponentType >::fromRGBA( float const( & colour )[4] )
 	{
 		return fromComponents( colour[0], colour[1], colour[2] );
 	}
 
 	template< typename ComponentType >
-	RgbColourT< ComponentType > RgbColourT< ComponentType >::fromABGR( float const( & colour )[4] )
+	inline RgbColourT< ComponentType > RgbColourT< ComponentType >::fromABGR( float const( & colour )[4] )
 	{
 		return fromComponents( colour[3], colour[2], colour[1] );
 	}
 
 	template< typename ComponentType >
-	RgbColourT< ComponentType > RgbColourT< ComponentType >::fromBGRA( float const( & colour )[4] )
+	inline RgbColourT< ComponentType > RgbColourT< ComponentType >::fromBGRA( float const( & colour )[4] )
 	{
 		return fromComponents( colour[2], colour[1], colour[0] );
 	}
 
 	template< typename ComponentType >
-	RgbColourT< ComponentType > RgbColourT< ComponentType >::fromARGB( float const( & colour )[4] )
+	inline RgbColourT< ComponentType > RgbColourT< ComponentType >::fromARGB( float const( & colour )[4] )
 	{
 		return fromComponents( colour[1], colour[2], colour[3] );
 	}
 
 	template< typename ComponentType >
-	RgbColourT< ComponentType > RgbColourT< ComponentType >::fromRGB( uint32_t colour )
+	inline RgbColourT< ComponentType > RgbColourT< ComponentType >::fromRGB( uint32_t colour )
 	{
 		float fR = float( ( ( colour & 0x00FF0000 ) >> 16 ) ) / 255.0f;
 		float fG = float( ( ( colour & 0x0000FF00 ) >>  8 ) ) / 255.0f;
@@ -241,7 +242,7 @@ namespace castor
 	}
 
 	template< typename ComponentType >
-	RgbColourT< ComponentType > RgbColourT< ComponentType >::fromBGR( uint32_t colour )
+	inline RgbColourT< ComponentType > RgbColourT< ComponentType >::fromBGR( uint32_t colour )
 	{
 		float fB = float( ( ( colour & 0x00FF0000 ) >> 16 ) ) / 255.0f;
 		float fG = float( ( ( colour & 0x0000FF00 ) >>  8 ) ) / 255.0f;
@@ -250,7 +251,7 @@ namespace castor
 	}
 
 	template< typename ComponentType >
-	RgbColourT< ComponentType > RgbColourT< ComponentType >::fromARGB( uint32_t colour )
+	inline RgbColourT< ComponentType > RgbColourT< ComponentType >::fromARGB( uint32_t colour )
 	{
 		float fR = float( ( ( colour & 0x00FF0000 ) >> 16 ) ) / 255.0f;
 		float fG = float( ( ( colour & 0x0000FF00 ) >>  8 ) ) / 255.0f;
@@ -259,7 +260,7 @@ namespace castor
 	}
 
 	template< typename ComponentType >
-	RgbColourT< ComponentType > RgbColourT< ComponentType >::fromBGRA( uint32_t colour )
+	inline RgbColourT< ComponentType > RgbColourT< ComponentType >::fromBGRA( uint32_t colour )
 	{
 		float fB = float( ( ( colour & 0xFF000000 ) >> 24 ) ) / 255.0f;
 		float fG = float( ( ( colour & 0x00FF0000 ) >> 16 ) ) / 255.0f;
@@ -268,7 +269,7 @@ namespace castor
 	}
 
 	template< typename ComponentType >
-	RgbColourT< ComponentType > RgbColourT< ComponentType >::fromRGBA( uint32_t colour )
+	inline RgbColourT< ComponentType > RgbColourT< ComponentType >::fromRGBA( uint32_t colour )
 	{
 		float fR = float( ( ( colour & 0xFF000000 ) >> 24 ) ) / 255.0f;
 		float fG = float( ( ( colour & 0x00FF0000 ) >> 16 ) ) / 255.0f;
@@ -277,7 +278,7 @@ namespace castor
 	}
 
 	template< typename ComponentType >
-	RgbColourT< ComponentType > RgbColourT< ComponentType >::fromABGR( uint32_t colour )
+	inline RgbColourT< ComponentType > RgbColourT< ComponentType >::fromABGR( uint32_t colour )
 	{
 		float fB = float( ( ( colour & 0x00FF0000 ) >> 16 ) ) / 255.0f;
 		float fG = float( ( ( colour & 0x0000FF00 ) >>  8 ) ) / 255.0f;
@@ -286,7 +287,7 @@ namespace castor
 	}
 
 	template< typename ComponentType >
-	RgbColourT< ComponentType > RgbColourT< ComponentType >::fromHSB( float hue, float saturation, float brightness )
+	inline RgbColourT< ComponentType > RgbColourT< ComponentType >::fromHSB( float hue, float saturation, float brightness )
 	{
 		float h = hue == 1.0f ? 0 : hue * 6.0f;
 		float f = h - std::floor( h );
@@ -323,7 +324,7 @@ namespace castor
 	}
 
 	template< typename ComponentType >
-	RgbColourT< ComponentType > & RgbColourT< ComponentType >::operator+=( RgbColourT< ComponentType > const & rhs )
+	inline RgbColourT< ComponentType > & RgbColourT< ComponentType >::operator+=( RgbColourT< ComponentType > const & rhs )
 	{
 		for ( uint8_t i = 0; i < uint8_t( RgbComponent::eCount ); i++ )
 		{
@@ -334,7 +335,7 @@ namespace castor
 	}
 
 	template< typename ComponentType >
-	RgbColourT< ComponentType > & RgbColourT< ComponentType >::operator-=( RgbColourT< ComponentType > const & rhs )
+	inline RgbColourT< ComponentType > & RgbColourT< ComponentType >::operator-=( RgbColourT< ComponentType > const & rhs )
 	{
 		for ( uint8_t i = 0; i < uint8_t( RgbComponent::eCount ); i++ )
 		{
@@ -345,7 +346,7 @@ namespace castor
 	}
 
 	template< typename ComponentType >
-	RgbColourT< ComponentType > & RgbColourT< ComponentType >::operator+=( ComponentType const & component )
+	inline RgbColourT< ComponentType > & RgbColourT< ComponentType >::operator+=( ComponentType const & component )
 	{
 		for ( uint8_t i = 0; i < uint8_t( RgbComponent::eCount ); i++ )
 		{
@@ -356,7 +357,7 @@ namespace castor
 	}
 
 	template< typename ComponentType >
-	RgbColourT< ComponentType > & RgbColourT< ComponentType >::operator-=( ComponentType const & component )
+	inline RgbColourT< ComponentType > & RgbColourT< ComponentType >::operator-=( ComponentType const & component )
 	{
 		for ( uint8_t i = 0; i < uint8_t( RgbComponent::eCount ); i++ )
 		{
@@ -367,7 +368,7 @@ namespace castor
 	}
 
 	template< typename ComponentType >
-	RgbColourT< ComponentType > & RgbColourT< ComponentType >::operator*=( ComponentType const & component )
+	inline RgbColourT< ComponentType > & RgbColourT< ComponentType >::operator*=( ComponentType const & component )
 	{
 		for ( uint8_t i = 0; i < uint8_t( RgbComponent::eCount ); i++ )
 		{
@@ -378,7 +379,7 @@ namespace castor
 	}
 
 	template< typename ComponentType >
-	RgbColourT< ComponentType > & RgbColourT< ComponentType >::operator/=( ComponentType const & component )
+	inline RgbColourT< ComponentType > & RgbColourT< ComponentType >::operator/=( ComponentType const & component )
 	{
 		for ( uint8_t i = 0; i < uint8_t( RgbComponent::eCount ); i++ )
 		{

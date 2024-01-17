@@ -30,7 +30,7 @@ namespace castor3d
 			, ashes::Buffer< uint32_t > const & materialsStarts
 			, ashes::Buffer< castor::Point2ui > const & pixels
 			, crg::RunnablePass::IsEnabledCallback isEnabled );
-		void accept( ConfigurationVisitorBase & visitor );
+		void accept( ConfigurationVisitorBase & visitor )const;
 
 		crg::FramePass const & getLastPass()const
 		{

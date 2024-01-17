@@ -24,7 +24,7 @@ namespace castor
 			return value;
 		}
 
-		static size_t getIndex( int x, int y, int width, int CU_UnusedParam( height ) )
+		static size_t getIndex( int x, int y, int width, CU_UnusedParam( int, height ) )
 		{
 			return size_t( y * width + x );
 		}
@@ -64,9 +64,9 @@ namespace castor
 			float br = getHeight( data, width, height, x + 1, y + 1 ); // bottom right
 
 			// sobel filter
-			const float dX = float( ( tr + 2.0 * r + br ) - ( tl + 2.0 * l + bl ) );
-			const float dY = float( ( bl + 2.0 * b + br ) - ( tl + 2.0 * t + tr ) );
-			const float dZ = float( 1.0 / strength );
+			const auto dX = float( ( tr + 2.0 * r + br ) - ( tl + 2.0 * l + bl ) );
+			const auto dY = float( ( bl + 2.0 * b + br ) - ( tl + 2.0 * t + tr ) );
+			const auto dZ = float( 1.0 / strength );
 
 			castor::Point3f n{ dX, dY, dZ };
 			castor::point::normalise( n );
@@ -102,7 +102,7 @@ namespace castor
 	}
 
 	bool convertToNormalMap( float strength
-		, castor::Image & image )
+		, castor::Image & image )noexcept
 	{
 		try
 		{

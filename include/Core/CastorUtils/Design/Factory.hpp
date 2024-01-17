@@ -62,14 +62,13 @@ namespace castor
 		 */
 		Entry & registerType( Key const & key, Creator create )
 		{
-			auto it = std::find_if( m_registered.begin()
+			if ( auto it = std::find_if( m_registered.begin()
 				, m_registered.end()
 				, [&key]( Entry const & lookup )
 				{
 					return key == lookup.key;
 				} );
-
-			if ( it != m_registered.end() )
+				it != m_registered.end() )
 			{
 				return *it;
 			}
@@ -90,14 +89,13 @@ namespace castor
 		 */
 		void unregisterType( Key const & key )
 		{
-			auto it = std::find_if( m_registered.begin()
+			if ( auto it = std::find_if( m_registered.begin()
 				, m_registered.end()
 				, [&key]( Entry const & lookup )
 				{
 					return key == lookup.key;
 				} );
-
-			if ( it != m_registered.end() )
+				it != m_registered.end() )
 			{
 				m_registered.erase( it );
 			}

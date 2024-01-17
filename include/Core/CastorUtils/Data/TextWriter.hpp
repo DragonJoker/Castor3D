@@ -32,8 +32,8 @@ namespace castor
 		public:
 			CU_API WriterBlock( WriterBlock const & rhs ) = delete;
 			CU_API WriterBlock & operator=( WriterBlock const & rhs ) = delete;
-			CU_API WriterBlock( WriterBlock && rhs );
-			CU_API WriterBlock & operator=( WriterBlock && rhs );
+			CU_API WriterBlock( WriterBlock && rhs )noexcept;
+			CU_API WriterBlock & operator=( WriterBlock && rhs )noexcept;
 
 			CU_API WriterBlock( TextWriterBase * writer
 				, String const & type
@@ -44,7 +44,7 @@ namespace castor
 				, StringStream & file );
 			CU_API WriterBlock( TextWriterBase * writer
 				, StringStream & file );
-			CU_API ~WriterBlock();
+			CU_API ~WriterBlock()noexcept;
 
 			CU_API operator bool()const;
 			CU_API TextWriterBase const * operator->()const;
@@ -59,6 +59,11 @@ namespace castor
 		friend class WriterBlock;
 
 	public:
+		CU_API TextWriterBase( TextWriterBase const & rhs ) = delete;
+		CU_API TextWriterBase & operator=( TextWriterBase const & rhs ) = delete;
+		CU_API TextWriterBase( TextWriterBase && rhs )noexcept;
+		CU_API TextWriterBase & operator=( TextWriterBase && rhs )noexcept;
+		CU_API virtual ~TextWriterBase()noexcept = default;
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -67,13 +72,6 @@ namespace castor
 		 */
 		CU_API explicit TextWriterBase( String tabs = cuEmptyString
 			, String const & name = cuEmptyString );
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		CU_API virtual ~TextWriterBase() = default;
 		/**
 		 *\~english
 		 *\brief		Copies the file with given path to output folder.
@@ -181,7 +179,7 @@ namespace castor
 
 	template<>
 	class TextWriter< int8_t >
-		: TextWriterT< int8_t >
+		: private TextWriterT< int8_t >
 	{
 	public:
 		CU_API explicit TextWriter( String tabs );
@@ -191,7 +189,7 @@ namespace castor
 
 	template<>
 	class TextWriter< uint8_t >
-		: TextWriterT< uint8_t >
+		: private TextWriterT< uint8_t >
 	{
 	public:
 		CU_API explicit TextWriter( String tabs );
@@ -201,7 +199,7 @@ namespace castor
 
 	template<>
 	class TextWriter< int16_t >
-		: TextWriterT< int16_t >
+		: private TextWriterT< int16_t >
 	{
 	public:
 		CU_API explicit TextWriter( String tabs );
@@ -211,7 +209,7 @@ namespace castor
 
 	template<>
 	class TextWriter< uint16_t >
-		: TextWriterT< uint16_t >
+		: private TextWriterT< uint16_t >
 	{
 	public:
 		CU_API explicit TextWriter( String tabs );
@@ -221,7 +219,7 @@ namespace castor
 
 	template<>
 	class TextWriter< int32_t >
-		: TextWriterT< int32_t >
+		: private TextWriterT< int32_t >
 	{
 	public:
 		CU_API explicit TextWriter( String tabs );
@@ -231,7 +229,7 @@ namespace castor
 
 	template<>
 	class TextWriter< uint32_t >
-		: TextWriterT< uint32_t >
+		: private TextWriterT< uint32_t >
 	{
 	public:
 		CU_API explicit TextWriter( String tabs );
@@ -241,7 +239,7 @@ namespace castor
 
 	template<>
 	class TextWriter< int64_t >
-		: TextWriterT< int64_t >
+		: private TextWriterT< int64_t >
 	{
 	public:
 		CU_API explicit TextWriter( String tabs );
@@ -251,7 +249,7 @@ namespace castor
 
 	template<>
 	class TextWriter< uint64_t >
-		: TextWriterT< uint64_t >
+		: private TextWriterT< uint64_t >
 	{
 	public:
 		CU_API explicit TextWriter( String tabs );
@@ -261,7 +259,7 @@ namespace castor
 
 	template<>
 	class TextWriter< float >
-		: TextWriterT< float >
+		: private TextWriterT< float >
 	{
 	public:
 		CU_API explicit TextWriter( String tabs );
@@ -271,7 +269,7 @@ namespace castor
 
 	template<>
 	class TextWriter< double >
-		: TextWriterT< double >
+		: private TextWriterT< double >
 	{
 	public:
 		CU_API explicit TextWriter( String tabs );
@@ -281,7 +279,7 @@ namespace castor
 
 	template<>
 	class TextWriter< String >
-		: TextWriterT< String >
+		: private TextWriterT< String >
 	{
 	public:
 		CU_API explicit TextWriter( String tabs );

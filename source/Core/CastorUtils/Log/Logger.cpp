@@ -9,28 +9,18 @@ namespace castor
 {
 	static const std::string ERROR_LOGGER_ALREADY_INITIALISED = "Logger instance already initialised";
 
-	Logger * Logger::m_singleton = nullptr;
+	std::unique_ptr< Logger > Logger::m_singleton = nullptr;
 
 	Logger::Logger( LogType level )
 		: m_console{ std::make_unique< ProgramConsole >( level < LogType::eInfo ) }
 		, m_instance{ std::make_unique< LoggerInstance >( *m_console, level ) }
-		, m_cout{ new InfoLoggerStreambufT< char >( *m_instance, std::cout ) }
-		, m_cerr{ new ErrorLoggerStreambufT< char >( *m_instance, std::cerr ) }
-		, m_clog{ new DebugLoggerStreambufT< char >( *m_instance, std::clog ) }
-		, m_wcout{ new InfoLoggerStreambufT< wchar_t >( *m_instance, std::wcout ) }
-		, m_wcerr{ new ErrorLoggerStreambufT< wchar_t >( *m_instance, std::wcerr ) }
-		, m_wclog{ new DebugLoggerStreambufT< wchar_t >( *m_instance, std::wclog ) }
+		, m_cout{ std::make_unique< InfoLoggerStreambufT< char > >( *m_instance, std::cout ) }
+		, m_cerr{ std::make_unique< ErrorLoggerStreambufT< char > >( *m_instance, std::cerr ) }
+		, m_clog{ std::make_unique< DebugLoggerStreambufT< char > >( *m_instance, std::clog ) }
+		, m_wcout{ std::make_unique< InfoLoggerStreambufT< wchar_t > >( *m_instance, std::wcout ) }
+		, m_wcerr{ std::make_unique< ErrorLoggerStreambufT< wchar_t > >( *m_instance, std::wcerr ) }
+		, m_wclog{ std::make_unique< DebugLoggerStreambufT< wchar_t > >( *m_instance, std::wclog ) }
 	{
-	}
-
-	Logger::~Logger()
-	{
-		delete m_cout;
-		delete m_cerr;
-		delete m_clog;
-		delete m_wcout;
-		delete m_wcerr;
-		delete m_wclog;
 	}
 
 	LoggerInstance * Logger::initialise( LogType level )
@@ -43,7 +33,7 @@ namespace castor
 		}
 		else
 		{
-			m_singleton = new Logger( level );
+			m_singleton = std::make_unique< Logger >( level );
 			result = m_singleton->getInstance();
 		}
 
@@ -54,8 +44,7 @@ namespace castor
 	{
 		if ( m_singleton )
 		{
-			delete m_singleton;
-			m_singleton = nullptr;
+			m_singleton.reset();
 		}
 	}
 
@@ -65,7 +54,7 @@ namespace castor
 		return std::make_unique< LoggerInstance >( *getSingleton().m_console, logLevel );
 	}
 
-	void Logger::registerCallback( LogCallback pfnCallback, void * pCaller )
+	void Logger::registerCallback( LogCallback const & pfnCallback, void * pCaller )
 	{
 		CU_Require( getSingleton().m_instance );
 		getSingleton().m_instance->registerCallback( pfnCallback, pCaller );

@@ -184,9 +184,9 @@ namespace castor
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = String;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ParameterType ParamType = ParameterType::eText;
+		CU_API static constexpr ParameterType ParamType = ParameterType::eText;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
-		CU_API static xchar const * const StringType;
+		CU_API static StringView constexpr StringType = cuT( "text" );
 	};
 	/**
 	\~english
@@ -199,11 +199,11 @@ namespace castor
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = String;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ParameterType ParamType = ParameterType::eName;
+		CU_API static constexpr ParameterType ParamType = ParameterType::eName;
 		//!~english The parameter type.	\~french Le type de paramètre.
 		CU_API static const ParameterType ParameterBaseType = ParameterType::eText;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
-		CU_API static xchar const * const StringType;
+		CU_API static StringView constexpr StringType = cuT( "name" );
 	};
 	/**
 	\~english
@@ -216,9 +216,9 @@ namespace castor
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = Path;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ParameterType ParamType = ParameterType::ePath;
+		CU_API static constexpr ParameterType ParamType = ParameterType::ePath;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
-		CU_API static xchar const * const StringType;
+		CU_API static StringView constexpr StringType = cuT( "path" );
 	};
 	/**
 	\~english
@@ -231,11 +231,11 @@ namespace castor
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = uint32_t;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ParameterType ParamType = ParameterType::eCheckedText;
+		CU_API static constexpr ParameterType ParamType = ParameterType::eCheckedText;
 		//!~english The parameter base type.	\~french Le type de base du paramètre.
 		CU_API static const ParameterType ParameterBaseType = ParameterType::eUInt32;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
-		CU_API static xchar const * const StringType;
+		CU_API static StringView constexpr StringType = cuT( "checked text" );
 	};
 	/**
 	\~english
@@ -248,11 +248,11 @@ namespace castor
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = uint32_t;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ParameterType ParamType = ParameterType::eBitwiseOred32BitsCheckedText;
+		CU_API static constexpr ParameterType ParamType = ParameterType::eBitwiseOred32BitsCheckedText;
 		//!~english The parameter base type.	\~french Le type de base du paramètre.
 		CU_API static const ParameterType ParameterBaseType = ParameterType::eUInt32;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
-		CU_API static xchar const * const StringType;
+		CU_API static StringView constexpr StringType = cuT( "32 bits bitwise ORed checked texts" );
 	};
 	/**
 	\~english
@@ -265,11 +265,11 @@ namespace castor
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = uint64_t;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ParameterType ParamType = ParameterType::eBitwiseOred64BitsCheckedText;
+		CU_API static constexpr ParameterType ParamType = ParameterType::eBitwiseOred64BitsCheckedText;
 		//!~english The parameter base type.	\~french Le type de base du paramètre.
 		CU_API static const ParameterType ParameterBaseType = ParameterType::eUInt64;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
-		CU_API static xchar const * const StringType;
+		CU_API static StringView constexpr StringType = cuT( "64 bits bitwise ORed checked texts" );
 	};
 	/**
 	\~english
@@ -282,9 +282,9 @@ namespace castor
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = bool;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ParameterType ParamType = ParameterType::eBool;
+		CU_API static constexpr ParameterType ParamType = ParameterType::eBool;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
-		CU_API static xchar const * const StringType;
+		CU_API static StringView constexpr StringType = cuT( "boolean" );
 	};
 	/**
 	\~english
@@ -297,9 +297,9 @@ namespace castor
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = int8_t;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ParameterType ParamType = ParameterType::eInt8;
+		CU_API static constexpr ParameterType ParamType = ParameterType::eInt8;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
-		CU_API static xchar const * const StringType;
+		CU_API static StringView constexpr StringType = cuT( "8 bits signed integer" );
 	};
 	/**
 	\~english
@@ -312,9 +312,9 @@ namespace castor
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = int16_t;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ParameterType ParamType = ParameterType::eInt16;
+		CU_API static constexpr ParameterType ParamType = ParameterType::eInt16;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
-		CU_API static xchar const * const StringType;
+		CU_API static StringView constexpr StringType = cuT( "16 bits signed integer" );
 	};
 	/**
 	\~english
@@ -327,9 +327,9 @@ namespace castor
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = int32_t;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ParameterType ParamType = ParameterType::eInt32;
+		CU_API static constexpr ParameterType ParamType = ParameterType::eInt32;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
-		CU_API static xchar const * const StringType;
+		CU_API static StringView constexpr StringType = cuT( "32 bits signed integer" );
 	};
 	/**
 	\~english
@@ -342,9 +342,9 @@ namespace castor
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = int64_t;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ParameterType ParamType = ParameterType::eInt64;
+		CU_API static constexpr ParameterType ParamType = ParameterType::eInt64;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
-		CU_API static xchar const * const StringType;
+		CU_API static StringView constexpr StringType = cuT( "64 bits signed integer" );
 	};
 	/**
 	\~english
@@ -357,9 +357,9 @@ namespace castor
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = uint8_t;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ParameterType ParamType = ParameterType::eUInt8;
+		CU_API static constexpr ParameterType ParamType = ParameterType::eUInt8;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
-		CU_API static xchar const * const StringType;
+		CU_API static StringView constexpr StringType = cuT( "8 bits unsigned integer" );
 	};
 	/**
 	\~english
@@ -372,9 +372,9 @@ namespace castor
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = uint16_t;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ParameterType ParamType = ParameterType::eUInt16;
+		CU_API static constexpr ParameterType ParamType = ParameterType::eUInt16;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
-		CU_API static xchar const * const StringType;
+		CU_API static StringView constexpr StringType = cuT( "16 bits unsigned integer" );
 	};
 	/**
 	\~english
@@ -387,9 +387,9 @@ namespace castor
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = uint32_t;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ParameterType ParamType = ParameterType::eUInt32;
+		CU_API static constexpr ParameterType ParamType = ParameterType::eUInt32;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
-		CU_API static xchar const * const StringType;
+		CU_API static StringView constexpr StringType = cuT( "32 bits unsigned integer" );
 	};
 	/**
 	\~english
@@ -402,9 +402,9 @@ namespace castor
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = uint64_t;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ParameterType ParamType = ParameterType::eUInt64;
+		CU_API static constexpr ParameterType ParamType = ParameterType::eUInt64;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
-		CU_API static xchar const * const StringType;
+		CU_API static StringView constexpr StringType = cuT( "64 bits unsigned integer" );
 	};
 	/**
 	\~english
@@ -417,9 +417,9 @@ namespace castor
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = float;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ParameterType ParamType = ParameterType::eFloat;
+		CU_API static constexpr ParameterType ParamType = ParameterType::eFloat;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
-		CU_API static xchar const * const StringType;
+		CU_API static StringView constexpr StringType = cuT( "simple precision floating point" );
 	};
 	/**
 	\~english
@@ -432,9 +432,9 @@ namespace castor
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = double;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ParameterType ParamType = ParameterType::eDouble;
+		CU_API static constexpr ParameterType ParamType = ParameterType::eDouble;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
-		CU_API static xchar const * const StringType;
+		CU_API static StringView constexpr StringType = cuT( "double precision floating point" );
 	};
 	/**
 	\~english
@@ -447,9 +447,9 @@ namespace castor
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = long double;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ParameterType ParamType = ParameterType::eLongDouble;
+		CU_API static constexpr ParameterType ParamType = ParameterType::eLongDouble;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
-		CU_API static xchar const * const StringType;
+		CU_API static StringView constexpr StringType = cuT( "long double precision floating point" );
 	};
 	/**
 	\~english
@@ -462,9 +462,9 @@ namespace castor
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = PixelFormat;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ParameterType ParamType = ParameterType::ePixelFormat;
+		CU_API static constexpr ParameterType ParamType = ParameterType::ePixelFormat;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
-		CU_API static xchar const * const StringType;
+		CU_API static StringView constexpr StringType = cuT( "pixel format" );
 	};
 	/**
 	\~english
@@ -477,9 +477,9 @@ namespace castor
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = Point2i;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ParameterType ParamType = ParameterType::ePoint2I;
+		CU_API static constexpr ParameterType ParamType = ParameterType::ePoint2I;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
-		CU_API static xchar const * const StringType;
+		CU_API static StringView constexpr StringType = cuT( "2 signed integers point" );
 	};
 	/**
 	\~english
@@ -492,9 +492,9 @@ namespace castor
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = Point3i;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ParameterType ParamType = ParameterType::ePoint3I;
+		CU_API static constexpr ParameterType ParamType = ParameterType::ePoint3I;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
-		CU_API static xchar const * const StringType;
+		CU_API static StringView constexpr StringType = cuT( "3 signed integers point" );
 	};
 	/**
 	\~english
@@ -507,9 +507,9 @@ namespace castor
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = Point4i;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ParameterType ParamType = ParameterType::ePoint4I;
+		CU_API static constexpr ParameterType ParamType = ParameterType::ePoint4I;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
-		CU_API static xchar const * const StringType;
+		CU_API static StringView constexpr StringType = cuT( "4 signed integers point" );
 	};
 	/**
 	\~english
@@ -522,9 +522,9 @@ namespace castor
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = Point2ui;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ParameterType ParamType = ParameterType::ePoint2U;
+		CU_API static constexpr ParameterType ParamType = ParameterType::ePoint2U;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
-		CU_API static xchar const * const StringType;
+		CU_API static StringView constexpr StringType = cuT( "2 unsigned integers point" );
 	};
 	/**
 	\~english
@@ -537,9 +537,9 @@ namespace castor
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = Point3ui;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ParameterType ParamType = ParameterType::ePoint3U;
+		CU_API static constexpr ParameterType ParamType = ParameterType::ePoint3U;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
-		CU_API static xchar const * const StringType;
+		CU_API static StringView constexpr StringType = cuT( "3 unsigned integers point" );
 	};
 	/**
 	\~english
@@ -552,9 +552,9 @@ namespace castor
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = Point4ui;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ParameterType ParamType = ParameterType::ePoint4U;
+		CU_API static constexpr ParameterType ParamType = ParameterType::ePoint4U;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
-		CU_API static xchar const * const StringType;
+		CU_API static StringView constexpr StringType = cuT( "4 unsigned integers point" );
 	};
 	/**
 	\~english
@@ -567,9 +567,9 @@ namespace castor
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = Point2f;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ParameterType ParamType = ParameterType::ePoint2F;
+		CU_API static constexpr ParameterType ParamType = ParameterType::ePoint2F;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
-		CU_API static xchar const * const StringType;
+		CU_API static StringView constexpr StringType = cuT( "2 simple precision floating point numbers point" );
 	};
 	/**
 	\~english
@@ -582,9 +582,9 @@ namespace castor
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = Point3f;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ParameterType ParamType = ParameterType::ePoint3F;
+		CU_API static constexpr ParameterType ParamType = ParameterType::ePoint3F;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
-		CU_API static xchar const * const StringType;
+		CU_API static StringView constexpr StringType = cuT( "3 simple precision floating point numbers point" );
 	};
 	/**
 	\~english
@@ -597,9 +597,9 @@ namespace castor
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = Point4f;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ParameterType ParamType = ParameterType::ePoint4F;
+		CU_API static constexpr ParameterType ParamType = ParameterType::ePoint4F;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
-		CU_API static xchar const * const StringType;
+		CU_API static StringView constexpr StringType = cuT( "4 simple precision floating point numbers point" );
 	};
 	/**
 	\~english
@@ -612,9 +612,9 @@ namespace castor
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = Point2d;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ParameterType ParamType = ParameterType::ePoint2D;
+		CU_API static constexpr ParameterType ParamType = ParameterType::ePoint2D;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
-		CU_API static xchar const * const StringType;
+		CU_API static StringView constexpr StringType = cuT( "2 double precision floating point numbers point" );
 	};
 	/**
 	\~english
@@ -627,9 +627,9 @@ namespace castor
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = Point3d;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ParameterType ParamType = ParameterType::ePoint3D;
+		CU_API static constexpr ParameterType ParamType = ParameterType::ePoint3D;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
-		CU_API static xchar const * const StringType;
+		CU_API static StringView constexpr StringType = cuT( "3 double precision floating point numbers point" );
 	};
 	/**
 	\~english
@@ -642,9 +642,9 @@ namespace castor
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = Point4d;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ParameterType ParamType = ParameterType::ePoint4D;
+		CU_API static constexpr ParameterType ParamType = ParameterType::ePoint4D;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
-		CU_API static xchar const * const StringType;
+		CU_API static StringView constexpr StringType = cuT( "4 double precision floating point numbers point" );
 	};
 	/**
 	\~english
@@ -657,9 +657,9 @@ namespace castor
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = Size;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ParameterType ParamType = ParameterType::eSize;
+		CU_API static constexpr ParameterType ParamType = ParameterType::eSize;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
-		CU_API static xchar const * const StringType;
+		CU_API static StringView constexpr StringType = cuT( "size" );
 	};
 	/**
 	\~english
@@ -672,9 +672,9 @@ namespace castor
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = Position;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ParameterType ParamType = ParameterType::ePosition;
+		CU_API static constexpr ParameterType ParamType = ParameterType::ePosition;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
-		CU_API static xchar const * const StringType;
+		CU_API static StringView constexpr StringType = cuT( "position" );
 	};
 	/**
 	\~english
@@ -687,9 +687,9 @@ namespace castor
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = Rectangle;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ParameterType ParamType = ParameterType::eRectangle;
+		CU_API static constexpr ParameterType ParamType = ParameterType::eRectangle;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
-		CU_API static xchar const * const StringType;
+		CU_API static StringView constexpr StringType = cuT( "rectangle" );
 	};
 	/**
 	\~english
@@ -702,9 +702,9 @@ namespace castor
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = RgbColour;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ParameterType ParamType = ParameterType::eRgbColour;
+		CU_API static constexpr ParameterType ParamType = ParameterType::eRgbColour;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
-		CU_API static xchar const * const StringType;
+		CU_API static StringView constexpr StringType = cuT( "RGB colour" );
 	};
 	/**
 	\~english
@@ -717,9 +717,9 @@ namespace castor
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = RgbaColour;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ParameterType ParamType = ParameterType::eRgbaColour;
+		CU_API static constexpr ParameterType ParamType = ParameterType::eRgbaColour;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
-		CU_API static xchar const * const StringType;
+		CU_API static StringView constexpr StringType = cuT( "RGBA colour" );
 	};
 	/**
 	\~english
@@ -732,9 +732,9 @@ namespace castor
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = HdrRgbColour;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ParameterType ParamType = ParameterType::eHdrRgbColour;
+		CU_API static constexpr ParameterType ParamType = ParameterType::eHdrRgbColour;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
-		CU_API static xchar const * const StringType;
+		CU_API static StringView constexpr StringType = cuT( "HDR RGB colour" );
 	};
 	/**
 	\~english
@@ -747,9 +747,9 @@ namespace castor
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = HdrRgbaColour;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ParameterType ParamType = ParameterType::eHdrRgbaColour;
+		CU_API static constexpr ParameterType ParamType = ParameterType::eHdrRgbaColour;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
-		CU_API static xchar const * const StringType;
+		CU_API static StringView constexpr StringType = cuT( "HDR RGBA colour" );
 	};
 	/**
 	\~english
@@ -806,6 +806,8 @@ namespace castor
 		: public std::false_type
 	{
 	};
+	template< ParameterType Type >
+	inline bool constexpr isArithmeticTypeV = IsArithmeticType< Type >::value;
 	/**
 	\~english
 	\brief		Structure used to tell if a ParameterType is an arithmetic type.
@@ -957,7 +959,7 @@ namespace castor
 	 *\brief		Récupère le nom du type de paramètre donné.
 	 *\param[in]	type	Le type de paramètre.
 	 */
-	CU_API String const & getTypeName( ParameterType type );
+	CU_API StringView getTypeName( ParameterType type );
 }
 
 #endif

@@ -24,10 +24,10 @@ namespace castor
 
 		LoggerInstance( LoggerInstance const & ) = delete;
 		LoggerInstance & operator=( LoggerInstance const & ) = delete;
-		CU_API LoggerInstance( LoggerInstance && rhs );
-		CU_API LoggerInstance & operator=( LoggerInstance && rhs );
+		CU_API LoggerInstance( LoggerInstance && rhs )noexcept;
+		CU_API LoggerInstance & operator=( LoggerInstance && rhs )noexcept;
 
-		CU_API ~LoggerInstance();
+		CU_API ~LoggerInstance()noexcept;
 		/**
 		 *\~english
 		 *\brief		sets the log file address.
@@ -50,7 +50,7 @@ namespace castor
 		 *\param[in]	callback	Le callback
 		 *\param[in]	caller		Pointeur sur des données utilisateur, utilisé pour identifier le callback
 		 */
-		CU_API void registerCallback( LogCallback callback, void * caller );
+		CU_API void registerCallback( LogCallback const & callback, void * caller );
 		/**
 		 *\~english
 		 *\brief		Unregisters the logging callback
@@ -78,7 +78,7 @@ namespace castor
 		 *\~french
 		 *\return		Le niveau de log actuel.
 		 */
-		CU_API LogType getLevel();
+		CU_API LogType getLevel()const;
 		/**
 		 *\~english
 		 *\brief		Logs a trace message, from a std::string
@@ -367,7 +367,7 @@ namespace castor
 
 		CU_API void flushQueue();
 
-		String getHeader( uint8_t index )const
+		String getHeader( uint8_t index )const noexcept
 		{
 			return m_headers[index];
 		}
@@ -377,7 +377,7 @@ namespace castor
 			m_mutexQueue.lock();
 		}
 
-		void unlock()const
+		void unlock()const noexcept
 		{
 			m_mutexQueue.unlock();
 		}
@@ -392,7 +392,14 @@ namespace castor
 	private:
 		LogType m_logLevel;
 		LoggerImpl m_impl;
-		std::array< String, size_t( LogType::eCount ) > m_headers;
+		std::array< String, size_t( LogType::eCount ) > m_headers
+		{
+			cuT( "****TRACE**** " ),
+			cuT( "****DEBUG**** " ),
+			cuT( "              " ),
+			cuT( "***WARNING*** " ),
+			cuT( "****ERROR**** " ),
+		};
 		MessageQueue m_queue;
 		mutable std::mutex m_mutexQueue;
 		std::thread m_logThread;

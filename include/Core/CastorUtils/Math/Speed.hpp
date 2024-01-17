@@ -65,25 +65,11 @@ namespace castor
 		using value_type = ValueT;
 
 	public:
-		SpeedT()
-			: m_value{}
-		{
-		}
+		SpeedT() = default;
 
 		explicit SpeedT( ValueT const & value )
 			: m_value{ value }
 		{
-		}
-
-		SpeedT( SpeedT< ValueT, DurationT > const & rhs )
-			: m_value{ rhs.m_value }
-		{
-		}
-
-		SpeedT & operator=( SpeedT< ValueT, DurationT > const & rhs )
-		{
-			m_value = rhs.m_value;
-			return *this;
 		}
 
 		template< typename ValueU, typename DurationU >
@@ -165,7 +151,7 @@ namespace castor
 		static DurationT constexpr Unit{ 1u };
 
 	private:
-		ValueT m_value;
+		ValueT m_value{};
 
 		template< typename Value, typename Duration, typename Traits >
 		friend bool operator==( SpeedT< Value, Duration, Traits > const &, SpeedT< Value, Duration, Traits > const & );
@@ -232,7 +218,7 @@ namespace castor
 
 	template< typename DurationT, typename ValueT >
 	SpeedT< ValueT, DurationT > makeSpeed( ValueT const & value 
-		, DurationT const & unit )
+		, DurationT const & )
 	{
 		return makeSpeed< DurationT >( value );
 	}

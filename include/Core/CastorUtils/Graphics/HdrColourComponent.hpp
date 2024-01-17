@@ -12,11 +12,6 @@ namespace castor
 	{
 	public:
 		HdrColourComponent() = default;
-		HdrColourComponent( HdrColourComponent const & rhs ) = default;
-		HdrColourComponent & operator=( HdrColourComponent const & rhs ) = default;
-		HdrColourComponent( HdrColourComponent && rhs ) = default;
-		HdrColourComponent & operator=( HdrColourComponent && rhs ) = default;
-		~HdrColourComponent() = default;
 		/**
 		 *\~english
 		 *\brief		Constructor from SRGB component.
@@ -212,7 +207,7 @@ namespace castor
 		 *\~french
 		 *\brief		Opérateur de conversion vers int8_t
 		 */
-		inline int8_t & convertTo( int8_t & v )const
+		int8_t & convertTo( int8_t & v )const
 		{
 			return v = int8_t( value() );
 		}
@@ -222,7 +217,7 @@ namespace castor
 		 *\~french
 		 *\brief		Opérateur de conversion vers uint8_t
 		 */
-		inline uint8_t & convertTo( uint8_t & v )const
+		uint8_t & convertTo( uint8_t & v )const
 		{
 			return v = uint8_t( value() );
 		}
@@ -232,7 +227,7 @@ namespace castor
 		 *\~french
 		 *\brief		Opérateur de conversion vers int16_t
 		 */
-		inline int16_t & convertTo( int16_t & v )const
+		int16_t & convertTo( int16_t & v )const
 		{
 			return v = int16_t( value() );
 		}
@@ -242,7 +237,7 @@ namespace castor
 		 *\~french
 		 *\brief		Opérateur de conversion vers uint16_t
 		 */
-		inline uint16_t & convertTo( uint16_t & v )const
+		uint16_t & convertTo( uint16_t & v )const
 		{
 			return v = uint16_t( value() );
 		}
@@ -252,7 +247,7 @@ namespace castor
 		 *\~french
 		 *\brief		Opérateur de conversion vers int32_t
 		 */
-		inline int32_t & convertTo( int32_t & v )const
+		int32_t & convertTo( int32_t & v )const
 		{
 			return v = int32_t( value() );
 		}
@@ -262,7 +257,7 @@ namespace castor
 		 *\~french
 		 *\brief		Opérateur de conversion vers uint32_t
 		 */
-		inline uint32_t & convertTo( uint32_t & v )const
+		uint32_t & convertTo( uint32_t & v )const
 		{
 			return v = uint32_t( value() );
 		}
@@ -272,7 +267,7 @@ namespace castor
 		 *\~french
 		 *\brief		Opérateur de conversion vers int64_t
 		 */
-		inline int64_t & convertTo( int64_t & v )const
+		int64_t & convertTo( int64_t & v )const
 		{
 			return v = int64_t( value() );
 		}
@@ -282,7 +277,7 @@ namespace castor
 		 *\~french
 		 *\brief		Opérateur de conversion vers uint64_t
 		 */
-		inline uint64_t & convertTo( uint64_t & v )const
+		uint64_t & convertTo( uint64_t & v )const
 		{
 			return v = uint64_t( value() );
 		}
@@ -292,7 +287,7 @@ namespace castor
 		 *\~french
 		 *\brief		Opérateur de conversion vers float
 		 */
-		inline float & convertTo( float & v )const
+		float & convertTo( float & v )const
 		{
 			return v = value();
 		}
@@ -302,7 +297,7 @@ namespace castor
 		 *\~french
 		 *\brief		Opérateur de conversion vers float
 		 */
-		inline double & convertTo( double & v )const
+		double & convertTo( double & v )const
 		{
 			return v = value();
 		}
@@ -312,7 +307,7 @@ namespace castor
 		 *\~french
 		 *\brief		Opérateur de conversion vers float
 		 */
-		inline long double & convertTo( long double & v )const
+		long double & convertTo( long double & v )const
 		{
 			return v = value();
 		}
@@ -456,7 +451,7 @@ namespace castor
 		 *\brief		Opérateur de conversion implicite
 		 *\return		La valeur
 		 */
-		inline operator float()const
+		operator float()const
 		{
 			return m_component;
 		}
@@ -468,7 +463,7 @@ namespace castor
 		 *\brief		Récupère la valeur de la composante
 		 *\return		La valeur
 		 */
-		inline float const & value()const
+		float const & value()const
 		{
 			return m_component;
 		}
@@ -480,7 +475,7 @@ namespace castor
 		 *\brief		Récupère la valeur de la composante
 		 *\return		La valeur
 		 */
-		inline float & value()
+		float & value()
 		{
 			return m_component;
 		}

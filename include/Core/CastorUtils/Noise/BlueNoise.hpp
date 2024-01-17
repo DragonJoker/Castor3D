@@ -31,30 +31,22 @@ namespace castor
 			const uint32_t r1 = 2447445397u;// prime[(2^32-1) / phi_2^2]
 
 			// h = high-freq dither noise
-			uint32_t h = ( x * r0 ) + ( y * r1 );
-
+			uint32_t h;
 			uint32_t l;
-			{
-				x = x0 >> 2u;
-				y = y0 >> 2u;
-				adjust( x, y );
 
-				uint32_t h = ( x * r0 ) + ( y * r1 );
-				h = h ^ 0xE2E17FDCu;
+			x = x0 >> 2u;
+			y = y0 >> 2u;
+			adjust( x, y );
+			h = ( x * r0 ) + ( y * r1 );
+			h = h ^ 0xE2E17FDCu;
+			l = h;
 
-				l = h;
-
-				{
-					x = x0 >> 4u;
-					y = y0 >> 4u;
-					adjust( x, y );
-
-					uint32_t h = ( x * r0 ) + ( y * r1 );
-					h = h ^ 0x1B98264Du;
-
-					l += h;
-				}
-			}
+			x = x0 >> 4u;
+			y = y0 >> 4u;
+			adjust( x, y );
+			h = ( x * r0 ) + ( y * r1 );
+			h = h ^ 0x1B98264Du;
+			l += h;
 
 			// combine low and high
 			return float( float( l + h * 1u ) * ( 1.0 / 4294967296.0 ) );
@@ -65,11 +57,11 @@ namespace castor
 		{
 			if ( ( ( x ^ y ) & 4u ) == 0u )
 			{
-			// flip every other tile to reduce anisotropy
+				// flip every other tile to reduce anisotropy
 				std::swap( x, y );
 			}
 
-			if ( ( ( y ) & 4u ) == 0u )
+			if ( ( y & 4u ) == 0u )
 			{
 				x = -x;// more iso but also more low-freq content
 			}

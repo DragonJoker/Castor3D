@@ -14,6 +14,8 @@ namespace castor
 	class FixedSizeMarkedMemoryData
 	{
 		using Namer = MemoryDataNamer< MemoryDataType::eMarked >;
+		using ObjectPtr = Object *;
+		using BytePtr = uint8_t *;
 
 		static const uint8_t NEVER_ALLOCATED = 0x00;
 		static const uint8_t ALLOCATED = 0xAD;
@@ -66,8 +68,7 @@ namespace castor
 				{
 					if ( *buffer == ALLOCATED )
 					{
-						reportError< PoolErrorType::eMarkedLeakAddress >( Namer::Name
-							, reinterpret_cast< void * >( buffer + 1 ) );
+						reportError< PoolErrorType::eMarkedLeakAddress >( Namer::Name, buffer + 1 );
 					}
 
 					buffer += size;
@@ -101,7 +102,7 @@ namespace castor
 
 			uint8_t * space = *--m_freeIndex;
 			* space = ALLOCATED;
-			return reinterpret_cast< Object * >( ++space );
+			return ObjectPtr( ++space );
 		}
 		/**
 		 *\~english
@@ -123,32 +124,28 @@ namespace castor
 			{
 				if ( m_freeIndex == m_freeEnd )
 				{
-					reportError< PoolErrorType::eCommonPoolIsFull >( Namer::Name
-						, reinterpret_cast< void * >( space ) );
+					reportError< PoolErrorType::eCommonPoolIsFull >( Namer::Name, space );
 					return false;
 				}
 
 				if ( ptrdiff_t( space ) < ptrdiff_t( m_buffer ) || ptrdiff_t( space ) >= ptrdiff_t( m_bufferEnd ) )
 				{
-					reportError< PoolErrorType::eCommonNotFromRange >( Namer::Name
-						, reinterpret_cast< void * >( space ) );
+					reportError< PoolErrorType::eCommonNotFromRange >( Namer::Name, space );
 					return false;
 				}
 
-				uint8_t * marked = reinterpret_cast< uint8_t * >( space );
+				auto marked = BytePtr( space );
 				--marked;
 
 				if ( *marked != ALLOCATED )
 				{
 					if ( *marked == FREED )
 					{
-						reportError< PoolErrorType::eMarkedDoubleDelete >( Namer::Name
-							, reinterpret_cast< void * >( space ) );
+						reportError< PoolErrorType::eMarkedDoubleDelete >( Namer::Name, space );
 						return false;
 					}
 
-					reportError< PoolErrorType::eMarkedNotFromPool >( Namer::Name
-						, reinterpret_cast< void * >( space ) );
+					reportError< PoolErrorType::eMarkedNotFromPool >( Namer::Name, space );
 					return false;
 				}
 

@@ -41,8 +41,6 @@ namespace castor
 				, std::move( merge ) }
 		{
 		}
-
-		~ResourceCacheT()override = default;
 		/**@}*/
 	};
 	/**
@@ -59,7 +57,7 @@ namespace castor
 	{
 		using ElementT = typename CacheT::ElementT;
 
-		void operator()( ElementT & res )const
+		void operator()( ElementT & )const
 		{
 		}
 	};

@@ -14,9 +14,6 @@ namespace castor
 		using Type = BinaryFile;
 	};
 	/**
-	\author Sylvain DOREMUS
-	\version 0.6.1.0
-	\date 03/01/2011
 	\~english
 	\brief User friendly File class
 	\remark adds some static functions to check file/directory validity, file/directory creation...
@@ -43,13 +40,6 @@ namespace castor
 		CU_API BinaryFile( Path const & fileName
 			, FlagCombination< OpenMode > const & mode
 			, EncodingMode encodingMode = EncodingMode::eASCII );
-		/**
-		 *\~english
-		 *\brief		Destructor, closes the file
-		 *\~french
-		 *\brief		Destructeur, ferme le fichier
-		 */
-		CU_API ~BinaryFile()override;
 		/**
 		 *\~english
 		 *\brief		Writes a string into the file (binary, so writes size then content, without '\0')

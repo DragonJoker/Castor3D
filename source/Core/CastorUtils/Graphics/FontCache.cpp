@@ -16,7 +16,7 @@ namespace castor
 	ResourceCacheTraitsT< Font, String >::ElementPtrT ResourceCacheTraitsT< Font, String >::makeElement( ResourceCacheBaseT< Font, String, ResourceCacheTraitsT< Font, String > > const & cache
 		, String const & name
 		, uint32_t height
-		, Path path )
+		, Path const & path )
 	{
 		auto & realCache = static_cast< ResourceCacheT< Font, String, ResourceCacheTraitsT< Font, String > > const & >( cache );
 		auto realPath = realCache.getRealPath( path );
@@ -33,7 +33,7 @@ namespace castor
 
 	ResourceCacheT< Font, String, FontCacheTraits >::ResourceCacheT( LoggerInstance & logger )
 		: ResourceCacheBaseT< Font, String >{ logger
-			, [this]( ElementT & resource )
+			, [this]( ElementT const & resource )
 			{
 				auto path = resource.getFilePath();
 				auto nameExt = path.getFileName( true );
@@ -41,7 +41,7 @@ namespace castor
 				if ( m_paths.find( nameExt ) == m_paths.end()
 					&& File::fileExists( path ) )
 				{
-					m_paths.insert( std::make_pair( nameExt, path ) );
+					m_paths.try_emplace( nameExt, path );
 				}
 			} }
 	{

@@ -96,7 +96,7 @@ namespace castor
 			, PixelFormat format
 			, uint8_t const * src )
 		{
-			int channels = int( getComponentsCount( format ) );
+			auto channels = int( getComponentsCount( format ) );
 			int alpha{ hasAlpha( format )
 				? 1
 				: STBIR_ALPHA_CHANNEL_NONE };
@@ -112,15 +112,14 @@ namespace castor
 			result.resize( size_t( dstLayerSize ) );
 			auto dst = result.data();
 
-			auto ret = stbir_resize( src, int( srcDimensions.width ), int( srcDimensions.height ), 0
-				, dst, int( dstDimensions.width ), int( dstDimensions.height ), 0
-				, dataType
-				, channels, alpha, 0
-				, STBIR_EDGE_CLAMP, STBIR_EDGE_CLAMP
-				, STBIR_FILTER_CATMULLROM, STBIR_FILTER_CATMULLROM
-				, colorSpace, nullptr );
-
-			if ( !ret )
+			if ( auto ret = stbir_resize( src, int( srcDimensions.width ), int( srcDimensions.height ), 0
+					, dst, int( dstDimensions.width ), int( dstDimensions.height ), 0
+					, dataType
+					, channels, alpha, 0
+					, STBIR_EDGE_CLAMP, STBIR_EDGE_CLAMP
+					, STBIR_FILTER_CATMULLROM, STBIR_FILTER_CATMULLROM
+					, colorSpace, nullptr );
+				!ret )
 			{
 				CU_LoaderError( "Image couldn't be resized" );
 			}
@@ -159,10 +158,10 @@ namespace castor
 			, uint32_t & dstLevels )
 		{
 			ByteArray result;
-			auto blockSize = ashes::getBlockSize( VkFormat( compressed ) );
 
-			if ( ( extent.width % blockSize.extent.width ) != 0
-				|| ( extent.height % blockSize.extent.height ) != 0 )
+			if ( auto blockSize = ashes::getBlockSize( VkFormat( compressed ) );
+				( extent.width % blockSize.extent.width ) != 0
+					|| ( extent.height % blockSize.extent.height ) != 0 )
 			{
 				auto resized = extent;
 				resized.width = uint32_t( ashes::getAlignedSize( extent.width, blockSize.extent.width ) );
@@ -176,10 +175,8 @@ namespace castor
 				dstLevels = 1u;
 			}
 
-			auto requiredLevels = ashes::getMaxMipCount( extent );
-
-			if ( dstLevels <= 1u
-				&& requiredLevels > 1u )
+			if ( auto requiredLevels = ashes::getMaxMipCount( extent );
+				dstLevels <= 1u && requiredLevels > 1u )
 			{
 				// Since blitting to compressed formats may not be supported by graphics API,
 				// we need to generate them on CPU.
@@ -367,7 +364,7 @@ namespace castor
 	{
 	}
 
-	PxBufferConvertOptions::~PxBufferConvertOptions()
+	PxBufferConvertOptions::~PxBufferConvertOptions()noexcept
 	{
 #if CU_UseCVTT
 		auto options = reinterpret_cast< CVTTOptions * >( additionalOptions );
@@ -470,7 +467,6 @@ namespace castor
 		, m_size{ size }
 		, m_layers{ layers }
 		, m_levels{ levels }
-		, m_buffer{ 0 }
 	{
 		initialise( options, interrupt, buffer, bufferFormat, bufferAlign );
 	}
@@ -501,12 +497,19 @@ namespace castor
 		, m_layers{ rhs.m_layers }
 		, m_levels{ rhs.m_levels }
 		, m_tiles{ rhs.m_tiles }
-		, m_buffer{ 0 }
 	{
 		initialise( rhs.getConstPtr(), rhs.getFormat(), rhs.getAlign() );
 	}
 
-	PxBufferBase::~PxBufferBase()
+	PxBufferBase::PxBufferBase( PxBufferBase && rhs )noexcept
+		: m_format{ rhs.m_format }
+		, m_flipped{ rhs.m_flipped }
+		, m_size{ std::move( rhs.m_size ) }
+		, m_layers{ rhs.m_layers }
+		, m_levels{ rhs.m_levels }
+		, m_align{ rhs.m_align }
+		, m_tiles{ std::move( rhs.m_tiles ) }
+		, m_buffer{ std::move( rhs.m_buffer ) }
 	{
 	}
 
@@ -515,10 +518,23 @@ namespace castor
 		clear();
 		m_size = rhs.m_size;
 		m_format = rhs.m_format;
+		m_align = rhs.m_align;
 		m_layers = rhs.m_layers;
 		m_levels = rhs.m_levels;
 		m_tiles = rhs.m_tiles;
 		initialise( rhs.m_buffer.data(), rhs.m_format );
+		return * this;
+	}
+
+	PxBufferBase & PxBufferBase::operator=( PxBufferBase && rhs )noexcept
+	{
+		m_size = std::move( rhs.m_size );
+		m_format = rhs.m_format;
+		m_align = rhs.m_align;
+		m_layers = rhs.m_layers;
+		m_levels = rhs.m_levels;
+		m_tiles = std::move( rhs.m_tiles );
+		m_buffer = std::move( rhs.m_buffer );
 		return * this;
 	}
 
@@ -614,13 +630,14 @@ namespace castor
 		initialise( nullptr, PixelFormat::eR8G8B8A8_UNORM );
 	}
 
-	void PxBufferBase::swap( PxBufferBase & pixelBuffer )
+	void PxBufferBase::swap( PxBufferBase & pixelBuffer )noexcept
 	{
 		std::swap( m_format, pixelBuffer.m_format );
 		std::swap( m_flipped, pixelBuffer.m_flipped );
 		std::swap( m_size, pixelBuffer.m_size );
 		std::swap( m_layers, pixelBuffer.m_layers );
 		std::swap( m_levels, pixelBuffer.m_levels );
+		std::swap( m_align, pixelBuffer.m_align );
 		std::swap( m_tiles, pixelBuffer.m_tiles );
 		std::swap( m_buffer, pixelBuffer.m_buffer );
 	}
@@ -679,9 +696,8 @@ namespace castor
 				auto srcLevel = srcLayer;
 
 				auto levelSize = ashes::getSize( srcSize, VkFormat( m_format ), level );
-				auto lines = ashes::getSubresourceDimension( srcSize.height, level ) / blockSize.extent.height;
 
-				if ( lines )
+				if ( auto lines = ashes::getSubresourceDimension( srcSize.height, level ) / blockSize.extent.height )
 				{
 					auto srcLineSize = levelSize / lines;
 					auto dstLineSize = srcLineSize * tilesX;

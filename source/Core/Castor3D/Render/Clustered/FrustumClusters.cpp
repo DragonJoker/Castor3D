@@ -32,6 +32,26 @@ namespace castor3d
 
 	namespace frscls
 	{
+		inline const std::array< uint32_t, 6u > NumLevelNodes
+		{
+			1,          // 1st level (32^0)
+			32,         // 2nd level (32^1)
+			1024,       // 3rd level (32^2)
+			32768,      // 4th level (32^3)
+			1048576,    // 5th level (32^4)
+			33554432,   // 6th level (32^5)
+		};
+
+		inline const std::array< uint32_t, 6u > NumBVHNodes
+		{
+			1,          // 1 level  =32^0
+			33,         // 2 levels +32^1
+			1057,       // 3 levels +32^2
+			33825,      // 4 levels +32^3
+			1082401,    // 5 levels +32^4
+			34636833,   // 6 levels +32^5
+		};
+
 		template< typename DataT >
 		void updateBuffer( RenderDevice const & device
 			, VkDeviceSize elementCount
@@ -168,7 +188,7 @@ namespace castor3d
 	void FrustumClusters::update( CpuUpdater & updater )
 	{
 		auto scene = m_camera.getScene();
-		auto & lightCache = scene->getLightCache();
+		auto const & lightCache = scene->getLightCache();
 		m_clustersDirty = lightCache.hasClusteredLights()
 			&& ( m_first > 0 || m_config.dirty );
 		doUpdate();
@@ -240,36 +260,17 @@ namespace castor3d
 
 	uint32_t FrustumClusters::getNumLevelNodes( uint32_t level )
 	{
-		static const uint32_t numLevelNodes[] =
-		{
-			1,          // 1st level (32^0)
-			32,         // 2nd level (32^1)
-			1024,       // 3rd level (32^2)
-			32768,      // 4th level (32^3)
-			1048576,    // 5th level (32^4)
-			33554432,   // 6th level (32^5)
-		};
-		return numLevelNodes[level];
+		return frscls::NumLevelNodes[level];
 	}
 
 	uint32_t FrustumClusters::getNumNodes( uint32_t numLeaves )
 	{
-		static const uint32_t numBVHNodes[] =
-		{
-			1,          // 1 level  =32^0
-			33,         // 2 levels +32^1
-			1057,       // 3 levels +32^2
-			33825,      // 4 levels +32^3
-			1082401,    // 5 levels +32^4
-			34636833,   // 6 levels +32^5
-		};
-
 		uint32_t numLevels = getNumLevels( numLeaves );
 		uint32_t numNodes = 0;
 
-		if ( numLevels > 0 && numLevels < castor::getCountOf( numBVHNodes ) )
+		if ( numLevels > 0 && numLevels < frscls::NumBVHNodes.size() )
 		{
-			numNodes = numBVHNodes[numLevels - 1];
+			numNodes = frscls::NumBVHNodes[size_t( numLevels ) - 1];
 		}
 
 		return numNodes;
@@ -280,7 +281,7 @@ namespace castor3d
 		m_toDelete.clear();
 
 		auto renderSize = getSafeBandedSize( m_camera.getSize() );
-		auto dimensions = m_dimensions.value();
+		auto const & dimensions = m_dimensions.value();
 		m_clusterSize = { castor::divRoundUp( renderSize->x, dimensions->x )
 			, castor::divRoundUp( renderSize->y, dimensions->y ) };
 		m_cameraProjection = m_camera.getProjection( true );

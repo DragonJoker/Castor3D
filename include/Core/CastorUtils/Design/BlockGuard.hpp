@@ -12,6 +12,7 @@ namespace castor
 {
 	template< typename CleanFunc >
 	struct BlockGuard
+		: public NonMovable
 	{
 		/**
 		 *\~english
@@ -39,7 +40,7 @@ namespace castor
 		 *\brief		Destructeur.
 		 *\remarks		Exécute l'action de nettoyage.
 		 */
-		~BlockGuard()
+		~BlockGuard()noexcept
 		{
 			m_clean();
 		}

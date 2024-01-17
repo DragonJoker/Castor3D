@@ -64,7 +64,7 @@
 #include "Castor3D/Shader/Program.hpp"
 
 #include <CastorUtils/Design/ResourceCache.hpp>
-#include <CastorUtils/FileParser/ParserParameter.hpp>
+#include <CastorUtils/FileParser/FileParser.hpp>
 
 using castor::operator<<;
 
@@ -76,9 +76,7 @@ namespace castor3d
 			, castor::String const & meshParams
 			, Parameters & parameters )
 		{
-			auto paramArray = castor::string::split( meshParams, cuT( "-" ), 20, false );
-
-			for ( auto param : paramArray )
+			for ( auto const & param : castor::string::split( meshParams, cuT( "-" ), 20, false ) )
 			{
 				if ( param.find( cuT( "smooth_normals" ) ) == 0 )
 				{
@@ -96,9 +94,8 @@ namespace castor3d
 				}
 				else if ( param.find( cuT( "pitch" ) ) == 0 )
 				{
-					auto eqIndex = param.find( cuT( '=' ) );
-
-					if ( eqIndex != castor::String::npos )
+					if ( auto eqIndex = param.find( cuT( '=' ) );
+						eqIndex != castor::String::npos )
 					{
 						float value;
 						castor::string::parse< float >( param.substr( eqIndex + 1 ), value );
@@ -111,9 +108,8 @@ namespace castor3d
 				}
 				else if ( param.find( cuT( "yaw" ) ) == 0 )
 				{
-					auto eqIndex = param.find( cuT( '=' ) );
-
-					if ( eqIndex != castor::String::npos )
+					if ( auto eqIndex = param.find( cuT( '=' ) );
+						eqIndex != castor::String::npos )
 					{
 						float value;
 						castor::string::parse< float >( param.substr( eqIndex + 1 ), value );
@@ -126,9 +122,8 @@ namespace castor3d
 				}
 				else if ( param.find( cuT( "roll" ) ) == 0 )
 				{
-					auto eqIndex = param.find( cuT( '=' ) );
-
-					if ( eqIndex != castor::String::npos )
+					if ( auto eqIndex = param.find( cuT( '=' ) );
+						eqIndex != castor::String::npos )
 					{
 						float value;
 						castor::string::parse< float >( param.substr( eqIndex + 1 ), value );
@@ -141,9 +136,8 @@ namespace castor3d
 				}
 				else if ( param.find( cuT( "emissive_mult" ) ) == 0 )
 				{
-					auto eqIndex = param.find( cuT( '=' ) );
-
-					if ( eqIndex != castor::String::npos )
+					if ( auto eqIndex = param.find( cuT( '=' ) );
+						eqIndex != castor::String::npos )
 					{
 						float value;
 						castor::string::parse< float >( param.substr( eqIndex + 1 ), value );
@@ -160,9 +154,8 @@ namespace castor3d
 				}
 				else if ( param.find( cuT( "rescale" ) ) == 0 )
 				{
-					auto eqIndex = param.find( cuT( '=' ) );
-
-					if ( eqIndex != castor::String::npos )
+					if ( auto eqIndex = param.find( cuT( '=' ) );
+						eqIndex != castor::String::npos )
 					{
 						float value;
 						castor::string::parse< float >( param.substr( eqIndex + 1 ), value );
@@ -175,15 +168,11 @@ namespace castor3d
 				}
 				else if ( param.find( cuT( "prefix" ) ) == 0 )
 				{
-					auto eqIndex = param.find( cuT( '=' ) );
-
-					if ( eqIndex != castor::String::npos )
+					if ( auto eqIndex = param.find( cuT( '=' ) );
+						eqIndex != castor::String::npos )
 					{
-						castor::String value = param.substr( eqIndex + 1 );
-
-						if ( value.size() > 2
-							&& value.front() == '\"'
-							&& value.back() == '\"' )
+						if ( castor::String value = param.substr( eqIndex + 1 );
+							value.size() > 2 && value.front() == '\"' && value.back() == '\"' )
 						{
 							parameters.add( cuT( "prefix" ), value.substr( 1, value.size() - 2 ) );
 						}
@@ -207,15 +196,11 @@ namespace castor3d
 				}
 				else if ( param.find( cuT( "preferred_importer" ) ) == 0 )
 				{
-					auto eqIndex = param.find( cuT( '=' ) );
-
-					if ( eqIndex != castor::String::npos )
+					if ( auto eqIndex = param.find( cuT( '=' ) );
+						eqIndex != castor::String::npos )
 					{
-						castor::String value = param.substr( eqIndex + 1 );
-
-						if ( value.size() > 2
-							&& value.front() == '\"'
-							&& value.back() == '\"' )
+						if ( castor::String value = param.substr( eqIndex + 1 );
+							value.size() > 2 && value.front() == '\"' && value.back() == '\"' )
 						{
 							parameters.add( cuT( "preferred_importer" ), value.substr( 1, value.size() - 2 ) );
 						}
@@ -273,7 +258,7 @@ namespace castor3d
 					newBlockContext->scene = newBlockContext->ownScene.get();
 				}
 
-				newBlockContext->root->mapScenes.insert( std::make_pair( name, newBlockContext->scene ) );
+				newBlockContext->root->mapScenes.try_emplace( name, newBlockContext->scene );
 				newBlockContext->overlays = castor::makeUnique< OverlayContext >();
 				newBlockContext->overlays->root = blockContext;
 				newBlockContext->overlays->scene = newBlockContext;
@@ -745,8 +730,8 @@ namespace castor3d
 
 				if ( rIntraOcularDistance > 0 )
 				{
-					//blockContext->renderTarget->setStereo( true );
-					//blockContext->renderTarget->setIntraOcularDistance( rIntraOcularDistance );
+					//! blockContext->renderTarget->setStereo( true );
+					//! blockContext->renderTarget->setIntraOcularDistance( rIntraOcularDistance );
 				}
 			}
 		}
@@ -1688,7 +1673,7 @@ namespace castor3d
 
 				SceneImporter importer{ *engine };
 
-				for ( auto & file : blockContext->files )
+				for ( auto const & file : blockContext->files )
 				{
 					if ( !importer.import( *blockContext->scene->scene
 						, file
@@ -1700,7 +1685,7 @@ namespace castor3d
 					}
 				}
 
-				for ( auto & file : blockContext->animFiles )
+				for ( auto const & file : blockContext->animFiles )
 				{
 					if ( !importer.importAnimations( *blockContext->scene->scene
 						, file
@@ -1957,9 +1942,9 @@ namespace castor3d
 			else
 			{
 				castor::String type;
-				Engine * engine = getEngine( *blockContext );
 
-				if ( !engine->getParticleFactory().isTypeRegistered( castor::string::lowerCase( params[0]->get( type ) ) ) )
+				if ( Engine * engine = getEngine( *blockContext );
+					!engine->getParticleFactory().isTypeRegistered( castor::string::lowerCase( params[0]->get( type ) ) ) )
 				{
 					CU_ParsingError( cuT( "Particle type [" ) + type + cuT( "] is not registered, make sure you've got the matching plug-in installed." ) );
 				}
@@ -2416,17 +2401,15 @@ namespace castor3d
 
 			if ( !blockContext->isStatic )
 			{
-				for ( auto fileName : blockContext->scene->root->csnaFiles )
+				for ( auto const & fileName : blockContext->scene->root->csnaFiles )
 				{
 					auto fName = fileName.getFileName();
-					auto pos = fName.find( name );
 
-					if ( pos == 0u
-						&& fName[name.size()] == '-' )
+					if ( auto pos = fName.find( name );
+						pos == 0u && fName[name.size()] == '-' )
 					{
-						auto animName = fName.substr( name.size() + 1u );
-
-						if ( !animName.empty() )
+						if ( auto animName = fName.substr( name.size() + 1u );
+							!animName.empty() )
 						{
 							auto & animation = node->createAnimation( animName );
 							BinaryParser< SceneNodeAnimation > parser;
@@ -2548,6 +2531,7 @@ namespace castor3d
 
 		static CU_ImplementAttributeParserBlock( parserObjectMaterials, ObjectContext )
 		{
+			// Only push the block
 		}
 		CU_EndAttributePushBlock( CSCNSection::eObjectMaterials, blockContext )
 
@@ -2624,40 +2608,38 @@ namespace castor3d
 			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
-			else
+			else if ( blockContext->geometry->getMesh() )
 			{
-				if ( blockContext->geometry->getMesh() )
+				if ( castor::String name;
+					auto material = getEngine( *blockContext )->tryFindMaterial( params[1]->get( name ) ) )
 				{
-					castor::String name;
 					uint16_t index;
 
-					if ( auto material = getEngine( *blockContext )->tryFindMaterial( params[1]->get( name ) ) )
+					if ( blockContext->geometry->getMesh()->getSubmeshCount() > params[0]->get( index ) )
 					{
-						if ( blockContext->geometry->getMesh()->getSubmeshCount() > params[0]->get( index ) )
-						{
-							auto submesh = blockContext->geometry->getMesh()->getSubmesh( index );
-							blockContext->geometry->setMaterial( *submesh, material );
-						}
-						else
-						{
-							CU_ParsingError( cuT( "Submesh index is too high" ) );
-						}
+						auto submesh = blockContext->geometry->getMesh()->getSubmesh( index );
+						blockContext->geometry->setMaterial( *submesh, material );
 					}
 					else
 					{
-						CU_ParsingError( cuT( "Material [" ) + name + cuT( "] does not exist" ) );
+						CU_ParsingError( cuT( "Submesh index is too high" ) );
 					}
 				}
 				else
 				{
-					CU_ParsingError( cuT( "Geometry's mesh not initialised" ) );
+					CU_ParsingError( cuT( "Material [" ) + name + cuT( "] does not exist" ) );
 				}
+			}
+			else
+			{
+				CU_ParsingError( cuT( "Geometry's mesh not initialised" ) );
 			}
 		}
 		CU_EndAttribute()
 
 		static CU_ImplementAttributeParserBlock( parserObjectMaterialsEnd, ObjectContext )
 		{
+			// Only push the block
 		}
 		CU_EndAttributePop()
 
@@ -3057,6 +3039,7 @@ namespace castor3d
 
 		static CU_ImplementAttributeParserBlock( parserMeshDefaultMaterials, MeshContext )
 		{
+			// Only push the block
 		}
 		CU_EndAttributePushBlock( CSCNSection::eMeshDefaultMaterials, blockContext )
 
@@ -3234,6 +3217,7 @@ namespace castor3d
 
 		static CU_ImplementAttributeParserBlock( parserMeshDefaultMaterialsEnd, MeshContext )
 		{
+			// Only push the block
 		}
 		CU_EndAttributePop()
 
@@ -3859,7 +3843,6 @@ namespace castor3d
 		{
 			if ( blockContext->overlay.rptr )
 			{
-				;
 				blockContext->overlay.rptr->setPixelSize( params[0]->get< castor::Size >() );
 			}
 			else
@@ -4138,7 +4121,7 @@ namespace castor3d
 
 			if ( overlay && overlay->getType() == OverlayType::eText )
 			{
-				auto & cache = getEngine( *blockContext )->getFontCache();
+				auto const & cache = getEngine( *blockContext )->getFontCache();
 				castor::String name;
 
 				if ( cache.find( params[0]->get( name ) ) )
@@ -4509,6 +4492,7 @@ namespace castor3d
 
 		static CU_ImplementAttributeParserBlock( parserBillboardPositions, BillboardsContext )
 		{
+			// Only push the block
 		}
 		CU_EndAttributePushBlock( CSCNSection::eBillboardList, blockContext )
 
@@ -4593,9 +4577,8 @@ namespace castor3d
 
 				if ( auto geometry = blockContext->scene->scene->findGeometry( params[0]->get( name ) ) )
 				{
-					auto node = geometry->getParent();
-
-					if ( node && node->hasAnimation() )
+					if ( auto node = geometry->getParent();
+						node && node->hasAnimation() )
 					{
 						blockContext->animNode = blockContext->animGroup->addObject( *node
 							, node->getName() );
@@ -4910,6 +4893,7 @@ namespace castor3d
 
 		static CU_ImplementAttributeParserBlock( parserAnimationEnd, AnimGroupContext )
 		{
+			// Only push the block
 		}
 		CU_EndAttributePop()
 
@@ -5581,7 +5565,7 @@ namespace castor3d
 			context.addPopParser( cuT( "}" ), parserSkyboxEnd );
 		}
 
-		static castor::AttributeParsers registerParsers( Engine & engine )
+		static castor::AttributeParsers registerParsers( Engine const & engine )
 		{
 			using namespace castor;
 			AttributeParsers result;
@@ -5628,7 +5612,7 @@ namespace castor3d
 		}
 	}
 
-	castor::AdditionalParsers createSceneFileParsers( Engine & engine )
+	castor::AdditionalParsers createSceneFileParsers( Engine const & engine )
 	{
 		return { scnprs::registerParsers( engine )
 			, registerSceneFileSections()

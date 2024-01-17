@@ -279,7 +279,7 @@ namespace CastorViewer
 	{
 		if ( !m_timers[size_t( id )]->Start( 10 ) )
 		{
-			castor3d::log::error << "Couldn't start timer: " << castor::System::getLastErrorText() << "\n";
+			castor3d::log::error << "Couldn't start timer: " << castor::system::getLastErrorText() << "\n";
 		}
 	}
 

@@ -15,7 +15,7 @@ namespace castor
 	{
 	}
 
-	BlockTimer::~BlockTimer()
+	BlockTimer::~BlockTimer()noexcept
 	{
 		Logger::logInfo( makeStringStream() << cuT( "BlockTimer::Exited Block : " ) << m_file.substr( m_file.find_last_of( '/' ) + 1u )
 			<< cuT( " " ) << m_function

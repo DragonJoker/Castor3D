@@ -11,13 +11,13 @@
 
 namespace castor
 {
-	namespace System
+	namespace system
 	{
 		namespace util
 		{
-			struct stSCREEN
+			struct ScreenData
 			{
-				stSCREEN( uint32_t wanted
+				ScreenData( uint32_t wanted
 					, uint32_t current
 					, castor::Size & size )
 					: wanted{ wanted }
@@ -31,30 +31,36 @@ namespace castor
 				castor::Size & size;
 				bool retrieved{};
 			};
+			using ScreenDataPtr = ScreenData *;
 
-			BOOL CALLBACK MonitorEnum( HMONITOR CU_UnusedParam( hMonitor )
-				, HDC CU_UnusedParam( hdcMonitor )
-				, LPRECT lprcMonitor
+			BOOL CALLBACK MonitorEnum( CU_UnusedParam( HMONITOR, hMonitor )
+				, CU_UnusedParam( HDC, hdcMonitor )
+				, LPCRECT lprcMonitor
 				, LPARAM dwData )
 			{
-				stSCREEN * screen = reinterpret_cast< stSCREEN * >( dwData );
+				BOOL result{ TRUE };
 
-				if ( screen && screen->current++ == screen->wanted )
+				if ( auto screen = ScreenDataPtr( dwData ) )
 				{
-					screen->size.set( uint32_t( lprcMonitor->right - lprcMonitor->left )
-						, uint32_t( lprcMonitor->bottom - lprcMonitor->top ) );
-					screen->retrieved = true;
-					return FALSE;
+					if ( screen->current == screen->wanted )
+					{
+						screen->size.set( uint32_t( lprcMonitor->right - lprcMonitor->left )
+							, uint32_t( lprcMonitor->bottom - lprcMonitor->top ) );
+						screen->retrieved = true;
+						result = FALSE;
+					}
+
+					++screen->current;
 				}
 
-				return TRUE;
+				return result;
 			}
 		}
 
 		bool getScreenSize( uint32_t index, Size & size )
 		{
-			util::stSCREEN screen{ index, 0, size };
-			BOOL bRet = ::EnumDisplayMonitors( nullptr, nullptr, util::MonitorEnum, LPARAM( &screen ) );
+			util::ScreenData screen{ index, 0, size };
+			BOOL bRet = ::EnumDisplayMonitors( nullptr, nullptr, MONITORENUMPROC( util::MonitorEnum ), LPARAM( &screen ) );
 			return bRet != FALSE || screen.retrieved;
 		}
 
@@ -66,22 +72,20 @@ namespace castor
 
 			if ( errorCode != ERROR_SUCCESS )
 			{
-				LPWSTR errorText = nullptr;
-
-				if ( ::FormatMessageW( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM
-					, nullptr
-					, errorCode
-					, 0
-					, LPWSTR( &errorText )
-					, 0
-					, nullptr ) != 0 )
+				if ( LPWSTR errorText = nullptr;
+					::FormatMessageW( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM
+						, nullptr
+						, errorCode
+						, 0
+						, LPWSTR( &errorText )
+						, 0
+						, nullptr ) != 0 )
 				{
-					int length = WideCharToMultiByte( CP_UTF8, 0u, errorText, -1, nullptr, 0u, 0u, 0u );
-
-					if ( length > 0 )
+					if ( int length = WideCharToMultiByte( CP_UTF8, 0u, errorText, -1, nullptr, 0u, nullptr, nullptr );
+						length > 0 )
 					{
 						String converted( size_t( length ), 0 );
-						WideCharToMultiByte( CP_UTF8, 0u, errorText, -1, converted.data(), length, 0u, 0u );
+						WideCharToMultiByte( CP_UTF8, 0u, errorText, -1, converted.data(), length, nullptr, nullptr );
 						string::replace( converted, "\r", String{} );
 						string::replace( converted, "\n", String{} );
 						stream << cuT( " (" ) << converted.c_str() << cuT( ")" );
@@ -103,11 +107,23 @@ namespace castor
 			return result;
 		}
 
-#define _WIN32_WINNT_WIN11                  0x0B00
+		static constexpr BYTE getLoByte( WORD w )
+		{
+			return ( ( BYTE )( ( ( DWORD_PTR )( w ) ) & 0xff ) );
+		}
+
+		static constexpr BYTE getHiByte( WORD w )
+		{
+			return ( ( BYTE )( ( ( ( DWORD_PTR )( w ) ) >> 8 ) & 0xff ) );
+		}
+
+		static WORD constexpr Win32WinNTWin11 = 0x0B00;
+		static BYTE constexpr LoWin32WinNTWin11 = getLoByte( Win32WinNTWin11 );
+		static BYTE constexpr HiWin32WinNTWin11 = getHiByte( Win32WinNTWin11 );
 
 		BOOL IsWindows11OrGreater()
 		{
-			return IsWindowsVersionOrGreater( HIBYTE( _WIN32_WINNT_WIN11 ), LOBYTE( _WIN32_WINNT_WIN11 ), 0 );
+			return IsWindowsVersionOrGreater( HiWin32WinNTWin11, LoWin32WinNTWin11, 0 );
 		}
 
 		String getOSName()

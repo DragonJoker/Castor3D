@@ -7,12 +7,15 @@ See LICENSE file in root folder
 #include "CastorUtils/Graphics/GraphicsModule.hpp"
 #include "CastorUtils/Data/DataModule.hpp"
 
+#include "CastorUtils/Design/NonCopyable.hpp"
+
 namespace castor
 {
 	class ImageWriterImpl
+		: public NonMovable
 	{
 	public:
-		virtual ~ImageWriterImpl() = default;
+		virtual ~ImageWriterImpl()noexcept = default;
 		/**
 		 *\~english
 		 *\brief		Saves an image data to a file.
@@ -89,7 +92,7 @@ namespace castor
 
 	private:
 		std::vector< ImageWriterPtr > m_writers;
-		std::map< String, ImageWriterImpl * > m_extWriters;
+		std::map< String, ImageWriterImpl *, std::less<> > m_extWriters;
 	};
 }
 

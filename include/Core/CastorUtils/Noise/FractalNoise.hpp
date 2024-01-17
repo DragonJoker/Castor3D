@@ -22,9 +22,9 @@ namespace castor
 	private:
 		NoiseT m_noise;
 		uint32_t m_octaves;
-		TypeT m_frequency;
-		TypeT m_amplitude;
-		TypeT m_persistence;
+		TypeT m_frequency{ TypeT( 1.0 ) };
+		TypeT m_amplitude{ TypeT( 1.0 ) };
+		TypeT m_persistence{ TypeT( 0.5 ) };
 	};
 
 	template< typename NoiseT >
@@ -32,9 +32,6 @@ namespace castor
 		, NoiseT noise )
 		: m_noise{ std::move( noise ) }
 		, m_octaves{ octaves }
-		, m_frequency{ TypeT( 1.0 ) }
-		, m_amplitude{ TypeT( 1.0 ) }
-		, m_persistence{ TypeT( 0.5 ) }
 	{
 	}
 

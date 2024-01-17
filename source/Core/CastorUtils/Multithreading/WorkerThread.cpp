@@ -5,29 +5,24 @@
 namespace castor
 {
 	WorkerThread::WorkerThread()
-		: m_start{ false }
-		, m_terminate{ false }
-	{
-		m_thread = std::make_unique< std::thread >( [this]()
+		: m_thread{ [this]()
 			{
 				doRun();
-			} );
+			} }
+	{
 	}
 
 	WorkerThread::~WorkerThread()noexcept
 	{
 		m_terminate = true;
-		m_thread->join();
+		m_thread.join();
 		m_currentJob = {};
-		m_thread.reset();
 	}
 
 	void WorkerThread::feed( Job job )
 	{
 		CU_Require( m_start == false );
-		{
-			m_currentJob = job;
-		}
+		m_currentJob = std::move( job );
 		m_start = true;
 	}
 

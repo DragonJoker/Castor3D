@@ -15,6 +15,8 @@ namespace castor
 	class FixedGrowingSizeMarkedMemoryData
 	{
 		using Namer = MemoryDataNamer< MemoryDataType::eFixedGrowingMarked >;
+		using ObjectPtr = Object *;
+		using BytePtr = uint8_t *;
 
 		static const uint8_t NEVER_ALLOCATED = 0x00;
 		static const uint8_t ALLOCATED = 0xAD;
@@ -61,8 +63,7 @@ namespace castor
 					{
 						if ( *data == ALLOCATED )
 						{
-							reportError< PoolErrorType::eMarkedLeakAddress >( Namer::Name
-								, reinterpret_cast< void * >( data + 1 ) );
+							reportError< PoolErrorType::eMarkedLeakAddress >( Namer::Name, data + 1 );
 						}
 
 						data += size;
@@ -102,7 +103,7 @@ namespace castor
 
 			uint8_t * space = *--m_freeIndex;
 			* space++ = ALLOCATED;
-			return reinterpret_cast< Object * >( space );
+			return ObjectPtr( space );
 		}
 		/**
 		 *\~english
@@ -122,25 +123,22 @@ namespace castor
 			{
 				if ( m_freeIndex == m_freeEnd )
 				{
-					reportError< PoolErrorType::eCommonPoolIsFull >( Namer::Name
-						, reinterpret_cast< void * >( space ) );
+					reportError< PoolErrorType::eCommonPoolIsFull >( Namer::Name, space );
 					return false;
 				}
 
-				uint8_t * marked = reinterpret_cast< uint8_t * >( space );
+				auto marked = BytePtr( space );
 				marked--;
 
 				if ( *marked != ALLOCATED )
 				{
 					if ( *marked == FREED )
 					{
-						reportError< PoolErrorType::eMarkedDoubleDelete >( Namer::Name
-							, reinterpret_cast< void * >( space ) );
+						reportError< PoolErrorType::eMarkedDoubleDelete >( Namer::Name, space );
 						return false;
 					}
 
-					reportError< PoolErrorType::eMarkedNotFromPool >( Namer::Name
-						, reinterpret_cast< void * >( space ) );
+					reportError< PoolErrorType::eMarkedNotFromPool >( Namer::Name, space );
 					return false;
 				}
 
@@ -152,8 +150,7 @@ namespace castor
 							&& ptrdiff_t( marked ) < ptrdiff_t( buffer.m_end );
 					} ) )
 				{
-					reportError< PoolErrorType::eGrowingNotFromRanges >( Namer::Name
-						, reinterpret_cast< void * >( space ) );
+					reportError< PoolErrorType::eGrowingNotFromRanges >( Namer::Name, space );
 					return false;
 				}
 
@@ -178,9 +175,8 @@ namespace castor
 		{
 			m_total += m_step;
 			ptrdiff_t count = m_buffersEnd - m_buffers;
-			auto buffers = reinterpret_cast< buffer * >( realloc( m_buffers, ( count + 1 ) * sizeof( buffer ) ) );
 
-			if ( buffers )
+			if ( auto buffers = static_cast< buffer * >( realloc( m_buffers, ( count + 1 ) * sizeof( buffer ) ) ) )
 			{
 				m_buffers = buffers;
 			}
@@ -189,7 +185,7 @@ namespace castor
 			m_buffersEnd->m_data = new uint8_t[m_step * ( sizeof( Object ) + 1 )];
 			m_buffersEnd->m_end = nullptr;
 			uint8_t * buffer = m_buffersEnd->m_data;
-			auto freeChunks = reinterpret_cast< uint8_t ** >( realloc( m_free, m_total * sizeof( uint8_t * ) ) );
+			auto freeChunks = static_cast< uint8_t ** >( realloc( m_free, m_total * sizeof( uint8_t * ) ) );
 
 			if ( freeChunks )
 			{

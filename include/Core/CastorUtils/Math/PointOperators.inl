@@ -11,9 +11,9 @@ namespace castor
 
 	template< typename T1, typename T2, uint32_t C1, uint32_t C2 >
 	template< typename PtType1 >
-	inline Point< typename std::remove_cv< T1 >::type, C1 > PtOperators< T1, T2, C1, C2 >::add( PtType1 const & lhs, T2 const & rhs )
+	inline Point< std::remove_cv_t< T1 >, C1 > PtOperators< T1, T2, C1, C2 >::add( PtType1 const & lhs, T2 const & rhs )
 	{
-		Point< typename std::remove_cv< T1 >::type, C1 > result( lhs );
+		Point< std::remove_cv_t< T1 >, C1 > result( lhs );
 		auto * buffer = result.ptr();
 		std::for_each( buffer
 			, buffer + MinValue< C1, C2 >::value
@@ -26,9 +26,9 @@ namespace castor
 
 	template< typename T1, typename T2, uint32_t C1, uint32_t C2 >
 	template< typename PtType1 >
-	inline Point< typename std::remove_cv< T1 >::type, C1 > PtOperators< T1, T2, C1, C2 >::sub( PtType1 const & lhs, T2 const & rhs )
+	inline Point< std::remove_cv_t< T1 >, C1 > PtOperators< T1, T2, C1, C2 >::sub( PtType1 const & lhs, T2 const & rhs )
 	{
-		Point< typename std::remove_cv< T1 >::type, C1 > result( lhs );
+		Point< std::remove_cv_t< T1 >, C1 > result( lhs );
 		auto * buffer = result.ptr();
 		std::for_each( buffer
 			, buffer + MinValue< C1, C2 >::value
@@ -41,9 +41,9 @@ namespace castor
 
 	template< typename T1, typename T2, uint32_t C1, uint32_t C2 >
 	template< typename PtType1 >
-	inline Point< typename std::remove_cv< T1 >::type, C1 > PtOperators< T1, T2, C1, C2 >::mul( PtType1 const & lhs, T2 const & rhs )
+	inline Point< std::remove_cv_t< T1 >, C1 > PtOperators< T1, T2, C1, C2 >::mul( PtType1 const & lhs, T2 const & rhs )
 	{
-		Point< typename std::remove_cv< T1 >::type, C1 > result( lhs );
+		Point< std::remove_cv_t< T1 >, C1 > result( lhs );
 		auto * buffer = result.ptr();
 		std::for_each( buffer
 			, buffer + MinValue< C1, C2 >::value
@@ -56,9 +56,9 @@ namespace castor
 
 	template< typename T1, typename T2, uint32_t C1, uint32_t C2 >
 	template< typename PtType1 >
-	inline Point< typename std::remove_cv< T1 >::type, C1 > PtOperators< T1, T2, C1, C2 >::div( PtType1 const & lhs, T2 const & rhs )
+	inline Point< std::remove_cv_t< T1 >, C1 > PtOperators< T1, T2, C1, C2 >::div( PtType1 const & lhs, T2 const & rhs )
 	{
-		Point< typename std::remove_cv< T1 >::type, C1 > result( lhs );
+		Point< std::remove_cv_t< T1 >, C1 > result( lhs );
 		auto * buffer = result.ptr();
 		std::for_each( buffer
 			, buffer + MinValue< C1, C2 >::value
@@ -71,9 +71,9 @@ namespace castor
 
 	template< typename T1, typename T2, uint32_t C1, uint32_t C2 >
 	template< typename PtType1 >
-	inline Point< typename std::remove_cv< T1 >::type, C1 > PtOperators< T1, T2, C1, C2 >::add( PtType1 const & lhs, T2 const * rhs )
+	inline Point< std::remove_cv_t< T1 >, C1 > PtOperators< T1, T2, C1, C2 >::add( PtType1 const & lhs, T2 const * rhs )
 	{
-		Point< typename std::remove_cv< T1 >::type, C1 > result( lhs );
+		Point< std::remove_cv_t< T1 >, C1 > result( lhs );
 		auto * buffer = result.ptr();
 		std::for_each( rhs
 			, rhs + MinValue< C1, C2 >::value
@@ -87,9 +87,9 @@ namespace castor
 
 	template< typename T1, typename T2, uint32_t C1, uint32_t C2 >
 	template< typename PtType1 >
-	inline Point< typename std::remove_cv< T1 >::type, C1 > PtOperators< T1, T2, C1, C2 >::sub( PtType1 const & lhs, T2 const * rhs )
+	inline Point< std::remove_cv_t< T1 >, C1 > PtOperators< T1, T2, C1, C2 >::sub( PtType1 const & lhs, T2 const * rhs )
 	{
-		Point< typename std::remove_cv< T1 >::type, C1 > result( lhs );
+		Point< std::remove_cv_t< T1 >, C1 > result( lhs );
 		auto * buffer = result.ptr();
 		std::for_each( rhs
 			, rhs + MinValue< C1, C2 >::value
@@ -103,9 +103,9 @@ namespace castor
 
 	template< typename T1, typename T2, uint32_t C1, uint32_t C2 >
 	template< typename PtType1 >
-	inline Point< typename std::remove_cv< T1 >::type, C1 > PtOperators< T1, T2, C1, C2 >::mul( PtType1 const & lhs, T2 const * rhs )
+	inline Point< std::remove_cv_t< T1 >, C1 > PtOperators< T1, T2, C1, C2 >::mul( PtType1 const & lhs, T2 const * rhs )
 	{
-		Point< typename std::remove_cv< T1 >::type, C1 > result( lhs );
+		Point< std::remove_cv_t< T1 >, C1 > result( lhs );
 		auto * buffer = result.ptr();
 		std::for_each( rhs
 			, rhs + MinValue< C1, C2 >::value
@@ -119,9 +119,9 @@ namespace castor
 
 	template< typename T1, typename T2, uint32_t C1, uint32_t C2 >
 	template< typename PtType1 >
-	inline Point< typename std::remove_cv< T1 >::type, C1 > PtOperators< T1, T2, C1, C2 >::div( PtType1 const & lhs, T2 const * rhs )
+	inline Point< std::remove_cv_t< T1 >, C1 > PtOperators< T1, T2, C1, C2 >::div( PtType1 const & lhs, T2 const * rhs )
 	{
-		Point< typename std::remove_cv< T1 >::type, C1 > result( lhs );
+		Point< std::remove_cv_t< T1 >, C1 > result( lhs );
 		auto * buffer = result.ptr();
 		std::for_each( rhs
 			, rhs + MinValue< C1, C2 >::value
@@ -135,28 +135,28 @@ namespace castor
 
 	template< typename T1, typename T2, uint32_t C1, uint32_t C2 >
 	template< typename PtType1, typename PtType2 >
-	inline Point< typename std::remove_cv< T1 >::type, C1 > PtOperators< T1, T2, C1, C2 >::add( PtType1 const & lhs, PtType2 const & rhs )
+	inline Point< std::remove_cv_t< T1 >, C1 > PtOperators< T1, T2, C1, C2 >::add( PtType1 const & lhs, PtType2 const & rhs )
 	{
 		return add( lhs, rhs.constPtr() );
 	}
 
 	template< typename T1, typename T2, uint32_t C1, uint32_t C2 >
 	template< typename PtType1, typename PtType2 >
-	inline Point< typename std::remove_cv< T1 >::type, C1 > PtOperators< T1, T2, C1, C2 >::sub( PtType1 const & lhs, PtType2 const & rhs )
+	inline Point< std::remove_cv_t< T1 >, C1 > PtOperators< T1, T2, C1, C2 >::sub( PtType1 const & lhs, PtType2 const & rhs )
 	{
 		return sub( lhs, rhs.constPtr() );
 	}
 
 	template< typename T1, typename T2, uint32_t C1, uint32_t C2 >
 	template< typename PtType1, typename PtType2 >
-	inline Point< typename std::remove_cv< T1 >::type, C1 > PtOperators< T1, T2, C1, C2 >::mul( PtType1 const & lhs, PtType2 const & rhs )
+	inline Point< std::remove_cv_t< T1 >, C1 > PtOperators< T1, T2, C1, C2 >::mul( PtType1 const & lhs, PtType2 const & rhs )
 	{
 		return mul( lhs, rhs.constPtr() );
 	}
 
 	template< typename T1, typename T2, uint32_t C1, uint32_t C2 >
 	template< typename PtType1, typename PtType2 >
-	inline Point< typename std::remove_cv< T1 >::type, C1 > PtOperators< T1, T2, C1, C2 >::div( PtType1 const & lhs, PtType2 const & rhs )
+	inline Point< std::remove_cv_t< T1 >, C1 > PtOperators< T1, T2, C1, C2 >::div( PtType1 const & lhs, PtType2 const & rhs )
 	{
 		return div( lhs, rhs.constPtr() );
 	}
@@ -312,7 +312,7 @@ namespace castor
 	template< typename T1, typename T2 >
 	struct PtOperators< T1, T2, 4, 4 >
 	{
-		using RawT1 = typename std::remove_cv< T1 >::type;
+		using RawT1 = std::remove_cv_t< T1 >;
 
 		template< typename PtType1 >
 		static inline Point< RawT1, 4 > add( PtType1 const & lhs, T2 const & rhs )
@@ -416,7 +416,7 @@ namespace castor
 	template< typename T1, typename T2 >
 	struct PtOperators< T1, T2, 3, 3 >
 	{
-		using RawT1 = typename std::remove_cv< T1 >::type;
+		using RawT1 = std::remove_cv_t< T1 >;
 
 		template< typename PtType1 >
 		static inline Point< RawT1, 3 > add( PtType1 const & lhs, T2 const & rhs )
@@ -512,7 +512,7 @@ namespace castor
 	template< typename T1, typename T2 >
 	struct PtOperators< T1, T2, 2, 2 >
 	{
-		using RawT1 = typename std::remove_cv< T1 >::type;
+		using RawT1 = std::remove_cv_t< T1 >;
 
 		template< typename PtType1 >
 		static inline Point< RawT1, 2 > add( PtType1 const & lhs, T2 const & rhs )

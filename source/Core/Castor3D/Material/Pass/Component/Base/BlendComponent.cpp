@@ -7,7 +7,7 @@
 #include "Castor3D/Scene/SceneFileParserData.hpp"
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
 
-#include <CastorUtils/FileParser/ParserParameter.hpp>
+#include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Data/Text/TextRgbColour.hpp>
 
 CU_ImplementSmartPtr( castor3d, BlendComponent )
@@ -27,17 +27,8 @@ namespace castor
 		bool operator()( castor3d::BlendComponent const & object
 			, StringStream & file )override
 		{
-			static const String blendModes[uint32_t( castor3d::BlendMode::eCount )] =
-			{
-				cuT( "none" ),
-				cuT( "additive" ),
-				cuT( "multiplicative" ),
-				cuT( "interpolative" ),
-				cuT( "a_buffer" ),
-				cuT( "depth_peeling" ),
-			};
-			return writeOpt( file, cuT( "colour_blend_mode" ), blendModes[uint32_t( object.getColourBlendMode() )], blendModes[uint32_t( castor3d::BlendMode::eNoBlend )] )
-				&& writeOpt( file, cuT( "alpha_blend_mode" ), blendModes[uint32_t( object.getAlphaBlendMode() )], blendModes[uint32_t( castor3d::BlendMode::eNoBlend )] );
+			return writeOpt( file, cuT( "colour_blend_mode" ), getName( object.getColourBlendMode() ), getName( castor3d::BlendMode::eNoBlend ) )
+				&& writeOpt( file, cuT( "alpha_blend_mode" ), getName( object.getAlphaBlendMode() ), getName( castor3d::BlendMode::eNoBlend ) );
 		}
 	};
 }
@@ -116,14 +107,14 @@ namespace castor3d
 		vis.visit( cuT( "Colour blend mode" )
 			, m_value.colourBlendMode
 			, names
-			, ConfigurationVisitorBase::OnEnumValueChangeT< BlendMode >( [this]( BlendMode oldV, BlendMode newV )
+			, ConfigurationVisitorBase::OnEnumValueChangeT< BlendMode >( [this]( CU_UnusedParam( BlendMode, oldV ), BlendMode newV )
 			{
 				m_value.colourBlendMode = newV;
 			} ) );
 		vis.visit( cuT( "Alpha blend mode" )
 			, m_value.alphaBlendMode
 			, names
-			, ConfigurationVisitorBase::OnEnumValueChangeT< BlendMode >( [this]( BlendMode oldV, BlendMode newV )
+			, ConfigurationVisitorBase::OnEnumValueChangeT< BlendMode >( [this]( CU_UnusedParam( BlendMode, oldV ), BlendMode newV )
 			{
 				m_value.alphaBlendMode = newV;
 			} ) );

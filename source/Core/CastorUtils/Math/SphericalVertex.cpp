@@ -24,8 +24,4 @@ namespace castor
 			m_theta = float( acos( vertex[0] / tmp ) );
 		}
 	}
-
-	SphericalVertex::~SphericalVertex()
-	{
-	}
 }

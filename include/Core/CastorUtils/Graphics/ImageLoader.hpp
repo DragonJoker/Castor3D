@@ -7,15 +7,17 @@ See LICENSE file in root folder
 #include "CastorUtils/Graphics/GraphicsModule.hpp"
 
 #include "CastorUtils/Design/ArrayView.hpp"
+#include "CastorUtils/Design/NonCopyable.hpp"
 #include "CastorUtils/Graphics/Image.hpp"
 #include "CastorUtils/Math/Point.hpp"
 
 namespace castor
 {
 	class ImageLoaderImpl
+		: public NonMovable
 	{
 	public:
-		virtual ~ImageLoaderImpl() = default;
+		virtual ~ImageLoaderImpl()noexcept = default;
 		/**
 		 *\~english
 		 *\brief		Loads an image file data.
@@ -102,10 +104,10 @@ namespace castor
 	};
 
 	class ImageLoader
+		: public NonMovable
 	{
 	public:
-		CU_API ImageLoader( PxCompressionSupport support = {} );
-		CU_API ~ImageLoader();
+		CU_API explicit ImageLoader( PxCompressionSupport support = {} );
 		/**
 		 *\~english
 		 *\brief		Registers an image loader.
@@ -223,12 +225,12 @@ namespace castor
 	private:
 		CU_API void checkData( uint8_t const * data
 			, uint32_t size )const;
-		CU_API ImageLoaderImpl * findLoader( Path imagePath )const;
-		CU_API ImageLoaderImpl * findLoader( String imageFormat )const;
+		CU_API ImageLoaderImpl * findLoader( Path const & imagePath )const;
+		CU_API ImageLoaderImpl * findLoader( String const & imageFormat )const;
 
 	private:
 		std::vector< ImageLoaderPtr > m_loaders;
-		std::map< String, ImageLoaderImpl * > m_extLoaders;
+		std::map< String, ImageLoaderImpl *, std::less<> > m_extLoaders;
 		PxBufferConvertOptions m_options;
 	};
 }

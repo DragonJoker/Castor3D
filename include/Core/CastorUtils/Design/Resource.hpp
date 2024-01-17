@@ -32,11 +32,11 @@ namespace castor
 		*	Construction/Desctruction.
 		**/
 		/**@{*/
-		ResourceT( ResourceT && rhs ) = default;
+		ResourceT( ResourceT && rhs )noexcept = default;
 		ResourceT( ResourceT const & ) = delete;
-		ResourceT & operator=( ResourceT && rhs ) = default;
+		ResourceT & operator=( ResourceT && rhs )noexcept = default;
 		ResourceT & operator=( ResourceT const & ) = delete;
-		~ResourceT()override = default;
+		~ResourceT()noexcept override = default;
 
 		template< typename ... ParametersT >
 		explicit ResourceT( ParametersT && ... params );
@@ -74,7 +74,7 @@ namespace castor
 			return m_initialised;
 		}
 
-		ElementT & operator*()
+		ElementT & operator*()noexcept
 		{
 			return *this;
 		}
@@ -136,12 +136,12 @@ namespace castor
 		using ElementContT = typename CacheT::ElementContT;
 		using ElementPtrT = typename CacheT::ElementPtrT;
 
-		explicit ResourceMergerT( String const & name )
-			: Named{ name }
+		explicit ResourceMergerT( String name )
+			: Named{ std::move( name ) }
 		{
 		}
 
-		void operator()( ElementCacheT const & source
+		void operator()( ElementCacheT const & /*source*/
 			, ElementContT & destination
 			, ElementPtrT element )const
 		{

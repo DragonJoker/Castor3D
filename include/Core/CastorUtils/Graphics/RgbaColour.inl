@@ -9,74 +9,135 @@ namespace castor
 {
 	//*************************************************************************************************
 
+	namespace rgba
+	{
+		static std::map< PredefinedRgbaColour, String > const PredefinedNames
+		{
+			{ PredefinedRgbaColour::eTransparentBlack, cuT( "transp_black" ) },
+			{ PredefinedRgbaColour::eTransparentDarkBlue, cuT( "transp_darkblue" ) },
+			{ PredefinedRgbaColour::eTransparentBlue, cuT( "transp_blue" ) },
+			{ PredefinedRgbaColour::eTransparentDarkGreen, cuT( "transp_darkgreen" ) },
+			{ PredefinedRgbaColour::eTransparentGreen, cuT( "transp_green" ) },
+			{ PredefinedRgbaColour::eTransparentDarkRed, cuT( "transp_darkred" ) },
+			{ PredefinedRgbaColour::eTransparentRed, cuT( "transp_red" ) },
+			{ PredefinedRgbaColour::eTransparentLightBlue, cuT( "transp_lightblue" ) },
+			{ PredefinedRgbaColour::eTransparentLightGreen, cuT( "transp_lightgreen" ) },
+			{ PredefinedRgbaColour::eTransparentLightRed, cuT( "transp_lightred" ) },
+			{ PredefinedRgbaColour::eTransparentWhite, cuT( "transp_white" ) },
+			{ PredefinedRgbaColour::eLowAlphaBlack, cuT( "lowalpha_black" ) },
+			{ PredefinedRgbaColour::eLowAlphaDarkBlue, cuT( "lowalpha_darkblue" ) },
+			{ PredefinedRgbaColour::eLowAlphaBlue, cuT( "lowalpha_blue" ) },
+			{ PredefinedRgbaColour::eLowAlphaDarkGreen, cuT( "lowalpha_darkgreen" ) },
+			{ PredefinedRgbaColour::eLowAlphaGreen, cuT( "lowalpha_green" ) },
+			{ PredefinedRgbaColour::eLowAlphaDarkRed, cuT( "lowalpha_darkred" ) },
+			{ PredefinedRgbaColour::eLowAlphaRed, cuT( "lowalpha_red" ) },
+			{ PredefinedRgbaColour::eLowAlphaLightBlue, cuT( "lowalpha_lightblue" ) },
+			{ PredefinedRgbaColour::eLowAlphaLightGreen, cuT( "lowalpha_lightgreen" ) },
+			{ PredefinedRgbaColour::eLowAlphaLightRed, cuT( "lowalpha_lightred" ) },
+			{ PredefinedRgbaColour::eLowAlphaWhite, cuT( "lowalpha_white" ) },
+			{ PredefinedRgbaColour::eMedAlphaBlack, cuT( "medalpha_black" ) },
+			{ PredefinedRgbaColour::eMedAlphaDarkBlue, cuT( "medalpha_darkblue" ) },
+			{ PredefinedRgbaColour::eMedAlphaBlue, cuT( "medalpha_blue" ) },
+			{ PredefinedRgbaColour::eMedAlphaDarkGreen, cuT( "medalpha_darkgreen" ) },
+			{ PredefinedRgbaColour::eMedAlphaGreen, cuT( "medalpha_green" ) },
+			{ PredefinedRgbaColour::eMedAlphaDarkRed, cuT( "medalpha_darkred" ) },
+			{ PredefinedRgbaColour::eMedAlphaRed, cuT( "medalpha_red" ) },
+			{ PredefinedRgbaColour::eMedAlphaLightBlue, cuT( "medalpha_lightblue" ) },
+			{ PredefinedRgbaColour::eMedAlphaLightGreen, cuT( "medalpha_lightgreen" ) },
+			{ PredefinedRgbaColour::eMedAlphaLightRed, cuT( "medalpha_lightred" ) },
+			{ PredefinedRgbaColour::eMedAlphaWhite, cuT( "medalpha_white" ) },
+			{ PredefinedRgbaColour::eHighAlphaBlack, cuT( "highalpha_black" ) },
+			{ PredefinedRgbaColour::eHighAlphaDarkBlue, cuT( "highalpha_darkblue" ) },
+			{ PredefinedRgbaColour::eHighAlphaBlue, cuT( "highalpha_blue" ) },
+			{ PredefinedRgbaColour::eHighAlphaDarkGreen, cuT( "highalpha_darkgreen" ) },
+			{ PredefinedRgbaColour::eHighAlphaGreen, cuT( "highalpha_green" ) },
+			{ PredefinedRgbaColour::eHighAlphaDarkRed, cuT( "highalpha_darkred" ) },
+			{ PredefinedRgbaColour::eHighAlphaRed, cuT( "highalpha_red" ) },
+			{ PredefinedRgbaColour::eHighAlphaLightBlue, cuT( "highalpha_lightblue" ) },
+			{ PredefinedRgbaColour::eHighAlphaLightGreen, cuT( "highalpha_lightgreen" ) },
+			{ PredefinedRgbaColour::eHighAlphaLightRed, cuT( "highalpha_lightred" ) },
+			{ PredefinedRgbaColour::eHighAlphaWhite, cuT( "highalpha_white" ) },
+			{ PredefinedRgbaColour::eOpaqueBlack, cuT( "black" ) },
+			{ PredefinedRgbaColour::eOpaqueDarkBlue, cuT( "darkblue" ) },
+			{ PredefinedRgbaColour::eOpaqueBlue, cuT( "blue" ) },
+			{ PredefinedRgbaColour::eOpaqueDarkGreen, cuT( "darkgreen" ) },
+			{ PredefinedRgbaColour::eOpaqueGreen, cuT( "green" ) },
+			{ PredefinedRgbaColour::eOpaqueDarkRed, cuT( "darkred" ) },
+			{ PredefinedRgbaColour::eOpaqueRed, cuT( "red" ) },
+			{ PredefinedRgbaColour::eOpaqueLightBlue, cuT( "lightblue" ) },
+			{ PredefinedRgbaColour::eOpaqueLightGreen, cuT( "lightgreen" ) },
+			{ PredefinedRgbaColour::eOpaqueLightRed, cuT( "lightred" ) },
+			{ PredefinedRgbaColour::eOpaqueWhite, cuT( "white" ) },
+		};
+
+		static std::map< String, PredefinedRgbaColour > const PredefinedColours
+		{
+			{ cuT( "transp_black" ), PredefinedRgbaColour::eTransparentBlack },
+			{ cuT( "transp_darkblue" ), PredefinedRgbaColour::eTransparentDarkBlue },
+			{ cuT( "transp_blue" ), PredefinedRgbaColour::eTransparentBlue },
+			{ cuT( "transp_darkgreen" ), PredefinedRgbaColour::eTransparentDarkGreen },
+			{ cuT( "transp_green" ), PredefinedRgbaColour::eTransparentGreen },
+			{ cuT( "transp_darkred" ), PredefinedRgbaColour::eTransparentDarkRed },
+			{ cuT( "transp_red" ), PredefinedRgbaColour::eTransparentRed },
+			{ cuT( "transp_lightblue" ), PredefinedRgbaColour::eTransparentLightBlue },
+			{ cuT( "transp_lightgreen" ), PredefinedRgbaColour::eTransparentLightGreen },
+			{ cuT( "transp_lightred" ), PredefinedRgbaColour::eTransparentLightRed },
+			{ cuT( "transp_white" ), PredefinedRgbaColour::eTransparentWhite },
+			{ cuT( "lowalpha_black" ), PredefinedRgbaColour::eLowAlphaBlack },
+			{ cuT( "lowalpha_darkblue" ), PredefinedRgbaColour::eLowAlphaDarkBlue },
+			{ cuT( "lowalpha_blue" ), PredefinedRgbaColour::eLowAlphaBlue },
+			{ cuT( "lowalpha_darkgreen" ), PredefinedRgbaColour::eLowAlphaDarkGreen },
+			{ cuT( "lowalpha_green" ), PredefinedRgbaColour::eLowAlphaGreen },
+			{ cuT( "lowalpha_darkred" ), PredefinedRgbaColour::eLowAlphaDarkRed },
+			{ cuT( "lowalpha_red" ), PredefinedRgbaColour::eLowAlphaRed },
+			{ cuT( "lowalpha_lightblue" ), PredefinedRgbaColour::eLowAlphaLightBlue },
+			{ cuT( "lowalpha_lightgreen" ), PredefinedRgbaColour::eLowAlphaLightGreen },
+			{ cuT( "lowalpha_lightred" ), PredefinedRgbaColour::eLowAlphaLightRed },
+			{ cuT( "lowalpha_white" ), PredefinedRgbaColour::eLowAlphaWhite },
+			{ cuT( "medalpha_black" ), PredefinedRgbaColour::eMedAlphaBlack },
+			{ cuT( "medalpha_darkblue" ), PredefinedRgbaColour::eMedAlphaDarkBlue },
+			{ cuT( "medalpha_blue" ), PredefinedRgbaColour::eMedAlphaBlue },
+			{ cuT( "medalpha_darkgreen" ), PredefinedRgbaColour::eMedAlphaDarkGreen },
+			{ cuT( "medalpha_green" ), PredefinedRgbaColour::eMedAlphaGreen },
+			{ cuT( "medalpha_darkred" ), PredefinedRgbaColour::eMedAlphaDarkRed },
+			{ cuT( "medalpha_red" ), PredefinedRgbaColour::eMedAlphaRed },
+			{ cuT( "medalpha_lightblue" ), PredefinedRgbaColour::eMedAlphaLightBlue },
+			{ cuT( "medalpha_lightgreen" ), PredefinedRgbaColour::eMedAlphaLightGreen },
+			{ cuT( "medalpha_lightred" ), PredefinedRgbaColour::eMedAlphaLightRed },
+			{ cuT( "medalpha_white" ), PredefinedRgbaColour::eMedAlphaWhite },
+			{ cuT( "highalpha_black" ), PredefinedRgbaColour::eHighAlphaBlack },
+			{ cuT( "highalpha_darkblue" ), PredefinedRgbaColour::eHighAlphaDarkBlue },
+			{ cuT( "highalpha_blue" ), PredefinedRgbaColour::eHighAlphaBlue },
+			{ cuT( "highalpha_darkgreen" ), PredefinedRgbaColour::eHighAlphaDarkGreen },
+			{ cuT( "highalpha_green" ), PredefinedRgbaColour::eHighAlphaGreen },
+			{ cuT( "highalpha_darkred" ), PredefinedRgbaColour::eHighAlphaDarkRed },
+			{ cuT( "highalpha_red" ), PredefinedRgbaColour::eHighAlphaRed },
+			{ cuT( "highalpha_lightblue" ), PredefinedRgbaColour::eHighAlphaLightBlue },
+			{ cuT( "highalpha_lightgreen" ), PredefinedRgbaColour::eHighAlphaLightGreen },
+			{ cuT( "highalpha_lightred" ), PredefinedRgbaColour::eHighAlphaLightRed },
+			{ cuT( "highalpha_white" ), PredefinedRgbaColour::eHighAlphaWhite },
+			{ cuT( "black" ), PredefinedRgbaColour::eOpaqueBlack },
+			{ cuT( "darkblue" ), PredefinedRgbaColour::eOpaqueDarkBlue },
+			{ cuT( "blue" ), PredefinedRgbaColour::eOpaqueBlue },
+			{ cuT( "darkgreen" ), PredefinedRgbaColour::eOpaqueDarkGreen },
+			{ cuT( "green" ), PredefinedRgbaColour::eOpaqueGreen },
+			{ cuT( "darkred" ), PredefinedRgbaColour::eOpaqueDarkRed },
+			{ cuT( "red" ), PredefinedRgbaColour::eOpaqueRed },
+			{ cuT( "lightblue" ), PredefinedRgbaColour::eOpaqueLightBlue },
+			{ cuT( "lightgreen" ), PredefinedRgbaColour::eOpaqueLightGreen },
+			{ cuT( "lightred" ), PredefinedRgbaColour::eOpaqueLightRed },
+			{ cuT( "white" ), PredefinedRgbaColour::eOpaqueWhite },
+		};
+	}
+
+	//*************************************************************************************************
+
 	String getPredefinedName( PredefinedRgbaColour predefined )
 	{
-		static std::map< PredefinedRgbaColour, String > mapNames;
-		typedef std::map< PredefinedRgbaColour, String >::iterator MapIt;
-
-		if ( mapNames.empty() )
-		{
-			mapNames[PredefinedRgbaColour::eTransparentBlack] = cuT( "transp_black" );
-			mapNames[PredefinedRgbaColour::eTransparentDarkBlue] = cuT( "transp_darkblue" );
-			mapNames[PredefinedRgbaColour::eTransparentBlue] = cuT( "transp_blue" );
-			mapNames[PredefinedRgbaColour::eTransparentDarkGreen] = cuT( "transp_darkgreen" );
-			mapNames[PredefinedRgbaColour::eTransparentGreen] = cuT( "transp_green" );
-			mapNames[PredefinedRgbaColour::eTransparentDarkRed] = cuT( "transp_darkred" );
-			mapNames[PredefinedRgbaColour::eTransparentRed] = cuT( "transp_red" );
-			mapNames[PredefinedRgbaColour::eTransparentLightBlue] = cuT( "transp_lightblue" );
-			mapNames[PredefinedRgbaColour::eTransparentLightGreen] = cuT( "transp_lightgreen" );
-			mapNames[PredefinedRgbaColour::eTransparentLightRed] = cuT( "transp_lightred" );
-			mapNames[PredefinedRgbaColour::eTransparentWhite] = cuT( "transp_white" );
-			mapNames[PredefinedRgbaColour::eLowAlphaBlack] = cuT( "lowalpha_black" );
-			mapNames[PredefinedRgbaColour::eLowAlphaDarkBlue] = cuT( "lowalpha_darkblue" );
-			mapNames[PredefinedRgbaColour::eLowAlphaBlue] = cuT( "lowalpha_blue" );
-			mapNames[PredefinedRgbaColour::eLowAlphaDarkGreen] = cuT( "lowalpha_darkgreen" );
-			mapNames[PredefinedRgbaColour::eLowAlphaGreen] = cuT( "lowalpha_green" );
-			mapNames[PredefinedRgbaColour::eLowAlphaDarkRed] = cuT( "lowalpha_darkred" );
-			mapNames[PredefinedRgbaColour::eLowAlphaRed] = cuT( "lowalpha_red" );
-			mapNames[PredefinedRgbaColour::eLowAlphaLightBlue] = cuT( "lowalpha_lightblue" );
-			mapNames[PredefinedRgbaColour::eLowAlphaLightGreen] = cuT( "lowalpha_lightgreen" );
-			mapNames[PredefinedRgbaColour::eLowAlphaLightRed] = cuT( "lowalpha_lightred" );
-			mapNames[PredefinedRgbaColour::eLowAlphaWhite] = cuT( "lowalpha_white" );
-			mapNames[PredefinedRgbaColour::eMedAlphaBlack] = cuT( "medalpha_black" );
-			mapNames[PredefinedRgbaColour::eMedAlphaDarkBlue] = cuT( "medalpha_darkblue" );
-			mapNames[PredefinedRgbaColour::eMedAlphaBlue] = cuT( "medalpha_blue" );
-			mapNames[PredefinedRgbaColour::eMedAlphaDarkGreen] = cuT( "medalpha_darkgreen" );
-			mapNames[PredefinedRgbaColour::eMedAlphaGreen] = cuT( "medalpha_green" );
-			mapNames[PredefinedRgbaColour::eMedAlphaDarkRed] = cuT( "medalpha_darkred" );
-			mapNames[PredefinedRgbaColour::eMedAlphaRed] = cuT( "medalpha_red" );
-			mapNames[PredefinedRgbaColour::eMedAlphaLightBlue] = cuT( "medalpha_lightblue" );
-			mapNames[PredefinedRgbaColour::eMedAlphaLightGreen] = cuT( "medalpha_lightgreen" );
-			mapNames[PredefinedRgbaColour::eMedAlphaLightRed] = cuT( "medalpha_lightred" );
-			mapNames[PredefinedRgbaColour::eMedAlphaWhite] = cuT( "medalpha_white" );
-			mapNames[PredefinedRgbaColour::eHighAlphaBlack] = cuT( "highalpha_black" );
-			mapNames[PredefinedRgbaColour::eHighAlphaDarkBlue] = cuT( "highalpha_darkblue" );
-			mapNames[PredefinedRgbaColour::eHighAlphaBlue] = cuT( "highalpha_blue" );
-			mapNames[PredefinedRgbaColour::eHighAlphaDarkGreen] = cuT( "highalpha_darkgreen" );
-			mapNames[PredefinedRgbaColour::eHighAlphaGreen] = cuT( "highalpha_green" );
-			mapNames[PredefinedRgbaColour::eHighAlphaDarkRed] = cuT( "highalpha_darkred" );
-			mapNames[PredefinedRgbaColour::eHighAlphaRed] = cuT( "highalpha_red" );
-			mapNames[PredefinedRgbaColour::eHighAlphaLightBlue] = cuT( "highalpha_lightblue" );
-			mapNames[PredefinedRgbaColour::eHighAlphaLightGreen] = cuT( "highalpha_lightgreen" );
-			mapNames[PredefinedRgbaColour::eHighAlphaLightRed] = cuT( "highalpha_lightred" );
-			mapNames[PredefinedRgbaColour::eHighAlphaWhite] = cuT( "highalpha_white" );
-			mapNames[PredefinedRgbaColour::eOpaqueBlack] = cuT( "black" );
-			mapNames[PredefinedRgbaColour::eOpaqueDarkBlue] = cuT( "darkblue" );
-			mapNames[PredefinedRgbaColour::eOpaqueBlue] = cuT( "blue" );
-			mapNames[PredefinedRgbaColour::eOpaqueDarkGreen] = cuT( "darkgreen" );
-			mapNames[PredefinedRgbaColour::eOpaqueGreen] = cuT( "green" );
-			mapNames[PredefinedRgbaColour::eOpaqueDarkRed] = cuT( "darkred" );
-			mapNames[PredefinedRgbaColour::eOpaqueRed] = cuT( "red" );
-			mapNames[PredefinedRgbaColour::eOpaqueLightBlue] = cuT( "lightblue" );
-			mapNames[PredefinedRgbaColour::eOpaqueLightGreen] = cuT( "lightgreen" );
-			mapNames[PredefinedRgbaColour::eOpaqueLightRed] = cuT( "lightred" );
-			mapNames[PredefinedRgbaColour::eOpaqueWhite] = cuT( "white" );
-		}
-
-		MapIt it = mapNames.find( predefined );
 		String result = cuT( "black" );
 
-		if ( it != mapNames.end() )
+		if ( auto it = rgba::PredefinedNames.find( predefined );
+			it != rgba::PredefinedNames.end() )
 		{
 			result = it->second;
 		}
@@ -86,72 +147,10 @@ namespace castor
 
 	PredefinedRgbaColour getPredefinedRgba( String const & name )
 	{
-		static std::map< String, PredefinedRgbaColour > mapNames;
-		typedef std::map< String, PredefinedRgbaColour >::iterator MapIt;
-
-		if ( mapNames.empty() )
-		{
-			mapNames[cuT( "transp_black" )] = PredefinedRgbaColour::eTransparentBlack;
-			mapNames[cuT( "transp_darkblue" )] = PredefinedRgbaColour::eTransparentDarkBlue;
-			mapNames[cuT( "transp_blue" )] = PredefinedRgbaColour::eTransparentBlue;
-			mapNames[cuT( "transp_darkgreen" )] = PredefinedRgbaColour::eTransparentDarkGreen;
-			mapNames[cuT( "transp_green" )] = PredefinedRgbaColour::eTransparentGreen;
-			mapNames[cuT( "transp_darkred" )] = PredefinedRgbaColour::eTransparentDarkRed;
-			mapNames[cuT( "transp_red" )] = PredefinedRgbaColour::eTransparentRed;
-			mapNames[cuT( "transp_lightblue" )] = PredefinedRgbaColour::eTransparentLightBlue;
-			mapNames[cuT( "transp_lightgreen" )] = PredefinedRgbaColour::eTransparentLightGreen;
-			mapNames[cuT( "transp_lightred" )] = PredefinedRgbaColour::eTransparentLightRed;
-			mapNames[cuT( "transp_white" )] = PredefinedRgbaColour::eTransparentWhite;
-			mapNames[cuT( "lowalpha_black" )] = PredefinedRgbaColour::eLowAlphaBlack;
-			mapNames[cuT( "lowalpha_darkblue" )] = PredefinedRgbaColour::eLowAlphaDarkBlue;
-			mapNames[cuT( "lowalpha_blue" )] = PredefinedRgbaColour::eLowAlphaBlue;
-			mapNames[cuT( "lowalpha_darkgreen" )] = PredefinedRgbaColour::eLowAlphaDarkGreen;
-			mapNames[cuT( "lowalpha_green" )] = PredefinedRgbaColour::eLowAlphaGreen;
-			mapNames[cuT( "lowalpha_darkred" )] = PredefinedRgbaColour::eLowAlphaDarkRed;
-			mapNames[cuT( "lowalpha_red" )] = PredefinedRgbaColour::eLowAlphaRed;
-			mapNames[cuT( "lowalpha_lightblue" )] = PredefinedRgbaColour::eLowAlphaLightBlue;
-			mapNames[cuT( "lowalpha_lightgreen" )] = PredefinedRgbaColour::eLowAlphaLightGreen;
-			mapNames[cuT( "lowalpha_lightred" )] = PredefinedRgbaColour::eLowAlphaLightRed;
-			mapNames[cuT( "lowalpha_white" )] = PredefinedRgbaColour::eLowAlphaWhite;
-			mapNames[cuT( "medalpha_black" )] = PredefinedRgbaColour::eMedAlphaBlack;
-			mapNames[cuT( "medalpha_darkblue" )] = PredefinedRgbaColour::eMedAlphaDarkBlue;
-			mapNames[cuT( "medalpha_blue" )] = PredefinedRgbaColour::eMedAlphaBlue;
-			mapNames[cuT( "medalpha_darkgreen" )] = PredefinedRgbaColour::eMedAlphaDarkGreen;
-			mapNames[cuT( "medalpha_green" )] = PredefinedRgbaColour::eMedAlphaGreen;
-			mapNames[cuT( "medalpha_darkred" )] = PredefinedRgbaColour::eMedAlphaDarkRed;
-			mapNames[cuT( "medalpha_red" )] = PredefinedRgbaColour::eMedAlphaRed;
-			mapNames[cuT( "medalpha_lightblue" )] = PredefinedRgbaColour::eMedAlphaLightBlue;
-			mapNames[cuT( "medalpha_lightgreen" )] = PredefinedRgbaColour::eMedAlphaLightGreen;
-			mapNames[cuT( "medalpha_lightred" )] = PredefinedRgbaColour::eMedAlphaLightRed;
-			mapNames[cuT( "medalpha_white" )] = PredefinedRgbaColour::eMedAlphaWhite;
-			mapNames[cuT( "highalpha_black" )] = PredefinedRgbaColour::eHighAlphaBlack;
-			mapNames[cuT( "highalpha_darkblue" )] = PredefinedRgbaColour::eHighAlphaDarkBlue;
-			mapNames[cuT( "highalpha_blue" )] = PredefinedRgbaColour::eHighAlphaBlue;
-			mapNames[cuT( "highalpha_darkgreen" )] = PredefinedRgbaColour::eHighAlphaDarkGreen;
-			mapNames[cuT( "highalpha_green" )] = PredefinedRgbaColour::eHighAlphaGreen;
-			mapNames[cuT( "highalpha_darkred" )] = PredefinedRgbaColour::eHighAlphaDarkRed;
-			mapNames[cuT( "highalpha_red" )] = PredefinedRgbaColour::eHighAlphaRed;
-			mapNames[cuT( "highalpha_lightblue" )] = PredefinedRgbaColour::eHighAlphaLightBlue;
-			mapNames[cuT( "highalpha_lightgreen" )] = PredefinedRgbaColour::eHighAlphaLightGreen;
-			mapNames[cuT( "highalpha_lightred" )] = PredefinedRgbaColour::eHighAlphaLightRed;
-			mapNames[cuT( "highalpha_white" )] = PredefinedRgbaColour::eHighAlphaWhite;
-			mapNames[cuT( "black" )] = PredefinedRgbaColour::eOpaqueBlack;
-			mapNames[cuT( "darkblue" )] = PredefinedRgbaColour::eOpaqueDarkBlue;
-			mapNames[cuT( "blue" )] = PredefinedRgbaColour::eOpaqueBlue;
-			mapNames[cuT( "darkgreen" )] = PredefinedRgbaColour::eOpaqueDarkGreen;
-			mapNames[cuT( "green" )] = PredefinedRgbaColour::eOpaqueGreen;
-			mapNames[cuT( "darkred" )] = PredefinedRgbaColour::eOpaqueDarkRed;
-			mapNames[cuT( "red" )] = PredefinedRgbaColour::eOpaqueRed;
-			mapNames[cuT( "lightblue" )] = PredefinedRgbaColour::eOpaqueLightBlue;
-			mapNames[cuT( "lightgreen" )] = PredefinedRgbaColour::eOpaqueLightGreen;
-			mapNames[cuT( "lightred" )] = PredefinedRgbaColour::eOpaqueLightRed;
-			mapNames[cuT( "white" )] = PredefinedRgbaColour::eOpaqueWhite;
-		}
-
-		MapIt it = mapNames.find( name );
 		PredefinedRgbaColour result = PredefinedRgbaColour::eOpaqueBlack;
 
-		if ( it != mapNames.end() )
+		if ( auto it = rgba::PredefinedColours.find( name );
+			it != rgba::PredefinedColours.end() )
 		{
 			result = it->second;
 		}
@@ -159,9 +158,11 @@ namespace castor
 		return result;
 	}
 
+	//*************************************************************************************************
+
 	template< typename ComponentType >
 	template< typename ComponentU >
-	RgbaColourT< ComponentType >::RgbaColourT( RgbaColourT< ComponentU > const & rhs
+	inline RgbaColourT< ComponentType >::RgbaColourT( RgbaColourT< ComponentU > const & rhs
 		, float gamma )
 		: m_components{ ComponentType{ rhs.m_components[0u], gamma }
 			, ComponentType{ rhs.m_components[1u], gamma }
@@ -171,157 +172,157 @@ namespace castor
 	}
 
 	template< typename ComponentType >
-	RgbaColourT< ComponentType >::RgbaColourT( float r, float g, float b, float a )
+	inline RgbaColourT< ComponentType >::RgbaColourT( float r, float g, float b, float a )
 		: m_components{ ComponentType{ r }, ComponentType{ g }, ComponentType{ b }, ComponentType{ a } }
 	{
 	}
 
 	template< typename ComponentType >
-	RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromRGB( Point3ub const & colour )
+	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromRGB( Point3ub const & colour )
 	{
 		return fromComponents( colour[0], colour[1], colour[2], uint8_t( 255 ) );
 	}
 
 	template< typename ComponentType >
-	RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromBGR( Point3ub const & colour )
+	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromBGR( Point3ub const & colour )
 	{
 		return fromComponents( colour[2], colour[1], colour[0], uint8_t( 255 ) );
 	}
 
 	template< typename ComponentType >
-	RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromRGBA( Point4ub const & colour )
+	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromRGBA( Point4ub const & colour )
 	{
 		return fromComponents( colour[0], colour[1], colour[2], colour[3] );
 	}
 
 	template< typename ComponentType >
-	RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromABGR( Point4ub const & colour )
+	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromABGR( Point4ub const & colour )
 	{
 		return fromComponents( colour[3], colour[2], colour[1], colour[0] );
 	}
 
 	template< typename ComponentType >
-	RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromBGRA( Point4ub const & colour )
+	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromBGRA( Point4ub const & colour )
 	{
 		return fromComponents( colour[2], colour[1], colour[0], colour[3] );
 	}
 
 	template< typename ComponentType >
-	RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromARGB( Point4ub const & colour )
+	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromARGB( Point4ub const & colour )
 	{
 		return fromComponents( colour[1], colour[2], colour[3], colour[0] );
 	}
 
 	template< typename ComponentType >
-	RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromRGB( Point3f const & colour )
+	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromRGB( Point3f const & colour )
 	{
 		return fromComponents( colour[0], colour[1], colour[2], 1.0f );
 	}
 
 	template< typename ComponentType >
-	RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromBGR( Point3f const & colour )
+	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromBGR( Point3f const & colour )
 	{
 		return fromComponents( colour[2], colour[1], colour[0], 1.0f );
 	}
 
 	template< typename ComponentType >
-	RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromRGBA( Point4f const & colour )
+	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromRGBA( Point4f const & colour )
 	{
 		return fromComponents( colour[0], colour[1], colour[2], colour[3] );
 	}
 
 	template< typename ComponentType >
-	RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromABGR( Point4f const & colour )
+	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromABGR( Point4f const & colour )
 	{
 		return fromComponents( colour[3], colour[2], colour[1], colour[0] );
 	}
 
 	template< typename ComponentType >
-	RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromBGRA( Point4f const & colour )
+	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromBGRA( Point4f const & colour )
 	{
 		return fromComponents( colour[2], colour[1], colour[0], colour[3] );
 	}
 
 	template< typename ComponentType >
-	RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromARGB( Point4f const & colour )
+	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromARGB( Point4f const & colour )
 	{
 		return fromComponents( colour[1], colour[2], colour[3], colour[0] );
 	}
 
 	template< typename ComponentType >
-	RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromRGB( uint8_t const( & colour )[3] )
+	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromRGB( uint8_t const( & colour )[3] )
 	{
 		return fromComponents( colour[0], colour[1], colour[2], uint8_t( 255 ) );
 	}
 
 	template< typename ComponentType >
-	RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromBGR( uint8_t const( & colour )[3] )
+	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromBGR( uint8_t const( & colour )[3] )
 	{
 		return fromComponents( colour[2], colour[1], colour[0], uint8_t( 255 ) );
 	}
 
 	template< typename ComponentType >
-	RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromRGBA( uint8_t const( & colour )[4] )
+	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromRGBA( uint8_t const( & colour )[4] )
 	{
 		return fromComponents( colour[0], colour[1], colour[2], colour[3] );
 	}
 
 	template< typename ComponentType >
-	RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromABGR( uint8_t const( & colour )[4] )
+	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromABGR( uint8_t const( & colour )[4] )
 	{
 		return fromComponents( colour[3], colour[2], colour[1], colour[0] );
 	}
 
 	template< typename ComponentType >
-	RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromBGRA( uint8_t const( & colour )[4] )
+	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromBGRA( uint8_t const( & colour )[4] )
 	{
 		return fromComponents( colour[2], colour[1], colour[0], colour[3] );
 	}
 
 	template< typename ComponentType >
-	RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromARGB( uint8_t const( & colour )[4] )
+	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromARGB( uint8_t const( & colour )[4] )
 	{
 		return fromComponents( colour[1], colour[2], colour[3], colour[0] );
 	}
 
 	template< typename ComponentType >
-	RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromRGB( float const( & colour )[3] )
+	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromRGB( float const( & colour )[3] )
 	{
 		return fromComponents( colour[0], colour[1], colour[2], 1.0f );
 	}
 
 	template< typename ComponentType >
-	RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromBGR( float const( & colour )[3] )
+	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromBGR( float const( & colour )[3] )
 	{
 		return fromComponents( colour[2], colour[1], colour[0], 1.0f );
 	}
 
 	template< typename ComponentType >
-	RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromRGBA( float const( & colour )[4] )
+	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromRGBA( float const( & colour )[4] )
 	{
 		return fromComponents( colour[0], colour[1], colour[2], colour[3] );
 	}
 
 	template< typename ComponentType >
-	RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromABGR( float const( & colour )[4] )
+	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromABGR( float const( & colour )[4] )
 	{
 		return fromComponents( colour[3], colour[2], colour[1], colour[0] );
 	}
 
 	template< typename ComponentType >
-	RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromBGRA( float const( & colour )[4] )
+	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromBGRA( float const( & colour )[4] )
 	{
 		return fromComponents( colour[2], colour[1], colour[0], colour[3] );
 	}
 
 	template< typename ComponentType >
-	RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromARGB( float const( & colour )[4] )
+	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromARGB( float const( & colour )[4] )
 	{
 		return fromComponents( colour[1], colour[2], colour[3], colour[0] );
 	}
 
 	template< typename ComponentType >
-	RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromRGB( uint32_t colour )
+	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromRGB( uint32_t colour )
 	{
 		float fR = float( ( ( colour & 0x00FF0000 ) >> 16 ) ) / 255.0f;
 		float fG = float( ( ( colour & 0x0000FF00 ) >>  8 ) ) / 255.0f;
@@ -331,7 +332,7 @@ namespace castor
 	}
 
 	template< typename ComponentType >
-	RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromBGR( uint32_t colour )
+	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromBGR( uint32_t colour )
 	{
 		float fB = float( ( ( colour & 0x00FF0000 ) >> 16 ) ) / 255.0f;
 		float fG = float( ( ( colour & 0x0000FF00 ) >>  8 ) ) / 255.0f;
@@ -341,7 +342,7 @@ namespace castor
 	}
 
 	template< typename ComponentType >
-	RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromARGB( uint32_t colour )
+	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromARGB( uint32_t colour )
 	{
 		float fA = float( ( ( colour & 0xFF000000 ) >> 24 ) ) / 255.0f;
 		float fR = float( ( ( colour & 0x00FF0000 ) >> 16 ) ) / 255.0f;
@@ -351,7 +352,7 @@ namespace castor
 	}
 
 	template< typename ComponentType >
-	RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromBGRA( uint32_t colour )
+	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromBGRA( uint32_t colour )
 	{
 		float fB = float( ( ( colour & 0xFF000000 ) >> 24 ) ) / 255.0f;
 		float fG = float( ( ( colour & 0x00FF0000 ) >> 16 ) ) / 255.0f;
@@ -361,7 +362,7 @@ namespace castor
 	}
 
 	template< typename ComponentType >
-	RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromRGBA( uint32_t colour )
+	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromRGBA( uint32_t colour )
 	{
 		float fR = float( ( ( colour & 0xFF000000 ) >> 24 ) ) / 255.0f;
 		float fG = float( ( ( colour & 0x00FF0000 ) >> 16 ) ) / 255.0f;
@@ -371,7 +372,7 @@ namespace castor
 	}
 
 	template< typename ComponentType >
-	RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromABGR( uint32_t colour )
+	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromABGR( uint32_t colour )
 	{
 		float fA = float( ( ( colour & 0xFF000000 ) >> 24 ) ) / 255.0f;
 		float fB = float( ( ( colour & 0x00FF0000 ) >> 16 ) ) / 255.0f;
@@ -381,7 +382,7 @@ namespace castor
 	}
 
 	template< typename ComponentType >
-	RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromHSB( float hue, float saturation, float brightness )
+	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromHSB( float hue, float saturation, float brightness )
 	{
 		float h = hue == 1.0f ? 0 : hue * 6.0f;
 		float f = h - std::floor( h );
@@ -418,7 +419,7 @@ namespace castor
 	}
 
 	template< typename ComponentType >
-	RgbaColourT< ComponentType > & RgbaColourT< ComponentType >::operator+=( RgbaColourT< ComponentType > const & rhs )
+	inline RgbaColourT< ComponentType > & RgbaColourT< ComponentType >::operator+=( RgbaColourT< ComponentType > const & rhs )
 	{
 		for ( uint8_t i = 0; i < uint8_t( RgbaComponent::eCount ); i++ )
 		{
@@ -429,7 +430,7 @@ namespace castor
 	}
 
 	template< typename ComponentType >
-	RgbaColourT< ComponentType > & RgbaColourT< ComponentType >::operator-=( RgbaColourT< ComponentType > const & rhs )
+	inline RgbaColourT< ComponentType > & RgbaColourT< ComponentType >::operator-=( RgbaColourT< ComponentType > const & rhs )
 	{
 		for ( uint8_t i = 0; i < uint8_t( RgbaComponent::eCount ); i++ )
 		{
@@ -440,7 +441,7 @@ namespace castor
 	}
 
 	template< typename ComponentType >
-	RgbaColourT< ComponentType > & RgbaColourT< ComponentType >::operator+=( ComponentType const & component )
+	inline RgbaColourT< ComponentType > & RgbaColourT< ComponentType >::operator+=( ComponentType const & component )
 	{
 		for ( uint8_t i = 0; i < uint8_t( RgbaComponent::eCount ); i++ )
 		{
@@ -451,7 +452,7 @@ namespace castor
 	}
 
 	template< typename ComponentType >
-	RgbaColourT< ComponentType > & RgbaColourT< ComponentType >::operator-=( ComponentType const & component )
+	inline RgbaColourT< ComponentType > & RgbaColourT< ComponentType >::operator-=( ComponentType const & component )
 	{
 		for ( uint8_t i = 0; i < uint8_t( RgbaComponent::eCount ); i++ )
 		{
@@ -462,7 +463,7 @@ namespace castor
 	}
 
 	template< typename ComponentType >
-	RgbaColourT< ComponentType > & RgbaColourT< ComponentType >::operator*=( ComponentType const & component )
+	inline RgbaColourT< ComponentType > & RgbaColourT< ComponentType >::operator*=( ComponentType const & component )
 	{
 		for ( uint8_t i = 0; i < uint8_t( RgbaComponent::eCount ); i++ )
 		{
@@ -473,7 +474,7 @@ namespace castor
 	}
 
 	template< typename ComponentType >
-	RgbaColourT< ComponentType > & RgbaColourT< ComponentType >::operator/=( ComponentType const & component )
+	inline RgbaColourT< ComponentType > & RgbaColourT< ComponentType >::operator/=( ComponentType const & component )
 	{
 		for ( uint8_t i = 0; i < uint8_t( RgbaComponent::eCount ); i++ )
 		{

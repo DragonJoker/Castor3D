@@ -20,7 +20,7 @@ namespace castor3d
 		, castor::String const & fullName
 		, RenderTarget & renderTarget
 		, RenderSystem & renderSystem
-		, Parameters const & CU_UnusedParam( parameters )
+		, CU_UnusedParam( Parameters const &, parameters )
 		, uint32_t passesCount
 		, Kind kind )
 		: castor::OwnedBy< RenderSystem >{ renderSystem }
@@ -30,11 +30,6 @@ namespace castor3d
 		, m_graph{ m_renderTarget.getGraph().createPassGroup( groupName ) }
 		, m_passesCount{ passesCount }
 		, m_kind{ kind }
-		, m_enabled{ true }
-	{
-	}
-
-	PostEffect::~PostEffect()
 	{
 	}
 

@@ -50,12 +50,9 @@ namespace castor
 		 *name Construction / Destruction.
 		 **/
 		/**@{*/
-		Coords();
-		Coords( Coords const & rhs );
-		Coords( Coords && rhs );
+		Coords() = default;
 		explicit Coords( Point< T, Count > & rhs );
 		explicit Coords( T * rhs );
-		~Coords();
 		/**@}*/
 		/**
 		 *\~english
@@ -65,8 +62,6 @@ namespace castor
 		 **/
 		/**@{*/
 		Coords & operator=( T * rhs );
-		Coords & operator=( Coords const & rhs );
-		Coords & operator=( Coords && rhs );
 		Coords & operator=( Point< T, Count > const & rhs );
 		/**@}*/
 		/**
@@ -116,61 +111,19 @@ namespace castor
 		 *\brief		Echange les données de c epoint avec celles du point donné
 		 *\param[in]	rhs	Le point à échanger
 		 */
-		void swap( Coords & rhs );
+		void swap( Coords & rhs )noexcept;
 		/**
 		 *\~english
-		 *\brief		Inverts data in the point
-		 *\remarks		The first becomes last and so on
+		 *\return		The point total size: count * elemSize.
 		 *\~french
-		 *\brief		Inverse les données dans ce point
-		 *\remarks		Les premiers deviennent les derniers
+		 *\return		La taille totale du point (count * elemSize).
 		 */
-		void flip();
-		/**
-		 *\~english
-		 *\return		The point total size: count() * elemSize().
-		 *\~french
-		 *\return		La taille totale du point (count() * elemSize()).
-		 */
-		inline uint32_t size()const
+		uint32_t size()const
 		{
 			return binary_size;
 		}
 		/**
 		 *\~english
-		 *\brief			Retrieves data from the point and put it into an array
-		 *\param[in,out]	result	Receives the point data, needs to be allocated by the caller
-		 *\~french
-		 *\brief			Récupère les données et les place dans un tableau
-		 *\param[in,out]	result	Reçoit les données, doit être alloué par l'appelant
-		 */
-		void toValues( T * result )const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the number of coordinates
-		 *\return		The number of coordinates
-		 *\~french
-		 *\brief		Récupère le nombre de coordonnées
-		 *\return		Le nombre de coordonnées
-		 */
-		inline uint32_t count()const
-		{
-			return Count;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the coordinate type size
-		 *\return		The data type size
-		 *\~french
-		 *\brief		Récupère la taille du type données
-		 *\return		La taille du type de données
-		 */
-		inline std::size_t elemSize()const
-		{
-			return sizeof( T );
-		}
-		/**
-		 *\~english
 		 *\brief		Retrieves the data at given index
 		 *\remarks		No check is made, if you make an index error, expect a crash
 		 *\return		A constant reference on data at wanted index
@@ -179,7 +132,7 @@ namespace castor
 		 *\remarks		Aucun check n'est fait, s'il y a une erreur d'index, attendez-vous à un crash
 		 *\return		Une référence constante sur la donnée à l'index voulu
 		 */
-		inline T const & operator[]( uint32_t index )const
+		T const & operator[]( uint32_t index )const
 		{
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wnull-dereference"
@@ -196,35 +149,13 @@ namespace castor
 		 *\remarks		Aucun check n'est fait, s'il y a une erreur d'index, attendez-vous à un crash
 		 *\return		Une référence sur la donnée à l'index voulu
 		 */
-		inline T & operator[]( uint32_t index )
+		T & operator[]( uint32_t index )
 		{
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wnull-dereference"
 			return m_coords[index];
 #pragma GCC diagnostic pop
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the data at given index
-		 *\remarks		This fonction checks the index and throws an exception if it is out of bounds
-		 *\return		A constant reference on data at wanted index
-		 *\~french
-		 *\brief		Récupère la donnée à l'index donné
-		 *\remarks		Cette fonction vérifie l'index et lance une exception s'il est hors bornes
-		 *\return		Une référence constante sur la donnée à l'index voulu
-		 */
-		T const & at( uint32_t index )const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the data at given index
-		 *\remarks		This fonction checks the index and throws an exception if it is out of bounds
-		 *\return		A reference on data at wanted index
-		 *\~french
-		 *\brief		Récupère la donnée à l'index donné
-		 *\remarks		Cette fonction vérifie l'index et lance une exception s'il est hors bornes
-		 *\return		Une référence sur la donnée à l'index voulu
-		 */
-		T & at( uint32_t index );
 		/**
 		 *\~english
 		 *\brief		Retrieves a non constant pointer on datas
@@ -233,7 +164,7 @@ namespace castor
 		 *\brief		Récupère un pointeur non constant sur les données
 		 *\return		Le pointeur
 		 */
-		inline T * ptr()
+		T * ptr()
 		{
 			return m_coords;
 		}
@@ -245,7 +176,7 @@ namespace castor
 		 *\brief		Récupère un pointeur constant sur les données
 		 *\return		Le pointeur
 		 */
-		inline T const * constPtr()const
+		T const * constPtr()const
 		{
 			return m_coords;
 		}
@@ -257,7 +188,7 @@ namespace castor
 		 *\brief		Récupère un itérateur sur le premier élément
 		 *\return		L'itérateur
 		 */
-		inline iterator begin()
+		iterator begin()
 		{
 			return m_coords;
 		}
@@ -269,7 +200,7 @@ namespace castor
 		 *\brief		Récupère un itérateur constant sur le premier élément
 		 *\return		L'itérateur
 		 */
-		inline const_iterator begin()const
+		const_iterator begin()const
 		{
 			return m_coords;
 		}
@@ -281,7 +212,7 @@ namespace castor
 		 *\brief		Récupère un itérateur sur le dernier élément
 		 *\return		L'itérateur
 		 */
-		inline iterator end()
+		iterator end()
 		{
 			return m_coords + Count;
 		}
@@ -293,7 +224,7 @@ namespace castor
 		 *\brief		Récupère un itérateur constant sur le dernier élément
 		 *\return		L'itérateur
 		 */
-		inline const_iterator end()const
+		const_iterator end()const
 		{
 			return m_coords + Count;
 		}
@@ -321,34 +252,34 @@ namespace castor
 	**/
 	/**@{*/
 	template< typename T, uint32_t Count >
-	Point< typename std::remove_cv< T >::type, Count > operator-( Coords< T, Count > const & rhs );
+	Point< std::remove_cv_t< T >, Count > operator-( Coords< T, Count > const & rhs );
 
 	template< typename T, uint32_t Count, typename U, uint32_t UCount >
-	Point< typename std::remove_cv< T >::type, Count > operator+( Coords< T, Count > const & lhs, Coords< U, UCount > const & rhs );
+	Point< std::remove_cv_t< T >, Count > operator+( Coords< T, Count > const & lhs, Coords< U, UCount > const & rhs );
 	template< typename T, uint32_t Count, typename U, uint32_t UCount >
-	Point< typename std::remove_cv< T >::type, Count > operator-( Coords< T, Count > const & lhs, Coords< U, UCount > const & rhs );
+	Point< std::remove_cv_t< T >, Count > operator-( Coords< T, Count > const & lhs, Coords< U, UCount > const & rhs );
 	template< typename T, uint32_t Count, typename U, uint32_t UCount >
-	Point< typename std::remove_cv< T >::type, Count > operator*( Coords< T, Count > const & lhs, Coords< U, UCount > const & rhs );
+	Point< std::remove_cv_t< T >, Count > operator*( Coords< T, Count > const & lhs, Coords< U, UCount > const & rhs );
 	template< typename T, uint32_t Count, typename U, uint32_t UCount >
-	Point< typename std::remove_cv< T >::type, Count > operator/( Coords< T, Count > const & lhs, Coords< U, UCount > const & rhs );
+	Point< std::remove_cv_t< T >, Count > operator/( Coords< T, Count > const & lhs, Coords< U, UCount > const & rhs );
 
 	template< typename T, uint32_t Count, typename U >
-	Point< typename std::remove_cv< T >::type, Count > operator+( Coords< T, Count > const & lhs, U const * rhs );
+	Point< std::remove_cv_t< T >, Count > operator+( Coords< T, Count > const & lhs, U const * rhs );
 	template< typename T, uint32_t Count, typename U >
-	Point< typename std::remove_cv< T >::type, Count > operator-( Coords< T, Count > const & lhs, U const * rhs );
+	Point< std::remove_cv_t< T >, Count > operator-( Coords< T, Count > const & lhs, U const * rhs );
 	template< typename T, uint32_t Count, typename U >
-	Point< typename std::remove_cv< T >::type, Count > operator*( Coords< T, Count > const & lhs, U const * rhs );
+	Point< std::remove_cv_t< T >, Count > operator*( Coords< T, Count > const & lhs, U const * rhs );
 	template< typename T, uint32_t Count, typename U >
-	Point< typename std::remove_cv< T >::type, Count > operator/( Coords< T, Count > const & lhs, U const * rhs );
+	Point< std::remove_cv_t< T >, Count > operator/( Coords< T, Count > const & lhs, U const * rhs );
 
 	template< typename T, uint32_t Count, typename U >
-	Point< typename std::remove_cv< T >::type, Count > operator+( Coords< T, Count > const & lhs, T const & rhs );
+	Point< std::remove_cv_t< T >, Count > operator+( Coords< T, Count > const & lhs, T const & rhs );
 	template< typename T, uint32_t Count, typename U >
-	Point< typename std::remove_cv< T >::type, Count > operator-( Coords< T, Count > const & lhs, T const & rhs );
+	Point< std::remove_cv_t< T >, Count > operator-( Coords< T, Count > const & lhs, T const & rhs );
 	template< typename T, uint32_t Count >
-	Point< typename std::remove_cv< T >::type, Count > operator*( Coords< T, Count > const & lhs, T const & rhs );
+	Point< std::remove_cv_t< T >, Count > operator*( Coords< T, Count > const & lhs, T const & rhs );
 	template< typename T, uint32_t Count >
-	Point< typename std::remove_cv< T >::type, Count > operator/( Coords< T, Count > const & lhs, T const & rhs );
+	Point< std::remove_cv_t< T >, Count > operator/( Coords< T, Count > const & lhs, T const & rhs );
 	/**@}*/
 	/**
 	\author 	Sylvain DOREMUS
@@ -408,7 +339,7 @@ namespace castor
 		 *\return		Le résultat du produit vectoriel
 		 */
 		template< typename T, typename U >
-		inline Point< T, 3 > cross( Coords3< T > const & lhs, Coords< U, 3 > const & rhs );
+		inline Point< T, 3 > cross( Coords< T, 3 > const & lhs, Coords< U, 3 > const & rhs );
 		/**
 		 *\~english
 		 *\brief		Computes the trigonometric cosine of the angle between 2 points

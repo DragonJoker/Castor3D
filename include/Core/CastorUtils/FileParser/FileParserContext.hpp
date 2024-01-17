@@ -9,6 +9,7 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Data/File.hpp"
 #include "CastorUtils/Data/Path.hpp"
+#include "CastorUtils/Design/NonCopyable.hpp"
 
 #include <deque>
 #include <limits>
@@ -17,8 +18,8 @@ namespace castor
 {
 	struct ContextDeleter
 	{
-		CU_API virtual ~ContextDeleter() = default;
-		CU_API virtual void destroy( void * data ) = 0;
+		CU_API virtual ~ContextDeleter()noexcept = default;
+		CU_API virtual void destroy( void * data )noexcept = 0;
 	};
 
 	using ContextDeleterPtr = std::unique_ptr< ContextDeleter >;
@@ -27,9 +28,11 @@ namespace castor
 	struct ContextDeleterT
 		: public ContextDeleter
 	{
-		void destroy( void * data )override
+		using ContextPtr = ContextT *;
+
+		void destroy( void * data )noexcept override
 		{
-			delete reinterpret_cast< ContextT * >( data );
+			delete ContextPtr( data );
 		}
 	};
 
@@ -41,10 +44,10 @@ namespace castor
 
 	struct BlockContext
 	{
-		BlockContext( BlockContext const & rhs ) = delete;
-		BlockContext & operator=( BlockContext const & rhs ) = delete;
-		CU_API BlockContext( BlockContext && rhs ) = default;
-		CU_API BlockContext & operator=( BlockContext && rhs ) = default;
+		CU_API BlockContext( BlockContext const & rhs ) = delete;
+		CU_API BlockContext & operator=( BlockContext const & rhs ) = delete;
+		CU_API BlockContext( BlockContext && rhs )noexcept = default;
+		CU_API BlockContext & operator=( BlockContext && rhs )noexcept = default;
 
 		BlockContext( void * pcontext
 			, ContextDeleterPtr pdtor )
@@ -53,7 +56,7 @@ namespace castor
 		{
 		}
 
-		~BlockContext()
+		~BlockContext()noexcept
 		{
 			if ( dtor && context )
 			{
@@ -64,7 +67,9 @@ namespace castor
 		void * context;
 		ContextDeleterPtr dtor;
 	};
+
 	class FileParserContext
+		: public NonMovable
 	{
 	public:
 		/**
@@ -85,7 +90,7 @@ namespace castor
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		CU_API virtual ~FileParserContext() = default;
+		CU_API virtual ~FileParserContext()noexcept = default;
 		/**
 		 *\~english
 		 *\brief		Registers a user context.
@@ -155,7 +160,7 @@ namespace castor
 		String functionName{};
 		//!\~english	The user context data, useful in plug-ins.
 		//!\~french		Les données de contexte utilisateur, utile dans les plug-ins.
-		std::map< String, void * > userContexts{};
+		std::map< String, void *, std::less<> > userContexts{};
 		//!\~english	The parser.
 		//!\~french		Le parseur.
 		FileParser * parser{};

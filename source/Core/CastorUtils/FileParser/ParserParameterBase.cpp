@@ -12,9 +12,9 @@ namespace castor
 			, T & value )
 		{
 			static ParameterType constexpr expected = ParserValueTyper< T >::Type;
-			auto given = parameter.getBaseType();
 
-			if ( given != expected )
+			if ( auto given = parameter.getBaseType();
+				given != expected )
 			{
 				if constexpr ( expected != ParameterType::eSize )
 				{

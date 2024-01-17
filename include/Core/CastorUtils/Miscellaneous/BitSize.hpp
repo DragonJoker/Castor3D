@@ -10,7 +10,7 @@ namespace castor
 {
 	static constexpr uint32_t getBitSize( uint64_t value )
 	{
-		int constexpr bitPatternToLog2[128]
+		std::array< int, 128 > constexpr bitPatternToLog2
 		{
 			0, // change to 0 if you want bitSize(0) = 0
 			48, -1, -1, 31, -1, 15, 51, -1, 63, 5, -1, -1, -1, 19, -1,
@@ -22,14 +22,14 @@ namespace castor
 			41, -1, 25, 37, -1, 47, -1, 30, 14, -1, -1, -1, -1, 22, -1, -1,
 			35, 12, -1, -1, -1, 59, 42, -1, -1, 61, 3, 26, 38, 44, -1, 56
 		};
-		uint64_t constexpr multiplicator = 0x6c04f118e9966f6bull;
+		uint64_t constexpr multiplicator = 0X6C04F118E9966F6BULL;
 		value |= value >> 1;
 		value |= value >> 2;
 		value |= value >> 4;
 		value |= value >> 8;
 		value |= value >> 16;
 		value |= value >> 32;
-		return uint32_t( bitPatternToLog2[(value * multiplicator) >> 57] );
+		return uint32_t( bitPatternToLog2[( value * multiplicator ) >> 57] );
 	}
 
 	static constexpr uint32_t getBitSize( uint32_t value )
@@ -37,7 +37,7 @@ namespace castor
 		return getBitSize( uint64_t( value ) );
 	}
 
-	static inline uint32_t getNextPowerOfTwo( uint32_t value )
+	static constexpr uint32_t getNextPowerOfTwo( uint32_t value )
 	{
 		auto bitSize = getBitSize( value );
 
@@ -49,7 +49,7 @@ namespace castor
 		return 0x00000001u << bitSize;
 	}
 
-	static inline bool isPowerOfTwo( uint32_t value )
+	static constexpr bool isPowerOfTwo( uint32_t value )
 	{
 		return value != 0
 			&& ( value & ( value - 1 ) ) == 0;

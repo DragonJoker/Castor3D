@@ -62,10 +62,6 @@ namespace castor
 		m_console = std::make_unique< LogcatConsole >();
 	}
 
-	ProgramConsole::~ProgramConsole()
-	{
-	}
-
 	void ProgramConsole::beginLog( LogType logLevel )
 	{
 		m_console->beginLog( logLevel );

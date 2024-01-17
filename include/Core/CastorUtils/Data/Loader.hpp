@@ -12,7 +12,7 @@ namespace castor
 {
 	template< class T, FileType FT >
 	class Loader
-		: public castor::NonCopyable
+		: public NonMovable
 	{
 	protected:
 		using Type = typename FileTyper< FT >::Type;
@@ -31,7 +31,7 @@ namespace castor
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		virtual ~Loader() = default;
+		virtual ~Loader()noexcept = default;
 		/**
 		 *\~english
 		 *\brief			Reads a resource from a file.
@@ -42,7 +42,7 @@ namespace castor
 		 *\param[in,out]	object	L'objet à lire.
 		 *\param[in,out]	file	Le fichier où lire l'objet.
 		 */
-		virtual bool operator()( T & CU_UnusedParam( object ), Type & CU_UnusedParam( file ) )
+		virtual bool operator()( CU_UnusedParam( T &, object ), CU_UnusedParam( Type &, file ) )
 		{
 			CU_LoaderError( "Import not supported by the loader registered for this type" );
 		}

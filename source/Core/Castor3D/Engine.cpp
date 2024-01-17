@@ -840,7 +840,7 @@ namespace castor3d
 	}
 
 	void Engine::declareSpecificsShaderBuffers( sdw::ShaderWriter & writer
-		, std::map< std::string, shader::BufferBaseUPtr > & buffers
+		, std::map< std::string, shader::BufferBaseUPtr, std::less<> > & buffers
 		, uint32_t & binding
 		, uint32_t set )const
 	{

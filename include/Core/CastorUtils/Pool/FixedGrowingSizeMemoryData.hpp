@@ -15,6 +15,7 @@ namespace castor
 	class FixedGrowingSizeMemoryData
 	{
 		using Namer = MemoryDataNamer< MemoryDataType::eFixedGrowing >;
+		using ObjectPtr = Object *;
 
 	protected:
 		/**
@@ -102,8 +103,7 @@ namespace castor
 			{
 				if ( m_freeIndex == m_freeEnd )
 				{
-					reportError< PoolErrorType::eCommonPoolIsFull >( Namer::Name
-						, reinterpret_cast< void * >( space ) );
+					reportError< PoolErrorType::eCommonPoolIsFull >( Namer::Name, space );
 					return false;
 				}
 
@@ -115,12 +115,11 @@ namespace castor
 							&& ptrdiff_t( space ) < ptrdiff_t( buffer.m_end );
 					} ) )
 				{
-					reportError< PoolErrorType::eGrowingNotFromRanges >( Namer::Name
-						, reinterpret_cast< void * >( space ) );
+					reportError< PoolErrorType::eGrowingNotFromRanges >( Namer::Name, space );
 					return false;
 				}
 
-				*m_freeIndex++ = reinterpret_cast< Object * >( space );
+				*m_freeIndex++ = ObjectPtr( space );
 				return true;
 			}
 
@@ -136,12 +135,13 @@ namespace castor
 		 */
 		void doCreateBuffer()noexcept
 		{
+			using ObjectPtr = Object *;
+
 			m_total += m_step;
 			ptrdiff_t count = m_buffersEnd - m_buffers;
-			auto buffers = reinterpret_cast< buffer * >( realloc( m_buffers
-				, ( count + 1 ) * sizeof( buffer ) ) );
 
-			if ( buffers )
+			if ( auto buffers = static_cast< buffer * >( realloc( m_buffers
+				, ( count + 1 ) * sizeof( buffer ) ) ) )
 			{
 				m_buffers = buffers;
 			}
@@ -150,10 +150,9 @@ namespace castor
 			m_buffersEnd->m_data = MemoryAllocator::allocate( m_step * sizeof( Object ) );
 			m_buffersEnd->m_end = nullptr;
 			auto buffer = m_buffersEnd->m_data;
-			auto freeChunks = reinterpret_cast< Object ** >( realloc( m_free
-				, m_total * sizeof( Object * ) ) );
 
-			if ( freeChunks )
+			if ( auto freeChunks = static_cast< Object ** >( realloc( m_free
+				, m_total * sizeof( Object * ) ) ) )
 			{
 				m_free = freeChunks;
 			}
@@ -163,7 +162,7 @@ namespace castor
 
 			for ( size_t i = 0; i < m_step; ++i )
 			{
-				*m_freeIndex++ = reinterpret_cast< Object * >( buffer );
+				*m_freeIndex++ = ObjectPtr( buffer );
 				buffer += sizeof( Object );
 			}
 

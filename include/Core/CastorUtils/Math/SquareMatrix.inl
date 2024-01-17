@@ -2,7 +2,7 @@
 
 namespace castor
 {
-	namespace
+	namespace sqmtx
 	{
 		template< typename Type, uint32_t Count > struct SqrMtxInverter;
 
@@ -291,7 +291,7 @@ namespace castor
 		template< typename TypeA, typename TypeB >
 		struct MtxMultiplicator< TypeA, TypeB, 0 >
 		{
-			static inline castor::Point< TypeB, 0 > mul( castor::SquareMatrix< TypeA, 4 > const & lhs, castor::Point< TypeB, 0 > const & rhs )
+			static inline castor::Point< TypeB, 0 > mul( castor::SquareMatrix< TypeA, 4 > const &, castor::Point< TypeB, 0 > const & )
 			{
 				return castor::Point< TypeB, 0 >();
 			}
@@ -333,12 +333,15 @@ namespace castor
 			}
 		};
 
+		template< typename T >
+		using Matrix1T = castor::SquareMatrix< T, 1 >;
+
 		template< typename T, uint32_t Count > struct CoFactorComputer;
 
 		template< typename T >
 		struct CoFactorComputer< T, 1 >
 		{
-			static inline T get( castor::SquareMatrix< T, 1 > const & CU_UnusedParam( matrix ), uint32_t CU_UnusedParam( column ), uint32_t CU_UnusedParam( row ) )
+			static inline T get( CU_UnusedParam( Matrix1T< T > const &, matrix ), CU_UnusedParam( uint32_t, column ), CU_UnusedParam( uint32_t, row ) )
 			{
 				return T{ 1 };
 			}
@@ -393,7 +396,7 @@ namespace castor
 	}
 
 	template< typename T, uint32_t Count >
-	inline SquareMatrix< T, Count >::SquareMatrix( SquareMatrix< T, Count > && rhs )
+	inline SquareMatrix< T, Count >::SquareMatrix( SquareMatrix< T, Count > && rhs )noexcept
 		: matrix_type( std::move( rhs ) )
 	{
 	}
@@ -460,7 +463,6 @@ namespace castor
 
 		if constexpr ( Count < 3 || Count > 4 )
 		{
-
 			for ( uint32_t i = 0; i < Count; i++ )
 			{
 				result += this->operator[]( 0 )[i] * getCofactor( i, 0 );
@@ -468,7 +470,7 @@ namespace castor
 		}
 		else
 		{
-			result = SqrMtxDeterminant< T, Count >::get( *this );
+			result = sqmtx::SqrMtxDeterminant< T, Count >::get( *this );
 		}
 
 		return result;
@@ -525,7 +527,7 @@ namespace castor
 	inline SquareMatrix< T, Count > SquareMatrix< T, Count >::getInverse()const
 	{
 		SquareMatrix< T, Count > result{ NoInit{} };
-		SqrMtxInverter< T, Count >::inverse( *this, result );
+		sqmtx::SqrMtxInverter< T, Count >::inverse( *this, result );
 		return result;
 	}
 
@@ -534,7 +536,8 @@ namespace castor
 	{
 		SquareMatrix < T, Count - 1 > result;
 		result.setIdentity();
-		uint32_t idst = 0, jdst = 0;
+		uint32_t idst = 0;
+		uint32_t jdst = 0;
 
 		for ( uint32_t isrc = 0; isrc < Count; isrc++ )
 		{
@@ -560,13 +563,13 @@ namespace castor
 	template< typename T, uint32_t Count >
 	inline typename SquareMatrix< T, Count >::value_type SquareMatrix< T, Count >::getCofactor( uint32_t column, uint32_t row )const
 	{
-		return CoFactorComputer< T, Count >::get( *this, column, row );
+		return sqmtx::CoFactorComputer< T, Count >::get( *this, column, row );
 	}
 
 	template< typename T, uint32_t Count >
 	inline SquareMatrix< T, Count > & SquareMatrix< T, Count >::invert()
 	{
-		SqrMtxInverter< T, Count >::inverse( *this, *this );
+		sqmtx::SqrMtxInverter< T, Count >::inverse( *this, *this );
 		return *this;
 	}
 
@@ -607,7 +610,7 @@ namespace castor
 	}
 
 	template< typename T, uint32_t Count >
-	inline SquareMatrix< T, Count > & SquareMatrix< T, Count >::operator=( SquareMatrix< T, Count > && rhs )
+	inline SquareMatrix< T, Count > & SquareMatrix< T, Count >::operator=( SquareMatrix< T, Count > && rhs )noexcept
 	{
 		matrix_type::operator=( std::move( rhs ) );
 		return * this;
@@ -649,7 +652,7 @@ namespace castor
 	template< typename Type >
 	inline SquareMatrix< T, Count > & SquareMatrix< T, Count >::operator*=( SquareMatrix< Type, Count > const & rhs )
 	{
-		SqrMtxOperators< T, Count >::mul( *this, rhs );
+		sqmtx::SqrMtxOperators< T, Count >::mul( *this, rhs );
 		return * this;
 	}
 

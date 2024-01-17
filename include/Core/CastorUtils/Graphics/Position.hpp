@@ -6,15 +6,28 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Graphics/GraphicsModule.hpp"
 
+#include "CastorUtils/Design/DataHolder.hpp"
 #include "CastorUtils/Math/Coords.hpp"
 
 namespace castor
 {
+	union PositionData
+	{
+		struct Pos
+		{
+			int32_t x;
+			int32_t y;
+		};
+		Pos position;
+		std::array< int32_t, 2u > buffer;
+	};
+
 	class Position
-		: public Coords< int32_t, 2 >
+		: private DataHolderT< PositionData >
+		, public Coords< int32_t, 2 >
 	{
 	private:
-		typedef Coords< int32_t, 2 > BaseType;
+		using BaseType = Coords< int32_t, 2 >;
 
 	public:
 		/**
@@ -43,14 +56,14 @@ namespace castor
 		 *\brief		Constructeur par déplacement
 		 *\param[in]	obj	L'objet à déplacer
 		 */
-		CU_API Position( Position && obj );
+		CU_API Position( Position && obj )noexcept;
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		CU_API ~Position();
+		CU_API ~Position()noexcept = default;
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator
@@ -72,7 +85,7 @@ namespace castor
 		 *\param[in]	obj	L'objet à déplacer
 		 *\return		Une référence sur cet objet
 		 */
-		CU_API Position & operator=( Position && obj );
+		CU_API Position & operator=( Position && obj )noexcept;
 		/**
 		 *\~english
 		 *\brief		sets the position values
@@ -99,9 +112,9 @@ namespace castor
 		 *\brief		Récupère la coordonnée gauche
 		 *\return		La coordonnée gauche du rectangle
 		 */
-		inline int32_t y()const
+		int32_t y()const
 		{
-			return m_data.position.y;
+			return getData().position.y;
 		}
 		/**
 		 *\~english
@@ -111,9 +124,9 @@ namespace castor
 		 *\brief		Récupère la coordonnée gauche
 		 *\return		La coordonnée gauche du rectangle
 		 */
-		inline int32_t & y()
+		int32_t & y()
 		{
-			return m_data.position.y;
+			return getData().position.y;
 		}
 		/**
 		 *\~english
@@ -123,9 +136,9 @@ namespace castor
 		 *\brief		Récupère la coordonnée droite
 		 *\return		La coordonnée droite du rectangle
 		 */
-		inline int32_t x()const
+		int32_t x()const
 		{
-			return m_data.position.x;
+			return getData().position.x;
 		}
 		/**
 		 *\~english
@@ -135,24 +148,13 @@ namespace castor
 		 *\brief		Récupère la coordonnée droite
 		 *\return		La coordonnée droite du rectangle
 		 */
-		inline int32_t & x()
+		int32_t & x()
 		{
-			return m_data.position.x;
+			return getData().position.x;
 		}
 
 		using BaseType::ptr;
 		using BaseType::constPtr;
-
-	private:
-		union
-		{
-			struct
-			{
-				int32_t x;
-				int32_t y;
-			} position;
-			int32_t buffer[2];
-		}	m_data;
 	};
 	/**
 	 *\~english

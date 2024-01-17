@@ -6,26 +6,28 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Graphics/GraphicsModule.hpp"
 
+#include "CastorUtils/Design/DataHolder.hpp"
 #include "CastorUtils/Math/Coords.hpp"
 
 namespace castor
 {
+	union SizeData
+	{
+		struct Mbr
+		{
+			uint32_t x;
+			uint32_t y;
+		};
+		Mbr size;
+		std::array< uint32_t, 2u > buffer;
+	};
+
 	class Size
-		: public Coords< uint32_t, 2 >
+		: private DataHolderT< SizeData >
+		, public Coords< uint32_t, 2 >
 	{
 	private:
-		typedef Coords< uint32_t, 2 > BaseType;
-
-	private:
-		union Datas
-		{
-			struct Mbr
-			{
-				uint32_t x;
-				uint32_t y;
-			} size;
-			uint32_t buffer[2];
-		}	m_data;
+		using BaseType = Coords< uint32_t, 2 >;
 
 	public:
 		/**
@@ -68,7 +70,7 @@ namespace castor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		CU_API ~Size()noexcept;
+		CU_API ~Size()noexcept = default;
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator
@@ -108,9 +110,9 @@ namespace castor
 		 *\brief		Récupère la largeur
 		 *\return		La largeur
 		 */
-		inline uint32_t getWidth()const noexcept
+		uint32_t getWidth()const noexcept
 		{
-			return m_data.size.x;
+			return getData().size.x;
 		}
 		/**
 		 *\~english
@@ -120,9 +122,9 @@ namespace castor
 		 *\brief		Récupère la largeur
 		 *\return		La largeur
 		 */
-		inline uint32_t & getWidth()noexcept
+		uint32_t & getWidth()noexcept
 		{
-			return m_data.size.x;
+			return getData().size.x;
 		}
 		/**
 		 *\~english
@@ -132,9 +134,9 @@ namespace castor
 		 *\brief		Récupère la hauteur
 		 *\return		La hauteur
 		 */
-		inline uint32_t getHeight()const noexcept
+		uint32_t getHeight()const noexcept
 		{
-			return m_data.size.y;
+			return getData().size.y;
 		}
 		/**
 		 *\~english
@@ -144,9 +146,9 @@ namespace castor
 		 *\brief		Récupère la hauteur
 		 *\return		La hauteur
 		 */
-		inline uint32_t & getHeight()noexcept
+		uint32_t & getHeight()noexcept
 		{
-			return m_data.size.y;
+			return getData().size.y;
 		}
 		/**
 		 *\~english
@@ -160,28 +162,28 @@ namespace castor
 		 */
 		CU_API void grow( int32_t cx, int32_t cy )noexcept;
 
-		inline Size & operator<<=( uint32_t rhs )noexcept
+		Size & operator<<=( uint32_t rhs )noexcept
 		{
-			m_data.size.x <<= rhs;
-			m_data.size.y <<= rhs;
+			getData().size.x <<= rhs;
+			getData().size.y <<= rhs;
 			return *this;
 		}
 
-		inline Size & operator>>=( uint32_t rhs )noexcept
+		Size & operator>>=( uint32_t rhs )noexcept
 		{
-			m_data.size.x >>= rhs;
-			m_data.size.y >>= rhs;
+			getData().size.x >>= rhs;
+			getData().size.y >>= rhs;
 			return *this;
 		}
 
 		auto operator->()const noexcept
 		{
-			return &m_data.size;
+			return &getData().size;
 		}
 
 		auto operator->()noexcept
 		{
-			return &m_data.size;
+			return &getData().size;
 		}
 
 		using BaseType::ptr;

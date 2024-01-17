@@ -44,7 +44,7 @@ namespace castor3d
 			MaterialsCounts.end();
 
 			writer.implementMain( 16u, 16u
-				, [&]( sdw::ComputeIn in )
+				, [&]( sdw::ComputeIn const & in )
 				{
 					auto pixel = writer.declLocale( "pixel"
 						, in.globalInvocationID.xy() );
@@ -61,7 +61,7 @@ namespace castor3d
 							, nodePipelineId & maxPipelinesMask );
 						sdw::atomicAdd( materialsCounts[pipelineId], 1_u );
 					}
-					FI;
+					FI
 				} );
 
 			return writer.getBuilder().releaseShader();
@@ -79,7 +79,7 @@ namespace castor3d
 		{
 			auto renderSize = getExtent( data );
 			auto & pass = graph.createPass( name + "/MaterialsCount"
-				, [&stages, &device, isEnabled, renderSize]( crg::FramePass const & framePass
+				, [&stages, &device, enable = std::move( isEnabled ), renderSize]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{
@@ -88,7 +88,7 @@ namespace castor3d
 						, graph
 						, crg::ru::Config{}
 						, crg::cp::Config{}
-							.isEnabled( isEnabled )
+							.isEnabled( enable )
 							.groupCountX( castor::divRoundUp( renderSize.width, 16u ) )
 							.groupCountY( castor::divRoundUp( renderSize.height, 16u ) )
 							.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( stages ) ) );
@@ -141,7 +141,7 @@ namespace castor3d
 			MaterialsStarts.end();
 
 			writer.implementMain( 64u
-				, [&]( sdw::ComputeIn in )
+				, [&]( sdw::ComputeIn const & in )
 				{
 					auto pipelineId = writer.declLocale( "pipelineId"
 						, in.globalInvocationID.x() );
@@ -154,14 +154,14 @@ namespace castor3d
 						{
 							result += materialsCounts[i];
 						}
-						ROF;
+						ROF
 
 						indirectCounts[pipelineId * 3u + 0u] = writer.cast< sdw::UInt >( ceil( writer.cast< sdw::Float >( materialsCounts[pipelineId] ) / 16.0_f ) );
 						indirectCounts[pipelineId * 3u + 1u] = 1u;
 						indirectCounts[pipelineId * 3u + 2u] = 1u;
 						materialStarts[pipelineId] = result;
 					}
-					FI;
+					FI
 				} );
 
 			return writer.getBuilder().releaseShader();
@@ -179,7 +179,7 @@ namespace castor3d
 			, ashes::PipelineShaderStageCreateInfoArray const & stages )
 		{
 			auto & pass = graph.createPass( name + "/MaterialsStart"
-				, [&stages, &device, isEnabled]( crg::FramePass const & framePass
+				, [&stages, &device, enable = std::move( isEnabled )]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{
@@ -188,7 +188,7 @@ namespace castor3d
 						, graph
 						, crg::ru::Config{}
 						, crg::cp::Config{}
-							.isEnabled( isEnabled )
+							.isEnabled( enable )
 							.groupCountX( device.renderSystem.getEngine()->getMaxPassTypeCount() / 64u )
 							.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( stages ) ) );
 					device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
@@ -252,7 +252,7 @@ namespace castor3d
 			PixelsXY.end();
 
 			writer.implementMain( 16u, 16u
-				, [&]( sdw::ComputeIn in )
+				, [&]( sdw::ComputeIn const & in )
 				{
 					auto pixel = writer.declLocale( "pixel"
 						, in.globalInvocationID.xy() );
@@ -271,7 +271,7 @@ namespace castor3d
 							, materialsStarts[pipelineId] + sdw::atomicAdd( materialsCounts[pipelineId], 1_u ) );
 						pixelsXY[pixelIndex] = pixel;
 					}
-					FI;
+					FI
 				} );
 
 			return writer.getBuilder().releaseShader();
@@ -291,7 +291,7 @@ namespace castor3d
 		{
 			auto renderSize = getExtent( data );
 			auto & pass = graph.createPass( name + "/PixelsXY"
-				, [&stages, &device, isEnabled, renderSize]( crg::FramePass const & framePass
+				, [&stages, &device, enable = std::move( isEnabled ), renderSize]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{
@@ -300,7 +300,7 @@ namespace castor3d
 						, graph
 						, crg::ru::Config{}
 						, crg::cp::Config{}
-							.isEnabled( isEnabled )
+							.isEnabled( enable )
 							.groupCountX( castor::divRoundUp( renderSize.width, 16u ) )
 							.groupCountY( castor::divRoundUp( renderSize.height, 16u ) )
 							.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( stages ) ) );
@@ -383,7 +383,7 @@ namespace castor3d
 			, previousPasses
 			, previousPass
 			, device
-			, isEnabled
+			, std::move( isEnabled )
 			, data
 			, materialsCounts
 			, materialsStarts
@@ -391,7 +391,7 @@ namespace castor3d
 			, m_pixelsStages );
 	}
 
-	void VisibilityReorderPass::accept( ConfigurationVisitorBase & visitor )
+	void VisibilityReorderPass::accept( ConfigurationVisitorBase & visitor )const
 	{
 		visitor.visit( m_computeCountsShader );
 		visitor.visit( m_computeStartsShader );

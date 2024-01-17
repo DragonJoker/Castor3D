@@ -8,7 +8,7 @@
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 
-#include <CastorUtils/FileParser/ParserParameter.hpp>
+#include <CastorUtils/FileParser/FileParser.hpp>
 
 #include <ShaderWriter/Intrinsics/IntrinsicFunctions.hpp>
 

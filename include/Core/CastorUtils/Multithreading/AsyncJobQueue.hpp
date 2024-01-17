@@ -4,6 +4,7 @@ See LICENSE file in root folder
 #ifndef ___CU_AsyncJobQueue_H___
 #define ___CU_AsyncJobQueue_H___
 
+#include "CastorUtils/Design/NonCopyable.hpp"
 #include "CastorUtils/Multithreading/ThreadPool.hpp"
 
 #include "CastorUtils/Config/BeginExternHeaderGuard.hpp"
@@ -13,6 +14,7 @@ See LICENSE file in root folder
 namespace castor
 {
 	class AsyncJobQueue
+		: public NonMovable
 	{
 	public:
 		using Job = std::function< void() >;
@@ -74,7 +76,7 @@ namespace castor
 		bool doCheckEnded();
 
 	private:
-		std::atomic_bool m_ended;
+		std::atomic_bool m_ended{};
 		JobArray m_pending;
 		ThreadPool m_pool;
 		std::mutex m_mutex;

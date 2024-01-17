@@ -23,7 +23,7 @@ namespace castor
 		 *\param[in]	value	La valeur.
 		 *\param[in]	range	Son intervalle.
 		 */
-		inline RangedValue( T const & value
+		RangedValue( T const & value
 			, Range< T > const & range )noexcept
 			: m_range{ range }
 			, m_value{ m_range.clamp( value ) }
@@ -37,7 +37,7 @@ namespace castor
 		 *\brief		Affectation depuis une valeur.
 		 *\param[in]	value	La valeur.
 		 */
-		inline RangedValue & operator=( T const & value )noexcept
+		RangedValue & operator=( T const & value )noexcept
 		{
 			m_value = m_range.clamp( value );
 			return *this;
@@ -77,7 +77,7 @@ namespace castor
 		 *\~french
 		 *\return		La valeur.
 		 */
-		inline T const & value()const noexcept
+		T const & value()const noexcept
 		{
 			return m_value;
 		}
@@ -87,7 +87,7 @@ namespace castor
 		 *\~french
 		 *\return		L'intervalle.
 		 */
-		inline Range< T > const & range()const noexcept
+		Range< T > const & range()const noexcept
 		{
 			return m_range;
 		}
@@ -98,49 +98,49 @@ namespace castor
 		 *\name Opérateurs arithmétiques.
 		 */
 		/**@{*/
-		inline RangedValue< T > & operator+=( RangedValue< T > const & rhs )noexcept
+		RangedValue< T > & operator+=( RangedValue< T > const & rhs )noexcept
 		{
 			m_value = m_range.clamp( m_value + rhs.m_value );
 			return *this;
 		}
 
-		inline RangedValue< T > & operator-=( RangedValue< T > const & rhs )noexcept
+		RangedValue< T > & operator-=( RangedValue< T > const & rhs )noexcept
 		{
 			m_value = m_range.clamp( m_value - rhs.m_value );
 			return *this;
 		}
 
-		inline RangedValue< T > & operator*=( RangedValue< T > const & rhs )noexcept
+		RangedValue< T > & operator*=( RangedValue< T > const & rhs )noexcept
 		{
 			m_value = m_range.clamp( m_value * rhs.m_value );
 			return *this;
 		}
 
-		inline RangedValue< T > & operator/=( RangedValue< T > const & rhs )noexcept
+		RangedValue< T > & operator/=( RangedValue< T > const & rhs )noexcept
 		{
 			m_value = m_range.clamp( m_value / rhs.m_value );
 			return *this;
 		}
 
-		inline RangedValue< T > & operator+=( T const & rhs )noexcept
+		RangedValue< T > & operator+=( T const & rhs )noexcept
 		{
 			m_value = m_range.clamp( m_value + rhs );
 			return *this;
 		}
 
-		inline RangedValue< T > & operator-=( T const & rhs )noexcept
+		RangedValue< T > & operator-=( T const & rhs )noexcept
 		{
 			m_value = m_range.clamp( m_value - rhs );
 			return *this;
 		}
 
-		inline RangedValue< T > & operator*=( T const & rhs )noexcept
+		RangedValue< T > & operator*=( T const & rhs )noexcept
 		{
 			m_value = m_range.clamp( m_value * rhs );
 			return *this;
 		}
 
-		inline RangedValue< T > & operator/=( T const & rhs )noexcept
+		RangedValue< T > & operator/=( T const & rhs )noexcept
 		{
 			m_value = m_range.clamp( m_value / rhs );
 			return *this;
@@ -186,7 +186,7 @@ namespace castor
 		template< typename T >
 		struct Equal
 		{
-			inline bool operator()( RangedValue< T > const & lhs
+			bool operator()( RangedValue< T > const & lhs
 				, RangedValue< T > const & rhs )const noexcept
 			{
 				static constexpr auto eps = std::numeric_limits< T >::epsilon();
@@ -197,7 +197,7 @@ namespace castor
 		template<>
 		struct Equal< uint32_t >
 		{
-			inline bool operator()( RangedValue< uint32_t > const & lhs
+			bool operator()( RangedValue< uint32_t > const & lhs
 				, RangedValue< uint32_t > const & rhs )const noexcept
 			{
 				return lhs.value() == rhs.value();

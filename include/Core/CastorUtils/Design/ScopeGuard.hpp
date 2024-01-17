@@ -43,14 +43,14 @@ namespace castor
 		 *\brief		Constructeur par déplacement.
 		 *\param[in]	rhs	L'objet à déplacer.
 		 */
-		ScopeGuard( ScopeGuard && rhs ) = default;
+		ScopeGuard( ScopeGuard && rhs )noexcept = default;
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		~ScopeGuard()
+		~ScopeGuard()noexcept
 		{
 			m_function();
 		}
@@ -71,9 +71,9 @@ namespace castor
 		 *\brief		Constructeur par déplacement.
 		 *\param[in]	rhs	L'objet à déplacer.
 		 */
-		ScopeGuard & operator=( ScopeGuard && rhs ) = default;
+		ScopeGuard & operator=( ScopeGuard && rhs )noexcept = default;
 
-	protected:
+	private:
 		ScopeExitFuncType m_function;
 	};
 	/**

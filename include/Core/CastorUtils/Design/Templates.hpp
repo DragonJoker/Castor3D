@@ -52,7 +52,7 @@ namespace castor
 	\remarks	spécialisation de MinValue pour A <= B.
 	*/
 	template< uint32_t A, uint32_t B >
-	struct MinValue < A, B, typename std::enable_if< ( A <= B ) >::type >
+	struct MinValue < A, B, std::enable_if_t< ( A <= B ) > >
 	{
 		static const uint32_t value = A;
 	};
@@ -65,7 +65,7 @@ namespace castor
 	\remarks	spécialisation de MinValue pour B < A.
 	*/
 	template< uint32_t A, uint32_t B >
-	struct MinValue < A, B, typename std::enable_if< ( B < A ) >::type >
+	struct MinValue < A, B, std::enable_if_t< ( B < A ) > >
 	{
 		static const uint32_t value = B;
 	};
@@ -78,7 +78,7 @@ namespace castor
 	\remarks	spécialisation de MaxValue pour A <= B.
 	*/
 	template< uint32_t A, uint32_t B >
-	struct MaxValue< A, B, typename std::enable_if< ( A >= B ) >::type >
+	struct MaxValue< A, B, std::enable_if_t< ( A >= B ) > >
 	{
 		static const uint32_t value = A;
 	};
@@ -91,7 +91,7 @@ namespace castor
 	\remarks	spécialisation de MaxValue pour B > A.
 	*/
 	template< uint32_t A, uint32_t B >
-	struct MaxValue< A, B, typename std::enable_if< ( B > A ) >::type >
+	struct MaxValue< A, B, std::enable_if_t< ( B > A ) > >
 	{
 		static const uint32_t value = B;
 	};

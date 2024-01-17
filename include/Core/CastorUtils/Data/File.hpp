@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "CastorUtils/CastorUtils.hpp"
 #include "CastorUtils/Data/Path.hpp"
 #include "CastorUtils/Design/FlagCombination.hpp"
+#include "CastorUtils/Design/NonCopyable.hpp"
 #include "CastorUtils/Exception/Exception.hpp"
 #include "CastorUtils/Exception/Assertion.hpp"
 
@@ -74,6 +75,7 @@ namespace castor
 	CU_API int64_t fileTell( FILE * file );
 
 	class File
+		: public NonMovable
 	{
 	public:
 		/*!
@@ -218,7 +220,7 @@ namespace castor
 		 *\~french
 		 *\brief		Destructeur, ferme le fichier
 		 */
-		CU_API virtual ~File();
+		CU_API virtual ~File()noexcept;
 		/**
 		 *\~english
 		 *\brief		sets the cursor in the file according to the given offset and the given mode
@@ -249,8 +251,8 @@ namespace castor
 		*	\p false if any error occured.
 		*/
 		CU_API static bool traverseDirectory( Path const & folderPath
-			, TraverseDirFunction directoryFunction
-			, HitFileFunction fileFunction );
+			, TraverseDirFunction const & directoryFunction
+			, HitFileFunction const & fileFunction );
 		/**
 		*\brief
 		*	Filters the files in a directory, recursively or not.
@@ -264,7 +266,7 @@ namespace castor
 		*	The files list.
 		*/
 		CU_API static PathArray filterDirectoryFiles( Path const & folderPath
-			, FilterFunction onFile
+			, FilterFunction const & onFile
 			, bool recursive = false );
 		/**
 		 *\~english
@@ -300,7 +302,7 @@ namespace castor
 		 *\brief		donne le répertoire de l'utilisateur courant
 		 *\return		Le répertoire
 		 */
-		CU_API static Path	getUserDirectory();
+		CU_API static Path getUserDirectory();
 		/**
 		 *\~english
 		 *\brief		Tests directory existence
@@ -311,7 +313,7 @@ namespace castor
 		 *\param[in]	folderPath	Le chemin du dossier
 		 *\return		\p true si le dossier existe
 		 */
-		CU_API static bool	directoryExists( Path const & folderPath );
+		CU_API static bool directoryExists( Path const & folderPath );
 		/**
 		 *\~english
 		 *\brief		Creates a directory
@@ -456,11 +458,6 @@ namespace castor
 		Path getFileName()const
 		{
 			return Path{ m_fileFullPath.getFullFileName() };
-		}
-
-		operator bool()const
-		{
-			return isOk();
 		}
 
 	protected:

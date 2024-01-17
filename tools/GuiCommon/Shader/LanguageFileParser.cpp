@@ -4,7 +4,7 @@
 #include "GuiCommon/Shader/LanguageInfo.hpp"
 #include "GuiCommon/Shader/StyleInfo.hpp"
 
-#include <CastorUtils/FileParser/ParserParameter.hpp>
+#include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Log/Logger.hpp>
 
 namespace GuiCommon

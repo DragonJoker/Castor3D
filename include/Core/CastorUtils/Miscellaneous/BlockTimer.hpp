@@ -5,10 +5,12 @@ See LICENSE file in root folder
 #define ___CASTOR_BLOCK_TIMER___
 
 #include "CastorUtils/Miscellaneous/PreciseTimer.hpp"
+#include "CastorUtils/Design/NonCopyable.hpp"
 
 namespace castor
 {
 	class BlockTimer
+		: public NonMovable
 	{
 	public:
 		/**
@@ -33,7 +35,7 @@ namespace castor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		CU_API ~BlockTimer();
+		CU_API ~BlockTimer()noexcept;
 
 	private:
 		std::string_view m_file;

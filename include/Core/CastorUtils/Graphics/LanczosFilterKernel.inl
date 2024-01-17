@@ -36,7 +36,7 @@ namespace castor
 			, int32_t x
 			, int32_t y
 			, uint32_t width
-			, uint32_t height )
+			, uint32_t )
 		{
 			return buffer + ( ( y * width ) + x ) * getBytesPerPixel( PFT );
 		}

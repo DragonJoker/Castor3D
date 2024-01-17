@@ -24,7 +24,8 @@ namespace castor
 		CU_API static const xchar GenericSeparator;
 
 	public:
-		CU_API Path();
+		CU_API Path() = default;
+		CU_API ~Path() = default;
 		/**
 		 *\~english
 		 *\brief		Constructor from a char array
@@ -54,6 +55,15 @@ namespace castor
 		CU_API explicit Path( String const & data );
 		/**
 		 *\~english
+		 *\brief		Constructor from a String
+		 *\param[in]	data	The String
+		 *\~french
+		 *\brief		Constructeur à partir d'un String
+		 *\param[in]	data	Le String
+		 */
+		CU_API explicit Path( StringView data );
+		/**
+		 *\~english
 		 *\brief		Copy Constructor
 		 *\param[in]	data	The Path object to copy
 		 *\~french
@@ -69,7 +79,7 @@ namespace castor
 		 *\brief		Constructeur par déplacement
 		 *\param[in]	data	L'objet Path à déplacer
 		 */
-		CU_API Path( Path && data );
+		CU_API Path( Path && data )noexcept;
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator
@@ -91,7 +101,7 @@ namespace castor
 		 *\param[in]	data	L'objet Path à déplacer
 		 *\return		Une référence sur cet objet Path
 		 */
-		CU_API Path & operator=( Path && data );
+		CU_API Path & operator=( Path && data )noexcept;
 		/**
 		 *\~english
 		 *\brief		Appends a path to the current path. adds the separator if needed
@@ -109,7 +119,7 @@ namespace castor
 		 *\brief		Concatène une chaîne de caractères à ce chemin. Ajoute le séparateur si besoin est
 		 *\param[in]	string	La chaîne de caractères à concaténer
 		 */
-		CU_API Path & operator/=( String const & string );
+		CU_API Path & operator/=( StringView string );
 		/**
 		 *\~english
 		 *\brief		adds a MBCS C string to the current path. Adds the separator if needed
@@ -145,7 +155,7 @@ namespace castor
 		 *\brief		Concatène une chaîne de caractères à ce chemin.
 		 *\param[in]	string	La chaîne de caractères à concaténer
 		 */
-		CU_API Path & operator+=( String const & string );
+		CU_API Path & operator+=( StringView string );
 		/**
 		 *\~english
 		 *\brief		adds a MBCS C string to the current path.
@@ -291,7 +301,7 @@ namespace castor
 	 */
 	CU_API Path operator/( wchar_t const * lhs, Path const & rhs );
 
-	CU_API std::filesystem::path makePath( castor::String const & str );
+	CU_API std::filesystem::path makePath( castor::StringView str );
 }
 
 #endif

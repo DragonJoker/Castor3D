@@ -24,10 +24,10 @@ namespace castor
 		 */
 		CU_API ParserParameterBase() = default;
 		CU_API ParserParameterBase( ParserParameterBase const & ) = default;
-		CU_API ParserParameterBase( ParserParameterBase && ) = default;
+		CU_API ParserParameterBase( ParserParameterBase && )noexcept = default;
 		CU_API ParserParameterBase & operator=( ParserParameterBase const & ) = default;
-		CU_API ParserParameterBase & operator=( ParserParameterBase && ) = default;
-		CU_API virtual ~ParserParameterBase() = default;
+		CU_API ParserParameterBase & operator=( ParserParameterBase && )noexcept = default;
+		CU_API virtual ~ParserParameterBase()noexcept = default;
 		/**
 		 *\~english
 		 *\return		The parameter type.
@@ -51,7 +51,7 @@ namespace castor
 		 *\~french
 		 *\return		Le type du chaîne paramètre.
 		 */
-		CU_API virtual xchar const * getStrType()const = 0;
+		CU_API virtual StringView getStrType()const = 0;
 		/**
 		 *\~english
 		 *\return		A copy of this parameter.

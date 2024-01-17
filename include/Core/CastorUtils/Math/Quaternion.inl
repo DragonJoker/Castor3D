@@ -4,7 +4,7 @@ namespace castor
 {
 	//*************************************************************************************************
 
-	namespace
+	namespace details
 	{
 		template< typename T >
 		inline T mixValues( T a, T b, T f )
@@ -290,14 +290,14 @@ namespace castor
 	template< typename T >
 	void QuaternionT< T >::toMatrix( double * matrix )const
 	{
-		Matrix4x4d mtx = Matrix4x4d( matrix );
+		auto mtx = Matrix4x4d( matrix );
 		toMatrix( mtx );
 	}
 
 	template< typename T >
 	void QuaternionT< T >::toMatrix( float * matrix )const
 	{
-		Matrix4x4f mtx = Matrix4x4f( matrix );
+		auto mtx = Matrix4x4f( matrix );
 		toMatrix( mtx );
 	}
 
@@ -320,9 +320,9 @@ namespace castor
 		T const y = DataHolder::getData().y;
 		T const z = DataHolder::getData().z;
 		T const w = DataHolder::getData().w;
-		auto s = T( sqrt( T{ 1.0 } - ( w * w ) ) );
 
-		if ( std::abs( s ) < std::numeric_limits< T >::epsilon() )
+		if ( auto s = T( sqrt( T{ 1.0 } - ( w * w ) ) );
+			std::abs( s ) < std::numeric_limits< T >::epsilon() )
 		{
 			// angle is 0 (mod 2*pi), so any axis will do
 			angle = 0.0_radians;
@@ -349,9 +349,9 @@ namespace castor
 		T const y = DataHolder::getData().y;
 		T const z = DataHolder::getData().z;
 		T const w = DataHolder::getData().w;
-		auto s = T( sqrt( T{ 1.0 } - ( w * w ) ) );
 
-		if ( std::abs( s ) < std::numeric_limits< T >::epsilon() )
+		if ( auto s = T( sqrt( T{ 1.0 } - ( w * w ) ) );
+			std::abs( s ) < std::numeric_limits< T >::epsilon() )
 		{
 			// angle is 0 (mod 2*pi), so any axis will do
 			angle = 0.0_radians;
@@ -486,10 +486,10 @@ namespace castor
 		{
 			// Linear interpolation
 			return QuaternionT< T >(
-				mixValues( DataHolder::getData().x, target->x, T( factor ) ),
-				mixValues( DataHolder::getData().y, target->y, T( factor ) ),
-				mixValues( DataHolder::getData().z, target->z, T( factor ) ),
-				mixValues( DataHolder::getData().w, target->w, T( factor ) ) );
+				details::mixValues( DataHolder::getData().x, target->x, T( factor ) ),
+				details::mixValues( DataHolder::getData().y, target->y, T( factor ) ),
+				details::mixValues( DataHolder::getData().z, target->z, T( factor ) ),
+				details::mixValues( DataHolder::getData().w, target->w, T( factor ) ) );
 		}
 		else
 		{
@@ -509,10 +509,10 @@ namespace castor
 		{
 			// Linear interpolation
 			return QuaternionT< T >(
-				mixValues( DataHolder::getData().x, target->x, T( factor ) ),
-				mixValues( DataHolder::getData().y, target->y, T( factor ) ),
-				mixValues( DataHolder::getData().z, target->z, T( factor ) ),
-				mixValues( DataHolder::getData().w, target->w, T( factor ) ) );
+				details::mixValues( DataHolder::getData().x, target->x, T( factor ) ),
+				details::mixValues( DataHolder::getData().y, target->y, T( factor ) ),
+				details::mixValues( DataHolder::getData().z, target->z, T( factor ) ),
+				details::mixValues( DataHolder::getData().w, target->w, T( factor ) ) );
 		}
 		else
 		{
@@ -545,7 +545,7 @@ namespace castor
 	template< typename T >
 	QuaternionT< T > QuaternionT< T >::slerp( QuaternionT< T > const & target, double factor )const
 	{
-		//	Slerp = q1((q1^-1)q2)^t;
+		//!	Slerp = q1((q1^-1)q2)^t;
 		T cosTheta = point::dot( *this, target );
 		QuaternionT< T > result( target );
 
@@ -560,14 +560,14 @@ namespace castor
 		}
 
 		// Calculate coefficients
-		T sclp, sclq;
+		T sclp{};
+		T sclq{};
 
 		if ( ( T( 1.0 ) - cosTheta ) > 0.0001 ) // 0.0001 -> some epsillon
 		{
-			// Standard case (slerp)
-			T omega, sinom;
-			omega = acos( cosTheta ); // extract theta from dot product's cos theta
-			sinom = sin( omega );
+			//! Standard case (slerp)
+			auto omega = T( acos( cosTheta ) ); // extract theta from dot product's cos theta
+			auto sinom = T( sin( omega ) );
 			sclp = T( sin( ( 1.0 - factor ) * omega ) / sinom );
 			sclq = T( sin( factor * omega ) / sinom );
 		}
@@ -588,7 +588,7 @@ namespace castor
 	template< typename T >
 	QuaternionT< T > QuaternionT< T >::slerp( QuaternionT< T > const & target, float factor )const
 	{
-		//	Slerp = q1((q1^-1)q2)^t;
+		//!	Slerp = q1((q1^-1)q2)^t;
 		T cosTheta = point::dot( *this, target );
 		QuaternionT< T > result( target );
 
@@ -603,11 +603,12 @@ namespace castor
 		}
 
 		// Calculate coefficients
-		T sclp, sclq;
+		T sclp{};
+		T sclq{};
 
 		if ( ( T( 1.0 ) - cosTheta ) > 0.0001 ) // 0.0001 -> some epsillon
 		{
-			// Standard case (slerp)
+			//! Standard case (slerp)
 			auto omega = T( acos( cosTheta ) ); // extract theta from dot product's cos theta
 			auto sinom = T( sin( omega ) );
 			sclp = T( sin( ( 1.0 - factor ) * omega ) / sinom );

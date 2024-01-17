@@ -24,7 +24,7 @@
 #include <Castor3D/Shader/Ubos/ObjectIdsUbo.hpp>
 #include <Castor3D/Shader/Ubos/SceneUbo.hpp>
 
-#include <CastorUtils/FileParser/ParserParameter.hpp>
+#include <CastorUtils/FileParser/FileParser.hpp>
 
 #include <ShaderWriter/Source.hpp>
 #include <ShaderWriter/TraditionalGraphicsWriter.hpp>

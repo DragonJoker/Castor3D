@@ -5,10 +5,12 @@ See LICENSE file in root folder
 #define ___CASTOR_BLOCK_TRACKER_H___
 
 #include "CastorUtils/Miscellaneous/MiscellaneousModule.hpp"
+#include "CastorUtils/Design/NonCopyable.hpp"
 
 namespace castor
 {
 	class BlockTracker
+		: public NonMovable
 	{
 	public:
 		/**
@@ -32,7 +34,7 @@ namespace castor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		CU_API ~BlockTracker();
+		CU_API ~BlockTracker()noexcept;
 
 	private:
 		String m_strFile;

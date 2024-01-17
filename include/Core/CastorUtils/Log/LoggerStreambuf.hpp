@@ -4,6 +4,7 @@ See LICENSE file in root folder
 #ifndef ___CU_LoggerStreambuf_H___
 #define ___CU_LoggerStreambuf_H___
 
+#include "CastorUtils/Design/NonCopyable.hpp"
 #include "CastorUtils/Log/LoggerInstance.hpp"
 #include "CastorUtils/Config/MultiThreadConfig.hpp"
 
@@ -17,6 +18,11 @@ namespace castor
 	class LoggerStreambufT
 		: public std::basic_streambuf< CharT >
 	{
+		LoggerStreambufT( LoggerStreambufT const & ) = delete;
+		LoggerStreambufT( LoggerStreambufT && )noexcept = delete;
+		LoggerStreambufT & operator=( LoggerStreambufT const & ) = delete;
+		LoggerStreambufT & operator=( LoggerStreambufT && )noexcept = delete;
+
 	public:
 		using string_type = std::basic_string< CharT >;
 		using ostream_type = std::basic_ostream< CharT >;
@@ -41,8 +47,15 @@ namespace castor
 
 		~LoggerStreambufT()noexcept override
 		{
-			doSync();
-			m_stream.rdbuf( m_old );
+			try
+			{
+				doSync();
+				m_stream.rdbuf( m_old );
+			}
+			catch ( ... )
+			{
+				// Nothing to do here...
+			}
 		}
 
 		int_type overflow( int_type c = traits_type::eof() )override

@@ -6,7 +6,7 @@
 #include "Castor3D/Scene/SceneFileParserData.hpp"
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
 
-#include <CastorUtils/FileParser/ParserParameter.hpp>
+#include <CastorUtils/FileParser/FileParser.hpp>
 
 #include <ShaderWriter/Source.hpp>
 

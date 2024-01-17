@@ -14,6 +14,7 @@ namespace castor
 	class FixedSizeMemoryData
 	{
 		using Namer = MemoryDataNamer< MemoryDataType::eFixed >;
+		using ObjectPtr = Object *;
 
 	protected:
 		/**
@@ -34,7 +35,7 @@ namespace castor
 
 			for ( size_t i = 0; i < m_total; ++i )
 			{
-				*m_freeIndex++ = reinterpret_cast< Object * >( m_bufferEnd );
+				*m_freeIndex++ = ObjectPtr( m_bufferEnd );
 				m_bufferEnd += sizeof( Object );
 			}
 
@@ -97,19 +98,17 @@ namespace castor
 			{
 				if ( m_freeIndex == m_freeEnd )
 				{
-					reportError< PoolErrorType::eCommonPoolIsFull >( Namer::Name
-						, reinterpret_cast< void * >( space ) );
+					reportError< PoolErrorType::eCommonPoolIsFull >( Namer::Name, space );
 					return false;
 				}
 
 				if ( ptrdiff_t( space ) < ptrdiff_t( m_buffer ) || ptrdiff_t( space ) >= ptrdiff_t( m_bufferEnd ) )
 				{
-					reportError< PoolErrorType::eCommonNotFromRange >( Namer::Name
-						, reinterpret_cast< void * >( space ) );
+					reportError< PoolErrorType::eCommonNotFromRange >( Namer::Name, space );
 					return false;
 				}
 
-				*m_freeIndex++ = reinterpret_cast< Object * >( space );
+				*m_freeIndex++ = ObjectPtr( space );
 				return true;
 			}
 			else

@@ -93,13 +93,13 @@ namespace castor
 		}
 		else
 		{
-			CU_Exception( "Couldn't open file " + string::stringCast< char >( m_fileFullPath ) + " : " + string::stringCast< char >( System::getLastErrorText() ) );
+			CU_Exception( "Couldn't open file " + string::stringCast< char >( m_fileFullPath ) + " : " + string::stringCast< char >( system::getLastErrorText() ) );
 		}
 
 		CU_CheckInvariants();
 	}
 
-	File::~File()
+	File::~File()noexcept
 	{
 		if ( m_file != nullptr )
 		{
@@ -155,20 +155,9 @@ namespace castor
 
 	bool File::isOk()const
 	{
-		bool result = false;
-
-		if ( m_file )
-		{
-			if ( ferror( m_file ) == 0 )
-			{
-				if ( feof( m_file ) == 0 )
-				{
-					result = true;
-				}
-			}
-		}
-
-		return result;
+		return m_file
+			&& ferror( m_file ) == 0
+			&& feof( m_file ) == 0;
 	}
 
 	long long File::tell()
@@ -334,8 +323,8 @@ namespace castor
 		, bool recursive )
 	{
 		files = filterDirectoryFiles( folderPath
-			, []( Path const & CU_UnusedParam( folder )
-				, String const & CU_UnusedParam( name ) )
+			, []( CU_UnusedParam( Path const &, folder )
+				, CU_UnusedParam( String const &, name ) )
 			{
 				return true;
 			}
@@ -344,7 +333,7 @@ namespace castor
 	}
 
 	PathArray File::filterDirectoryFiles( Path const & folderPath
-		, FilterFunction onFile
+		, FilterFunction const & onFile
 		, bool recursive )
 	{
 		PathArray files;
@@ -371,7 +360,7 @@ namespace castor
 		}
 		else
 		{
-			directoryFunction = []( Path const & CU_UnusedParam( path ) )
+			directoryFunction = []( CU_UnusedParam( Path const &, path ) )
 			{
 				return true;
 			};

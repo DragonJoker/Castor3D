@@ -20,7 +20,7 @@ namespace castor
 		TypeT noise( TypeT x, TypeT y, TypeT z );
 
 	private:
-		uint32_t m_permutations[512];
+		std::array< uint32_t, 512u > m_permutations;
 
 		uint8_t hash( int32_t i );
 		int32_t fastfloor( TypeT fp );
@@ -52,7 +52,10 @@ namespace castor
 	template< typename TypeT >
 	TypeT SimplexNoiseT< TypeT >::noise( TypeT x, TypeT y, TypeT z )
 	{
-		TypeT n0, n1, n2, n3; // Noise contributions from the four corners
+		TypeT n0{}; // Noise contributions from the four corners
+		TypeT n1{}; // Noise contributions from the four corners
+		TypeT n2{}; // Noise contributions from the four corners
+		TypeT n3{}; // Noise contributions from the four corners
 
 		// Skewing/Unskewing factors for 3D
 		static constexpr TypeT F3 = TypeT( 1.0 / 3.0 );
@@ -73,8 +76,12 @@ namespace castor
 
 		// For the 3D case, the simplex shape is a slightly irregular tetrahedron.
 		// Determine which simplex we are in.
-		int32_t i1, j1, k1; // Offsets for second corner of simplex in (i,j,k) coords
-		int32_t i2, j2, k2; // Offsets for third corner of simplex in (i,j,k) coords
+		int32_t i1{}; // Offsets for second corner of simplex in (i,j,k) coords
+		int32_t j1{}; // Offsets for second corner of simplex in (i,j,k) coords
+		int32_t k1{}; // Offsets for second corner of simplex in (i,j,k) coords
+		int32_t i2{}; // Offsets for third corner of simplex in (i,j,k) coords
+		int32_t j2{}; // Offsets for third corner of simplex in (i,j,k) coords
+		int32_t k2{}; // Offsets for third corner of simplex in (i,j,k) coords
 		if ( x0 >= y0 )
 		{
 			if ( y0 >= z0 )
@@ -127,8 +134,8 @@ namespace castor
 		int gi3 = hash( i + 1 + hash( j + 1 + hash( k + 1 ) ) );
 
 		// Calculate the contribution from the four corners
-		TypeT t0 = TypeT( 0.6 ) - x0 * x0 - y0 * y0 - z0 * z0;
-		if ( t0 < 0 )
+		if ( TypeT t0 = TypeT( 0.6 ) - x0 * x0 - y0 * y0 - z0 * z0;
+			t0 < 0 )
 		{
 			n0 = 0.0;
 		}
@@ -138,8 +145,8 @@ namespace castor
 			n0 = t0 * t0 * grad( gi0, x0, y0, z0 );
 		}
 
-		TypeT t1 = TypeT( 0.6 ) - x1 * x1 - y1 * y1 - z1 * z1;
-		if ( t1 < 0 )
+		if ( TypeT t1 = TypeT( 0.6 ) - x1 * x1 - y1 * y1 - z1 * z1;
+			t1 < 0 )
 		{
 			n1 = 0.0;
 		}
@@ -149,8 +156,8 @@ namespace castor
 			n1 = t1 * t1 * grad( gi1, x1, y1, z1 );
 		}
 
-		TypeT t2 = TypeT( 0.6 ) - x2 * x2 - y2 * y2 - z2 * z2;
-		if ( t2 < 0 )
+		if ( TypeT t2 = TypeT( 0.6 ) - x2 * x2 - y2 * y2 - z2 * z2;
+			t2 < 0 )
 		{
 			n2 = 0.0;
 		}
@@ -160,8 +167,8 @@ namespace castor
 			n2 = t2 * t2 * grad( gi2, x2, y2, z2 );
 		}
 
-		TypeT t3 = TypeT( 0.6 ) - x3 * x3 - y3 * y3 - z3 * z3;
-		if ( t3 < 0 )
+		if ( TypeT t3 = TypeT( 0.6 ) - x3 * x3 - y3 * y3 - z3 * z3;
+			t3 < 0 )
 		{
 			n3 = 0.0;
 		}
@@ -185,7 +192,7 @@ namespace castor
 	template< typename TypeT >
 	int32_t SimplexNoiseT< TypeT >::fastfloor( TypeT fp )
 	{
-		int32_t i = static_cast< int32_t >( fp );
+		auto i = int32_t( fp );
 		return ( fp < i ) ? ( i - 1 ) : ( i );
 	}
 

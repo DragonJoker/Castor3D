@@ -7,7 +7,7 @@
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
 
-#include <CastorUtils/FileParser/ParserParameter.hpp>
+#include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Log/Logger.hpp>
 
 #ifndef CU_PlatformWindows

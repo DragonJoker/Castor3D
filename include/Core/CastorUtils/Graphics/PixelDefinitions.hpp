@@ -31,7 +31,7 @@ namespace castor
 	 *\brief		Fonction de récuperation de la taille d'un pixel sans templates
 	 *\param[in]	format	Le format de pixels
 	 */
-	inline constexpr VkDeviceSize getBytesPerPixel( PixelFormat format )
+	constexpr VkDeviceSize getBytesPerPixel( PixelFormat format )
 	{
 		return ashes::getSize( ashes::getMinimalExtent2D( VkFormat( format ) ), VkFormat( format ) );
 	}

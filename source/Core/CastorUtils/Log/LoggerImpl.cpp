@@ -9,7 +9,7 @@
 
 namespace castor
 {
-	LoggerImpl::LoggerImpl( LoggerImpl && rhs )
+	LoggerImpl::LoggerImpl( LoggerImpl && rhs )noexcept
 		: m_parent{ rhs.m_parent }
 		, m_console{ std::move( rhs.m_console ) }
 		, m_logFilePath{ std::move( rhs.m_logFilePath ) }
@@ -18,7 +18,7 @@ namespace castor
 		rhs.m_console = nullptr;
 	}
 
-	LoggerImpl & LoggerImpl::operator=( LoggerImpl && rhs )
+	LoggerImpl & LoggerImpl::operator=( LoggerImpl && rhs )noexcept
 	{
 		m_console = std::move( rhs.m_console );
 		m_logFilePath = std::move( rhs.m_logFilePath );
@@ -28,7 +28,7 @@ namespace castor
 	}
 
 	LoggerImpl::LoggerImpl( ProgramConsole & console
-		, LogType CU_UnusedParam( level )
+		, CU_UnusedParam( LogType, level )
 		, LoggerInstance & parent )
 		: m_parent{ parent }
 		, m_console{ &console }
@@ -38,7 +38,7 @@ namespace castor
 	void LoggerImpl::registerCallback( LogCallback callback, void * caller )
 	{
 		auto lock( makeUniqueLock( m_mutexCallbacks ) );
-		m_mapCallbacks[caller] = callback;
+		m_mapCallbacks[caller] = std::move( callback );
 	}
 
 	void LoggerImpl::unregisterCallback( void * caller )
@@ -93,7 +93,7 @@ namespace castor
 		std::string time = std::ctime( &endTime );
 		string::replace( time, "\n", std::string{} );
 		String timeStamp = string::stringCast< xchar >( time );
-		StringStream logs[size_t( LogType::eCount )]
+		std::array< StringStream, size_t( LogType::eCount ) > logs
 		{
 			makeStringStream(),
 			makeStringStream(),
@@ -134,9 +134,8 @@ namespace castor
 
 				for ( auto const & stream : logs )
 				{
-					String text = stream.str();
-
-					if ( !text.empty() )
+					if ( String text = stream.str();
+						!text.empty() )
 					{
 						try
 						{
@@ -153,9 +152,9 @@ namespace castor
 				}
 			}
 		}
-		catch ( std::exception & /*exc*/ )
+		catch ( std::exception & exc )
 		{
-			//m_console->print( cuT( "Couldn't open log file : " ) + string::stringCast< xchar >( exc.what() ), true );
+			printf( "Couldn't open log file: %s", exc.what() );
 		}
 	}
 
@@ -197,9 +196,9 @@ namespace castor
 
 			if ( !m_mapCallbacks.empty() )
 			{
-				for ( auto it : m_mapCallbacks )
+				for ( auto const & [data, callback] : m_mapCallbacks )
 				{
-					it.second( line, logLevel, newLine );
+					callback( line, logLevel, newLine );
 				}
 			}
 		}

@@ -55,11 +55,11 @@ namespace castor
 		{
 			return Type( getSrc( buffer ).g << 4 );
 		}
-		static Type B( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type B( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return 0x00u;
 		}
-		static Type A( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type A( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return std::numeric_limits< Type >::max();
 		}
@@ -71,10 +71,10 @@ namespace castor
 		{
 			getDst( buffer ).g = uint8_t( value >> 4 );
 		}
-		static void B( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void B( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
-		static void A( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void A( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
 	};
@@ -229,7 +229,7 @@ namespace castor
 		{
 			return Type( getSrc( buffer ).b << 3 );
 		}
-		static Type A( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type A( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return std::numeric_limits< Type >::max();
 		}
@@ -245,7 +245,7 @@ namespace castor
 		{
 			getDst( buffer ).b = uint16_t( value >> 3 );
 		}
-		static void A( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void A( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
 	};
@@ -284,7 +284,7 @@ namespace castor
 		{
 			return Type( getSrc( buffer ).b << 3 );
 		}
-		static Type A( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type A( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return 0xFF;
 		}
@@ -300,7 +300,7 @@ namespace castor
 		{
 			getDst( buffer ).b = uint16_t( value >> 3 );
 		}
-		static void A( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void A( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
 	};
@@ -501,15 +501,15 @@ namespace castor
 		{
 			return Type( getSrc( buffer ).r );
 		}
-		static Type G( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type G( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return 0x00;
 		}
-		static Type B( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type B( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return 0x00;
 		}
-		static Type A( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type A( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return std::numeric_limits< Type >::max();
 		}
@@ -517,13 +517,13 @@ namespace castor
 		{
 			getDst( buffer ).r = int8_t( value );
 		}
-		static void G( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void G( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
-		static void B( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void B( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
-		static void A( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void A( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
 	};
@@ -550,15 +550,15 @@ namespace castor
 		{
 			return getSrc( buffer ).r;
 		}
-		static Type G( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type G( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return 0x00;
 		}
-		static Type B( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type B( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return 0x00;
 		}
-		static Type A( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type A( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return std::numeric_limits< Type >::max();
 		}
@@ -566,13 +566,13 @@ namespace castor
 		{
 			getDst( buffer ).r = value;
 		}
-		static void G( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void G( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
-		static void B( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void B( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
-		static void A( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void A( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
 	};
@@ -640,11 +640,11 @@ namespace castor
 		{
 			return getSrc( buffer ).g;
 		}
-		static Type B( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type B( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return 0x00;
 		}
-		static Type A( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type A( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return std::numeric_limits< Type >::max();
 		}
@@ -656,10 +656,10 @@ namespace castor
 		{
 			getDst( buffer ).g = value;
 		}
-		static void B( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void B( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
-		static void A( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void A( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
 	};
@@ -692,11 +692,11 @@ namespace castor
 		{
 			return getSrc( buffer ).g;
 		}
-		static Type B( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type B( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return 0x00;
 		}
-		static Type A( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type A( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return std::numeric_limits< Type >::max();
 		}
@@ -708,10 +708,10 @@ namespace castor
 		{
 			getDst( buffer ).g = value;
 		}
-		static void B( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void B( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
-		static void A( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void A( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
 	};
@@ -785,7 +785,7 @@ namespace castor
 		{
 			return getSrc( buffer ).b;
 		}
-		static Type A( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type A( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return std::numeric_limits< Type >::max();
 		}
@@ -801,7 +801,7 @@ namespace castor
 		{
 			getDst( buffer ).b = value;
 		}
-		static void A( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void A( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
 	};
@@ -840,7 +840,7 @@ namespace castor
 		{
 			return getSrc( buffer ).b;
 		}
-		static Type A( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type A( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return std::numeric_limits< Type >::max();
 		}
@@ -856,7 +856,7 @@ namespace castor
 		{
 			getDst( buffer ).b = value;
 		}
-		static void A( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void A( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
 	};
@@ -930,7 +930,7 @@ namespace castor
 		{
 			return getSrc( buffer ).b;
 		}
-		static Type A( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type A( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return std::numeric_limits< Type >::max();
 		}
@@ -946,7 +946,7 @@ namespace castor
 		{
 			getDst( buffer ).b = value;
 		}
-		static void A( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void A( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
 	};
@@ -985,7 +985,7 @@ namespace castor
 		{
 			return getSrc( buffer ).b;
 		}
-		static Type A( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type A( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return std::numeric_limits< Type >::max();
 		}
@@ -1001,7 +1001,7 @@ namespace castor
 		{
 			getDst( buffer ).b = value;
 		}
-		static void A( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void A( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
 	};
@@ -1804,15 +1804,15 @@ namespace castor
 		{
 			return getSrc( buffer ).r;
 		}
-		static Type G( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type G( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return 0;
 		}
-		static Type B( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type B( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return 0;
 		}
-		static Type A( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type A( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return std::numeric_limits< Type >::max();
 		}
@@ -1820,13 +1820,13 @@ namespace castor
 		{
 			getDst( buffer ).r = value;
 		}
-		static void G( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void G( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
-		static void B( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void B( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
-		static void A( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void A( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
 	};
@@ -1853,15 +1853,15 @@ namespace castor
 		{
 			return getSrc( buffer ).r;
 		}
-		static Type G( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type G( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return 0;
 		}
-		static Type B( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type B( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return 0;
 		}
-		static Type A( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type A( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return std::numeric_limits< Type >::max();
 		}
@@ -1869,13 +1869,13 @@ namespace castor
 		{
 			getDst( buffer ).r = value;
 		}
-		static void G( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void G( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
-		static void B( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void B( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
-		static void A( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void A( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
 	};
@@ -1943,11 +1943,11 @@ namespace castor
 		{
 			return getSrc( buffer ).g;
 		}
-		static Type B( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type B( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return 0;
 		}
-		static Type A( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type A( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return std::numeric_limits< Type >::max();
 		}
@@ -1959,10 +1959,10 @@ namespace castor
 		{
 			getDst( buffer ).g = value;
 		}
-		static void B( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void B( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
-		static void A( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void A( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
 	};
@@ -1995,11 +1995,11 @@ namespace castor
 		{
 			return getSrc( buffer ).g;
 		}
-		static Type B( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type B( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return 0;
 		}
-		static Type A( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type A( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return std::numeric_limits< Type >::max();
 		}
@@ -2011,10 +2011,10 @@ namespace castor
 		{
 			getDst( buffer ).g = value;
 		}
-		static void B( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void B( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
-		static void A( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void A( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
 	};
@@ -2088,7 +2088,7 @@ namespace castor
 		{
 			return getSrc( buffer ).b;
 		}
-		static Type A( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type A( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return std::numeric_limits< Type >::max();
 		}
@@ -2104,7 +2104,7 @@ namespace castor
 		{
 			getDst( buffer ).b = value;
 		}
-		static void A( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void A( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
 	};
@@ -2143,7 +2143,7 @@ namespace castor
 		{
 			return getSrc( buffer ).b;
 		}
-		static Type A( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type A( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return std::numeric_limits< Type >::max();
 		}
@@ -2159,7 +2159,7 @@ namespace castor
 		{
 			getDst( buffer ).b = value;
 		}
-		static void A( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void A( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
 	};
@@ -2372,15 +2372,15 @@ namespace castor
 		{
 			return getSrc( buffer ).r;
 		}
-		static Type G( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type G( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return 0;
 		}
-		static Type B( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type B( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return 0;
 		}
-		static Type A( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type A( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return std::numeric_limits< Type >::max();
 		}
@@ -2388,13 +2388,13 @@ namespace castor
 		{
 			getDst( buffer ).r = value;
 		}
-		static void G( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void G( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
-		static void B( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void B( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
-		static void A( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void A( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
 	};
@@ -2421,15 +2421,15 @@ namespace castor
 		{
 			return getSrc( buffer ).r;
 		}
-		static Type G( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type G( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return 0;
 		}
-		static Type B( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type B( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return 0;
 		}
-		static Type A( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type A( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return std::numeric_limits< Type >::max();
 		}
@@ -2437,13 +2437,13 @@ namespace castor
 		{
 			getDst( buffer ).r = value;
 		}
-		static void G( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void G( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
-		static void B( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void B( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
-		static void A( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void A( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
 	};
@@ -2470,15 +2470,15 @@ namespace castor
 		{
 			return getSrc( buffer ).r;
 		}
-		static Type G( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type G( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return 0;
 		}
-		static Type B( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type B( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return 0;
 		}
-		static Type A( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type A( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return std::numeric_limits< Type >::max();
 		}
@@ -2486,13 +2486,13 @@ namespace castor
 		{
 			getDst( buffer ).r = value;
 		}
-		static void G( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void G( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
-		static void B( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void B( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
-		static void A( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void A( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
 	};
@@ -2525,11 +2525,11 @@ namespace castor
 		{
 			return getSrc( buffer ).g;
 		}
-		static Type B( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type B( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return 0;
 		}
-		static Type A( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type A( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return std::numeric_limits< Type >::max();
 		}
@@ -2541,10 +2541,10 @@ namespace castor
 		{
 			getDst( buffer ).g = value;
 		}
-		static void B( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void B( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
-		static void A( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void A( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
 	};
@@ -2577,11 +2577,11 @@ namespace castor
 		{
 			return getSrc( buffer ).g;
 		}
-		static Type B( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type B( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return 0;
 		}
-		static Type A( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type A( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return std::numeric_limits< Type >::max();
 		}
@@ -2593,10 +2593,10 @@ namespace castor
 		{
 			getDst( buffer ).g = value;
 		}
-		static void B( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void B( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
-		static void A( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void A( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
 	};
@@ -2629,11 +2629,11 @@ namespace castor
 		{
 			return getSrc( buffer ).g;
 		}
-		static Type B( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type B( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return 0;
 		}
-		static Type A( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type A( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return std::numeric_limits< Type >::max();
 		}
@@ -2645,10 +2645,10 @@ namespace castor
 		{
 			getDst( buffer ).g = value;
 		}
-		static void B( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void B( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
-		static void A( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void A( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
 	};
@@ -2687,7 +2687,7 @@ namespace castor
 		{
 			return getSrc( buffer ).b;
 		}
-		static Type A( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type A( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return std::numeric_limits< Type >::max();
 		}
@@ -2703,7 +2703,7 @@ namespace castor
 		{
 			getDst( buffer ).b = value;
 		}
-		static void A( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void A( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
 	};
@@ -2742,7 +2742,7 @@ namespace castor
 		{
 			return getSrc( buffer ).b;
 		}
-		static Type A( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type A( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return std::numeric_limits< Type >::max();
 		}
@@ -2758,7 +2758,7 @@ namespace castor
 		{
 			getDst( buffer ).b = value;
 		}
-		static void A( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void A( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
 	};
@@ -2797,7 +2797,7 @@ namespace castor
 		{
 			return getSrc( buffer ).b;
 		}
-		static Type A( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type A( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return std::numeric_limits< Type >::max();
 		}
@@ -2813,7 +2813,7 @@ namespace castor
 		{
 			getDst( buffer ).b = value;
 		}
-		static void A( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void A( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
 	};
@@ -3014,15 +3014,15 @@ namespace castor
 		{
 			return getSrc( buffer ).r;
 		}
-		static Type G( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type G( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return 0;
 		}
-		static Type B( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type B( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return 0;
 		}
-		static Type A( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type A( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return std::numeric_limits< Type >::max();
 		}
@@ -3030,13 +3030,13 @@ namespace castor
 		{
 			getDst( buffer ).r = value;
 		}
-		static void G( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void G( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
-		static void B( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void B( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
-		static void A( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void A( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
 	};
@@ -3063,15 +3063,15 @@ namespace castor
 		{
 			return getSrc( buffer ).r;
 		}
-		static Type G( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type G( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return 0;
 		}
-		static Type B( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type B( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return 0;
 		}
-		static Type A( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type A( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return std::numeric_limits< Type >::max();
 		}
@@ -3079,13 +3079,13 @@ namespace castor
 		{
 			getDst( buffer ).r = value;
 		}
-		static void G( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void G( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
-		static void B( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void B( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
-		static void A( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void A( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
 	};
@@ -3112,15 +3112,15 @@ namespace castor
 		{
 			return getSrc( buffer ).r;
 		}
-		static Type G( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type G( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return 0;
 		}
-		static Type B( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type B( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return 0;
 		}
-		static Type A( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type A( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return std::numeric_limits< Type >::max();
 		}
@@ -3128,13 +3128,13 @@ namespace castor
 		{
 			getDst( buffer ).r = value;
 		}
-		static void G( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void G( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
-		static void B( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void B( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
-		static void A( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void A( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
 	};
@@ -3167,11 +3167,11 @@ namespace castor
 		{
 			return getSrc( buffer ).g;
 		}
-		static Type B( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type B( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return 0;
 		}
-		static Type A( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type A( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return std::numeric_limits< Type >::max();
 		}
@@ -3183,10 +3183,10 @@ namespace castor
 		{
 			getDst( buffer ).g = value;
 		}
-		static void B( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void B( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
-		static void A( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void A( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
 	};
@@ -3219,11 +3219,11 @@ namespace castor
 		{
 			return getSrc( buffer ).g;
 		}
-		static Type B( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type B( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return 0;
 		}
-		static Type A( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type A( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return std::numeric_limits< Type >::max();
 		}
@@ -3235,10 +3235,10 @@ namespace castor
 		{
 			getDst( buffer ).g = value;
 		}
-		static void B( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void B( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
-		static void A( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void A( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
 	};
@@ -3271,11 +3271,11 @@ namespace castor
 		{
 			return getSrc( buffer ).g;
 		}
-		static Type B( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type B( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return 0;
 		}
-		static Type A( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type A( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return std::numeric_limits< Type >::max();
 		}
@@ -3287,10 +3287,10 @@ namespace castor
 		{
 			getDst( buffer ).g = value;
 		}
-		static void B( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void B( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
-		static void A( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void A( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
 	};
@@ -3329,7 +3329,7 @@ namespace castor
 		{
 			return getSrc( buffer ).b;
 		}
-		static Type A( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type A( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return std::numeric_limits< Type >::max();
 		}
@@ -3345,7 +3345,7 @@ namespace castor
 		{
 			getDst( buffer ).b = value;
 		}
-		static void A( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void A( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
 	};
@@ -3384,7 +3384,7 @@ namespace castor
 		{
 			return getSrc( buffer ).b;
 		}
-		static Type A( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type A( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return std::numeric_limits< Type >::max();
 		}
@@ -3400,7 +3400,7 @@ namespace castor
 		{
 			getDst( buffer ).b = value;
 		}
-		static void A( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void A( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
 	};
@@ -3439,7 +3439,7 @@ namespace castor
 		{
 			return getSrc( buffer ).b;
 		}
-		static Type A( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type A( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return std::numeric_limits< Type >::max();
 		}
@@ -3455,7 +3455,7 @@ namespace castor
 		{
 			getDst( buffer ).b = value;
 		}
-		static void A( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void A( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
 	};
@@ -3668,7 +3668,7 @@ namespace castor
 		{
 			return Type( getSrc( buffer ).b << 22 );
 		}
-		static Type A( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type A( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return std::numeric_limits< float >::max();
 		}
@@ -3684,7 +3684,7 @@ namespace castor
 		{
 			getDst( buffer ).b = ( uint32_t( value ) >> 21 );
 		}
-		static void A( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void A( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
 	};
@@ -3725,7 +3725,7 @@ namespace castor
 		{
 			return Type( getSrc( buffer ).b << 23 );
 		}
-		static Type A( uint8_t const * CU_UnusedParam( buffer ) )
+		static Type A( CU_UnusedParam( uint8_t const *, buffer ) )
 		{
 			return std::numeric_limits< float >::max();
 		}
@@ -3741,7 +3741,7 @@ namespace castor
 		{
 			getDst( buffer ).b = ( uint32_t( value ) >> 23 );
 		}
-		static void A( uint8_t * CU_UnusedParam( buffer ), Type CU_UnusedParam( value ) )
+		static void A( CU_UnusedParam( uint8_t *, buffer ), CU_UnusedParam( Type, value ) )
 		{
 		}
 	};

@@ -104,7 +104,7 @@ namespace castor3d
 
 		while ( !m_frameEnded )
 		{
-			castor::System::sleep( 5 );
+			castor::system::sleep( 5 );
 		}
 	}
 
@@ -124,7 +124,7 @@ namespace castor3d
 
 		while ( !isEnded() )
 		{
-			castor::System::sleep( 5 );
+			castor::system::sleep( 5 );
 		}
 	}
 
@@ -155,7 +155,7 @@ namespace castor3d
 				// Tant qu'on n'a pas demandé le début du rendu, on attend.
 				while ( !isInterrupted() && !isRendering() )
 				{
-					castor::System::sleep( 10 );
+					castor::system::sleep( 10 );
 				}
 
 				// Le rendu est en cours

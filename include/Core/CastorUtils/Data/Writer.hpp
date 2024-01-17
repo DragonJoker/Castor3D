@@ -14,13 +14,13 @@ namespace castor
 {
 	template< class DataT, typename StreamT >
 	class Writer
-		: public castor::NonCopyable
+		: public NonMovable
 	{
 	protected:
 		using Type = StreamT;
 
 	public:
-		virtual ~Writer() = default;
+		virtual ~Writer()noexcept = default;
 		/**
 		 *\~english
 		 *\brief			Writes a resource to a file.
@@ -31,7 +31,7 @@ namespace castor
 		 *\param[in]		object	L'objet à écrire.
 		 *\param[in,out]	file	Le fichier où écrire l'objet.
 		 */
-		virtual bool operator()( DataT const & CU_UnusedParam( object ), Type & CU_UnusedParam( file ) )
+		virtual bool operator()( CU_UnusedParam( DataT const &, object ), CU_UnusedParam( Type &, file ) )
 		{
 			CU_LoaderError( "Export not supported by the loader registered for this type" );
 		}

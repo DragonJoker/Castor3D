@@ -28,21 +28,21 @@ namespace castor
 
 		using iterator_category = internal_type::iterator_category;
 		
-		inline ConstPixelIterator( array_type const & array, internal_type const & iter )
+		ConstPixelIterator( array_type const & array, internal_type const & iter )
 			: m_current{ iter }
 			, m_end{ array.end() }
 		{
 			doLink();
 		}
 
-		inline ConstPixelIterator( ConstPixelIterator const & iter )
+		ConstPixelIterator( ConstPixelIterator const & iter )
 			: m_current{ iter.m_current }
 			, m_end{ iter.m_end }
 		{
 			doLink();
 		}
 			
-		inline ConstPixelIterator( ConstPixelIterator && iter )
+		ConstPixelIterator( ConstPixelIterator && iter )noexcept
 			: m_current{ std::move( iter.m_current ) }
 			, m_end{ std::move( iter.m_end ) }
 		{
@@ -50,7 +50,7 @@ namespace castor
 			iter.m_pixel.unlink();
 		}
 
-		inline ConstPixelIterator & operator=( ConstPixelIterator const & it )
+		ConstPixelIterator & operator=( ConstPixelIterator const & it )
 		{
 			m_current = it.m_current;
 			m_end = it.m_end;
@@ -58,7 +58,7 @@ namespace castor
 			return *this;
 		}
 
-		inline ConstPixelIterator & operator=( ConstPixelIterator && it )
+		ConstPixelIterator & operator=( ConstPixelIterator && it )noexcept
 		{
 			m_current = std::move( it.m_current );
 			m_end = std::move( it.m_end );
@@ -67,83 +67,83 @@ namespace castor
 			return *this;
 		}
 
-		inline ConstPixelIterator & operator+=( size_t offset )
+		ConstPixelIterator & operator+=( size_t offset )
 		{
 			m_current += ptrdiff_t( offset * ConstPixelIterator::size );
 			doLink();
 			return *this;
 		}
 
-		inline ConstPixelIterator & operator-=( size_t offset )
+		ConstPixelIterator & operator-=( size_t offset )
 		{
 			m_current -= ptrdiff_t( offset * ConstPixelIterator::size );
 			doLink();
 			return *this;
 		}
 
-		inline ConstPixelIterator & operator++()
+		ConstPixelIterator & operator++()
 		{
 			operator+=( 1u );
 			return *this;
 		}
 
-		inline ConstPixelIterator operator++( int )
+		ConstPixelIterator operator++( int )
 		{
 			ConstPixelIterator temp = *this;
 			++( *this );
 			return temp;
 		}
 
-		inline ConstPixelIterator & operator--()
+		ConstPixelIterator & operator--()
 		{
 			operator-=( 1u );
 			return *this;
 		}
 
-		inline ConstPixelIterator operator--( int )
+		ConstPixelIterator operator--( int )
 		{
 			ConstPixelIterator temp = *this;
 			++( *this );
 			return temp;
 		}
 
-		inline pixel_type const & operator*()const
+		pixel_type const & operator*()const
 		{
 			CU_Require( m_current != m_end );
 			return m_pixel;
 		}
 
-		inline pixel_type & operator*()
+		pixel_type & operator*()
 		{
 			CU_Require( m_current != m_end );
 			return m_pixel;
 		}
 
-		inline bool operator==( ConstPixelIterator const & it )const
+		bool operator==( ConstPixelIterator const & it )const
 		{
 			return m_current == it.m_current;
 		}
 
-		inline bool operator!=( ConstPixelIterator const & it )const
+		bool operator!=( ConstPixelIterator const & it )const
 		{
 			return !( *this == it );
 		}
 
-		static inline difference_type diffIt( ConstPixelIterator const & lhs
+		static difference_type diffIt( ConstPixelIterator const & lhs
 			, ConstPixelIterator const & rhs )
 		{
 			assert( lhs.m_end == rhs.m_end );
 			return difference_type( ( lhs.m_current - rhs.m_current ) / size );
 		}
 
-		static inline difference_type diffIt( ConstPixelIterator const & lhs
+		static difference_type diffIt( ConstPixelIterator const & lhs
 			, PixelIterator< PF > const & rhs )
 		{
 			assert( lhs.m_end == rhs.m_end );
 			return difference_type( ( lhs.m_current - rhs.m_current ) / size );
 		}
 
-		static inline difference_type diffIt( PixelIterator< PF > const & lhs
+		static difference_type diffIt( PixelIterator< PF > const & lhs
 			, ConstPixelIterator const & rhs )
 		{
 			assert( lhs.m_end == rhs.m_end );
@@ -151,7 +151,7 @@ namespace castor
 		}
 		
 	private:
-		void doLink()
+		void doLink()noexcept
 		{
 			if ( m_current != m_end )
 			{

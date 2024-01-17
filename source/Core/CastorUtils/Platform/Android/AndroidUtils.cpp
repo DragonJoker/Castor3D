@@ -10,7 +10,7 @@
 
 namespace castor
 {
-	namespace System
+	namespace system
 	{
 		bool getScreenSize( uint32_t p_screen, castor::Size & p_size )
 		{

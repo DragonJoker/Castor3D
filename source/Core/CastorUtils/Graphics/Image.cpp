@@ -15,6 +15,26 @@ CU_ImplementSmartPtr( castor, Image )
 
 namespace castor
 {
+	namespace img
+	{
+		stbir_datatype getStbDataType( PixelFormat fmt )
+		{
+			if ( isFloatingPoint( fmt ) )
+			{
+				return STBIR_TYPE_FLOAT;
+			}
+
+			if ( isInt32( fmt ) )
+			{
+				return STBIR_TYPE_UINT32;
+			}
+
+			return isInt16( fmt )
+				? STBIR_TYPE_UINT16
+				: STBIR_TYPE_UINT8;
+		}
+	}
+
 	Image::Image( String const & name
 		, Path const & path
 		, Size const & size
@@ -58,7 +78,7 @@ namespace castor
 				, layout.depthLayers()
 				, layout.levels
 				, layout.format ) ) }
-		, m_layout{ layout }
+		, m_layout{ std::move( layout ) }
 	{
 		CU_CheckInvariants();
 	}
@@ -113,17 +133,11 @@ namespace castor
 
 		ImageLayout layout{ *buffer };
 		auto format = buffer->getFormat();
-		int channels = int( getComponentsCount( buffer->getFormat() ) );
+		auto channels = int( getComponentsCount( buffer->getFormat() ) );
 		int alpha{ hasAlpha( buffer->getFormat() )
 			? 1
 			: STBIR_ALPHA_CHANNEL_NONE };
-		stbir_datatype dataType{ isFloatingPoint( buffer->getFormat() )
-			? STBIR_TYPE_FLOAT
-			: ( isInt32( buffer->getFormat() )
-				? STBIR_TYPE_UINT32
-				: ( isInt16( buffer->getFormat() )
-					? STBIR_TYPE_UINT16
-					: STBIR_TYPE_UINT8 ) ) };
+		stbir_datatype dataType{ img::getStbDataType( buffer->getFormat() ) };
 		stbir_colorspace colorSpace{ isSRGBFormat( buffer->getFormat() )
 			? STBIR_COLORSPACE_SRGB
 			: STBIR_COLORSPACE_LINEAR };
@@ -141,15 +155,14 @@ namespace castor
 
 		for ( uint32_t layer = 0u; layer < layout.depthLayers(); ++layer )
 		{
-			auto resized = stbir_resize( src, int( buffer->getWidth() ), int( buffer->getHeight() ), 0
-				, dst, int( result->getWidth() ), int( result->getHeight() ), 0
-				, dataType
-				, channels, alpha, 0
-				, STBIR_EDGE_CLAMP, STBIR_EDGE_CLAMP
-				, STBIR_FILTER_CATMULLROM, STBIR_FILTER_CATMULLROM
-				, colorSpace, nullptr );
-
-			if ( !resized )
+			if ( auto resized = stbir_resize( src, int( buffer->getWidth() ), int( buffer->getHeight() ), 0
+					, dst, int( result->getWidth() ), int( result->getHeight() ), 0
+					, dataType
+					, channels, alpha, 0
+					, STBIR_EDGE_CLAMP, STBIR_EDGE_CLAMP
+					, STBIR_FILTER_CATMULLROM, STBIR_FILTER_CATMULLROM
+					, colorSpace, nullptr );
+				!resized )
 			{
 				CU_LoaderError( "Image couldn't be resized" );
 			}
@@ -180,7 +193,7 @@ namespace castor
 	{
 		CU_CheckInvariants();
 		setPixel( 0, 0, colour );
-		uint32_t uiBpp = uint32_t( getBytesPerPixel( getPixelFormat() ) );
+		auto uiBpp = uint32_t( getBytesPerPixel( getPixelFormat() ) );
 		auto src = m_buffer->getPtr();
 		auto buffer = m_buffer->getPtr() + uiBpp;
 		auto end = m_buffer->getPtr() + m_buffer->getSize();
@@ -199,7 +212,7 @@ namespace castor
 	{
 		CU_CheckInvariants();
 		setPixel( 0, 0, colour );
-		uint32_t uiBpp = uint32_t( getBytesPerPixel( getPixelFormat() ) );
+		auto uiBpp = uint32_t( getBytesPerPixel( getPixelFormat() ) );
 		auto src = m_buffer->getPtr();
 		auto buffer = m_buffer->getPtr() + uiBpp;
 		auto end = m_buffer->getPtr() + m_buffer->getSize();

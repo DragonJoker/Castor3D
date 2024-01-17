@@ -71,7 +71,7 @@ namespace castor3d
 		 *\brief		Supprime une passe externe.
 		 *\param[in]	pass	La passe.
 		 */
-		C3D_API void removePass( PassRPtr pass );
+		C3D_API void removePass( Pass const & pass );
 		/**
 		 *\~english
 		 *\brief		Retrieves a pass and returns it.

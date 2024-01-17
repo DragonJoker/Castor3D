@@ -325,7 +325,7 @@ namespace castor3d
 		static castor::Size getScreenSize()
 		{
 			castor::Size result;
-			castor::System::getScreenSize( 0u, result );
+			castor::system::getScreenSize( 0u, result );
 			return result;
 		}
 

@@ -90,10 +90,10 @@ namespace castor3d
 				}
 			}
 
-			CU_Ensure( !castor::isNan( min[0] ) && !castor::isNan( min[1] ) && !castor::isNan( min[2] ) );
-			CU_Ensure( !castor::isNan( max[0] ) && !castor::isNan( max[1] ) && !castor::isNan( max[2] ) );
-			CU_Ensure( !castor::isInf( min[0] ) && !castor::isInf( min[1] ) && !castor::isInf( min[2] ) );
-			CU_Ensure( !castor::isInf( max[0] ) && !castor::isInf( max[1] ) && !castor::isInf( max[2] ) );
+			CU_Ensure( !std::isnan( min[0] ) && !std::isnan( min[1] ) && !std::isnan( min[2] ) );
+			CU_Ensure( !std::isnan( max[0] ) && !std::isnan( max[1] ) && !std::isnan( max[2] ) );
+			CU_Ensure( !std::isinf( min[0] ) && !std::isinf( min[1] ) && !std::isinf( min[2] ) );
+			CU_Ensure( !std::isinf( max[0] ) && !std::isinf( max[1] ) && !std::isinf( max[2] ) );
 			CU_Ensure( min != castor::Point3f( rmax, rmax, rmax ) );
 			CU_Ensure( max != castor::Point3f( rmin, rmin, rmin ) );
 			return castor::BoundingBox{ min, max };

@@ -65,7 +65,7 @@ namespace castor
 		 *\param[in]	lib	La DynamicLibrary à copier
 		 *\return		Une référence sur cette DynamicLibrary
 		 */
-		CU_API DynamicLibrary & operator =( DynamicLibrary const & lib );
+		CU_API DynamicLibrary & operator=( DynamicLibrary const & lib );
 		/**
 		 *\~english
 		 *\brief		Move assignment operator
@@ -76,7 +76,7 @@ namespace castor
 		 *\param[in]	lib	La DynamicLibrary à déplacer
 		 *\return		Une référence sur cette DynamicLibrary
 		 */
-		CU_API DynamicLibrary & operator =( DynamicLibrary && lib );
+		CU_API DynamicLibrary & operator=( DynamicLibrary && lib )noexcept;
 		/**
 		 *\~english
 		 *\brief		Retrieves a function
@@ -126,7 +126,7 @@ namespace castor
 		template< typename FuncType >
 		bool getFunction( FuncType & function, String const & name )noexcept
 		{
-			function = reinterpret_cast< FuncType >( doGetFunction( name ) );
+			function = FuncType( doGetFunction( name ) );
 			return function != nullptr;
 		}
 		/**
@@ -178,7 +178,7 @@ namespace castor
 		template< typename FuncType >
 		bool getFunction( String const & name, FuncType & function )noexcept
 		{
-			function = reinterpret_cast< FuncType >( doGetFunction( name ) );
+			function = FuncType( doGetFunction( name ) );
 			return function != nullptr;
 		}
 		/**
@@ -212,8 +212,8 @@ namespace castor
 		CU_API VoidFnType doGetFunction( String const & name )noexcept;
 
 	private:
-		void * m_library;
-		Path m_pathLibrary;
+		void * m_library{};
+		Path m_pathLibrary{};
 	};
 }
 

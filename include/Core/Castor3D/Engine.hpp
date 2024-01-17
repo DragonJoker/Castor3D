@@ -602,7 +602,7 @@ namespace castor3d
 		 *\param[in]		set		L'indice de descriptor set.
 		 */
 		C3D_API void declareSpecificsShaderBuffers( sdw::ShaderWriter & writer
-			, std::map< std::string, castor3d::shader::BufferBaseUPtr > & buffers
+			, std::map< std::string, castor3d::shader::BufferBaseUPtr, std::less<> > & buffers
 			, uint32_t & binding
 			, uint32_t set )const;
 		/**

@@ -32,58 +32,61 @@ namespace castor::Debug
 
 				if ( !initialised )
 				{
-					std::cerr << "SymInitialize failed: " << System::getLastErrorText() << std::endl;
+					std::cerr << "SymInitialize failed: " << system::getLastErrorText() << std::endl;
 				}
 			}
 
-			~DbgHelpContext()
+			~DbgHelpContext()noexcept
 			{
 				::SymCleanup( process );
 			}
 
-			void loadModule( DynamicLibrary const & CU_UnusedParam( library ) )
+			void loadModule( CU_UnusedParam( DynamicLibrary const &, library ) )
 			{
-				//auto result = ::SymLoadModuleEx( doGetProcess()    // target process 
-				//	, nullptr                                      // handle to image - not used
-				//	, library.getPath().c_str()                    // name of image file
-				//	, nullptr                                      // name of module - not required
-				//	, 0                                            // base address - not required
-				//	, 0                                            // size of image - not required
-				//	, nullptr                                      // MODLOAD_DATA used for special cases 
-				//	, 0 );                                         // flags - not required
+/**
+				auto result = ::SymLoadModuleEx( doGetProcess()    // target process 
+					, nullptr                                      // handle to image - not used
+					, library.getPath().c_str()                    // name of image file
+					, nullptr                                      // name of module - not required
+					, 0                                            // base address - not required
+					, 0                                            // size of image - not required
+					, nullptr                                      // MODLOAD_DATA used for special cases 
+					, 0 );                                         // flags - not required
 
-				//if ( !result )
-				//{
-				//	std::cerr << "SymLoadModuleEx failed: " << System::getLastErrorText() << std::endl;
-				//}
-				//else
-				//{
-				//	libraryBaseAddress[&library] = result;
-				//}
+				if ( !result )
+				{
+					std::cerr << "SymLoadModuleEx failed: " << system::getLastErrorText() << std::endl;
+				}
+				else
+				{
+					libraryBaseAddress[&library] = result;
+				}
+*/
 			}
 
-			void unloadModule( DynamicLibrary const & CU_UnusedParam( library ) )
+			void unloadModule( CU_UnusedParam( DynamicLibrary const &, library ) )
 			{
-				//auto address = libraryBaseAddress[&library];
+/**
+				auto address = libraryBaseAddress[&library];
 
-				//if ( address )
-				//{
-				//	::SymUnloadModule64( doGetProcess(), address );
-				//}
+				if ( address )
+				{
+					::SymUnloadModule64( doGetProcess(), address );
+				}
+*/
 			}
 
 			template< typename CharU, typename CharT >
-			inline std::basic_string< CharU > demangle( std::basic_string< CharT > const & name )
+			inline std::basic_string< CharU > demangle( std::basic_string< CharT > const & name )const
 			{
 				std::string ret = string::stringCast< char >( name );
 
 				try
 				{
-					char real[2048] = { 0 };
-
-					if ( ::UnDecorateSymbolName( ret.c_str(), real, sizeof( real ), UNDNAME_COMPLETE ) )
+					if ( std::array< char, 2048 > real{};
+						::UnDecorateSymbolName( ret.c_str(), real.data(), DWORD( real.size() ), UNDNAME_COMPLETE ) )
 					{
-						ret = real;
+						ret = real.data();
 					}
 				}
 				catch ( ... )
@@ -110,6 +113,32 @@ namespace castor::Debug
 		}
 
 		template< typename CharT >
+		static void showSymbol( DbgHelpContext const & context
+			, DWORD64 symbolAddress
+			, SYMBOL_INFO * symbolInfo
+			, std::basic_ostream< CharT > & stream )
+		{
+			if ( ::SymFromAddr( context.process, symbolAddress, nullptr, symbolInfo ) )
+			{
+				stream << "== " << context.demangle< CharT >( string::stringCast< char >( symbolInfo->Name, symbolInfo->Name + symbolInfo->NameLen ) );
+				IMAGEHLP_LINE64 line{};
+				DWORD displacement{};
+				line.SizeOfStruct = sizeof( IMAGEHLP_LINE64 );
+
+				if ( ::SymGetLineFromAddr64( context.process, symbolInfo->Address, &displacement, &line ) )
+				{
+					stream << "(" << string::stringCast< CharT >( line.FileName ) << ":" << line.LineNumber << ":" << displacement << ")";
+				}
+
+				stream << std::endl;
+			}
+			else
+			{
+				stream << "== Symbol not found." << std::endl;
+			}
+		}
+
+		template< typename CharT >
 		static void showBacktrace( std::basic_ostream< CharT > & stream
 			, int toCapture
 			, int toSkip )
@@ -117,9 +146,8 @@ namespace castor::Debug
 			static std::mutex mutex;
 			using LockType = std::unique_lock< std::mutex >;
 
-			auto & context = getContext();
-
-			if ( context && context->initialised )
+			if ( auto & context = getContext();
+				context && context->initialised )
 			{
 				LockType lock{ makeUniqueLock( mutex ) };
 				const int MaxFnNameLen( 255 );
@@ -134,9 +162,8 @@ namespace castor::Debug
 
 				// symbol->Name type is char [1] so there is space for \0 already
 				auto size = sizeof( SYMBOL_INFO ) + ( MaxFnNameLen * sizeof( char ) );
-				auto symbol( ( SYMBOL_INFO * )malloc( size ) );
 
-				if ( symbol )
+				if ( auto symbol = ( ( SYMBOL_INFO * )malloc( size ) ) )
 				{
 					memset( symbol, 0, size );
 					symbol->MaxNameLen = MaxFnNameLen;
@@ -144,24 +171,7 @@ namespace castor::Debug
 
 					for ( unsigned int i = 0; i < num; ++i )
 					{
-						if ( ::SymFromAddr( context->process, reinterpret_cast< DWORD64 >( backTrace[i] ), nullptr, symbol ) )
-						{
-							stream << "== " << context->demangle< CharT >( string::stringCast< char >( symbol->Name, symbol->Name + symbol->NameLen ) );
-							IMAGEHLP_LINE64 line{};
-							DWORD displacement{};
-							line.SizeOfStruct = sizeof( IMAGEHLP_LINE64 );
-
-							if ( ::SymGetLineFromAddr64( context->process, symbol->Address, &displacement, &line ) )
-							{
-								stream << "(" << string::stringCast< CharT >( line.FileName ) << ":" << line.LineNumber << ":" << displacement << ")";
-							}
-
-							stream << std::endl;
-						}
-						else
-						{
-							stream << "== Symbol not found." << std::endl;
-						}
+						showSymbol( *context, DWORD64( backTrace[i] ), symbol, stream );
 					}
 
 					free( symbol );
@@ -169,7 +179,7 @@ namespace castor::Debug
 			}
 			else
 			{
-				stream << "== Unable to retrieve the call stack: " << string::stringCast< CharT >( System::getLastErrorText() ) << std::endl;
+				stream << "== Unable to retrieve the call stack: " << string::stringCast< CharT >( system::getLastErrorText() ) << std::endl;
 			}
 		}
 	}
@@ -199,7 +209,7 @@ namespace castor::Debug
 	namespace dbg
 	{
 		template< typename CharT >
-		void showBacktrace( std::basic_ostream< CharT > & stream, int, int )
+		void showBacktrace( std::basic_ostream< CharT > &, int, int )
 		{
 		}
 	}
@@ -212,11 +222,11 @@ namespace castor::Debug
 	{
 	}
 
-	void loadModule( DynamicLibrary const & library )
+	void loadModule( DynamicLibrary const & )
 	{
 	}
 
-	void unloadModule( DynamicLibrary const & library )
+	void unloadModule( DynamicLibrary const & )
 	{
 	}
 
