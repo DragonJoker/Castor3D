@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Design/DesignModule.hpp"
 
+#include "CastorUtils/Design/NonCopyable.hpp"
 #include "CastorUtils/Exception/Assertion.hpp"
 #include "CastorUtils/Multithreading/SpinMutex.hpp"
 
@@ -21,12 +22,11 @@ namespace castor
 {
 	template< typename SignalT >
 	class TSConnectionT
+		: public NonCopyable
 	{
 	private:
 		using my_signal = SignalT;
 		using my_signal_ptr = my_signal *;
-		TSConnectionT( TSConnectionT< my_signal > const & ) = delete;
-		TSConnectionT & operator=( TSConnectionT< my_signal > const & ) = delete;
 
 	public:
 		/**
@@ -180,7 +180,7 @@ namespace castor
 		 *\~french
 		 *\brief		Déconnecte la fonction du signal.
 		 */
-		bool disconnect()
+		bool disconnect()noexcept
 		{
 			bool result{ false };
 
@@ -196,7 +196,7 @@ namespace castor
 			return result;
 		}
 
-		operator bool()const
+		operator bool()const noexcept
 		{
 			return ( m_signal && m_connection );
 		}
@@ -208,7 +208,7 @@ namespace castor
 		 *\~french
 		 *\brief		Echange deux connexions.
 		 */
-		void swap( TSConnectionT & lhs, TSConnectionT & rhs )
+		void swap( TSConnectionT & lhs, TSConnectionT & rhs )const noexcept
 		{
 			if ( &rhs != &lhs )
 			{
@@ -242,6 +242,7 @@ namespace castor
 
 	template< typename Function >
 	class TSSignalT
+		: public NonCopyable
 	{
 		friend class TSConnectionT< TSSignalT< Function > >;
 		using my_connection = TSConnectionT< TSSignalT< Function > >;
@@ -251,11 +252,9 @@ namespace castor
 		using connection = my_connection;
 
 	public:
-		TSSignalT( TSSignalT const & ) = delete;
-		TSSignalT & operator=( TSSignalT const & ) = delete;
 		TSSignalT() = default;
 
-		TSSignalT( TSSignalT && rhs )
+		TSSignalT( TSSignalT && rhs )noexcept
 		{
 			auto rhsLock( makeUniqueLock( rhs.m_mutex ) );
 			auto lhsLock( makeUniqueLock( m_mutex ) );
@@ -263,7 +262,7 @@ namespace castor
 			m_slots = std::move( rhs.m_slots );
 		}
 
-		TSSignalT & operator=( TSSignalT && rhs )
+		TSSignalT & operator=( TSSignalT && rhs )noexcept
 		{
 			auto rhsLock( makeUniqueLock( rhs.m_mutex ) );
 			auto lhsLock( makeUniqueLock( m_mutex ) );
@@ -367,7 +366,7 @@ namespace castor
 		 *\brief		Déconnecte une fonction.
 		 *\param[in]	index	L'indice de la fonction.
 		 */
-		void disconnect( uint32_t index )
+		void disconnect( uint32_t index )noexcept
 		{
 			auto it = m_slots.find( index );
 
@@ -384,10 +383,17 @@ namespace castor
 		 *\brief		Ajoute une connexion à la liste.
 		 *\param[in]	connection	La connexion à ajouter.
 		 */
-		void addConnection( my_connection & connection )
+		void addConnection( my_connection & connection )noexcept
 		{
-			assert( m_connections.find( &connection ) == m_connections.end() );
-			m_connections.insert( &connection );
+			try
+			{
+				assert( m_connections.find( &connection ) == m_connections.end() );
+				m_connections.insert( &connection );
+			}
+			catch ( ... )
+			{
+				// Nothing to do ?
+			}
 		}
 		/**
 		 *\~english
@@ -397,7 +403,7 @@ namespace castor
 		 *\brief		Enlève une connexion de la liste.
 		 *\param[in]	connection	La connexion à enlever.
 		 */
-		void removeConnection( my_connection & connection )
+		void removeConnection( my_connection & connection )noexcept
 		{
 			assert( m_connections.find( &connection ) != m_connections.end() );
 			m_connections.erase( &connection );
@@ -413,7 +419,7 @@ namespace castor
 		 *\param[in]	newConnection	La connexion à ajouter.
 		 */
 		void replaceConnection( my_connection & oldConnection
-			, my_connection & newConnection )
+			, my_connection & newConnection )noexcept
 		{
 			removeConnection( oldConnection );
 			addConnection( newConnection );

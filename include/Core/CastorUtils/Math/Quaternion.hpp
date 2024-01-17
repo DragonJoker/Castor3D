@@ -41,7 +41,7 @@ namespace castor
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		inline QuaternionT();
+		QuaternionT();
 		/**
 		 *\~english
 		 *\brief		Copy Constructor
@@ -50,7 +50,7 @@ namespace castor
 		 *\brief		Constructeur par copie
 		 *\param[in]	rhs	L'objet Quaternion à copier
 		 */
-		inline QuaternionT( QuaternionT const & rhs );
+		QuaternionT( QuaternionT const & rhs );
 		/**
 		 *\~english
 		 *\brief		Move Constructor
@@ -59,7 +59,7 @@ namespace castor
 		 *\brief		Constructeur par déplacement
 		 *\param[in]	rhs	L'objet Quaternion à déplacer
 		 */
-		inline QuaternionT( QuaternionT && rhs )noexcept;
+		QuaternionT( QuaternionT && rhs )noexcept;
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -68,7 +68,7 @@ namespace castor
 		 *\brief		Constructeur
 		 *\param[in]	values	Les valeurs du Quaternion
 		 */
-		inline explicit QuaternionT( double const * values );
+		explicit QuaternionT( double const * values );
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -77,7 +77,7 @@ namespace castor
 		 *\brief		Constructeur
 		 *\param[in]	values	Les valeurs du Quaternion
 		 */
-		inline explicit QuaternionT( float const * values );
+		explicit QuaternionT( float const * values );
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -86,7 +86,7 @@ namespace castor
 		 *\brief		Constructeur
 		 *\param[in]	values	Les valeurs du quaternion
 		 */
-		inline explicit QuaternionT( Point4f const & values );
+		explicit QuaternionT( Point4f const & values );
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -95,14 +95,14 @@ namespace castor
 		 *\brief		Constructeur
 		 *\param[in]	values	Les valeurs du quaternion
 		 */
-		inline explicit QuaternionT( Point4d const & values );
+		explicit QuaternionT( Point4d const & values );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		inline ~QuaternionT()noexcept = default;
+		~QuaternionT()noexcept = default;
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator
@@ -113,7 +113,7 @@ namespace castor
 		 *\param[in]	rhs	L'objet Quaternion à copier
 		 *\return		Une référence sur cet objet Quaternion
 		 */
-		inline QuaternionT< T > & operator=( QuaternionT< T > const & rhs );
+		QuaternionT< T > & operator=( QuaternionT< T > const & rhs );
 		/**
 		 *\~english
 		 *\brief		Move assignment operator
@@ -124,7 +124,7 @@ namespace castor
 		 *\param[in]	rhs	L'objet Quaternion à déplacer
 		 *\return		Une référence sur cet objet Quaternion
 		 */
-		inline QuaternionT< T > & operator=( QuaternionT< T > && rhs )noexcept;
+		QuaternionT< T > & operator=( QuaternionT< T > && rhs )noexcept;
 		/**
 		 *\~english
 		 *\brief		addition assignment operator
@@ -135,7 +135,7 @@ namespace castor
 		 *\param[in]	rhs	L'objet Quaternion à ajouter
 		 *\return		Une référence sur cet objet Quaternion
 		 */
-		inline QuaternionT< T > & operator+=( QuaternionT< T > const & rhs );
+		QuaternionT< T > & operator+=( QuaternionT< T > const & rhs );
 		/**
 		 *\~english
 		 *\brief		Substraction assignment operator
@@ -146,7 +146,7 @@ namespace castor
 		 *\param[in]	rhs	L'objet Quaternion à soustraire
 		 *\return		Une référence sur cet objet Quaternion
 		 */
-		inline QuaternionT< T > & operator-=( QuaternionT< T > const & rhs );
+		QuaternionT< T > & operator-=( QuaternionT< T > const & rhs );
 		/**
 		 *\~english
 		 *\brief		Multiplication assignment operator
@@ -157,7 +157,7 @@ namespace castor
 		 *\param[in]	rhs	L'objet Quaternion à multiplier
 		 *\return		Une référence sur cet objet Quaternion
 		 */
-		inline QuaternionT< T > & operator*=( QuaternionT< T > const & rhs );
+		QuaternionT< T > & operator*=( QuaternionT< T > const & rhs );
 		/**
 		 *\~english
 		 *\brief		Multiplication assignment operator
@@ -168,7 +168,7 @@ namespace castor
 		 *\param[in]	rhs	Le scalaire à multiplier
 		 *\return		Une référence sur cet objet Quaternion
 		 */
-		inline QuaternionT< T > & operator*=( double rhs );
+		QuaternionT< T > & operator*=( double rhs );
 		/**
 		 *\~english
 		 *\brief		Multiplication assignment operator
@@ -179,7 +179,7 @@ namespace castor
 		 *\param[in]	rhs	Le scalaire à multiplier
 		 *\return		Une référence sur cet objet Quaternion
 		 */
-		inline QuaternionT< T > & operator*=( float rhs );
+		QuaternionT< T > & operator*=( float rhs );
 		/**
 		 *\~english
 		 *\brief		Updates this Quaternion from a rotation matrix
@@ -188,7 +188,7 @@ namespace castor
 		 *\brief		Met à jour ce Quaternion à partir d'une matrice de rotation
 		 *\param[in]	matrix	La matrice de rotation
 		 */
-		static inline QuaternionT< T > fromMatrix( Matrix4x4f const & matrix );
+		static QuaternionT< T > fromMatrix( Matrix4x4f const & matrix );
 		/**
 		 *\~english
 		 *\brief		Updates this Quaternion from a rotation matrix
@@ -197,7 +197,7 @@ namespace castor
 		 *\brief		Met à jour ce Quaternion à partir d'une matrice de rotation
 		 *\param[in]	matrix	La matrice de rotation
 		 */
-		static inline QuaternionT< T > fromMatrix( Matrix4x4d const & matrix );
+		static QuaternionT< T > fromMatrix( Matrix4x4d const & matrix );
 		/**
 		 *\~english
 		 *\brief		Updates this Quaternion from a rotation matrix
@@ -206,7 +206,7 @@ namespace castor
 		 *\brief		Met à jour ce Quaternion à partir d'une matrice de rotation
 		 *\param[in]	matrix	La matrice de rotation
 		 */
-		static inline QuaternionT< T > fromMatrix( float const * matrix );
+		static QuaternionT< T > fromMatrix( float const * matrix );
 		/**
 		 *\~english
 		 *\brief		Updates this Quaternion from a rotation matrix
@@ -215,7 +215,7 @@ namespace castor
 		 *\brief		Met à jour ce Quaternion à partir d'une matrice de rotation
 		 *\param[in]	matrix	La matrice de rotation
 		 */
-		static inline QuaternionT< T > fromMatrix( double const * matrix );
+		static QuaternionT< T > fromMatrix( double const * matrix );
 		/**
 		 *\~english
 		 *\brief		Updates this Quaternion from an axis and an angle
@@ -226,7 +226,7 @@ namespace castor
 		 *\param[in]	vector	L'axe
 		 *\param[in]	angle	L'angle
 		 */
-		static inline QuaternionT< T > fromAxisAngle( Point3f const & vector, Angle const & angle );
+		static QuaternionT< T > fromAxisAngle( Point3f const & vector, Angle const & angle );
 		/**
 		 *\~english
 		 *\brief		Updates this Quaternion from an axis and an angle
@@ -237,7 +237,7 @@ namespace castor
 		 *\param[in]	vector	L'axe
 		 *\param[in]	angle	L'angle
 		 */
-		static inline QuaternionT< T > fromAxisAngle( Point3d const & vector, Angle const & angle );
+		static QuaternionT< T > fromAxisAngle( Point3d const & vector, Angle const & angle );
 		/**
 		 *\~english
 		 *\brief		Updates this Quaternion from 3 axes
@@ -246,7 +246,7 @@ namespace castor
 		 *\brief		Met à jour ce Quaternion à partir de 3 axes
 		 *\param[in]	x, y, z	Les axes
 		 */
-		static inline QuaternionT< T > fromAxes( Point3f const & x, Point3f const & y, Point3f const & z );
+		static QuaternionT< T > fromAxes( Point3f const & x, Point3f const & y, Point3f const & z );
 		/**
 		 *\~english
 		 *\brief		Updates this Quaternion from 3 axes
@@ -255,7 +255,7 @@ namespace castor
 		 *\brief		Met à jour ce Quaternion à partir de 3 axes
 		 *\param[in]	x, y, z	Les axes
 		 */
-		static inline QuaternionT< T > fromAxes( Point3d const & x, Point3d const & y, Point3d const & z );
+		static QuaternionT< T > fromAxes( Point3d const & x, Point3d const & y, Point3d const & z );
 		/**
 		 *\~english
 		 *\brief		Updates this Quaternion from 4 components
@@ -264,7 +264,7 @@ namespace castor
 		 *\brief		Met à jour ce Quaternion à partir de 4 composantes
 		 *\param[in]	x, y, z, w	Les composantes
 		 */
-		static inline QuaternionT< T > fromComponents( float x, float y, float z, float w );
+		static QuaternionT< T > fromComponents( float x, float y, float z, float w );
 		/**
 		 *\~english
 		 *\brief		Updates this Quaternion from 4 components
@@ -273,7 +273,7 @@ namespace castor
 		 *\brief		Met à jour ce Quaternion à partir de 4 composantes
 		 *\param[in]	x, y, z, w	Les composantes
 		 */
-		static inline QuaternionT< T > fromComponents( double x, double y, double z, double w );
+		static QuaternionT< T > fromComponents( double x, double y, double z, double w );
 		/**
 		 *\~english
 		 *\brief		Transforms a vector and gives the result
@@ -287,7 +287,7 @@ namespace castor
 		 *\return		Une référence sur result
 		 */
 		template< Vector3fT PtT >
-		inline PtT & transform( PtT const & vector, PtT & result )const;
+		PtT & transform( PtT const & vector, PtT & result )const;
 		/**
 		 *\~english
 		 *\brief		Transforms a vector and gives the result
@@ -301,7 +301,7 @@ namespace castor
 		 *\return		Une référence sur result
 		 */
 		template< Vector3dT PtT >
-		inline PtT & transform( PtT const & vector, PtT & result )const;
+		PtT & transform( PtT const & vector, PtT & result )const;
 		/**
 		 *\~english
 		 *\brief		Fills a rotation matrix from this Quaternion
@@ -310,7 +310,7 @@ namespace castor
 		 *\brief		Remplit une matrice de rotation à partir de ce Quaternion
 		 *\param[out]	matrix	La matrice à remplir
 		 */
-		inline void toMatrix( float * matrix )const;
+		void toMatrix( float * matrix )const;
 		/**
 		 *\~english
 		 *\brief		Fills a rotation matrix from this Quaternion
@@ -319,7 +319,7 @@ namespace castor
 		 *\brief		Remplit une matrice de rotation à partir de ce Quaternion
 		 *\param[out]	matrix	La matrice à remplir
 		 */
-		inline void toMatrix( double * matrix )const;
+		void toMatrix( double * matrix )const;
 		/**
 		 *\~english
 		 *\brief		Fills a rotation matrix from this Quaternion
@@ -328,7 +328,7 @@ namespace castor
 		 *\brief		Remplit une matrice de rotation à partir de ce Quaternion
 		 *\param[out]	matrix	La matrice à remplir
 		 */
-		inline void toMatrix( Matrix4x4f & matrix )const;
+		void toMatrix( Matrix4x4f & matrix )const;
 		/**
 		 *\~english
 		 *\brief		Fills a rotation matrix from this Quaternion
@@ -337,7 +337,7 @@ namespace castor
 		 *\brief		Remplit une matrice de rotation à partir de ce Quaternion
 		 *\param[out]	matrix	La matrice à remplir
 		 */
-		inline void toMatrix( Matrix4x4d & matrix )const;
+		void toMatrix( Matrix4x4d & matrix )const;
 		/**
 		 *\~english
 		 *\brief		Gives the axis and the angle from this Quaternion
@@ -348,7 +348,7 @@ namespace castor
 		 *\param[out]	vector	Reçoit l'axe
 		 *\param[out]	angle		Reçoit l'angle
 		 */
-		inline void toAxisAngle( Point3f & vector, Angle & angle )const;
+		void toAxisAngle( Point3f & vector, Angle & angle )const;
 		/**
 		 *\~english
 		 *\brief		Gives the axis and the angle from this Quaternion
@@ -359,7 +359,7 @@ namespace castor
 		 *\param[out]	vector	Reçoit l'axe
 		 *\param[out]	angle		Reçoit l'angle
 		 */
-		inline void toAxisAngle( Point3d & vector, Angle & angle )const;
+		void toAxisAngle( Point3d & vector, Angle & angle )const;
 		/**
 		 *\~english
 		 *\brief		Computes 3 axes from this quaternion
@@ -368,7 +368,7 @@ namespace castor
 		 *\brief		Calcule 3 axes à partir de ce quaternion
 		 *\param[out]	x, y, z	Les axes
 		 */
-		inline void toAxes( Point3f & x, Point3f & y, Point3f & z )const;
+		void toAxes( Point3f & x, Point3f & y, Point3f & z )const;
 		/**
 		 *\~english
 		 *\brief		Computes 3 axes from this quaternion
@@ -377,14 +377,14 @@ namespace castor
 		 *\brief		Calcule 3 axes à partir de ce quaternion
 		 *\param[out]	x, y, z	Les axes
 		 */
-		inline void toAxes( Point3d & x, Point3d & y, Point3d & z )const;
+		void toAxes( Point3d & x, Point3d & y, Point3d & z )const;
 		/**
 		 *\~english
 		 *\brief		sets this Quaternion to its conjugate
 		 *\~french
 		 *\brief		Définit ce Quaternion à son conjugué
 		 */
-		inline void conjugate();
+		void conjugate();
 		/**
 		 *\~english
 		 *\brief		Retrieves the conjugate of this Quaternion
@@ -393,7 +393,7 @@ namespace castor
 		 *\brief		Récupère le conjugué de ce Quaternion
 		 *\return		Le conjugué
 		 */
-		inline QuaternionT< T > getConjugate()const;
+		QuaternionT< T > getConjugate()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the magnitude of this Quaternion
@@ -402,28 +402,28 @@ namespace castor
 		 *\brief		Récupère la magnitude de ce Quaternion
 		 *\return		La magnitude
 		 */
-		inline double getMagnitude()const;
+		double getMagnitude()const;
 		/**
 		 *\~english
 		 *\return		The pitch angle.
 		 *\~french
 		 *\return		L'angle de pitch.
 		 */
-		inline AngleT< T > getPitch()const;
+		AngleT< T > getPitch()const;
 		/**
 		 *\~english
 		 *\return		The yaw angle.
 		 *\~french
 		 *\return		L'angle de yaw.
 		 */
-		inline AngleT< T > getYaw()const;
+		AngleT< T > getYaw()const;
 		/**
 		 *\~english
 		 *\return		The roll angle.
 		 *\~french
 		 *\return		L'angle de roll.
 		 */
-		inline AngleT< T > getRoll()const;
+		AngleT< T > getRoll()const;
 		/**
 		 *\~english
 		 *\brief		Spherical linear interpolation another quaternions.
@@ -438,7 +438,7 @@ namespace castor
 		 *\param[in]	factor	Le facteur d'interpolation. L'interpolation est définie hors de l'intervalle [0, 1].
 		 *\return		Le résultat de l'interpolation.
 		 */
-		inline QuaternionT< T > mix( QuaternionT< T > const & target, double factor )const;
+		QuaternionT< T > mix( QuaternionT< T > const & target, double factor )const;
 		/**
 		 *\~english
 		 *\brief		Spherical linear interpolation another quaternions.
@@ -453,7 +453,7 @@ namespace castor
 		 *\param[in]	factor	Le facteur d'interpolation. L'interpolation est définie hors de l'intervalle [0, 1].
 		 *\return		Le résultat de l'interpolation.
 		 */
-		inline QuaternionT< T > mix( QuaternionT< T > const & target, float factor )const;
+		QuaternionT< T > mix( QuaternionT< T > const & target, float factor )const;
 		/**
 		 *\~english
 		 *\brief		Linear interpolation of two quaternions.
@@ -466,7 +466,7 @@ namespace castor
 		 *\param[in]	factor	Le facteur d'interpolation. L'interpolation est définie à l'intérieur de l'intervalle [0, 1].
 		 *\return		Le résultat de l'interpolation.
 		 */
-		inline QuaternionT< T > lerp( QuaternionT< T > const & target, double factor )const;
+		QuaternionT< T > lerp( QuaternionT< T > const & target, double factor )const;
 		/**
 		 *\~english
 		 *\brief		Linear interpolation of two quaternions.
@@ -479,7 +479,7 @@ namespace castor
 		 *\param[in]	factor	Le facteur d'interpolation. L'interpolation est définie à l'intérieur de l'intervalle [0, 1].
 		 *\return		Le résultat de l'interpolation.
 		 */
-		inline QuaternionT< T > lerp( QuaternionT< T > const & target, float factor )const;
+		QuaternionT< T > lerp( QuaternionT< T > const & target, float factor )const;
 		/**
 		 *\~english
 		 *\brief		Spherical linear interpolation with another quaternions.
@@ -494,7 +494,7 @@ namespace castor
 		 *\param[in]	factor	Le facteur d'interpolation. L'interpolation est définie hors de l'intervalle [0, 1].
 		 *\return		Le résultat de l'interpolation.
 		 */
-		inline QuaternionT< T > slerp( QuaternionT< T > const & target, double factor )const;
+		QuaternionT< T > slerp( QuaternionT< T > const & target, double factor )const;
 		/**
 		 *\~english
 		 *\brief		Spherical linear interpolation with another quaternions.
@@ -509,28 +509,28 @@ namespace castor
 		 *\param[in]	factor	Le facteur d'interpolation. L'interpolation est définie hors de l'intervalle [0, 1].
 		 *\return		Le résultat de l'interpolation.
 		 */
-		inline QuaternionT< T > slerp( QuaternionT< T > const & target, float factor )const;
+		QuaternionT< T > slerp( QuaternionT< T > const & target, float factor )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the Quaternion identity
 		 *\~french
 		 *\brief		Récupère le Quaternion identité
 		 */
-		inline static QuaternionT< T > identity();
+		static QuaternionT< T > identity();
 		/**
 		 *\~english
 		 *\brief		Retrieves the null Quaternion
 		 *\~french
 		 *\brief		Récupère le Quaternion nul
 		 */
-		inline static QuaternionT< T > null();
+		static QuaternionT< T > null();
 
-		inline PointData< T, 4u > * operator->()
+		PointData< T, 4u > * operator->()
 		{
 			return &DataHolder::getData();
 		}
 
-		inline PointData< T, 4u > const * operator->()const
+		PointData< T, 4u > const * operator->()const
 		{
 			return &DataHolder::getData();
 		}

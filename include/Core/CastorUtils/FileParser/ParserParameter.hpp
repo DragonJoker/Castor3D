@@ -24,24 +24,16 @@ namespace castor
 	*/
 	template< ParameterType Type >
 	class ParserParameter < Type
-			, std::enable_if_t< !HasBaseParameterType< Type >::value && !IsArithmeticType< Type >::value > >
+			, std::enable_if_t< !hasBaseParameterTypeV< Type > && !isArithmeticTypeV< Type > > >
 		: public ParserParameterBase
 	{
 	public:
 		//!\~english	The parameter value type.
 		//!\~french		Le type de valeur du paramètre.
-		using ValueType = typename ParserParameterHelper< Type >::ValueType;
+		using ValueType = ParserParameterValueType< Type >;
 
 	public:
-		/**
-		 *\~english
-		 *\brief		Constructor.
-		 *\~french
-		 *\brief		Constructor.
-		 */
-		ParserParameter()
-		{
-		}
+		ParserParameter() = default;
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -58,14 +50,14 @@ namespace castor
 		 */
 		ParameterType getType()const override
 		{
-			return ParserParameterHelper< Type >::ParamType;
+			return ParserParameterParamType< Type >;
 		}
 		/**
 		 *\copydoc		castor::ParserParameterBase::getStrType
 		 */
-		xchar const * getStrType()const override
+		StringView getStrType()const override
 		{
-			return ParserParameterHelper< Type >::StringType;
+			return ParserParameterStringType< Type >;
 		}
 		/**
 		 *\copydoc		castor::ParserParameterBase::clone
@@ -113,7 +105,7 @@ namespace castor
 	public:
 		//!\~english	The parameter value type.
 		//!\~french		Le type de valeur du paramètre.
-		using ValueType = typename ParserParameterHelper< Type >::ValueType;
+		using ValueType = ParserParameterValueType< Type >;
 
 	public:
 		/**
@@ -172,14 +164,14 @@ namespace castor
 		 */
 		ParameterType getType()const override
 		{
-			return ParserParameterHelper< Type >::ParamType;
+			return ParserParameterParamType< Type >;
 		}
 		/**
 		 *\copydoc		castor::ParserParameterBase::getStrType
 		 */
-		xchar const * getStrType()const override
+		StringView getStrType()const override
 		{
-			return ParserParameterHelper< Type >::StringType;
+			return ParserParameterStringType< Type >;
 		}
 		/**
 		 *\copydoc		castor::ParserParameterBase::clone
@@ -256,7 +248,7 @@ namespace castor
 		/**
 		 *\copydoc		castor::ParserParameterBase::getStrType
 		 */
-		xchar const * getStrType()const override;
+		StringView getStrType()const override;
 		/**
 		 *\copydoc		castor::ParserParameterBase::clone
 		 */
@@ -289,7 +281,7 @@ namespace castor
 		 *\param[in]	name	Le nom du type de paramètre.
 		 */
 		explicit ParserParameter( UInt32StrMap const & values
-			, xchar const * name = ParserParameterHelper< ParameterType::eCheckedText >::StringType );
+			, StringView name = ParserParameterStringType< ParameterType::eCheckedText > );
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -298,8 +290,8 @@ namespace castor
 		 */
 		explicit ParserParameter( uint32_t value
 			, UInt32StrMap const & values
-			, xchar const * name = ParserParameterHelper< ParameterType::eCheckedText >::StringType )
-			: ParserParameter< ParameterType::eUInt32 >{ std::move( value ) }
+			, StringView name = ParserParameterStringType< ParameterType::eCheckedText > )
+			: ParserParameter< ParameterType::eUInt32 >{ value }
 			, m_name{ name }
 			, m_values{ values }
 		{
@@ -315,7 +307,7 @@ namespace castor
 		/**
 		 *\copydoc		castor::ParserParameterBase::getStrType
 		 */
-		xchar const * getStrType()const override;
+		StringView getStrType()const override;
 		/**
 		 *\copydoc		castor::ParserParameterBase::clone
 		 */
@@ -327,7 +319,7 @@ namespace castor
 			, String & params )override;
 
 	public:
-		xchar const * m_name;
+		StringView m_name;
 		UInt32StrMap const m_values;
 	};
 	/**
@@ -352,7 +344,7 @@ namespace castor
 		 *\param[in]	name	Le nom du type de paramètre.
 		 */
 		explicit ParserParameter( UInt32StrMap const & values
-			, xchar const * name = ParserParameterHelper< ParameterType::eBitwiseOred32BitsCheckedText >::StringType );
+			, StringView name = ParserParameterStringType< ParameterType::eBitwiseOred32BitsCheckedText > );
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -361,8 +353,8 @@ namespace castor
 		 */
 		explicit ParserParameter( uint32_t value
 			, UInt32StrMap const & values
-			, xchar const * name = ParserParameterHelper< ParameterType::eBitwiseOred32BitsCheckedText >::StringType )
-			: ParserParameter< ParameterType::eUInt32 >{ std::move( value ) }
+			, StringView name = ParserParameterStringType< ParameterType::eBitwiseOred32BitsCheckedText > )
+			: ParserParameter< ParameterType::eUInt32 >{ value }
 			, m_name{ name }
 			, m_values{ values }
 		{
@@ -378,7 +370,7 @@ namespace castor
 		/**
 		 *\copydoc		castor::ParserParameterBase::getStrType
 		 */
-		xchar const * getStrType()const override;
+		StringView getStrType()const override;
 		/**
 		 *\copydoc		castor::ParserParameterBase::clone
 		 */
@@ -390,7 +382,7 @@ namespace castor
 			, String & params )override;
 
 	public:
-		xchar const * m_name;
+		StringView m_name;
 		UInt32StrMap const m_values;
 	};
 	/**
@@ -415,7 +407,7 @@ namespace castor
 		 *\param[in]	name	Le nom du type de paramètre.
 		 */
 		explicit ParserParameter( UInt64StrMap const & values
-			, xchar const * name = ParserParameterHelper< ParameterType::eBitwiseOred64BitsCheckedText >::StringType );
+			, StringView name = ParserParameterStringType< ParameterType::eBitwiseOred64BitsCheckedText > );
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -424,8 +416,8 @@ namespace castor
 		 */
 		explicit ParserParameter( uint64_t value
 			, UInt64StrMap const & values
-			, xchar const * name = ParserParameterHelper< ParameterType::eBitwiseOred64BitsCheckedText >::StringType )
-			: ParserParameter< ParameterType::eUInt64 >{ std::move( value ) }
+			, StringView name = ParserParameterStringType< ParameterType::eBitwiseOred64BitsCheckedText > )
+			: ParserParameter< ParameterType::eUInt64 >{ value }
 			, m_name{ name }
 			, m_values{ values }
 		{
@@ -441,7 +433,7 @@ namespace castor
 		/**
 		 *\copydoc		castor::ParserParameterBase::getStrType
 		 */
-		xchar const * getStrType()const override;
+		StringView getStrType()const override;
 		/**
 		 *\copydoc		castor::ParserParameterBase::clone
 		 */
@@ -453,7 +445,7 @@ namespace castor
 			, String & params )override;
 
 	public:
-		xchar const * m_name;
+		StringView m_name;
 		UInt64StrMap const m_values;
 	};
 	/**
@@ -478,7 +470,7 @@ namespace castor
 	 *\return		Le paramètre créé.
 	 */
 	template< ParameterType Type, typename ... Params >
-	ParserParameterBaseSPtr makeDefaultedParameter( typename ParserParameterHelper< Type >::ValueType defaultValue
+	ParserParameterBaseSPtr makeDefaultedParameter( ParserParameterValueType< Type > defaultValue
 		, Params && ... params )
 	{
 		return std::make_shared< ParserParameter< Type > >( defaultValue
@@ -497,17 +489,17 @@ namespace castor
 	{
 		static_assert( Type >= ParameterType::eInt8 && Type <= ParameterType::eLongDouble
 			, "Only for arithmetic types" );
-		static_assert( ( Type == ParameterType::eInt8 && std::is_same< T, int8_t >::value )
-				|| ( Type == ParameterType::eInt16 && std::is_same< T, int16_t >::value )
-				|| ( Type == ParameterType::eInt32 && std::is_same< T, int32_t >::value )
-				|| ( Type == ParameterType::eInt64 && std::is_same< T, int64_t >::value )
-				|| ( Type == ParameterType::eUInt8 && std::is_same< T, uint8_t >::value )
-				|| ( Type == ParameterType::eUInt16 && std::is_same< T, uint16_t >::value )
-				|| ( Type == ParameterType::eUInt32 && std::is_same< T, uint32_t >::value )
-				|| ( Type == ParameterType::eUInt64 && std::is_same< T, uint64_t >::value )
-				|| ( Type == ParameterType::eFloat && std::is_same< T, float >::value )
-				|| ( Type == ParameterType::eDouble && std::is_same< T, double >::value )
-				|| ( Type == ParameterType::eLongDouble && std::is_same< T, long double >::value )
+		static_assert( ( Type == ParameterType::eInt8 && std::is_same_v< T, int8_t > )
+				|| ( Type == ParameterType::eInt16 && std::is_same_v< T, int16_t > )
+				|| ( Type == ParameterType::eInt32 && std::is_same_v< T, int32_t > )
+				|| ( Type == ParameterType::eInt64 && std::is_same_v< T, int64_t > )
+				|| ( Type == ParameterType::eUInt8 && std::is_same_v< T, uint8_t > )
+				|| ( Type == ParameterType::eUInt16 && std::is_same_v< T, uint16_t > )
+				|| ( Type == ParameterType::eUInt32 && std::is_same_v< T, uint32_t > )
+				|| ( Type == ParameterType::eUInt64 && std::is_same_v< T, uint64_t > )
+				|| ( Type == ParameterType::eFloat && std::is_same_v< T, float > )
+				|| ( Type == ParameterType::eDouble && std::is_same_v< T, double > )
+				|| ( Type == ParameterType::eLongDouble && std::is_same_v< T, long double > )
 			, "C type and ParameterType must match." );
 
 		return std::make_shared< ParserParameter< Type > >( range );
@@ -525,10 +517,11 @@ namespace castor
 	 *\return		Le paramètre créé.
 	 */
 	template< ParameterType Type >
-	ParserParameterBaseSPtr makeParameter( xchar const * name
+	ParserParameterBaseSPtr makeParameter( StringView name
 		, UInt32StrMap const & values )
 	{
-		static_assert( Type == ParameterType::eCheckedText || Type == ParameterType::eBitwiseOred32BitsCheckedText, "Only for ParameterType::eCheckedText or ParameterType::eBitwiseOred32BitsCheckedText" );
+		static_assert( Type == ParameterType::eCheckedText || Type == ParameterType::eBitwiseOred32BitsCheckedText
+			, "Only for ParameterType::eCheckedText or ParameterType::eBitwiseOred32BitsCheckedText" );
 		return std::make_shared< ParserParameter< Type > >( values, name );
 	}
 	/**
@@ -544,10 +537,11 @@ namespace castor
 	 *\return		Le paramètre créé.
 	 */
 	template< ParameterType Type >
-	ParserParameterBaseSPtr makeParameter( xchar const * name
+	ParserParameterBaseSPtr makeParameter( StringView name
 		, UInt64StrMap const & values )
 	{
-		static_assert( Type == ParameterType::eBitwiseOred64BitsCheckedText, "Only for ParameterType::eBitwiseOred64BitsCheckedText" );
+		static_assert( Type == ParameterType::eBitwiseOred64BitsCheckedText
+			, "Only for ParameterType::eBitwiseOred64BitsCheckedText" );
 		return std::make_shared< ParserParameter< Type > >( values, name );
 	}
 	/**

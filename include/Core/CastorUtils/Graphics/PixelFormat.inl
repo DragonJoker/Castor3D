@@ -462,12 +462,12 @@ namespace castor
 		using Type = long double;
 	};
 
-	inline constexpr uint8_t getComponentsCount( PixelFormat format )
+	constexpr uint8_t getComponentsCount( PixelFormat format )
 	{
 		return uint8_t( ashes::getCount( VkFormat( format ) ) );
 	}
 
-	inline constexpr bool hasAlpha( PixelFormat format )
+	constexpr bool hasAlpha( PixelFormat format )
 	{
 		bool result = false;
 
@@ -486,7 +486,7 @@ namespace castor
 		return result;
 	}
 
-	inline constexpr bool hasComponent( PixelFormat format
+	constexpr bool hasComponent( PixelFormat format
 		, PixelComponent component )
 	{
 		switch ( component )
@@ -513,7 +513,7 @@ namespace castor
 		}
 	}
 
-	inline constexpr PixelFormat getSingleComponent( PixelFormat format )
+	constexpr PixelFormat getSingleComponent( PixelFormat format )
 	{
 		PixelFormat result = PixelFormat::eUNDEFINED;
 
@@ -532,7 +532,7 @@ namespace castor
 		return result;
 	}
 
-	inline constexpr bool isInt8( PixelFormat format )
+	constexpr bool isInt8( PixelFormat format )
 	{
 		return format == PixelFormat::eR8_UNORM
 			|| format == PixelFormat::eR8_SNORM
@@ -585,7 +585,7 @@ namespace castor
 			|| format == PixelFormat::eA8B8G8R8_SRGB;
 	}
 
-	inline constexpr bool isInt16( PixelFormat format )
+	constexpr bool isInt16( PixelFormat format )
 	{
 		return format == PixelFormat::eR16_UNORM
 			|| format == PixelFormat::eR16_SNORM
@@ -613,7 +613,7 @@ namespace castor
 			|| format == PixelFormat::eR16G16B16A16_SINT;
 	}
 
-	inline constexpr bool isInt32( PixelFormat format )
+	constexpr bool isInt32( PixelFormat format )
 	{
 		return format == PixelFormat::eR32_UINT
 			|| format == PixelFormat::eR32_SINT
@@ -625,7 +625,7 @@ namespace castor
 			|| format == PixelFormat::eR32G32B32A32_SINT;
 	}
 
-	inline constexpr bool isFloatingPoint( PixelFormat format )
+	constexpr bool isFloatingPoint( PixelFormat format )
 	{
 		return format == PixelFormat::eR16G16B16A16_SFLOAT
 			|| format == PixelFormat::eR16G16B16_SFLOAT
@@ -647,18 +647,18 @@ namespace castor
 			|| format == PixelFormat::eBC6H_SFLOAT_BLOCK;
 	}
 
-	inline constexpr bool isCompressed( PixelFormat format )
+	constexpr bool isCompressed( PixelFormat format )
 	{
 		return format >= PixelFormat::eBC1_RGB_UNORM_BLOCK
 			&& format <= PixelFormat::eASTC_12x12_SRGB_BLOCK;
 	}
 
-	inline constexpr bool isSRGBFormat( PixelFormat format )
+	constexpr bool isSRGBFormat( PixelFormat format )
 	{
 		return ashes::isSRGBFormat( VkFormat( format ) );
 	}
 
-	inline constexpr bool isRGFormat( PixelFormat format )
+	constexpr bool isRGFormat( PixelFormat format )
 	{
 		return format == PixelFormat::eR4G4_UNORM
 			|| format == PixelFormat::eR8G8_UNORM
@@ -687,7 +687,7 @@ namespace castor
 			|| format == PixelFormat::eEAC_R11G11_SNORM_BLOCK;
 	}
 
-	inline constexpr bool isRGBFormat( PixelFormat format )
+	constexpr bool isRGBFormat( PixelFormat format )
 	{
 		return format == PixelFormat::eR5G6B5_UNORM
 			|| format == PixelFormat::eR8G8B8_UNORM
@@ -718,7 +718,7 @@ namespace castor
 			|| format == PixelFormat::eETC2_R8G8B8_SRGB_BLOCK;
 	}
 
-	inline constexpr bool isBGRFormat( PixelFormat format )
+	constexpr bool isBGRFormat( PixelFormat format )
 	{
 		return format == PixelFormat::eB5G6R5_UNORM
 			|| format == PixelFormat::eB8G8R8_UNORM
@@ -732,7 +732,7 @@ namespace castor
 			|| format == PixelFormat::eE5B9G9R9_UFLOAT;
 	}
 
-	inline constexpr bool isRGBAFormat( PixelFormat format )
+	constexpr bool isRGBAFormat( PixelFormat format )
 	{
 		return format == PixelFormat::eR4G4B4A4_UNORM
 			|| format == PixelFormat::eR5G5B5A1_UNORM
@@ -766,7 +766,7 @@ namespace castor
 			|| format == PixelFormat::eETC2_R8G8B8A8_SRGB_BLOCK;
 	}
 
-	inline constexpr bool isARGBFormat( PixelFormat format )
+	constexpr bool isARGBFormat( PixelFormat format )
 	{
 		return format == PixelFormat::eA1R5G5B5_UNORM
 			|| format == PixelFormat::eA2R10G10B10_UNORM
@@ -777,7 +777,7 @@ namespace castor
 			|| format == PixelFormat::eA2R10G10B10_SINT;
 	}
 
-	inline constexpr bool isBGRAFormat( PixelFormat format )
+	constexpr bool isBGRAFormat( PixelFormat format )
 	{
 		return format == PixelFormat::eB4G4R4A4_UNORM
 			|| format == PixelFormat::eB5G5R5A1_UNORM
@@ -790,7 +790,7 @@ namespace castor
 			|| format == PixelFormat::eB8G8R8A8_SRGB;
 	}
 
-	inline constexpr bool isABGRFormat( PixelFormat format )
+	constexpr bool isABGRFormat( PixelFormat format )
 	{
 		return format == PixelFormat::eA8B8G8R8_UNORM
 			|| format == PixelFormat::eA8B8G8R8_SNORM
@@ -807,7 +807,7 @@ namespace castor
 			|| format == PixelFormat::eA2B10G10R10_SINT;
 	}
 
-	inline constexpr PixelFormat getSRGBFormat( PixelFormat format )
+	constexpr PixelFormat getSRGBFormat( PixelFormat format )
 	{
 		switch ( format )
 		{
@@ -874,7 +874,7 @@ namespace castor
 		}
 	}
 
-	inline constexpr PixelFormat getNonSRGBFormat( PixelFormat format )
+	constexpr PixelFormat getNonSRGBFormat( PixelFormat format )
 	{
 		switch ( format )
 		{
@@ -941,12 +941,12 @@ namespace castor
 		}
 	}
 
-	inline constexpr bool isDepthOrStencilFormat( PixelFormat format )
+	constexpr bool isDepthOrStencilFormat( PixelFormat format )
 	{
 		return ashes::isDepthOrStencilFormat( VkFormat( format ) );
 	}
 
-	inline constexpr PixelFormat getPFWithoutAlpha( PixelFormat format )
+	constexpr PixelFormat getPFWithoutAlpha( PixelFormat format )
 	{
 		PixelFormat result = PixelFormat::eCount;
 
@@ -984,7 +984,7 @@ namespace castor
 		return result;
 	}
 
-	inline constexpr PixelFormat getPFWithAlpha( PixelFormat format )
+	constexpr PixelFormat getPFWithAlpha( PixelFormat format )
 	{
 		PixelFormat result = PixelFormat::eCount;
 
@@ -1022,7 +1022,7 @@ namespace castor
 		return result;
 	}
 
-	inline constexpr uint32_t getComponentIndex( PixelComponent component )
+	constexpr uint32_t getComponentIndex( PixelComponent component )
 	{
 		switch ( component )
 		{
@@ -1043,7 +1043,7 @@ namespace castor
 		}
 	}
 
-	inline constexpr uint32_t getComponentIndex( PixelComponent component
+	constexpr uint32_t getComponentIndex( PixelComponent component
 		, PixelFormat format )
 	{
 		if ( isABGRFormat( format ) )
@@ -1114,7 +1114,7 @@ namespace castor
 		}
 	}
 
-	inline constexpr PixelComponent getIndexComponent( uint32_t index
+	constexpr PixelComponent getIndexComponent( uint32_t index
 		, PixelFormat format )
 	{
 		if ( isABGRFormat( format ) )
@@ -1193,7 +1193,7 @@ namespace castor
 		}
 	}
 
-	inline constexpr castor::PixelComponents getComponents( PixelFormat format )
+	constexpr castor::PixelComponents getComponents( PixelFormat format )
 	{
 		if ( isRGBAFormat( format )
 			|| isARGBFormat( format )

@@ -177,7 +177,7 @@ namespace castor3d
 		void doRecordInto( crg::RecordContext & context
 			, VkCommandBuffer commandBuffer
 			, uint32_t index );
-		void doRecordCompute( crg::RecordContext & context
+		void doRecordCompute( crg::RecordContext const & context
 			, VkCommandBuffer commandBuffer );
 		void doRecordGraphics( crg::RecordContext & context
 			, VkCommandBuffer commandBuffer );

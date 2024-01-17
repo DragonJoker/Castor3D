@@ -10,8 +10,6 @@ See LICENSE file in root folder
 #include "CastorUtils/Graphics/HdrColourComponent.hpp"
 #include "CastorUtils/Math/Point.hpp"
 
-#undef RGB
-
 namespace castor
 {
 	/**
@@ -52,9 +50,9 @@ namespace castor
 		RgbaColourT() = default;
 		RgbaColourT( RgbaColourT const & rhs ) = default;
 		RgbaColourT & operator=( RgbaColourT const & rhs ) = default;
-		RgbaColourT( RgbaColourT && rhs ) = default;
-		RgbaColourT & operator=( RgbaColourT && rhs ) = default;
-		~RgbaColourT() = default;
+		RgbaColourT( RgbaColourT && rhs )noexcept = default;
+		RgbaColourT & operator=( RgbaColourT && rhs )noexcept = default;
+		~RgbaColourT()noexcept = default;
 		/**
 		 *\~english
 		 *\brief		Constructor from other component type
@@ -74,7 +72,7 @@ namespace castor
 		 *\~french
 		 *\brief		Constructeur spécifié.
 		 */
-		inline RgbaColourT( float r, float g, float b, float a );
+		RgbaColourT( float r, float g, float b, float a );
 		/**
 		 *\~english
 		 *\brief		Constructor from components
@@ -119,7 +117,7 @@ namespace castor
 		 *\param[in]	colour	Le point contenant les composantes
 		 *\return		La RgbaColourT construite
 		 */
-		inline static RgbaColourT fromRGB( Point3ub const & colour );
+		static RgbaColourT fromRGB( Point3ub const & colour );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing BGR components
@@ -130,7 +128,7 @@ namespace castor
 		 *\param[in]	colour	Le point contenant les composantes
 		 *\return		La RgbaColourT construite
 		 */
-		inline static RgbaColourT fromBGR( Point3ub const & colour );
+		static RgbaColourT fromBGR( Point3ub const & colour );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing RGBA components
@@ -141,7 +139,7 @@ namespace castor
 		 *\param[in]	colour	Le point contenant les composantes
 		 *\return		La RgbaColourT construite
 		 */
-		inline static RgbaColourT fromRGBA( Point4ub const & colour );
+		static RgbaColourT fromRGBA( Point4ub const & colour );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing BGRA components
@@ -152,7 +150,7 @@ namespace castor
 		 *\param[in]	colour	Le point contenant les composantes
 		 *\return		La RgbaColourT construite
 		 */
-		inline static RgbaColourT fromBGRA( Point4ub const & colour );
+		static RgbaColourT fromBGRA( Point4ub const & colour );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing ARGB components
@@ -163,7 +161,7 @@ namespace castor
 		 *\param[in]	colour	Le point contenant les composantes
 		 *\return		La RgbaColourT construite
 		 */
-		inline static RgbaColourT fromARGB( Point4ub const & colour );
+		static RgbaColourT fromARGB( Point4ub const & colour );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing ABGR components
@@ -174,7 +172,7 @@ namespace castor
 		 *\param[in]	colour	Le point contenant les composantes
 		 *\return		La RgbaColourT construite
 		 */
-		inline static RgbaColourT fromABGR( Point4ub const & colour );
+		static RgbaColourT fromABGR( Point4ub const & colour );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing RGB components
@@ -185,7 +183,7 @@ namespace castor
 		 *\param[in]	colour	Le point contenant les composantes
 		 *\return		La RgbaColourT construite
 		 */
-		inline static RgbaColourT fromRGB( Point3f const & colour );
+		static RgbaColourT fromRGB( Point3f const & colour );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing BGR components
@@ -196,7 +194,7 @@ namespace castor
 		 *\param[in]	colour	Le point contenant les composantes
 		 *\return		La RgbaColourT construite
 		 */
-		inline static RgbaColourT fromBGR( Point3f const & colour );
+		static RgbaColourT fromBGR( Point3f const & colour );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing RGBA components
@@ -207,7 +205,7 @@ namespace castor
 		 *\param[in]	colour	Le point contenant les composantes
 		 *\return		La RgbaColourT construite
 		 */
-		inline static RgbaColourT fromRGBA( Point4f const & colour );
+		static RgbaColourT fromRGBA( Point4f const & colour );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing ARGB components
@@ -218,7 +216,7 @@ namespace castor
 		 *\param[in]	colour	Le point contenant les composantes
 		 *\return		La RgbaColourT construite
 		 */
-		inline static RgbaColourT fromARGB( Point4f const & colour );
+		static RgbaColourT fromARGB( Point4f const & colour );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing ABGR components
@@ -229,7 +227,7 @@ namespace castor
 		 *\param[in]	colour	Le point contenant les composantes
 		 *\return		La RgbaColourT construite
 		 */
-		inline static RgbaColourT fromABGR( Point4f const & colour );
+		static RgbaColourT fromABGR( Point4f const & colour );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing BGRA components
@@ -240,7 +238,7 @@ namespace castor
 		 *\param[in]	colour	Le point contenant les composantes
 		 *\return		La RgbaColourT construite
 		 */
-		inline static RgbaColourT fromBGRA( Point4f const & colour );
+		static RgbaColourT fromBGRA( Point4f const & colour );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing RGB components
@@ -251,7 +249,7 @@ namespace castor
 		 *\param[in]	colour	Le point contenant les composantes
 		 *\return		La RgbaColourT construite
 		 */
-		inline static RgbaColourT fromRGB( uint8_t const( & colour )[3] );
+		static RgbaColourT fromRGB( uint8_t const( & colour )[3] );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing BGR components
@@ -262,7 +260,7 @@ namespace castor
 		 *\param[in]	colour	Le point contenant les composantes
 		 *\return		La RgbaColourT construite
 		 */
-		inline static RgbaColourT fromBGR( uint8_t const( & colour )[3] );
+		static RgbaColourT fromBGR( uint8_t const( & colour )[3] );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing RGBA components
@@ -273,7 +271,7 @@ namespace castor
 		 *\param[in]	colour	Le point contenant les composantes
 		 *\return		La RgbaColourT construite
 		 */
-		inline static RgbaColourT fromRGBA( uint8_t const( & colour )[4] );
+		static RgbaColourT fromRGBA( uint8_t const( & colour )[4] );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing BGRA components
@@ -284,7 +282,7 @@ namespace castor
 		 *\param[in]	colour	Le point contenant les composantes
 		 *\return		La RgbaColourT construite
 		 */
-		inline static RgbaColourT fromBGRA( uint8_t const( & colour )[4] );
+		static RgbaColourT fromBGRA( uint8_t const( & colour )[4] );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing ARGB components
@@ -295,7 +293,7 @@ namespace castor
 		 *\param[in]	colour	Le point contenant les composantes
 		 *\return		La RgbaColourT construite
 		 */
-		inline static RgbaColourT fromARGB( uint8_t const( & colour )[4] );
+		static RgbaColourT fromARGB( uint8_t const( & colour )[4] );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing ABGR components
@@ -306,7 +304,7 @@ namespace castor
 		 *\param[in]	colour	Le point contenant les composantes
 		 *\return		La RgbaColourT construite
 		 */
-		inline static RgbaColourT fromABGR( uint8_t const( & colour )[4] );
+		static RgbaColourT fromABGR( uint8_t const( & colour )[4] );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing RGB components
@@ -317,7 +315,7 @@ namespace castor
 		 *\param[in]	colour	Le point contenant les composantes
 		 *\return		La RgbaColourT construite
 		 */
-		inline static RgbaColourT fromRGB( float const( & colour )[3] );
+		static RgbaColourT fromRGB( float const( & colour )[3] );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing BGR components
@@ -328,7 +326,7 @@ namespace castor
 		 *\param[in]	colour	Le point contenant les composantes
 		 *\return		La RgbaColourT construite
 		 */
-		inline static RgbaColourT fromBGR( float const( & colour )[3] );
+		static RgbaColourT fromBGR( float const( & colour )[3] );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing RGBA components
@@ -339,7 +337,7 @@ namespace castor
 		 *\param[in]	colour	Le point contenant les composantes
 		 *\return		La RgbaColourT construite
 		 */
-		inline static RgbaColourT fromRGBA( float const( & colour )[4] );
+		static RgbaColourT fromRGBA( float const( & colour )[4] );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing ARGB components
@@ -350,7 +348,7 @@ namespace castor
 		 *\param[in]	colour	Le point contenant les composantes
 		 *\return		La RgbaColourT construite
 		 */
-		inline static RgbaColourT fromARGB( float const( & colour )[4] );
+		static RgbaColourT fromARGB( float const( & colour )[4] );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing ABGR components
@@ -361,7 +359,7 @@ namespace castor
 		 *\param[in]	colour	Le point contenant les composantes
 		 *\return		La RgbaColourT construite
 		 */
-		inline static RgbaColourT fromABGR( float const( & colour )[4] );
+		static RgbaColourT fromABGR( float const( & colour )[4] );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing BGRA components
@@ -372,7 +370,7 @@ namespace castor
 		 *\param[in]	colour	Le point contenant les composantes
 		 *\return		La RgbaColourT construite
 		 */
-		inline static RgbaColourT fromBGRA( float const( & colour )[4] );
+		static RgbaColourT fromBGRA( float const( & colour )[4] );
 		/**
 		 *\~english
 		 *\brief		Constructor from an uint32_t representing RGB components
@@ -383,7 +381,7 @@ namespace castor
 		 *\param[in]	colour	L'uint32_t contenant la couleur (0x00RRGGBB)
 		 *\return		La RgbaColourT construite
 		 */
-		inline static RgbaColourT fromRGB( uint32_t colour );
+		static RgbaColourT fromRGB( uint32_t colour );
 		/**
 		 *\~english
 		 *\brief		Constructor from an uint32_t representing BGR components
@@ -394,7 +392,7 @@ namespace castor
 		 *\param[in]	colour	L'uint32_t contenant la couleur (0x00BBGGRR)
 		 *\return		La RgbaColourT construite
 		 */
-		inline static RgbaColourT fromBGR( uint32_t colour );
+		static RgbaColourT fromBGR( uint32_t colour );
 		/**
 		 *\~english
 		 *\brief		Constructor from an uint32_t representing ARGB components
@@ -405,7 +403,7 @@ namespace castor
 		 *\param[in]	colour	L'uint32_t contenant la couleur (0xAARRGGBB)
 		 *\return		La RgbaColourT construite
 		 */
-		inline static RgbaColourT fromARGB( uint32_t colour );
+		static RgbaColourT fromARGB( uint32_t colour );
 		/**
 		 *\~english
 		 *\brief		Constructor from an uint32_t representing RGBA components
@@ -416,7 +414,7 @@ namespace castor
 		 *\param[in]	colour	L'uint32_t contenant la couleur (0xRRGGBBAA)
 		 *\return		La RgbaColourT construite
 		 */
-		inline static RgbaColourT fromRGBA( uint32_t colour );
+		static RgbaColourT fromRGBA( uint32_t colour );
 		/**
 		 *\~english
 		 *\brief		Constructor from an uint32_t representing ABGR components
@@ -427,7 +425,7 @@ namespace castor
 		 *\param[in]	colour	L'uint32_t contenant la couleur (0xAABBGGRR)
 		 *\return		La RgbaColourT construite
 		 */
-		inline static RgbaColourT fromABGR( uint32_t colour );
+		static RgbaColourT fromABGR( uint32_t colour );
 		/**
 		 *\~english
 		 *\brief		Constructor from an uint32_t representing BGRA components
@@ -438,7 +436,7 @@ namespace castor
 		 *\param[in]	colour	L'uint32_t contenant la couleur (0xBBGGRRAA)
 		 *\return		La RgbaColourT construite
 		 */
-		inline static RgbaColourT fromBGRA( uint32_t colour );
+		static RgbaColourT fromBGRA( uint32_t colour );
 		/**
 		 *\~english
 		 *\brief		Constructor from an HSB components.
@@ -449,7 +447,7 @@ namespace castor
 		 *\param[in]	hue, saturation, brightness	Les composantes HSB.
 		 *\return		La RgbaColourT construite.
 		 */
-		inline static RgbaColourT fromHSB( float hue, float saturation, float brightness );
+		static RgbaColourT fromHSB( float hue, float saturation, float brightness );
 		/**
 		 *\~english
 		 *\brief		Retrieves an iterator to the first ColourComponent
@@ -458,7 +456,7 @@ namespace castor
 		 *\brief		Récupère un itérateur sur le premier ColourComponent
 		 *\return		L'itérateur
 		 */
-		inline ColourComponentArrayIt begin()
+		ColourComponentArrayIt begin()
 		{
 			return m_components.begin();
 		}
@@ -470,7 +468,7 @@ namespace castor
 		 *\brief		Récupère un itérateur constant sur le premier ColourComponent
 		 *\return		L'itérateur
 		 */
-		inline ColourComponentArrayConstIt begin()const
+		ColourComponentArrayConstIt begin()const
 		{
 			return m_components.begin();
 		}
@@ -482,7 +480,7 @@ namespace castor
 		 *\brief		Récupère un itérateur sur après le dernier ColourComponent
 		 *\return		L'itérateur
 		 */
-		inline ColourComponentArrayIt end()
+		ColourComponentArrayIt end()
 		{
 			return m_components.end();
 		}
@@ -494,7 +492,7 @@ namespace castor
 		 *\brief		Récupère un itérateur constant sur après le dernier ColourComponent
 		 *\return		L'itérateur
 		 */
-		inline ColourComponentArrayConstIt end()const
+		ColourComponentArrayConstIt end()const
 		{
 			return m_components.end();
 		}
@@ -506,7 +504,7 @@ namespace castor
 		 *\brief		Récupère un pointeur constant sur les valeurs de la couleur
 		 *\return		Le pointeur
 		 */
-		inline float const * constPtr()const
+		float const * constPtr()const
 		{
 			return &m_components[0].value();
 		}
@@ -518,7 +516,7 @@ namespace castor
 		 *\brief		Récupère un pointeur sur les valeurs de la couleur
 		 *\return		Le pointeur
 		 */
-		inline float * ptr()
+		float * ptr()
 		{
 			return &m_components[0].value();
 		}
@@ -532,7 +530,7 @@ namespace castor
 		 *\param[in]	component	La composante demandée
 		 *\return		La valeur de la composante
 		 */
-		inline ComponentType & operator[]( RgbaComponent component )
+		ComponentType & operator[]( RgbaComponent component )
 		{
 			return m_components[size_t( component )];
 		}
@@ -546,7 +544,7 @@ namespace castor
 		 *\param[in]	component	La composante demandée
 		 *\return		La valeur de la composante
 		 */
-		inline ComponentType const & operator[]( RgbaComponent component )const
+		ComponentType const & operator[]( RgbaComponent component )const
 		{
 			return m_components[size_t( component )];
 		}
@@ -560,7 +558,7 @@ namespace castor
 		 *\param[in]	component	La composante demandée
 		 *\return		La valeur de la composante
 		 */
-		inline ComponentType & operator[]( size_t component )
+		ComponentType & operator[]( size_t component )
 		{
 			return m_components[component];
 		}
@@ -574,7 +572,7 @@ namespace castor
 		 *\param[in]	component	La composante demandée
 		 *\return		La valeur de la composante
 		 */
-		inline ComponentType const & operator[]( size_t component )const
+		ComponentType const & operator[]( size_t component )const
 		{
 			return m_components[component];
 		}
@@ -588,7 +586,7 @@ namespace castor
 		 *\param[in]	component	La composante demandée
 		 *\return		La valeur de la composante
 		 */
-		inline ComponentType & get( RgbaComponent component )
+		ComponentType & get( RgbaComponent component )
 		{
 			return m_components[size_t( component )];
 		}
@@ -602,7 +600,7 @@ namespace castor
 		 *\param[in]	component	La composante demandée
 		 *\return		La valeur de la composante
 		 */
-		inline ComponentType const & get( RgbaComponent component )const
+		ComponentType const & get( RgbaComponent component )const
 		{
 			return m_components[size_t( component )];
 		}
@@ -614,7 +612,7 @@ namespace castor
 		 *\brief		Récupère la valeur de la composante rouge
 		 *\return		La valeur de la composante
 		 */
-		inline ComponentType & red()
+		ComponentType & red()
 		{
 			return get( RgbaComponent::eRed );
 		}
@@ -626,7 +624,7 @@ namespace castor
 		 *\brief		Récupère la valeur de la composante rouge
 		 *\return		La valeur de la composante
 		 */
-		inline ComponentType const & red()const
+		ComponentType const & red()const
 		{
 			return get( RgbaComponent::eRed );
 		}
@@ -638,7 +636,7 @@ namespace castor
 		 *\brief		Récupère la valeur de la composante verte
 		 *\return		La valeur de la composante
 		 */
-		inline ComponentType & green()
+		ComponentType & green()
 		{
 			return get( RgbaComponent::eGreen );
 		}
@@ -650,7 +648,7 @@ namespace castor
 		 *\brief		Récupère la valeur de la composante verte
 		 *\return		La valeur de la composante
 		 */
-		inline ComponentType const & green()const
+		ComponentType const & green()const
 		{
 			return get( RgbaComponent::eGreen );
 		}
@@ -662,7 +660,7 @@ namespace castor
 		 *\brief		Récupère la valeur de la composante bleue
 		 *\return		La valeur de la composante
 		 */
-		inline ComponentType & blue()
+		ComponentType & blue()
 		{
 			return get( RgbaComponent::eBlue );
 		}
@@ -674,7 +672,7 @@ namespace castor
 		 *\brief		Récupère la valeur de la composante bleue
 		 *\return		La valeur de la composante
 		 */
-		inline ComponentType const & blue()const
+		ComponentType const & blue()const
 		{
 			return get( RgbaComponent::eBlue );
 		}
@@ -686,7 +684,7 @@ namespace castor
 		 *\brief		Récupère la valeur de la composante alpha
 		 *\return		La valeur de la composante
 		 */
-		inline ComponentType & alpha()
+		ComponentType & alpha()
 		{
 			return get( RgbaComponent::eAlpha );
 		}
@@ -698,7 +696,7 @@ namespace castor
 		 *\brief		Récupère la valeur de la composante alpha
 		 *\return		La valeur de la composante
 		 */
-		inline ComponentType const & alpha()const
+		ComponentType const & alpha()const
 		{
 			return get( RgbaComponent::eAlpha );
 		}
@@ -712,7 +710,7 @@ namespace castor
 		 *\param[in]	rhs	Les couleurs à ajouter
 		 *\return		Resultat de this + rhs
 		 */
-		inline RgbaColourT & operator+=( RgbaColourT const & rhs );
+		RgbaColourT & operator+=( RgbaColourT const & rhs );
 		/**
 		 *\~english
 		 *\brief		Substraction assignment operator
@@ -723,7 +721,7 @@ namespace castor
 		 *\param[in]	rhs	Les couleurs à soustraire
 		 *\return		Resultat de this - rhs
 		 */
-		inline RgbaColourT & operator-=( RgbaColourT const & rhs );
+		RgbaColourT & operator-=( RgbaColourT const & rhs );
 		/**
 		 *\~english
 		 *\brief		addition assignment operator
@@ -814,7 +812,7 @@ namespace castor
 		 *\param[in]	component	La valeur à ajouter
 		 *\return		Resultat de this + component
 		 */
-		inline RgbaColourT & operator+=( ComponentType const & component );
+		RgbaColourT & operator+=( ComponentType const & component );
 		/**
 		 *\~english
 		 *\brief		Substraction assignment operator
@@ -825,7 +823,7 @@ namespace castor
 		 *\param[in]	component	La valeur à soustraire
 		 *\return		Resultat de this - component
 		 */
-		inline RgbaColourT & operator-=( ComponentType const & component );
+		RgbaColourT & operator-=( ComponentType const & component );
 		/**
 		 *\~english
 		 *\brief		Multiplication assignment operator
@@ -836,7 +834,7 @@ namespace castor
 		 *\param[in]	component	La valeur à multiplier
 		 *\return		Resultat de this * component
 		 */
-		inline RgbaColourT & operator*=( ComponentType const & component );
+		RgbaColourT & operator*=( ComponentType const & component );
 		/**
 		 *\~english
 		 *\brief		Division assignment operator
@@ -847,7 +845,7 @@ namespace castor
 		 *\param[in]	component	La valeur à diviser
 		 *\return		Resultat de this / component
 		 */
-		inline RgbaColourT & operator/=( ComponentType const & component );
+		RgbaColourT & operator/=( ComponentType const & component );
 
 	private:
 		ColourComponentArray m_components;

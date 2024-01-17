@@ -4,11 +4,13 @@ See LICENSE file in root folder
 #ifndef ___CU_ThreadPool_H___
 #define ___CU_ThreadPool_H___
 
+#include "CastorUtils/Design/NonCopyable.hpp"
 #include "CastorUtils/Multithreading/WorkerThread.hpp"
 
 namespace castor
 {
 	class ThreadPool
+		: public NonMovable
 	{
 		using WorkerPtr = std::unique_ptr< WorkerThread >;
 		using WorkerArray = std::vector< WorkerPtr >;
@@ -72,14 +74,14 @@ namespace castor
 		 *\~french
 		 *\return		Le nombre de threads.
 		 */
-		inline size_t getCount()const
+		size_t getCount()const noexcept
 		{
 			return m_count;
 		}
 
 	private:
 		WorkerThread & doReserveWorker();
-		void doFreeWorker( WorkerThread & worker );
+		void doFreeWorker( WorkerThread const & worker );
 
 	private:
 		size_t const m_count;

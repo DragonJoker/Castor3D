@@ -131,7 +131,7 @@ namespace castor
 		 *\~french
 		 *\brief		Constructeur par défaut
 		 */
-		inline AngleT()noexcept;
+		AngleT()noexcept;
 		/**
 		 *\~english
 		 *\brief		Conversion to turns
@@ -140,7 +140,7 @@ namespace castor
 		 *\brief		Conversion en tours
 		 *\return		La valeur de l'angle, en tours
 		 */
-		inline Type turns()const noexcept;
+		Type turns()const noexcept;
 		/**
 		 *\~english
 		 *\brief		Conversion to degrees
@@ -149,7 +149,7 @@ namespace castor
 		 *\brief		Conversion en degrés
 		 *\return		La valeur de l'angle, en degrés
 		 */
-		inline Type degrees()const noexcept;
+		Type degrees()const noexcept;
 		/**
 		 *\~english
 		 *\brief		Conversion to radians
@@ -158,7 +158,7 @@ namespace castor
 		 *\brief		Conversion en radians
 		 *\return		La valeur de l'angle, en radians
 		 */
-		inline Type radians()const noexcept;
+		Type radians()const noexcept;
 		/**
 		 *\~english
 		 *\brief		Conversion to gradients
@@ -167,7 +167,7 @@ namespace castor
 		 *\brief		Conversion en gradients
 		 *\return		La valeur de l'angle, en gradients
 		 */
-		inline Type grads()const noexcept;
+		Type grads()const noexcept;
 		/**
 		 *\~english
 		 *\brief		sets this angle value from turns
@@ -176,7 +176,7 @@ namespace castor
 		 *\brief		Définit la valeur de cet angle à partir de tours
 		 *\param[in]	value	L'angle exprimé en tours
 		 */
-		inline void turns( double value )noexcept;
+		void turns( double value )noexcept;
 		/**
 		 *\~english
 		 *\brief		sets this angle value from degrees
@@ -185,7 +185,7 @@ namespace castor
 		 *\brief		Définit la valeur de cet angle à partir de degrés
 		 *\param[in]	value	L'angle exprimé en degrés
 		 */
-		inline void degrees( double value )noexcept;
+		void degrees( double value )noexcept;
 		/**
 		 *\~english
 		 *\brief		sets this angle value from radians
@@ -194,7 +194,7 @@ namespace castor
 		 *\brief		Définit la valeur de cet angle à partir de radians
 		 *\param[in]	value	L'angle exprimé en radians
 		 */
-		inline void radians( double value )noexcept;
+		void radians( double value )noexcept;
 		/**
 		 *\~english
 		 *\brief		sets this angle value from gradients
@@ -203,7 +203,7 @@ namespace castor
 		 *\brief		Définit la valeur de cet angle à partir de gradients
 		 *\param[in]	value	L'angle exprimé en gradients
 		 */
-		inline void grads( double value )noexcept;
+		void grads( double value )noexcept;
 		/**
 		 *\~english
 		 *\brief		Trigonometric cosine
@@ -212,7 +212,7 @@ namespace castor
 		 *\brief		Cosinus trigonométrique
 		 *\return		Le cosinus de cet angle
 		 */
-		inline Type cos()const;
+		Type cos()const;
 		/**
 		 *\~english
 		 *\brief		Trigonometric sine
@@ -221,7 +221,7 @@ namespace castor
 		 *\brief		Sinus trigonométrique
 		 *\return		Le sinus de cet angle
 		 */
-		inline Type sin()const;
+		Type sin()const;
 		/**
 		 *\~english
 		 *\brief		Trigonometric tangent
@@ -230,7 +230,7 @@ namespace castor
 		 *\brief		Tangente trigonométrique
 		 *\return		La tangente de cet angle
 		 */
-		inline Type tan()const;
+		Type tan()const;
 		/**
 		 *\~english
 		 *\brief		Trigonometric cosine
@@ -239,7 +239,7 @@ namespace castor
 		 *\brief		Cosinus trigonométrique
 		 *\return		Le cosinus de cet angle
 		 */
-		inline float cosf()const;
+		float cosf()const;
 		/**
 		 *\~english
 		 *\brief		Trigonometric sine
@@ -248,7 +248,7 @@ namespace castor
 		 *\brief		Sinus trigonométrique
 		 *\return		Le sinus de cet angle
 		 */
-		inline float sinf()const;
+		float sinf()const;
 		/**
 		 *\~english
 		 *\brief		Trigonometric tangent
@@ -257,7 +257,7 @@ namespace castor
 		 *\brief		Tangente trigonométrique
 		 *\return		La tangente de cet angle
 		 */
-		inline float tanf()const;
+		float tanf()const;
 		/**
 		 *\~english
 		 *\brief		Trigonometric cosine
@@ -266,7 +266,7 @@ namespace castor
 		 *\brief		Cosinus trigonométrique
 		 *\return		Le cosinus de cet angle
 		 */
-		inline double cosd()const;
+		double cosd()const;
 		/**
 		 *\~english
 		 *\brief		Trigonometric sine
@@ -275,7 +275,7 @@ namespace castor
 		 *\brief		Sinus trigonométrique
 		 *\return		Le sinus de cet angle
 		 */
-		inline double sind()const;
+		double sind()const;
 		/**
 		 *\~english
 		 *\brief		Trigonometric tangent
@@ -284,7 +284,7 @@ namespace castor
 		 *\brief		Tangente trigonométrique
 		 *\return		La tangente de cet angle
 		 */
-		inline double tand()const;
+		double tand()const;
 		/**
 		 *\~english
 		 *\brief		Hyperbolic cosine
@@ -293,7 +293,7 @@ namespace castor
 		 *\brief		Cosinus hyperbolique
 		 *\return		Le cosinus hyperbolique de cet angle
 		 */
-		inline Type cosh()const;
+		Type cosh()const;
 		/**
 		 *\~english
 		 *\brief		Hyperbolic sine
@@ -302,7 +302,7 @@ namespace castor
 		 *\brief		Sinus hyperbolique
 		 *\return		Le sinus hyperbolique de cet angle
 		 */
-		inline Type sinh()const;
+		Type sinh()const;
 		/**
 		 *\~english
 		 *\brief		Hyperbolic tangent
@@ -311,7 +311,7 @@ namespace castor
 		 *\brief		Tangente hyperbolique
 		 *\return		La tangente hyperbolique de cet angle
 		 */
-		inline Type tanh()const;
+		Type tanh()const;
 		/**
 		 *\~english
 		 *\brief		Negation operator.
@@ -320,7 +320,7 @@ namespace castor
 		 *\brief		Opérateur de négation.
 		 *\return		Une référence sur cet angle.
 		 */
-		inline AngleT< Type > operator-()const noexcept;
+		AngleT< Type > operator-()const noexcept;
 		/**
 		 *\~english
 		 *\brief		addition assignment operator
@@ -331,7 +331,7 @@ namespace castor
 		 *\param[in]	rhs	L'angle à ajouter à celui-ci
 		 *\return		Une référence sur cet angle
 		 */
-		inline AngleT< Type > & operator+=( AngleT< Type > const & rhs )noexcept;
+		AngleT< Type > & operator+=( AngleT< Type > const & rhs )noexcept;
 		/**
 		 *\~english
 		 *\brief		Substraction assignment operator
@@ -342,7 +342,7 @@ namespace castor
 		 *\param[in]	rhs	L'angle à soustraire de celui-ci
 		 *\return		Une référence sur cet angle
 		 */
-		inline AngleT< Type > & operator-=( AngleT< Type > const & rhs )noexcept;
+		AngleT< Type > & operator-=( AngleT< Type > const & rhs )noexcept;
 		/**
 		 *\~english
 		 *\brief		Multiplication assignment operator
@@ -353,7 +353,7 @@ namespace castor
 		 *\param[in]	rhs	L'angle à multiplier à celui-ci
 		 *\return		Une référence sur cet angle
 		 */
-		inline AngleT< Type > & operator*=( AngleT< Type > const & rhs )noexcept;
+		AngleT< Type > & operator*=( AngleT< Type > const & rhs )noexcept;
 		/**
 		 *\~english
 		 *\brief		Division assignment operator
@@ -364,7 +364,7 @@ namespace castor
 		 *\param[in]	rhs	L'angle diviseur de celui-ci
 		 *\return		Une référence sur cet angle
 		 */
-		inline AngleT< Type > & operator/=( AngleT< Type > const & rhs )noexcept;
+		AngleT< Type > & operator/=( AngleT< Type > const & rhs )noexcept;
 		/**
 		 *\~english
 		 *\brief		Multiplication assignment operator
@@ -375,7 +375,7 @@ namespace castor
 		 *\param[in]	rhs	Le scalaire à multiplier à celui-ci
 		 *\return		Une référence sur cet angle
 		 */
-		inline AngleT< Type > & operator*=( double rhs )noexcept;
+		AngleT< Type > & operator*=( double rhs )noexcept;
 		/**
 		 *\~english
 		 *\brief		Division assignment operator
@@ -386,14 +386,14 @@ namespace castor
 		 *\param[in]	rhs	Le scalaire diviseur de celui-ci
 		 *\return		Une référence sur cet angle
 		 */
-		inline AngleT< Type > & operator/=( double rhs )noexcept;
+		AngleT< Type > & operator/=( double rhs )noexcept;
 		/**
 		 *\~english
 		*\return		The angle value, in radians.
 		 *\~french
 		*\return		La valeur de l'angle, en radians.
 		*/
-		explicit inline operator Type()const noexcept
+		explicit operator Type()const noexcept
 		{
 			return m_radians;
 		}

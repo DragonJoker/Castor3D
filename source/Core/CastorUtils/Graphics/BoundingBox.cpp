@@ -6,12 +6,6 @@ CU_ImplementSmartPtr( castor, BoundingBox )
 
 namespace castor
 {
-	BoundingBox::BoundingBox()
-		: BoundingContainer3D{}
-		, m_dimensions{}
-	{
-	}
-
 	BoundingBox::BoundingBox( Point3f const & min, Point3f const & max )
 		: BoundingContainer3D{ min + ( max - min ) / 2.0f }
 		, m_dimensions{ max - min }
@@ -58,7 +52,7 @@ namespace castor
 
 	void BoundingBox::load( Point3f const & min, Point3f const & max )
 	{
-		m_center = min + ( max - min ) / 2.0f;
+		setCenter( min + ( max - min ) / 2.0f );
 		m_dimensions = max - min;
 	}
 
@@ -66,7 +60,7 @@ namespace castor
 	{
 		auto min = getMin();
 		auto max = getMax();
-		Point3f corners[8]
+		std::array< Point3f, 8u > corners
 		{
 			min,
 			max,
@@ -87,7 +81,8 @@ namespace castor
 		// Retrieve axis aligned box boundaries.
 		min = corners[0];
 		max = corners[0];
-		for ( auto & corner : makeArrayView( corners + 1, corners + 8 ) )
+
+		for ( auto & corner : makeArrayView( std::next( corners.begin() ), corners.end() ) )
 		{
 			min[0] = std::min( corner[0], min[0] );
 			min[1] = std::min( corner[1], min[1] );

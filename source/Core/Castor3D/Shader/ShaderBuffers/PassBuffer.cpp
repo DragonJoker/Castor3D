@@ -102,10 +102,11 @@ namespace castor3d
 
 			CU_Require( m_passes.size() < m_maxCount );
 			m_passes.emplace_back( &pass );
-			pass.setId( m_passID++ );
+			pass.setId( m_passID );
+			++m_passID;
 			m_connections.emplace_back( pass.onChanged.connect( [this]( Pass const & ppass
-				, PassComponentCombineID CU_UnusedParam( oldCombineID )
-				, PassComponentCombineID CU_UnusedParam( newCombineID ) )
+				, CU_UnusedParam( PassComponentCombineID, oldCombineID )
+				, CU_UnusedParam( PassComponentCombineID, newCombineID ) )
 				{
 					m_dirty.emplace_back( &ppass );
 				} ) );
@@ -150,12 +151,11 @@ namespace castor3d
 
 			for ( auto pass : castor::makeArrayView( dirty.begin(), end ) )
 			{
-				auto it = m_passTypeIndices.emplace( passbuf::hash( *pass )
-					, PassTypeData{ uint16_t( m_passTypeIndices.size() )
+				if ( auto it = m_passTypeIndices.emplace( passbuf::hash( *pass )
+						, PassTypeData{ uint16_t( m_passTypeIndices.size() )
 						, pass->getComponentCombineID()
 						, pass->getTextureCombineID() } ).first;
-
-				if ( it->second.index * VkDeviceSize( m_stride ) > m_data.size() )
+					it->second.index * VkDeviceSize( m_stride ) > m_data.size() )
 				{
 					log::warn << "Material pass [" << pass->getOwner()->getName() << ", " << pass->getIndex() <<"] is out of buffer boundaries, ignoring it." << std::endl;
 				}
@@ -164,9 +164,9 @@ namespace castor3d
 					pass->fillBuffer( *this, it->second.index );
 				}
 
-				for ( auto & buffer : specifics )
+				for ( auto const & [name, buffer] : specifics )
 				{
-					buffer.second.first.update( *buffer.second.second, *pass );
+					buffer.first.update( *buffer.second, *pass );
 				}
 
 				pass->reset();
@@ -177,9 +177,9 @@ namespace castor3d
 			m_buffer.setSecondCount( uint32_t( m_passTypeIndices.size() ) );
 			m_buffer.upload( uploader );
 
-			for ( auto & buffer : specifics )
+			for ( auto & [name, buffer] : specifics )
 			{
-				if ( auto & buf = buffer.second.second )
+				if ( auto & buf = buffer.second )
 				{
 					buf->setCount( passCount );
 					buf->upload( uploader );
@@ -219,9 +219,9 @@ namespace castor3d
 	PassBuffer::PassDataPtr PassBuffer::getData( uint32_t passID )
 	{
 		CU_Require( passID > 0 );
-		auto index = passID - 1;
 
-		if ( index < m_maxCount )
+		if ( auto index = passID - 1;
+			index < m_maxCount )
 		{
 			return PassBuffer::PassDataPtr{ castor::makeArrayView( m_data.data() + ptrdiff_t( m_stride ) * index, m_stride ) };
 		}

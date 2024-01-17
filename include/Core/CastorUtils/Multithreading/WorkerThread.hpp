@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Multithreading/MultithreadingModule.hpp"
 
+#include "CastorUtils/Design/NonCopyable.hpp"
 #include "CastorUtils/Design/Signal.hpp"
 
 #include "CastorUtils/Config/BeginExternHeaderGuard.hpp"
@@ -19,10 +20,11 @@ See LICENSE file in root folder
 namespace castor
 {
 	class WorkerThread
+		: public NonMovable
 	{
 	public:
 		using Job = std::function< void() >;
-		using OnEnded = SignalT< std::function< void( WorkerThread & ) > >;
+		using OnEnded = SignalT< std::function< void( WorkerThread const & ) > >;
 
 	public:
 		/**
@@ -84,7 +86,7 @@ namespace castor
 		void doRun();
 
 	private:
-		std::unique_ptr< std::thread > m_thread;
+		std::thread m_thread;
 		std::mutex m_mutex;
 		std::atomic_bool m_start{ false };
 		std::atomic_bool m_terminate{ false };

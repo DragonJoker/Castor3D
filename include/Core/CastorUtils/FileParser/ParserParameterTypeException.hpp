@@ -23,11 +23,12 @@ namespace castor
 		 *\brief		Constructeur
 		 *\param[in]	expectedType	Le type réel du paramètre.
 		 */
-		inline explicit ParserParameterTypeException( ParameterType givenType
+		explicit ParserParameterTypeException( ParameterType givenType
 			, char const * file
 			, char const * function
 			, uint32_t line )
-			: castor::Exception{ "Wrong parameter type in parser: user gave " + getTypeName( givenType ) + " while parameter base type is " + ParserParameterHelper< ExpectedT >::StringType
+			: castor::Exception{ "Wrong parameter type in parser: user gave " + String{ getTypeName( givenType ) }
+					+ " while parameter base type is " + String{ ParserParameterStringType< ExpectedT > }
 				, file
 				, function
 				, line }

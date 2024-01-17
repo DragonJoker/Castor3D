@@ -2,13 +2,10 @@
 
 #include <thread>
 
-namespace castor
+namespace castor::system
 {
-	namespace System
+	void sleep( uint32_t uiTime )
 	{
-		void sleep( uint32_t uiTime )
-		{
-			std::this_thread::sleep_for( Milliseconds( uiTime ) );
-		}
+		std::this_thread::sleep_for( Milliseconds( uiTime ) );
 	}
 }

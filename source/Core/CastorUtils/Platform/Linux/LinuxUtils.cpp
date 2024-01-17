@@ -12,7 +12,7 @@
 
 namespace castor
 {
-	namespace System
+	namespace system
 	{
 #	if CU_HasXinerama
 

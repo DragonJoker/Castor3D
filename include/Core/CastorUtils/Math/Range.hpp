@@ -29,7 +29,7 @@ namespace castor
 		 *\brief		Constructeur.
 		 *\param[in]	min, max	Les bornes de l'intervalle.
 		 */
-		inline Range( T const & min, T const & max )noexcept
+		Range( T const & min, T const & max )noexcept
 			: m_min{ std::min( min, max ) }
 			, m_max{ std::max( min, max ) }
 		{
@@ -158,7 +158,7 @@ namespace castor
 		 *\~french
 		 *\return		La borne minimale.
 		 */
-		inline T const & getMin()const noexcept
+		T const & getMin()const noexcept
 		{
 			return m_min;
 		}
@@ -168,7 +168,7 @@ namespace castor
 		 *\~french
 		 *\return		La borne maximale.
 		 */
-		inline T const & getMax()const noexcept
+		T const & getMax()const noexcept
 		{
 			return m_max;
 		}

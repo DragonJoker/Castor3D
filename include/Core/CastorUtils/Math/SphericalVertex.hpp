@@ -33,13 +33,6 @@ namespace castor
 		 *\param[in]	vertex	Le vertex à convertir
 		 */
 		CU_API explicit SphericalVertex( Point3f const & vertex );
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		CU_API ~SphericalVertex();
 
 	public:
 		//!\~english	The radius (distance to origin).

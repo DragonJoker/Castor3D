@@ -22,8 +22,9 @@ namespace castor
 	public:
 		LoggerImpl( LoggerImpl const & ) = delete;
 		LoggerImpl & operator=( LoggerImpl const & ) = delete;
-		CU_API LoggerImpl( LoggerImpl && rhs );
-		CU_API LoggerImpl & operator=( LoggerImpl && rhs );
+		CU_API LoggerImpl( LoggerImpl && rhs )noexcept;
+		CU_API LoggerImpl & operator=( LoggerImpl && rhs )noexcept;
+		~LoggerImpl()noexcept = default;
 		/**
 		 *\~english
 		 *\brief		Constructor

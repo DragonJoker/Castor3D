@@ -63,7 +63,7 @@ namespace castor
 		 *\brief		Rapporte une erreur de pool.
 		 *\param[in]	space	L'espace mémoire.
 		 */
-		static inline void report( void * space )
+		static inline void report( void const * space )
 		{
 			std::cerr << "0x" << std::hex << space << " - " << CommonPoolIsFullPoolError::Text << std::endl;
 		}
@@ -107,7 +107,7 @@ namespace castor
 		 *\brief		Rapporte une erreur de pool.
 		 *\param[in]	space	L'espace mémoire.
 		 */
-		static inline void report( void * space )
+		static inline void report( void const * space )
 		{
 			std::cerr << "0x" << std::hex << space << " - " << CommonNotFromRangePoolError::Text << std::endl;
 		}
@@ -129,7 +129,7 @@ namespace castor
 		 *\brief		Rapporte une erreur de pool.
 		 *\param[in]	space	L'espace mémoire.
 		 */
-		static inline void report( void * space )
+		static inline void report( void const * space )
 		{
 			std::cerr << "***   " << MarkedLeakAddressPoolError::Text << ": 0x" << std::hex << space << std::endl;
 		}
@@ -151,7 +151,7 @@ namespace castor
 		 *\brief		Rapporte une erreur de pool.
 		 *\param[in]	space	L'espace mémoire.
 		 */
-		static inline void report( void * space )
+		static inline void report( void const * space )
 		{
 			std::cerr << "0x" << std::hex << space << " - " << MarkedDoubleDeletePoolError::Text << std::endl;
 		}
@@ -173,7 +173,7 @@ namespace castor
 		 *\brief		Rapporte une erreur de pool.
 		 *\param[in]	space	L'espace mémoire.
 		 */
-		static inline void report( void * space )
+		static inline void report( void const * space )
 		{
 			std::cerr << "0x" << std::hex << space << " - " << MarkedNotFromPoolPoolError::Text << std::endl;
 		}
@@ -195,7 +195,7 @@ namespace castor
 		 *\brief		Rapporte une erreur de pool.
 		 *\param[in]	space	L'espace mémoire.
 		 */
-		static inline void report( void * space )
+		static inline void report( void const * space )
 		{
 			std::cerr << "0x" << std::hex << space << " - " << GrowingNotFromRangesPoolError::Text << std::endl;
 		}

@@ -8,18 +8,10 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	/**
-	\todo		Remove accessors, create traits
-	*/
 	class ColourComponent
 	{
 	public:
 		ColourComponent() = default;
-		ColourComponent( ColourComponent const & rhs ) = default;
-		ColourComponent & operator=( ColourComponent const & rhs ) = default;
-		ColourComponent( ColourComponent && rhs ) = default;
-		ColourComponent & operator=( ColourComponent && rhs ) = default;
-		~ColourComponent() = default;
 		/**
 		 *\~english
 		 *\brief		Constructor from HDR component.
@@ -225,7 +217,7 @@ namespace castor
 		 *\~french
 		 *\brief		Opérateur de conversion vers int8_t
 		 */
-		inline int8_t & convertTo( int8_t & v )const
+		int8_t & convertTo( int8_t & v )const
 		{
 			return v = int8_t( value() * 255.0 );
 		}
@@ -235,7 +227,7 @@ namespace castor
 		 *\~french
 		 *\brief		Opérateur de conversion vers uint8_t
 		 */
-		inline uint8_t & convertTo( uint8_t & v )const
+		uint8_t & convertTo( uint8_t & v )const
 		{
 			return v = uint8_t( value() * 255.0 );
 		}
@@ -245,7 +237,7 @@ namespace castor
 		 *\~french
 		 *\brief		Opérateur de conversion vers int16_t
 		 */
-		inline int16_t & convertTo( int16_t & v )const
+		int16_t & convertTo( int16_t & v )const
 		{
 			return v = int16_t( value() * 255.0 );
 		}
@@ -255,7 +247,7 @@ namespace castor
 		 *\~french
 		 *\brief		Opérateur de conversion vers uint16_t
 		 */
-		inline uint16_t & convertTo( uint16_t & v )const
+		uint16_t & convertTo( uint16_t & v )const
 		{
 			return v = uint16_t( value() * 255.0 );
 		}
@@ -265,7 +257,7 @@ namespace castor
 		 *\~french
 		 *\brief		Opérateur de conversion vers int32_t
 		 */
-		inline int32_t & convertTo( int32_t & v )const
+		int32_t & convertTo( int32_t & v )const
 		{
 			return v = int32_t( value() * 255.0 );
 		}
@@ -275,7 +267,7 @@ namespace castor
 		 *\~french
 		 *\brief		Opérateur de conversion vers uint32_t
 		 */
-		inline uint32_t & convertTo( uint32_t & v )const
+		uint32_t & convertTo( uint32_t & v )const
 		{
 			return v = uint32_t( value() * 255.0 );
 		}
@@ -285,7 +277,7 @@ namespace castor
 		 *\~french
 		 *\brief		Opérateur de conversion vers int64_t
 		 */
-		inline int64_t & convertTo( int64_t & v )const
+		int64_t & convertTo( int64_t & v )const
 		{
 			return v = int64_t( value() * 255.0 );
 		}
@@ -295,7 +287,7 @@ namespace castor
 		 *\~french
 		 *\brief		Opérateur de conversion vers uint64_t
 		 */
-		inline uint64_t & convertTo( uint64_t & v )const
+		uint64_t & convertTo( uint64_t & v )const
 		{
 			return v = uint64_t( value() * 255.0 );
 		}
@@ -305,7 +297,7 @@ namespace castor
 		 *\~french
 		 *\brief		Opérateur de conversion vers float
 		 */
-		inline float & convertTo( float & v )const
+		float & convertTo( float & v )const
 		{
 			return v = value();
 		}
@@ -315,7 +307,7 @@ namespace castor
 		 *\~french
 		 *\brief		Opérateur de conversion vers float
 		 */
-		inline double & convertTo( double & v )const
+		double & convertTo( double & v )const
 		{
 			return v = value();
 		}
@@ -325,7 +317,7 @@ namespace castor
 		 *\~french
 		 *\brief		Opérateur de conversion vers float
 		 */
-		inline long double & convertTo( long double & v )const
+		long double & convertTo( long double & v )const
 		{
 			return v = value();
 		}
@@ -341,7 +333,7 @@ namespace castor
 		 *\param[in]	rhs	La valeur à ajouter
 		 *\return		Resultat de this + rhs
 		 */
-		ColourComponent & operator+=( ColourComponent && rhs )
+		ColourComponent & operator+=( ColourComponent const & rhs )
 		{
 			m_component += rhs.value();
 			doClamp();
@@ -359,7 +351,7 @@ namespace castor
 		 *\param[in]	rhs	La valeur à soustraire
 		 *\return		Resultat de this - rhs
 		 */
-		ColourComponent & operator-=( ColourComponent && rhs )
+		ColourComponent & operator-=( ColourComponent const & rhs )
 		{
 			m_component -= rhs.value();
 			doClamp();
@@ -377,7 +369,7 @@ namespace castor
 		 *\param[in]	rhs	La valeur à multiplier
 		 *\return		Resultat de this * rhs
 		 */
-		ColourComponent & operator*=( ColourComponent && rhs )
+		ColourComponent & operator*=( ColourComponent const & rhs )
 		{
 			m_component *= rhs.value();
 			doClamp();
@@ -395,7 +387,7 @@ namespace castor
 		 *\param[in]	rhs	La valeur à diviser
 		 *\return		Resultat de this / rhs
 		 */
-		ColourComponent & operator/=( ColourComponent && rhs )
+		ColourComponent & operator/=( ColourComponent const & rhs )
 		{
 			m_component /= rhs.value();
 			doClamp();
@@ -412,7 +404,7 @@ namespace castor
 		 *\return		Resultat de this + rhs
 		 */
 		template< typename T >
-		ColourComponent & operator+=( T && rhs )
+		ColourComponent & operator+=( T const & rhs )
 		{
 			float value = 0;
 			ColourComponent component( value );
@@ -432,7 +424,7 @@ namespace castor
 		 *\return		Resultat de this - rhs
 		 */
 		template< typename T >
-		ColourComponent & operator-=( T && rhs )
+		ColourComponent & operator-=( T const & rhs )
 		{
 			float value = 0;
 			ColourComponent component( value );
@@ -452,7 +444,7 @@ namespace castor
 		 *\return		Resultat de this * rhs
 		 */
 		template< typename T >
-		ColourComponent & operator*=( T && rhs )
+		ColourComponent & operator*=( T const & rhs )
 		{
 			float value = 0;
 			ColourComponent component( value );
@@ -472,7 +464,7 @@ namespace castor
 		 *\return		Resultat de this / rhs
 		 */
 		template< typename T >
-		ColourComponent & operator/=( T && rhs )
+		ColourComponent & operator/=( T const & rhs )
 		{
 			float value = 0;
 			ColourComponent component( value );
@@ -489,7 +481,7 @@ namespace castor
 		 *\brief		Opérateur de conversion implicite
 		 *\return		La valeur
 		 */
-		inline operator float()const
+		operator float()const
 		{
 			return m_component;
 		}
@@ -501,7 +493,7 @@ namespace castor
 		 *\brief		Récupère la valeur de la composante
 		 *\return		La valeur
 		 */
-		inline float const & value()const
+		float const & value()const
 		{
 			return m_component;
 		}
@@ -513,7 +505,7 @@ namespace castor
 		 *\brief		Récupère la valeur de la composante
 		 *\return		La valeur
 		 */
-		inline float & value()
+		float & value()
 		{
 			return m_component;
 		}

@@ -9,10 +9,6 @@ namespace castor
 		m_savedTime = doGetElapsed();
 	}
 
-	PreciseTimer::~PreciseTimer()
-	{
-	}
-
 	Nanoseconds PreciseTimer::getElapsed()
 	{
 		auto current = doGetElapsed();

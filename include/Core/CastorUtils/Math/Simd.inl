@@ -1,3 +1,5 @@
+#if CU_UseSSE2
+
 namespace castor
 {
 	inline Float4::Float4( float const * rhs )
@@ -63,3 +65,5 @@ namespace castor
 		return result /= rhs;
 	}
 }
+
+#endif

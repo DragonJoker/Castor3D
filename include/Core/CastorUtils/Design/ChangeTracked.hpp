@@ -14,48 +14,38 @@ namespace castor
 	class ChangeTrackedT
 	{
 	public:
-		ChangeTrackedT()noexcept
-			: m_value{}
-			, m_dirty{ true }
-		{
-		}
+		ChangeTrackedT()noexcept = default;
+		~ChangeTrackedT()noexcept = default;
 
 		explicit ChangeTrackedT( std::function< void() > callback )noexcept
-			: m_value{}
-			, m_dirty{ true }
-			, m_callback{ callback }
+			: m_callback{ std::move( callback ) }
 		{
 		}
 
 		explicit ChangeTrackedT( ValueT const & rhs )noexcept
 			: m_value{ rhs }
-			, m_dirty{ true }
 		{
 		}
 
 		explicit ChangeTrackedT( ValueT const & rhs
 			, std::function< void() > callback )noexcept
 			: m_value{ rhs }
-			, m_dirty{ true }
-			, m_callback{ callback }
+			, m_callback{ std::move( callback ) }
 		{
 		}
 
 		ChangeTrackedT( ChangeTrackedT && rhs )noexcept
 			: m_value{ std::move( rhs.m_value ) }
-			, m_callback{ rhs.m_callback }
+			, m_callback{ std::move( rhs.m_callback ) }
 		{
 			this->doCopy( m_dirty, rhs.m_dirty );
 		}
 
 		ChangeTrackedT( ChangeTrackedT const & rhs )noexcept
 			: m_value{ rhs.m_value }
-			, m_dirty{ true }
 			, m_callback{ rhs.m_callback }
 		{
 		}
-
-		~ChangeTrackedT() = default;
 
 		ChangeTrackedT & operator=( ValueT const & rhs )noexcept
 		{
@@ -142,7 +132,7 @@ namespace castor
 
 	private:
 		void doCopy( std::atomic_bool & lhs
-			, std::atomic_bool const & rhs )
+			, std::atomic_bool const & rhs )const
 		{
 			lhs = rhs.load();
 
@@ -153,7 +143,7 @@ namespace castor
 		}
 
 		void doCopy( bool & lhs
-			, bool const & rhs )
+			, bool const & rhs )const
 		{
 			lhs = rhs;
 
@@ -174,7 +164,7 @@ namespace castor
 		}
 
 	private:
-		ValueT m_value;
+		ValueT m_value{};
 		ControlT m_dirty{ true };
 		std::function< void() > m_callback;
 	};

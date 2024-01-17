@@ -47,7 +47,8 @@ namespace castor
 	template< typename T >
 	T * alignedAlloc( size_t alignment, size_t size )
 	{
-		return reinterpret_cast< T * >( alignedAlloc( alignment, size ) );
+		using TPtr = T *;
+		return TPtr( alignedAlloc( alignment, size ) );
 	}
 
 	template< int A >

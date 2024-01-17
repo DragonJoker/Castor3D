@@ -60,7 +60,7 @@ namespace castor
 		, uint8_t const * srcBuffer
 		, uint8_t * dstBuffer
 		, uint32_t level
-		, uint32_t CU_UnusedParam( levelSize ) )
+		, CU_UnusedParam( uint32_t, levelSize ) )
 	{
 		auto pixelSize = getBytesPerPixel( PFT );
 		auto srcLevelExtent = ashes::getSubresourceDimensions( fullExtent, level - 1u, VkFormat( PFT ) );

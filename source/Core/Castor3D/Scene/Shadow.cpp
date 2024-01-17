@@ -6,7 +6,7 @@
 #include "Castor3D/Scene/SceneFileParserData.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
 
-#include <CastorUtils/FileParser/ParserParameter.hpp>
+#include <CastorUtils/FileParser/FileParser.hpp>
 
 CU_ImplementSmartPtr( castor3d, ShadowConfig )
 

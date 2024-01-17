@@ -37,7 +37,7 @@ namespace castor
 		{
 			return ( ( !fullName.empty()
 					? writeRawText( file, cuT( "\n" ) + tabs + fullName )
-					: 1ull ) > 0 )
+					: 1ULL ) > 0 )
 				&& ( writeRawText( file, cuT( "\n" ) + tabs + cuT( "{\n" ) ) );
 		}
 	}
@@ -70,7 +70,7 @@ namespace castor
 	{
 	}
 
-	TextWriterBase::WriterBlock::WriterBlock( WriterBlock && rhs )
+	TextWriterBase::WriterBlock::WriterBlock( WriterBlock && rhs )noexcept
 		: m_writer{ rhs.m_writer }
 		, m_name{ rhs.m_name }
 		, m_file{ rhs.m_file }
@@ -79,7 +79,7 @@ namespace castor
 		rhs.m_writer = nullptr;
 	}
 
-	TextWriterBase::WriterBlock & TextWriterBase::WriterBlock::operator=( WriterBlock && rhs )
+	TextWriterBase::WriterBlock & TextWriterBase::WriterBlock::operator=( WriterBlock && rhs )noexcept
 	{
 		m_writer = rhs.m_writer;
 		m_name = rhs.m_name;
@@ -98,12 +98,21 @@ namespace castor
 		return m_writer;
 	}
 
-	TextWriterBase::WriterBlock::~WriterBlock()
+	TextWriterBase::WriterBlock::~WriterBlock()noexcept
 	{
 		if ( m_writer )
 		{
 			m_writer->m_indent--;
-			m_result = txtwrite::writeRawText( m_file, m_writer->tabs() + cuT( "}\n" ) );
+
+			try
+			{
+				m_result = txtwrite::writeRawText( m_file, m_writer->tabs() + cuT( "}\n" ) );
+			}
+			catch ( ... )
+			{
+				// Nothing to do here...
+			}
+
 			m_writer->checkError( m_result, ( "footer " + m_name ).c_str() );
 		}
 	}

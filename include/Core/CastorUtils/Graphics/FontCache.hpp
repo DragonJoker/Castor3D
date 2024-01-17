@@ -43,12 +43,12 @@ namespace castor
 
 	public:
 		CU_API explicit ResourceCacheT( LoggerInstance & logger );
-		CU_API ~ResourceCacheT()override = default;
+		CU_API ~ResourceCacheT()noexcept override = default;
 
 		CU_API Path getRealPath( Path path )const;
 
 	private:
-		using PathNameMap = std::unordered_map< String, Path >;
+		using PathNameMap = std::unordered_map< String, Path, StringHash, std::equal_to<> >;
 		//!\~english	The font files paths sorted by file_name.file_extension.
 		//!\~french		Les fichiers des polices, triés par file_name.file_extension.
 		PathNameMap m_paths;

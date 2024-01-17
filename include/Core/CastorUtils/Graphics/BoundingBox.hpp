@@ -12,17 +12,7 @@ namespace castor
 		: public BoundingContainer3D
 	{
 	public:
-		CU_API BoundingBox( BoundingBox const & rhs ) = default;
-		CU_API BoundingBox( BoundingBox && rhs ) = default;
-		CU_API BoundingBox & operator=( BoundingBox const & rhs ) = default;
-		CU_API BoundingBox & operator=( BoundingBox && rhs ) = default;
-		/**
-		 *\~english
-		 *\brief		Constructor.
-		 *\~french
-		 *\brief		Constructeur.
-		 */
-		CU_API BoundingBox();
+		CU_API BoundingBox() = default;
 		/**
 		 *\~english
 		 *\brief		Constructor from min and max extents.
@@ -108,7 +98,7 @@ namespace castor
 		 *\~french
 		 *\return		Le point minimal.
 		 */
-		inline Point3f getMin()const
+		Point3f getMin()const
 		{
 			return getCenter() - ( m_dimensions / 2.0f );
 		}
@@ -118,7 +108,7 @@ namespace castor
 		 *\~french
 		 *\return		Le point maximal.
 		 */
-		inline Point3f getMax()const
+		Point3f getMax()const
 		{
 			return getCenter() + ( m_dimensions / 2.0f );
 		}
@@ -128,7 +118,7 @@ namespace castor
 		 *\~french
 		 *\return		Les dimensions.
 		 */
-		inline Point3f const & getDimensions()const
+		Point3f const & getDimensions()const
 		{
 			return m_dimensions;
 		}
@@ -136,7 +126,7 @@ namespace castor
 	private:
 		//!\~english	The dimensions of the bounding box.
 		//!\~french		Les dimensions de la bounding box.
-		Point3f m_dimensions;
+		Point3f m_dimensions{};
 	};
 
 	inline bool operator==( BoundingBox const & lhs

@@ -174,7 +174,7 @@ See LICENSE file in root folder
 	CU_DeclareList( Matrix##count##x##count##name, Matrix##count##x##count##name )
 
 #if !defined CU_UnusedParam
-#	define CU_UnusedParam( x )
+#	define CU_UnusedParam( t, x ) [[maybe_unused]] t x
 #endif
 
 #define CU_EnumBounds( EnumName, EnumMin )\

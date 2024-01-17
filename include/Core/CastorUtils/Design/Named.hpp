@@ -20,53 +20,10 @@ namespace castor
 		 *\brief		Constructeur
 		 *\param[in]	name	Le nom
 		 */
-		explicit NamedBaseT( T const & name )
-			: m_name( name )
+		explicit NamedBaseT( T name )noexcept
+			: m_name{ std::move( name ) }
 		{
 		}
-		/**
-		 *\~english
-		 *\brief		Copy Constructor
-		 *\param[in]	named	The object to copy
-		 *\~french
-		 *\brief		Constructeur par copie
-		 *\param[in]	named	L'objet à copier
-		 */
-		NamedBaseT( NamedBaseT const & named ) = default;
-		/**
-		 *\~english
-		 *\brief		Move Constructor
-		 *\param[in]	named	The object to move
-		 *\~french
-		 *\brief		Constructeur par déplacement
-		 *\param[in]	named	L'objet à déplacer
-		 */
-		NamedBaseT( NamedBaseT && named ) = default;
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		~NamedBaseT() = default;
-		/**
-		 *\~english
-		 *\brief		Copy Constructor
-		 *\param[in]	named	The object to copy
-		 *\~french
-		 *\brief		Constructeur par copie
-		 *\param[in]	named	L'objet à copier
-		 */
-		NamedBaseT & operator=( NamedBaseT const & named ) = default;
-		/**
-		 *\~english
-		 *\brief		Move Constructor
-		 *\param[in]	named	The object to move
-		 *\~french
-		 *\brief		Constructeur par déplacement
-		 *\param[in]	named	L'objet à déplacer
-		 */
-		NamedBaseT & operator=( NamedBaseT && named ) = default;
 		/**
 		 *\~english
 		 *\brief		Retrieves the name
@@ -75,14 +32,14 @@ namespace castor
 		 *\brief		Récupère le nom
 		 *\return		Le nom
 		 */
-		T const & getName()const
+		T const & getName()const noexcept
 		{
 			return m_name;
 		}
 
-		void rename( T const & name )
+		void rename( T name )noexcept
 		{
-			m_name = name;
+			m_name = std::move( name );
 		}
 
 	protected:

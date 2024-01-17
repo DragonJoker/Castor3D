@@ -4,6 +4,7 @@ See LICENSE file in root folder
 #ifndef ___CU_OBJECT_POOL_H___
 #define ___CU_OBJECT_POOL_H___
 
+#include "CastorUtils/Design/NonCopyable.hpp"
 #include "CastorUtils/Pool/MemoryDataTyper.hpp"
 #include "CastorUtils/Pool/FixedGrowingSizeMarkedMemoryData.hpp"
 #include "CastorUtils/Pool/FixedGrowingSizeMemoryData.hpp"
@@ -22,7 +23,7 @@ namespace castor
 		}
 
 		template< typename ... TParams >
-		static inline void destroy( Object * space )
+		static inline void destroy( Object * space )noexcept
 		{
 			space->~Object();
 		}
@@ -32,7 +33,12 @@ namespace castor
 	class ObjectPool
 		: private MemoryDataTyper< Object, MemDataType >::Type
 	{
-		typedef typename MemoryDataTyper< Object, MemDataType >::Type MemoryData;
+		using MemoryData = typename MemoryDataTyper< Object, MemDataType >::Type;
+
+		ObjectPool( ObjectPool const & ) = delete;
+		ObjectPool( ObjectPool && )noexcept = delete;
+		ObjectPool & operator=( ObjectPool const & ) = delete;
+		ObjectPool & operator=( ObjectPool && )noexcept = delete;
 
 	public:
 		/**
@@ -130,7 +136,12 @@ namespace castor
 	class AlignedObjectPool
 		: private AlignedMemoryDataTyper< Object, Align, MemDataType >::Type
 	{
-		typedef typename AlignedMemoryDataTyper< Object, Align, MemDataType >::Type MemoryData;
+		using MemoryData = typename AlignedMemoryDataTyper< Object, Align, MemDataType >::Type;
+
+		AlignedObjectPool( AlignedObjectPool const & ) = delete;
+		AlignedObjectPool( AlignedObjectPool && )noexcept = delete;
+		AlignedObjectPool & operator=( AlignedObjectPool const & ) = delete;
+		AlignedObjectPool & operator=( AlignedObjectPool && )noexcept = delete;
 
 	public:
 		/**

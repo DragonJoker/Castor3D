@@ -12,17 +12,7 @@ namespace castor
 		: public BoundingContainer3D
 	{
 	public:
-		CU_API BoundingSphere( BoundingSphere const & rhs ) = default;
-		CU_API BoundingSphere( BoundingSphere && rhs ) = default;
-		CU_API BoundingSphere & operator=( BoundingSphere const & rhs ) = default;
-		CU_API BoundingSphere & operator=( BoundingSphere && rhs ) = default;
-		/**
-		 *\~english
-		 *\brief		Default constructor.
-		 *\~french
-		 *\brief		Constructeur par défaut.
-		 */
-		CU_API BoundingSphere();
+		CU_API BoundingSphere() = default;
 		/**
 		 *\~english
 		 *\brief		Specified constructor.
@@ -91,7 +81,7 @@ namespace castor
 		 *\~french
 		 *\return		Le rayon.
 		 */
-		inline float getRadius()const
+		float getRadius()const
 		{
 			return m_radius;
 		}
@@ -99,7 +89,7 @@ namespace castor
 	private:
 		//!\~english	The radius of the sphere.
 		//!\~french		Le rayon de la sphère.
-		float m_radius;
+		float m_radius{};
 	};
 
 	inline bool operator==( BoundingSphere const & lhs

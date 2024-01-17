@@ -35,6 +35,11 @@ namespace castor
 		using ElementCleanerT = typename ElementCacheTraitsT::ElementCleanerT;
 		using ElementMergerT = typename ElementCacheTraitsT::ElementMergerT;
 
+		ResourceCacheBaseT( ResourceCacheBaseT const & ) = delete;
+		ResourceCacheBaseT & operator=( ResourceCacheBaseT const & ) = delete;
+		ResourceCacheBaseT( ResourceCacheBaseT && )noexcept = delete;
+		ResourceCacheBaseT & operator=( ResourceCacheBaseT && )noexcept = delete;
+
 	protected:
 		/**
 		*name
@@ -52,7 +57,7 @@ namespace castor
 		{
 		}
 
-		virtual ~ResourceCacheBaseT() = default;
+		virtual ~ResourceCacheBaseT()noexcept = default;
 		/**@}*/
 
 	public:
@@ -372,9 +377,9 @@ namespace castor
 			, ElementKeyT const & newName )
 		{
 			auto lock( castor::makeUniqueLock( *this ) );
-			auto newIt = m_resources.find( newName );
 
-			if ( newIt != m_resources.end() )
+			if ( auto newIt = m_resources.find( newName );
+				newIt != m_resources.end() )
 			{
 				this->reportDuplicate( newName );
 				return;
@@ -778,9 +783,9 @@ namespace castor
 			, bool cleanup = false )
 		{
 			ElementPtrT result;
-			auto it = m_resources.find( name );
 
-			if ( it != m_resources.end() )
+			if ( auto it = m_resources.find( name );
+				it != m_resources.end() )
 			{
 				result = std::move( it->second );
 
@@ -798,9 +803,9 @@ namespace castor
 		ElementObsT doTryFindNoLock( ElementKeyT const & name )const
 		{
 			ElementObsT result{};
-			auto it = m_resources.find( name );
-			
-			if ( it != m_resources.end() )
+
+			if ( auto it = m_resources.find( name );
+				it != m_resources.end() )
 			{
 				ElementPtrT & element = it->second;
 				result = ElementCacheTraitsT::makeElementObs( element );

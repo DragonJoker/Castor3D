@@ -12,7 +12,7 @@ namespace castor
 {
 	//*****************************************************************************************
 
-	PixelFormat getFormatByName( String const & formatName )
+	PixelFormat getFormatByName( StringView formatName )
 	{
 		PixelFormat result = PixelFormat::eCount;
 
@@ -645,8 +645,10 @@ namespace castor
 		}
 	}
 
-	namespace
+	namespace pxf
 	{
+		using PFNDecompressBlock = bool( * )( uint8_t const * data, uint8_t * pixelBuffer );
+
 		template< PixelFormat PFSrc >
 		void compressBufferT( PxBufferConvertOptions const * options
 			, std::atomic_bool const * interrupt
@@ -760,6 +762,56 @@ namespace castor
 				}
 			}
 		}
+
+		template< typename DecompressBlockT >
+		bool decompressRowBlock( uint8_t const * data
+			, uint32_t width
+			, uint32_t height
+			, uint32_t pixelSize
+			, uint32_t y
+			, uint32_t widthInBlocks
+			, std::array< uint8_t, 16 * 4u > & blockBuffer
+			, uint8_t * pixelBuffer
+			, DecompressBlockT decompressBlock )
+		{
+			uint32_t newRows = ( y * 4 + 3 >= height )
+				? height - y * 4u
+				: newRows = 4u;
+
+			for ( uint32_t x = 0u; x < widthInBlocks; ++x )
+			{
+				if ( !decompressBlock( data, blockBuffer.data() ) )
+				{
+					return false;
+				}
+
+				uint32_t blockSize = 8u;
+				uint8_t * pixelp = pixelBuffer
+					+ y * 4u * width * pixelSize
+					+ x * 4u * pixelSize;
+				uint32_t newColumns;
+
+				if ( x * 4 + 3 >= width )
+				{
+					newColumns = width - x * 4;
+				}
+				else
+				{
+					newColumns = 4u;
+				}
+
+				for ( uint32_t row = 0u; row < newRows; ++row )
+				{
+					memcpy( pixelp + row * width * pixelSize
+						, blockBuffer.data() + row * 4u * pixelSize
+						, newColumns * pixelSize );
+				}
+
+				data += blockSize;
+			}
+
+			return true;
+		}
 	}
 
 	void compressBuffer( PxBufferConvertOptions const * options
@@ -777,7 +829,7 @@ namespace castor
 		{
 #define CUPF_ENUM_VALUE_COLOR( name, value, components, alpha )\
 		case PixelFormat::e##name:\
-			compressBufferT< PixelFormat::e##name >( options\
+			pxf::compressBufferT< PixelFormat::e##name >( options\
 				, interrupt\
 				, srcDimensions\
 				, dstDimensions\
@@ -792,16 +844,15 @@ namespace castor
 		}
 	}
 
-	PxBufferBaseUPtr decompressBuffer( PxBufferBaseRPtr src )
+	PxBufferBaseUPtr decompressBuffer( PxBufferBase const & src )
 	{
-		auto result = src->clone();
+		auto result = src.clone();
 
-		if ( isCompressed( src->getFormat() ) )
+		if ( isCompressed( src.getFormat() ) )
 		{
-			using PFNDecompressBlock = bool( * )( uint8_t const * data, uint8_t * pixelBuffer );
-			PFNDecompressBlock decompressBlock = nullptr;
+			pxf::PFNDecompressBlock decompressBlock = nullptr;
 
-			switch ( src->getFormat() )
+			switch ( src.getFormat() )
 			{
 			case PixelFormat::eBC1_RGB_UNORM_BLOCK:
 			case PixelFormat::eBC1_RGB_SRGB_BLOCK:
@@ -820,62 +871,22 @@ namespace castor
 				return result;
 			}
 
-			result = PxBufferBase::create( src->getDimensions()
+			result = PxBufferBase::create( src.getDimensions()
 				, PixelFormat::eR8G8B8A8_UNORM );
 			uint8_t * pixelBuffer = result->getPtr();
-			uint8_t blockBuffer[16 * 4u];
-			uint8_t const * data = src->getConstPtr();
-			uint32_t pixelSize = uint32_t( getBytesPerPixel( result->getFormat() ) );
-			uint32_t height = src->getHeight();
-			uint32_t width = src->getWidth();
+			std::array< uint8_t, 16 * 4u > blockBuffer;
+			uint8_t const * data = src.getConstPtr();
+			auto pixelSize = uint32_t( getBytesPerPixel( result->getFormat() ) );
+			uint32_t height = src.getHeight();
+			uint32_t width = src.getWidth();
 			uint32_t heightInBlocks = height / 4u;
 			uint32_t widthInBlocks = width / 4u;
 
 			for ( uint32_t y = 0u; y < heightInBlocks; ++y )
 			{
-				uint32_t newRows;
-
-				if ( y * 4 + 3 >= height )
+				if ( !pxf::decompressRowBlock( data, width, height, pixelSize, y, widthInBlocks, blockBuffer, pixelBuffer, decompressBlock ) )
 				{
-					newRows = height - y * 4u;
-				}
-				else
-				{
-					newRows = 4u;
-				}
-
-				for ( uint32_t x = 0u; x < widthInBlocks; ++x )
-				{
-					bool r = decompressBlock( data, blockBuffer );
-
-					if ( !r )
-					{
-						return src->clone();
-					}
-
-					uint32_t blockSize = 8u;
-					uint8_t * pixelp = pixelBuffer +
-						y * 4u * width * pixelSize +
-						x * 4u * pixelSize;
-					uint32_t newColumns;
-
-					if ( x * 4 + 3 >= width )
-					{
-						newColumns = width - x * 4;
-					}
-					else
-					{
-						newColumns = 4u;
-					}
-
-					for ( uint32_t row = 0u; row < newRows; ++row )
-					{
-						memcpy( pixelp + row * width * pixelSize
-							, blockBuffer + row * 4u * pixelSize
-							, newColumns * pixelSize );
-					}
-
-					data += blockSize;
+					return src.clone();
 				}
 			}
 		}

@@ -19,8 +19,7 @@ namespace castor
 		: public PxBufferBase
 	{
 	public:
-		typedef Pixel< PF > MyPixel;
-
+		using MyPixel = Pixel< PF >;
 		using iterator = PixelIterator< PF >;
 		using const_iterator = ConstPixelIterator< PF >;
 
@@ -58,7 +57,7 @@ namespace castor
 		 *\param[in]	buffer			Buffer de données
 		 *\param[in]	bufferFormat	Format des pixels du buffer de données
 		 */
-		explicit inline PxBuffer( Size const & size
+		explicit PxBuffer( Size const & size
 			, uint8_t const * buffer = nullptr
 			, PixelFormat bufferFormat = PixelFormat::eR8G8B8A8_UNORM )
 			: PxBuffer{ size, 1u, 1u, buffer, bufferFormat }
@@ -73,18 +72,22 @@ namespace castor
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline MyPixel at( uint32_t x, uint32_t y )const;
+		MyPixel at( uint32_t x, uint32_t y )const;
 
-		inline iterator begin()const
+		iterator pixelsBegin()const noexcept
 		{
 			return iterator{ m_buffer, m_buffer.begin() };
 		}
 
-		inline iterator end()const
+		iterator pixelsEnd()const noexcept
 		{
 			return iterator{ m_buffer, m_buffer.end() };
 		}
 		/**@}*/
+
+	private:
+		using PxBufferBase::begin;
+		using PxBufferBase::end;
 	};
 }
 

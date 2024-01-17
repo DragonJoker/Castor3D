@@ -110,7 +110,7 @@ namespace castor
 	}
 
 	void ResourceCacheT< Material, String, MaterialCacheTraits >::PassDataBuffers::declareShaderBuffers( sdw::ShaderWriter & writer
-		, std::map< std::string, shader::BufferBaseUPtr > & buffers
+		, std::map< std::string, shader::BufferBaseUPtr, std::less<> > & buffers
 		, uint32_t & binding
 		, uint32_t set )const
 	{
@@ -283,7 +283,7 @@ namespace castor
 	}
 
 	void ResourceCacheT< Material, String, MaterialCacheTraits >::declareSpecificsShaderBuffers( sdw::ShaderWriter & writer
-		, std::map< std::string, shader::BufferBaseUPtr > & buffers
+		, std::map< std::string, shader::BufferBaseUPtr, std::less<> > & buffers
 		, uint32_t & binding
 		, uint32_t set )const
 	{

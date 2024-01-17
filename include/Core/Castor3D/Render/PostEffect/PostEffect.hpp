@@ -66,7 +66,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API virtual ~PostEffect();
+		C3D_API virtual ~PostEffect()noexcept = default;
 		/**
 		 *\~english
 		 *\brief		Writes the effect into a text file.
@@ -243,7 +243,7 @@ namespace castor3d
 		crg::FramePassGroup & m_graph;
 		uint32_t m_passesCount{ 1u };
 		Kind m_kind{ Kind::eHDR };
-		bool m_enabled;
+		bool m_enabled{ true };
 		uint32_t m_passIndex{};
 		Texture const * m_source{};
 	};

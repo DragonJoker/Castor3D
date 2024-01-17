@@ -53,7 +53,7 @@ namespace castor
 			}
 		}
 
-		~Win32Console()override
+		~Win32Console()noexcept override
 		{
 			if ( m_allocated )
 			{
@@ -118,10 +118,6 @@ namespace castor
 	{
 		std::ios::sync_with_stdio( false );
 		m_console = std::make_unique< Win32Console >( showConsole );
-	}
-
-	ProgramConsole::~ProgramConsole()
-	{
 	}
 
 	void ProgramConsole::beginLog( LogType logLevel )

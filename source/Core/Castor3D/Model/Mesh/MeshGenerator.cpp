@@ -19,10 +19,6 @@ namespace castor3d
 	{
 	}
 
-	MeshGenerator::~MeshGenerator()
-	{
-	}
-
 	MeshGeneratorUPtr MeshGenerator::create()
 	{
 		return castor::makeUnique< MeshGenerator >( cuT( "custom" ) );
@@ -48,7 +44,7 @@ namespace castor3d
 		}
 	}
 
-	void MeshGenerator::doGenerate( Mesh & CU_UnusedParam( mesh ), Parameters const &  CU_UnusedParam( parameters ) )
+	void MeshGenerator::doGenerate( CU_UnusedParam( Mesh &, mesh ), CU_UnusedParam( Parameters const &, parameters ) )
 	{
 	}
 }

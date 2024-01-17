@@ -56,12 +56,7 @@ namespace castor
 		using DeviceSize = uint64_t;
 		using Range = castor::Range< DeviceSize >;
 
-		CU_API ImageLayout( ImageLayout const & rhs ) = default;
-		CU_API ImageLayout( ImageLayout && rhs ) = default;
-		CU_API ImageLayout & operator=( ImageLayout const & rhs ) = default;
-		CU_API ImageLayout & operator=( ImageLayout && rhs ) = default;
-
-		inline ImageLayout( Type type = e2D
+		ImageLayout( Type type = e2D
 			, PixelFormat format = PixelFormat::eR8G8B8A8_UNORM
 			, Point3ui extent = { 1u, 1u, 1u }
 			, uint32_t baseLayer = 0u
@@ -80,12 +75,12 @@ namespace castor
 		{
 		}
 
-		inline explicit ImageLayout( PxBufferBase const & buffer )
+		explicit ImageLayout( PxBufferBase const & buffer )
 			: ImageLayout{ getType( buffer ), buffer }
 		{
 		}
 
-		inline explicit ImageLayout( Type type
+		explicit ImageLayout( Type type
 			, PxBufferBase const & buffer )
 			: ImageLayout{ type
 				, buffer.getFormat()
@@ -98,123 +93,119 @@ namespace castor
 		{
 		}
 
-		static inline Type getType( PxBufferBase const & buffer )
+		static Type getType( PxBufferBase const & buffer )
 		{
 			return ( buffer.getLayers() > 1
-				? ( buffer.getHeight() <= 1 && buffer.getWidth() > 1
-					? e1DArray
-					: e2DArray )
-				: ( buffer.getHeight() <= 1 && buffer.getWidth() > 1
-					? e1D
-					: e2D ) );
+				? ( buffer.getHeight() <= 1 && buffer.getWidth() > 1 ? e1DArray : e2DArray )
+				: ( buffer.getHeight() <= 1 && buffer.getWidth() > 1 ? e1D : e2D ) );
 		}
 
-		inline Size dimensions()const
+		Size dimensions()const noexcept
 		{
 			return { extent->x, extent->y };
 		}
 
-		inline Size dimensions( uint32_t level )const
+		Size dimensions( uint32_t level )const noexcept
 		{
 			return dimensions() >> level;
 		}
 
-		inline uint32_t depthLayers()const
+		uint32_t depthLayers()const noexcept
 		{
 			return std::max( extent->z, layers );
 		}
 
-		CU_API Range range()const;
-		CU_API Range slice( uint32_t index )const;
-		CU_API Range sliceMip( uint32_t index, uint32_t level )const;
+		CU_API Range range()const noexcept;
+		CU_API Range slice( uint32_t index )const noexcept;
+		CU_API Range sliceMip( uint32_t index, uint32_t level )const noexcept;
 
-		CU_API DeviceSize size()const;
-		CU_API DeviceSize sliceSize()const;
-		CU_API DeviceSize sliceMipSize( uint32_t level )const;
+		CU_API DeviceSize size()const noexcept;
+		CU_API DeviceSize sliceSize()const noexcept;
+		CU_API DeviceSize sliceMipSize( uint32_t level )const noexcept;
 
-		CU_API DeviceSize offset()const;
-		CU_API DeviceSize sliceOffset( uint32_t index )const;
-		CU_API DeviceSize sliceMipOffset( uint32_t index, uint32_t level )const;
+		CU_API DeviceSize offset()const noexcept;
+		CU_API DeviceSize sliceOffset( uint32_t index )const noexcept;
+		CU_API DeviceSize sliceMipOffset( uint32_t index, uint32_t level )const noexcept;
 
-		CU_API Buffer buffer( PxBufferBase & buffer )const;
-		CU_API Buffer sliceBuffer( PxBufferBase & buffer, uint32_t index )const;
-		CU_API Buffer sliceMipBuffer( PxBufferBase & buffer, uint32_t index, uint32_t level )const;
+		CU_API Buffer buffer( PxBufferBase & buffer )const noexcept;
+		CU_API Buffer sliceBuffer( PxBufferBase & buffer, uint32_t index )const noexcept;
+		CU_API Buffer sliceMipBuffer( PxBufferBase & buffer, uint32_t index, uint32_t level )const noexcept;
 
-		CU_API ConstBuffer buffer( PxBufferBase const & buffer )const;
-		CU_API ConstBuffer sliceBuffer( PxBufferBase const & buffer, uint32_t index )const;
-		CU_API ConstBuffer sliceMipBuffer( PxBufferBase const & buffer, uint32_t index, uint32_t level )const;
+		CU_API ConstBuffer buffer( PxBufferBase const & buffer )const noexcept;
+		CU_API ConstBuffer sliceBuffer( PxBufferBase const & buffer, uint32_t index )const noexcept;
+		CU_API ConstBuffer sliceMipBuffer( PxBufferBase const & buffer, uint32_t index, uint32_t level )const noexcept;
 
-		CU_API bool hasBuffer( PxBufferBase const & buffer )const;
-		CU_API bool hasSliceBuffer( PxBufferBase const & buffer, uint32_t index )const;
-		CU_API bool hasSliceMipBuffer( PxBufferBase const & buffer, uint32_t index, uint32_t level )const;
+		CU_API bool hasBuffer( PxBufferBase const & buffer )const noexcept;
+		CU_API bool hasSliceBuffer( PxBufferBase const & buffer, uint32_t index )const noexcept;
+		CU_API bool hasSliceMipBuffer( PxBufferBase const & buffer, uint32_t index, uint32_t level )const noexcept;
 
-		Range layer( uint32_t index )const
+		Range layer( uint32_t index )const noexcept
 		{
 			return slice( index );
 		}
 
 		Range layerMip( uint32_t index
-			, uint32_t level )const
+			, uint32_t level )const noexcept
 		{
 			return sliceMip( index, level );
 		}
 
-		DeviceSize layerSize()const
+		DeviceSize layerSize()const noexcept
 		{
 			return sliceSize();
 		}
 
-		DeviceSize layerMipSize( uint32_t level )const
+		DeviceSize layerMipSize( uint32_t level )const noexcept
 		{
 			return sliceMipSize( level );
 		}
 
-		DeviceSize layerOffset( uint32_t index )const
+		DeviceSize layerOffset( uint32_t index )const noexcept
 		{
 			return sliceOffset( index );
 		}
 
 		DeviceSize layerMipOffset( uint32_t index
-			, uint32_t level )const
+			, uint32_t level )const noexcept
 		{
 			return sliceMipOffset( index, level );
 		}
 
 		Buffer layerBuffer( PxBufferBase & buffer
-			, uint32_t index )const
+			, uint32_t index )const noexcept
 		{
 			return sliceBuffer( buffer, index );
 		}
 
 		Buffer layerMipBuffer( PxBufferBase & buffer
 			, uint32_t index
-			, uint32_t level )const
+			, uint32_t level )const noexcept
 		{
 			return sliceMipBuffer( buffer, index, level );
 		}
 
 		ConstBuffer layerBuffer( PxBufferBase const & buffer
-			, uint32_t index )const
+			, uint32_t index )const noexcept
 		{
 			return sliceBuffer( buffer, index );
 		}
 
 		ConstBuffer layerMipBuffer( PxBufferBase const & buffer
 			, uint32_t index
-			, uint32_t level )const
+			, uint32_t level )const noexcept
 		{
 			return sliceMipBuffer( buffer, index, level );
 		}
 
 		bool hasLayerBuffer( PxBufferBase const & buffer
-			, uint32_t index )const
+			, uint32_t index )const noexcept
 		{
 			return hasSliceBuffer( buffer, index );
 		}
 
 		bool hasLayerMipBuffer( PxBufferBase const & buffer
 			, uint32_t index
-			, uint32_t level )const
+			, uint32_t level )const noexcept
 		{
 			return hasSliceMipBuffer( buffer, index, level );
 		}

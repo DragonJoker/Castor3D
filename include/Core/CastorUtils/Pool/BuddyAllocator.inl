@@ -138,8 +138,8 @@ namespace castor
 		, uint32_t level )
 	{
 		auto & freeList = m_freeLists[level];
-		Block lhs;
-		Block rhs;
+		Block lhs{};
+		Block rhs{};
 		typename FreeList::iterator it;
 
 		if ( index % 2u )

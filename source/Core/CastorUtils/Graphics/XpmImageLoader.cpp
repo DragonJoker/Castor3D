@@ -8,16 +8,55 @@ namespace castor
 {
 	namespace xpml
 	{
+		static StringArray const XpmExtensions
+		{
+			cuT( "xpm" ),
+		};
+
 		static StringArray const & listExtensions()
 		{
-			static StringArray const list
-			{
-				cuT( "xpm" ),
-			};
-			return list;
+			return XpmExtensions;
 		}
 
 		using R8G8B8Pixel = Pixel< PixelFormat::eR8G8B8_UNORM >;
+
+		void parseColour( char const * line
+			, uint32_t charCount
+			, std::map< std::string, xpml::R8G8B8Pixel, std::less<> > & colours )
+		{
+			std::string code( &line[0], &line[charCount] );
+			char const * it = std::strstr( line, "c " );
+
+			if ( !it )
+			{
+				it = std::strstr( line, "g " );
+
+				if ( !it )
+				{
+					CU_LoaderError( "Can't load XPM image: Ill-formed colour line" );
+				}
+			}
+
+			std::string value( it + 2, &line[std::strlen( line )] );
+			xpml::R8G8B8Pixel pixel{ true };
+
+			if ( value.find( '#' ) != std::string::npos )
+			{
+				uint32_t r{};
+				uint32_t g{};
+				uint32_t b{};
+
+				if ( std::sscanf( value.c_str(), "#%02X%02X%02X", &r, &g, &b ) == EOF )
+				{
+					CU_LoaderError( "Can't load XPM image: Invalid image data" );
+				}
+
+				std::array< uint8_t, 3u > components{ { uint8_t( r ), uint8_t( g ), uint8_t( b ) } };
+				std::memcpy( pixel.ptr(), components.data(), 3 );
+			}
+
+			colours[code] = pixel;
+		}
 	}
 
 	void XpmImageLoader::registerLoader( ImageLoader & reg )
@@ -31,16 +70,18 @@ namespace castor
 		reg.unregisterLoader( xpml::listExtensions() );
 	}
 
-	ImageLayout XpmImageLoader::load( String const & CU_UnusedParam( imageFormat )
+	ImageLayout XpmImageLoader::load( CU_UnusedParam( String const &, imageFormat )
 		, uint8_t const * input
 		, uint32_t size
 		, PxBufferBaseUPtr & outbuffer )const
 	{
-		auto data = reinterpret_cast< char * const * >( input );
+		using CharCPtrPtr = char * const *;
+		auto data = CharCPtrPtr( input );
 		uint32_t coloursCount = 0;
 		uint32_t charCount = 0;
 		std::stringstream stream( data[0] );
-		uint32_t w, h;
+		uint32_t w{};
+		uint32_t h{};
 		stream >> w >> h >> coloursCount >> charCount;
 		Size imgSize{ w, h };
 
@@ -58,46 +99,16 @@ namespace castor
 		}
 
 		// Parse colours
-		std::map< std::string, xpml::R8G8B8Pixel > colours;
-		std::for_each( &data[1], &data[1 + coloursCount]
-			, [&colours, &charCount]( char const * line )
-			{
-				std::string code( &line[0], &line[charCount] );
-				char const * it = std::strstr( line, "c " );
-
-				if ( !it )
-				{
-					it = std::strstr( line, "g " );
-
-					if ( !it )
-					{
-						CU_LoaderError( "Can't load XPM image: Ill-formed colour line" );
-					}
-				}
-
-				std::string value( it + 2, &line[std::strlen( line )] );
-				xpml::R8G8B8Pixel pixel{ true };
-
-				if ( value.find( '#' ) != std::string::npos )
-				{
-					uint32_t r, g, b;
-
-					if ( std::sscanf( value.c_str(), "#%02X%02X%02X", &r, &g, &b ) == EOF )
-					{
-						CU_LoaderError( "Can't load XPM image: Invalid image data" );
-					}
-
-					std::array< uint8_t, 3u > components{ { uint8_t( r ), uint8_t( g ), uint8_t( b ) } };
-					std::memcpy( pixel.ptr(), components.data(), 3 );
-				}
-
-				colours[code] = pixel;
-			} );
+		std::map< std::string, xpml::R8G8B8Pixel, std::less<> > colours;
+		for ( auto line : castor::makeArrayView( &data[1], &data[1 + coloursCount] ) )
+		{
+			xpml::parseColour( line, charCount, colours );
+		}
 
 		// Parse image
 		auto ppixels = PxBufferBase::create( imgSize, PixelFormat::eR8G8B8_UNORM );
-		auto & pixels = static_cast< PxBuffer< PixelFormat::eR8G8B8_UNORM > & >( *ppixels );
-		auto buffer = pixels.begin();
+		auto const & pixels = static_cast< PxBuffer< PixelFormat::eR8G8B8_UNORM > const & >( *ppixels );
+		auto buffer = pixels.pixelsBegin();
 
 		for ( auto it = &data[1 + coloursCount]; it != &data[1 + coloursCount + h]; ++it )
 		{

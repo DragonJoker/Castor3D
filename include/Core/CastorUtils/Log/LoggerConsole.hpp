@@ -4,11 +4,13 @@ See LICENSE file in root folder
 #ifndef ___CU_LoggerConsole_H___
 #define ___CU_LoggerConsole_H___
 
+#include "CastorUtils/Design/NonCopyable.hpp"
 #include "CastorUtils/Log/LogModule.hpp"
 
 namespace castor
 {
 	class ConsoleImpl
+		: public NonMovable
 	{
 	public:
 		/**
@@ -24,7 +26,7 @@ namespace castor
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		virtual ~ConsoleImpl() = default;
+		virtual ~ConsoleImpl()noexcept = default;
 		/**
 		 *\~english
 		 *\brief		Configures console for the given log type.
@@ -62,13 +64,6 @@ namespace castor
 		explicit ProgramConsole( bool showConsole );
 		/**
 		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		~ProgramConsole();
-		/**
-		 *\~english
 		 *\brief		Configures console for the given log type.
 		 *\param[in]	logLevel	The log level.
 		 *\~french
@@ -88,7 +83,7 @@ namespace castor
 		 */
 		void print( String const & toLog, bool newLine );
 
-	protected:
+	private:
 		//!\~english	The platform specific console.
 		//!\~french		La console spécifique à la plateforme.
 		std::unique_ptr< ConsoleImpl > m_console;

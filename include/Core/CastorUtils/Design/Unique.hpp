@@ -13,8 +13,13 @@ namespace castor
 {
 	template< class T >
 	class Unique
-		: private NonCopyable
+		: private NonMovable
 	{
+		Unique( Unique const & ) = delete;
+		Unique & operator=( Unique const & ) = delete;
+		Unique( Unique && )noexcept = delete;
+		Unique & operator=( Unique && )noexcept = delete;
+
 	protected:
 		/**
 		 *\~english
@@ -24,7 +29,7 @@ namespace castor
 		 *\brief		Constructeur.
 		 *\remarks		Lance une exception si l'instance est déjà initialisée.
 		 */
-		inline explicit Unique( T * pThis )
+		explicit Unique( T * pThis )
 		{
 			if ( !doGetInstance() )
 			{
@@ -41,7 +46,7 @@ namespace castor
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		inline ~Unique()
+		~Unique()noexcept
 		{
 			doGetInstance() = nullptr;
 		}
@@ -53,7 +58,7 @@ namespace castor
 		 *\~french
 		 *\return		L'instance unique, nullptr s'il n'y en a pas.
 		 */
-		static inline T *& doGetInstance()
+		static T *& doGetInstance()
 		{
 			static T * instance = nullptr;
 			return instance;

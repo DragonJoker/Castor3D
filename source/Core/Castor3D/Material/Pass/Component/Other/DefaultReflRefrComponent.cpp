@@ -13,7 +13,7 @@
 #include "Castor3D/Shader/Shaders/GlslReflection.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 
-#include <CastorUtils/FileParser/ParserParameter.hpp>
+#include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Data/Text/TextRgbColour.hpp>
 
 CU_ImplementSmartPtr( castor3d, DefaultReflRefrComponent )

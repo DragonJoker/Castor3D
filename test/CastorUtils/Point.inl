@@ -1061,49 +1061,6 @@ namespace Testing
 		std::swap( m_coords, rhs.m_coords );
 	}
 
-	template< typename T, uint32_t Count >
-	void Coords< T, Count >::flip()
-	{
-		for ( uint32_t i = 0; i < Count / 2; i++ )
-		{
-			std::swap( m_coords[i], m_coords[Count - 1 - i] );
-		}
-	}
-
-	template< typename T, uint32_t Count >
-	inline void Coords< T, Count >::toValues( T * result )const
-	{
-		if ( m_coords )
-		{
-			for ( uint32_t i = 0; i < Count; i++ )
-			{
-				result[i] = m_coords[i];
-			}
-		}
-	}
-
-	template< typename T, uint32_t Count >
-	T const & Coords< T, Count >::at( uint32_t idx )const
-	{
-		if ( idx >= Count )
-		{
-			throw std::range_error( "Coords subscript out of range" );
-		}
-
-		return m_coords[idx];
-	}
-
-	template< typename T, uint32_t Count >
-	T & Coords< T, Count >::at( uint32_t idx )
-	{
-		if ( idx >= Count )
-		{
-			throw std::range_error( "Coords subscript out of range" );
-		}
-
-		return m_coords[idx];
-	}
-
 //*************************************************************************************************
 
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
@@ -1458,47 +1415,7 @@ namespace Testing
 		}
 	}
 
-	template< typename T, uint32_t Count >
-	void Point< T, Count >::flip()
-	{
-		for ( uint32_t i = 0; i < Count / 2; i++ )
-		{
-			std::swap( m_coords[i], m_coords[Count - 1 - i] );
-		}
-	}
-
-	template< typename T, uint32_t Count >
-	inline void Point< T, Count >::toValues( T * result )const
-	{
-		for ( uint32_t i = 0; i < Count; i++ )
-		{
-			result[i] = m_coords[i];
-		}
-	}
-
-	template< typename T, uint32_t Count >
-	T const & Point< T, Count >::at( uint32_t idx )const
-	{
-		if ( idx >= Count )
-		{
-			throw std::range_error( "Point subscript out of range" );
-		}
-
-		return m_coords[idx];
-	}
-
-	template< typename T, uint32_t Count >
-	T & Point< T, Count >::at( uint32_t idx )
-	{
-		if ( idx >= Count )
-		{
-			throw std::range_error( "Point subscript out of range" );
-		}
-
-		return m_coords[idx];
-	}
-
-//*************************************************************************************************
+	//*************************************************************************************************
 
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
 	inline bool operator ==( Point< T, Count > const & lhs, Point< U, _Count > const & rhs )

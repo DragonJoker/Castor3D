@@ -22,8 +22,8 @@
 namespace castor
 {
 	bool File::traverseDirectory( Path const & folderPath
-		, TraverseDirFunction directoryFunction
-		, HitFileFunction fileFunction )
+		, TraverseDirFunction const & directoryFunction
+		, HitFileFunction const & fileFunction )
 	{
 		CU_Require( !folderPath.empty() );
 		bool result = false;

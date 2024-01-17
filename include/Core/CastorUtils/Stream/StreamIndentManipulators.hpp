@@ -95,7 +95,7 @@ namespace castor
 		 *\brief		Le callback des évènements du flux
 		 */
 		template< typename CharType >
-		inline void callback( std::ios_base::event ev, std::ios_base & ios, int x )
+		inline void callback( std::ios_base::event ev, std::ios_base & ios, CU_UnusedParam( int, x ) )
 		{
 			if ( BasicIndentBufferManager< CharType >::instances() )
 			{
@@ -110,7 +110,7 @@ namespace castor
 #	error Known good compilers: 3.3
 #else
 
-					if ( std::basic_ostream< CharType > & o_s = dynamic_cast< std::basic_ostream< CharType > & >( ios ) )
+					if ( auto & o_s = dynamic_cast< std::basic_ostream< CharType > & >( ios ) )
 					{
 						o_s << Indent( getIndent( ios ) );
 					}
@@ -135,7 +135,7 @@ namespace castor
 	template< typename CharType >
 	inline std::basic_ostream< CharType > & operator <<( std::basic_ostream< CharType > & stream, format::Indent const & ind )
 	{
-		format::BasicIndentBuffer< CharType > * sbuf = dynamic_cast< format::BasicIndentBuffer< CharType > * >( stream.rdbuf() );
+		auto * sbuf = dynamic_cast< format::BasicIndentBuffer< CharType > * >( stream.rdbuf() );
 
 		if ( !sbuf )
 		{

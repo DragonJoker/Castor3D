@@ -38,7 +38,7 @@
 #include "Castor3D/Shader/ShaderBuffers/SssProfileBuffer.hpp"
 
 #include <CastorUtils/Design/ResourceCache.hpp>
-#include <CastorUtils/FileParser/ParserParameter.hpp>
+#include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Graphics/PixelFormat.hpp>
 
 #include <algorithm>

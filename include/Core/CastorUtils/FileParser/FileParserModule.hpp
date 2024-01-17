@@ -260,6 +260,15 @@ namespace castor
 	*/
 	template< ParameterType Type, typename ParserValueHelperT=void >
 	struct ParserParameterHelper;
+
+	template< ParameterType Type, typename ParserValueHelperT = void >
+	using ParserParameterValueType = typename ParserParameterHelper< Type, ParserValueHelperT >::ValueType;
+
+	template< ParameterType Type, typename ParserValueHelperT = void >
+	inline ParameterType constexpr ParserParameterParamType = ParserParameterHelper< Type, ParserValueHelperT >::ParamType;
+
+	template< ParameterType Type, typename ParserValueHelperT = void >
+	inline StringView constexpr ParserParameterStringType = ParserParameterHelper< Type, ParserValueHelperT >::StringType;
 	/**
 	\~english
 	\brief		Structure used to tell if an ParameterType has a base parameter type.
@@ -271,6 +280,8 @@ namespace castor
 		: public std::false_type
 	{
 	};
+	template< ParameterType Type >
+	inline bool constexpr hasBaseParameterTypeV = HasBaseParameterType< Type >::value;
 	/**
 	\~english
 	\brief		Exception thrown when the user tries to retrieve a parameter of a wrong type
@@ -336,6 +347,15 @@ namespace castor
 	*/
 	struct ParserFunctionAndParams
 	{
+		ParserFunctionAndParams( ParserFunction function = {}
+			, uint32_t resultSection = {}
+			, ParserParameterArray params = {} )
+			: function{ std::move( function ) }
+			, resultSection{ resultSection }
+			, params{ std::move( params ) }
+		{
+		}
+
 		ParserFunction function{};
 		uint32_t resultSection{};
 		ParserParameterArray params{};
@@ -359,7 +379,7 @@ namespace castor
 	*\brief
 	*	Les parsers triés par nom de token.
 	*/
-	using AttributeParsers = std::map< String, SectionAttributeParsers >;
+	using AttributeParsers = std::map< String, SectionAttributeParsers, std::less<> >;
 	/**
 	 *\~english
 	 *\brief		User defined parsing context creator.
@@ -463,18 +483,21 @@ namespace castor
 			, std::move( params ) );
 	}
 
+	template< typename BlockContextT >
+	using BlockParserFunctionT = bool( * )( FileParserContext &, BlockContextT *, ParserParameterArray const & );
+
 	template< typename SectionT, typename BlockContextT >
 	inline void addParserT( castor::AttributeParsers & parsers
 		, SectionT section
 		, castor::String const & name
-		, bool( *function )( FileParserContext &, BlockContextT *, ParserParameterArray const & )
+		, BlockParserFunctionT< BlockContextT > function
 		, castor::ParserParameterArray params = castor::ParserParameterArray{} )
 	{
 		using BaseFunction = bool( * )( FileParserContext &, void *, ParserParameterArray const & );
 		addParser( parsers
 			, uint32_t( section )
 			, name
-			, reinterpret_cast< BaseFunction >( function )
+			, BaseFunction( function )
 			, std::move( params ) );
 	}
 
@@ -483,7 +506,7 @@ namespace castor
 		, SectionT oldSection
 		, SectionU newSection
 		, castor::String const & name
-		, bool( *function )( FileParserContext &, BlockContextT *, ParserParameterArray const & )
+		, BlockParserFunctionT< BlockContextT > function
 		, castor::ParserParameterArray params = castor::ParserParameterArray{} )
 	{
 		using BaseFunction = bool( * )( FileParserContext &, void *, ParserParameterArray const & );
@@ -491,7 +514,7 @@ namespace castor
 			, uint32_t( oldSection )
 			, uint32_t( newSection )
 			, name
-			, reinterpret_cast< BaseFunction >( function )
+			, BaseFunction( function )
 			, std::move( params ) );
 	}
 	//@}

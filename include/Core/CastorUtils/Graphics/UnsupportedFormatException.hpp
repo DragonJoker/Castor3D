@@ -14,27 +14,7 @@ namespace castor
 		: public castor::Exception
 	{
 	public:
-		/**
-		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	description	Error description
-		 *\param[in]	file		Function file
-		 *\param[in]	function	Function name
-		 *\param[in]	line		Function line
-		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	description	Description de l'erreur
-		 *\param[in]	file		Fichier contenant la fonction
-		 *\param[in]	function	Nom de la fonction
-		 *\param[in]	line		Ligne dans la fonction
-		 */
-		UnsupportedFormatException(	std::string const & description
-			, char const * file
-			, char const * function
-			, uint32_t line )
-			: Exception( description, file, function, line )
-		{
-		}
+		using castor::Exception::Exception;
 	};
 }
 /**

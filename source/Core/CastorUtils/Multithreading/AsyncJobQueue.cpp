@@ -5,8 +5,7 @@
 namespace castor
 {
 	AsyncJobQueue::AsyncJobQueue( size_t count )
-		: m_ended{ false }
-		, m_pool{ count }
+		: m_pool{ count }
 		, m_worker{ [this](){ doRun(); } }
 	{
 	}
@@ -23,7 +22,7 @@ namespace castor
 		auto lock( makeUniqueLock( m_mutex ) );
 		if ( !m_ended )
 		{
-			m_pending.push_back( job );
+			m_pending.emplace_back( std::move( job ) );
 		}
 	}
 

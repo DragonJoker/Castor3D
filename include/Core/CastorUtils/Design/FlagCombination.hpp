@@ -19,7 +19,7 @@ namespace castor
 		using BaseType = typename std::underlying_type< FlagTypeT >::type;
 
 	public:
-		inline explicit constexpr FlagIterator( FlagIterator const & value )
+		explicit constexpr FlagIterator( FlagIterator const & value )
 			: m_initialValue{ value.m_initialValue }
 			, m_index{ value.m_index }
 			, m_value{ value.m_value }
@@ -28,7 +28,7 @@ namespace castor
 		/**
 		* Begin ctor.
 		*/
-		inline explicit constexpr FlagIterator( BaseType contValue )
+		explicit constexpr FlagIterator( BaseType contValue )
 			: m_initialValue{ contValue }
 		{
 			doGetNextValue();
@@ -36,7 +36,7 @@ namespace castor
 		/**
 		* End ctor.
 		*/
-		inline constexpr FlagIterator( BaseType contValue
+		constexpr FlagIterator( BaseType contValue
 			, FlagTypeT iterValue )
 			: m_initialValue{ contValue }
 			, m_index{ sizeof( BaseType ) * 8 }
@@ -44,26 +44,26 @@ namespace castor
 		{
 		}
 
-		inline constexpr FlagIterator & operator++()
+		constexpr FlagIterator & operator++()
 		{
 			doGetNextValue();
 			return *this;
 		}
 
-		inline constexpr FlagIterator operator++( int )
+		constexpr FlagIterator operator++( int )
 		{
 			FlagIterator result{ *this };
 			++( *this );
 			return result;
 		}
 
-		inline constexpr FlagTypeT operator*()const
+		constexpr FlagTypeT operator*()const
 		{
 			return m_value;
 		}
 
 	private:
-		inline constexpr void doGetNextValue()
+		constexpr void doGetNextValue()
 		{
 			auto v = BaseType{ 1u };
 
@@ -86,7 +86,7 @@ namespace castor
 	};
 
 	template< typename FlagTypeT, typename IteratorTraitsT >
-	inline constexpr bool operator==( FlagIterator< FlagTypeT, IteratorTraitsT > const & lhs
+	constexpr bool operator==( FlagIterator< FlagTypeT, IteratorTraitsT > const & lhs
 		, FlagIterator< FlagTypeT, IteratorTraitsT > const & rhs )
 	{
 		return lhs.m_index == rhs.m_index
@@ -94,7 +94,7 @@ namespace castor
 	}
 
 	template< typename FlagTypeT, typename IteratorTraitsT >
-	inline constexpr bool operator!=( FlagIterator< FlagTypeT, IteratorTraitsT > const & lhs
+	constexpr bool operator!=( FlagIterator< FlagTypeT, IteratorTraitsT > const & lhs
 		, FlagIterator< FlagTypeT, IteratorTraitsT > const & rhs )
 	{
 		return !( lhs == rhs );
@@ -115,14 +115,14 @@ namespace castor
 		*	Construction.
 		**/
 		/**@{*/
-		inline constexpr FlagCombination( FlagType value )noexcept
+		constexpr FlagCombination( FlagType value )noexcept
 			: m_value{ BaseType( value ) }
 		{
 			static_assert( sizeof( FlagType ) == sizeof( BaseType )
 				, "Can't combine different size parameters" );
 		}
 
-		inline explicit constexpr FlagCombination( BaseType value = BaseType{} )noexcept
+		explicit constexpr FlagCombination( BaseType value = BaseType{} )noexcept
 			: m_value{ value }
 		{
 			static_assert( sizeof( FlagType ) == sizeof( BaseType )
@@ -138,12 +138,12 @@ namespace castor
 		*	Conversion.
 		**/
 		/**\{*/
-		inline constexpr operator BaseType const &()const noexcept
+		constexpr operator BaseType const &()const noexcept
 		{
 			return m_value;
 		}
 
-		inline constexpr BaseType value()const noexcept
+		constexpr BaseType value()const noexcept
 		{
 			return m_value;
 		}
@@ -157,17 +157,17 @@ namespace castor
 		*	Itération.
 		**/
 		/**\{*/
-		inline constexpr FlagIterator< FlagType > begin()const noexcept
+		constexpr FlagIterator< FlagType > begin()const noexcept
 		{
 			return FlagIterator< FlagType >( m_value );
 		}
 
-		inline constexpr FlagIterator< FlagType > end()const noexcept
+		constexpr FlagIterator< FlagType > end()const noexcept
 		{
 			return FlagIterator< FlagType >( m_value, FlagType{} );
 		}
 
-		inline constexpr size_t size()const noexcept
+		constexpr size_t size()const noexcept
 		{
 			size_t result = 0;
 
@@ -179,7 +179,7 @@ namespace castor
 			return result;
 		}
 
-		inline constexpr bool empty()const noexcept
+		constexpr bool empty()const noexcept
 		{
 			return value() == 0u;
 		}
@@ -193,61 +193,61 @@ namespace castor
 		*	Opérateurs binaires.
 		**/
 		/**\{*/
-		inline constexpr FlagCombination & operator&=( BaseType rhs )noexcept
+		constexpr FlagCombination & operator&=( BaseType rhs )noexcept
 		{
 			m_value &= rhs;
 			return *this;
 		}
 
-		inline constexpr FlagCombination & operator|=( BaseType rhs )noexcept
+		constexpr FlagCombination & operator|=( BaseType rhs )noexcept
 		{
 			m_value |= rhs;
 			return *this;
 		}
 		
-		inline constexpr FlagCombination & operator^=( BaseType rhs )noexcept
+		constexpr FlagCombination & operator^=( BaseType rhs )noexcept
 		{
 			m_value ^= rhs;
 			return *this;
 		}
 
-		inline constexpr FlagCombination & operator&=( FlagType rhs )noexcept
+		constexpr FlagCombination & operator&=( FlagType rhs )noexcept
 		{
 			m_value &= BaseType( rhs );
 			return *this;
 		}
 
-		inline constexpr FlagCombination & operator|=( FlagType rhs )noexcept
+		constexpr FlagCombination & operator|=( FlagType rhs )noexcept
 		{
 			m_value |= BaseType( rhs );
 			return *this;
 		}
 		
-		inline constexpr FlagCombination & operator^=( FlagType rhs )noexcept
+		constexpr FlagCombination & operator^=( FlagType rhs )noexcept
 		{
 			m_value ^= BaseType( rhs );
 			return *this;
 		}
 
-		inline constexpr FlagCombination & operator&=( FlagCombination< FlagType > const & rhs )noexcept
+		constexpr FlagCombination & operator&=( FlagCombination< FlagType > const & rhs )noexcept
 		{
 			m_value &= BaseType( rhs );
 			return *this;
 		}
 
-		inline constexpr FlagCombination & operator|=( FlagCombination< FlagType > const & rhs )noexcept
+		constexpr FlagCombination & operator|=( FlagCombination< FlagType > const & rhs )noexcept
 		{
 			m_value |= BaseType( rhs );
 			return *this;
 		}
 
-		inline constexpr FlagCombination & operator^=( FlagCombination< FlagType > const & rhs )noexcept
+		constexpr FlagCombination & operator^=( FlagCombination< FlagType > const & rhs )noexcept
 		{
 			m_value ^= BaseType( rhs );
 			return *this;
 		}
 
-		inline constexpr FlagCombination & operator~()noexcept
+		constexpr FlagCombination & operator~()noexcept
 		{
 			m_value = ~BaseType( m_value );
 			return *this;
@@ -267,7 +267,7 @@ namespace castor
 	**/
 	/**\{*/
 	template< typename FlagType >
-	inline constexpr bool operator==( FlagCombination< FlagType > const & lhs
+	constexpr bool operator==( FlagCombination< FlagType > const & lhs
 		, FlagCombination< FlagType > const & rhs )noexcept
 	{
 		using Type = typename FlagCombination< FlagType >::BaseType;
@@ -275,7 +275,7 @@ namespace castor
 	}
 
 	template< typename FlagType >
-	inline constexpr bool operator==( FlagCombination< FlagType > const & lhs
+	constexpr bool operator==( FlagCombination< FlagType > const & lhs
 		, FlagType const & rhs )noexcept
 	{
 		using Type = typename FlagCombination< FlagType >::BaseType;
@@ -283,7 +283,7 @@ namespace castor
 	}
 
 	template< typename FlagType >
-	inline constexpr bool operator!=( FlagCombination< FlagType > const & lhs
+	constexpr bool operator!=( FlagCombination< FlagType > const & lhs
 		, FlagCombination< FlagType > const & rhs )noexcept
 	{
 		using Type = typename FlagCombination< FlagType >::BaseType;
@@ -291,7 +291,7 @@ namespace castor
 	}
 
 	template< typename FlagType >
-	inline constexpr bool operator!=( FlagCombination< FlagType > const & lhs
+	constexpr bool operator!=( FlagCombination< FlagType > const & lhs
 		, FlagType const & rhs )noexcept
 	{
 		using Type = typename FlagCombination< FlagType >::BaseType;
@@ -307,7 +307,7 @@ namespace castor
 	**/
 	/**\{*/
 	template< typename FlagType >
-	inline constexpr FlagCombination< FlagType > operator&
+	constexpr FlagCombination< FlagType > operator&
 		( FlagCombination< FlagType > const & lhs
 		, FlagType const & rhs )noexcept
 	{
@@ -316,7 +316,7 @@ namespace castor
 	}
 
 	template< typename FlagType >
-	inline constexpr FlagCombination< FlagType > operator|
+	constexpr FlagCombination< FlagType > operator|
 		( FlagCombination< FlagType > const & lhs
 		, FlagType const & rhs )noexcept
 	{
@@ -325,7 +325,7 @@ namespace castor
 	}
 	
 	template< typename FlagType >
-	inline constexpr FlagCombination< FlagType > operator^
+	constexpr FlagCombination< FlagType > operator^
 		( FlagCombination< FlagType > const & lhs
 		, FlagType const & rhs )noexcept
 	{
@@ -334,7 +334,7 @@ namespace castor
 	}
 
 	template< typename FlagType >
-	inline constexpr FlagCombination< FlagType > operator&
+	constexpr FlagCombination< FlagType > operator&
 		( FlagCombination< FlagType > const & lhs
 		, typename FlagCombination< FlagType >::BaseType const & rhs )noexcept
 	{
@@ -343,7 +343,7 @@ namespace castor
 	}
 
 	template< typename FlagType >
-	inline constexpr FlagCombination< FlagType > operator|
+	constexpr FlagCombination< FlagType > operator|
 		( FlagCombination< FlagType > const & lhs
 		, typename FlagCombination< FlagType >::BaseType const & rhs )noexcept
 	{
@@ -352,7 +352,7 @@ namespace castor
 	}
 
 	template< typename FlagType >
-	inline constexpr FlagCombination< FlagType > operator^
+	constexpr FlagCombination< FlagType > operator^
 		( FlagCombination< FlagType > const & lhs
 		, typename FlagCombination< FlagType >::BaseType const & rhs )noexcept
 	{
@@ -361,7 +361,7 @@ namespace castor
 	}
 
 	template< typename FlagType >
-	inline constexpr FlagCombination< FlagType > operator&
+	constexpr FlagCombination< FlagType > operator&
 		( FlagCombination< FlagType > const & lhs
 		, FlagCombination< FlagType > const & rhs )noexcept
 	{
@@ -370,7 +370,7 @@ namespace castor
 	}
 
 	template< typename FlagType >
-	inline constexpr FlagCombination< FlagType > operator|
+	constexpr FlagCombination< FlagType > operator|
 		( FlagCombination< FlagType > const & lhs
 		, FlagCombination< FlagType > const & rhs )noexcept
 	{
@@ -379,7 +379,7 @@ namespace castor
 	}
 
 	template< typename FlagType >
-	inline constexpr FlagCombination< FlagType > operator^
+	constexpr FlagCombination< FlagType > operator^
 		( FlagCombination< FlagType > const & lhs
 		, FlagCombination< FlagType > const & rhs )noexcept
 	{
@@ -398,7 +398,7 @@ namespace castor
 	 *\return		\p true si flags contient n'importe lequel de rhs.
 	 */
 	template< typename T, typename U >
-	inline constexpr bool hasAll( T const & value, U const & rhs )noexcept
+	constexpr bool hasAll( T const & value, U const & rhs )noexcept
 	{
 		static_assert( sizeof( T ) == sizeof( U )
 			, "Can't check flags for different size parameters" );
@@ -415,7 +415,7 @@ namespace castor
 	 *\return		\p true si flags contient n'importe lequel de rhs.
 	 */
 	template< typename FlagType >
-	inline constexpr bool hasAll( FlagCombination< FlagType > const & value
+	constexpr bool hasAll( FlagCombination< FlagType > const & value
 		, FlagType const & rhs )noexcept
 	{
 		return ( value & rhs ) == rhs;
@@ -431,7 +431,7 @@ namespace castor
 	 *\return		\p true si flags contient n'importe lequel de rhs.
 	 */
 	template< typename FlagType >
-	inline constexpr bool hasAll( FlagType const & value
+	constexpr bool hasAll( FlagType const & value
 		, FlagCombination< FlagType > const & rhs )noexcept
 	{
 		return ( rhs & value ) == rhs;
@@ -447,7 +447,7 @@ namespace castor
 	 *\return		\p true si flags contient n'importe lequel de rhs.
 	 */
 	template< typename FlagType >
-	inline constexpr bool hasAll( typename FlagCombination< FlagType >::BaseType const & value
+	constexpr bool hasAll( typename FlagCombination< FlagType >::BaseType const & value
 		, FlagCombination< FlagType > const & rhs )noexcept
 	{
 		return hasAll( FlagType{ value }, rhs );
@@ -463,7 +463,7 @@ namespace castor
 	 *\return		\p true si flags contient n'importe lequel de rhs.
 	 */
 	template< typename FlagType >
-	inline constexpr bool hasAll( FlagCombination< FlagType > const & value
+	constexpr bool hasAll( FlagCombination< FlagType > const & value
 		, typename FlagCombination< FlagType >::BaseType const & rhs )noexcept
 	{
 		return hasAll( value, FlagType{ rhs } );
@@ -479,7 +479,7 @@ namespace castor
 	 *\return		\p true si flags contient n'importe lequel de rhs.
 	 */
 	template< typename FlagType >
-	inline constexpr bool hasAll( FlagCombination< FlagType > const & value
+	constexpr bool hasAll( FlagCombination< FlagType > const & value
 		, FlagCombination< FlagType > const & rhs )noexcept
 	{
 		return ( value & rhs ) == rhs;
@@ -495,7 +495,7 @@ namespace castor
 	 *\return		\p true si flags contient n'importe lequel de rhs.
 	 */
 	template< typename T, typename U >
-	inline constexpr bool hasAny( T const & value, U const & rhs )noexcept
+	constexpr bool hasAny( T const & value, U const & rhs )noexcept
 	{
 		static_assert( sizeof( T ) == sizeof( U )
 			, "Can't check flags for different size parameters" );
@@ -512,7 +512,7 @@ namespace castor
 	 *\return		\p true si flags contient n'importe lequel de rhs.
 	 */
 	template< typename FlagType >
-	inline constexpr bool hasAny( FlagCombination< FlagType > const & value
+	constexpr bool hasAny( FlagCombination< FlagType > const & value
 		, FlagType const & rhs )noexcept
 	{
 		return ( value & rhs ) != FlagType{};
@@ -528,7 +528,7 @@ namespace castor
 	 *\return		\p true si flags contient n'importe lequel de rhs.
 	 */
 	template< typename FlagType, typename Type >
-	inline constexpr bool hasAny( FlagCombination< FlagType > const & value
+	constexpr bool hasAny( FlagCombination< FlagType > const & value
 		, Type const & rhs )noexcept
 	{
 		static_assert( sizeof( FlagType ) == sizeof( Type )
@@ -546,7 +546,7 @@ namespace castor
 	 *\return		\p true si flags contient flag.
 	 */
 	template< typename T, typename U >
-	inline constexpr bool checkFlag( T const & value, U const & flag )noexcept
+	constexpr bool checkFlag( T const & value, U const & flag )noexcept
 	{
 		static_assert( sizeof( T ) == sizeof( U )
 			, "Can't check flags for different size parameters" );
@@ -563,7 +563,7 @@ namespace castor
 	 *\return		\p true si flags contient flag.
 	 */
 	template< typename FlagType >
-	inline constexpr bool checkFlag( FlagCombination< FlagType > const & value
+	constexpr bool checkFlag( FlagCombination< FlagType > const & value
 		, FlagType const & flag )noexcept
 	{
 		using Type = typename FlagCombination< FlagType >::BaseType;
@@ -580,7 +580,7 @@ namespace castor
 	 *\return		\p true si flags contient flag.
 	 */
 	template< typename FlagType, typename Type >
-	inline constexpr bool checkFlag( FlagCombination< FlagType > const & value
+	constexpr bool checkFlag( FlagCombination< FlagType > const & value
 		, Type const & flag )noexcept
 	{
 		static_assert( sizeof( FlagType ) == sizeof( Type )
@@ -600,7 +600,7 @@ namespace castor
 	 *\return			La valeur.
 	 */
 	template< typename FlagType >
-	inline constexpr FlagCombination< FlagType > & addFlag
+	constexpr FlagCombination< FlagType > & addFlag
 		( FlagCombination< FlagType > & value
 		, FlagType const & flag )noexcept
 	{
@@ -620,7 +620,7 @@ namespace castor
 	 *\return			La valeur.
 	 */
 	template< typename FlagType >
-	inline constexpr FlagCombination< FlagType > & addFlags
+	constexpr FlagCombination< FlagType > & addFlags
 		( FlagCombination< FlagType > & value
 		, FlagCombination< FlagType > const & flags )noexcept
 	{
@@ -640,8 +640,8 @@ namespace castor
 	 *\return			La valeur.
 	 */
 	template< typename FlagType >
-	inline FlagCombination< FlagType > & remFlags
-	( FlagCombination< FlagType > & value
+	constexpr FlagCombination< FlagType > & remFlags
+		( FlagCombination< FlagType > & value
 		, FlagCombination< FlagType > const & flags )noexcept
 	{
 		using Type = typename FlagCombination< FlagType >::BaseType;
@@ -661,7 +661,7 @@ namespace castor
 	 *\return			La valeur.
 	 */
 	template< typename FlagType >
-	inline constexpr FlagCombination< FlagType > & remFlag
+	constexpr FlagCombination< FlagType > & remFlag
 		( FlagCombination< FlagType > & value
 		, FlagType const & flag )noexcept
 	{
@@ -682,7 +682,7 @@ namespace castor
 	 *\return		La nouvelle valeur.
 	 */
 	template< typename FlagType >
-	inline constexpr FlagCombination< FlagType > addFlag
+	constexpr FlagCombination< FlagType > addFlag
 		( FlagCombination< FlagType > const & value
 		, FlagType const & flag )noexcept
 	{
@@ -701,7 +701,7 @@ namespace castor
 	 *\return		La nouvelle valeur.
 	 */
 	template< typename FlagType >
-	inline constexpr FlagCombination< FlagType > remFlag
+	constexpr FlagCombination< FlagType > remFlag
 		( FlagCombination< FlagType > const & value
 		, FlagType const & flag )noexcept
 	{

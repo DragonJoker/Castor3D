@@ -8,59 +8,15 @@ namespace castor
 	//*************************************************************************************************
 
 	template< typename T, uint32_t Count >
-	Coords< T, Count >::Coords()
-		: m_coords( nullptr )
-	{
-	}
-
-	template< typename T, uint32_t Count >
 	Coords< T, Count >::Coords( T * rhs )
 		: m_coords( rhs )
 	{
 	}
 
 	template< typename T, uint32_t Count >
-	Coords< T, Count >::Coords( Coords< T, Count > const & rhs )
-		: m_coords( rhs.m_coords )
-	{
-	}
-
-	template< typename T, uint32_t Count >
-	Coords< T, Count >::Coords( Coords< T, Count > && rhs )
-		: m_coords( nullptr )
-	{
-		m_coords = std::move( rhs.m_coords );
-		rhs.m_coords = nullptr;
-	}
-
-	template< typename T, uint32_t Count >
 	Coords< T, Count >::Coords( Point< T, Count > & rhs )
 		: m_coords( rhs.ptr() )
 	{
-	}
-
-	template< typename T, uint32_t Count >
-	inline Coords< T, Count >::~Coords()
-	{
-	}
-
-	template< typename T, uint32_t Count >
-	inline Coords< T, Count > & Coords< T, Count >::operator=( Coords< T, Count > const & rhs )
-	{
-		m_coords = rhs.m_coords;
-		return *this;
-	}
-
-	template< typename T, uint32_t Count >
-	inline Coords< T, Count > & Coords< T, Count >::operator=( Coords< T, Count > && rhs )
-	{
-		if ( this != &rhs )
-		{
-			m_coords = std::move( rhs.m_coords );
-			rhs.m_coords = nullptr;
-		}
-
-		return *this;
 	}
 
 	template< typename T, uint32_t Count >
@@ -144,44 +100,9 @@ namespace castor
 	}
 
 	template< typename T, uint32_t Count >
-	void Coords< T, Count >::swap( Coords< T, Count > & rhs )
+	void Coords< T, Count >::swap( Coords< T, Count > & rhs )noexcept
 	{
 		std::swap( m_coords, rhs.m_coords );
-	}
-
-	template< typename T, uint32_t Count >
-	void Coords< T, Count >::flip()
-	{
-		for ( uint32_t i = 0; i < Count / 2; i++ )
-		{
-			std::swap( m_coords[i], m_coords[Count - 1 - i] );
-		}
-	}
-
-	template< typename T, uint32_t Count >
-	inline void Coords< T, Count >::toValues( T * result )const
-	{
-		if ( m_coords )
-		{
-			for ( uint32_t i = 0; i < Count; i++ )
-			{
-				result[i] = m_coords[i];
-			}
-		}
-	}
-
-	template< typename T, uint32_t Count >
-	T const & Coords< T, Count >::at( uint32_t index )const
-	{
-		CU_Require( index < Count );
-		return m_coords[index];
-	}
-
-	template< typename T, uint32_t Count >
-	T & Coords< T, Count >::at( uint32_t index )
-	{
-		CU_Require( index < Count );
-		return m_coords[index];
 	}
 
 	template< typename T, uint32_t Count, typename U, uint32_t UCount >
@@ -204,7 +125,7 @@ namespace castor
 	}
 
 	template< typename T, uint32_t Count >
-	inline Point< typename std::remove_cv< T >::type, Count > operator-( Coords< T, Count > const & rhs )
+	inline Point< std::remove_cv_t< T >, Count > operator-( Coords< T, Count > const & rhs )
 	{
 		Point< T, Count > result;
 
@@ -217,64 +138,64 @@ namespace castor
 	}
 
 	template< typename T, uint32_t Count, typename U, uint32_t UCount >
-	inline Point< typename std::remove_cv< T >::type, Count > operator+( Coords< T, Count > const & lhs, Coords< U, UCount > const & rhs )
+	inline Point< std::remove_cv_t< T >, Count > operator+( Coords< T, Count > const & lhs, Coords< U, UCount > const & rhs )
 	{
 		return PtOperators< T, U, Count, UCount >::add( lhs, rhs );
 	}
 	template< typename T, uint32_t Count, typename U, uint32_t UCount >
-	inline Point< typename std::remove_cv< T >::type, Count > operator-( Coords< T, Count > const & lhs, Coords< U, UCount > const & rhs )
+	inline Point< std::remove_cv_t< T >, Count > operator-( Coords< T, Count > const & lhs, Coords< U, UCount > const & rhs )
 	{
 		return PtOperators< T, U, Count, UCount >::sub( lhs, rhs );
 	}
 	template< typename T, uint32_t Count, typename U, uint32_t UCount >
-	inline Point< typename std::remove_cv< T >::type, Count > operator*( Coords< T, Count > const & lhs, Coords< U, UCount > const & rhs )
+	inline Point< std::remove_cv_t< T >, Count > operator*( Coords< T, Count > const & lhs, Coords< U, UCount > const & rhs )
 	{
 		return PtOperators< T, U, Count, UCount >::mul( lhs, rhs );
 	}
 	template< typename T, uint32_t Count, typename U, uint32_t UCount >
-	inline Point< typename std::remove_cv< T >::type, Count > operator/( Coords< T, Count > const & lhs, Coords< U, UCount > const & rhs )
+	inline Point< std::remove_cv_t< T >, Count > operator/( Coords< T, Count > const & lhs, Coords< U, UCount > const & rhs )
 	{
 		return PtOperators< T, U, Count, UCount >::div( lhs, rhs );
 	}
 
 	template< typename T, uint32_t Count, typename U >
-	inline Point< typename std::remove_cv< T >::type, Count > operator+( Coords< T, Count > const & lhs, U const * rhs )
+	inline Point< std::remove_cv_t< T >, Count > operator+( Coords< T, Count > const & lhs, U const * rhs )
 	{
 		return PtOperators< T, U, Count, Count >::add( lhs, rhs );
 	}
 	template< typename T, uint32_t Count, typename U >
-	inline Point< typename std::remove_cv< T >::type, Count > operator-( Coords< T, Count > const & lhs, U const * rhs )
+	inline Point< std::remove_cv_t< T >, Count > operator-( Coords< T, Count > const & lhs, U const * rhs )
 	{
 		return PtOperators< T, U, Count, Count >::sub( lhs, rhs );
 	}
 	template< typename T, uint32_t Count, typename U >
-	inline Point< typename std::remove_cv< T >::type, Count > operator*( Coords< T, Count > const & lhs, U const * rhs )
+	inline Point< std::remove_cv_t< T >, Count > operator*( Coords< T, Count > const & lhs, U const * rhs )
 	{
 		return PtOperators< T, U, Count, Count >::mul( lhs, rhs );
 	}
 	template< typename T, uint32_t Count, typename U >
-	inline Point< typename std::remove_cv< T >::type, Count > operator/( Coords< T, Count > const & lhs, U const * rhs )
+	inline Point< std::remove_cv_t< T >, Count > operator/( Coords< T, Count > const & lhs, U const * rhs )
 	{
 		return PtOperators< T, U, Count, Count >::div( lhs, rhs );
 	}
 
 	template< typename T, uint32_t Count >
-	inline Point< typename std::remove_cv< T >::type, Count > operator+( Coords< T, Count > const & lhs, T const & rhs )
+	inline Point< std::remove_cv_t< T >, Count > operator+( Coords< T, Count > const & lhs, T const & rhs )
 	{
 		return PtOperators< T, T, Count, Count >::add( lhs, rhs );
 	}
 	template< typename T, uint32_t Count >
-	inline Point< typename std::remove_cv< T >::type, Count > operator-( Coords< T, Count > const & lhs, T const & rhs )
+	inline Point< std::remove_cv_t< T >, Count > operator-( Coords< T, Count > const & lhs, T const & rhs )
 	{
 		return PtOperators< T, T, Count, Count >::sub( lhs, rhs );
 	}
 	template< typename T, uint32_t Count >
-	inline Point< typename std::remove_cv< T >::type, Count > operator*( Coords< T, Count > const & lhs, T const & rhs )
+	inline Point< std::remove_cv_t< T >, Count > operator*( Coords< T, Count > const & lhs, T const & rhs )
 	{
 		return PtOperators< T, T, Count, Count >::mul( lhs, rhs );
 	}
 	template< typename T, uint32_t Count >
-	inline Point< typename std::remove_cv< T >::type, Count > operator/( Coords< T, Count > const & lhs, T const & rhs )
+	inline Point< std::remove_cv_t< T >, Count > operator/( Coords< T, Count > const & lhs, T const & rhs )
 	{
 		return PtOperators< T, T, Count, Count >::div( lhs, rhs );
 	}

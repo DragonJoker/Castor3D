@@ -30,6 +30,21 @@ See LICENSE file in root folder
 
 namespace castor
 {
+	struct StringHash
+	{
+		using is_transparent = void;
+
+		std::size_t operator()( std::string_view v )const
+		{
+			return std::hash< std::string_view >{}( v );
+		}
+
+		std::size_t operator()( std::wstring_view v )const
+		{
+			return std::hash< std::wstring_view >{}( v );
+		}
+	};
+
 	/**
 	\see		QuaternionT
 	\~english

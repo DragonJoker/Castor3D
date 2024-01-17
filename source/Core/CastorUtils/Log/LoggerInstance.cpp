@@ -7,7 +7,7 @@
 
 namespace castor
 {
-	LoggerInstance::LoggerInstance( LoggerInstance && rhs )
+	LoggerInstance::LoggerInstance( LoggerInstance && rhs )noexcept
 		: m_logLevel{ std::move( rhs.m_logLevel ) }
 		, m_impl{ std::move( rhs.m_impl ) }
 		, m_headers{ std::move( rhs.m_headers ) }
@@ -22,7 +22,7 @@ namespace castor
 		rhs.m_threadEnded = false;
 	}
 
-	LoggerInstance & LoggerInstance::operator=( LoggerInstance && rhs )
+	LoggerInstance & LoggerInstance::operator=( LoggerInstance && rhs )noexcept
 	{
 		m_logLevel = std::move( rhs.m_logLevel );
 		m_impl = std::move( rhs.m_impl );
@@ -38,7 +38,7 @@ namespace castor
 		return *this;
 	}
 
-	LoggerInstance::~LoggerInstance()
+	LoggerInstance::~LoggerInstance()noexcept
 	{
 		doCleanupThread();
 	}
@@ -47,19 +47,11 @@ namespace castor
 		, LogType logType )
 		: m_logLevel{ logType }
 		, m_impl{ console, logType, *this }
-		, m_headers
-		{
-			cuT( "****TRACE**** " ),
-			cuT( "****DEBUG**** " ),
-			cuT( "              " ),
-			cuT( "***WARNING*** " ),
-			cuT( "****ERROR**** " ),
-		}
 	{
 		doInitialiseThread();
 	}
 
-	void LoggerInstance::registerCallback( LogCallback pfnCallback, void * pCaller )
+	void LoggerInstance::registerCallback( LogCallback const & pfnCallback, void * pCaller )
 	{
 		m_impl.registerCallback( pfnCallback, pCaller );
 	}
@@ -76,7 +68,7 @@ namespace castor
 		m_initialised = true;
 	}
 
-	LogType LoggerInstance::getLevel()
+	LogType LoggerInstance::getLevel()const
 	{
 		return m_logLevel;
 	}
@@ -264,11 +256,11 @@ namespace castor
 	void LoggerInstance::flushQueue()
 	{
 		MessageQueue queue;
-
+		[&queue, this]()
 		{
 			auto lock( makeUniqueLock( m_mutexQueue ) );
 			std::swap( queue, m_queue );
-		}
+		}();
 
 		if ( !queue.empty() )
 		{
@@ -322,7 +314,7 @@ namespace castor
 #if !defined( NDEBUG )
 			m_impl.printMessage( logLevel, message, newLine );
 #endif
-			m_queue.push_back( { logLevel, message, newLine } );
+			m_queue.emplace_back( logLevel, message, newLine );
 		}
 	}
 }

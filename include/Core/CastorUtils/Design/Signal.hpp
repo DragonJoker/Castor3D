@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___CU_SIGNAL_H___
 
 #include "CastorUtils/Design/DesignModule.hpp"
+#include "CastorUtils/Design/NonCopyable.hpp"
 
 #include "CastorUtils/Exception/Assertion.hpp"
 
@@ -16,12 +17,11 @@ namespace castor
 {
 	template< typename MySignalT >
 	class ConnectionT
+		: public NonCopyable
 	{
 	private:
 		using signal_type = MySignalT;
 		using signal_ptr = signal_type *;
-		ConnectionT( ConnectionT< signal_type > const & ) = delete;
-		ConnectionT & operator=( ConnectionT< signal_type > const & ) = delete;
 
 	public:
 		/**
@@ -120,7 +120,7 @@ namespace castor
 		 *\brief		Destructeur.
 		 *\remarks		Déconnecte la fonction du signal.
 		 */
-		~ConnectionT()
+		~ConnectionT()noexcept
 		{
 			disconnect();
 		}
@@ -130,7 +130,7 @@ namespace castor
 		 *\~french
 		 *\brief		Déconnecte la fonction du signal.
 		 */
-		bool disconnect()
+		bool disconnect()noexcept
 		{
 			bool result{ false };
 
@@ -146,7 +146,7 @@ namespace castor
 			return result;
 		}
 
-		operator bool()const
+		operator bool()const noexcept
 		{
 			return ( m_signal && m_connection );
 		}
@@ -158,7 +158,7 @@ namespace castor
 		 *\~french
 		 *\brief		Echange deux connexions.
 		 */
-		void swap( ConnectionT & lhs, ConnectionT & rhs )
+		void swap( ConnectionT & lhs, ConnectionT & rhs )const noexcept
 		{
 			if ( &rhs != &lhs )
 			{
@@ -189,6 +189,7 @@ namespace castor
 
 	template< typename Function >
 	class SignalT
+		: public NonCopyable
 	{
 		friend class ConnectionT< SignalT< Function > >;
 		using my_connection = ConnectionT< SignalT< Function > >;
@@ -198,10 +199,8 @@ namespace castor
 		using connection = my_connection;
 
 	public:
-		SignalT( SignalT const & ) = delete;
-		SignalT & operator=( SignalT const & ) = delete;
-		SignalT( SignalT && ) = default;
-		SignalT & operator=( SignalT && ) = default;
+		SignalT( SignalT && )noexcept = default;
+		SignalT & operator=( SignalT && )noexcept = default;
 		SignalT() = default;
 		/**
 		 *\~english
@@ -211,7 +210,7 @@ namespace castor
 		 *\brief		Destructeur.
 		 *\remarks		Déconnecte toutes les connexions restantes.
 		 */
-		~SignalT()
+		~SignalT()noexcept
 		{
 			// ConnectionT::disconnect appelle SignalT::remConnection, qui
 			// supprime la connection de m_connections, invalidant ainsi
@@ -291,7 +290,7 @@ namespace castor
 		 *\brief		Déconnecte une fonction.
 		 *\param[in]	index	L'indice de la fonction.
 		 */
-		void disconnect( uint32_t index )
+		void disconnect( uint32_t index )noexcept
 		{
 			auto it = m_slots.find( index );
 
@@ -308,10 +307,17 @@ namespace castor
 		 *\brief		Ajoute une connexion à la liste.
 		 *\param[in]	connection	La connexion à ajouter.
 		 */
-		void addConnection( my_connection & connection )
+		void addConnection( my_connection & connection )noexcept
 		{
-			assert( m_connections.find( &connection ) == m_connections.end() );
-			m_connections.insert( &connection );
+			try
+			{
+				assert( m_connections.find( &connection ) == m_connections.end() );
+				m_connections.emplace( &connection );
+			}
+			catch ( ... )
+			{
+				// Nothing to do ?
+			}
 		}
 		/**
 		 *\~english
@@ -321,7 +327,7 @@ namespace castor
 		 *\brief		Enlève une connexion de la liste.
 		 *\param[in]	connection	La connexion à enlever.
 		 */
-		void removeConnection( my_connection & connection )
+		void removeConnection( my_connection & connection )noexcept
 		{
 			assert( m_connections.find( &connection ) != m_connections.end() );
 			m_connections.erase( &connection );
@@ -337,7 +343,7 @@ namespace castor
 		 *\param[in]	newConnection	La connexion à ajouter.
 		 */
 		void replaceConnection( my_connection & oldConnection
-			, my_connection & newConnection )
+			, my_connection & newConnection )noexcept
 		{
 			removeConnection( oldConnection );
 			addConnection( newConnection );

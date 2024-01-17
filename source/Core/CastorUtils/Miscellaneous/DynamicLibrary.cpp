@@ -5,8 +5,7 @@ CU_ImplementSmartPtr( castor, DynamicLibrary )
 namespace castor
 {
 	DynamicLibrary::DynamicLibrary( Path const & pathFile )noexcept
-		: m_library( nullptr )
-		, m_pathLibrary( pathFile )
+		: m_pathLibrary( pathFile )
 	{
 		doOpen();
 	}
@@ -18,8 +17,7 @@ namespace castor
 	}
 
 	DynamicLibrary::DynamicLibrary( DynamicLibrary const & lib )noexcept
-		: m_library( nullptr )
-		, m_pathLibrary( lib.m_pathLibrary )
+		: m_pathLibrary( lib.m_pathLibrary )
 	{
 		if ( lib.m_library )
 		{
@@ -40,7 +38,7 @@ namespace castor
 		doClose();
 	}
 
-	DynamicLibrary & DynamicLibrary::operator =( DynamicLibrary const & lib )
+	DynamicLibrary & DynamicLibrary::operator=( DynamicLibrary const & lib )
 	{
 		doClose();
 
@@ -53,7 +51,7 @@ namespace castor
 		return *this;
 	}
 
-	DynamicLibrary & DynamicLibrary::operator =( DynamicLibrary && lib )
+	DynamicLibrary & DynamicLibrary::operator=( DynamicLibrary && lib )noexcept
 	{
 		if ( this != &lib )
 		{

@@ -13,7 +13,7 @@ namespace castor
 {
 	class PreciseTimer
 	{
-		typedef std::chrono::high_resolution_clock clock;
+		using clock = std::chrono::high_resolution_clock;
 
 	public:
 		/**
@@ -23,13 +23,6 @@ namespace castor
 		 *\brief		Constructeur
 		 */
 		CU_API PreciseTimer();
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		CU_API ~PreciseTimer();
 		/**
 		 *\~english
 		 *\return		The time elapsed since the last call.

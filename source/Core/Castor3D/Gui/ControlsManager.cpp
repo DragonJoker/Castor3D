@@ -25,7 +25,7 @@
 #include "Castor3D/Gui/Theme/StyleStatic.hpp"
 #include "Castor3D/Overlay/BorderPanelOverlay.hpp"
 
-#include <CastorUtils/FileParser/ParserParameter.hpp>
+#include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Graphics/FontCache.hpp>
 
 CU_ImplementSmartPtr( castor3d, ControlsManager )

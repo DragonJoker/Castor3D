@@ -13,17 +13,17 @@ namespace castor
 	class AttributeParserMap
 	{
 	private:
-		CU_DeclareMap( String, ParserFunctionAndParams, );
+		using Map = std::map< String, ParserFunctionAndParams, std::less<> >;
 		Map m_map;
 
 	public:
-		typedef MapIt iterator;
-		typedef MapConstIt const_iterator;
+		using iterator = Map::iterator;
+		using const_iterator = Map::const_iterator;
 
 		ParserFunctionAndParams & operator []( String const & name )
 		{
-			auto ires = m_map.emplace( name, ParserFunctionAndParams{} );
-			return ires.first->second;
+			auto [it, res] = m_map.try_emplace( name );
+			return it->second;
 		}
 
 		iterator find( String const & name )

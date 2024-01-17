@@ -10,68 +10,65 @@
 #include <fstream>
 #include <string>
 
-namespace castor
+namespace castor::platform
 {
-	namespace Platform
-	{
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wmissing-prototypes"
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wmissing-declarations"
-		void callCpuid( uint32_t func, std::array< int32_t, 4 > & p_data )
+	void callCpuid( uint32_t func, std::array< int32_t, 4 > & p_data )
+	{
+		uint32_t a{};
+		uint32_t b{};
+		uint32_t c{};
+		uint32_t d{};
+		__get_cpuid( func, &a, &b, &c, &d );
+		p_data[0] = int32_t( a );
+		p_data[1] = int32_t( b );
+		p_data[2] = int32_t( c );
+		p_data[3] = int32_t( d );
+	}
+
+	uint32_t getCoreCount()
+	{
+		char res[128];
+		FILE * fp = popen( "/bin/cat /proc/cpuinfo | grep -c '^processor'", "r" );
+		auto read = fread( res, 1, sizeof( res ) - 1, fp );
+
+		if ( !read || read >= sizeof( res ) )
 		{
-			uint32_t a{};
-			uint32_t b{};
-			uint32_t c{};
-			uint32_t d{};
-			__get_cpuid( func, &a, &b, &c, &d );
-			p_data[0] = int32_t( a );
-			p_data[1] = int32_t( b );
-			p_data[2] = int32_t( c );
-			p_data[3] = int32_t( d );
+			CU_Failure( "Couldn't retrieve CPU cores count" );
 		}
 
-		uint32_t getCoreCount()
-		{
-			char res[128];
-			FILE * fp = popen( "/bin/cat /proc/cpuinfo | grep -c '^processor'", "r" );
-			auto read = fread( res, 1, sizeof( res ) - 1, fp );
+		pclose( fp );
+		return uint32_t( res[0] );
+	}
 
-			if ( !read || read >= sizeof( res ) )
+	std::string getCPUModel()
+	{
+		std::string line;
+		std::ifstream finfo( "/proc/cpuinfo" );
+		std::string result;
+
+		while ( std::getline( finfo, line ) )
+		{
+			std::stringstream str( line );
+			std::string itype;
+			std::string info;
+
+			if ( std::getline( str, itype, ':' )
+				&& std::getline( str, info )
+				&& itype.substr( 0, 10 ) == "model name" )
 			{
-				CU_Failure( "Couldn't retrieve CPU cores count" );
+				result = info.substr( 1 );
+				break;
 			}
-
-			pclose( fp );
-			return uint32_t( res[0] );
 		}
 
-		std::string getCPUModel()
-		{
-			std::string line;
-			std::ifstream finfo( "/proc/cpuinfo" );
-			std::string result;
-
-			while ( std::getline( finfo, line ) )
-			{
-				std::stringstream str( line );
-				std::string itype;
-				std::string info;
-
-				if ( std::getline( str, itype, ':' )
-					&& std::getline( str, info )
-					&& itype.substr( 0, 10 ) == "model name" )
-				{
-					result = info.substr( 1 );
-					break;
-				}
-			}
-
-			return result;
-		}
+		return result;
+	}
 #pragma GCC diagnostic pop
 #pragma clang diagnostic pop
-	}
 }
 
 #endif

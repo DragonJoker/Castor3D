@@ -9,9 +9,6 @@ See LICENSE file in root folder
 namespace castor
 {
 	/**
-	\author		Sylvain DOREMUS
-	\version	0.8.0
-	\date		08/01/2016
 	\~english
 	\brief		Pool managed object.
 	\remarks	Uses a policy to change behaviour easily.
@@ -29,6 +26,7 @@ namespace castor
 	{
 	public:
 		using MyUniqueObjectPool = UniqueObjectPool< Object, MemDataType >;
+		using ObjectPtr = Object *;
 
 	public:
 		/**
@@ -40,20 +38,8 @@ namespace castor
 		 *\param[in]	params	Les paramètre du constructeur de Object.
 		 */
 		template< typename ... Params >
-		explicit PoolManagedObject( Params ... params )noexcept
-			: Object( params... )
-		{
-		}
-		/**
-		 *\~english
-		 *\brief		Copy constructor.
-		 *\param[in]	rhs	The other object.
-		 *\~french
-		 *\brief		Constructeur par copie.
-		 *\param[in]	rhs	L'autre objet.
-		 */
-		PoolManagedObject( PoolManagedObject const & rhs )noexcept
-			: Object( rhs )
+		explicit PoolManagedObject( Params && ... params )noexcept
+			: Object( std::forward< Params >( params )... )
 		{
 		}
 		/**
@@ -78,7 +64,7 @@ namespace castor
 		 *\remarks		Utilise le pool d'objets pour allouer la mémoire.
 		 *\param[in]	size	La taille à allouer.
 		 */
-		static void * operator new( std::size_t size )
+		void * operator new( std::size_t size )
 		{
 			auto result = MyUniqueObjectPool::get().allocate();
 
@@ -101,9 +87,9 @@ namespace castor
 		 *\param[in]	ptr	Le pointeur à désallouer.
 		 *\param[in]	size	La taille à désallouer.
 		 */
-		static void operator delete( void * ptr, std::size_t size )
+		void operator delete( void * ptr, std::size_t size )
 		{
-			MyUniqueObjectPool::get().deallocate( reinterpret_cast< Object * >( ptr ) );
+			MyUniqueObjectPool::get().deallocate( ObjectPtr( ptr ) );
 		}
 		/**
 		 *\~english
@@ -117,9 +103,9 @@ namespace castor
 		 *\param[in]	ptr	Le pointeur à désallouer.
 		 *\param[in]	size	La taille à désallouer.
 		 */
-		static void operator delete[]( void * ptr, std::size_t size )
+		void operator delete[]( void * ptr, std::size_t size )
 		{
-			MyUniqueObjectPool::get().deallocate( reinterpret_cast< Object * >( ptr ) );
+			MyUniqueObjectPool::get().deallocate( ObjectPtr( ptr ) );
 		}
 	};
 }

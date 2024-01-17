@@ -105,10 +105,6 @@ namespace castor
 	{
 	}
 
-	ImageLoader::~ImageLoader()
-	{
-	}
-
 	void ImageLoader::registerLoader( String const & extension, ImageLoaderPtr loader )
 	{
 		m_loaders.emplace_back( std::move( loader ) );
@@ -129,9 +125,8 @@ namespace castor
 
 	void ImageLoader::unregisterLoader( String const & extension )
 	{
-		auto it = m_extLoaders.find( string::lowerCase( extension ) );
-
-		if ( it != m_extLoaders.end() )
+		if ( auto it = m_extLoaders.find( string::lowerCase( extension ) );
+			it != m_extLoaders.end() )
 		{
 			m_extLoaders.erase( it );
 		}
@@ -155,8 +150,10 @@ namespace castor
 		}
 
 		ByteArray data;
+
+		if ( BinaryFile file{ path, File::OpenMode::eRead };
+			file.isOk() )
 		{
-			BinaryFile file{ path, File::OpenMode::eRead };
 			auto size = file.getLength();
 
 			if ( !size )
@@ -233,12 +230,12 @@ namespace castor
 		}
 	}
 
-	ImageLoaderImpl * ImageLoader::findLoader( Path imagePath )const
+	ImageLoaderImpl * ImageLoader::findLoader( Path const & imagePath )const
 	{
 		return findLoader( string::lowerCase( imagePath.getExtension() ) );
 	}
 
-	ImageLoaderImpl * ImageLoader::findLoader( String imageFormat )const
+	ImageLoaderImpl * ImageLoader::findLoader( String const & imageFormat )const
 	{
 		auto it = m_extLoaders.find( string::lowerCase( imageFormat ) );
 

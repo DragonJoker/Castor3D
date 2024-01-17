@@ -15,7 +15,7 @@
 #include <Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp>
 #include <Castor3D/Shader/Shaders/GlslUtils.hpp>
 
-#include <CastorUtils/FileParser/ParserParameter.hpp>
+#include <CastorUtils/FileParser/FileParser.hpp>
 
 CU_ImplementSmartPtr( water, WaterNormal2MapComponent )
 

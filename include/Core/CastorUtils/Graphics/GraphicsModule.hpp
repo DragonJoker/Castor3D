@@ -840,7 +840,7 @@ namespace castor
 		CU_API static ElementPtrT makeElement( ResourceCacheBaseT< Font, String, ResourceCacheTraitsT< Font, String > > const & cache
 			, KeyT const & name
 			, uint32_t height
-			, Path path );
+			, Path const & path );
 	};
 	using FontCacheTraits = ResourceCacheTraitsT< Font, String >;
 

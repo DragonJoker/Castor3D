@@ -9,7 +9,7 @@
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneFileParserData.hpp"
 
-#include <CastorUtils/FileParser/ParserParameter.hpp>
+#include <CastorUtils/FileParser/FileParser.hpp>
 
 CU_ImplementSmartPtr( castor3d, Material )
 
@@ -133,7 +133,7 @@ namespace castor3d
 
 		log::debug << cuT( "Initialising material [" ) << getName() << cuT( "]" ) << std::endl;
 
-		for ( auto & pass : m_passes )
+		for ( auto const & pass : m_passes )
 		{
 			pass->initialise();
 		}
@@ -150,7 +150,7 @@ namespace castor3d
 
 		m_initialised = false;
 
-		for ( auto & pass : m_passes )
+		for ( auto const & pass : m_passes )
 		{
 			pass->cleanup();
 		}
@@ -169,10 +169,10 @@ namespace castor3d
 			, lightingModelId );
 		CU_Require( result );
 		auto ret = result.get();
-		m_passListeners.emplace( ret
+		m_passListeners.try_emplace( ret
 			, result->onChanged.connect( [this]( Pass const & p
-				, PassComponentCombineID CU_UnusedParam( oldCombineID )
-				, PassComponentCombineID CU_UnusedParam( newCombineID ) )
+				, CU_UnusedParam( PassComponentCombineID, oldCombineID )
+				, CU_UnusedParam( PassComponentCombineID, newCombineID ) )
 			{
 				onPassChanged( p );
 			} ) );
@@ -198,10 +198,10 @@ namespace castor3d
 		auto newPass = getEngine()->getPassFactory().create( *this
 			, pass );
 		CU_Require( newPass );
-		m_passListeners.emplace( newPass.get()
+		m_passListeners.try_emplace( newPass.get()
 			, newPass->onChanged.connect( [this]( Pass const & p
-				, PassComponentCombineID CU_UnusedParam( oldCombineID )
-				, PassComponentCombineID CU_UnusedParam( newCombineID ) )
+				, CU_UnusedParam( PassComponentCombineID, oldCombineID )
+				, CU_UnusedParam( PassComponentCombineID, newCombineID ) )
 			{
 				onPassChanged( p );
 			} ) );
@@ -209,13 +209,13 @@ namespace castor3d
 		onChanged( *this );
 	}
 
-	void Material::removePass( PassRPtr pass )
+	void Material::removePass( Pass const & pass )
 	{
 		auto it = std::find_if( m_passes.begin()
 			, m_passes.end()
-			, [pass]( PassUPtr const & lookup )
+			, [&pass]( PassUPtr const & lookup )
 			{
-				return lookup.get() == pass;
+				return lookup.get() == &pass;
 			} );
 
 		if ( it != m_passes.end() )
@@ -270,7 +270,7 @@ namespace castor3d
 			} );
 	}
 
-	void Material::onPassChanged( Pass const & pass )
+	void Material::onPassChanged( Pass const & )
 	{
 		onChanged( *this );
 	}

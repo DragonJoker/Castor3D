@@ -11,10 +11,6 @@ namespace castor
 	{
 	}
 
-	BinaryFile::~BinaryFile()
-	{
-	}
-
 	bool BinaryFile::write( String const & toWrite )
 	{
 		CU_CheckInvariants();

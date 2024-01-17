@@ -302,57 +302,15 @@ namespace Testing
 		void swap( Coords< T, Count > & rhs );
 		/**
 		 *\~english
-		 *\brief		Inverts data in the point
-		 *\remark		The first becomes last and so on
-		 *\~french
-		 *\brief		Inverse les donnàes dans ce point
-		 *\remark		Les premiers deviennent les derniers
-		 */
-		void flip();
-		/**
-		 *\~english
 		 *\brief		Retrieves the total size of the point
-		 *\return		count() * elemSize()
+		 *\return		count * elemSize
 		 *\~french
 		 *\brief		Ràcupàre la taille totale du point
-		 *\return		count() * elemSize()
+		 *\return		count * elemSize
 		 */
 		inline uint32_t size()const
 		{
 			return binary_size;
-		}
-		/**
-		 *\~english
-		 *\brief			Retrieves data from the point and put it into an array
-		 *\param[in,out]	result	Receives the point data, needs to be allocated by the caller
-		 *\~french
-		 *\brief			Ràcupàre les donnàes et les place dans un tableau
-		 *\param[in,out]	result	Reàoit les donnàes, doit àtre allouà par l'appelant
-		 */
-		void toValues( T * result )const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the number of coordinates
-		 *\return		The number of coordinates
-		 *\~french
-		 *\brief		Ràcupàre le nombre de coordonnàes
-		 *\return		Le nombre de coordonnàes
-		 */
-		inline uint32_t count()const
-		{
-			return Count;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the coordinate type size
-		 *\return		The data type size
-		 *\~french
-		 *\brief		Ràcupàre la taille du type donnàes
-		 *\return		La taille du type de donnàes
-		 */
-		inline std::size_t elemSize()const
-		{
-			return sizeof( T );
 		}
 		/**
 		 *\~english
@@ -382,28 +340,6 @@ namespace Testing
 		{
 			return m_coords[idx];
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the data at given index
-		 *\remark		This fonction checks the index and throws an exception if it is out of bounds
-		 *\return		A constant reference on data at wanted index
-		 *\~french
-		 *\brief		Ràcupàre la donnàe à l'index donné
-		 *\remark		Cette fonction vàrifie l'index et lance une exception s'il est hors bornes
-		 *\return		Une ràfàrence constante sur la donnàe à l'index voulu
-		 */
-		T const & at( uint32_t idx )const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the data at given index
-		 *\remark		This fonction checks the index and throws an exception if it is out of bounds
-		 *\return		A reference on data at wanted index
-		 *\~french
-		 *\brief		Ràcupàre la donnàe à l'index donné
-		 *\remark		Cette fonction vàrifie l'index et lance une exception s'il est hors bornes
-		 *\return		Une ràfàrence sur la donnàe à l'index voulu
-		 */
-		T & at( uint32_t idx );
 		/**
 		 *\~english
 		 *\brief		Retrieves a non constant pointer on datas
@@ -957,36 +893,6 @@ namespace Testing
 		void swap( Point< T, Count > & rhs );
 		/**
 		 *\~english
-		 *\brief		Inverts data in the point
-		 *\remark		The first becomes last and so on
-		 *\~french
-		 *\brief		Inverse les donnàes dans ce point
-		 *\remark		Les premiers deviennent les derniers
-		 */
-		void flip();
-		/**
-		 *\~english
-		 *\brief			Retrieves data from the point and put it into an array
-		 *\param[in,out]	result	Receives the point data, needs to be allocated by the caller
-		 *\~french
-		 *\brief			Ràcupàre les donnàes et les place dans un tableau
-		 *\param[in,out]	result	Reàoit les donnàes, doit àtre allouà par l'appelant
-		 */
-		void toValues( T * result )const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the number of coordinates
-		 *\return		The number of coordinates
-		 *\~french
-		 *\brief		Ràcupàre le nombre de coordonnàes
-		 *\return		Le nombre de coordonnàes
-		 */
-		inline uint32_t count()const
-		{
-			return Count;
-		}
-		/**
-		 *\~english
 		 *\brief		Retrieves the coordinate type size
 		 *\return		The data type size
 		 *\~french
@@ -1000,10 +906,10 @@ namespace Testing
 		/**
 		 *\~english
 		 *\brief		Retrieves the total size of the point
-		 *\return		count() * elemSize()
+		 *\return		count * elemSize
 		 *\~french
 		 *\brief		Ràcupàre la taille totale du point
-		 *\return		count() * elemSize()
+		 *\return		count * elemSize
 		 */
 		inline	std::size_t	size()const
 		{
@@ -1037,28 +943,6 @@ namespace Testing
 		{
 			return m_coords[rhs];
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the data at given index
-		 *\remark		This fonction checks the index and throws an exception if it is out of bounds
-		 *\return		A constant reference on data at wanted index
-		 *\~french
-		 *\brief		Ràcupàre la donnàe à l'index donné
-		 *\remark		Cette fonction vàrifie l'index et lance une exception s'il est hors bornes
-		 *\return		Une ràfàrence constante sur la donnàe à l'index voulu
-		 */
-		T const & at( uint32_t rhs )const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the data at given index
-		 *\remark		This fonction checks the index and throws an exception if it is out of bounds
-		 *\return		A reference on data at wanted index
-		 *\~french
-		 *\brief		Ràcupàre la donnàe à l'index donné
-		 *\remark		Cette fonction vàrifie l'index et lance une exception s'il est hors bornes
-		 *\return		Une ràfàrence sur la donnàe à l'index voulu
-		 */
-		T & at( uint32_t rhs );
 		/**
 		 *\~english
 		 *\brief		Retrieves the pointer on datas

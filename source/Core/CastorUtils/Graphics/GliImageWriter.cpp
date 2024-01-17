@@ -44,26 +44,29 @@ namespace castor
 				, 1 };
 		}
 
+		static StringArray const GliExtensions
+		{
+			cuT( "dds" ),
+			cuT( "kmg" ),
+			cuT( "ktx" ),
+		};
+
 		static StringArray const & listExtensions()
 		{
-			static StringArray const list
-			{
-				cuT( "dds" ),
-				cuT( "kmg" ),
-				cuT( "ktx" ),
-			};
-			return list;
+			return GliExtensions;
 		}
 
 		static gli::texture convert( PxBufferBase const & buffer )
 		{
+			using BytePtr = uint8_t *;
+
 			gli::texture result{ getTarget( buffer.getDimensions(), buffer.getLayers() )
 				, getFormat( buffer.getFormat() )
 				, getExtent( buffer.getDimensions() )
 				, buffer.getLayers()
 				, 1u
 				, buffer.getLevels() };
-			auto dstLayer = reinterpret_cast< uint8_t * >( result.data() );
+			auto dstLayer = BytePtr( result.data() );
 			auto srcLayer = buffer.getConstPtr();
 			auto srcLayerSize = ashes::getLevelsSize( { buffer.getWidth(), buffer.getHeight(), 1u }
 				, VkFormat( buffer.getFormat() )

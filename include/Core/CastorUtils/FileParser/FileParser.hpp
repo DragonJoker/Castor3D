@@ -17,6 +17,23 @@ namespace castor
 	public:
 		struct Action
 		{
+			Action( Path file = {}
+				, uint64_t line = {}
+				, String name = {}
+				, uint32_t section = {}
+				, ParserFunctionAndParams function = {}
+				, String params = {}
+				, bool implicit = {} )
+				: file{ std::move( file ) }
+				, line{ line }
+				, name{ std::move( name ) }
+				, section{ section }
+				, function{ std::move( function ) }
+				, params{ std::move( params ) }
+				, implicit{ implicit }
+			{
+			}
+
 			Path file{};
 			uint64_t line{};
 			String name{};
@@ -29,9 +46,9 @@ namespace castor
 	public:
 		CU_API PreprocessedFile( PreprocessedFile const & rhs ) = delete;
 		CU_API PreprocessedFile & operator=( PreprocessedFile const & rhs ) = delete;
-		CU_API PreprocessedFile( PreprocessedFile && rhs ) = default;
-		CU_API PreprocessedFile & operator=( PreprocessedFile && rhs );
-		CU_API virtual ~PreprocessedFile() = default;
+		CU_API PreprocessedFile( PreprocessedFile && rhs )noexcept;
+		CU_API PreprocessedFile & operator=( PreprocessedFile && rhs )noexcept;
+		CU_API virtual ~PreprocessedFile()noexcept = default;
 
 		CU_API explicit PreprocessedFile( FileParser & parser );
 		CU_API PreprocessedFile( FileParser & parser
@@ -92,6 +109,7 @@ namespace castor
 	};
 
 	class FileParser
+		: public NonMovable
 	{
 	public:
 		/**
@@ -123,7 +141,7 @@ namespace castor
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		CU_API virtual ~FileParser();
+		CU_API virtual ~FileParser()noexcept = default;
 		/**
 		 *\~english
 		 *\brief		Registers additional parsers.
@@ -161,7 +179,7 @@ namespace castor
 		 *\param[in]	path			Le chemin d'accès au fichier.
 		 *\param[in]	preprocessed	Le fichier pré-traité.
 		 */
-		CU_API void processFile( Path path
+		CU_API void processFile( Path const & path
 			, PreprocessedFile & preprocessed );
 		/**
 		 *\~english
@@ -305,8 +323,8 @@ namespace castor
 		CU_API void addParser( SectionId oldSection
 			, SectionId newSection
 			, String const & name
-			, ParserFunction function
-			, ParserParameterArray params = ParserParameterArray() );
+			, ParserFunction const & function
+			, ParserParameterArray const & params = ParserParameterArray() );
 		/**
 		 *\~english
 		 *\brief		adds a parser function to the parsers list.
@@ -323,8 +341,8 @@ namespace castor
 		 */
 		CU_API void addParser( SectionId section
 			, String const & name
-			, ParserFunction function
-			, ParserParameterArray params = ParserParameterArray() );
+			, ParserFunction const & function
+			, ParserParameterArray const & params = ParserParameterArray() );
 		/**
 		 *\~english
 		 *\brief		Tells if the read lines are to be ignored.
@@ -376,7 +394,7 @@ namespace castor
 			doCleanupParser( preprocessed );
 		}
 
-		std::map< castor::String, castor::AdditionalParsers > const & getAdditionalParsers()const
+		auto const & getAdditionalParsers()const
 		{
 			return m_additionalParsers;
 		}
@@ -433,6 +451,21 @@ namespace castor
 		CU_API virtual std::unique_ptr< FileParser > doCreateParser()const = 0;
 
 	private:
+		void doProcessNoBlockLine( StringView curLine
+			, PreprocessedFile & preprocessed
+			, std::vector< StringView > const & work
+			, std::vector< StringView > const & nextWork
+			, uint64_t lineIndex
+			, SectionId & pendingSection
+			, bool & isNextOpenBrace );
+		void doProcessLine( StringView curLine
+			, PreprocessedFile & preprocessed
+			, std::vector< StringView > const & work
+			, std::vector< StringView > const & nextWork
+			, uint64_t lineIndex
+			, SectionId & pendingSection
+			, bool & commented
+			, bool & isNextOpenBrace );
 		void doParseScriptBlockBegin( PreprocessedFile & preprocessed
 			, uint32_t newSection
 			, uint64_t lineIndex
@@ -451,13 +484,13 @@ namespace castor
 		void doLeaveBlock( PreprocessedFile & preprocessed
 			, uint64_t lineIndex
 			, bool implicit );
-		bool doIsInIgnoredBlock();
+		bool doIsInIgnoredBlock()const;
 		void doIncludeFile( PreprocessedFile & preprocessed
 			, uint64_t lineIndex
 			, StringView param );
 		void doAddDefine( uint64_t lineIndex
 			, StringView param );
-		void doCheckDefines( String & text );
+		void doCheckDefines( String & text )const;
 
 	private:
 		SectionId m_rootSectionId{};
@@ -465,7 +498,7 @@ namespace castor
 		int m_ignoreLevel{ 0 };
 		Path m_path;
 		String m_fileName;
-		std::map< castor::String, AdditionalParsers > m_additionalParsers;
+		std::map< castor::String, AdditionalParsers, std::less<> > m_additionalParsers;
 		std::deque< SectionId > m_sections{};
 
 	protected:

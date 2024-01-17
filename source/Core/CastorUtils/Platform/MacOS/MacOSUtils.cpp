@@ -9,7 +9,7 @@ extern void getDisplaySize( uint32_t * w, uint32_t * h );
 
 namespace castor
 {
-	namespace System
+	namespace system
 	{
 		bool getScreenSize( uint32_t p_screen, castor::Size & p_size )
 		{
@@ -20,17 +20,17 @@ namespace castor
 
 		String getLastErrorText()
 		{
-			String strReturn;
+			String result;
 			int error = errno;
 			char * szError = nullptr;
 
 			if ( error != 0 && ( szError = strerror( error ) ) != nullptr )
 			{
-				strReturn = string::toString( error ) + cuT( " (" ) + string::stringCast< xchar >( szError ) + cuT( ")" );
-				string::replace( strReturn, cuT( "\n" ), cuT( "" ) );
+				result = string::toString( error ) + cuT( " (" ) + string::stringCast< xchar >( szError ) + cuT( ")" );
+				string::replace( result, cuT( "\n" ), cuT( "" ) );
 			}
 
-			return strReturn;
+			return result;
 		}
 
 		String getOSName()
@@ -62,9 +62,9 @@ namespace castor
 		}
 	}
 
-	void getLocaltime( std::tm * p_tm, time_t const * p_pTime )
+	void getLocaltime( std::tm * tm, time_t const * pTime )
 	{
-		*p_tm = *localtime( p_pTime );
+		*tm = *localtime( pTime );
 	}
 }
 

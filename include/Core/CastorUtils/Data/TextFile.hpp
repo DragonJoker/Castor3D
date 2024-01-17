@@ -11,9 +11,6 @@ See LICENSE file in root folder
 namespace castor
 {
 	/**
-	\author		Sylvain DOREMUS
-	\version	0.9.0
-	\date		24/05/2016
 	\~english
 	\brief		Helper structure to find File type (BinaryFile or TextFile) from FileType.
 	\remarks	Specialisation for FileType::eText.
@@ -27,9 +24,6 @@ namespace castor
 		using Type = TextFile;
 	};
 	/**
-	\author		Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		03/01/2011
 	\~english
 	\brief		Text file class
 	\~french
@@ -56,13 +50,6 @@ namespace castor
 			, EncodingMode encoding = EncodingMode::eASCII );
 		/**
 		 *\~english
-		 *\brief		Destructor, closes the file
-		 *\~french
-		 *\brief		Destructeur, ferme le fichier
-		 */
-		CU_API ~TextFile()override;
-		/**
-		 *\~english
 		 *\brief		Reads one line from the file (stops at first separator met or when size is read)
 		 *\param[out]	toRead		Receives the read line
 		 *\param[in]	size		The maximum line size
@@ -75,7 +62,7 @@ namespace castor
 		 *\param[in]	separators	La liste des séparateurs de ligne
 		 *\return		Le nombre d'octets lus
 		 */
-		CU_API uint64_t readLine( String & toRead, uint64_t size, String separators = cuT( "\r\n" ) );
+		CU_API uint64_t readLine( String & toRead, uint64_t size, StringView separators = cuT( "\r\n" ) );
 		/**
 		 *\~english
 		 *\brief		Reads one word from the file (stops at first ' ' met)

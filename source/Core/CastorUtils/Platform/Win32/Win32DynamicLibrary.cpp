@@ -2,7 +2,7 @@
 
 #if defined( CU_PlatformWindows )
 
-#include <windows.h>
+#include <Windows.h>
 
 #include "CastorUtils/Exception/Assertion.hpp"
 #include "CastorUtils/Exception/Exception.hpp"
@@ -26,7 +26,7 @@ namespace castor
 				if ( !m_library )
 				{
 					String strError = cuT( "Can't load dynamic library at [" ) + m_pathLibrary + cuT( "]: " );
-					strError += System::getLastErrorText();
+					strError += system::getLastErrorText();
 					Logger::logError( strError );
 					m_pathLibrary.clear();
 				}
@@ -42,7 +42,7 @@ namespace castor
 			catch ( ... )
 			{
 				String strError = cuT( "Can't load dynamic library at [" ) + m_pathLibrary + cuT( "]: " );
-				strError += System::getLastErrorText();
+				strError += system::getLastErrorText();
 				Logger::logError( strError );
 				m_library = nullptr;
 				m_pathLibrary.clear();
@@ -58,7 +58,7 @@ namespace castor
 		{
 			std::string stdname( string::stringCast< char >( name ) );
 			UINT oldMode = ::SetErrorMode( SEM_FAILCRITICALERRORS );
-			result = reinterpret_cast< VoidFnType >( ::GetProcAddress( static_cast< HMODULE >( m_library ), stdname.c_str() ) );
+			result = VoidFnType( ::GetProcAddress( static_cast< HMODULE >( m_library ), stdname.c_str() ) );
 			::SetErrorMode( oldMode );
 		}
 		else

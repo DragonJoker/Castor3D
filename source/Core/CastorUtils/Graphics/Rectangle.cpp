@@ -3,39 +3,21 @@
 namespace castor
 {
 	Rectangle::Rectangle( Position const & ptStart, Size const & size )
-		: Coords4i( m_data.buffer )
+		: Coords4i{ getData().buffer.data() }
 	{
-		m_data.rect.left = ptStart.x();
-		m_data.rect.top = ptStart.y();
-		m_data.rect.right = m_data.rect.left + int32_t( size.getWidth() );
-		m_data.rect.bottom = m_data.rect.top + int32_t( size.getHeight() );
+		getData().rect.left = ptStart.x();
+		getData().rect.top = ptStart.y();
+		getData().rect.right = getData().rect.left + int32_t( size.getWidth() );
+		getData().rect.bottom = getData().rect.top + int32_t( size.getHeight() );
 	}
 
 	Rectangle::Rectangle( int32_t iLeft, int32_t iTop, int32_t iRight, int32_t iBottom )
-		: Coords4i( m_data.buffer )
+		: Coords4i{ getData().buffer.data() }
 	{
-		m_data.rect.left = iLeft;
-		m_data.rect.top = iTop;
-		m_data.rect.right = iRight;
-		m_data.rect.bottom = iBottom;
-	}
-
-	Rectangle::Rectangle( Rectangle const & rhs )
-		: Coords4i( m_data.buffer )
-	{
-		m_data.rect.left = rhs.m_data.rect.left;
-		m_data.rect.top = rhs.m_data.rect.top;
-		m_data.rect.right = rhs.m_data.rect.right;
-		m_data.rect.bottom = rhs.m_data.rect.bottom;
-	}
-
-	Rectangle & Rectangle::operator=( Rectangle const & rhs )
-	{
-		m_data.rect.left = rhs.m_data.rect.left;
-		m_data.rect.top = rhs.m_data.rect.top;
-		m_data.rect.right = rhs.m_data.rect.right;
-		m_data.rect.bottom = rhs.m_data.rect.bottom;
-		return *this;
+		getData().rect.left = iLeft;
+		getData().rect.top = iTop;
+		getData().rect.right = iRight;
+		getData().rect.bottom = iBottom;
 	}
 
 	Intersection Rectangle::intersects( Position const & point )const
@@ -72,10 +54,10 @@ namespace castor
 
 	void Rectangle::set( int32_t iLeft, int32_t iTop, int32_t iRight, int32_t iBottom )
 	{
-		m_data.rect.left	= iLeft;
-		m_data.rect.top		= iTop;
-		m_data.rect.right	= iRight;
-		m_data.rect.bottom	= iBottom;
+		getData().rect.left	= iLeft;
+		getData().rect.top		= iTop;
+		getData().rect.right	= iRight;
+		getData().rect.bottom	= iBottom;
 	}
 
 	void Rectangle::size( Size & result )const

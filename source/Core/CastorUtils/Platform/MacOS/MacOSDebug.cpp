@@ -11,22 +11,22 @@
 #	include <cxxabi.h>
 #endif
 
-namespace castor
+namespace castor::debug
 {
-	namespace Debug
+	namespace backtrace
 	{
 #if !defined( NDEBUG )
 
 		template< typename CharU, typename CharT >
-		inline std::basic_string< CharU > Demangle( std::basic_string< CharT > const & p_name )
+		static std::basic_string< CharU > demangleSymbol( std::basic_string< CharT > const & name )
 		{
-			std::string ret = string::stringCast< char >( p_name );
-			size_t lindex = p_name.find( "(" );
-			size_t rindex = p_name.find( "+" );
+			std::string ret = string::stringCast< char >( name );
+			size_t lindex = name.find( "(" );
+			size_t rindex = name.find( "+" );
 
 			if ( lindex != std::string::npos && rindex != std::string::npos )
 			{
-				ret = p_name.substr( lindex + 1, rindex - 1 - lindex );
+				ret = name.substr( lindex + 1, rindex - 1 - lindex );
 			}
 
 			int status;
@@ -34,11 +34,11 @@ namespace castor
 
 			if ( !status )
 			{
-				ret = p_name.substr( 0, lindex + 1 ) + real + p_name.substr( rindex );
+				ret = name.substr( 0, lindex + 1 ) + real + name.substr( rindex );
 			}
 			else
 			{
-				ret = p_name;
+				ret = name;
 			}
 
 			free( real );
@@ -46,16 +46,16 @@ namespace castor
 		}
 
 		template< typename CharT >
-		inline void doShowBacktrace( std::basic_ostream< CharT > & p_stream, int p_toCapture, int p_toSkip )
+		static void showBacktrace( std::basic_ostream< CharT > & stream, int toCapture, int toSkip )
 		{
-			p_stream << "CALL STACK:" << std::endl;
-			std::vector< void * > backTrace( p_toCapture );
-			unsigned int num( ::backtrace( backTrace.data(), p_toCapture ) );
+			stream << "CALL STACK:" << std::endl;
+			std::vector< void * > backTrace( toCapture );
+			unsigned int num( ::backtrace( backTrace.data(), toCapture ) );
 			char ** fnStrings( ::backtrace_symbols( backTrace.data(), num ) );
 
-			for ( unsigned i = p_toSkip; i < num; ++i )
+			for ( unsigned i = toSkip; i < num; ++i )
 			{
-				p_stream << "== " << Demangle< CharT >( string::stringCast< char >( fnStrings[i] ) ) << std::endl;
+				stream << "== " << demangleSymbol< CharT >( string::stringCast< char >( fnStrings[i] ) ) << std::endl;
 			}
 
 			free( fnStrings );
@@ -64,39 +64,39 @@ namespace castor
 #else
 
 		template< typename CharT >
-		inline void doShowBacktrace( std::basic_ostream< CharT > & p_stream, int p_toCapture, int p_toSkip )
+		static void showBacktrace( std::basic_ostream< CharT > & stream, int toCapture, int toSkip )
 		{
 		}
 
 #endif
+	}
 
-		void initialise()
-		{
-		}
+	void initialise()
+	{
+	}
 
-		void cleanup()
-		{
-		}
+	void cleanup()
+	{
+	}
 
-		void loadModule( DynamicLibrary const & library )
-		{
-		}
+	void loadModule( DynamicLibrary const & library )
+	{
+	}
 
-		void unloadModule( DynamicLibrary const & library )
-		{
-		}
+	void unloadModule( DynamicLibrary const & library )
+	{
+	}
 
-		std::wostream & operator<<( std::wostream & p_stream, Backtrace const & p_backtrace )
-		{
-			doShowBacktrace( p_stream, p_backtrace.m_toCapture, p_backtrace.m_toSkip );
-			return p_stream;
-		}
+	std::wostream & operator<<( std::wostream & stream, Backtrace const & bt )
+	{
+		backtrace::showBacktrace( stream, bt.m_toCapture, bt.m_toSkip );
+		return stream;
+	}
 
-		std::ostream & operator<<( std::ostream & p_stream, Backtrace const & p_backtrace )
-		{
-			doShowBacktrace( p_stream, p_backtrace.m_toCapture, p_backtrace.m_toSkip );
-			return p_stream;
-		}
+	std::ostream & operator<<( std::ostream & stream, Backtrace const & bt )
+	{
+		backtrace::showBacktrace( stream, bt.m_toCapture, bt.m_toSkip );
+		return stream;
 	}
 }
 

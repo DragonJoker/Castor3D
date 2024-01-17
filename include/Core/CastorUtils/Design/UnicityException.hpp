@@ -11,9 +11,6 @@ See LICENSE file in root folder
 namespace castor
 {
 	/**
-	\author		Sylvain DOREMUS
-	\version	0.8.0
-	\date		12/01/2016
 	\~english
 	\brief		Unicity errors enumeration.
 	\~french
@@ -28,15 +25,12 @@ namespace castor
 		CU_ScopedEnumBounds( eNoInstance )
 	};
 	/**
-	\author		Sylvain DOREMUS
-	\version	0.8.0
-	\date		12/01/2016
 	\~english
 	\brief		Unicity error texts.
 	\~french
 	\brief		Textes des erreurs d'unicité
 	*/
-	static char const * const STR_UNICITY_ERROR[] =
+	static std::array< StringView, size_t( UnicityError::eCount ) > const STR_UNICITY_ERROR
 	{
 		"No instance for Unique class ",
 		"Duplicate instance for Unique class ",
@@ -51,7 +45,7 @@ namespace castor
 			, char const * file
 			, char const * function
 			, uint32_t line )
-			: Exception( STR_UNICITY_ERROR[uint32_t( error )] + description
+			: Exception( String{ STR_UNICITY_ERROR[uint32_t( error )] } + description
 				, file
 				, function
 				, line )

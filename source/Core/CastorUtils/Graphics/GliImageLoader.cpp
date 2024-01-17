@@ -35,24 +35,6 @@ namespace castor
 				return PixelFormat::eB8G8R8A8_UNORM;
 			case gli::FORMAT_BGR8_SRGB_PACK32:
 				return PixelFormat::eB8G8R8A8_SRGB;
-			case gli::FORMAT_RGB_PVRTC1_8X8_UNORM_BLOCK32:
-			case gli::FORMAT_RGB_PVRTC1_8X8_SRGB_BLOCK32:
-			case gli::FORMAT_RGB_PVRTC1_16X8_UNORM_BLOCK32:
-			case gli::FORMAT_RGB_PVRTC1_16X8_SRGB_BLOCK32:
-			case gli::FORMAT_RGBA_PVRTC1_8X8_UNORM_BLOCK32:
-			case gli::FORMAT_RGBA_PVRTC1_8X8_SRGB_BLOCK32:
-			case gli::FORMAT_RGBA_PVRTC1_16X8_UNORM_BLOCK32:
-			case gli::FORMAT_RGBA_PVRTC1_16X8_SRGB_BLOCK32:
-			case gli::FORMAT_RGBA_PVRTC2_4X4_UNORM_BLOCK8:
-			case gli::FORMAT_RGBA_PVRTC2_4X4_SRGB_BLOCK8:
-			case gli::FORMAT_RGBA_PVRTC2_8X4_UNORM_BLOCK8:
-			case gli::FORMAT_RGBA_PVRTC2_8X4_SRGB_BLOCK8:
-			case gli::FORMAT_RGB_ETC_UNORM_BLOCK8:
-			case gli::FORMAT_RGB_ATC_UNORM_BLOCK8:
-			case gli::FORMAT_RGBA_ATCA_UNORM_BLOCK16:
-			case gli::FORMAT_RGBA_ATCI_UNORM_BLOCK16:
-			case gli::FORMAT_LA8_UNORM_PACK8:
-			case gli::FORMAT_RG3B2_UNORM_PACK8:
 			default:
 				CU_Exception( "Unsupported gli::format" );
 			}
@@ -82,15 +64,16 @@ namespace castor
 			}
 		}
 
+		static StringArray const GliExtensions
+		{
+			cuT( "dds" ),
+			cuT( "kmg" ),
+			cuT( "ktx" ),
+		};
+
 		static StringArray const & listExtensions()
 		{
-			static StringArray const list
-			{
-				cuT( "dds" ),
-				cuT( "kmg" ),
-				cuT( "ktx" ),
-			};
-			return list;
+			return GliExtensions;
 		}
 	}
 
@@ -112,21 +95,22 @@ namespace castor
 		, uint32_t size
 		, PxBufferBaseUPtr & buffer )const
 	{
+		using CharCPtr = char const *;
 		gli::texture texture;
 		bool flipped = false;
 
 		if ( imageFormat.find( cuT( "dds" ) ) != String::npos )
 		{
-			texture = gli::load_dds( reinterpret_cast< char const * >( data ), size );
+			texture = gli::load_dds( CharCPtr( data ), size );
 			flipped = true;
 		}
 		else if ( imageFormat.find( cuT( "kmg" ) ) != String::npos )
 		{
-			texture = gli::load_kmg( reinterpret_cast< char const * >( data ), size );
+			texture = gli::load_kmg( CharCPtr( data ), size );
 		}
 		else if ( imageFormat.find( cuT( "ktx" ) ) != String::npos )
 		{
-			texture = gli::load_ktx( reinterpret_cast< char const * >( data ), size );
+			texture = gli::load_ktx( CharCPtr( data ), size );
 		}
 
 		if ( texture.empty() )

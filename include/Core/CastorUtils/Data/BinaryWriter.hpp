@@ -30,7 +30,7 @@ namespace castor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~BinaryWriter()override = default;
+		~BinaryWriter()noexcept override = default;
 	};
 }
 

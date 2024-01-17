@@ -5,7 +5,7 @@
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/SceneFileParserData.hpp"
 
-#include <CastorUtils/FileParser/ParserParameter.hpp>
+#include <CastorUtils/FileParser/FileParser.hpp>
 
 namespace castor3d
 {

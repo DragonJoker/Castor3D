@@ -18,7 +18,7 @@ namespace castor
 		 *\~french
 		 *\brief		Constructeur.
 		 */
-		CU_API PlaneEquation();
+		CU_API PlaneEquation() = default;
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -182,8 +182,8 @@ namespace castor
 		}
 
 	private:
-		Point3f m_normal;
-		float m_d;
+		Point3f m_normal{};
+		float m_d{};
 		friend CU_API bool operator==( PlaneEquation const &, PlaneEquation const & );
 		friend CU_API bool operator!=( PlaneEquation const &, PlaneEquation const & );
 	};

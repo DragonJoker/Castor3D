@@ -15,6 +15,27 @@ namespace castor
 {
 	namespace file
 	{
+		template< typename TraverseDirT, typename HitFileT >
+		static void traverse( Path const & folderPath
+			, TraverseDirT const & directoryFunction
+			, HitFileT const & fileFunction
+			, dirent const * dirent
+			, String const & name
+			, bool & result )
+		{
+			if ( name != cuT( "." ) && name != cuT( ".." ) )
+			{
+				if ( dirent->d_type == DT_DIR )
+				{
+					result = directoryFunction( folderPath / name );
+				}
+				else
+				{
+					fileFunction( folderPath, name );
+				}
+			}
+		}
+
 		static void printErrnoName( String const & type
 			, Path const & path )
 		{
@@ -72,8 +93,8 @@ namespace castor
 	}
 
 	bool File::traverseDirectory( Path const & folderPath
-		, TraverseDirFunction directoryFunction
-		, HitFileFunction fileFunction )
+		, TraverseDirFunction const & directoryFunction
+		, HitFileFunction const & fileFunction )
 	{
 		CU_Require( !folderPath.empty() );
 		bool result = false;
@@ -92,18 +113,7 @@ namespace castor
 			while ( result && ( dirent = readdir( dir ) ) != nullptr )
 			{
 				String name = string::stringCast< xchar >( dirent->d_name );
-
-				if ( name != cuT( "." ) && name != cuT( ".." ) )
-				{
-					if ( dirent->d_type == DT_DIR )
-					{
-						result = directoryFunction( folderPath / name );
-					}
-					else
-					{
-						fileFunction( folderPath, name );
-					}
-				}
+				file::traverse( folderPath, directoryFunction, fileFunction, dirent, name, result );
 			}
 
 			closedir( dir );

@@ -27,7 +27,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API virtual ~MeshGenerator();
+		C3D_API virtual ~MeshGenerator()noexcept = default;
 		/**
 		 *\~english
 		 *\brief		Creation function, used by Factory

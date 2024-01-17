@@ -15,36 +15,38 @@ namespace castor
 	const xchar Path::NativeSeparator = cuT( '/' );
 #endif
 
-	Path::Path()
-	{
-	}
-
 	Path::Path( char const * rhs )
-		:	String( string::stringCast< xchar >( rhs ) )
+		: String{ string::stringCast< xchar >( rhs ) }
 	{
 		doNormalise();
 	}
 
 	Path::Path( wchar_t const * rhs )
-		:	String( string::stringCast< xchar >( rhs ) )
+		: String{ string::stringCast< xchar >( rhs ) }
 	{
 		doNormalise();
 	}
 
 	Path::Path( String const & rhs )
-		:	String( rhs )
+		: String{ rhs }
+	{
+		doNormalise();
+	}
+
+	Path::Path( StringView rhs )
+		: String{ rhs }
 	{
 		doNormalise();
 	}
 
 	Path::Path( Path const & rhs )
-		:	String( rhs )
+		: String{ rhs }
 	{
 		doNormalise();
 	}
 
-	Path::Path( Path && rhs )
-		:	String( std::move( rhs ) )
+	Path::Path( Path && rhs )noexcept
+		: String{ std::move( rhs ) }
 	{
 	}
 
@@ -55,7 +57,7 @@ namespace castor
 		return *this;
 	}
 
-	Path & Path::operator=( Path && rhs )
+	Path & Path::operator=( Path && rhs )noexcept
 	{
 		String::operator=( std::move( rhs ) );
 		return *this;
@@ -69,7 +71,7 @@ namespace castor
 		return *this;
 	}
 
-	Path & Path::operator/=( String const & rhs )
+	Path & Path::operator/=( StringView rhs )
 	{
 		push_back( NativeSeparator );
 		append( rhs );
@@ -99,7 +101,7 @@ namespace castor
 		return *this;
 	}
 
-	Path & Path::operator+=( String const & rhs )
+	Path & Path::operator+=( StringView rhs )
 	{
 		String::operator+=( rhs );
 		doNormalise();
@@ -123,9 +125,9 @@ namespace castor
 	Path Path::getPath()const
 	{
 		Path result;
-		std::size_t index = find_last_of( NativeSeparator );
 
-		if ( index != String::npos )
+		if ( std::size_t index = find_last_of( NativeSeparator );
+			index != String::npos )
 		{
 			result = Path{ substr( 0, index ) };
 		}
@@ -135,7 +137,7 @@ namespace castor
 
 	Path Path::getFileName( bool withExtension )const
 	{
-		Path result = ( * this );
+		Path result = *this;
 		std::size_t index = find_last_of( NativeSeparator );
 
 		if ( index != String::npos )
@@ -158,10 +160,10 @@ namespace castor
 
 	Path Path::getFullFileName()const
 	{
-		Path result = ( * this );
-		std::size_t index = find_last_of( NativeSeparator );
+		Path result = *this;
 
-		if ( index != String::npos )
+		if ( std::size_t index = find_last_of( NativeSeparator );
+			index != String::npos )
 		{
 			result = Path{ substr( index + 1, String::npos ) };
 		}
@@ -175,10 +177,10 @@ namespace castor
 
 	String Path::getExtension()const
 	{
-		String result = ( * this );
-		std::size_t index = find_last_of( cuT( "." ) );
+		String result = *this;
 
-		if ( index != String::npos )
+		if ( std::size_t index = find_last_of( cuT( "." ) );
+			index != String::npos )
 		{
 			result = substr( index + 1, String::npos );
 		}
@@ -223,20 +225,20 @@ namespace castor
 				assign( substr( 1 ) );
 			}
 
-			xchar sep[3] = { NativeSeparator, 0 };
+			std::array< xchar, 3 > sep{ NativeSeparator, 0, 0 };
 			String tmp( *this );
-			string::replace( tmp, cuT( "/" ), sep );
-			string::replace( tmp, cuT( "\\" ), sep );
+			string::replace( tmp, cuT( "/" ), sep.data() );
+			string::replace( tmp, cuT( "\\" ), sep.data() );
 
 			if ( this->at( this->size() - 1 ) == NativeSeparator )
 			{
 				end = NativeSeparator;
 			}
 
-			StringArray folders = string::split( tmp, sep, 1000, false );
+			StringArray folders = string::split( tmp, sep.data(), 1000, false);
 			std::list< String > list( folders.begin(), folders.end() );
 			tmp.clear();
-			std::list< String >::iterator it = std::find( list.begin(), list.end(), cuT( ".." ) );
+			auto it = std::find( list.begin(), list.end(), cuT( ".." ) );
 
 			while ( list.size() > 1 && it != list.end() )
 			{
@@ -258,7 +260,7 @@ namespace castor
 
 			tmp = begin;
 
-			for ( auto folder : list )
+			for ( auto const & folder : list )
 			{
 				if ( !tmp.empty()
 					&& ( tmp.size() > 1 || tmp != "/" ) )
@@ -322,7 +324,7 @@ namespace castor
 		return path;
 	}
 
-	std::filesystem::path makePath( castor::String const & str )
+	std::filesystem::path makePath( castor::StringView str )
 	{
 		return std::filesystem::u8path( str.begin(), str.end() );
 	}

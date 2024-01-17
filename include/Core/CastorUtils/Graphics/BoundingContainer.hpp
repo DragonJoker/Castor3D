@@ -14,22 +14,13 @@ namespace castor
 	class BoundingContainer
 	{
 	public:
-		CU_API BoundingContainer( BoundingContainer const & rhs ) = default;
-		CU_API BoundingContainer( BoundingContainer && rhs ) = default;
-		CU_API BoundingContainer & operator=( BoundingContainer const & rhs ) = default;
-		CU_API BoundingContainer & operator=( BoundingContainer && rhs ) = default;
-		CU_API virtual ~BoundingContainer() = default;
 		using MyPoint = Point< float, Dimension >;
-		/**
-		 *\~english
-		 *\brief		Constructor.
-		 *\~french
-		 *\brief		Constructeur.
-		 */
-		BoundingContainer()
-			: m_center()
-		{
-		}
+		CU_API BoundingContainer() = default;
+		CU_API BoundingContainer( BoundingContainer const & ) = default;
+		CU_API BoundingContainer( BoundingContainer && )noexcept = default;
+		CU_API BoundingContainer & operator=( BoundingContainer const & ) = default;
+		CU_API BoundingContainer & operator=( BoundingContainer && )noexcept = default;
+		CU_API virtual ~BoundingContainer()noexcept = default;
 		/**
 		 *\~english
 		 *\brief		Constructor from center.
@@ -38,8 +29,8 @@ namespace castor
 		 *\brief		Constructeur à partir du centre.
 		 *\param[in]	center	Le centre.
 		 */
-		explicit BoundingContainer( MyPoint const & center )
-			: m_center( center )
+		explicit BoundingContainer( MyPoint center )
+			: m_center{ std::move( center ) }
 		{
 		}
 		/**
@@ -70,15 +61,21 @@ namespace castor
 		 *\~french
 		 *\return		Le centre de ce conteneur.
 		 */
-		inline MyPoint const & getCenter()const
+		MyPoint const & getCenter()const
 		{
 			return m_center;
 		}
 
 	protected:
+		void setCenter( MyPoint center )noexcept
+		{
+			m_center = std::move( center );
+		}
+
+	private:
 		//!\~english	The center of the container.
 		//!\~french		Le centre de ce conteneur.
-		MyPoint m_center;
+		MyPoint m_center{};
 	};
 }
 

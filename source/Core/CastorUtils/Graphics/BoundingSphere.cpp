@@ -5,47 +5,41 @@ CU_ImplementSmartPtr( castor, BoundingSphere )
 
 namespace castor
 {
-	BoundingSphere::BoundingSphere()
-		: BoundingContainer3D()
-		, m_radius( 0 )
-	{
-	}
-
 	BoundingSphere::BoundingSphere( Point3f const & center, float radius )
-		: BoundingContainer3D( center )
+		: BoundingContainer3D{ center }
 		, m_radius( radius )
 	{
 	}
 
 	BoundingSphere::BoundingSphere( BoundingBox const & box )
-		: BoundingContainer3D( box.getCenter() )
-		, m_radius( float( point::length( box.getMax() - m_center ) ) )
+		: BoundingContainer3D{ box.getCenter() }
+		, m_radius( float( point::length( box.getMax() - getCenter() ) ) )
 	{
 	}
 
 	void BoundingSphere::load( Point3f const & center, float radius )
 	{
-		m_center = center;
+		setCenter( center );
 		m_radius = radius;
 	}
 
 	void BoundingSphere::load( BoundingBox const & box )
 	{
-		m_center = box.getCenter();
-		m_radius = float( point::distance( box.getMax(), m_center ) );
+		setCenter( box.getCenter() );
+		m_radius = float( point::distance( box.getMax(), getCenter() ) );
 #if !defined( NDEBUG )
-		auto radius = float( point::distance( m_center, box.getMin() ) );
+		auto radius = float( point::distance( getCenter(), box.getMin() ) );
 		CU_Ensure( std::abs( m_radius - radius ) < 0.01f );
 #endif
 	}
 
 	bool BoundingSphere::isWithin( Point3f const & point )const
 	{
-		return point::length( point - m_center ) < m_radius;
+		return point::length( point - getCenter() ) < m_radius;
 	}
 
 	bool BoundingSphere::isOnLimits( Point3f const & point )const
 	{
-		return ( float( point::length( point - m_center ) ) - m_radius ) < 0.0001f;
+		return ( float( point::length( point - getCenter() ) ) - m_radius ) < 0.0001f;
 	}
 }

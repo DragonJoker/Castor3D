@@ -7,12 +7,14 @@ See LICENSE file in root folder
 #include "CastorUtils/Data/DataModule.hpp"
 
 #include "CastorUtils/Data/File.hpp"
+#include "CastorUtils/Design/NonCopyable.hpp"
 
 #include <list>
 
 namespace castor
 {
 	class ZipArchive
+		: public NonMovable
 	{
 	public:
 		struct Folder;
@@ -24,23 +26,23 @@ namespace castor
 			FolderList folders;
 			std::list< String > files;
 
-			Folder();
+			Folder() = default;
 			Folder( String const & name, Path const & path );
 			Folder * findFolder( Path const & path );
 			void addFile( Path const & path );
 			void removeFile( Path const & path );
 		};
 
-
 		struct ZipImpl
+			: public NonMovable
 		{
-			virtual ~ZipImpl() = default;
+			virtual ~ZipImpl()noexcept = default;
 			virtual void open( Path const & path, File::OpenMode mode ) = 0;
 			virtual void close() = 0;
 			virtual void deflate( Folder const & files ) = 0;
 			virtual StringArray inflate( Path const & outFolder, Folder & folder ) = 0;
-			virtual bool findFolder( String const & folder ) = 0;
-			virtual bool findFile( String const & file ) = 0;
+			virtual bool findFolder( String const & folder )const = 0;
+			virtual bool findFile( String const & file )const = 0;
 		};
 
 	public:
@@ -61,7 +63,7 @@ namespace castor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		CU_API virtual ~ZipArchive();
+		CU_API ~ZipArchive()noexcept;
 		/**
 		 *\~english
 		 *\brief		Deflates an archive
@@ -104,7 +106,7 @@ namespace castor
 		 *\brief		Recherche un dossier dans l'archive
 		 *\param[in]	folder	Le nom du dossier
 		 */
-		CU_API bool findFolder( String const & folder );
+		CU_API bool findFolder( String const & folder )const;
 		/**
 		 *\~english
 		 *\brief		Looks for a file into the archive
@@ -113,7 +115,7 @@ namespace castor
 		 *\brief		Recherche un fichier dans l'archive
 		 *\param[in]	file	Le nom du fichier
 		 */
-		CU_API bool findFile( String const & file );
+		CU_API bool findFile( String const & file )const;
 
 	private:
 		std::unique_ptr< ZipImpl > m_impl;

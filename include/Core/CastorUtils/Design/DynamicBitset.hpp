@@ -23,11 +23,11 @@ namespace castor
 		*	Construction/Destruction.
 		*/
 		/**@{*/
-		inline DynamicBitsetT();
-		inline explicit DynamicBitsetT( size_t size, bool value = false );
-		inline explicit DynamicBitsetT( String const & bits );
-		inline explicit DynamicBitsetT( char const * bits );
-		inline DynamicBitsetT( char const * bits, size_t size );
+		DynamicBitsetT();
+		explicit DynamicBitsetT( size_t size, bool value = false );
+		explicit DynamicBitsetT( String const & bits );
+		explicit DynamicBitsetT( char const * bits );
+		DynamicBitsetT( char const * bits, size_t size );
 		/**@}*/
 		/**
 		*\~english
@@ -38,16 +38,16 @@ namespace castor
 		*	Fonctions d'ensemble de bits.
 		*/
 		/**@{*/
-		inline void set( size_t bit, bool value = true );
-		inline bool get( size_t bit )const;
-		inline BlockTypeT getBlock( size_t index )const;
-		inline void reset();
-		inline void resize( size_t size, bool value );
-		inline size_t getSize()const;
-		inline size_t getBlockCount()const;
-		inline bool none()const;
-		inline bool any()const;
-		inline bool all()const;
+		void set( size_t bit, bool value = true );
+		bool get( size_t bit )const;
+		BlockTypeT getBlock( size_t index )const;
+		void reset();
+		void resize( size_t size, bool value );
+		size_t getSize()const;
+		size_t getBlockCount()const;
+		bool none()const;
+		bool any()const;
+		bool all()const;
 		/**@}*/
 		/**
 		*\~english
@@ -58,8 +58,8 @@ namespace castor
 		*	Accès de tableau.
 		*/
 		/**@{*/
-		inline Bit operator[]( size_t index );
-		inline bool operator[]( size_t index )const;
+		Bit operator[]( size_t index );
+		bool operator[]( size_t index )const;
 		/**@}*/
 		/**
 		*\~english
@@ -70,22 +70,22 @@ namespace castor
 		*	Opérations bit à bit.
 		*/
 		/**@{*/
-		inline DynamicBitsetT & operator<<=( int value );
-		inline DynamicBitsetT & operator>>=( int value );
-		inline DynamicBitsetT & operator&=( DynamicBitsetT const & value );
-		inline DynamicBitsetT & operator|=( DynamicBitsetT const & value );
-		inline DynamicBitsetT & operator^=( DynamicBitsetT const & value );
-		inline DynamicBitsetT operator~()const;
+		DynamicBitsetT & operator<<=( int value );
+		DynamicBitsetT & operator>>=( int value );
+		DynamicBitsetT & operator&=( DynamicBitsetT const & value );
+		DynamicBitsetT & operator|=( DynamicBitsetT const & value );
+		DynamicBitsetT & operator^=( DynamicBitsetT const & value );
+		DynamicBitsetT operator~()const;
 		/**@}*/
-		inline String toString()const;
+		String toString()const;
 
 		using BlockType = BlockTypeT;
 		static constexpr BlockTypeT fullBitMask = std::numeric_limits< BlockTypeT >::max();
 		static constexpr size_t bitsPerBlock = sizeof( BlockTypeT ) * 8u;
 
 	private:
-		inline void doResetExtraBits();
-		inline BlockTypeT doGetLastBlockMask()const;
+		void doResetExtraBits();
+		BlockTypeT doGetLastBlockMask()const;
 
 	private:
 		std::vector< BlockTypeT > m_blocks;
@@ -142,11 +142,12 @@ namespace castor
 	*/
 	template< typename BlockTypeT >
 	class DynamicBitsetT< BlockTypeT >::Bit
+		: public NonMovable
 	{
 		friend DynamicBitsetT< BlockTypeT >;
 
 	private:
-		inline Bit( BlockTypeT & block
+		Bit( BlockTypeT & block
 			, BlockTypeT mask )
 			: m_block{ block }
 			, m_mask{ mask }
@@ -154,19 +155,19 @@ namespace castor
 		}
 
 	public:
-		inline Bit & operator=( bool val );
-		inline Bit & operator=( Bit const & bit );
+		Bit & operator=( bool val );
+		Bit & operator=( Bit const & bit );
 
-		inline void set( bool val = true );
+		void set( bool val = true );
 
 		template< bool BadCall = true >
-		inline void * operator&() const;
+		void * operator&()const;
 
 		explicit operator bool()const;
 
-		inline Bit & operator|=( bool value );
-		inline Bit & operator&=( bool value );
-		inline Bit & operator^=( bool value );
+		Bit & operator|=( bool value );
+		Bit & operator&=( bool value );
+		Bit & operator^=( bool value );
 
 	private:
 		BlockTypeT & m_block;

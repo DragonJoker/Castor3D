@@ -41,21 +41,14 @@ namespace castor
 		 *\~french
 		 *\brief		Constructeur.
 		 */
-		CU_API CpuInformations();
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		CU_API ~CpuInformations();
+		CU_API CpuInformations() = default;
 		/**
 		 *\~english
 		 *\return		The number of cores (Physical + Virtual).
 		 *\~french
 		 *\return		Le nombre de coeurs (Physiques + Virtuels).
 		 */
-		inline uint32_t getCoreCount()const
+		uint32_t getCoreCount()const
 		{
 			return m_internal.m_coreCount;
 		}
@@ -65,7 +58,7 @@ namespace castor
 		 *\~french
 		 *\return		Le vendeur du CPU.
 		 */
-		inline std::string getVendor()const
+		std::string getVendor()const
 		{
 			return m_internal.m_vendor;
 		}
@@ -75,7 +68,7 @@ namespace castor
 		 *\~french
 		 *\return		Le modèle du CPU.
 		 */
-		inline std::string getModel()const
+		std::string getModel()const
 		{
 			return m_internal.m_model;
 		}
@@ -85,7 +78,7 @@ namespace castor
 		 *\~french
 		 *\return		Le support des instructions SSE3.
 		 */
-		inline bool SSE3()const
+		bool SSE3()const
 		{
 			return m_internal.m_f_1_ECX[0];
 		}
@@ -95,7 +88,7 @@ namespace castor
 		 *\~french
 		 *\return		Le support des instructions PCLMULQDQ.
 		 */
-		inline bool PCLMULQDQ()const
+		bool PCLMULQDQ()const
 		{
 			return m_internal.m_f_1_ECX[1];
 		}
@@ -105,7 +98,7 @@ namespace castor
 		 *\~french
 		 *\return		Le support des instructions MONITOR.
 		 */
-		inline bool MONITOR()const
+		bool MONITOR()const
 		{
 			return m_internal.m_f_1_ECX[3];
 		}
@@ -115,7 +108,7 @@ namespace castor
 		 *\~french
 		 *\return		Le support des instructions SSSE3.
 		 */
-		inline bool SSSE3()const
+		bool SSSE3()const
 		{
 			return m_internal.m_f_1_ECX[9];
 		}
@@ -125,7 +118,7 @@ namespace castor
 		 *\~french
 		 *\return		Le support des instructions FMA.
 		 */
-		inline bool FMA()const
+		bool FMA()const
 		{
 			return m_internal.m_f_1_ECX[12];
 		}
@@ -135,7 +128,7 @@ namespace castor
 		 *\~french
 		 *\return		Le support des instructions CMPXCHG16B.
 		 */
-		inline bool CMPXCHG16B()const
+		bool CMPXCHG16B()const
 		{
 			return m_internal.m_f_1_ECX[13];
 		}
@@ -145,7 +138,7 @@ namespace castor
 		 *\~french
 		 *\return		Le support des instructions SSE4.1.
 		 */
-		inline bool SSE41()const
+		bool SSE41()const
 		{
 			return m_internal.m_f_1_ECX[19];
 		}
@@ -155,7 +148,7 @@ namespace castor
 		 *\~french
 		 *\return		Le support des instructions SSE4.2.
 		 */
-		inline bool SSE42()const
+		bool SSE42()const
 		{
 			return m_internal.m_f_1_ECX[20];
 		}
@@ -165,7 +158,7 @@ namespace castor
 		 *\~french
 		 *\return		Le support des instructions MOVBE.
 		 */
-		inline bool MOVBE()const
+		bool MOVBE()const
 		{
 			return m_internal.m_f_1_ECX[22];
 		}
@@ -175,7 +168,7 @@ namespace castor
 		 *\~french
 		 *\return		Le support des instructions POPCNT.
 		 */
-		inline bool POPCNT()const
+		bool POPCNT()const
 		{
 			return m_internal.m_f_1_ECX[23];
 		}
@@ -185,7 +178,7 @@ namespace castor
 		 *\~french
 		 *\return		Le support des instructions AES.
 		 */
-		inline bool AES()const
+		bool AES()const
 		{
 			return m_internal.m_f_1_ECX[25];
 		}
@@ -195,7 +188,7 @@ namespace castor
 		 *\~french
 		 *\return		Le support des instructions XSAVE.
 		 */
-		inline bool XSAVE()const
+		bool XSAVE()const
 		{
 			return m_internal.m_f_1_ECX[26];
 		}
@@ -205,7 +198,7 @@ namespace castor
 		 *\~french
 		 *\return		Le support des instructions OSXSAVE.
 		 */
-		inline bool OSXSAVE()const
+		bool OSXSAVE()const
 		{
 			return m_internal.m_f_1_ECX[27];
 		}
@@ -215,7 +208,7 @@ namespace castor
 		 *\~french
 		 *\return		Le support des instructions AVX.
 		 */
-		inline bool AVX()const
+		bool AVX()const
 		{
 			return m_internal.m_f_1_ECX[28];
 		}
@@ -225,7 +218,7 @@ namespace castor
 		 *\~french
 		 *\return		Le support des instructions F16C.
 		 */
-		inline bool F16C()const
+		bool F16C()const
 		{
 			return m_internal.m_f_1_ECX[29];
 		}
@@ -235,7 +228,7 @@ namespace castor
 		 *\~french
 		 *\return		Le support des instructions RDRAND.
 		 */
-		inline bool RDRAND()const
+		bool RDRAND()const
 		{
 			return m_internal.m_f_1_ECX[30];
 		}
@@ -245,7 +238,7 @@ namespace castor
 		 *\~french
 		 *\return		Le support des instructions MSR.
 		 */
-		inline bool MSR()const
+		bool MSR()const
 		{
 			return m_internal.m_f_1_EDX[5];
 		}
@@ -255,7 +248,7 @@ namespace castor
 		 *\~french
 		 *\return		Le support des instructions CX8.
 		 */
-		inline bool CX8()const
+		bool CX8()const
 		{
 			return m_internal.m_f_1_EDX[8];
 		}
@@ -265,7 +258,7 @@ namespace castor
 		 *\~french
 		 *\return		Le support des instructions SEP.
 		 */
-		inline bool SEP()const
+		bool SEP()const
 		{
 			return m_internal.m_f_1_EDX[11];
 		}
@@ -275,7 +268,7 @@ namespace castor
 		 *\~french
 		 *\return		Le support des instructions CMOV.
 		 */
-		inline bool CMOV()const
+		bool CMOV()const
 		{
 			return m_internal.m_f_1_EDX[15];
 		}
@@ -285,7 +278,7 @@ namespace castor
 		 *\~french
 		 *\return		Le support des instructions CLFSH.
 		 */
-		inline bool CLFSH()const
+		bool CLFSH()const
 		{
 			return m_internal.m_f_1_EDX[19];
 		}
@@ -295,7 +288,7 @@ namespace castor
 		 *\~french
 		 *\return		Le support des instructions MMX.
 		 */
-		inline bool MMX()const
+		bool MMX()const
 		{
 			return m_internal.m_f_1_EDX[23];
 		}
@@ -305,7 +298,7 @@ namespace castor
 		 *\~french
 		 *\return		Le support des instructions FXSR.
 		 */
-		inline bool FXSR()const
+		bool FXSR()const
 		{
 			return m_internal.m_f_1_EDX[24];
 		}
@@ -315,7 +308,7 @@ namespace castor
 		 *\~french
 		 *\return		Le support des instructions SSE.
 		 */
-		inline bool SSE()const
+		bool SSE()const
 		{
 			return m_internal.m_f_1_EDX[25];
 		}
@@ -325,7 +318,7 @@ namespace castor
 		 *\~french
 		 *\return		Le support des instructions SSE2.
 		 */
-		inline bool SSE2()const
+		bool SSE2()const
 		{
 			return m_internal.m_f_1_EDX[26];
 		}
@@ -335,7 +328,7 @@ namespace castor
 		 *\~french
 		 *\return		Le support des instructions FSGSBASE.
 		 */
-		inline bool FSGSBASE()const
+		bool FSGSBASE()const
 		{
 			return m_internal.m_f_7_EBX[0];
 		}
@@ -345,7 +338,7 @@ namespace castor
 		 *\~french
 		 *\return		Le support des instructions BMI1.
 		 */
-		inline bool BMI1()const
+		bool BMI1()const
 		{
 			return m_internal.m_f_7_EBX[3];
 		}
@@ -355,7 +348,7 @@ namespace castor
 		 *\~french
 		 *\return		Le support des instructions HLE.
 		 */
-		inline bool HLE()const
+		bool HLE()const
 		{
 			return m_internal.m_isIntel && m_internal.m_f_7_EBX[4];
 		}
@@ -365,7 +358,7 @@ namespace castor
 		 *\~french
 		 *\return		Le support des instructions AVX2.
 		 */
-		inline bool AVX2()const
+		bool AVX2()const
 		{
 			return m_internal.m_f_7_EBX[5];
 		}
@@ -375,7 +368,7 @@ namespace castor
 		 *\~french
 		 *\return		Le support des instructions BMI2.
 		 */
-		inline bool BMI2()const
+		bool BMI2()const
 		{
 			return m_internal.m_f_7_EBX[8];
 		}
@@ -385,7 +378,7 @@ namespace castor
 		 *\~french
 		 *\return		Le support des instructions ERMS.
 		 */
-		inline bool ERMS()const
+		bool ERMS()const
 		{
 			return m_internal.m_f_7_EBX[9];
 		}
@@ -395,7 +388,7 @@ namespace castor
 		 *\~french
 		 *\return		Le support des instructions INVPCID.
 		 */
-		inline bool INVPCID()const
+		bool INVPCID()const
 		{
 			return m_internal.m_f_7_EBX[10];
 		}
@@ -405,7 +398,7 @@ namespace castor
 		 *\~french
 		 *\return		Le support des instructions RTM.
 		 */
-		inline bool RTM()const
+		bool RTM()const
 		{
 			return m_internal.m_isIntel && m_internal.m_f_7_EBX[11];
 		}
@@ -415,7 +408,7 @@ namespace castor
 		 *\~french
 		 *\return		Le support des instructions AVX512F.
 		 */
-		inline bool AVX512F()const
+		bool AVX512F()const
 		{
 			return m_internal.m_f_7_EBX[16];
 		}
@@ -425,7 +418,7 @@ namespace castor
 		 *\~french
 		 *\return		Le support des instructions RDSEED.
 		 */
-		inline bool RDSEED()const
+		bool RDSEED()const
 		{
 			return m_internal.m_f_7_EBX[18];
 		}
@@ -435,7 +428,7 @@ namespace castor
 		 *\~french
 		 *\return		Le support des instructions ADX.
 		 */
-		inline bool ADX()const
+		bool ADX()const
 		{
 			return m_internal.m_f_7_EBX[19];
 		}
@@ -445,7 +438,7 @@ namespace castor
 		 *\~french
 		 *\return		Le support des instructions AVX512PF.
 		 */
-		inline bool AVX512PF()const
+		bool AVX512PF()const
 		{
 			return m_internal.m_f_7_EBX[26];
 		}
@@ -455,7 +448,7 @@ namespace castor
 		 *\~french
 		 *\return		Le support des instructions AVX512ER.
 		 */
-		inline bool AVX512ER()const
+		bool AVX512ER()const
 		{
 			return m_internal.m_f_7_EBX[27];
 		}
@@ -465,7 +458,7 @@ namespace castor
 		 *\~french
 		 *\return		Le support des instructions AVX512CD.
 		 */
-		inline bool AVX512CD()const
+		bool AVX512CD()const
 		{
 			return m_internal.m_f_7_EBX[28];
 		}
@@ -475,7 +468,7 @@ namespace castor
 		 *\~french
 		 *\return		Le support des instructions SHA.
 		 */
-		inline bool SHA()const
+		bool SHA()const
 		{
 			return m_internal.m_f_7_EBX[29];
 		}
@@ -485,7 +478,7 @@ namespace castor
 		 *\~french
 		 *\return		Le support des instructions PREFETCHWT1.
 		 */
-		inline bool PREFETCHWT1()const
+		bool PREFETCHWT1()const
 		{
 			return m_internal.m_f_7_ECX[0];
 		}

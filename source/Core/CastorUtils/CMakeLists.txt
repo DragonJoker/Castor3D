@@ -546,35 +546,71 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 	source_group( "Header Files\\Multithreading" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
 	source_group( "Source Files\\Multithreading" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
 
-	if ( ANDROID )
-		set( _PLATFORM Android )
-	elseif ( WIN32 )
-		set( _PLATFORM Win32 )
-	elseif ( APPLE )
-		set( _PLATFORM MacOS )
-	else ()
-		set( _PLATFORM Linux )
-	endif ()
 	set( ${PROJECT_NAME}_FOLDER_SRC_FILES
-		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/${_PLATFORM}/${_PLATFORM}Aligned.cpp
-		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/${_PLATFORM}/${_PLATFORM}CpuInformations.cpp
-		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/${_PLATFORM}/${_PLATFORM}Debug.cpp
-		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/${_PLATFORM}/${_PLATFORM}DynamicLibrary.cpp
-		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/${_PLATFORM}/${_PLATFORM}File.cpp
-		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/${_PLATFORM}/${_PLATFORM}LoggerConsole.cpp
-		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/${_PLATFORM}/${_PLATFORM}Utils.cpp
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/Android/AndroidAligned.cpp
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/Android/AndroidCpuInformations.cpp
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/Android/AndroidDebug.cpp
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/Android/AndroidDynamicLibrary.cpp
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/Android/AndroidFile.cpp
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/Android/AndroidLoggerConsole.cpp
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/Android/AndroidUtils.cpp
+	)
+	set( ${PROJECT_NAME}_SRC_FILES
+		${${PROJECT_NAME}_SRC_FILES}
+		${${PROJECT_NAME}_FOLDER_SRC_FILES}
+	)
+	source_group( "Source Files\\Platform\\Android" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
+
+	set( ${PROJECT_NAME}_FOLDER_SRC_FILES
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/Linux/LinuxAligned.cpp
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/Linux/LinuxCpuInformations.cpp
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/Linux/LinuxDebug.cpp
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/Linux/LinuxDynamicLibrary.cpp
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/Linux/LinuxFile.cpp
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/Linux/LinuxLoggerConsole.cpp
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/Linux/LinuxUtils.cpp
+	)
+	set( ${PROJECT_NAME}_SRC_FILES
+		${${PROJECT_NAME}_SRC_FILES}
+		${${PROJECT_NAME}_FOLDER_SRC_FILES}
+	)
+	source_group( "Source Files\\Platform\\Linux" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
+
+	set( ${PROJECT_NAME}_FOLDER_SRC_FILES
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/MacOS/MacOSAligned.cpp
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/MacOS/MacOSCpuInformations.cpp
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/MacOS/MacOSDebug.cpp
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/MacOS/MacOSDynamicLibrary.cpp
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/MacOS/MacOSFile.cpp
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/MacOS/MacOSLoggerConsole.cpp
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/MacOS/MacOSUtils.cpp
 	)
 	if ( APPLE )
 		set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 			${${PROJECT_NAME}_FOLDER_SRC_FILES}
-			${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/${_PLATFORM}/DisplaySize.mm
+			${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/MacOS/DisplaySize.mm
 		)
 	endif ()
 	set( ${PROJECT_NAME}_SRC_FILES
 		${${PROJECT_NAME}_SRC_FILES}
 		${${PROJECT_NAME}_FOLDER_SRC_FILES}
 	)
-	source_group( "Source Files\\Platform" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
+	source_group( "Source Files\\Platform\\MacOS" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
+
+	set( ${PROJECT_NAME}_FOLDER_SRC_FILES
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/Win32/Win32Aligned.cpp
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/Win32/Win32CpuInformations.cpp
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/Win32/Win32Debug.cpp
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/Win32/Win32DynamicLibrary.cpp
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/Win32/Win32File.cpp
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/Win32/Win32LoggerConsole.cpp
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/Win32/Win32Utils.cpp
+	)
+	set( ${PROJECT_NAME}_SRC_FILES
+		${${PROJECT_NAME}_SRC_FILES}
+		${${PROJECT_NAME}_FOLDER_SRC_FILES}
+	)
+	source_group( "Source Files\\Platform\\Win32" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
 
 	set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Pool/PoolException.cpp

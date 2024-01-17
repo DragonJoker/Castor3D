@@ -15,28 +15,21 @@
 #include <iostream>
 
 #include <direct.h>
-#include <Shlobj.h>
-#include <windows.h>
-#define getCurrentDir _getcwd
-#undef copyFile
-#undef deleteFile
+#include <ShlObj.h>
+#include <Windows.h>
 
 namespace castor
 {
-	bool File::traverseDirectory( Path const & folderPath
-		, TraverseDirFunction directoryFunction
-		, HitFileFunction fileFunction )
+	namespace file
 	{
-		CU_Require( !folderPath.empty() );
-		bool result = false;
-		WIN32_FIND_DATAA findData;
-		HANDLE handle = ::FindFirstFileA( ( folderPath / cuT( "*.*" ) ).c_str(), &findData );
-
-		if ( handle != INVALID_HANDLE_VALUE )
+		template< typename TraverseDirT, typename HitFileT >
+		static void traverse( Path const & folderPath
+			, TraverseDirT const & directoryFunction
+			, HitFileT const & fileFunction
+			, WIN32_FIND_DATAA const & findData
+			, String const & name
+			, bool & result )
 		{
-			result = true;
-			String name = findData.cFileName;
-
 			if ( name != cuT( "." ) && name != cuT( ".." ) )
 			{
 				if ( ( findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) == FILE_ATTRIBUTE_DIRECTORY )
@@ -48,24 +41,30 @@ namespace castor
 					fileFunction( folderPath, name );
 				}
 			}
+		}
+	}
+
+	bool File::traverseDirectory( Path const & folderPath
+		, TraverseDirFunction const & directoryFunction
+		, HitFileFunction const & fileFunction )
+	{
+		CU_Require( !folderPath.empty() );
+		bool result = false;
+		WIN32_FIND_DATAA findData{};
+
+		if ( HANDLE handle = ::FindFirstFileA( ( folderPath / cuT( "*.*" ) ).c_str(), &findData );
+			handle != INVALID_HANDLE_VALUE )
+		{
+			result = true;
+			String name = findData.cFileName;
+			file::traverse( folderPath, directoryFunction, fileFunction, findData, name, result );
 
 			while ( result && ::FindNextFileA( handle, &findData ) == TRUE )
 			{
 				if ( findData.cFileName != name )
 				{
 					name = findData.cFileName;
-
-					if ( name != cuT( "." ) && name != cuT( ".." ) )
-					{
-						if ( ( findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) == FILE_ATTRIBUTE_DIRECTORY )
-						{
-							result = directoryFunction( folderPath / name );
-						}
-						else
-						{
-							fileFunction( folderPath, name );
-						}
-					}
+					file::traverse( folderPath, directoryFunction, fileFunction, findData, name, result );
 				}
 			}
 
@@ -86,7 +85,7 @@ namespace castor
 
 		if ( err && !file )
 		{
-			Logger::logError( makeStringStream() << cuT( "Couldn't open file [" ) << path << cuT( "], due to error: " ) << System::getLastErrorText() );
+			Logger::logError( makeStringStream() << cuT( "Couldn't open file [" ) << path << cuT( "], due to error: " ) << system::getLastErrorText() );
 		}
 
 		return err == 0;
@@ -101,7 +100,7 @@ namespace castor
 
 		if ( err && !file )
 		{
-			Logger::logError( makeStringStream() << cuT( "Couldn't open file [" ) << path << cuT( "], due to error: " ) << System::getLastErrorText() );
+			Logger::logError( makeStringStream() << cuT( "Couldn't open file [" ) << path << cuT( "], due to error: " ) << system::getLastErrorText() );
 		}
 
 		return err == 0;
@@ -154,12 +153,12 @@ namespace castor
 	Path File::getExecutableDirectory()
 	{
 		Path pathReturn;
-		xchar path[FILENAME_MAX];
-		DWORD result = ::GetModuleFileNameA( nullptr, path, _countof( path ) );
+		std::array< xchar, FILENAME_MAX > path{};
 
-		if ( result != 0 )
+		if ( DWORD result = ::GetModuleFileNameA( nullptr, path.data(), DWORD( path.size() ) );
+			result != 0 )
 		{
-			pathReturn = Path{ path };
+			pathReturn = Path{ path.data() };
 		}
 
 		pathReturn = pathReturn.getPath();
@@ -169,12 +168,12 @@ namespace castor
 	Path File::getUserDirectory()
 	{
 		Path pathReturn;
-		xchar path[FILENAME_MAX];
-		HRESULT hr = SHGetFolderPathA( nullptr, CSIDL_PROFILE, nullptr, 0, path );
+		std::array< xchar, FILENAME_MAX > path{};
 
-		if ( SUCCEEDED( hr ) )
+		if ( HRESULT hr = SHGetFolderPathA( nullptr, CSIDL_PROFILE, nullptr, 0, path.data() );
+			SUCCEEDED( hr ) )
 		{
-			pathReturn = Path{ path };
+			pathReturn = Path{ path.data() };
 		}
 
 		return pathReturn;
@@ -190,9 +189,8 @@ namespace castor
 	bool File::directoryCreate( Path const & inpath
 		, FlagCombination< CreateMode > const & flags )
 	{
-		Path path = inpath.getPath();
-
-		if ( !path.empty() && !directoryExists( path ) )
+		if ( Path path = inpath.getPath();
+			!path.empty() && !directoryExists( path ) )
 		{
 			directoryCreate( path, flags );
 		}

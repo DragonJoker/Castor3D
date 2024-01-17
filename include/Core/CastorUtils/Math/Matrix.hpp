@@ -47,7 +47,7 @@ namespace castor
 		Matrix();
 		explicit Matrix( NoInit const & );
 		Matrix( Matrix const & matrix );
-		Matrix( Matrix && matrix );
+		Matrix( Matrix && matrix )noexcept;
 		explicit Matrix( T const & value );
 		explicit Matrix( T * matrix );
 		template< typename Type >
@@ -57,7 +57,7 @@ namespace castor
 		template< typename Type >
 		explicit Matrix( Matrix< Type, Columns, Rows > const & matrix );
 		explicit Matrix( std::initializer_list< T > rhs );
-		~Matrix();
+		~Matrix()noexcept = default;
 		/**@}*/
 		/**
 		 *\~english
@@ -99,14 +99,14 @@ namespace castor
 		 *\~french
 		 *\return		Le pointeur sur les données.
 		 */
-		inline value_type * ptr();
+		value_type * ptr();
 		/**
 		 *\~english
 		 *\return		The pointer on constant datas.
 		 *\~french
 		 *\return		Le pointeur sur les données constantes.
 		 */
-		inline value_type const * constPtr()const;
+		value_type const * constPtr()const;
 		/**
 		 *\~english
 		 *\brief		Initialises the matrix to 0.
@@ -168,7 +168,7 @@ namespace castor
 		**/
 		/**@{*/
 		Matrix< T, Columns, Rows > & operator=( Matrix< T, Columns, Rows > const & rhs );
-		Matrix< T, Columns, Rows > & operator=( Matrix< T, Columns, Rows > && rhs );
+		Matrix< T, Columns, Rows > & operator=( Matrix< T, Columns, Rows > && rhs )noexcept;
 		template< typename Type > Matrix< T, Columns, Rows > & operator=( Matrix< Type, Columns, Rows > const & rhs );
 		template< typename Type > Matrix< T, Columns, Rows > & operator=( Type const * rhs );
 		/**@}*/

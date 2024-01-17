@@ -79,7 +79,7 @@ namespace castortd
 
 			auto sizeWnd = FromDIP( GetClientSize() );
 			castor::Size sizeScreen;
-			castor::System::getScreenSize( 0, sizeScreen );
+			castor::system::getScreenSize( 0, sizeScreen );
 			GetParent()->SetClientSize( sizeWnd );
 			GetParent()->SetPosition( FromDIP( wxPoint( std::max( 0, int( sizeScreen.getWidth() ) - sizeWnd.GetWidth() ) / 2
 				, std::max( 0, int( sizeScreen.getHeight() ) - sizeWnd.GetHeight() ) / 2 ) ) );

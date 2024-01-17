@@ -193,7 +193,7 @@ namespace GuiCommon
 
 				if ( castor::isCompressed( buffer->getFormat() ) )
 				{
-					buffer = castor::decompressBuffer( buffer.get() );
+					buffer = castor::decompressBuffer( *buffer );
 				}
 
 				if ( buffer->getFormat() != castor::PixelFormat::eR8G8B8A8_UNORM )

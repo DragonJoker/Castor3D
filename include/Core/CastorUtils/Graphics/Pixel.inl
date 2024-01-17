@@ -148,7 +148,7 @@ namespace castor
 	}
 
 	template< PixelFormat FT >
-	Pixel< FT >::Pixel( Pixel && rhs )
+	Pixel< FT >::Pixel( Pixel && rhs )noexcept
 	{
 		m_components = std::move( rhs.m_components );
 		m_delete = rhs.m_delete;
@@ -172,7 +172,7 @@ namespace castor
 	}
 
 	template< PixelFormat FT >
-	Pixel< FT >::~Pixel()
+	Pixel< FT >::~Pixel()noexcept
 	{
 		clear();
 	}
@@ -193,7 +193,7 @@ namespace castor
 	}
 
 	template< PixelFormat FT >
-	Pixel< FT > & Pixel< FT >::operator=( Pixel< FT > && rhs )
+	Pixel< FT > & Pixel< FT >::operator=( Pixel< FT > && rhs )noexcept
 	{
 		clear();
 
@@ -257,7 +257,7 @@ namespace castor
 	}
 
 	template< PixelFormat FT >
-	void Pixel< FT >::clear()
+	void Pixel< FT >::clear()noexcept
 	{
 		if ( m_delete )
 		{
@@ -269,7 +269,7 @@ namespace castor
 	}
 
 	template< PixelFormat FT >
-	void Pixel< FT >::link( uint8_t * components )
+	void Pixel< FT >::link( uint8_t * components )noexcept
 	{
 		clear();
 
@@ -278,13 +278,17 @@ namespace castor
 	}
 
 	template< PixelFormat FT >
-	void Pixel< FT >::unlink()
+	void Pixel< FT >::unlink()noexcept
 	{
 		clear();
 
-		m_components = new uint8_t[PixelDefinitionsT< FT >::Size];
+		m_components = new( std::nothrow ) uint8_t[PixelDefinitionsT< FT >::Size];
 		m_delete = true;
-		std::memset( m_components, 0, PixelDefinitionsT< FT >::Size );
+
+		if ( m_components )
+		{
+			std::memset( m_components, 0, PixelDefinitionsT< FT >::Size );
+		}
 	}
 
 	template< PixelFormat FT >

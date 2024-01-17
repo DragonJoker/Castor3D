@@ -4,34 +4,22 @@ See LICENSE file in root folder
 #ifndef ___CU_Logger_H___
 #define ___CU_Logger_H___
 
+#include "CastorUtils/Design/NonCopyable.hpp"
 #include "CastorUtils/Log/LoggerInstance.hpp"
 
 namespace castor
 {
 	class Logger
+		: public NonMovable
 	{
-	private:
-		Logger( Logger const & ) = delete;
-		Logger & operator=( Logger const & ) = delete;
-		Logger( Logger && rhs ) = delete;
-		Logger & operator=( Logger && rhs ) = delete;
-
+	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		CU_API Logger( LogType level );
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		CU_API ~Logger();
-
-	public:
+		CU_API explicit Logger( LogType level );
 		/**
 		 *\~english
 		 *\brief		Initialises this logger instance level
@@ -67,7 +55,7 @@ namespace castor
 		 *\param[in]	callback	Le callback
 		 *\param[in]	caller		Pointeur sur des données utilisateur, utilisé pour identifier le callback
 		 */
-		CU_API static void registerCallback( LogCallback callback, void * caller );
+		CU_API static void registerCallback( LogCallback const & callback, void * caller );
 		/**
 		 *\~english
 		 *\brief		Unregisters the logging callback
@@ -527,16 +515,16 @@ namespace castor
 		}
 
 	private:
-		static Logger * m_singleton;
+		static std::unique_ptr< Logger > m_singleton;
 
 		std::unique_ptr< ProgramConsole > m_console;
 		std::unique_ptr< LoggerInstance > m_instance;
-		std::streambuf * m_cout{ nullptr };
-		std::streambuf * m_cerr{ nullptr };
-		std::streambuf * m_clog{ nullptr };
-		std::wstreambuf * m_wcout{ nullptr };
-		std::wstreambuf * m_wcerr{ nullptr };
-		std::wstreambuf * m_wclog{ nullptr };
+		std::unique_ptr< std::streambuf > m_cout{};
+		std::unique_ptr< std::streambuf > m_cerr{};
+		std::unique_ptr< std::streambuf > m_clog{};
+		std::unique_ptr< std::wstreambuf > m_wcout{};
+		std::unique_ptr< std::wstreambuf > m_wcerr{};
+		std::unique_ptr< std::wstreambuf > m_wclog{};
 	};
 }
 

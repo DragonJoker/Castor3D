@@ -13,7 +13,7 @@ namespace castor
 		Logger::logDebug( makeStringStream() << cuT( "BlockTracker::Entered Block : " ) << m_strFunction << cuT( " in " ) << m_strFile << cuT( ", line " ) << m_uiLine );
 	}
 
-	BlockTracker::~BlockTracker()
+	BlockTracker::~BlockTracker()noexcept
 	{
 		Logger::logDebug( makeStringStream() << cuT( "BlockTracker::Exited Block : " ) << m_strFunction << cuT( " in " ) << m_strFile << cuT( ", line " ) << m_uiLine );
 	}

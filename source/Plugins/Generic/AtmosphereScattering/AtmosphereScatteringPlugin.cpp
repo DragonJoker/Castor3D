@@ -11,7 +11,7 @@
 #include <Castor3D/Material/Pass/PhongPass.hpp>
 #include <Castor3D/Model/Mesh/MeshFactory.hpp>
 
-#include <CastorUtils/FileParser/ParserParameter.hpp>
+#include <CastorUtils/FileParser/FileParser.hpp>
 
 #ifndef CU_PlatformWindows
 #	define C3D_AtmosphereScattering_API

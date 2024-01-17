@@ -115,88 +115,49 @@ namespace castor
 	xchar const * const RegexFormat< HdrRgbaColour >::Value = cuT( "#([0-9a-fA-F]{2}[0-9a-fA-F]{2}[0-9a-fA-F]{2}[0-9a-fA-F]{2})"
 		"|#([0-9a-fA-F]{2}[0-9a-fA-F]{2}[0-9a-fA-F]{2})" );
 
-	xchar const * const ParserParameterHelper< ParameterType::eText >::StringType = cuT( "text" );
-	xchar const * const ParserParameterHelper< ParameterType::eName >::StringType = cuT( "name" );
-	xchar const * const ParserParameterHelper< ParameterType::ePath >::StringType = cuT( "path" );
-	xchar const * const ParserParameterHelper< ParameterType::eCheckedText >::StringType = cuT( "checked text" );
-	xchar const * const ParserParameterHelper< ParameterType::eBitwiseOred32BitsCheckedText >::StringType = cuT( "32 bits bitwise ORed checked texts" );
-	xchar const * const ParserParameterHelper< ParameterType::eBitwiseOred64BitsCheckedText >::StringType = cuT( "64 bits bitwise ORed checked texts" );
-	xchar const * const ParserParameterHelper< ParameterType::eBool >::StringType = cuT( "boolean" );
-	xchar const * const ParserParameterHelper< ParameterType::eInt8 >::StringType = cuT( "8 bits signed integer" );
-	xchar const * const ParserParameterHelper< ParameterType::eInt16 >::StringType = cuT( "16 bits signed integer" );
-	xchar const * const ParserParameterHelper< ParameterType::eInt32 >::StringType = cuT( "32 bits signed integer" );
-	xchar const * const ParserParameterHelper< ParameterType::eInt64 >::StringType = cuT( "64 bits signed integer" );
-	xchar const * const ParserParameterHelper< ParameterType::eUInt8 >::StringType = cuT( "8 bits unsigned integer" );
-	xchar const * const ParserParameterHelper< ParameterType::eUInt16 >::StringType = cuT( "16 bits unsigned integer" );
-	xchar const * const ParserParameterHelper< ParameterType::eUInt32 >::StringType = cuT( "32 bits unsigned integer" );
-	xchar const * const ParserParameterHelper< ParameterType::eUInt64 >::StringType = cuT( "64 bits unsigned integer" );
-	xchar const * const ParserParameterHelper< ParameterType::eFloat >::StringType = cuT( "simple precision floating point" );
-	xchar const * const ParserParameterHelper< ParameterType::eDouble >::StringType = cuT( "double precision floating point" );
-	xchar const * const ParserParameterHelper< ParameterType::eLongDouble >::StringType = cuT( "long double precision floating point" );
-	xchar const * const ParserParameterHelper< ParameterType::ePixelFormat >::StringType = cuT( "pixel format" );
-	xchar const * const ParserParameterHelper< ParameterType::ePoint2I >::StringType = cuT( "2 integers point" );
-	xchar const * const ParserParameterHelper< ParameterType::ePoint3I >::StringType = cuT( "3 integers point" );
-	xchar const * const ParserParameterHelper< ParameterType::ePoint4I >::StringType = cuT( "4 integers point" );
-	xchar const * const ParserParameterHelper< ParameterType::ePoint2U >::StringType = cuT( "2 unsigned integers point" );
-	xchar const * const ParserParameterHelper< ParameterType::ePoint3U >::StringType = cuT( "3 unsigned integers point" );
-	xchar const * const ParserParameterHelper< ParameterType::ePoint4U >::StringType = cuT( "4 unsigned integers point" );
-	xchar const * const ParserParameterHelper< ParameterType::ePoint2F >::StringType = cuT( "2 simple precision floating point numbers point" );
-	xchar const * const ParserParameterHelper< ParameterType::ePoint3F >::StringType = cuT( "3 simple precision floating point numbers point" );
-	xchar const * const ParserParameterHelper< ParameterType::ePoint4F >::StringType = cuT( "4 simple precision floating point numbers point" );
-	xchar const * const ParserParameterHelper< ParameterType::ePoint2D >::StringType = cuT( "2 double precision floating point numbers point" );
-	xchar const * const ParserParameterHelper< ParameterType::ePoint3D >::StringType = cuT( "3 double precision floating point numbers point" );
-	xchar const * const ParserParameterHelper< ParameterType::ePoint4D >::StringType = cuT( "4 double precision floating point numbers point" );
-	xchar const * const ParserParameterHelper< ParameterType::eSize >::StringType = cuT( "size" );
-	xchar const * const ParserParameterHelper< ParameterType::ePosition >::StringType = cuT( "position" );
-	xchar const * const ParserParameterHelper< ParameterType::eRectangle >::StringType = cuT( "rectangle" );
-	xchar const * const ParserParameterHelper< ParameterType::eRgbColour >::StringType = cuT( "RGB colour" );
-	xchar const * const ParserParameterHelper< ParameterType::eRgbaColour >::StringType = cuT( "RGBA colour" );
-	xchar const * const ParserParameterHelper< ParameterType::eHdrRgbColour >::StringType = cuT( "HDR RGB colour" );
-	xchar const * const ParserParameterHelper< ParameterType::eHdrRgbaColour >::StringType = cuT( "HDR RGBA colour" );
-
-	static const std::array< String, size_t( ParameterType::eCount ) > TypeName
+	static std::array< StringView, size_t( ParameterType::eCount ) > constexpr TypeName
 	{
-		cuT( "text" ),
-		cuT( "name" ),
-		cuT( "path" ),
-		cuT( "checked text" ),
-		cuT( "32 bits bitwise ORed checked texts" ),
-		cuT( "64 bits bitwise ORed checked texts" ),
-		cuT( "boolean" ),
-		cuT( "8 bits signed integer" ),
-		cuT( "16 bits signed integer" ),
-		cuT( "32 bits signed integer" ),
-		cuT( "64 bits signed integer" ),
-		cuT( "8 bits unsigned integer" ),
-		cuT( "16 bits unsigned integer" ),
-		cuT( "32 bits unsigned integer" ),
-		cuT( "64 bits unsigned integer" ),
-		cuT( "simple precision floating point" ),
-		cuT( "double precision floating point" ),
-		cuT( "long double precision floating point" ),
-		cuT( "pixel format" ),
-		cuT( "2 integers point" ),
-		cuT( "3 integers point" ),
-		cuT( "4 integers point" ),
-		cuT( "2 unsigned integers point" ),
-		cuT( "3 unsigned integers point" ),
-		cuT( "4 unsigned integers point" ),
-		cuT( "2 simple precision floating point numbers point" ),
-		cuT( "3 simple precision floating point numbers point" ),
-		cuT( "4 simple precision floating point numbers point" ),
-		cuT( "2 double precision floating point numbers point" ),
-		cuT( "3 double precision floating point numbers point" ),
-		cuT( "4 double precision floating point numbers point" ),
-		cuT( "size" ),
-		cuT( "position" ),
-		cuT( "rectangle" ),
-		cuT( "RGB colour" ),
-		cuT( "RGBA colour" ),
-		cuT( "HDR RGB colour" ),
-		cuT( "HDR RGBA colour" ),
+		ParserParameterStringType< ParameterType::eText >,
+		ParserParameterStringType< ParameterType::eName >,
+		ParserParameterStringType< ParameterType::ePath >,
+		ParserParameterStringType< ParameterType::eCheckedText >,
+		ParserParameterStringType< ParameterType::eBitwiseOred32BitsCheckedText >,
+		ParserParameterStringType< ParameterType::eBitwiseOred64BitsCheckedText >,
+		ParserParameterStringType< ParameterType::eBool >,
+		ParserParameterStringType< ParameterType::eInt8 >,
+		ParserParameterStringType< ParameterType::eInt16 >,
+		ParserParameterStringType< ParameterType::eInt32 >,
+		ParserParameterStringType< ParameterType::eInt64 >,
+		ParserParameterStringType< ParameterType::eUInt8 >,
+		ParserParameterStringType< ParameterType::eUInt16 >,
+		ParserParameterStringType< ParameterType::eUInt32 >,
+		ParserParameterStringType< ParameterType::eUInt64 >,
+		ParserParameterStringType< ParameterType::eFloat >,
+		ParserParameterStringType< ParameterType::eDouble >,
+		ParserParameterStringType< ParameterType::eLongDouble >,
+		ParserParameterStringType< ParameterType::ePixelFormat >,
+		ParserParameterStringType< ParameterType::ePoint2I >,
+		ParserParameterStringType< ParameterType::ePoint3I >,
+		ParserParameterStringType< ParameterType::ePoint4I >,
+		ParserParameterStringType< ParameterType::ePoint2U >,
+		ParserParameterStringType< ParameterType::ePoint3U >,
+		ParserParameterStringType< ParameterType::ePoint4U >,
+		ParserParameterStringType< ParameterType::ePoint2F >,
+		ParserParameterStringType< ParameterType::ePoint3F >,
+		ParserParameterStringType< ParameterType::ePoint4F >,
+		ParserParameterStringType< ParameterType::ePoint2D >,
+		ParserParameterStringType< ParameterType::ePoint3D >,
+		ParserParameterStringType< ParameterType::ePoint4D >,
+		ParserParameterStringType< ParameterType::eSize >,
+		ParserParameterStringType< ParameterType::ePosition >,
+		ParserParameterStringType< ParameterType::eRectangle >,
+		ParserParameterStringType< ParameterType::eRgbColour >,
+		ParserParameterStringType< ParameterType::eRgbaColour >,
+		ParserParameterStringType< ParameterType::eHdrRgbColour >,
+		ParserParameterStringType< ParameterType::eHdrRgbaColour >,
 	};
 
-	String const & getTypeName( ParameterType type )
+	StringView getTypeName( ParameterType type )
 	{
 		return TypeName[uint32_t( type )];
 	}

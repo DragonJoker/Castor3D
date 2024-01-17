@@ -32,7 +32,7 @@ namespace castor
 		template< PixelFormat PFSrc, PixelFormat PFDst >
 		struct PixelConverter
 		{
-			void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
+			void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )const
 			{
 				if constexpr ( PFSrc == PFDst )
 				{
@@ -165,7 +165,7 @@ namespace castor
 		template< PixelFormat PFSrc, PixelFormat PFDst, typename EnableT = void >
 		struct BufferConverter
 		{
-			void operator()( PxBufferConvertOptions const * CU_UnusedParam( options )
+			void operator()( CU_UnusedParam( PxBufferConvertOptions const * const, options )
 				, Size const & srcDimensions
 				, Size const & dstDimensions
 				, uint8_t const * srcBuffer
@@ -778,7 +778,6 @@ namespace castor
 						, dstBuffer );
 				}
 			}
-			
 			else
 			{
 				details::PixelConverter< PFT, PF >()( srcBuffer

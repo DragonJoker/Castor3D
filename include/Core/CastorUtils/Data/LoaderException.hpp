@@ -25,16 +25,7 @@ namespace castor
 		: public castor::Exception
 	{
 	public:
-		LoaderException( std::string const & description
-			, char const * file
-			, char const * function
-			, uint32_t line )
-			: Exception( description
-				, file
-				, function
-				, line )
-		{
-		}
+		using castor::Exception::Exception;
 	};
 }
 //!\~english	Helper macro to use LoaderException.

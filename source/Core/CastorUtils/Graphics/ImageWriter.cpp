@@ -25,9 +25,8 @@ namespace castor
 
 	void ImageWriter::unregisterWriter( String const & extension )
 	{
-		auto it = m_extWriters.find( string::lowerCase( extension ) );
-
-		if ( it != m_extWriters.end() )
+		if ( auto it = m_extWriters.find( string::lowerCase( extension ) );
+			it != m_extWriters.end() )
 		{
 			m_extWriters.erase( it );
 		}
@@ -49,10 +48,10 @@ namespace castor
 			CU_LoaderError( "Can't write image: Path is empty" );
 		}
 
-		auto it = m_extWriters.find( string::lowerCase( path.getExtension() ) );
 		bool result = false;
 
-		if ( it != m_extWriters.end() )
+		if ( auto it = m_extWriters.find( string::lowerCase( path.getExtension() ) );
+			it != m_extWriters.end() )
 		{
 			result = it->second->write( path, buffer );
 		}

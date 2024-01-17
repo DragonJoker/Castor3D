@@ -17,7 +17,7 @@ namespace castor
 			static uint32_t constexpr MinCount = MinValue< SrcCount, DstCount >::value;
 
 			void operator()( SrcType const * src
-				, DstType * dst )
+				, DstType * dst )const
 			{
 				for ( uint32_t i = 0; i < MinCount; i++ )
 				{
@@ -40,7 +40,7 @@ namespace castor
 			static uint32_t constexpr MinCount = MinValue< SrcCount, DstCount >::value;
 
 			void operator()( Type const * src
-				, Type * dst )
+				, Type * dst )const
 			{
 				std::copy( src, src + MinCount, dst );
 
@@ -59,13 +59,11 @@ namespace castor
 
 	template< typename T, uint32_t TCount >
 	constexpr Point< T, TCount >::Point()noexcept
-		: m_data{}
 	{
 	}
 
 	template< typename T, uint32_t TCount >
 	Point< T, TCount >::Point( T const * rhs )noexcept
-		: m_data{}
 	{
 		if ( !rhs )
 		{
@@ -83,7 +81,6 @@ namespace castor
 
 	template< typename T, uint32_t TCount >
 	constexpr Point< T, TCount >::Point( Point< T, TCount > const & rhs )noexcept
-		: m_data{}
 	{
 		std::copy( rhs.begin()
 			, rhs.end()
@@ -92,7 +89,6 @@ namespace castor
 
 	template< typename T, uint32_t TCount >
 	constexpr Point< T, TCount >::Point( Point< T, TCount > && rhs )noexcept
-		: m_data{}
 	{
 		std::copy( rhs.begin()
 			, rhs.end()
@@ -102,7 +98,6 @@ namespace castor
 	template< typename T, uint32_t TCount >
 	template< typename U, uint32_t UCount >
 	Point< T, TCount >::Point( Point< U, UCount > const & rhs )noexcept
-		: m_data{}
 	{
 		details::DataCopier< U, T, UCount, TCount > copier;
 		copier( rhs.constPtr(), ptr() );
@@ -111,7 +106,6 @@ namespace castor
 	template< typename T, uint32_t TCount >
 	template< typename U, uint32_t UCount >
 	Point< T, TCount >::Point( Coords< U, UCount > const & rhs )noexcept
-		: m_data{}
 	{
 		details::DataCopier< U, T, UCount, TCount > copier;
 		copier( rhs.constPtr(), ptr() );
@@ -120,7 +114,6 @@ namespace castor
 	template< typename T, uint32_t TCount >
 	template< typename U >
 	Point< T, TCount >::Point( U const * rhs )noexcept
-		: m_data{}
 	{
 		if ( !rhs )
 		{
@@ -189,18 +182,21 @@ namespace castor
 	{
 		return PtAssignOperators< T, U, TCount, UCount >::add( *this, rhs );
 	}
+
 	template< typename T, uint32_t TCount >
 	template< typename U, uint32_t UCount >
 	inline Point< T, TCount > & Point< T, TCount >::operator-=( Point< U, UCount > const & rhs )
 	{
 		return PtAssignOperators< T, U, TCount, UCount >::sub( *this, rhs );
 	}
+
 	template< typename T, uint32_t TCount >
 	template< typename U, uint32_t UCount >
 	inline Point< T, TCount > & Point< T, TCount >::operator*=( Point< U, UCount > const & rhs )
 	{
 		return PtAssignOperators< T, U, TCount, UCount >::mul( *this, rhs );
 	}
+
 	template< typename T, uint32_t TCount >
 	template< typename U, uint32_t UCount >
 	inline Point< T, TCount > & Point< T, TCount >::operator/=( Point< U, UCount > const & rhs )
@@ -214,18 +210,21 @@ namespace castor
 	{
 		return PtAssignOperators< T, U, TCount, UCount >::add( *this, rhs );
 	}
+
 	template< typename T, uint32_t TCount >
 	template< typename U, uint32_t UCount >
 	inline Point< T, TCount > & Point< T, TCount >::operator-=( Coords< U, UCount > const & rhs )
 	{
 		return PtAssignOperators< T, U, TCount, UCount >::sub( *this, rhs );
 	}
+
 	template< typename T, uint32_t TCount >
 	template< typename U, uint32_t UCount >
 	inline Point< T, TCount > & Point< T, TCount >::operator*=( Coords< U, UCount > const & rhs )
 	{
 		return PtAssignOperators< T, U, TCount, UCount >::mul( *this, rhs );
 	}
+
 	template< typename T, uint32_t TCount >
 	template< typename U, uint32_t UCount >
 	inline Point< T, TCount > & Point< T, TCount >::operator/=( Coords< U, UCount > const & rhs )
@@ -239,18 +238,21 @@ namespace castor
 	{
 		return PtAssignOperators< T, U, TCount, TCount >::add( *this, rhs );
 	}
+
 	template< typename T, uint32_t TCount >
 	template< typename U >
 	inline Point< T, TCount > & Point< T, TCount >::operator-=( U const * rhs )
 	{
 		return PtAssignOperators< T, U, TCount, TCount >::sub( *this, rhs );
 	}
+
 	template< typename T, uint32_t TCount >
 	template< typename U >
 	inline Point< T, TCount > & Point< T, TCount >::operator*=( U const * rhs )
 	{
 		return PtAssignOperators< T, U, TCount, TCount >::mul( *this, rhs );
 	}
+
 	template< typename T, uint32_t TCount >
 	template< typename U >
 	inline Point< T, TCount > & Point< T, TCount >::operator/=( U const * rhs )
@@ -263,16 +265,19 @@ namespace castor
 	{
 		return PtAssignOperators< T, T, TCount, TCount >::add( *this, rhs );
 	}
+
 	template< typename T, uint32_t TCount >
 	inline Point< T, TCount > & Point< T, TCount >::operator-=( T const & rhs )
 	{
 		return PtAssignOperators< T, T, TCount, TCount >::sub( *this, rhs );
 	}
+
 	template< typename T, uint32_t TCount >
 	inline Point< T, TCount > & Point< T, TCount >::operator*=( T const & rhs )
 	{
 		return PtAssignOperators< T, T, TCount, TCount >::mul( *this, rhs );
 	}
+
 	template< typename T, uint32_t TCount >
 	inline Point< T, TCount > & Point< T, TCount >::operator/=( T const & rhs )
 	{
@@ -280,44 +285,12 @@ namespace castor
 	}
 
 	template< typename T, uint32_t TCount >
-	void Point< T, TCount >::swap( Point< T, TCount > & rhs )
+	void Point< T, TCount >::swap( Point< T, TCount > & rhs )noexcept
 	{
 		for ( uint32_t i = 0; i < TCount; i++ )
 		{
 			std::swap( m_data.coords[i], rhs.m_data.coords[i] );
 		}
-	}
-
-	template< typename T, uint32_t TCount >
-	void Point< T, TCount >::flip()
-	{
-		for ( uint32_t i = 0; i < TCount / 2; i++ )
-		{
-			std::swap( m_data.coords[i], m_data.coords[TCount - 1 - i] );
-		}
-	}
-
-	template< typename T, uint32_t TCount >
-	inline void Point< T, TCount >::toValues( T * result )const
-	{
-		for ( uint32_t i = 0; i < TCount; i++ )
-		{
-			result[i] = m_data.coords[i];
-		}
-	}
-
-	template< typename T, uint32_t TCount >
-	T const & Point< T, TCount >::at( uint32_t index )const
-	{
-		CU_Require( index < TCount );
-		return m_data.coords[index];
-	}
-
-	template< typename T, uint32_t TCount >
-	T & Point< T, TCount >::at( uint32_t index )
-	{
-		CU_Require( index < TCount );
-		return m_data.coords[index];
 	}
 
 	//*************************************************************************************************
@@ -334,6 +307,7 @@ namespace castor
 
 		return result;
 	}
+
 	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
 	inline bool operator!=( Point< T, TCount > const & lhs, Point< U, UCount > const & rhs )
 	{
@@ -352,6 +326,7 @@ namespace castor
 
 		return result;
 	}
+
 	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
 	inline bool operator!=( Coords< T, TCount > const & lhs, Point< U, UCount > const & rhs )
 	{
@@ -370,6 +345,7 @@ namespace castor
 
 		return result;
 	}
+
 	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
 	inline bool operator!=( Point< T, TCount > const & lhs, Coords< U, UCount > const & rhs )
 	{
@@ -377,9 +353,9 @@ namespace castor
 	}
 
 	template< typename T, uint32_t TCount >
-	inline Point< typename std::remove_cv< T >::type, TCount > operator-( Point< T, TCount > const & rhs )
+	inline Point< std::remove_cv_t< T >, TCount > operator-( Point< T, TCount > const & rhs )
 	{
-		Point< typename std::remove_cv< T >::type, TCount > result;
+		Point< std::remove_cv_t< T >, TCount > result;
 
 		for ( uint32_t i = 0; i < TCount; ++i )
 		{
@@ -390,106 +366,121 @@ namespace castor
 	}
 
 	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	inline Point< typename std::remove_cv< T >::type, TCount > operator+( Point< T, TCount > const & lhs, Point< U, UCount > const & rhs )
+	inline Point< std::remove_cv_t< T >, TCount > operator+( Point< T, TCount > const & lhs, Point< U, UCount > const & rhs )
 	{
 		return PtOperators< T, U, TCount, UCount >::add( lhs, rhs );
 	}
+
 	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	inline Point< typename std::remove_cv< T >::type, TCount > operator-( Point< T, TCount > const & lhs, Point< U, UCount > const & rhs )
+	inline Point< std::remove_cv_t< T >, TCount > operator-( Point< T, TCount > const & lhs, Point< U, UCount > const & rhs )
 	{
 		return PtOperators< T, U, TCount, UCount >::sub( lhs, rhs );
 	}
+
 	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	inline Point< typename std::remove_cv< T >::type, TCount > operator*( Point< T, TCount > const & lhs, Point< U, UCount > const & rhs )
+	inline Point< std::remove_cv_t< T >, TCount > operator*( Point< T, TCount > const & lhs, Point< U, UCount > const & rhs )
 	{
 		return PtOperators< T, U, TCount, UCount >::mul( lhs, rhs );
 	}
+
 	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	inline Point< typename std::remove_cv< T >::type, TCount > operator/( Point< T, TCount > const & lhs, Point< U, UCount > const & rhs )
+	inline Point< std::remove_cv_t< T >, TCount > operator/( Point< T, TCount > const & lhs, Point< U, UCount > const & rhs )
 	{
 		return PtOperators< T, U, TCount, UCount >::div( lhs, rhs );
 	}
 
 	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	inline Point< typename std::remove_cv< T >::type, TCount > operator+( Coords< T, TCount > const & lhs, Point< U, UCount > const & rhs )
+	inline Point< std::remove_cv_t< T >, TCount > operator+( Coords< T, TCount > const & lhs, Point< U, UCount > const & rhs )
 	{
 		return PtOperators< T, U, TCount, UCount >::add( lhs, rhs );
 	}
+
 	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	inline Point< typename std::remove_cv< T >::type, TCount > operator-( Coords< T, TCount > const & lhs, Point< U, UCount > const & rhs )
+	inline Point< std::remove_cv_t< T >, TCount > operator-( Coords< T, TCount > const & lhs, Point< U, UCount > const & rhs )
 	{
 		return PtOperators< T, U, TCount, UCount >::sub( lhs, rhs );
 	}
+
 	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	inline Point< typename std::remove_cv< T >::type, TCount > operator*( Coords< T, TCount > const & lhs, Point< U, UCount > const & rhs )
+	inline Point< std::remove_cv_t< T >, TCount > operator*( Coords< T, TCount > const & lhs, Point< U, UCount > const & rhs )
 	{
 		return PtOperators< T, U, TCount, UCount >::mul( lhs, rhs );
 	}
+
 	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	inline Point< typename std::remove_cv< T >::type, TCount > operator/( Coords< T, TCount > const & lhs, Point< U, UCount > const & rhs )
+	inline Point< std::remove_cv_t< T >, TCount > operator/( Coords< T, TCount > const & lhs, Point< U, UCount > const & rhs )
 	{
 		return PtOperators< T, U, TCount, UCount >::div( lhs, rhs );
 	}
 
 	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	inline Point< typename std::remove_cv< T >::type, TCount > operator+( Point< T, TCount > const & lhs, Coords< U, UCount > const & rhs )
+	inline Point< std::remove_cv_t< T >, TCount > operator+( Point< T, TCount > const & lhs, Coords< U, UCount > const & rhs )
 	{
 		return PtOperators< T, U, TCount, UCount >::add( lhs, rhs );
 	}
+
 	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	inline Point< typename std::remove_cv< T >::type, TCount > operator-( Point< T, TCount > const & lhs, Coords< U, UCount > const & rhs )
+	inline Point< std::remove_cv_t< T >, TCount > operator-( Point< T, TCount > const & lhs, Coords< U, UCount > const & rhs )
 	{
 		return PtOperators< T, U, TCount, UCount >::sub( lhs, rhs );
 	}
+
 	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	inline Point< typename std::remove_cv< T >::type, TCount > operator*( Point< T, TCount > const & lhs, Coords< U, UCount > const & rhs )
+	inline Point< std::remove_cv_t< T >, TCount > operator*( Point< T, TCount > const & lhs, Coords< U, UCount > const & rhs )
 	{
 		return PtOperators< T, U, TCount, UCount >::mul( lhs, rhs );
 	}
+
 	template< typename T, uint32_t TCount, typename U, uint32_t UCount >
-	inline Point< typename std::remove_cv< T >::type, TCount > operator/( Point< T, TCount > const & lhs, Coords< U, UCount > const & rhs )
+	inline Point< std::remove_cv_t< T >, TCount > operator/( Point< T, TCount > const & lhs, Coords< U, UCount > const & rhs )
 	{
 		return PtOperators< T, U, TCount, UCount >::div( lhs, rhs );
 	}
 
 	template <typename T, uint32_t TCount, typename U>
-	inline Point< typename std::remove_cv< T >::type, TCount > operator+( Point< T, TCount > const & lhs, U const * rhs )
+	inline Point< std::remove_cv_t< T >, TCount > operator+( Point< T, TCount > const & lhs, U const * rhs )
 	{
 		return PtOperators< T, U, TCount, TCount >::add( lhs, rhs );
 	}
+
 	template <typename T, uint32_t TCount, typename U>
-	inline Point< typename std::remove_cv< T >::type, TCount > operator-( Point< T, TCount > const & lhs, U const * rhs )
+	inline Point< std::remove_cv_t< T >, TCount > operator-( Point< T, TCount > const & lhs, U const * rhs )
 	{
 		return PtOperators< T, U, TCount, TCount >::sub( lhs, rhs );
 	}
+
 	template <typename T, uint32_t TCount, typename U>
-	inline Point< typename std::remove_cv< T >::type, TCount > operator*( Point< T, TCount > const & lhs, U const * rhs )
+	inline Point< std::remove_cv_t< T >, TCount > operator*( Point< T, TCount > const & lhs, U const * rhs )
 	{
 		return PtOperators< T, U, TCount, TCount >::mul( lhs, rhs );
 	}
+
 	template <typename T, uint32_t TCount, typename U>
-	inline Point< typename std::remove_cv< T >::type, TCount > operator/( Point< T, TCount > const & lhs, U const * rhs )
+	inline Point< std::remove_cv_t< T >, TCount > operator/( Point< T, TCount > const & lhs, U const * rhs )
 	{
 		return PtOperators< T, U, TCount, TCount >::div( lhs, rhs );
 	}
 
 	template< typename T, uint32_t TCount >
-	inline Point< typename std::remove_cv< T >::type, TCount > operator+( Point< T, TCount > const & lhs, T const & rhs )
+	inline Point< std::remove_cv_t< T >, TCount > operator+( Point< T, TCount > const & lhs, T const & rhs )
 	{
 		return PtOperators< T, T, TCount, TCount >::add( lhs, rhs );
 	}
+
 	template< typename T, uint32_t TCount >
-	inline Point< typename std::remove_cv< T >::type, TCount > operator-( Point< T, TCount > const & lhs, T const & rhs )
+	inline Point< std::remove_cv_t< T >, TCount > operator-( Point< T, TCount > const & lhs, T const & rhs )
 	{
 		return PtOperators< T, T, TCount, TCount >::sub( lhs, rhs );
 	}
+
 	template< typename T, uint32_t TCount >
-	inline Point< typename std::remove_cv< T >::type, TCount > operator*( Point< T, TCount > const & lhs, T const & rhs )
+	inline Point< std::remove_cv_t< T >, TCount > operator*( Point< T, TCount > const & lhs, T const & rhs )
 	{
 		return PtOperators< T, T, TCount, TCount >::mul( lhs, rhs );
 	}
+
 	template< typename T, uint32_t TCount >
-	inline Point< typename std::remove_cv< T >::type, TCount > operator/( Point< T, TCount > const & lhs, T const & rhs )
+	inline Point< std::remove_cv_t< T >, TCount > operator/( Point< T, TCount > const & lhs, T const & rhs )
 	{
 		return PtOperators< T, T, TCount, TCount >::div( lhs, rhs );
 	}
@@ -629,7 +620,7 @@ namespace castor
 		}
 
 		template< typename T, uint32_t TCount >
-		inline void negate( Point< T, TCount > & point )
+		static void negate( Point< T, TCount > & point )
 		{
 			for ( uint32_t i = 0; i < TCount; i++ )
 			{
@@ -638,7 +629,7 @@ namespace castor
 		}
 
 		template< typename T, uint32_t TCount >
-		void normalise( Point< T, TCount > & point )
+		static void normalise( Point< T, TCount > & point )
 		{
 			T tLength = T( length( point ) );
 
@@ -649,7 +640,7 @@ namespace castor
 		}
 
 		template< typename T, uint32_t TCount >
-		Point< T, TCount > getNormalised( Point< T, TCount > const & point )
+		static Point< T, TCount > getNormalised( Point< T, TCount > const & point )
 		{
 			Point< T, TCount > result( point );
 			normalise( result );
@@ -657,7 +648,7 @@ namespace castor
 		}
 
 		template< typename T, typename U, uint32_t TCount >
-		T dot( Point< T, TCount > const & lhs, Point< U, TCount > const & rhs )
+		static T dot( Point< T, TCount > const & lhs, Point< U, TCount > const & rhs )
 		{
 			T result{};
 
@@ -680,7 +671,7 @@ namespace castor
 		}
 
 		template< typename T, uint32_t TCount >
-		double cosTheta( Point< T, TCount > const & lhs, Point< T, TCount > const & rhs )
+		static double cosTheta( Point< T, TCount > const & lhs, Point< T, TCount > const & rhs )
 		{
 			double result = double( length( lhs ) * length( rhs ) );
 
@@ -697,7 +688,7 @@ namespace castor
 		}
 
 		template< typename T, uint32_t TCount >
-		double lengthSquared( Point< T, TCount > const & point )
+		static double lengthSquared( Point< T, TCount > const & point )
 		{
 			double result = 0.0;
 
@@ -710,13 +701,13 @@ namespace castor
 		}
 
 		template< typename T, uint32_t TCount >
-		double length( Point< T, TCount > const & point )
+		static double length( Point< T, TCount > const & point )
 		{
 			return sqrt( lengthSquared( point ) );
 		}
 
 		template< typename T, uint32_t TCount >
-		inline double lengthManhattan( Point< T, TCount > const & point )
+		static double lengthManhattan( Point< T, TCount > const & point )
 		{
 			double result = 0.0;
 
@@ -729,7 +720,7 @@ namespace castor
 		}
 
 		template< typename T, uint32_t TCount >
-		double lengthMinkowski( Point< T, TCount > const & point, double order )
+		static double lengthMinkowski( Point< T, TCount > const & point, double order )
 		{
 			double result = 0.0;
 
@@ -743,7 +734,7 @@ namespace castor
 		}
 
 		template< typename T, uint32_t TCount >
-		double lengthChebychev( Point< T, TCount > const & point )
+		static double lengthChebychev( Point< T, TCount > const & point )
 		{
 			double result = 0.0;
 
@@ -756,37 +747,37 @@ namespace castor
 		}
 
 		template< typename T, uint32_t TCount >
-		double distanceSquared( Point< T, TCount > const & lhs, Point< T, TCount > const & rhs )
+		static double distanceSquared( Point< T, TCount > const & lhs, Point< T, TCount > const & rhs )
 		{
 			return lengthSquared( rhs - lhs );
 		}
 
 		template< typename T, uint32_t TCount >
-		double distance( Point< T, TCount > const & lhs, Point< T, TCount > const & rhs )
+		static double distance( Point< T, TCount > const & lhs, Point< T, TCount > const & rhs )
 		{
 			return length( rhs - lhs );
 		}
 
 		template< typename T, uint32_t TCount >
-		inline double distanceManhattan( Point< T, TCount > const & lhs, Point< T, TCount > const & rhs )
+		static double distanceManhattan( Point< T, TCount > const & lhs, Point< T, TCount > const & rhs )
 		{
 			return lengthManhattan( rhs - lhs );
 		}
 
 		template< typename T, uint32_t TCount >
-		double distanceMinkowski( Point< T, TCount > const & lhs, Point< T, TCount > const & rhs, double order )
+		static double distanceMinkowski( Point< T, TCount > const & lhs, Point< T, TCount > const & rhs, double order )
 		{
 			return lengthMinkowski( rhs - lhs, order );
 		}
 
 		template< typename T, uint32_t TCount >
-		double distanceChebychev( Point< T, TCount > const & lhs, Point< T, TCount > const & rhs )
+		static double distanceChebychev( Point< T, TCount > const & lhs, Point< T, TCount > const & rhs )
 		{
 			return lengthChebychev( rhs - lhs );
 		}
 
 		template< typename T, typename U, uint32_t TCount >
-		T dot( Point< T, TCount > const & lhs, Coords< U, TCount > const & rhs )
+		static T dot( Point< T, TCount > const & lhs, Coords< U, TCount > const & rhs )
 		{
 			T result = T();
 
@@ -799,7 +790,7 @@ namespace castor
 		}
 
 		template< Vector3T LhsT, typename U >
-		LhsT cross( LhsT const & lhs, Coords< U, 3 > const & rhs )
+		static LhsT cross( LhsT const & lhs, Coords3< U > const & rhs )
 		{
 			LhsT result{ lhs };
 			setCoord( result, 0, ( getCoord( lhs, 1 ) * getCoord( rhs, 2 ) ) - ( getCoord( lhs, 2 ) * getCoord( rhs, 1 ) ) );
@@ -809,7 +800,7 @@ namespace castor
 		}
 
 		template< typename T, uint32_t TCount >
-		double cosTheta( Point< T, TCount > const & lhs, Coords< T, TCount > const & rhs )
+		static double cosTheta( Point< T, TCount > const & lhs, Coords< T, TCount > const & rhs )
 		{
 			double result = double( length( lhs ) * length( rhs ) );
 
@@ -826,7 +817,7 @@ namespace castor
 		}
 
 		template< typename T, typename U, uint32_t TCount >
-		T dot( Coords< T, TCount > const & lhs, Point< U, TCount > const & rhs )
+		static T dot( Coords< T, TCount > const & lhs, Point< U, TCount > const & rhs )
 		{
 			T result{};
 
@@ -839,7 +830,7 @@ namespace castor
 		}
 
 		template< typename T, Vector3T RhsT >
-		RhsT cross( Coords< T, 3 > const & lhs, RhsT const & rhs )
+		static RhsT cross( Coords3< T > const & lhs, RhsT const & rhs )
 		{
 			RhsT result{ lhs };
 			setCoord( result, 0, ( getCoord( lhs, 1 ) * getCoord( rhs, 2 ) ) - ( getCoord( lhs, 2 ) * getCoord( rhs, 1 ) ) );
@@ -849,7 +840,7 @@ namespace castor
 		}
 
 		template< typename T, uint32_t TCount >
-		double cosTheta( Coords< T, TCount > const & lhs, Point< T, TCount > const & rhs )
+		static double cosTheta( Coords< T, TCount > const & lhs, Point< T, TCount > const & rhs )
 		{
 			double result = double( length( lhs ) * length( rhs ) );
 
@@ -866,7 +857,7 @@ namespace castor
 		}
 
 		template< typename T, typename U, uint32_t TCount >
-		T dot( Point< T, TCount > const & lhs, Coords< U const, TCount > const & rhs )
+		static T dot( Point< T, TCount > const & lhs, Coords< U const, TCount > const & rhs )
 		{
 			T result = T();
 
@@ -879,7 +870,7 @@ namespace castor
 		}
 
 		template< typename T, typename U >
-		Point< T, 3 > cross( Point< T, 3 > const & lhs, Coords< U const, 3 > const & rhs )
+		static Point3< T > cross( Point3< T > const & lhs, Coords3< U const > const & rhs )
 		{
 			return Point< T, 3 >(
 				( lhs[1] * rhs[2] ) - ( lhs[2] * rhs[1] ),
@@ -889,7 +880,7 @@ namespace castor
 		}
 
 		template< typename T, uint32_t TCount >
-		double cosTheta( Point< T, TCount > const & lhs, Coords< T const, TCount > const & rhs )
+		static double cosTheta( Point< T, TCount > const & lhs, Coords< T const, TCount > const & rhs )
 		{
 			double result = double( length( lhs ) * length( rhs ) );
 
@@ -906,7 +897,7 @@ namespace castor
 		}
 
 		template< typename T, typename U, uint32_t TCount >
-		T dot( Coords< T const, TCount > const & lhs, Point< U, TCount > const & rhs )
+		static T dot( Coords< T const, TCount > const & lhs, Point< U, TCount > const & rhs )
 		{
 			T result{};
 
@@ -919,7 +910,7 @@ namespace castor
 		}
 
 		template< typename T, typename U >
-		Point< T, 3 > cross( Coords< T const, 3 > const & lhs, Point< U, 3 > const & rhs )
+		static Point3< T > cross( Coords3< T const > const & lhs, Point3< U > const & rhs )
 		{
 			return Point< T, 3 >(
 				( lhs[1] * rhs[2] ) - ( lhs[2] * rhs[1] ),
@@ -929,7 +920,7 @@ namespace castor
 		}
 
 		template< typename T, uint32_t TCount >
-		double cosTheta( Coords< T const, TCount > const & lhs, Point< T, TCount > const & rhs )
+		static double cosTheta( Coords< T const, TCount > const & lhs, Point< T, TCount > const & rhs )
 		{
 			double result = double( length( lhs ) * length( rhs ) );
 

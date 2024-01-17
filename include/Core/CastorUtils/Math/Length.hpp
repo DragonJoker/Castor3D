@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___CU_Length_H___
@@ -163,112 +163,112 @@ namespace castor
 		 *\~french
 		 *\brief		Constructeur par défaut
 		 */
-		inline explicit LengthT( LengthUnit unit = LengthUnit::eMetre )noexcept;
+		explicit LengthT( LengthUnit unit = LengthUnit::eMetre )noexcept;
 		/**
 		 *\~english
 		 *\return		The value converted to given unit.
 		 *\~french
 		 *\return		La valeur convertie dans l'unité donnée.
 		 */
-		inline TypeT unit( LengthUnit u )const noexcept;
+		TypeT unit( LengthUnit u )const noexcept;
 		/**
 		 *\~english
 		 *\return		The value converted to kilometres.
 		 *\~french
 		 *\return		La valeur convertie en kilomètres.
 		 */
-		inline TypeT kilometres()const noexcept;
+		TypeT kilometres()const noexcept;
 		/**
 		 *\~english
 		 *\return		The value converted to metres.
 		 *\~french
 		 *\return		La valeur convertie en mètres.
 		 */
-		inline TypeT metres()const noexcept;
+		TypeT metres()const noexcept;
 		/**
 		 *\~english
 		 *\return		The value converted to centimetres.
 		 *\~french
 		 *\return		La valeur convertie en centimètres.
 		 */
-		inline TypeT centimetres()const noexcept;
+		TypeT centimetres()const noexcept;
 		/**
 		 *\~english
 		 *\return		The value converted to millimetres.
 		 *\~french
 		 *\return		La valeur convertie en millimètres.
 		 */
-		inline TypeT millimetres()const noexcept;
+		TypeT millimetres()const noexcept;
 		/**
 		 *\~english
 		 *\return		The value converted to yards.
 		 *\~french
 		 *\return		La valeur convertie en yards.
 		 */
-		inline TypeT yards()const noexcept;
+		TypeT yards()const noexcept;
 		/**
 		 *\~english
 		 *\return		The value converted to feet.
 		 *\~french
 		 *\return		La valeur convertie en pieds.
 		 */
-		inline TypeT feet()const noexcept;
+		TypeT feet()const noexcept;
 		/**
 		 *\~english
 		 *\return		The value converted to inches.
 		 *\~french
 		 *\return		La valeur convertie en pouces.
 		 */
-		inline TypeT inches()const noexcept;
+		TypeT inches()const noexcept;
 		/**
 		 *\~english
 		 *\param[in]	value	Length expressed in kilometres.
 		 *\~french
 		 *\param[in]	value	La longueur exprimée en kilomètres.
 		 */
-		inline void kilometres( double value )noexcept;
+		void kilometres( double value )noexcept;
 		/**
 		 *\~english
 		 *\param[in]	value	Length expressed in metres.
 		 *\~french
 		 *\param[in]	value	La longueur exprimée en mètres.
 		 */
-		inline void metres( double value )noexcept;
+		void metres( double value )noexcept;
 		/**
 		 *\~english
 		 *\param[in]	value	Length expressed in centimetres.
 		 *\~french
 		 *\param[in]	value	La longueur exprimée en centimètres.
 		 */
-		inline void centimetres( double value )noexcept;
+		void centimetres( double value )noexcept;
 		/**
 		 *\~english
 		 *\param[in]	value	Length expressed in millimetres.
 		 *\~french
 		 *\param[in]	value	La longueur exprimée en millimètres.
 		 */
-		inline void millimetres( double value )noexcept;
+		void millimetres( double value )noexcept;
 		/**
 		 *\~english
 		 *\param[in]	value	Length expressed in yards.
 		 *\~french
 		 *\param[in]	value	La longueur exprimée en yards.
 		 */
-		inline void yards( double value )noexcept;
+		void yards( double value )noexcept;
 		/**
 		 *\~english
 		 *\param[in]	value	Length expressed in feet.
 		 *\~french
 		 *\param[in]	value	La longueur exprimée en pieds.
 		 */
-		inline void feet( double value )noexcept;
+		void feet( double value )noexcept;
 		/**
 		 *\~english
 		 *\param[in]	value	Length expressed in inches.
 		 *\~french
 		 *\param[in]	value	La longueur exprimée en pouces.
 		 */
-		inline void inches( double value )noexcept;
+		void inches( double value )noexcept;
 		/**
 		 *\~english
 		 *\name Arithmetic operators.
@@ -276,14 +276,14 @@ namespace castor
 		 *\name Opérateurs arithmétiques.
 		**/
 		/**@{*/
-		inline LengthT< TypeT > & operator=( TypeT const & rhs )noexcept;
-		inline LengthT< TypeT > & operator-()noexcept;
-		inline LengthT< TypeT > & operator+=( LengthT< TypeT > const & rhs )noexcept;
-		inline LengthT< TypeT > & operator-=( LengthT< TypeT > const & rhs )noexcept;
-		inline LengthT< TypeT > & operator+=( TypeT const & rhs )noexcept;
-		inline LengthT< TypeT > & operator-=( TypeT const & rhs )noexcept;
-		inline LengthT< TypeT > & operator*=( double rhs )noexcept;
-		inline LengthT< TypeT > & operator/=( double rhs )noexcept;
+		LengthT< TypeT > & operator=( TypeT const & rhs )noexcept;
+		LengthT< TypeT > & operator-()noexcept;
+		LengthT< TypeT > & operator+=( LengthT< TypeT > const & rhs )noexcept;
+		LengthT< TypeT > & operator-=( LengthT< TypeT > const & rhs )noexcept;
+		LengthT< TypeT > & operator+=( TypeT const & rhs )noexcept;
+		LengthT< TypeT > & operator-=( TypeT const & rhs )noexcept;
+		LengthT< TypeT > & operator*=( double rhs )noexcept;
+		LengthT< TypeT > & operator/=( double rhs )noexcept;
 		/**@}*/
 		/**
 		 *\~english
@@ -291,22 +291,22 @@ namespace castor
 		 *\~french
 		*\return		La valeur de la longueur, dans son unité.
 		*/
-		explicit inline operator TypeT const &()const noexcept
+		explicit operator TypeT const &()const noexcept
 		{
 			return m_value;
 		}
 
-		inline TypeT const & value()const noexcept
+		TypeT const & value()const noexcept
 		{
 			return m_value;
 		}
 
-		inline TypeT & operator*()noexcept
+		TypeT & operator*()noexcept
 		{
 			return m_value;
 		}
 
-		inline LengthUnit lengthUnit()const noexcept
+		LengthUnit lengthUnit()const noexcept
 		{
 			return m_unit;
 		}

@@ -4,6 +4,7 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_PIXEL_BUFFER_BASE_H___
 #define ___CASTOR_PIXEL_BUFFER_BASE_H___
 
+#include "CastorUtils/Design/NonCopyable.hpp"
 #include "CastorUtils/Graphics/Pixel.hpp"
 #include "CastorUtils/Graphics/Size.hpp"
 #include "CastorUtils/Graphics/Position.hpp"
@@ -25,9 +26,10 @@ namespace castor
 	};
 
 	struct PxBufferConvertOptions
+		: public NonMovable
 	{
 		CU_API explicit PxBufferConvertOptions( PxCompressionSupport support );
-		CU_API ~PxBufferConvertOptions();
+		CU_API ~PxBufferConvertOptions()noexcept;
 
 		CU_API PixelFormat getCompressed( PixelFormat format )const;
 		CU_API uint32_t getAdditionalAlign( PixelFormat format )const;
@@ -39,9 +41,9 @@ namespace castor
 	class PxBufferBase
 	{
 	public:
-		typedef std::vector< uint8_t > PxArray;
-		typedef PxArray::iterator PixelData;
-		typedef PxArray::const_iterator ConstPixelData;
+		using PxArray = std::vector< uint8_t >;
+		using PixelData = PxArray::iterator;
+		using ConstPixelData = PxArray::const_iterator;
 
 	public:
 		/**
@@ -115,11 +117,20 @@ namespace castor
 		CU_API PxBufferBase( PxBufferBase const & pixelBuffer );
 		/**
 		 *\~english
+		 *\brief		Move Constructor
+		 *\param[in]	pixelBuffer	The PxBufferBase object to move
+		 *\~french
+		 *\brief		Constructeur par déplacement
+		 *\param[in]	pixelBuffer	L'objet PxBufferBase à déplacer
+		 */
+		CU_API PxBufferBase( PxBufferBase && pixelBuffer )noexcept;
+		/**
+		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		CU_API ~PxBufferBase();
+		CU_API ~PxBufferBase()noexcept = default;
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator
@@ -131,6 +142,17 @@ namespace castor
 		 *\return		Une référence sur cet objet PxBufferBase
 		 */
 		CU_API PxBufferBase & operator=( PxBufferBase const & pixelBuffer );
+		/**
+		 *\~english
+		 *\brief		Move assignment operator
+		 *\param[in]	pixelBuffer	The PxBufferBase object to move
+		 *\return		A reference to this PxBufferBase object
+		 *\~french
+		 *\brief		Opérateur d'affectation par déplacement
+		 *\param[in]	pixelBuffer	L'objet PxBufferBase à déplacer
+		 *\return		Une référence sur cet objet PxBufferBase
+		 */
+		CU_API PxBufferBase & operator=( PxBufferBase && pixelBuffer )noexcept;
 		/**
 		 *\brief		Deletes the data buffer
 		 *\~french
@@ -206,7 +228,7 @@ namespace castor
 		 *\brief		Echange les données de ce buffer avec celles du buffer donné
 		 *\param[in]	pixelBuffer	Le buffer à échanger
 		 */
-		CU_API void swap( PxBufferBase & pixelBuffer );
+		CU_API void swap( PxBufferBase & pixelBuffer )noexcept;
 		/**
 		 *\~english
 		 *\brief		Updates the buffer container, with given layers and miplevels counts.
@@ -265,102 +287,102 @@ namespace castor
 		 *\~french
 		 *\return		count() * (size of a pixel)
 		 */
-		uint64_t getSize()const
+		uint64_t getSize()const noexcept
 		{
 			return m_buffer.size();
 		}
 
-		uint8_t const * begin()const
+		uint8_t const * begin()const noexcept
 		{
 			return m_buffer.data();
 		}
 
-		uint8_t const * end()const
+		uint8_t const * end()const noexcept
 		{
 			return begin() + getSize();
 		}
 
-		uint8_t const * cbegin()const
+		uint8_t const * cbegin()const noexcept
 		{
 			return m_buffer.data();
 		}
 
-		uint8_t const * cend()const
+		uint8_t const * cend()const noexcept
 		{
 			return cbegin() + getSize();
 		}
 
-		uint8_t const * getConstPtr()const
+		uint8_t const * getConstPtr()const noexcept
 		{
 			return m_buffer.data();
 		}
 
-		uint8_t * getPtr()
+		uint8_t * getPtr()noexcept
 		{
 			return m_buffer.data();
 		}
 
-		bool isFlipped()const
+		bool isFlipped()const noexcept
 		{
 			return m_flipped;
 		}
 		
-		PixelFormat getFormat()const
+		PixelFormat getFormat()const noexcept
 		{
 			return m_format;
 		}
 
-		uint32_t getWidth()const
+		uint32_t getWidth()const noexcept
 		{
 			return m_size.getWidth();
 		}
 
-		uint32_t getHeight()const
+		uint32_t getHeight()const noexcept
 		{
 			return m_size.getHeight();
 		}
 
-		Point3ui getTiles()const
+		Point3ui getTiles()const noexcept
 		{
 			return m_tiles;
 		}
 
-		Size getTileSize()const
+		Size getTileSize()const noexcept
 		{
 			return { getTileWidth(), getTileHeight() };
 		}
 
-		uint32_t getTileWidth()const
+		uint32_t getTileWidth()const noexcept
 		{
 			return m_size.getWidth() / m_tiles->x;
 		}
 
-		uint32_t getTileHeight()const
+		uint32_t getTileHeight()const noexcept
 		{
 			return m_size.getHeight() / m_tiles->y;
 		}
 
-		uint32_t getLayers()const
+		uint32_t getLayers()const noexcept
 		{
 			return m_layers;
 		}
 
-		uint32_t getLevels()const
+		uint32_t getLevels()const noexcept
 		{
 			return m_levels;
 		}
 
-		uint32_t getAlign()const
+		uint32_t getAlign()const noexcept
 		{
 			return m_align;
 		}
 
-		Size const & getDimensions()const
+		Size const & getDimensions()const noexcept
 		{
 			return m_size;
 		}
 
-		uint32_t getCount()const
+		uint32_t getCount()const noexcept
 		{
 			return getWidth() * getHeight();
 		}

@@ -11,7 +11,7 @@
 
 namespace castor
 {
-	ImageLayout::Range ImageLayout::range()const
+	ImageLayout::Range ImageLayout::range()const noexcept
 	{
 		auto off = offset();
 		auto sze = size();
@@ -22,7 +22,7 @@ namespace castor
 		};
 	}
 	
-	ImageLayout::Range ImageLayout::slice( uint32_t index )const
+	ImageLayout::Range ImageLayout::slice( uint32_t index )const noexcept
 	{
 		auto offset = sliceOffset( index );
 		auto size = sliceSize();
@@ -33,7 +33,7 @@ namespace castor
 		};
 	}
 
-	ImageLayout::Range ImageLayout::sliceMip( uint32_t index, uint32_t level )const
+	ImageLayout::Range ImageLayout::sliceMip( uint32_t index, uint32_t level )const noexcept
 	{
 		auto offset = sliceMipOffset( index, level );
 		auto size = sliceMipSize( level );
@@ -44,12 +44,12 @@ namespace castor
 		};
 	}
 
-	ImageLayout::DeviceSize ImageLayout::size()const
+	ImageLayout::DeviceSize ImageLayout::size()const noexcept
 	{
 		return depthLayers() * sliceSize();
 	}
 
-	ImageLayout::DeviceSize ImageLayout::sliceSize()const
+	ImageLayout::DeviceSize ImageLayout::sliceSize()const noexcept
 	{
 		return ashes::getLevelsSize( VkExtent2D{ extent->x, extent->y }
 			, VkFormat( format )
@@ -58,19 +58,19 @@ namespace castor
 			, alignment );
 	}
 
-	ImageLayout::DeviceSize ImageLayout::sliceMipSize( uint32_t level )const
+	ImageLayout::DeviceSize ImageLayout::sliceMipSize( uint32_t level )const noexcept
 	{
 		return ashes::getSize( VkExtent2D{ extent->x, extent->y }
 			, VkFormat( format )
 			, level );
 	}
 
-	ImageLayout::DeviceSize ImageLayout::offset()const
+	ImageLayout::DeviceSize ImageLayout::offset()const noexcept
 	{
 		return sliceMipOffset( baseLayer, baseLevel );
 	}
 
-	ImageLayout::DeviceSize ImageLayout::sliceOffset( uint32_t index )const
+	ImageLayout::DeviceSize ImageLayout::sliceOffset( uint32_t index )const noexcept
 	{
 		return index * ashes::getLevelsSize( VkExtent2D{ extent->x, extent->y }
 			, VkFormat( format )
@@ -80,7 +80,7 @@ namespace castor
 	}
 	
 	ImageLayout::DeviceSize ImageLayout::sliceMipOffset( uint32_t index
-		, uint32_t level )const
+		, uint32_t level )const noexcept
 	{
 		return sliceOffset( index )
 			+ ashes::getLevelsSize( VkExtent2D{ extent->x, extent->y }
@@ -90,7 +90,7 @@ namespace castor
 				, alignment );
 	}
 
-	ImageLayout::Buffer ImageLayout::buffer( PxBufferBase & buffer )const
+	ImageLayout::Buffer ImageLayout::buffer( PxBufferBase & buffer )const noexcept
 	{
 		auto rng = range();
 		return ImageLayout::Buffer
@@ -101,7 +101,7 @@ namespace castor
 	}
 
 	ImageLayout::Buffer ImageLayout::sliceBuffer( PxBufferBase & buffer
-		, uint32_t index )const
+		, uint32_t index )const noexcept
 	{
 		auto range = slice( index );
 		return ImageLayout::Buffer
@@ -113,7 +113,7 @@ namespace castor
 
 	ImageLayout::Buffer ImageLayout::sliceMipBuffer( PxBufferBase & buffer
 		, uint32_t index
-		, uint32_t level )const
+		, uint32_t level )const noexcept
 	{
 		auto range = sliceMip( index, level );
 		return ImageLayout::Buffer
@@ -123,7 +123,7 @@ namespace castor
 		};
 	}
 
-	ImageLayout::ConstBuffer ImageLayout::buffer( PxBufferBase const & buffer )const
+	ImageLayout::ConstBuffer ImageLayout::buffer( PxBufferBase const & buffer )const noexcept
 	{
 		auto rng = range();
 		return ImageLayout::ConstBuffer
@@ -134,7 +134,7 @@ namespace castor
 	}
 
 	ImageLayout::ConstBuffer ImageLayout::sliceBuffer( PxBufferBase const & buffer
-		, uint32_t index )const
+		, uint32_t index )const noexcept
 	{
 		auto range = slice( index );
 		return ImageLayout::ConstBuffer
@@ -146,7 +146,7 @@ namespace castor
 
 	ImageLayout::ConstBuffer ImageLayout::sliceMipBuffer( PxBufferBase const & buffer
 		, uint32_t index
-		, uint32_t level )const
+		, uint32_t level )const noexcept
 	{
 		auto range = sliceMip( index, level );
 		return ImageLayout::ConstBuffer
@@ -156,17 +156,17 @@ namespace castor
 		};
 	}
 
-	bool ImageLayout::hasBuffer( PxBufferBase const & buffer )const
+	bool ImageLayout::hasBuffer( PxBufferBase const & buffer )const noexcept
 	{
 		return buffer.getSize() >= range().getMax();
 	}
 
-	bool ImageLayout::hasSliceBuffer( PxBufferBase const & buffer, uint32_t index )const
+	bool ImageLayout::hasSliceBuffer( PxBufferBase const & buffer, uint32_t index )const noexcept
 	{
 		return buffer.getSize() >= slice( index ).getMax();
 	}
 
-	bool ImageLayout::hasSliceMipBuffer( PxBufferBase const & buffer, uint32_t index, uint32_t level )const
+	bool ImageLayout::hasSliceMipBuffer( PxBufferBase const & buffer, uint32_t index, uint32_t level )const noexcept
 	{
 		return buffer.getSize() >= sliceMip( index, level ).getMax();
 	}

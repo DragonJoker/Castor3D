@@ -45,7 +45,7 @@ namespace castor
 		explicit SquareMatrix( NoInit const & );
 		explicit SquareMatrix( T const & rhs );
 		SquareMatrix( SquareMatrix const & rhs );
-		SquareMatrix( SquareMatrix && rhs );
+		SquareMatrix( SquareMatrix && rhs )noexcept;
 		template< uint32_t CountU >
 		explicit SquareMatrix( SquareMatrix< T, CountU > const & rhs );
 		template< typename Type >
@@ -162,7 +162,7 @@ namespace castor
 		template< typename Type >
 		SquareMatrix< T, Count > & operator=( Matrix< Type, Count, Count > const & rhs );
 		SquareMatrix< T, Count > & operator=( SquareMatrix< T, Count > const & rhs );
-		SquareMatrix< T, Count > & operator=( SquareMatrix< T, Count > && rhs );
+		SquareMatrix< T, Count > & operator=( SquareMatrix< T, Count > && rhs )noexcept;
 		template< typename Type >
 		SquareMatrix< T, Count > & operator=( SquareMatrix< Type, Count > const & rhs );
 		template< typename Type >

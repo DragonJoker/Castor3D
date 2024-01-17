@@ -21,7 +21,7 @@ namespace castor
 			int m_toCapture;
 			int m_toSkip;
 
-			inline Backtrace( int toCapture = 20, int toSkip = 2 )
+			Backtrace( int toCapture = 20, int toSkip = 2 )
 				: m_toCapture{ toCapture }
 				, m_toSkip{ toSkip }
 			{
@@ -93,10 +93,6 @@ namespace castor
 			{
 			}
 
-			~Backtraced()
-			{
-			}
-
 		private:
 			static std::string doGetCallStack()
 			{
@@ -112,7 +108,8 @@ namespace castor
 #endif
 		};
 
-		inline std::ostream & operator<<( std::ostream & stream, Backtraced const & traced )
+		inline std::ostream & operator<<( std::ostream & stream
+			, [[maybe_unused]] Backtraced const & traced )
 		{
 #if !defined( NDEBUG )
 

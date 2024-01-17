@@ -22,7 +22,8 @@ namespace castor
 		 */
 		static uint8_t * allocate( size_t size )
 		{
-			return reinterpret_cast< uint8_t * >( alignedAlloc( Align, size ) );
+			using BytePtr = uint8_t *;
+			return BytePtr( alignedAlloc( Align, size ) );
 		}
 		/**
 		 *\~english

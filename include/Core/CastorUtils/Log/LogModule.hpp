@@ -23,6 +23,15 @@ namespace castor
 	*/
 	struct Message
 	{
+		Message( LogType type
+			, std::string message
+			, bool newLine )
+			: m_type{ type }
+			, m_message{ std::move( message ) }
+			, m_newLine{ newLine }
+		{
+		}
+
 		//! The message type.
 		LogType m_type;
 		//! The message text.

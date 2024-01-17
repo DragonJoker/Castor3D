@@ -28,9 +28,9 @@ namespace castor
 			auto dstIndex = getComponentIndex( PcDstT, dstPixelFormat );
 			dstBuffer += dstIndex * componentSize;
 
-			if ( hasComponent( PfSrcT, PcSrcT ) )
+			if constexpr ( hasComponent( PfSrcT, PcSrcT ) )
 			{
-				auto srcIndex = getComponentIndex( PcSrcT, PfSrcT );
+				auto constexpr srcIndex = getComponentIndex( PcSrcT, PfSrcT );
 				srcBuffer += srcIndex * componentSize;
 
 				for ( size_t i = 0; i < count; ++i )
@@ -201,7 +201,7 @@ namespace castor
 	PxBufferBaseUPtr extractComponent( PxBufferBaseRPtr src
 		, PixelComponent component )
 	{
-		auto decomp = decompressBuffer( src );
+		auto decomp = decompressBuffer( *src );
 		auto result = PxBufferBase::create( decomp->getDimensions()
 			, getSingleComponent( decomp->getFormat() ) );
 		pfext::copyComponent( *decomp
@@ -214,7 +214,7 @@ namespace castor
 	PxBufferBaseUPtr extractComponents( PxBufferBaseRPtr src
 		, PixelComponents components )
 	{
-		auto decomp = decompressBuffer( src );
+		auto decomp = decompressBuffer( *src );
 		auto result = PxBufferBase::create( decomp->getDimensions()
 			, getPixelFormat( decomp->getFormat(), components ) );
 		auto dstIndex = 0u;

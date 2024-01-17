@@ -3,38 +3,34 @@
 namespace castor
 {
 	Size::Size()noexcept
-		: Size( 0u, 0u )
+		: Size{ 0u, 0u }
 	{
 	}
 
 	Size::Size( uint32_t width, uint32_t height )noexcept
-		:	BaseType( m_data.buffer )
+		: BaseType{ getData().buffer.data() }
 	{
-		m_data.size.x = width;
-		m_data.size.y = height;
+		getData().size.x = width;
+		getData().size.y = height;
 	}
 
 	Size::Size( Size const & rhs )noexcept
-		:	BaseType( m_data.buffer )
+		: BaseType{ getData().buffer.data() }
 	{
-		m_data.size = rhs.m_data.size;
+		getData().size = rhs.getData().size;
 	}
 
 	Size::Size( Size && rhs )noexcept
-		:	BaseType( m_data.buffer )
+		: BaseType{ getData().buffer.data() }
 	{
-		m_data.size = rhs.m_data.size;
-		rhs.m_data.size.x = 0;
-		rhs.m_data.size.y = 0;
-	}
-
-	Size::~Size()noexcept
-	{
+		getData().size = rhs.getData().size;
+		rhs.getData().size.x = 0;
+		rhs.getData().size.y = 0;
 	}
 
 	Size & Size::operator=( Size const & rhs )noexcept
 	{
-		m_data.size = rhs.m_data.size;
+		getData().size = rhs.getData().size;
 		return *this;
 	}
 
@@ -42,9 +38,9 @@ namespace castor
 	{
 		if ( this != &rhs )
 		{
-			m_data.size = rhs.m_data.size;
-			rhs.m_data.size.x = 0;
-			rhs.m_data.size.y = 0;
+			getData().size = rhs.getData().size;
+			rhs.getData().size.x = 0;
+			rhs.getData().size.y = 0;
 		}
 
 		return *this;
@@ -52,36 +48,36 @@ namespace castor
 
 	void Size::set( uint32_t width, uint32_t height )noexcept
 	{
-		m_data.size.x = width;
-		m_data.size.y = height;
+		getData().size.x = width;
+		getData().size.y = height;
 	}
 
 	void Size::grow( int32_t cx, int32_t cy )noexcept
 	{
-		if ( cx > 0 && std::numeric_limits< uint32_t >::max() - m_data.size.x < uint32_t( cx ) )
+		if ( cx > 0 && std::numeric_limits< uint32_t >::max() - getData().size.x < uint32_t( cx ) )
 		{
-			m_data.size.x = std::numeric_limits< uint32_t >::max();
+			getData().size.x = std::numeric_limits< uint32_t >::max();
 		}
-		else if ( cx < 0 && m_data.size.x < uint32_t( -cx ) )
+		else if ( cx < 0 && getData().size.x < uint32_t( -cx ) )
 		{
-			m_data.size.x = 0;
+			getData().size.x = 0;
 		}
 		else
 		{
-			m_data.size.x += cx;
+			getData().size.x += cx;
 		}
 
-		if ( cy > 0 && std::numeric_limits< uint32_t >::max() - m_data.size.y < uint32_t( cy ) )
+		if ( cy > 0 && std::numeric_limits< uint32_t >::max() - getData().size.y < uint32_t( cy ) )
 		{
-			m_data.size.y = std::numeric_limits< uint32_t >::max();
+			getData().size.y = std::numeric_limits< uint32_t >::max();
 		}
-		else if ( cy < 0 && m_data.size.y < uint32_t( -cy ) )
+		else if ( cy < 0 && getData().size.y < uint32_t( -cy ) )
 		{
-			m_data.size.y = 0;
+			getData().size.y = 0;
 		}
 		else
 		{
-			m_data.size.y += cy;
+			getData().size.y += cy;
 		}
 	}
 

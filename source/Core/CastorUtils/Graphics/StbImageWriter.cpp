@@ -31,12 +31,12 @@ namespace castor
 				CU_LoaderError( cuT( "Couldn't write file " ) + path + cuT( ":\nUnsupported pixel format." ) );
 			}
 
-			int x = int( buffer.getWidth() );
-			int y = int( buffer.getHeight() );
+			auto x = int( buffer.getWidth() );
+			auto y = int( buffer.getHeight() );
 			stbi_flip_vertically_on_write( 1u );
-			auto extension = string::upperCase( path.getExtension() );
 
-			if ( extension == "PNG" )
+			if ( auto extension = string::upperCase( path.getExtension() );
+				extension == "PNG" )
 			{
 				result = stbi_write_png( string::stringCast< char >( path ).c_str()
 					, x
@@ -95,11 +95,12 @@ namespace castor
 				CU_LoaderError( cuT( "Couldn't write file " ) + path + cuT( ":\nUnsupported pixel format." ) );
 			}
 
-			int x = int( buffer.getWidth() );
-			int y = int( buffer.getHeight() );
+			auto x = int( buffer.getWidth() );
+			auto y = int( buffer.getHeight() );
 			Path realPath = path.getPath() / ( path.getFileName() + ".hdr" );
 			stbi_flip_vertically_on_write( 1u );
-			auto data = reinterpret_cast< float const * >( buffer.getConstPtr() );
+			using FloatCPtr = float const *;
+			auto data = FloatCPtr( buffer.getConstPtr() );
 			result = stbi_write_hdr( string::stringCast< char >( realPath ).c_str()
 				, x
 				, y
@@ -114,24 +115,25 @@ namespace castor
 			return result;
 		}
 
+		static StringArray const StbExtensions
+		{
+			cuT( "jpeg" ),
+			cuT( "jpg" ),
+			cuT( "png" ),
+			cuT( "tga" ),
+			cuT( "bmp" ),
+			cuT( "psd" ),
+			cuT( "gif" ),
+			cuT( "hdr" ),
+			cuT( "pic" ),
+			cuT( "pnm" ),
+			cuT( "ppm" ),
+			cuT( "pgm" ),
+		};
+
 		static StringArray const & listExtensions()
 		{
-			static StringArray const list
-			{
-				cuT( "jpeg" ),
-				cuT( "jpg" ),
-				cuT( "png" ),
-				cuT( "tga" ),
-				cuT( "bmp" ),
-				cuT( "psd" ),
-				cuT( "gif" ),
-				cuT( "hdr" ),
-				cuT( "pic" ),
-				cuT( "pnm" ),
-				cuT( "ppm" ),
-				cuT( "pgm" ),
-			};
-			return list;
+			return StbExtensions;
 		}
 	}
 

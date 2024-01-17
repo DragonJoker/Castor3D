@@ -67,7 +67,7 @@ namespace castor
 		 *\brief		Le callback des évènements du flux
 		 */
 		template< typename PrefixType, typename CharType >
-		inline void callback( std::ios_base::event ev, std::ios_base & ios, int x )
+		inline void callback( std::ios_base::event ev, std::ios_base & ios, CU_UnusedParam( int, x ) )
 		{
 			if ( BasicPrefixBufferManager< BasePrefixer< CharType, PrefixType >, CharType >::instances() )
 			{
@@ -82,7 +82,7 @@ namespace castor
 #	error Known good compilers: 3.3
 #else
 
-					if ( std::basic_ostream< CharType > & o_s = dynamic_cast< std::basic_ostream< CharType > & >( ios ) )
+					if ( auto & o_s = dynamic_cast< std::basic_ostream< CharType > & >( ios ) )
 					{
 						o_s << BasePrefixer< CharType, PrefixType >();
 					}
@@ -105,11 +105,10 @@ namespace castor
 	 *\param[in]	Prefix	Le préfixe.
 	 */
 	template< typename CharType, typename PrefixType >
-	inline std::basic_ostream< CharType > & operator<<( std::basic_ostream< CharType > & stream, format::BasePrefixer< CharType, PrefixType > const & Prefix )
+	inline std::basic_ostream< CharType > & operator<<( std::basic_ostream< CharType > & stream, format::BasePrefixer< CharType, PrefixType > const & /*prefix*/ )
 	{
-		auto * sbuf = dynamic_cast< format::BasicPrefixBuffer< format::BasePrefixer< CharType, PrefixType >, CharType > * >( stream.rdbuf() );
-
-		if ( !sbuf )
+		if ( auto * sbuf = dynamic_cast< format::BasicPrefixBuffer< format::BasePrefixer< CharType, PrefixType >, CharType > * >( stream.rdbuf() );
+			!sbuf )
 		{
 			format::installPrefixBuffer< PrefixType >( stream );
 			stream.register_callback( format::callback< PrefixType, CharType >, 0 );

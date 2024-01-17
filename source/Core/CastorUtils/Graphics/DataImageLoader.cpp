@@ -6,17 +6,18 @@
 
 namespace castor
 {
-	namespace xpml
+	namespace datal
 	{
-		static StringArray const & listExtensions()
+		static StringArray const DataExtensions
 		{
-			static StringArray const list
-			{
 #define CUPF_ENUM_VALUE( name, value, components, alpha, colour, depth, stencil, compressed )\
 				getFormatName( PixelFormat::e##name ),
 #include "CastorUtils/Graphics/PixelFormat.enum"
-			};
-			return list;
+		};
+
+		static StringArray const & listExtensions()
+		{
+			return DataExtensions;
 		}
 
 		using R8G8B8Pixel = Pixel< PixelFormat::eR8G8B8_UNORM >;
@@ -24,13 +25,13 @@ namespace castor
 
 	void DataImageLoader::registerLoader( ImageLoader & reg )
 	{
-		reg.registerLoader( xpml::listExtensions()
+		reg.registerLoader( datal::listExtensions()
 			, std::make_unique< DataImageLoader >() );
 	}
 
 	void DataImageLoader::unregisterLoader( ImageLoader & reg )
 	{
-		reg.unregisterLoader( xpml::listExtensions() );
+		reg.unregisterLoader( datal::listExtensions() );
 	}
 
 	ImageLayout DataImageLoader::load( String const & imageFormat

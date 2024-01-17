@@ -14,7 +14,7 @@ namespace castor
 		: public Range< T >
 	{
 	public:
-		inline IndexedRangeT( uint32_t index
+		IndexedRangeT( uint32_t index
 			, T const & min
 			, T const & max )
 			: Range< T >{ min, max }
@@ -22,7 +22,7 @@ namespace castor
 		{
 		}
 
-		inline uint32_t getIndex()const
+		uint32_t getIndex()const
 		{
 			return m_index;
 		}
@@ -40,22 +40,21 @@ namespace castor
 		using SequenceType = std::vector< RangeType >;
 
 	public:
-		inline explicit RangeSequenceT( std::vector< T > const & sequence )
+		explicit RangeSequenceT( std::vector< T > const & sequence )
 			: Range{ sequence.front(), sequence.back() }
 			, m_sequence{ convert( sequence ) }
 		{
 		}
 
-		inline RangeType const & getRange( T const & value )const
+		RangeType const & getRange( T const & value )const
 		{
-			auto it = std::find_if( m_sequence.begin()
-				, m_sequence.end()
-				, [&value]( RangeType const & range )
-				{
-					return range.has( value );
-				} );
-
-			if ( it != m_sequence.end() )
+			if ( auto it = std::find_if( m_sequence.begin()
+					, m_sequence.end()
+					, [&value]( RangeType const & range )
+					{
+						return range.has( value );
+					} );
+				it != m_sequence.end() )
 			{
 				return *it;
 			}
@@ -64,7 +63,7 @@ namespace castor
 		}
 
 	private:
-		inline SequenceType convert( std::vector< T > const & sequence )
+		SequenceType convert( std::vector< T > const & sequence )
 		{
 			assert( sequence.size() >= 2u );
 			SequenceType result;
