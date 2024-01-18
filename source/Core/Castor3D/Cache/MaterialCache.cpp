@@ -110,7 +110,7 @@ namespace castor
 	}
 
 	void ResourceCacheT< Material, String, MaterialCacheTraits >::PassDataBuffers::declareShaderBuffers( sdw::ShaderWriter & writer
-		, std::map< std::string, shader::BufferBaseUPtr, std::less<> > & buffers
+		, castor::StringMap< shader::BufferBaseUPtr > & buffers
 		, uint32_t & binding
 		, uint32_t set )const
 	{
@@ -216,7 +216,7 @@ namespace castor
 			} ) );
 	}
 
-	void ResourceCacheT< Material, String, MaterialCacheTraits >::clear()
+	void ResourceCacheT< Material, String, MaterialCacheTraits >::clear()noexcept
 	{
 		auto lock( makeUniqueLock( *this ) );
 		m_defaultMaterial = {};
@@ -258,7 +258,7 @@ namespace castor
 		m_specificsBuffers.registerBuffer( name, buffer );
 	}
 
-	void ResourceCacheT< Material, String, MaterialCacheTraits >::unregisterSpecificsBuffer( std::string const & name )
+	void ResourceCacheT< Material, String, MaterialCacheTraits >::unregisterSpecificsBuffer( std::string const & name )noexcept
 	{
 		m_specificsBuffers.unregisterBuffer( name );
 	}
@@ -283,7 +283,7 @@ namespace castor
 	}
 
 	void ResourceCacheT< Material, String, MaterialCacheTraits >::declareSpecificsShaderBuffers( sdw::ShaderWriter & writer
-		, std::map< std::string, shader::BufferBaseUPtr, std::less<> > & buffers
+		, castor::StringMap< shader::BufferBaseUPtr > & buffers
 		, uint32_t & binding
 		, uint32_t set )const
 	{
@@ -341,7 +341,7 @@ namespace castor
 		return false;
 	}
 
-	void ResourceCacheT< Material, String, MaterialCacheTraits >::unregisterPass( Pass & pass )
+	void ResourceCacheT< Material, String, MaterialCacheTraits >::unregisterPass( Pass & pass )noexcept
 	{
 		if ( m_passBuffer
 			&& pass.getId() )
@@ -381,7 +381,7 @@ namespace castor
 		return false;
 	}
 
-	void ResourceCacheT< Material, String, MaterialCacheTraits >::unregisterUnit( TextureUnit & unit )
+	void ResourceCacheT< Material, String, MaterialCacheTraits >::unregisterUnit( TextureUnit & unit )noexcept
 	{
 		if ( m_texConfigBuffer
 			&& unit.getId() )
@@ -412,7 +412,7 @@ namespace castor
 		return false;
 	}
 
-	void ResourceCacheT< Material, String, MaterialCacheTraits >::unregisterTexture( AnimatedTexture const & texture )
+	void ResourceCacheT< Material, String, MaterialCacheTraits >::unregisterTexture( AnimatedTexture const & texture )noexcept
 	{
 		if ( m_texAnimBuffer )
 		{

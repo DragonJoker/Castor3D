@@ -41,7 +41,7 @@ namespace castor3d
 
 	public:
 		C3D_API void initialise();
-		C3D_API void cleanup();
+		C3D_API void cleanup()noexcept;
 		C3D_API void registerLight( Light * light );
 		C3D_API void update( CpuUpdater & updater );
 		C3D_API crg::SemaphoreWaitArray render( crg::SemaphoreWaitArray const & toWait
@@ -186,14 +186,14 @@ namespace castor3d
 		static uint32_t countInitialisationSteps()noexcept
 		{
 			uint32_t result = 0u;
-			++result;// light injection;
+			++result;// light injection
 
 			if constexpr ( GeometryVolumesT )
 			{
-				++result;// geom injection;
+				++result;// geom injection
 			}
 
-			result += LpvMaxPropagationSteps;// propagation;
+			result += LpvMaxPropagationSteps;// propagation
 			return result;
 		}
 	};

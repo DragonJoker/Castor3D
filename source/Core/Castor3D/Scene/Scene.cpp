@@ -220,7 +220,7 @@ namespace castor3d
 			, *this );
 	}
 
-	Scene::~Scene()
+	Scene::~Scene()noexcept
 	{
 		if ( m_cleanBackground )
 		{
@@ -278,7 +278,7 @@ namespace castor3d
 	void Scene::initialise()
 	{
 		auto & engine = *getEngine();
-		auto & device = engine.getRenderSystem()->getRenderDevice();
+		auto const & device = engine.getRenderSystem()->getRenderDevice();
 		m_timerParticlesGpu = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), getName() + "/ParticlesGPU", crg::TimerScope::eUpdate );
 		engine.registerTimer( getName() + "/ParticlesGPU", *m_timerParticlesGpu );
 #if C3D_DebugTimers

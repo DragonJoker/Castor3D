@@ -12,7 +12,7 @@ namespace castor3d
 		load();
 	}
 
-	ParticlePlugin::~ParticlePlugin()
+	ParticlePlugin::~ParticlePlugin()noexcept
 	{
 		unload();
 	}

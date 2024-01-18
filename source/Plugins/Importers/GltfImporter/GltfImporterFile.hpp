@@ -68,7 +68,7 @@ namespace c3d_gltf
 	using AnimationChannelSampler = std::pair< fastgltf::AnimationChannel, fastgltf::AnimationSampler >;
 	using NodeAnimationChannelSampler = std::vector< AnimationChannelSampler >;
 	using AnimationChannelSamplers = std::map< fastgltf::AnimationPath, NodeAnimationChannelSampler >;
-	using Animations = std::map< castor::String, AnimationChannelSamplers >;
+	using Animations = castor::StringMap< AnimationChannelSamplers >;
 
 	using IndexName = std::pair< size_t, castor::String >;
 	using NameContainer = std::vector< IndexName >;
@@ -140,8 +140,8 @@ namespace c3d_gltf
 	{
 		std::vector< GltfNodeData > nodes;
 		std::vector< GltfNodeData > skeletonNodes;
-		std::map< castor::String, GltfMeshData > meshes;
-		std::map< castor::String, GlSkeletonData > skeletons;
+		castor::StringMap< GltfMeshData > meshes;
+		castor::StringMap< GlSkeletonData > skeletons;
 	};
 
 	class GltfImporterFile

@@ -641,10 +641,10 @@ namespace castor3d
 		m_engine = std::move( rhs.m_engine );
 		m_parent = std::move( rhs.m_parent );
 		m_categoryName = std::move( rhs.m_categoryName );
-		m_leftOffset = std::move( rhs.m_leftOffset );
-		m_posX = std::move( rhs.m_posX );
-		m_visible = std::move( rhs.m_visible );
-		m_parentVisible = std::move( rhs.m_parentVisible );
+		m_leftOffset = rhs.m_leftOffset;
+		m_posX = rhs.m_posX;
+		m_visible = rhs.m_visible;
+		m_parentVisible = rhs.m_parentVisible;
 		m_passes = std::move( rhs.m_passes );
 		m_categories = std::move( rhs.m_categories );
 		m_container = std::move( rhs.m_container );
@@ -672,10 +672,10 @@ namespace castor3d
 		: m_engine{ std::move( rhs.m_engine ) }
 		, m_parent{ std::move( rhs.m_parent ) }
 		, m_categoryName{ std::move( rhs.m_categoryName ) }
-		, m_leftOffset{ std::move( rhs.m_leftOffset ) }
-		, m_posX{ std::move( rhs.m_posX ) }
-		, m_visible{ std::move( rhs.m_visible ) }
-		, m_parentVisible{ std::move( rhs.m_parentVisible ) }
+		, m_leftOffset{ rhs.m_leftOffset }
+		, m_posX{ rhs.m_posX }
+		, m_visible{ rhs.m_visible }
+		, m_parentVisible{ rhs.m_parentVisible }
 		, m_passes{ std::move( rhs.m_passes ) }
 		, m_categories{ std::move( rhs.m_categories ) }
 		, m_container{ std::move( rhs.m_container ) }
@@ -1015,14 +1015,6 @@ namespace castor3d
 	{
 		doCreateMainDebugPanel();
 		doCreateRenderPassesDebugPanel();
-	}
-
-	DebugOverlays::~DebugOverlays()
-	{
-	}
-
-	void DebugOverlays::initialise( OverlayCache & cache )
-	{
 	}
 
 	void DebugOverlays::cleanup()

@@ -11,9 +11,9 @@ namespace Testing
 {
 	namespace details
 	{
-		static std::map< castor::String, SceneNodeRPtr > sortNodes( Scene const & scene )
+		static castor::StringMap< SceneNodeRPtr > sortNodes( Scene const & scene )
 		{
-			std::map< castor::String, SceneNodeRPtr > result;
+			castor::StringMap< SceneNodeRPtr > result;
 			auto lock = castor::makeUniqueLock( scene.getSceneNodeCache() );
 
 			for ( auto & it : scene.getSceneNodeCache() )
@@ -24,9 +24,9 @@ namespace Testing
 			return result;
 		}
 
-		static std::map< castor::String, GeometryRPtr > sortGeometries( Scene const & scene )
+		static castor::StringMap< GeometryRPtr > sortGeometries( Scene const & scene )
 		{
-			std::map< castor::String, GeometryRPtr > result;
+			castor::StringMap< GeometryRPtr > result;
 			auto lock = castor::makeUniqueLock( scene.getGeometryCache() );
 
 			for ( auto & it : scene.getGeometryCache() )
@@ -37,9 +37,9 @@ namespace Testing
 			return result;
 		}
 
-		static std::map< castor::String, LightRPtr > sortLights( Scene const & scene )
+		static castor::StringMap< LightRPtr > sortLights( Scene const & scene )
 		{
-			std::map< castor::String, LightRPtr > result;
+			castor::StringMap< LightRPtr > result;
 			auto lock = castor::makeUniqueLock( scene.getLightCache() );
 
 			for ( auto & it : scene.getLightCache() )
@@ -50,9 +50,9 @@ namespace Testing
 			return result;
 		}
 
-		static std::map< castor::String, CameraRPtr > sortCameras( Scene const & scene )
+		static castor::StringMap< CameraRPtr > sortCameras( Scene const & scene )
 		{
-			std::map< castor::String, CameraRPtr > result;
+			castor::StringMap< CameraRPtr > result;
 			auto lock = castor::makeUniqueLock( scene.getCameraCache() );
 
 			for ( auto & it : scene.getCameraCache() )
@@ -63,9 +63,9 @@ namespace Testing
 			return result;
 		}
 
-		static std::map< castor::String, AnimatedObjectGroupRPtr > sortAnimatedGroups( Scene const & scene )
+		static castor::StringMap< AnimatedObjectGroupRPtr > sortAnimatedGroups( Scene const & scene )
 		{
-			std::map< castor::String, AnimatedObjectGroupRPtr > result;
+			castor::StringMap< AnimatedObjectGroupRPtr > result;
 			auto lock = castor::makeUniqueLock( scene.getAnimatedObjectGroupCache() );
 
 			for ( auto & it : scene.getAnimatedObjectGroupCache() )

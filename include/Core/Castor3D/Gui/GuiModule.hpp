@@ -22,29 +22,30 @@ namespace castor3d
 	enum class ControlType
 		: uint8_t
 	{
-		eNone,
+		eNone = 0,
 		//! PanelCtrl
-		ePanel,
+		ePanel = 1,
 		//! StaticCtrl
-		eStatic,
+		eStatic = 2,
 		//! EditCtrl
-		eEdit,
+		eEdit = 3,
 		//! SliderCtrl
-		eSlider,
+		eSlider = 4,
 		//! ComboBoxCtrl
-		eComboBox,
+		eComboBox = 5,
 		//! ListBoxCtrl
-		eListBox,
+		eListBox = 6,
 		//! ButtonCtrl
-		eButton,
+		eButton = 7,
 		//! ExpandablePanelCtrl
-		eExpandablePanel,
+		eExpandablePanel = 8,
 		//! FrameCtrl
-		eFrame,
+		eFrame = 9,
 		//! ScrollBarCtrl
-		eScrollBar,
+		eScrollBar = 10,
 		//! ProgressCtrl
-		eProgress,
+		eProgress = 11,
+		CU_ScopedEnumBounds( eNone, eProgress )
 	};
 	/**
 	*\brief	Enumeration of supported control events.
@@ -53,11 +54,10 @@ namespace castor3d
 		: uint8_t
 	{
 		//! Control dragged.
-		eDrag,
+		eDrag = 0,
 		//! Control dropped.
-		eDrop,
-		//! The control events count.
-		eCount,
+		eDrop = 1,
+		CU_ScopedEnumBounds( eDrag, eDrop )
 	};
 	/**
 	*\brief	Enumeration of supported combobox events.
@@ -66,9 +66,8 @@ namespace castor3d
 		: uint8_t
 	{
 		//! Item selected.
-		eSelected,
-		//! The combo box events count.
-		eCount,
+		eSelected = 0,
+		CU_ScopedEnumBounds( eSelected, eSelected )
 	};
 	/**
 	*\brief	Enumeration of supported edit events.
@@ -77,11 +76,10 @@ namespace castor3d
 		: uint8_t
 	{
 		//! The edit text has changed.
-		eUpdated,
+		eUpdated = 0,
 		//! The return key has been hit (the edit must have EditStyle::eProcessEnter style).
-		eReturn,
-		//! The edit events count.
-		eCount,
+		eReturn = 1,
+		CU_ScopedEnumBounds( eUpdated, eReturn )
 	};
 	/**
 	*\brief	Enumeration of supported expandable panel events.
@@ -90,11 +88,10 @@ namespace castor3d
 		: uint8_t
 	{
 		//! Expand panel.
-		eExpand,
+		eExpand = 0,
 		//! Retract panel, leaving only header visible.
-		eRetract,
-		//! The expandable panel events count.
-		eCount,
+		eRetract = 1,
+		CU_ScopedEnumBounds( eExpand, eRetract )
 	};
 	/**
 	*\brief	Enumeration of supported listbox events.
@@ -103,9 +100,8 @@ namespace castor3d
 		: uint8_t
 	{
 		//! Item selected.
-		eSelected,
-		//! The combobox events count.
-		eCount,
+		eSelected = 0,
+		CU_ScopedEnumBounds( eSelected, eSelected )
 	};
 	/**
 	*\brief	Enumeration of supported button events.
@@ -114,9 +110,8 @@ namespace castor3d
 		: uint8_t
 	{
 		//! Button clicked.
-		eClicked,
-		//! The button events count.
-		eCount,
+		eClicked = 0,
+		CU_ScopedEnumBounds( eClicked, eClicked )
 	};
 	/**
 	*\brief	Enumeration of supported slider events.
@@ -125,11 +120,10 @@ namespace castor3d
 		: uint8_t
 	{
 		//! Slider thumb release.
-		eThumbRelease,
+		eThumbRelease = 0,
 		//! Slider thumb track.
-		eThumbTrack,
-		//! The slider events count.
-		eCount,
+		eThumbTrack = 1,
+		CU_ScopedEnumBounds( eThumbRelease, eThumbTrack )
 	};
 	/**
 	*\brief	Enumeration of supported combobox events.
@@ -138,11 +132,10 @@ namespace castor3d
 		: uint8_t
 	{
 		//! The user has dropped the scroll thumb.
-		eThumbRelease,
+		eThumbRelease = 0,
 		//! The user is dragging the scroll thumb.
-		eThumbTrack,
-		//! The scrollbar events count.
-		eCount,
+		eThumbTrack = 1,
+		CU_ScopedEnumBounds( eThumbRelease, eThumbTrack )
 	};
 	/**
 	*\brief	Listbox control supported flags.
@@ -253,9 +246,10 @@ namespace castor3d
 		: uint8_t
 	{
 		//! Event to ask the main window to show a message box.
-		eShowMessageBox,
+		eShowMessageBox = 0,
 		//! Event to ask the main window to resize to the given size.
-		eResizeParent,
+		eResizeParent = 1,
+		CU_ScopedEnumBounds( eShowMessageBox, eResizeParent )
 	};
 	/**
 	*\brief	The flags for a specific control in a layout.

@@ -12,12 +12,7 @@ namespace castor3d
 {
 	struct VertexBoneData
 	{
-		C3D_API VertexBoneData();
-		C3D_API VertexBoneData( VertexBoneData const & rhs );
-		C3D_API VertexBoneData( VertexBoneData && rhs )noexcept;
-		C3D_API ~VertexBoneData();
-		C3D_API VertexBoneData & operator=( VertexBoneData const & rhs );
-		C3D_API VertexBoneData & operator=( VertexBoneData && rhs )noexcept;
+		C3D_API VertexBoneData() = default;
 		/**
 		 *\~english
 		 *\brief		adds bone informations to the vertex
@@ -40,36 +35,10 @@ namespace castor3d
 				castor::Point4ui id0;
 				castor::Point4ui id1;
 			};
-			std::array< uint32_t, MaxBonesPerVertex > data;
-			Ids()
-				: data{}
-			{
-			}
-			Ids( Ids const & rhs )
-				: data{ rhs.data }
-			{
-			}
-			Ids( Ids && rhs )noexcept
-				: data{ std::move( rhs.data ) }
-			{
-			}
-			~Ids()
-			{
-			}
-			Ids & operator=( Ids const & rhs )
-			{
-				data = rhs.data;
-				return *this;
-			}
-			Ids & operator=( Ids && rhs )noexcept
-			{
-				if ( this != &rhs )
-				{
-					data = std::move( rhs.data );
-				}
+			std::array< uint32_t, MaxBonesPerVertex > data{};
 
-				return *this;
-			}
+			Ids() = default;
+
 			uint32_t & operator[]( size_t index )
 			{
 				return data[index];
@@ -109,36 +78,10 @@ namespace castor3d
 				castor::Point4f weight0;
 				castor::Point4f weight1;
 			};
-			std::array< float, MaxBonesPerVertex > data;
-			Weights()
-				: data{}
-			{
-			}
-			Weights( Weights const & rhs )
-				: data{ rhs.data }
-			{
-			}
-			Weights( Weights && rhs )noexcept
-				: data{ std::move( rhs.data ) }
-			{
-			}
-			~Weights()
-			{
-			}
-			Weights & operator=( Weights const & rhs )
-			{
-				data = rhs.data;
-				return *this;
-			}
-			Weights & operator=( Weights && rhs )noexcept
-			{
-				if ( this != &rhs )
-				{
-					data = std::move( rhs.data );
-				}
+			std::array< float, MaxBonesPerVertex > data{};
 
-				return *this;
-			}
+			Weights() = default;
+
 			float & operator[]( size_t index )
 			{
 				return data[index];

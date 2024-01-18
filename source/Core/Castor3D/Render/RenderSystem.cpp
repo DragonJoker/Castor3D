@@ -688,11 +688,6 @@ namespace castor3d
 	{
 	}
 
-	RenderSystem::~RenderSystem()
-	{
-		m_randomStorage.reset();
-	}
-
 	ashes::InstancePtr RenderSystem::createInstance( Engine & engine
 		, AshPluginDescription const & desc
 		, Extensions & instanceExtensions )
@@ -712,7 +707,7 @@ namespace castor3d
 			, globalLayer.layerName );
 
 		// On récupère la liste d'extensions pour chaque couche de l'instance.
-		std::map< std::string, ashes::VkExtensionPropertiesArray, std::less<> > layersExtensions;
+		castor::StringMap< ashes::VkExtensionPropertiesArray > layersExtensions;
 		for ( auto layerProperties : layers )
 		{
 			layersExtensions.try_emplace( layerProperties.layerName

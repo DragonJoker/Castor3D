@@ -47,7 +47,7 @@ namespace castor3d
 		 *\param[in]	offset	Le décalage en mémoire du bloc.
 		 *\return		Le block.
 		 */
-		PointerType getPointer( uint32_t offset )
+		PointerType getPointer( uint32_t offset )const
 		{
 			return offset;
 		}

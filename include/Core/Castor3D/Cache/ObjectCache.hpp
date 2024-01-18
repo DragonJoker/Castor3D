@@ -51,7 +51,7 @@ namespace castor3d
 		 *\param[in]	attach			L'attacheur d'objet (à un noeud de scène).
 		 *\param[in]	detach			Le détacheur d'objet (d'un noeud de scène).
 		 */
-		inline ObjectCacheT( Scene & scene
+		ObjectCacheT( Scene & scene
 			, SceneNodeRPtr rootNode
 			, SceneNodeRPtr rootCameraNode
 			, SceneNodeRPtr rootObjectNode

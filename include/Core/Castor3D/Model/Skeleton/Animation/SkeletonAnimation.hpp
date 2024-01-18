@@ -158,7 +158,7 @@ namespace castor3d
 		}
 
 	protected:
-		using ObjectMap = std::map< castor::String, SkeletonAnimationObjectUPtr >;
+		using ObjectMap = castor::StringMap< SkeletonAnimationObjectUPtr >;
 
 	protected:
 		//!\~english	The root moving objects.

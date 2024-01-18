@@ -64,7 +64,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API ~LineariseDepthPass();
+		C3D_API ~LineariseDepthPass()noexcept;
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, CPU wise.
@@ -88,12 +88,13 @@ namespace castor3d
 		*/
 		/**@{*/
 		static uint32_t countInitialisationSteps()noexcept;
-		crg::ImageViewIdArray const & getResult()const
+
+		crg::ImageViewIdArray const & getResult()const noexcept
 		{
 			return m_mipViews;
 		}
 
-		crg::FramePass const & getLastPass()const
+		crg::FramePass const & getLastPass()const noexcept
 		{
 			return *m_lastPass;
 		}

@@ -158,7 +158,8 @@ namespace castor3d
 
 		castor::ArrayView< DataT > getData()
 		{
-			return castor::makeArrayView( reinterpret_cast< DataT * >( buffer->getDatas().data() + getOffset() )
+			using DataPtr = DataT *;
+			return castor::makeArrayView( DataPtr( buffer->getDatas().data() + getOffset() )
 				, getCount() );
 		}
 

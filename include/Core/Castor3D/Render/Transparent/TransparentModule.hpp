@@ -26,9 +26,9 @@ namespace castor3d
 	enum class WbTexture
 		: uint8_t
 	{
-		eAccumulation,
-		eRevealage,
-		CU_ScopedEnumBounds( eAccumulation ),
+		eAccumulation = 0,
+		eRevealage = 1,
+		CU_ScopedEnumBounds( eAccumulation, eRevealage ),
 	};
 	C3D_API castor::String getTextureName( WbTexture texture );
 	C3D_API castor::String getTexName( WbTexture texture );
@@ -37,9 +37,9 @@ namespace castor3d
 	C3D_API VkClearValue getClearValue( WbTexture texture );
 	C3D_API VkImageUsageFlags getUsageFlags( WbTexture texture );
 	C3D_API VkBorderColor getBorderColor( WbTexture texture );
-	inline uint32_t getMipLevels( RenderDevice const & device
-		, WbTexture texture
-		, castor::Size const & size )
+	inline uint32_t getMipLevels( RenderDevice const & /*device*/
+		, WbTexture /*texture*/
+		, castor::Size const & /*size*/ )
 	{
 		return 1u;
 	}
@@ -51,7 +51,7 @@ namespace castor3d
 			, texture
 			, castor::Size{ size.width, size.height } );
 	}
-	inline VkCompareOp getCompareOp( WbTexture texture )
+	inline VkCompareOp getCompareOp( WbTexture /*texture*/ )
 	{
 		return VK_COMPARE_OP_NEVER;
 	}

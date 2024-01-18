@@ -151,7 +151,7 @@ namespace castor3d
 	{
 	}
 
-	Engine * RenderTechniquePass::getEngine()const
+	Engine * RenderTechniquePass::getEngine()const noexcept
 	{
 		return m_scene.getOwner();
 	}
@@ -169,7 +169,7 @@ namespace castor3d
 		return m_scene.getEngine()->areDebugTargetsEnabled();
 	}
 
-	DebugConfig & RenderTechniquePass::getDebugConfig()const
+	DebugConfig & RenderTechniquePass::getDebugConfig()const noexcept
 	{
 		return m_scene.getDebugConfig();
 	}

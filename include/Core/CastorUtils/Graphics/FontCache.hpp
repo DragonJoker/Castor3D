@@ -48,7 +48,7 @@ namespace castor
 		CU_API Path getRealPath( Path path )const;
 
 	private:
-		using PathNameMap = std::unordered_map< String, Path, StringHash, std::equal_to<> >;
+		using PathNameMap = UnorderedStringMap< Path >;
 		//!\~english	The font files paths sorted by file_name.file_extension.
 		//!\~french		Les fichiers des polices, triés par file_name.file_extension.
 		PathNameMap m_paths;

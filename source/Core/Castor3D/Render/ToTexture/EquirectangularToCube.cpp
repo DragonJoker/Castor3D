@@ -146,7 +146,6 @@ namespace castor3d
 		, RenderDevice const & device
 		, TextureLayout const & target )
 		: RenderCube{ device, false }
-		, m_device{ device }
 		, m_commandBuffer{ device.graphicsData()->commandPool->createCommandBuffer( "EquirectangularToCube" ) }
 		, m_view{ equiRectangular.getDefaultSampledView() }
 		, m_renderPass{ equitocube::doCreateRenderPass( m_device, target.getPixelFormat() ) }

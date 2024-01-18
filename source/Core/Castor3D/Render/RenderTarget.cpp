@@ -482,7 +482,7 @@ namespace castor3d
 		}
 	}
 
-	RenderTarget::~RenderTarget()
+	RenderTarget::~RenderTarget()noexcept
 	{
 		for ( auto & texture : m_srgbObjects )
 		{

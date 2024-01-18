@@ -39,7 +39,7 @@ namespace castor3d
 
 		template< typename StyleT >
 		StyleT * getThemeStyle( castor::String const & name
-			, std::map< castor::String, ThemeUPtr > const & themes )
+			, castor::StringMap< ThemeUPtr > const & themes )
 		{
 			StyleT * style{};
 			auto themeIt = std::find_if( themes.begin()

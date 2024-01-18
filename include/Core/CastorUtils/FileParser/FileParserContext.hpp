@@ -160,7 +160,7 @@ namespace castor
 		String functionName{};
 		//!\~english	The user context data, useful in plug-ins.
 		//!\~french		Les données de contexte utilisateur, utile dans les plug-ins.
-		std::map< String, void *, std::less<> > userContexts{};
+		StringMap< void * > userContexts{};
 		//!\~english	The parser.
 		//!\~french		Le parseur.
 		FileParser * parser{};

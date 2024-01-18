@@ -110,10 +110,6 @@ namespace castor3d
 	{
 	}
 
-	ShaderProgram::~ShaderProgram()
-	{
-	}
-
 	void ShaderProgram::setFile( VkShaderStageFlagBits target, castor::Path const & pathFile )
 	{
 		castor::String source;
@@ -164,30 +160,30 @@ namespace castor3d
 	}
 
 	SpirVShader const & compileShader( RenderSystem & renderSystem
-		, ShaderModule & module )
+		, ShaderModule & shaderModule )
 	{
-		return renderSystem.compileShader( module );
+		return renderSystem.compileShader( shaderModule );
 	}
 
 	SpirVShader const & compileShader( RenderDevice const & device
-		, ShaderModule & module )
+		, ShaderModule & shaderModule )
 	{
-		return compileShader( device.renderSystem, module );
+		return compileShader( device.renderSystem, shaderModule );
 	}
 
 	SpirVShader const & compileShader( RenderSystem & renderSystem
-		, ProgramModule & module
+		, ProgramModule & shaderModule
 		, ast::EntryPointConfig const & entryPoint )
 	{
-		return renderSystem.compileShader( module
+		return renderSystem.compileShader( shaderModule
 			, entryPoint );
 	}
 
 	SpirVShader const & compileShader( RenderDevice const & device
-		, ProgramModule & module
+		, ProgramModule & shaderModule
 		, ast::EntryPointConfig const & entryPoint )
 	{
-		return compileShader( device.renderSystem, module, entryPoint );
+		return compileShader( device.renderSystem, shaderModule, entryPoint );
 	}
 
 	ashes::PipelineShaderStageCreateInfoArray makeProgramStates( RenderDevice const & device

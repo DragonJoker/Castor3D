@@ -56,10 +56,10 @@ namespace castor
 		class Export OwnedBy< Owner >\
 		{\
 		protected:\
-			explicit OwnedBy( Owner & owner );\
+			explicit OwnedBy( Owner & owner )noexcept;\
 		public:\
-			Owner * get##Name()const;\
-			Owner * getOwner()const;\
+			Owner * get##Name()const noexcept;\
+			Owner * getOwner()const noexcept;\
 		private:\
 			Owner * m_owner;\
 		};\
@@ -76,15 +76,15 @@ namespace castor
 #	define CU_ImplementExportedOwnedBy( Owner, Name )\
 	namespace castor\
 	{\
-		OwnedBy< Owner >::OwnedBy( Owner & owner )\
+		OwnedBy< Owner >::OwnedBy( Owner & owner )noexcept\
 			: m_owner( &owner )\
 		{\
 		}\
-		Owner * OwnedBy< Owner >::get##Name()const\
+		Owner * OwnedBy< Owner >::get##Name()const noexcept\
 		{\
 			return m_owner;\
 		}\
-		Owner * OwnedBy< Owner >::getOwner()const\
+		Owner * OwnedBy< Owner >::getOwner()const noexcept\
 		{\
 			return m_owner;\
 		}\

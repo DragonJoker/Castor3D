@@ -30,18 +30,18 @@ namespace castor3d
 		C3D_API TextureAnimationKeyFrame( TextureAnimation & parent
 			, castor::Milliseconds const & timeIndex );
 
-		void setTile( castor::Point2ui tile )
+		void setTile( castor::Point2ui tile )noexcept
 		{
 			m_tile = std::move( tile );
 		}
 
-		castor::Point2ui const & getTile()const
+		castor::Point2ui const & getTile()const noexcept
 		{
 			return m_tile;
 		}
 
 	private:
-		void doSetTimeIndex( castor::Milliseconds const & time )
+		void doSetTimeIndex( castor::Milliseconds const & time )noexcept
 		{
 			m_timeIndex = time;
 		}

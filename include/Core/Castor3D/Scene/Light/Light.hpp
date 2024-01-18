@@ -286,7 +286,7 @@ namespace castor3d
 		*	Mutateurs.
 		*/
 		/**@{*/
-		void setColour( float * values )
+		void setColour( float const * values )
 		{
 			m_category->setColour( castor::Point3f( values[0], values[1], values[2] ) );
 		}
@@ -306,7 +306,7 @@ namespace castor3d
 			m_category->setColour( toRGBFloat( value ) );
 		}
 
-		void setIntensity( float * values )
+		void setIntensity( float const * values )
 		{
 			m_category->setIntensity( castor::Point2f( values[0], values[1] ) );
 		}

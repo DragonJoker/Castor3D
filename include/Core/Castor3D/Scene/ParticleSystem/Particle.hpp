@@ -15,6 +15,11 @@ namespace castor3d
 	class Particle
 	{
 	public:
+		C3D_API Particle( Particle const & rhs );
+		C3D_API Particle( Particle && rhs )noexcept;
+		C3D_API Particle & operator=( Particle const & rhs );
+		C3D_API Particle & operator=( Particle && rhs )noexcept;
+		C3D_API ~Particle()noexcept = default;
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -38,42 +43,6 @@ namespace castor3d
 		C3D_API explicit Particle( ParticleDeclaration const & description );
 		/**
 		 *\~english
-		 *\brief		Copy constructor.
-		 *\param[in]	rhs	The object to copy.
-		 *\~french
-		 *\brief		Constructeur par copie.
-		 *\param[in]	rhs	L'objet à copier.
-		 */
-		C3D_API Particle( Particle const & rhs );
-		/**
-		 *\~english
-		 *\brief		Move constructor.
-		 *\param[in]	rhs	The object to move.
-		 *\~french
-		 *\brief		Constructeur par déplacement.
-		 *\param[in]	rhs	L'objet à déplacer.
-		 */
-		C3D_API Particle( Particle && rhs )noexcept;
-		/**
-		 *\~english
-		 *\brief		Copy assignment operator.
-		 *\param[in]	rhs	The object to copy.
-		 *\~french
-		 *\brief		Opérateur d'affectation par copie.
-		 *\param[in]	rhs	L'objet à copier.
-		 */
-		C3D_API Particle & operator=( Particle const & rhs );
-		/**
-		 *\~english
-		 *\brief		Move assignment operator.
-		 *\param[in]	rhs	The object to move.
-		 *\~french
-		 *\brief		Opérateur d'affectation par déplacement.
-		 *\param[in]	rhs	L'objet à déplacer.
-		 */
-		C3D_API Particle & operator=( Particle && rhs )noexcept;
-		/**
-		 *\~english
 		 *\brief		Sets the particle variable's value at given index.
 		 *\param[in]	index	The variable index.
 		 *\param[in]	value	The variable value.
@@ -83,7 +52,7 @@ namespace castor3d
 		 *\param[in]	value	La valeur de la variable.
 		 */
 		template< ParticleFormat Type >
-		inline void setValue( uint32_t index
+		void setValue( uint32_t index
 			, typename ElementTyper< Type >::Type const & value );
 		/**
 		 *\~english
@@ -96,7 +65,7 @@ namespace castor3d
 		 *\return		La valeur de la variable.
 		 */
 		template< ParticleFormat Type >
-		inline typename ElementTyper< Type >::Type getValue( uint32_t index )const;
+		typename ElementTyper< Type >::Type getValue( uint32_t index )const;
 		/**
 		 *\~english
 		 *\return		The particle data.

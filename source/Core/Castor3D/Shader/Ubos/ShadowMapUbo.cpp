@@ -56,7 +56,7 @@ namespace castor3d
 		m_ubo = m_device.uboPool->getBuffer< Configuration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
 	}
 
-	ShadowMapUbo::~ShadowMapUbo()
+	ShadowMapUbo::~ShadowMapUbo()noexcept
 	{
 		m_device.uboPool->putBuffer( m_ubo );
 	}

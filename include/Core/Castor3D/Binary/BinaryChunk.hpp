@@ -21,7 +21,7 @@ namespace castor3d
 	*\brief		Crée un numéro de version cmsh.
 	*\param[in]	maj, min, rev	Les numéros de version majeure, mineure et révision.
 	*/
-	inline constexpr uint32_t makeCmshVersion( uint32_t maj
+	constexpr uint32_t makeCmshVersion( uint32_t maj
 		, uint32_t min
 		, uint32_t rev )
 	{
@@ -37,7 +37,7 @@ namespace castor3d
 	*\param[in]	version Un numéro de version cmsh.
 	*\return	Le numéro majeur de la version.
 	*/
-	inline constexpr uint32_t getCmshMajor( uint32_t version )
+	constexpr uint32_t getCmshMajor( uint32_t version )
 	{
 		return ( version >> 24 );
 	}
@@ -49,7 +49,7 @@ namespace castor3d
 	*\param[in]	version Un numéro de version cmsh.
 	*\return	Le numéro mineur de la version.
 	*/
-	inline constexpr uint32_t getCmshMinor( uint32_t version )
+	constexpr uint32_t getCmshMinor( uint32_t version )
 	{
 		return ( ( version >> 16 ) & uint32_t( 0xff ) );
 	}
@@ -61,7 +61,7 @@ namespace castor3d
 	*\param[in]	version Un numéro de version cmsh.
 	*\return	Le numéro de révision de la version.
 	*/
-	inline constexpr uint32_t getCmshRevision( uint32_t version )
+	constexpr uint32_t getCmshRevision( uint32_t version )
 	{
 		return ( version & uint32_t( 0xff ) );
 	}
@@ -154,17 +154,17 @@ namespace castor3d
 		eMovingTransform = makeChunkID( 'M', 'V', 'N', 'G', 'T', 'S', 'F', 'M' ),
 		eBonesComponent = makeChunkID( 'B', 'O', 'N', 'E', 'C', 'O', 'M', 'P' ),
 		// Version 1.2
-		eKeyframeCount [[deprecated]] = makeChunkID( 'K', 'F', 'R', 'M', 'C', 'O', 'N', 'T' ),
-		eKeyframes [[deprecated]] = makeChunkID( 'K', 'E', 'Y', 'F', 'R', 'M', 'E', 'S' ),
+		eKeyframeCount [[deprecated( "Use specific animation type keyframes" )]] = makeChunkID( 'K', 'F', 'R', 'M', 'C', 'O', 'N', 'T' ),
+		eKeyframes [[deprecated( "Use specific animation type keyframes" )]] = makeChunkID( 'K', 'E', 'Y', 'F', 'R', 'M', 'E', 'S' ),
 		eSkeletonAnimationKeyFrame = makeChunkID( 'S', 'K', 'A', 'N', 'K', 'F', 'R', 'M' ),
 		eSkeletonAnimationKeyFrameTime = makeChunkID( 'S', 'K', 'A', 'N', 'K', 'F', 'T', 'M' ),
 		eSkeletonAnimationKeyFrameObjectType = makeChunkID( 'S', 'K', 'A', 'N', 'K', 'F', 'O', 'Y' ),
 		eSkeletonAnimationKeyFrameObjectName = makeChunkID( 'S', 'K', 'A', 'N', 'K', 'F', 'O', 'N' ),
 		// Version 1.4
-		eSubmeshFaceCount [[deprecated]] = makeChunkID( 'S', 'M', 'S', 'H', 'F', 'C', 'C', 'T' ),
+		eSubmeshFaceCount [[deprecated( "Use eSubmeshIndexComponentCount and eSubmeshIndexCount" )]] = makeChunkID( 'S', 'M', 'S', 'H', 'F', 'C', 'C', 'T' ),
 		eSubmeshIndexComponentCount = makeChunkID( 'S', 'M', 'F', 'C', 'C', 'P', 'C', 'T' ),
 		eSubmeshIndexCount = makeChunkID( 'S', 'M', 'S', 'H', 'I', 'C', 'C', 'T' ),
-		eSubmeshFaces [[deprecated]] = makeChunkID( 'S', 'M', 'S', 'H', 'F', 'A', 'C', 'E' ),
+		eSubmeshFaces [[deprecated( "Use eSubmeshIndices" )]] = makeChunkID( 'S', 'M', 'S', 'H', 'F', 'A', 'C', 'E' ),
 		eSubmeshIndices = makeChunkID( 'S', 'M', 'S', 'H', 'I', 'D', 'C', 'S' ),
 		// Version 1.5
 		eSceneNodeAnimation = makeChunkID( 'S', 'C', 'N', 'D', 'A', 'N', 'I', 'M' ),
@@ -175,25 +175,25 @@ namespace castor3d
 		eSceneNodeAnimationKeyFrameScale = makeChunkID( 'S', 'N', 'A', 'N', 'K', 'F', 'S', 'L' ),
 		// Version 1.6
 		eBoneId = makeChunkID( 'B', 'O', 'N', 'E', 'I', 'D', ' ', ' ' ),
-		eSubmeshVertex [[deprecated]] = makeChunkID( 'S', 'M', 'S', 'H', 'V', 'R', 'T', 'X' ),
+		eSubmeshVertex [[deprecated( "Use vertex component specific types" )]] = makeChunkID( 'S', 'M', 'S', 'H', 'V', 'R', 'T', 'X' ),
 		eSubmeshPositions = makeChunkID( 'S', 'M', 'S', 'H', 'P', 'O', 'S', 'I' ),
 		eSubmeshNormals = makeChunkID( 'S', 'M', 'S', 'H', 'N', 'O', 'R', 'M' ),
-		eSubmeshTangents [[deprecated]] = makeChunkID( 'S', 'M', 'S', 'H', 'T', 'A', 'N', 'G' ),
+		eSubmeshTangents [[deprecated( "Use eSubmeshTangentsMikkt" )]] = makeChunkID( 'S', 'M', 'S', 'H', 'T', 'A', 'N', 'G' ),
 		eSubmeshTexcoords0 = makeChunkID( 'S', 'M', 'S', 'H', 'T', 'E', 'X', 'C' ),
 		eSubmeshTexcoords1 = makeChunkID( 'S', 'M', 'S', 'H', 'T', 'E', 'X', '1' ),
 		eSubmeshTexcoords2 = makeChunkID( 'S', 'M', 'S', 'H', 'T', 'E', 'X', '2' ),
 		eSubmeshTexcoords3 = makeChunkID( 'S', 'M', 'S', 'H', 'T', 'E', 'X', '3' ),
 		eSubmeshColours = makeChunkID( 'S', 'M', 'S', 'H', 'C', 'O', 'L', 'R' ),
-		eMeshAnimationKeyFrame [[deprecated]] = makeChunkID( 'M', 'S', 'A', 'N', 'K', 'F', 'R', 'M' ),
-		eMeshAnimationKeyFrameTime [[deprecated]] = makeChunkID( 'M', 'S', 'A', 'N', 'K', 'F', 'T', 'M' ),
-		eMeshAnimationKeyFrameBufferData [[deprecated]] = makeChunkID( 'M', 'H', 'A', 'N', 'K', 'F', 'D', 'T' ),
-		eMeshAnimationKeyFrameSubmeshID [[deprecated]] = makeChunkID( 'M', 'S', 'A', 'N', 'K', 'F', 'I', 'D' ),
-		eMeshAnimationKeyFrameBufferSize [[deprecated]] = makeChunkID( 'M', 'H', 'A', 'N', 'K', 'F', 'S', 'Z' ),
+		eMeshAnimationKeyFrame [[deprecated( "Use morph target related data" )]] = makeChunkID( 'M', 'S', 'A', 'N', 'K', 'F', 'R', 'M' ),
+		eMeshAnimationKeyFrameTime [[deprecated( "Use morph target related data" )]] = makeChunkID( 'M', 'S', 'A', 'N', 'K', 'F', 'T', 'M' ),
+		eMeshAnimationKeyFrameBufferData [[deprecated( "Use morph target related data" )]] = makeChunkID( 'M', 'H', 'A', 'N', 'K', 'F', 'D', 'T' ),
+		eMeshAnimationKeyFrameSubmeshID [[deprecated( "Use morph target related data" )]] = makeChunkID( 'M', 'S', 'A', 'N', 'K', 'F', 'I', 'D' ),
+		eMeshAnimationKeyFrameBufferSize [[deprecated( "Use morph target related data" )]] = makeChunkID( 'M', 'H', 'A', 'N', 'K', 'F', 'S', 'Z' ),
 		eMorphComponent = makeChunkID( 'M', 'O', 'R', 'P', 'C', 'O', 'M', 'P' ),
 		eMorphTargetBufferSize = makeChunkID( 'S', 'M', 'S', 'H', 'M', 'T', 'S', 'Z' ),
 		eMorphTargetPositions = makeChunkID( 'S', 'M', 'S', 'H', 'M', 'T', 'P', 'O' ),
 		eMorphTargetNormals = makeChunkID( 'S', 'M', 'S', 'H', 'M', 'T', 'N', 'M' ),
-		eMorphTargetTangents [[deprecated]] = makeChunkID( 'S', 'M', 'S', 'H', 'M', 'T', 'T', 'A' ),
+		eMorphTargetTangents [[deprecated( "Use eMorphTargetTangentsMikkt" )]] = makeChunkID( 'S', 'M', 'S', 'H', 'M', 'T', 'T', 'A' ),
 		eMorphTargetTexcoords0 = makeChunkID( 'S', 'M', 'S', 'H', 'M', 'T', 'T', 'X' ),
 		eMorphTargetTexcoords1 = makeChunkID( 'S', 'M', 'S', 'H', 'M', 'T', 'T', '1' ),
 		eMorphTargetTexcoords2 = makeChunkID( 'S', 'M', 'S', 'H', 'M', 'T', 'T', '2' ),
@@ -203,7 +203,7 @@ namespace castor3d
 		eMeshMorphTargetTime = makeChunkID( 'S', 'M', 'S', 'H', 'M', 'T', 'T', 'M' ),
 		eMeshMorphTargetSubmeshID = makeChunkID( 'M', 'H', 'A', 'N', 'M', 'T', 'I', 'D' ),
 		eMeshMorphTargetWeights = makeChunkID( 'M', 'H', 'A', 'N', 'M', 'T', 'W', 'T' ),
-		eSkeletonAnimationKeyFrameObjectTransform [[deprecated]] = makeChunkID( 'S', 'K', 'A', 'N', 'K', 'F', 'O', 'T' ),
+		eSkeletonAnimationKeyFrameObjectTransform [[deprecated( "Use eSkeletonAnimationKeyFrameObjectTranslate, eSkeletonAnimationKeyFrameObjectRotate and eSkeletonAnimationKeyFrameObjectScale" )]] = makeChunkID( 'S', 'K', 'A', 'N', 'K', 'F', 'O', 'T' ),
 		eSkeletonAnimationKeyFrameObjectTranslate = makeChunkID( 'S', 'K', 'A', 'N', 'K', 'F', 'O', 'R' ),
 		eSkeletonAnimationKeyFrameObjectRotate = makeChunkID( 'S', 'K', 'A', 'N', 'K', 'F', 'O', 'O' ),
 		eSkeletonAnimationKeyFrameObjectScale = makeChunkID( 'S', 'K', 'A', 'N', 'K', 'F', 'O', 'S' ),
@@ -354,7 +354,7 @@ namespace castor3d
 		 *\brief		Récupère le tampon restant
 		 *\return		La valeur
 		 */
-		inline uint8_t const * getRemainingData()const
+		uint8_t const * getRemainingData()const
 		{
 			return &m_data[m_index];
 		}
@@ -366,7 +366,7 @@ namespace castor3d
 		 *\brief		Récupère le type de chunk
 		 *\return		La valeur
 		 */
-		inline ChunkType getChunkType()const
+		ChunkType getChunkType()const
 		{
 			return m_type;
 		}
@@ -378,7 +378,7 @@ namespace castor3d
 		 *\brief		Récupère la taille des données du chunk
 		 *\return		La valeur
 		 */
-		inline uint32_t getDataSize()const
+		uint32_t getDataSize()const
 		{
 			return uint32_t( m_data.size() );
 		}
@@ -390,7 +390,7 @@ namespace castor3d
 		 *\brief		Récupère les données du chunk
 		 *\return		La valeur
 		 */
-		inline uint8_t const * getData()const
+		uint8_t const * getData()const
 		{
 			return m_data.data();
 		}
@@ -404,7 +404,7 @@ namespace castor3d
 		 *\param[in]	begin	Le début du tampon de données
 		 *\param[in]	end		La fin du tampon de données
 		 */
-		inline void setData( uint8_t const * begin
+		void setData( uint8_t const * begin
 			, uint8_t const * end )
 		{
 			m_data.assign( begin, end );
@@ -440,7 +440,7 @@ namespace castor3d
 
 	private:
 		template< typename T >
-		inline bool doRead( T * values
+		bool doRead( T * values
 			, uint32_t count )
 		{
 			auto size = count * uint32_t( sizeof( T ) );
@@ -448,7 +448,8 @@ namespace castor3d
 
 			if ( result )
 			{
-				auto begin = reinterpret_cast< T * >( &m_data[m_index] );
+				using TPtr = T *;
+				auto begin = TPtr( &m_data[m_index] );
 				auto end = begin + count;
 				auto value = values;
 

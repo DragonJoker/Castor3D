@@ -84,10 +84,6 @@ namespace castor3d
 	{
 	}
 
-	IblTextures::~IblTextures()
-	{
-	}
-
 	void IblTextures::update( QueueData const & queueData )
 	{
 		m_radianceComputer.render( queueData );

@@ -70,12 +70,12 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		C3D_API bool isPassEnabled()const override;
+		C3D_API bool isPassEnabled()const noexcept override;
 		C3D_API bool isUpToDate()const;
 		/**
 		 *\copydoc		castor3d::RenderNodesPass::getShaderFlags
 		 */
-		ShaderFlags getShaderFlags()const override
+		ShaderFlags getShaderFlags()const noexcept override
 		{
 			return ShaderFlag::eLighting
 				| ShaderFlag::eTangentSpace
@@ -99,7 +99,7 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		bool doIsValidRenderable( RenderedObject const & object )const override;
+		bool doIsValidRenderable( RenderedObject const & object )const noexcept override;
 		SubmeshComponentCombine doAdjustSubmeshComponents( SubmeshComponentCombine submeshCombine )const override;
 		void doFillAdditionalBindings( PipelineFlags const & flags
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings )const override;

@@ -83,7 +83,7 @@ namespace castor3d
 		OnSliderEventConnection connect( SliderEvent event
 			, OnSliderEventFunction function )
 		{
-			return m_signals[size_t( event )].connect( function );
+			return m_signals[size_t( event )].connect( std::move( function ) );
 		}
 
 		/**
@@ -199,7 +199,7 @@ namespace castor3d
 		castor::Position m_mouse{};
 		StaticCtrlRPtr m_line{};
 		StaticCtrlRPtr m_tick{};
-		OnSliderEvent m_signals[size_t( SliderEvent::eCount )];
+		std::array< OnSliderEvent, size_t( SliderEvent::eCount ) > m_signals;
 	};
 }
 

@@ -32,7 +32,7 @@ namespace castor3d
 		static inline bool write( uint8_t const * begin
 			, uint8_t const * end
 			, ChunkType type
-			, BinaryChunk & chunk )
+			, BinaryChunk & chunk )noexcept
 		{
 			bool result = true;
 
@@ -51,9 +51,6 @@ namespace castor3d
 		}
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\version	0.9.0
-	\date 		30/05/2016
 	\~english
 	\brief		Chunk data writer
 	\~french
@@ -92,8 +89,8 @@ namespace castor3d
 				prepareChunkDataT( nullptr, value );
 			}
 
-			return ChunkWriterBase::write( reinterpret_cast< uint8_t const * >( values.data() )
-				, reinterpret_cast< uint8_t const * >( values.data() + values.size() )
+			return ChunkWriterBase::write( ByteCPtr( values.data() )
+				, ByteCPtr( values.data() + values.size() )
 				, type
 				, chunk );
 		}
@@ -123,9 +120,6 @@ namespace castor3d
 		}
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\version	0.9.0
-	\date 		30/05/2016
 	\~english
 	\brief		ChunkWriter specialisation for castor::String.
 	\~french
@@ -159,7 +153,7 @@ namespace castor3d
 			try
 			{
 				auto svalue = castor::string::stringCast< char >( value );
-				auto buffer = reinterpret_cast< uint8_t const * >( svalue.data() );
+				auto buffer = ByteCPtr( svalue.data() );
 				ChunkWriterBase::write( buffer, buffer + svalue.size(), type, chunk );
 			}
 			catch ( ... )
@@ -171,9 +165,6 @@ namespace castor3d
 		}
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\version	0.9.0
-	\date 		30/05/2016
 	\~english
 	\brief		ChunkWriter specialisation for castor::Path.
 	\~french
@@ -207,7 +198,7 @@ namespace castor3d
 			try
 			{
 				auto svalue = castor::string::stringCast< char >( value );
-				auto buffer = reinterpret_cast< uint8_t const * >( svalue.data() );
+				auto buffer = ByteCPtr( svalue.data() );
 				ChunkWriterBase::write( buffer, buffer + svalue.size(), type, chunk );
 			}
 			catch ( ... )

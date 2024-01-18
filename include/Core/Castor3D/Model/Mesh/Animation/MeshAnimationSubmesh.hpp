@@ -15,6 +15,11 @@ namespace castor3d
 		, public std::enable_shared_from_this< MeshAnimationSubmesh >
 	{
 	public:
+		C3D_API MeshAnimationSubmesh( MeshAnimationSubmesh && rhs )noexcept = default;
+		C3D_API MeshAnimationSubmesh & operator=( MeshAnimationSubmesh && rhs )noexcept = delete;
+		C3D_API MeshAnimationSubmesh( MeshAnimationSubmesh const & rhs ) = delete;
+		C3D_API MeshAnimationSubmesh & operator=( MeshAnimationSubmesh const & rhs ) = delete;
+		C3D_API ~MeshAnimationSubmesh()noexcept = default;
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -26,34 +31,6 @@ namespace castor3d
 		 *\param[in]	submesh		Le sous-maillage.
 		 */
 		C3D_API MeshAnimationSubmesh( MeshAnimation & animation, Submesh & submesh );
-		/**
-		 *\~english
-		 *\brief		Move constructor.
-		 *\~french
-		 *\brief		Constructeur par déplacement.
-		 */
-		C3D_API MeshAnimationSubmesh( MeshAnimationSubmesh && rhs ) = default;
-		/**
-		 *\~english
-		 *\brief		Move assignment operator.
-		 *\~french
-		 *\brief		Opérateur d'affectation par déplacement.
-		 */
-		C3D_API MeshAnimationSubmesh & operator=( MeshAnimationSubmesh && rhs ) = delete;
-		/**
-		 *\~english
-		 *\brief		Copy constructor.
-		 *\~french
-		 *\brief		Constructeur par copie.
-		 */
-		C3D_API MeshAnimationSubmesh( MeshAnimationSubmesh const & rhs ) = delete;
-		/**
-		 *\~english
-		 *\brief		Copy assignment operator.
-		 *\~french
-		 *\brief		Opérateur d'affectation par copie.
-		 */
-		C3D_API MeshAnimationSubmesh & operator=( MeshAnimationSubmesh const & rhs ) = delete;
 		/**
 		 *\~english
 		 *\return		The submesh.

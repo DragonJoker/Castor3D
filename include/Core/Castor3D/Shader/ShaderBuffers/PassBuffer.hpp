@@ -204,7 +204,7 @@ namespace castor3d
 		 *\brief		Supprime une pass du tampon.
 		 *\param[in]	pass	La passe.
 		 */
-		C3D_API void removePass( Pass & pass );
+		C3D_API void removePass( Pass & pass )noexcept;
 		/**
 		 *\~english
 		 *\brief		Updates the passes buffer.

@@ -78,7 +78,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API ~Scene();
+		C3D_API ~Scene()noexcept;
 		/**
 		 *\~english
 		 *\brief		Initialises the scene

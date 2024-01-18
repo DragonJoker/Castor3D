@@ -27,28 +27,28 @@ namespace castor3d
 	public:
 		struct Data
 		{
-			float x;
-			float y;
-			float z;
-			float w;
+			float x{};
+			float y{};
+			float z{};
+			float w{};
 		};
 		struct SssProfileData
 		{
-			uint32_t transmittanceProfileSize;
-			float gaussianWidth;
-			float subsurfaceScatteringStrength;
-			float thicknessScale;
-			std::array< Data, TransmittanceProfileSize > transmittanceProfile;
+			uint32_t transmittanceProfileSize{};
+			float gaussianWidth{};
+			float subsurfaceScatteringStrength{};
+			float thicknessScale{};
+			std::array< Data, TransmittanceProfileSize > transmittanceProfile{};
 		};
 		using SssProfilesData = castor::ArrayView< SssProfileData >;
 
 		struct SssProfileDataPtr
 		{
-			uint32_t * transmittanceProfileSize;
-			float * gaussianWidth;
-			float * subsurfaceScatteringStrength;
-			float * thicknessScale;
-			std::array< Data, TransmittanceProfileSize > * transmittanceProfile;
+			uint32_t * transmittanceProfileSize{};
+			float * gaussianWidth{};
+			float * subsurfaceScatteringStrength{};
+			float * thicknessScale{};
+			std::array< Data, TransmittanceProfileSize > * transmittanceProfile{};
 		};
 
 		static constexpr uint32_t DataSize = sizeof( SssProfileData );
@@ -86,7 +86,7 @@ namespace castor3d
 		 *\brief		Supprime une pass du tampon.
 		 *\param[in]	component	Le composant de subsurface scattering.
 		 */
-		C3D_API void removePass( SubsurfaceScatteringComponent & component );
+		C3D_API void removePass( SubsurfaceScatteringComponent & component )noexcept;
 		/**
 		 *\~english
 		 *\brief		Updates the passes buffer.

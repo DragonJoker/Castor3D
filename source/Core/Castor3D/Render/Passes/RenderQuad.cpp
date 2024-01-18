@@ -163,7 +163,7 @@ namespace castor3d
 		template< typename TypeT >
 		static inline TypeT const & defaultV = DefaultValueGetterT< TypeT >::get();
 
-		static ashes::WriteDescriptorSet clone( ashes::WriteDescriptorSet const & src )
+		static ashes::WriteDescriptorSet clone( ashes::WriteDescriptorSet const & src )noexcept
 		{
 			ashes::WriteDescriptorSet result{ src->dstBinding
 				, src->dstArrayElement
@@ -215,12 +215,12 @@ namespace castor3d
 	{
 	}
 
-	RenderQuad::~RenderQuad()
+	RenderQuad::~RenderQuad()noexcept
 	{
 		cleanup();
 	}
 
-	void RenderQuad::cleanup()
+	void RenderQuad::cleanup()noexcept
 	{
 		for ( auto & pass : m_passes )
 		{

@@ -229,26 +229,27 @@ namespace castor3d
 	struct ClustersUboConfiguration
 	{
 		// The 3D dimensions of the cluster grid.
-		castor::Point3ui gridDim;
+		castor::Point3ui gridDim{};
 		// The clusters Z split scheme.
-		uint32_t splitScheme;
+		uint32_t splitScheme{};
 		// The size of a cluster in screen space (pixels).
-		castor::Point2ui clusterSize;
+		castor::Point2ui clusterSize{};
 		// The distance to the near and far clipping plane. (Used for computing the index in the cluster grid)
-		castor::Point2f viewNearFar;
+		castor::Point2f viewNearFar{};
 		// The number of BVH levels for point lights.
-		uint32_t pointLightLevelsCount;
+		uint32_t pointLightLevelsCount{};
 		// The number of BVH levels for spot lights.
-		uint32_t spotLightLevelsCount;
+		uint32_t spotLightLevelsCount{};
 		// The number of point lights.
-		uint32_t pointLightsCount;
+		uint32_t pointLightsCount{};
 		// The number of spot lights.
-		uint32_t spotLightsCount;
+		uint32_t spotLightsCount{};
 		// The biased exponential split scheme bias.
-		float bias;
+		float bias{};
 		// If clustered lights processing uses wave intrinsics.
-		uint32_t enableWaveIntrinsics;
-		float pad0, pad1;
+		uint32_t enableWaveIntrinsics{};
+		float pad0{};
+		float pad1{};
 	};
 	/**
 	*\~english

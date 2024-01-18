@@ -58,7 +58,7 @@ namespace castor3d
 			, uint32_t index
 			, CubeMapFace face
 			, SceneBackground & background );
-		C3D_API ~EnvironmentMapPass();
+		C3D_API ~EnvironmentMapPass()noexcept;
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, CPU wise.
@@ -124,7 +124,7 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		crg::FramePass const & getLastPass()const
+		crg::FramePass const & getLastPass()const noexcept
 		{
 			return *m_transparentPassDesc;
 		}

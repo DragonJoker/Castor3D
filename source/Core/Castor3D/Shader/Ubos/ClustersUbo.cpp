@@ -298,7 +298,7 @@ namespace castor3d
 	{
 	}
 
-	ClustersUbo::~ClustersUbo()
+	ClustersUbo::~ClustersUbo()noexcept
 	{
 		m_device.uboPool->putBuffer( m_ubo );
 	}

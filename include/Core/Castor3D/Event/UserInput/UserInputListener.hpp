@@ -24,7 +24,10 @@ namespace castor3d
 	public:
 		/**@name General */
 		//@{
-
+		UserInputListener( UserInputListener const & ) = delete;
+		UserInputListener( UserInputListener && )noexcept = default;
+		UserInputListener & operator=( UserInputListener const & ) = delete;
+		UserInputListener & operator=( UserInputListener && )noexcept = default;
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -43,7 +46,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API virtual ~UserInputListener();
+		C3D_API virtual ~UserInputListener()noexcept = default;
 		/**
 		 *\~english
 		 *\brief		Initialises the listener.
@@ -609,11 +612,11 @@ namespace castor3d
 		bool m_enabled{};
 		EventHandlerRPtr m_activeHandler{};
 		EventHandlerRPtr m_lastMouseTarget{};
-		std::map< castor::String, OnMouseMoveActionFunction > m_onMouseMoveActions;
-		std::map< castor::String, OnClickActionFunction > m_onClickActions;
-		std::map< castor::String, OnSelectActionFunction > m_onSelectActions;
-		std::map< castor::String, OnTextActionFunction > m_onTextActions;
-		std::map< castor::String, OnExpandActionFunction > m_onExpandActions;
+		castor::StringMap< OnMouseMoveActionFunction > m_onMouseMoveActions;
+		castor::StringMap< OnClickActionFunction > m_onClickActions;
+		castor::StringMap< OnSelectActionFunction > m_onSelectActions;
+		castor::StringMap< OnTextActionFunction > m_onTextActions;
+		castor::StringMap< OnExpandActionFunction > m_onExpandActions;
 		OnCursorActionFunction m_onCursorAction;
 		OnClipboardTextActionFunction m_onClipboardTextAction;
 	};

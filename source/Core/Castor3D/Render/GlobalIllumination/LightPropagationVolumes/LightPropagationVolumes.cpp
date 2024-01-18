@@ -543,7 +543,7 @@ namespace castor3d
 		}
 	}
 
-	void LightPropagationVolumesBase::cleanup()
+	void LightPropagationVolumesBase::cleanup()noexcept
 	{
 		m_initialised = false;
 		m_lightLpvs.clear();
@@ -552,11 +552,11 @@ namespace castor3d
 
 	void LightPropagationVolumesBase::registerLight( Light * light )
 	{
-		auto ires = m_lightLpvs.emplace( light, nullptr );
+		auto [it, res] = m_lightLpvs.try_emplace( light );
 
-		if ( ires.second )
+		if ( res )
 		{
-			ires.first->second = std::make_unique< LightLpv >( m_graph
+			it->second = std::make_unique< LightLpv >( m_graph
 				, crg::FramePassArray{ m_downsamplePass }
 				, m_device
 				, light->getName()
@@ -569,7 +569,7 @@ namespace castor3d
 					? &m_geometry
 					: nullptr ) );
 
-			for ( auto & lightInjectionPassDesc : ires.first->second->lightInjectionPassDescs )
+			for ( auto & lightInjectionPassDesc : it->second->lightInjectionPassDescs )
 			{
 				m_lightPropagationPassesDesc.front()->addDependency( *lightInjectionPassDesc );
 			}
@@ -578,7 +578,7 @@ namespace castor3d
 			{
 				for ( auto index = 1u; index < m_lightPropagationPassesDesc.size(); ++index )
 				{
-					for ( auto & geometryInjectionPassDesc : ires.first->second->geometryInjectionPassDescs )
+					for ( auto & geometryInjectionPassDesc : it->second->geometryInjectionPassDescs )
 					{
 						m_lightPropagationPassesDesc[index]->addDependency( *geometryInjectionPassDesc );
 					}

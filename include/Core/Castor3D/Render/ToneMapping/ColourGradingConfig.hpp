@@ -51,7 +51,7 @@ namespace castor3d
 		alignas( alignof( uint32_t ) ) bool pad0{};
 	};
 
-	inline bool operator==( ColourGradingConfig const & lhs, ColourGradingConfig const & rhs )
+	inline bool operator==( ColourGradingConfig const & lhs, ColourGradingConfig const & rhs )noexcept
 	{
 		return lhs.whiteBalance == rhs.whiteBalance
 			&& lhs.postExposure == rhs.postExposure

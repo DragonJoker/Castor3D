@@ -26,11 +26,11 @@ namespace castor3d
 	{
 		//!\~english	Node objects.
 		//!\~french		Objets noeud.
-		eNode,
+		eNode = 0,
 		//!\~english	Bone objects.
 		//!\~french		Objets os.
-		eBone,
-		CU_ScopedEnumBounds( eNode )
+		eBone = 1,
+		CU_ScopedEnumBounds( eNode, eBone )
 	};
 	C3D_API castor::String getName( SkeletonNodeType value );
 	/**

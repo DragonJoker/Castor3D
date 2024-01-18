@@ -21,15 +21,15 @@ namespace castor3d
 	enum class RenderNodeType
 		: uint8_t
 	{
-		eFrontSubmesh,
-		eFrontSubmeshMeshlet,
-		eFrontSubmeshInstanced,
-		eFrontBillboard,
-		eBackSubmesh,
-		eBackSubmeshMeshlet,
-		eBackSubmeshInstanced,
-		eBackBillboard,
-		CU_ScopedEnumBounds( eFrontSubmesh )
+		eFrontSubmesh = 0,
+		eFrontSubmeshMeshlet = 1,
+		eFrontSubmeshInstanced = 2,
+		eFrontBillboard = 3,
+		eBackSubmesh = 4,
+		eBackSubmeshMeshlet = 5,
+		eBackSubmeshInstanced = 6,
+		eBackBillboard = 7,
+		CU_ScopedEnumBounds( eFrontSubmesh, eBackBillboard )
 	};
 	RenderNodeType getRenderNodeType( ProgramFlags const & flags );
 	/**

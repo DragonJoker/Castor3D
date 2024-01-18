@@ -12,11 +12,18 @@ See LICENSE file in root folder
 #include "CastorUtils/Config/PlatformConfig.hpp"
 
 #include <CastorUtils/Config/BeginExternHeaderGuard.hpp>
+#include <array>
 #include <chrono>
+#include <iostream>
+#include <list>
+#include <map>
+#include <set>
+#include <sstream>
 #include <string>
 #include <string_view>
-#include <iostream>
-#include <sstream>
+#include <unordered_map>
+#include <unordered_set>
+#include <vector>
 #include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
 /**@name Configuration */
@@ -49,6 +56,49 @@ namespace castor
 	using U32OutputStream = std::basic_ostream< u32char >;
 	using InputStream = std::basic_istream< xchar >;
 	using U32InputStream = std::basic_istream< u32char >;
+
+	struct StringHash
+	{
+		using is_transparent = void;
+
+		std::size_t operator()( std::string_view v )const
+		{
+			return std::hash< std::string_view >{}( v );
+		}
+
+		std::size_t operator()( std::wstring_view v )const
+		{
+			return std::hash< std::wstring_view >{}( v );
+		}
+
+		std::size_t operator()( U32StringView v )const
+		{
+			return std::hash< U32StringView >{}( v );
+		}
+	};
+
+	template< typename KeyT, typename PredT = std::less<>, typename AllocT = std::allocator< KeyT > >
+	using Set = std::set< KeyT, PredT, AllocT >;
+	template< typename KeyT, typename DataT, typename PredT = std::less<>, typename AllocT = std::allocator< std::pair< KeyT const, DataT > > >
+	using Map = std::map< KeyT, DataT, PredT, AllocT >;
+	template< typename KeyT, typename DataT, typename PredT = std::less<>, typename AllocT = std::allocator< std::pair< KeyT const, DataT > > >
+	using MultiMap = std::multimap< KeyT, DataT, PredT, AllocT >;
+	template< typename KeyT, typename DataT, typename PredT = std::less<>, typename AllocT = std::allocator< KeyT > >
+	using MultiSet = std::multiset< KeyT, PredT, AllocT >;
+	template< typename DataT, typename AllocT = std::allocator< DataT > >
+	using Vector = std::vector< DataT, AllocT >;
+	template< typename DataT, typename AllocT = std::allocator< DataT > >
+	using List = std::list< DataT, AllocT >;
+	template< typename DataT, size_t SizeT >
+	using Array = std::array< DataT, SizeT >;
+
+	template< typename DataT >
+	using StringMap = Map< String, DataT >;
+	template< typename DataT >
+	using UnorderedStringMap = std::unordered_map< String, DataT, StringHash, std::equal_to<> >;
+
+	using StringSet = std::set< String, StringHash, std::equal_to<> >;
+	using UnorderedStringSet = std::unordered_set< String, StringHash, std::equal_to<> >;
 
 	using Seconds = std::chrono::seconds;
 	using Milliseconds = std::chrono::milliseconds;

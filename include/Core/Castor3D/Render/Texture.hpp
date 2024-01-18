@@ -106,7 +106,7 @@ namespace castor3d
 		C3D_API ~Texture()noexcept;
 
 		C3D_API void create();
-		C3D_API void destroy();
+		C3D_API void destroy()noexcept;
 
 		operator bool()const noexcept
 		{
@@ -166,17 +166,17 @@ namespace castor3d
 			, uint32_t dstQueueFamily
 			, bool target = false )const;
 
-		uint32_t getMipLevels()const
+		uint32_t getMipLevels()const noexcept
 		{
 			return imageId.data->info.mipLevels;
 		}
 
-		VkFormat getFormat()const
+		VkFormat getFormat()const noexcept
 		{
 			return imageId.data->info.format;
 		}
 
-		VkExtent3D const & getExtent()const
+		VkExtent3D const & getExtent()const noexcept
 		{
 			return imageId.data->info.extent;
 		}
@@ -203,7 +203,7 @@ namespace castor3d
 		IntermediateView( castor::String name
 			, crg::ImageViewId const & viewId
 			, VkImageLayout layout
-			, TextureFactors factors = {} )
+			, TextureFactors factors = {} )noexcept
 			: name{ std::move( name ) }
 			, viewId{ viewId }
 			, layout{ layout }
@@ -214,11 +214,11 @@ namespace castor3d
 		IntermediateView( castor::String name
 			, Texture const & texture
 			, VkImageLayout layout
-			, TextureFactors factors = {} )
+			, TextureFactors factors = {} )noexcept
 			: IntermediateView{ std::move( name )
-			, texture.sampledViewId
-			, layout
-			, std::move( factors ) }
+				, texture.sampledViewId
+				, layout
+				, std::move( factors ) }
 		{
 		}
 

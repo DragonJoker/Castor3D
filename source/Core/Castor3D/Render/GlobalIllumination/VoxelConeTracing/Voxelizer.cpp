@@ -169,7 +169,7 @@ namespace castor3d
 			} ) );
 	}
 
-	Voxelizer::~Voxelizer()
+	Voxelizer::~Voxelizer()noexcept
 	{
 		m_scene.getEngine()->unregisterTimer( m_runnable->getName() + "/Graph"
 			, m_runnable->getTimer() );

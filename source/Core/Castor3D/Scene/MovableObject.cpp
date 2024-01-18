@@ -73,7 +73,7 @@ namespace castor3d
 		getScene()->markDirty( *this );
 	}
 
-	EngineRPtr MovableObject::getEngine()const
+	EngineRPtr MovableObject::getEngine()const noexcept
 	{
 		return getScene()->getEngine();
 	}

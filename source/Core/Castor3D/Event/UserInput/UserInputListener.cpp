@@ -33,10 +33,6 @@ namespace castor3d
 			} ) );
 	}
 
-	UserInputListener::~UserInputListener()
-	{
-	}
-
 	bool UserInputListener::initialise()
 	{
 		m_frameListener->postEvent( makeCpuFunctorEvent( CpuEventType::ePostCpuStep

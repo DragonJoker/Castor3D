@@ -88,7 +88,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API ~RenderTechnique();
+		C3D_API ~RenderTechnique()noexcept;
 		/**
 		 *\~english
 		 *\return		The number of steps needed for initialisation, to show progression.
@@ -180,197 +180,197 @@ namespace castor3d
 		C3D_API DebugConfig & getDebugConfig()const;
 		C3D_API bool areDebugTargetsEnabled()const noexcept;
 
-		castor::Size const & getSize()const
+		castor::Size const & getSize()const noexcept
 		{
 			return m_rawSize;
 		}
 
-		crg::ImageViewIdArray getSampledResult()const
+		crg::ImageViewIdArray getSampledResult()const noexcept
 		{
 			return { m_colour->sampledViewId };
 		}
 
-		crg::ImageViewIdArray getTargetResult()const
+		crg::ImageViewIdArray getTargetResult()const noexcept
 		{
 			return { m_colour->targetViewId };
 		}
 
-		crg::ImageViewIdArray getSampledIntermediate()const
+		crg::ImageViewIdArray getSampledIntermediate()const noexcept
 		{
 			return { m_intermediate->sampledViewId };
 		}
 
-		crg::ImageViewIdArray getTargetIntermediate()const
+		crg::ImageViewIdArray getTargetIntermediate()const noexcept
 		{
 			return { m_intermediate->targetViewId };
 		}
 
-		crg::ImageViewIdArray getTargetDepth()const
+		crg::ImageViewIdArray getTargetDepth()const noexcept
 		{
 			return { m_depth.targetViewId };
 		}
 
-		Texture const & getDepth()const
+		Texture const & getDepth()const noexcept
 		{
 			return m_depth;
 		}
 
-		Texture const & getResult()const
+		Texture const & getResult()const noexcept
 		{
 			return *m_colour;
 		}
 
-		Texture const & getIntermediate()const
+		Texture const & getIntermediate()const noexcept
 		{
 			return *m_intermediate;
 		}
 
-		VkExtent3D const & getTargetExtent()const
+		VkExtent3D const & getTargetExtent()const noexcept
 		{
 			return m_colour->getExtent();
 		}
 
-		VkFormat getTargetFormat()const
+		VkFormat getTargetFormat()const noexcept
 		{
 			return m_colour->getFormat();
 		}
 
-		Texture const & getNormal()const
+		Texture const & getNormal()const noexcept
 		{
 			return m_normal;
 		}
 
-		Texture const & getScattering()const
+		Texture const & getScattering()const noexcept
 		{
 			return m_scattering;
 		}
 
-		Texture const & getDiffuse()const
+		Texture const & getDiffuse()const noexcept
 		{
 			return m_diffuse;
 		}
 
-		Texture const & getDepthObj()const
+		Texture const & getDepthObj()const noexcept
 		{
 			return m_prepass.getDepthObj();
 		}
 
-		ashes::Buffer< int32_t > const & getDepthRange()const
+		ashes::Buffer< int32_t > const & getDepthRange()const noexcept
 		{
 			return m_prepass.getDepthRange();
 		}
 
-		void setNeedsDepthRange( bool v )
+		void setNeedsDepthRange( bool v )noexcept
 		{
 			m_prepass.setNeedsDepthRange( v );
 		}
 
-		ShadowMapResult const & getDirectionalShadowPassResult()const
+		ShadowMapResult const & getDirectionalShadowPassResult()const noexcept
 		{
 			return m_directionalShadowMap->getShadowPassResult( false );
 		}
 
-		ShadowMapResult const & getPointShadowPassResult()const
+		ShadowMapResult const & getPointShadowPassResult()const noexcept
 		{
 			return m_pointShadowMap->getShadowPassResult( false );
 		}
 
-		ShadowMapResult const & getSpotShadowPassResult()const
+		ShadowMapResult const & getSpotShadowPassResult()const noexcept
 		{
 			return m_spotShadowMap->getShadowPassResult( false );
 		}
 
-		CameraUbo const & getCameraUbo()const
+		CameraUbo const & getCameraUbo()const noexcept
 		{
 			return m_cameraUbo;
 		}
 
-		CameraUbo & getCameraUbo()
+		CameraUbo & getCameraUbo()noexcept
 		{
 			return m_cameraUbo;
 		}
 
-		SceneUbo const & getSceneUbo()const
+		SceneUbo const & getSceneUbo()const noexcept
 		{
 			return m_sceneUbo;
 		}
 
-		SceneUbo & getSceneUbo()
+		SceneUbo & getSceneUbo()noexcept
 		{
 			return m_sceneUbo;
 		}
 
-		ShadowMapLightTypeArray const & getShadowMaps()const
+		ShadowMapLightTypeArray const & getShadowMaps()const noexcept
 		{
 			return m_allShadowMaps;
 		}
 
-		RenderTarget const & getRenderTarget()const
+		RenderTarget const & getRenderTarget()const noexcept
 		{
 			return m_renderTarget;
 		}
 
-		RenderTarget & getRenderTarget()
+		RenderTarget & getRenderTarget()noexcept
 		{
 			return m_renderTarget;
 		}
 
-		bool isMultisampling()const
+		bool isMultisampling()const noexcept
 		{
 			return false;
 		}
 
-		ashes::Buffer< uint32_t > const & getMaterialsCounts()const
+		ashes::Buffer< uint32_t > const & getMaterialsCounts()const noexcept
 		{
 			return m_opaque.getMaterialsCounts();
 		}
 
-		ashes::Buffer< castor::Point3ui > const & getMaterialsIndirectCounts()const
+		ashes::Buffer< castor::Point3ui > const & getMaterialsIndirectCounts()const noexcept
 		{
 			return m_opaque.getMaterialsIndirectCounts();
 		}
 
-		ashes::Buffer< uint32_t > const & getMaterialsStarts()const
+		ashes::Buffer< uint32_t > const & getMaterialsStarts()const noexcept
 		{
 			return m_opaque.getMaterialsStarts();
 		}
 
-		ashes::Buffer< castor::Point2ui > const & getPixelXY()const
+		ashes::Buffer< castor::Point2ui > const & getPixelXY()const noexcept
 		{
 			return m_opaque.getPixelXY();
 		}
 
-		bool hasVisibility()const
+		bool hasVisibility()const noexcept
 		{
 			return m_prepass.hasVisibility();
 		}
 
-		Texture const & getVisibilityResult()const
+		Texture const & getVisibilityResult()const noexcept
 		{
 			return m_prepass.getVisibility();
 		}
 
-		crg::FramePass const & getGetLastDepthPass()const
+		crg::FramePass const & getGetLastDepthPass()const noexcept
 		{
 			return *m_lastDepthPass;
 		}
 
-		crg::FramePass const & getDepthRangePass()const
+		crg::FramePass const & getDepthRangePass()const noexcept
 		{
 			return *m_depthRangePass;
 		}
 
-		crg::FramePass const & getGetLastOpaquePass()const
+		crg::FramePass const & getGetLastOpaquePass()const noexcept
 		{
 			return *m_lastOpaquePass;
 		}
 
-		crg::FramePass const & getGetLastTransparentPass()const
+		crg::FramePass const & getGetLastTransparentPass()const noexcept
 		{
 			return *m_lastTransparentPass;
 		}
 
-		crg::FramePassGroup & getGraph()
+		crg::FramePassGroup & getGraph()noexcept
 		{
 			return m_graph;
 		}

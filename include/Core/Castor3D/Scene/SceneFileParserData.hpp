@@ -89,7 +89,7 @@ namespace castor3d
 		castor::LoggerInstance * logger{};
 		castor::PathArray files{};
 		castor::PathArray csnaFiles{};
-		std::map< castor::String, TextureSourceInfoUPtr > sourceInfos{};
+		castor::StringMap< TextureSourceInfoUPtr > sourceInfos{};
 		ProgressBar * progress{};
 	};
 
@@ -138,19 +138,19 @@ namespace castor3d
 		}
 
 		template< typename BlockContextU >
-		void addParser( castor::String name
+		void addParser( castor::String const & name
 			, ParserFunctionT< BlockContextU > function
 			, castor::ParserParameterArray params = castor::ParserParameterArray{} )
 		{
 			castor::addParser( parsers
 				, section
-				, std::move( name )
-				, reinterpret_cast< ParserFunctionT< void > >( function )
+				, name
+				, ParserFunctionT< void >( function )
 				, std::move( params ) );
 		}
 
 		template< typename BlockContextU, typename SectionT >
-		void addPushParser( castor::String name
+		void addPushParser( castor::String const & name
 			, SectionT newSection
 			, ParserFunctionT< BlockContextU > function
 			, castor::ParserParameterArray params = castor::ParserParameterArray{} )
@@ -158,20 +158,20 @@ namespace castor3d
 			castor::addParser( parsers
 				, section
 				, uint32_t( newSection )
-				, std::move( name )
-				, reinterpret_cast< ParserFunctionT< void > >( function )
+				, name
+				, ParserFunctionT< void >( function )
 				, std::move( params ) );
 		}
 
 		template< typename BlockContextU >
-		void addPopParser( castor::String name
+		void addPopParser( castor::String const & name
 			, ParserFunctionT< BlockContextU > function )
 		{
 			castor::addParser( parsers
 				, section
 				, oldSection
-				, std::move( name )
-				, reinterpret_cast< ParserFunctionT< void > >( function ) );
+				, name
+				, ParserFunctionT< void >( function ) );
 		}
 
 		void addDefaultPopParser()

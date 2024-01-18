@@ -51,7 +51,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API virtual ~RenderLoop();
+		C3D_API virtual ~RenderLoop()noexcept;
 		/**
 		 *\~english
 		 *\brief		Cleans up the render loop.

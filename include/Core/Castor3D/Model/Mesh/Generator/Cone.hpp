@@ -26,25 +26,9 @@ namespace castor3d
 		C3D_API static MeshGeneratorUPtr create();
 
 	private:
-		C3D_API virtual void doGenerate( Mesh & mesh
+		C3D_API void doGenerate( Mesh & mesh
 			, Parameters const & parameters )override;
-
-	private:
-		//!\~english The number of faces	\~french Nombre de faces
-		uint32_t m_nbFaces;
-		//!\~english  The cone height	\~french La hauteur du cône
-		float m_height;
-		//!\~english  The cone radius	\~french Le rayon de la base
-		float m_radius;
-		friend std::ostream & operator <<( std::ostream & o
-			, Cone const & c );
 	};
-
-	inline std::ostream & operator <<( std::ostream & o
-		, Cone const & c )
-	{
-		return o << "Cone(" << c.m_nbFaces << "," << c.m_height << "," << c.m_radius << ")";
-	}
 }
 
 #endif

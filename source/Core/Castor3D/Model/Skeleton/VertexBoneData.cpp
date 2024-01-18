@@ -2,44 +2,6 @@
 
 namespace castor3d
 {
-	VertexBoneData::VertexBoneData()
-	{
-	}
-
-	VertexBoneData::VertexBoneData( VertexBoneData const & rhs )
-		: m_ids{ rhs.m_ids }
-		, m_weights{ rhs.m_weights }
-	{
-	}
-
-	VertexBoneData::VertexBoneData( VertexBoneData && rhs )noexcept
-		: m_ids{ std::move( rhs.m_ids ) }
-		, m_weights{ std::move( rhs.m_weights ) }
-	{
-	}
-
-	VertexBoneData::~VertexBoneData()
-	{
-	}
-
-	VertexBoneData & VertexBoneData::operator=( VertexBoneData const & rhs )
-	{
-		m_ids = rhs.m_ids;
-		m_weights = rhs.m_weights;
-		return *this;
-	}
-
-	VertexBoneData & VertexBoneData::operator=( VertexBoneData && rhs )noexcept
-	{
-		if ( this != &rhs )
-		{
-			m_ids = std::move( rhs.m_ids );
-			m_weights = std::move( rhs.m_weights );
-		}
-
-		return *this;
-	}
-
 	void VertexBoneData::addBoneData( uint32_t boneId, float weight )
 	{
 		bool done = false;
@@ -53,7 +15,5 @@ namespace castor3d
 				done = true;
 			}
 		}
-
-		//CU_Ensure( done );
 	}
 }

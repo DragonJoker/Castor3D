@@ -93,9 +93,9 @@ namespace castor3d
 			return m_labelStyle;
 		}
 
-		void setTextFontName( castor::String value )
+		void setTextFontName( castor::StringView value )
 		{
-			m_labelStyle.setFont( std::move( value ) );
+			m_labelStyle.setFont( value );
 		}
 
 		void setTextMaterial( MaterialObs value )

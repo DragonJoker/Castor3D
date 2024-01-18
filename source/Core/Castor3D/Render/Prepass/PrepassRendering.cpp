@@ -109,12 +109,12 @@ namespace castor3d
 		}
 	}
 
-	Engine * PrepassRendering::getEngine()const
+	Engine * PrepassRendering::getEngine()const noexcept
 	{
 		return getOwner()->getEngine();
 	}
 
-	crg::FramePass const & PrepassRendering::getLastPass()const
+	crg::FramePass const & PrepassRendering::getLastPass()const noexcept
 	{
 		if ( hasVisibility() )
 		{
@@ -124,12 +124,12 @@ namespace castor3d
 		return *m_depthPassDesc;
 	}
 
-	crg::FramePass const & PrepassRendering::getDepthRangePass()const
+	crg::FramePass const & PrepassRendering::getDepthRangePass()const noexcept
 	{
 		return *m_computeDepthRangeDesc;
 	}
 
-	bool PrepassRendering::hasVisibility()const
+	bool PrepassRendering::hasVisibility()const noexcept
 	{
 		return bool( m_result[PpTexture::eVisibility] );
 	}

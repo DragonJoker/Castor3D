@@ -151,7 +151,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	QueuesData::QueuesData( QueuesData && rhs )
+	QueuesData::QueuesData( QueuesData && rhs )noexcept
 		: familySupport{ rhs.familySupport }
 		, familyIndex{ rhs.familyIndex }
 		, m_allQueuesData{ std::move( rhs.m_allQueuesData ) }
@@ -160,7 +160,7 @@ namespace castor3d
 	{
 	}
 
-	QueuesData & QueuesData::operator=( QueuesData && rhs )
+	QueuesData & QueuesData::operator=( QueuesData && rhs )noexcept
 	{
 		familySupport = rhs.familySupport;
 		familyIndex = rhs.familyIndex;
@@ -206,7 +206,7 @@ namespace castor3d
 		return result;
 	}
 
-	void QueuesData::unreserveQueue( QueueData const * queue )const
+	void QueuesData::unreserveQueue( QueueData const * queue )const noexcept
 	{
 		auto lock( castor::makeUniqueLock( m_mutex ) );
 		m_remainingQueuesData.push_back( queue );
@@ -261,7 +261,7 @@ namespace castor3d
 		return result.data;
 	}
 
-	void QueuesData::putQueue( QueueData const * queue )
+	void QueuesData::putQueue( QueueData const * /*queue*/ )noexcept
 	{
 		auto lock( castor::makeUniqueLock( m_mutex ) );
 		CU_Require( !m_busyQueues.empty() );
@@ -287,7 +287,7 @@ namespace castor3d
 	{
 	}
 
-	QueueDataWrapper::QueueDataWrapper( QueueDataWrapper && rhs )
+	QueueDataWrapper::QueueDataWrapper( QueueDataWrapper && rhs )noexcept
 		: parent{ rhs.parent }
 		, data{ rhs.data }
 	{
@@ -295,7 +295,7 @@ namespace castor3d
 		rhs.data = nullptr;
 	}
 
-	QueueDataWrapper & QueueDataWrapper::operator=( QueueDataWrapper && rhs )
+	QueueDataWrapper & QueueDataWrapper::operator=( QueueDataWrapper && rhs )noexcept
 	{
 		parent = rhs.parent;
 		data = rhs.data;
@@ -310,7 +310,7 @@ namespace castor3d
 	{
 	}
 
-	QueueDataWrapper::~QueueDataWrapper()
+	QueueDataWrapper::~QueueDataWrapper()noexcept
 	{
 		if ( parent && data )
 		{
@@ -577,7 +577,7 @@ namespace castor3d
 		uboPool = castor::makeUnique< UniformBufferPool >( *this, cuT( "UniformBufferPool" ) );
 	}
 
-	RenderDevice::~RenderDevice()
+	RenderDevice::~RenderDevice()noexcept
 	{
 		{
 			auto lock = castor::makeUniqueLock( m_mutex );
@@ -700,38 +700,37 @@ namespace castor3d
 		return *it;
 	}
 
-	QueueDataWrapper RenderDevice::graphicsData()const
+	QueueDataWrapper RenderDevice::graphicsData()const noexcept
 	{
 		return QueueDataWrapper{ m_preferredGraphicsQueue };
 	}
 
-	size_t RenderDevice::graphicsQueueSize()const
+	size_t RenderDevice::graphicsQueueSize()const noexcept
 	{
 		return m_preferredGraphicsQueue->getQueueSize();
 	}
 
-	QueueData const * RenderDevice::reserveGraphicsData()const
+	QueueData const * RenderDevice::reserveGraphicsData()const noexcept
 	{
 		return m_preferredGraphicsQueue->reserveQueue();
 	}
 
-	void RenderDevice::unreserveGraphicsData( QueueData const * queueData )const
+	void RenderDevice::unreserveGraphicsData( QueueData const * queueData )const noexcept
 	{
 		m_preferredGraphicsQueue->unreserveQueue( queueData );
 	}
 
-	void RenderDevice::putGraphicsData( QueueData const * queueData )const
+	void RenderDevice::putGraphicsData( QueueData const * queueData )const noexcept
 	{
 		m_preferredGraphicsQueue->putQueue( queueData );
 	}
 
-	crg::GraphContext & RenderDevice::makeContext()const
+	crg::GraphContext & RenderDevice::makeContext()const noexcept
 	{
 		auto lock( castor::makeUniqueLock( m_mutex ) );
-		auto ires = m_contexts.emplace( std::this_thread::get_id(), GraphContextPtr{} );
-		auto it = ires.first;
+		auto [it, res] = m_contexts.try_emplace( std::this_thread::get_id() );
 
-		if ( ires.second )
+		if ( res )
 		{
 			it->second = std::make_unique< crg::GraphContext >( *device
 				, VkPipelineCache{}
@@ -751,7 +750,7 @@ namespace castor3d
 		return *it->second;
 	}
 
-	bool RenderDevice::hasExtension( std::string_view const & name )const
+	bool RenderDevice::hasExtension( std::string_view const & name )const noexcept
 	{
 		auto it = std::find_if( m_deviceExtensions.getExtensionsNames().begin()
 			, m_deviceExtensions.getExtensionsNames().end()
@@ -762,7 +761,7 @@ namespace castor3d
 		return it != m_deviceExtensions.getExtensionsNames().end();
 	}
 
-	bool RenderDevice::hasTerminateInvocation()const
+	bool RenderDevice::hasTerminateInvocation()const noexcept
 	{
 #if VK_VERSION_1_3
 		if ( m_hasFeatures13 )
@@ -777,7 +776,7 @@ namespace castor3d
 #endif
 	}
 
-	bool RenderDevice::hasDemoteToHelperInvocation()const
+	bool RenderDevice::hasDemoteToHelperInvocation()const noexcept
 	{
 #if VK_VERSION_1_3
 		if ( m_hasFeatures13 )
@@ -792,12 +791,12 @@ namespace castor3d
 #endif
 	}
 
-	bool RenderDevice::hasMeshAndTaskShaders()const
+	bool RenderDevice::hasMeshAndTaskShaders()const noexcept
 	{
 		return hasMeshShaders() && hasTaskShaders();
 	}
 
-	bool RenderDevice::hasMeshShaders()const
+	bool RenderDevice::hasMeshShaders()const noexcept
 	{
 #if C3D_UseMeshShaders
 #	if VK_EXT_mesh_shader || VK_NV_mesh_shader
@@ -821,7 +820,7 @@ namespace castor3d
 #endif
 	}
 
-	bool RenderDevice::hasTaskShaders()const
+	bool RenderDevice::hasTaskShaders()const noexcept
 	{
 #if C3D_UseMeshShaders && C3D_UseTaskShaders
 #	if VK_EXT_mesh_shader || VK_NV_mesh_shader
@@ -845,7 +844,7 @@ namespace castor3d
 #endif
 	}
 
-	bool RenderDevice::hasAtomicFloatAdd()const
+	bool RenderDevice::hasAtomicFloatAdd()const noexcept
 	{
 #if VK_EXT_shader_atomic_float
 		return m_atomicFloatAddFeatures.shaderBufferFloat32AtomicAdd == VK_TRUE
@@ -855,7 +854,7 @@ namespace castor3d
 #endif
 	}
 
-	bool RenderDevice::hasBufferDeviceAddress()const
+	bool RenderDevice::hasBufferDeviceAddress()const noexcept
 	{
 #if VK_VERSION_1_2
 		if ( m_hasFeatures12 )
@@ -870,7 +869,7 @@ namespace castor3d
 #endif
 	}
 
-	bool RenderDevice::hasRayTracing()const
+	bool RenderDevice::hasRayTracing()const noexcept
 	{
 #if VK_KHR_acceleration_structure && VK_KHR_ray_tracing_pipeline
 		return m_accelFeatures.accelerationStructure == VK_TRUE
@@ -880,7 +879,7 @@ namespace castor3d
 #endif
 	}
 
-	uint32_t RenderDevice::getMaxBindlessSampled()const
+	uint32_t RenderDevice::getMaxBindlessSampled()const noexcept
 	{
 #if VK_VERSION_1_2
 		if ( m_hasFeatures12 )
@@ -895,7 +894,7 @@ namespace castor3d
 #endif
 	}
 
-	uint32_t RenderDevice::getMaxBindlessStorage()const
+	uint32_t RenderDevice::getMaxBindlessStorage()const noexcept
 	{
 #if VK_VERSION_1_2
 		if ( m_hasFeatures12 )
@@ -910,7 +909,7 @@ namespace castor3d
 #endif
 	}
 
-	bool RenderDevice::hasBindless()const
+	bool RenderDevice::hasBindless()const noexcept
 	{
 #if VK_VERSION_1_2
 		if ( m_hasFeatures12 )
@@ -929,7 +928,7 @@ namespace castor3d
 #endif
 	}
 
-	void RenderDevice::fillGPUMeshInformations( GpuInformations & gpuInformations )const
+	void RenderDevice::fillGPUMeshInformations( GpuInformations & gpuInformations )const noexcept
 	{
 #if VK_EXT_mesh_shader || VK_NV_mesh_shader
 #	if VK_EXT_mesh_shader && VK_NV_mesh_shader

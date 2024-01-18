@@ -52,10 +52,10 @@ namespace castor3d
 	public:
 		C3D_API LayeredLpvGridConfigUbo( LayeredLpvGridConfigUbo const & rhs ) = delete;
 		C3D_API LayeredLpvGridConfigUbo & operator=( LayeredLpvGridConfigUbo const & rhs ) = delete;
-		C3D_API LayeredLpvGridConfigUbo( LayeredLpvGridConfigUbo && rhs ) = default;
-		C3D_API LayeredLpvGridConfigUbo & operator=( LayeredLpvGridConfigUbo && rhs ) = delete;
+		C3D_API LayeredLpvGridConfigUbo( LayeredLpvGridConfigUbo && rhs )noexcept = default;
+		C3D_API LayeredLpvGridConfigUbo & operator=( LayeredLpvGridConfigUbo && rhs )noexcept = delete;
 		C3D_API explicit LayeredLpvGridConfigUbo( RenderDevice const & device );
-		C3D_API ~LayeredLpvGridConfigUbo();
+		C3D_API ~LayeredLpvGridConfigUbo()noexcept;
 
 		C3D_API void cpuUpdate( std::array< castor::Grid const *, LpvMaxCascadesCount > const & grids
 			, float indirectAttenuation );

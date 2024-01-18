@@ -702,7 +702,7 @@ namespace castor3d
 	}
 
 	void Engine::unregisterTimer( castor::String const & category
-		, FramePassTimer & timer )
+		, FramePassTimer & timer )noexcept
 	{
 		if ( hasRenderLoop() )
 		{
@@ -840,7 +840,7 @@ namespace castor3d
 	}
 
 	void Engine::declareSpecificsShaderBuffers( sdw::ShaderWriter & writer
-		, std::map< std::string, shader::BufferBaseUPtr, std::less<> > & buffers
+		, castor::StringMap< shader::BufferBaseUPtr > & buffers
 		, uint32_t & binding
 		, uint32_t set )const
 	{

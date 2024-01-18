@@ -9,8 +9,4 @@ namespace castor3d
 		, m_type{ type }
 	{
 	}
-
-	ParticleSystemImpl::~ParticleSystemImpl()
-	{
-	}
 }

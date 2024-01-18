@@ -60,10 +60,10 @@ namespace castor3d
 	public:
 		C3D_API SceneUbo( SceneUbo const & rhs ) = delete;
 		C3D_API SceneUbo & operator=( SceneUbo const & rhs ) = delete;
-		C3D_API SceneUbo( SceneUbo && rhs ) = default;
-		C3D_API SceneUbo & operator=( SceneUbo && rhs ) = delete;
+		C3D_API SceneUbo( SceneUbo && rhs )noexcept = default;
+		C3D_API SceneUbo & operator=( SceneUbo && rhs )noexcept = delete;
 		C3D_API explicit SceneUbo( RenderDevice const & device );
-		C3D_API ~SceneUbo();
+		C3D_API ~SceneUbo()noexcept;
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.

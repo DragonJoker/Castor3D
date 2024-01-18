@@ -28,10 +28,7 @@ namespace castor3d
 		struct ComponentsShader
 			: shader::PassMapComponentsShader
 		{
-			explicit ComponentsShader( PassComponentPlugin const & plugin )
-				: shader::PassMapComponentsShader{ plugin }
-			{
-			}
+			using shader::PassMapComponentsShader::PassMapComponentsShader;
 
 			C3D_API void applyTexture( shader::PassShaders const & passShaders
 				, shader::TextureConfigurations const & textureConfigs

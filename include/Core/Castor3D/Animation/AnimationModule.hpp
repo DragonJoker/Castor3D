@@ -26,14 +26,14 @@ namespace castor3d
 	{
 		//!\~english	Playing animation state.
 		//!\~french		Animation en cours de lecture.
-		ePlaying,
+		ePlaying = 0,
 		//!\~english	Stopped animation state.
 		//!\~french		Animation stoppée.
-		eStopped,
+		eStopped = 1,
 		//!\~english	Paused animation state.
 		//!\~french		Animation en pause.
-		ePaused,
-		CU_ScopedEnumBounds( ePlaying )
+		ePaused = 2,
+		CU_ScopedEnumBounds( ePlaying, ePaused )
 	};
 	C3D_API castor::String getName( AnimationState value );
 	/**
@@ -49,17 +49,17 @@ namespace castor3d
 	{
 		//!\~english	Scene node animation.
 		//!\~french		Animation de noeud de scène.
-		eSceneNode,
+		eSceneNode = 0,
 		//!\~english	Skeleton animation.
 		//!\~french		Animation de squelette.
-		eSkeleton,
+		eSkeleton = 1,
 		//!\~english	Submesh animation (morphing).
 		//!\~french		Animation de sous-maillage (morphing).
-		eMesh,
+		eMesh = 2,
 		//!\~english	Texture animation.
 		//!\~french		Animation de texture.
-		eTexture,
-		CU_ScopedEnumBounds( eSceneNode )
+		eTexture = 3,
+		CU_ScopedEnumBounds( eSceneNode, eTexture )
 	};
 	C3D_API castor::String getName( AnimationType value );
 	/**
@@ -75,11 +75,11 @@ namespace castor3d
 	{
 		//!\~english	No interpolation.
 		//!\~french		Pas d'interpolation.
-		eNearest,
+		eNearest = 0,
 		//!\~english	Linear mode.
 		//!\~french		Mode linéaire.
-		eLinear,
-		CU_ScopedEnumBounds( eNearest )
+		eLinear = 1,
+		CU_ScopedEnumBounds( eNearest, eLinear )
 	};
 	C3D_API castor::String getName( InterpolatorType value );
 	/**

@@ -33,9 +33,6 @@ namespace castor3d
 	*/
 	class SkeletonAnimationBone;
 	/**
-	\author 	Sylvain DOREMUS
-	\version	0.1
-	\date		09/02/2010
 	\~english
 	\brief		The class which manages key frames
 	\remark		Key frames are the frames where the animation must be at a precise state
@@ -45,9 +42,6 @@ namespace castor3d
 	*/
 	class SkeletonAnimationKeyFrame;
 	/**
-	\author 	Sylvain DOREMUS
-	\version	0.7.0
-	\date		09/12/2013
 	\~english
 	\brief		Implementation of SkeletonAnimationObject for abstract nodes
 	\remark		Used to decompose the model and place intermediate animation nodes.
@@ -57,9 +51,6 @@ namespace castor3d
 	*/
 	class SkeletonAnimationNode;
 	/**
-	\author 	Sylvain DOREMUS
-	\version	0.1
-	\date		09/02/2010
 	\~english
 	\brief		Class which represents the skeleton animation objects.
 	\remark		Manages translation, scaling, rotation of the object.

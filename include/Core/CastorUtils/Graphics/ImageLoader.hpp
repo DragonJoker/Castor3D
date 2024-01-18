@@ -230,7 +230,7 @@ namespace castor
 
 	private:
 		std::vector< ImageLoaderPtr > m_loaders;
-		std::map< String, ImageLoaderImpl *, std::less<> > m_extLoaders;
+		StringMap< ImageLoaderImpl * > m_extLoaders;
 		PxBufferConvertOptions m_options;
 	};
 }

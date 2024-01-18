@@ -496,7 +496,7 @@ namespace castor3d
 		m_bentResult.create();
 	}
 
-	SsaoBlurPass::~SsaoBlurPass()
+	SsaoBlurPass::~SsaoBlurPass()noexcept
 	{
 		m_bentResult.destroy();
 		m_result.destroy();

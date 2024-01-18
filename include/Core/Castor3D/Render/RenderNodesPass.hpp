@@ -211,7 +211,7 @@ namespace castor3d
 		RenderNodesPassDesc & implicitAction( crg::ImageViewId view
 			, crg::RecordContext::ImplicitAction action )
 		{
-			m_ruConfig.implicitAction( view, action );
+			m_ruConfig.implicitAction( view, std::move( action ) );
 			return *this;
 		}
 		/**
@@ -338,7 +338,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API ~RenderNodesPass()override;
+		C3D_API ~RenderNodesPass()noexcept override;
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, CPU wise.
@@ -478,7 +478,7 @@ namespace castor3d
 			, bool isFrontCulled
 			, uint32_t passLayerIndex
 			, GpuBufferOffsetT< castor::Point4f > const & morphTargets
-			, SubmeshRenderData * submeshData )const;
+			, SubmeshRenderData * submeshData )const noexcept;
 		/**
 		 *\~english
 		 *\brief		Creates the pipeline flags for given configuration.
@@ -509,7 +509,7 @@ namespace castor3d
 			, VkPrimitiveTopology topology
 			, bool isFrontCulled
 			, GpuBufferOffsetT< castor::Point4f > const & morphTargets
-			, SubmeshRenderData * submeshData )const;
+			, SubmeshRenderData * submeshData )const noexcept;
 		/**
 		 *\~english
 		 *\brief			Prepares the pipeline matching the given flags, for back face culling nodes.
@@ -581,7 +581,7 @@ namespace castor3d
 		 *\brief			Enregistre les comptes de noeuds dans le RenderInfo donné.
 		 *\param[in,out]	info	Reçoit les comptes.
 		 */
-		C3D_API void countNodes( RenderInfo & info )const;
+		C3D_API void countNodes( RenderInfo & info )const noexcept;
 		/**
 		 *\~english
 		 *\brief		Creates a blend state matching given blend modes.
@@ -722,18 +722,18 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		C3D_API bool areValidPassFlags( PassComponentCombine const & passFlags )const;
-		C3D_API virtual bool isPassEnabled()const;
-		C3D_API virtual ShaderFlags getShaderFlags()const;
+		C3D_API bool areValidPassFlags( PassComponentCombine const & passFlags )const noexcept;
+		C3D_API virtual bool isPassEnabled()const noexcept;
+		C3D_API virtual ShaderFlags getShaderFlags()const noexcept;
 		C3D_API virtual bool areDebugTargetsEnabled()const noexcept;
-		C3D_API bool isValidPass( Pass const & pass )const;
-		C3D_API bool isValidRenderable( RenderedObject const & object )const;
-		C3D_API bool isValidNode( SceneNode const & node )const;
-		C3D_API bool allowClusteredLighting( ClustersConfig const & config )const;
-		C3D_API bool hasNodes()const;
-		C3D_API Scene & getScene()const;
-		C3D_API SceneNode const * getIgnoredNode()const;
-		C3D_API bool isMeshShading()const;
+		C3D_API bool isValidPass( Pass const & pass )const noexcept;
+		C3D_API bool isValidRenderable( RenderedObject const & object )const noexcept;
+		C3D_API bool isValidNode( SceneNode const & node )const noexcept;
+		C3D_API bool allowClusteredLighting( ClustersConfig const & config )const noexcept;
+		C3D_API bool hasNodes()const noexcept;
+		C3D_API Scene & getScene()const noexcept;
+		C3D_API SceneNode const * getIgnoredNode()const noexcept;
+		C3D_API bool isMeshShading()const noexcept;
 		C3D_API PipelinesNodesT< SubmeshRenderNode > const & getSubmeshNodes()const;
 		C3D_API InstantiatedPipelinesNodesT< SubmeshRenderNode > const & getInstancedSubmeshNodes()const;
 		C3D_API PipelinesNodesT< BillboardRenderNode > const & getBillboardNodes()const;
@@ -862,7 +862,7 @@ namespace castor3d
 		 *\param[in]	pass	La passe de matériau.
 		 *\return		\p true si la passe est rendue via cette passe de noeuds.
 		 */
-		C3D_API virtual bool doIsValidPass( Pass const & pass )const;
+		C3D_API virtual bool doIsValidPass( Pass const & pass )const noexcept;
 		/**
 		 *\~english
 		 *\param[in]	object	The rendered object.
@@ -871,7 +871,7 @@ namespace castor3d
 		 *\param[in]	object	L'objet rendu.
 		 *\return		\p true si l'objet est rendu via cette passe de noeuds.
 		 */
-		C3D_API virtual bool doIsValidRenderable( RenderedObject const & object )const;
+		C3D_API virtual bool doIsValidRenderable( RenderedObject const & object )const noexcept;
 		C3D_API virtual SubmeshComponentCombine doAdjustSubmeshComponents( SubmeshComponentCombine submeshCombine )const;
 		C3D_API virtual ProgramFlags doAdjustProgramFlags( ProgramFlags flags )const;
 		C3D_API virtual SceneFlags doAdjustSceneFlags( SceneFlags flags )const;
@@ -908,7 +908,7 @@ namespace castor3d
 			, ashes::WriteDescriptorSetArray & descriptorWrites
 			, uint32_t & index )const;
 
-		RenderQueue & getRenderQueue()const
+		RenderQueue & getRenderQueue()const noexcept
 		{
 			return *RenderQueueHolder::getData();
 		}
@@ -1053,18 +1053,20 @@ namespace castor3d
 	{
 		explicit IsRenderPassEnabled( RenderNodesPass const & pass )
 			: m_pass{ &pass }
-		{}
+		{
+		}
 
 		IsRenderPassEnabled()
 			: m_pass{}
-		{}
+		{
+		}
 
-		void setPass( RenderNodesPass const & pass )
+		void setPass( RenderNodesPass const & pass )noexcept
 		{
 			m_pass = &pass;
 		}
 
-		bool operator()()const
+		bool operator()()const noexcept
 		{
 			return m_pass
 				&& m_pass->isPassEnabled();

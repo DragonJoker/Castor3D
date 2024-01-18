@@ -24,16 +24,16 @@ namespace castor3d
 			int m_index{ -1 };
 			//!\~english	Vertex normal.
 			//!\~french		Normale du sommet.
-			std::array< float, 3 > m_fNormal{ { 0.0f, 0.0f, 0.0f } };
+			std::array< float, 3 > m_normal{ { 0.0f, 0.0f, 0.0f } };
 			//!\~english	Vertex UV.
 			//!\~french		UV du sommet.
-			std::array< float, 2 > m_fTexCoords{ { 0.0f, 0.0f } };
+			std::array< float, 2 > m_texCoords{ { 0.0f, 0.0f } };
 			//!\~english	Tells the vertex has a normal.
 			//!\~french		Dit que le sommet a une normale.
-			bool m_bHasNormal{ false };
+			bool m_hasNormal{ false };
 			//!\~english	Tells the vertex has UV.
 			//!\~french		Dit que le sommet a un UV.
-			bool m_bHasTexCoords{ false };
+			bool m_hasTexCoords{ false };
 		};
 		//!\~english	The 3 vertex informations.
 		//!\~french		Les informations des 3 sommets.

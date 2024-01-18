@@ -72,9 +72,9 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		C3D_API ashes::Sampler const & getSampler()const;
+		C3D_API ashes::Sampler const & getSampler()const noexcept;
 
-		Texture const & getResult()const
+		Texture const & getResult()const noexcept
 		{
 			return m_result;
 		}

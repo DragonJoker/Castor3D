@@ -100,7 +100,7 @@ namespace castor3d
 		log::trace << "Created EnvironmentMapPass " << getName() << std::endl;
 	}
 
-	EnvironmentMapPass::~EnvironmentMapPass()
+	EnvironmentMapPass::~EnvironmentMapPass()noexcept
 	{
 		if ( m_runnable )
 		{

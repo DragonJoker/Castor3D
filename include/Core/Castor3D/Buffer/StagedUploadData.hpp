@@ -21,7 +21,7 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	class StagedUploadData
-		: castor::DataHolderT< ashes::CommandBufferPtr >
+		: private castor::DataHolderT< ashes::CommandBufferPtr >
 		, public UploadData
 	{
 		using CommandBufferHolder = castor::DataHolderT< ashes::CommandBufferPtr >;
@@ -77,7 +77,7 @@ namespace castor3d
 			}
 
 			GpuPackedBaseBufferUPtr buffer;
-			u32 lifetime;
+			u32 lifetime{};
 		};
 		using BufferArray = std::vector< StagingBuffer >;
 
@@ -89,8 +89,8 @@ namespace castor3d
 		struct BufferRange
 		{
 			byte * mapped{};
-			VkDeviceSize offset{ ~( 0ull ) };
-			VkDeviceSize range{ 0ull };
+			VkDeviceSize offset{ ~( 0ULL ) };
+			VkDeviceSize range{ 0ULL };
 		};
 		using BuffersRanges = std::unordered_map< ashes::BufferBase const *, BufferRange >;
 
@@ -118,7 +118,7 @@ namespace castor3d
 
 			~FrameBuffers()noexcept
 			{
-				for ( auto & [buffer, bounds] : buffers )
+				for ( auto const & [buffer, bounds] : buffers )
 				{
 					buffer->unlock();
 				}

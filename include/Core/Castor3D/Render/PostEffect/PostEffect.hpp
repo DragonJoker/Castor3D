@@ -143,7 +143,7 @@ namespace castor3d
 		*	Mutateurs.
 		**/
 		/**@{*/
-		void enable( bool value )
+		void enable( bool value )noexcept
 		{
 			m_enabled = value;
 		}
@@ -160,17 +160,17 @@ namespace castor3d
 		C3D_API virtual crg::FramePass const & getPass()const = 0;
 		C3D_API virtual void setParameters( Parameters parameters ) = 0;
 
-		bool isAfterToneMapping()const
+		bool isAfterToneMapping()const noexcept
 		{
 			return m_kind == Kind::eSRGB;
 		}
 
-		castor::String const & getFullName()const
+		castor::String const & getFullName()const noexcept
 		{
 			return m_fullName;
 		}
 
-		bool const & isEnabled()const
+		bool const & isEnabled()const noexcept
 		{
 			return m_enabled;
 		}

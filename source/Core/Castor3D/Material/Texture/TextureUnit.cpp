@@ -514,7 +514,7 @@ namespace castor3d
 		CU_EndAttribute()
 	}
 
-	TextureUnit::TextureUnit( TextureUnit && rhs )
+	TextureUnit::TextureUnit( TextureUnit && rhs )noexcept
 		: AnimableT< Engine >{ std::move( rhs ) }
 		, m_data{ rhs.m_data }
 		, m_device{ std::move( rhs.m_device ) }
@@ -545,12 +545,11 @@ namespace castor3d
 		, TextureUnitData & data )
 		: AnimableT< Engine >{ engine }
 		, m_data{ data }
-		, m_descriptor{ 0u, 0u, 1u, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER }
 	{
 		m_transformations.setIdentity();
 	}
 
-	TextureUnit::~TextureUnit()
+	TextureUnit::~TextureUnit()noexcept
 	{
 		if ( getId() != 0u )
 		{
@@ -593,7 +592,7 @@ namespace castor3d
 		return true;
 	}
 
-	void TextureUnit::cleanup()
+	void TextureUnit::cleanup()noexcept
 	{
 		getOwner()->getMaterialCache().unregisterUnit( *this );
 		m_id = 0u;

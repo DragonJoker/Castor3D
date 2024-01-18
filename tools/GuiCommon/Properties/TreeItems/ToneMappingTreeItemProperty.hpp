@@ -49,7 +49,7 @@ namespace GuiCommon
 		castor3d::RenderTarget & m_target;
 		wxWindow * m_parent;
 		wxArrayString m_choices;
-		std::map< castor::String, uint32_t > m_nameToChoice;
+		castor::StringMap< uint32_t > m_nameToChoice;
 	};
 }
 

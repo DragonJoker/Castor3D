@@ -112,10 +112,10 @@ namespace castor3d
 
 		OverlayPipelineData( OverlayPipelineData const & ) = delete;
 		OverlayPipelineData & operator=( OverlayPipelineData const & ) = delete;
-		OverlayPipelineData( OverlayPipelineData && ) = default;
-		OverlayPipelineData & operator=( OverlayPipelineData && ) = default;
+		OverlayPipelineData( OverlayPipelineData && )noexcept = default;
+		OverlayPipelineData & operator=( OverlayPipelineData && )noexcept = default;
 		OverlayPipelineData() = default;
-		~OverlayPipelineData() = default;
+		~OverlayPipelineData()noexcept = default;
 
 		OverlayPipelineData( ashes::BufferPtr< uint32_t > iDsBuffer
 			, castor::ArrayView< uint32_t > ids

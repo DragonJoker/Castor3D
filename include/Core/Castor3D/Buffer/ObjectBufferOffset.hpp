@@ -121,7 +121,7 @@ namespace castor3d
 					, 0u
 					, 1u
 					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER };
-				result.bufferInfo.push_back( { getBuffer(), getOffset(), getAskedSize() } );
+				result.bufferInfo.push_back( VkDescriptorBufferInfo{ getBuffer(), getOffset(), getAskedSize() } );
 				return result;
 			}
 
@@ -131,7 +131,7 @@ namespace castor3d
 					, 0u
 					, 1u
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
-				result.bufferInfo.push_back( { getBuffer(), getOffset(), getAskedSize() } );
+				result.bufferInfo.push_back( VkDescriptorBufferInfo{ getBuffer(), getOffset(), getAskedSize() } );
 				return result;
 			}
 		};

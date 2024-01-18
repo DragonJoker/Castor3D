@@ -15,14 +15,14 @@ namespace castor
 	//@{
 	enum class LengthUnit
 	{
-		eKilometre,
-		eMetre,
-		eCentimetre,
-		eMillimetre,
-		eYard,
-		eFoot,
-		eInch,
-		CU_ScopedEnumBounds( eKilometre )
+		eKilometre = 0,
+		eMetre = 1,
+		eCentimetre = 2,
+		eMillimetre = 3,
+		eYard = 4,
+		eFoot = 5,
+		eInch = 6,
+		CU_ScopedEnumBounds( eKilometre, eInch )
 	};
 	CU_API String getName( LengthUnit value );
 

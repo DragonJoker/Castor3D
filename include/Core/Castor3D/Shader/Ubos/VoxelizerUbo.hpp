@@ -42,7 +42,7 @@ namespace castor3d
 			sdw::UInt radianceNumCones;
 			sdw::Float radianceNumConesInv;
 
-			// sdw::Vec3 pad;
+			//! sdw::Vec3 pad;
 			sdw::Float rayStepSize;
 
 			sdw::UInt enabled;
@@ -104,10 +104,10 @@ namespace castor3d
 	public:
 		C3D_API VoxelizerUbo( VoxelizerUbo const & rhs ) = delete;
 		C3D_API VoxelizerUbo & operator=( VoxelizerUbo const & rhs ) = delete;
-		C3D_API VoxelizerUbo( VoxelizerUbo && rhs ) = default;
-		C3D_API VoxelizerUbo & operator=( VoxelizerUbo && rhs ) = delete;
+		C3D_API VoxelizerUbo( VoxelizerUbo && rhs )noexcept = default;
+		C3D_API VoxelizerUbo & operator=( VoxelizerUbo && rhs )noexcept = delete;
 		C3D_API explicit VoxelizerUbo( RenderDevice const & device );
-		C3D_API ~VoxelizerUbo();
+		C3D_API ~VoxelizerUbo()noexcept;
 
 		C3D_API void cpuUpdate( VctConfig const & voxelConfig
 			, float worldToGrid

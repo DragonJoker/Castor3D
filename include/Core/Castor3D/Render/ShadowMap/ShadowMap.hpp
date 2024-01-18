@@ -25,10 +25,11 @@ namespace castor3d
 	public:
 		struct PassData
 		{
+			PassData() = default;
+
 			explicit PassData( SceneCullerUPtr culler )
 				: ownCuller{ std::move( culler ) }
 				, culler{ ownCuller.get() }
-				, pass{ nullptr }
 			{
 			}
 
@@ -37,29 +38,19 @@ namespace castor3d
 				: viewport{ std::move( viewport ) }
 				, ownCuller{ std::move( culler ) }
 				, culler{ ownCuller.get() }
-				, pass{ nullptr }
 			{
 			}
 
 			explicit PassData( SceneCuller * culler )
-				: ownCuller{ nullptr }
-				, culler{ culler }
-				, pass{ nullptr }
+				: culler{ culler }
 			{
 			}
 
-			PassData()
-				: ownCuller{ nullptr }
-				, culler{ nullptr }
-				, pass{ nullptr }
-			{
-			}
-
-			ViewportUPtr viewport;
-			FrustumUPtr frustum;
-			SceneCullerUPtr ownCuller;
-			SceneCuller * culler;
-			ShadowMapPass * pass;
+			ViewportUPtr viewport{};
+			FrustumUPtr frustum{};
+			SceneCullerUPtr ownCuller{};
+			SceneCuller * culler{};
+			ShadowMapPass * pass{};
 		};
 		using PassDataPtr = std::unique_ptr< PassData >;
 
@@ -116,7 +107,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API virtual ~ShadowMap() = default;
+		C3D_API virtual ~ShadowMap()noexcept = default;
 		/**
 		*\~english
 		*\brief
@@ -182,22 +173,22 @@ namespace castor3d
 		C3D_API virtual crg::ImageViewIdArray getViews( SmTexture texture
 			, uint32_t index = 0u )const;
 
-		ShadowMapResult const & getShadowPassResult( bool isStatic )const
+		ShadowMapResult const & getShadowPassResult( bool isStatic )const noexcept
 		{
 			return isStatic ? m_staticsResult : m_result;
 		}
 
-		ShadowMapResult & getShadowPassResult( bool isStatic )
+		ShadowMapResult & getShadowPassResult( bool isStatic )noexcept
 		{
 			return isStatic ? m_staticsResult : m_result;
 		}
 
-		Scene & getScene()const
+		Scene & getScene()const noexcept
 		{
 			return m_scene;
 		}
 
-		uint32_t getCount()const
+		uint32_t getCount()const noexcept
 		{
 			return m_count;
 		}

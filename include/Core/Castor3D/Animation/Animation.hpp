@@ -25,11 +25,11 @@ namespace castor3d
 		 *name Copie / Déplacement.
 		 **/
 		/**@{*/
-		C3D_API AnimationT( AnimationT && rhs ) = default;
-		C3D_API AnimationT & operator=( AnimationT && rhs ) = delete;
+		C3D_API AnimationT( AnimationT && rhs )noexcept = default;
+		C3D_API AnimationT & operator=( AnimationT && rhs )noexcept = delete;
 		C3D_API AnimationT( AnimationT const & rhs ) = delete;
 		C3D_API AnimationT & operator=( AnimationT const & rhs ) = delete;
-		C3D_API virtual ~AnimationT() = default;
+		C3D_API virtual ~AnimationT()noexcept = default;
 		/**@}*/
 		/**
 		 *\~english
@@ -45,7 +45,7 @@ namespace castor3d
 		 *\param[in]	animable	L'objet animable parent.
 		 *\param[in]	name		Le nom de l'animation.
 		 */
-		inline AnimationT( AnimableHandlerT & handler
+		AnimationT( AnimableHandlerT & handler
 			, AnimationType type
 			, AnimableT< AnimableHandlerT > & animable
 			, castor::String const & name = castor::cuEmptyString );
@@ -61,7 +61,7 @@ namespace castor3d
 		 *\param[in]	type		Le type d'animation.
 		 *\param[in]	name		Le nom de l'animation.
 		 */
-		inline AnimationT( AnimableHandlerT & handler
+		AnimationT( AnimableHandlerT & handler
 			, AnimationType type
 			, castor::String const & name = castor::cuEmptyString );
 		/**
@@ -72,7 +72,7 @@ namespace castor3d
 		 *\brief		Ajoute une keyframe à l'animation.
 		 *\param[in]	keyFrame	La keyframe.
 		 */
-		inline void addKeyFrame( AnimationKeyFrameUPtr keyFrame );
+		void addKeyFrame( AnimationKeyFrameUPtr keyFrame );
 		/**
 		 *\~english
 		 *\brief			Finds a keyframe given a time index.
@@ -81,7 +81,7 @@ namespace castor3d
 		 *\brief			Trouve une keyframe à l'index de temps donné.
 		 *\param[in]		time	L'index de temps.
 		 */
-		inline AnimationKeyFrameArray::iterator find( castor::Milliseconds const & time );
+		AnimationKeyFrameArray::iterator find( castor::Milliseconds const & time );
 		/**
 		 *\~english
 		 *\brief			Finds a keyframe given a time index.
@@ -94,7 +94,7 @@ namespace castor3d
 		 *\param[in,out]	prv		La keyframe précédente, reçoit la nouvelle s'il y a eu un changement.
 		 *\param[in,out]	cur		La keyframe courante, reçoit la nouvelle s'il y a eu un changement.
 		 */
-		inline void findKeyFrame( castor::Milliseconds const & time
+		void findKeyFrame( castor::Milliseconds const & time
 			, AnimationKeyFrameArray::iterator & prv
 			, AnimationKeyFrameArray::iterator & cur )const;
 		/**
@@ -103,14 +103,14 @@ namespace castor3d
 		 *\~french
 		 *\brief		Initialise la longueur de l'animation.
 		 */
-		inline void updateLength();
+		void updateLength();
 		/**
 		 *\~english
 		 *\return		\p true if the key frames list is empty.
 		 *\~french
 		 *\return		\p true si la liste de key frames est vide.
 		 */
-		inline bool isEmpty()const
+		bool isEmpty()const
 		{
 			return m_keyframes.empty();
 		}
@@ -120,7 +120,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le nombre de key frames.
 		 */
-		inline size_t size()const
+		size_t size()const
 		{
 			return m_keyframes.size();
 		}
@@ -130,7 +130,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le début des key frames.
 		 */
-		inline AnimationKeyFrameArray::const_iterator begin()const
+		AnimationKeyFrameArray::const_iterator begin()const
 		{
 			return m_keyframes.begin();
 		}
@@ -140,7 +140,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le début des key frames.
 		 */
-		inline AnimationKeyFrameArray::iterator begin()
+		AnimationKeyFrameArray::iterator begin()
 		{
 			return m_keyframes.begin();
 		}
@@ -150,7 +150,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La fin des key frames.
 		 */
-		inline AnimationKeyFrameArray::const_iterator end()const
+		AnimationKeyFrameArray::const_iterator end()const
 		{
 			return m_keyframes.end();
 		}
@@ -160,7 +160,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La fin des key frames.
 		 */
-		inline AnimationKeyFrameArray::iterator end()
+		AnimationKeyFrameArray::iterator end()
 		{
 			return m_keyframes.end();
 		}
@@ -170,7 +170,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le type de l'animation.
 		 */
-		inline AnimationType getType()const
+		AnimationType getType()const
 		{
 			return m_type;
 		}
@@ -180,12 +180,12 @@ namespace castor3d
 		 *\~french
 		 *\return		La longueur de l'animation.
 		 */
-		inline castor::Milliseconds const & getLength()const
+		castor::Milliseconds const & getLength()const
 		{
 			return m_length;
 		}
 
-		inline AnimableT< AnimableHandlerT > * getAnimable()const
+		AnimableT< AnimableHandlerT > * getAnimable()const
 		{
 			return m_animable;
 		}

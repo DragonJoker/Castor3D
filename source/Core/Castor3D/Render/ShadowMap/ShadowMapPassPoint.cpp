@@ -72,7 +72,7 @@ namespace castor3d
 		log::trace << "Created " << getName() << std::endl;
 	}
 
-	ShadowMapPassPoint::~ShadowMapPassPoint()
+	ShadowMapPassPoint::~ShadowMapPassPoint()noexcept
 	{
 		m_onNodeChanged.disconnect();
 	}

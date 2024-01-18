@@ -14,10 +14,6 @@ namespace castor3d
 	{
 	}
 
-	RenderTargetCache::~RenderTargetCache()
-	{
-	}
-
 	RenderTargetRPtr RenderTargetCache::add( TargetType type
 		, castor::Size const & size
 		, castor::PixelFormat pixelFormat )
@@ -32,7 +28,7 @@ namespace castor3d
 		return ret;
 	}
 
-	void RenderTargetCache::remove( RenderTargetRPtr target )
+	void RenderTargetCache::remove( RenderTargetRPtr target )noexcept
 	{
 		cachetgt::LockType lock{ castor::makeUniqueLock( *this ) };
 		auto v = std::next( m_renderTargets.begin()

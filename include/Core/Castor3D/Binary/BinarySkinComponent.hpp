@@ -12,8 +12,6 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	/**
-	\author 	Sylvain DOREMUS
-	\date		09/11/2017
 	\~english
 	\brief		Helper structure to find ChunkType from a type.
 	\remarks	Specialisation for SkinComponent.
@@ -27,8 +25,6 @@ namespace castor3d
 		static ChunkType const Value = ChunkType::eBonesComponent;
 	};
 	/**
-	\author		Sylvain DOREMUS
-	\date		09/11/2017
 	\~english
 	\brief		SkinComponent loader.
 	\~english
@@ -52,8 +48,6 @@ namespace castor3d
 		C3D_API bool doWrite( SkinComponent const & obj )override;
 	};
 	/**
-	\author		Sylvain DOREMUS
-	\date		09/11/2017
 	\~english
 	\brief		SkinComponent loader.
 	\~english

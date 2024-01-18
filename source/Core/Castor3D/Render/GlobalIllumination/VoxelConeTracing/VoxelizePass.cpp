@@ -148,14 +148,14 @@ namespace castor3d
 		}
 	}
 
-	bool VoxelizePass::isPassEnabled()const
+	bool VoxelizePass::isPassEnabled()const noexcept
 	{
 		return m_voxelConfig.enabled
 			&& RenderNodesPass::isPassEnabled()
 			&& ( getRenderQueue().isOutOfDate() || m_outOfDate );
 	}
 
-	ShaderFlags VoxelizePass::getShaderFlags()const
+	ShaderFlags VoxelizePass::getShaderFlags()const noexcept
 	{
 		return ShaderFlag::eWorldSpace
 			| ShaderFlag::eNormal

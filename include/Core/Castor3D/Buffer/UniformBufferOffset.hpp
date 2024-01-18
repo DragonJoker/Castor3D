@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_UniformBufferOffset_HPP___
@@ -36,14 +36,14 @@ namespace castor3d
 
 		VkDeviceSize getByteOffset()const
 		{
-			auto & uniformBuffer = buffer->getBuffer();
+			auto const & uniformBuffer = buffer->getBuffer();
 			auto size = uniformBuffer.getAlignedSize();
 			return offset * size;
 		}
 
 		VkDeviceSize getByteRange()const
 		{
-			auto & uniformBuffer = buffer->getBuffer();
+			auto const & uniformBuffer = buffer->getBuffer();
 			auto size = uniformBuffer.getAlignedSize();
 			return range * size;
 		}
@@ -113,7 +113,7 @@ namespace castor3d
 				, dstArrayElement
 				, 1u
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER };
-			result.bufferInfo.push_back( { uniformBuffer.getBuffer()
+			result.bufferInfo.push_back( VkDescriptorBufferInfo{ uniformBuffer.getBuffer()
 				, size * offset
 				, size * range } );
 			return result;

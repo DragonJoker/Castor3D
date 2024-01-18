@@ -121,10 +121,6 @@ namespace castor3d
 		{
 			return *m_buffer;
 		}
-		operator ashes::Buffer< uint8_t > const & ()const
-		{
-			return *m_buffer;
-		}
 		/**
 		*\~english
 		*\return
@@ -134,10 +130,6 @@ namespace castor3d
 		*	Le tampon interne.
 		*/
 		ashes::Buffer< uint8_t > & getBuffer()
-		{
-			return *m_buffer;
-		}
-		operator ashes::Buffer< uint8_t > & ()
 		{
 			return *m_buffer;
 		}
@@ -156,7 +148,8 @@ namespace castor3d
 		template< typename DataT >
 		DataT const & getData( VkDeviceSize offset )const
 		{
-			return *reinterpret_cast< DataT const * >( m_data.data() + offset );
+			using DataCPtr = DataT const *;
+			return *DataCPtr( m_data.data() + offset );
 		}
 		/**
 		*\~english
@@ -173,7 +166,8 @@ namespace castor3d
 		template< typename DataT >
 		DataT & getData( VkDeviceSize offset )
 		{
-			return *reinterpret_cast< DataT * >( m_data.data() + offset );
+			using DataPtr = DataT *;
+			return *DataPtr( m_data.data() + offset );
 		}
 		/**
 		*\~english
@@ -373,10 +367,6 @@ namespace castor3d
 		{
 			return *m_buffer;
 		}
-		operator ashes::BufferBase const & ( )const
-		{
-			return *m_buffer;
-		}
 		/**
 		*\~english
 		*\return
@@ -386,10 +376,6 @@ namespace castor3d
 		*	Le tampon interne.
 		*/
 		ashes::BufferBase & getBuffer()
-		{
-			return *m_buffer;
-		}
-		operator ashes::BufferBase & ( )
 		{
 			return *m_buffer;
 		}

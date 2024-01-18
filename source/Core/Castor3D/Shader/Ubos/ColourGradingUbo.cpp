@@ -216,7 +216,7 @@ namespace castor3d
 	{
 	}
 
-	ColourGradingUbo::~ColourGradingUbo()
+	ColourGradingUbo::~ColourGradingUbo()noexcept
 	{
 		m_device.uboPool->putBuffer( m_ubo );
 	}

@@ -26,14 +26,8 @@ namespace castor3d
 		C3D_API static MeshGeneratorUPtr create();
 
 	private:
-		C3D_API virtual void doGenerate( Mesh & mesh
+		C3D_API void doGenerate( Mesh & mesh
 			, Parameters const & parameters )override;
-
-	private:
-		float m_internalRadius;
-		float m_externalRadius;
-		uint32_t m_internalNbFaces;
-		uint32_t m_externalNbFaces;
 	};
 }
 

@@ -21,10 +21,10 @@ namespace castor3d
 	public:
 		BinaryParserBase() = default;
 		BinaryParserBase( BinaryParserBase const & ) = default;
-		BinaryParserBase( BinaryParserBase && ) = default;
+		BinaryParserBase( BinaryParserBase && )noexcept = default;
 		BinaryParserBase & operator=( BinaryParserBase const & ) = default;
-		BinaryParserBase & operator=( BinaryParserBase && ) = default;
-		virtual ~BinaryParserBase() = default;
+		BinaryParserBase & operator=( BinaryParserBase && )noexcept = default;
+		virtual ~BinaryParserBase()noexcept = default;
 		/**
 		 *\~english
 		 *\brief		Creates a binary parser.
@@ -32,7 +32,7 @@ namespace castor3d
 		 *\brief		Crée un parser binaire.
 		 */
 		template< typename T >
-		inline BinaryParser< T > createBinaryParser()
+		BinaryParser< T > createBinaryParser()
 		{
 			BinaryParser< T > parser;
 			parser.m_fileVersion = m_fileVersion;
@@ -50,7 +50,7 @@ namespace castor3d
 		 *\param[in]	file	Le fichier qui contient le chunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		inline bool parse( TParsed & obj
+		bool parse( TParsed & obj
 			, castor::BinaryFile & file )
 		{
 			BinaryChunk header{ true };
@@ -101,7 +101,7 @@ namespace castor3d
 		 *\param[in]	chunk	Le chunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		inline bool parse( TParsed & obj
+		bool parse( TParsed & obj
 			, BinaryChunk & chunk )
 		{
 			bool result = true;
@@ -180,7 +180,7 @@ namespace castor3d
 		 *\param[in,out]	chunk	Le chunk.
 		 *\return			\p false si une erreur quelconque est arrivée.
 		 */
-		inline bool doParseHeader( BinaryChunk & chunk )const
+		bool doParseHeader( BinaryChunk & chunk )const
 		{
 			BinaryChunk schunk{ isLittleEndian( chunk ) };
 			bool result = chunk.getSubChunk( schunk );
@@ -259,7 +259,7 @@ namespace castor3d
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		template< typename T >
-		inline bool doParseChunk( T * values
+		bool doParseChunk( T * values
 			, size_t count
 			, BinaryChunk & chunk )const
 		{
@@ -278,7 +278,7 @@ namespace castor3d
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		template< typename T, size_t Count >
-		inline bool doParseChunk( T( &values )[Count]
+		bool doParseChunk( T( &values )[Count]
 			, BinaryChunk & chunk )const
 		{
 			return ChunkParser< T >::parse( values, Count, chunk );
@@ -296,7 +296,7 @@ namespace castor3d
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		template< typename T, size_t Count >
-		inline bool doParseChunk( std::array< T, Count > & values
+		bool doParseChunk( std::array< T, Count > & values
 			, BinaryChunk & chunk )const
 		{
 			return ChunkParser< T >::parse( values.data(), Count, chunk );
@@ -314,7 +314,7 @@ namespace castor3d
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		template< typename T >
-		inline bool doParseChunk( std::vector< T > & values
+		bool doParseChunk( std::vector< T > & values
 			, BinaryChunk & chunk )const
 		{
 			return ChunkParser< T >::parse( values.data(), values.size(), chunk );
@@ -332,7 +332,7 @@ namespace castor3d
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		template< typename T >
-		inline bool doParseChunk( T & value
+		bool doParseChunk( T & value
 			, BinaryChunk & chunk )const
 		{
 			return ChunkParser< T >::parse( value, chunk );
@@ -347,7 +347,7 @@ namespace castor3d
 		 *\param[out]	chunk	Reçoit le sous-chunk.
 		 *\return		\p false si une erreur quelconque est arrivée.
 		 */
-		inline bool doGetSubChunk( BinaryChunk & chunk )
+		bool doGetSubChunk( BinaryChunk & chunk )
 		{
 			CU_Require( m_chunk );
 			bool result = m_chunk->checkAvailable( 1 );
@@ -460,7 +460,7 @@ namespace castor3d
 	protected:
 		C3D_API static castor::String Name;
 
-		inline void checkError( bool result
+		void checkError( bool result
 			, castor::String const & text )const
 		{
 			if ( !result )

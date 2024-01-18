@@ -29,7 +29,7 @@ namespace castor3d
 			, VkImageUsageFlags pusage = VkImageUsageFlags{ VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT } )
 			: sourceInfo{ std::move( psourceInfo ) }
 			, image{ std::move( pimage ) }
-			, usage{ std::move( pusage ) }
+			, usage{ pusage }
 		{
 		}
 
@@ -60,8 +60,8 @@ namespace castor3d
 	public:
 		TextureUnit( TextureUnit const & ) = delete;
 		TextureUnit & operator=( TextureUnit const & ) = delete;
-		C3D_API TextureUnit( TextureUnit && rhs );
-		C3D_API TextureUnit & operator=( TextureUnit && rhs ) = delete;
+		C3D_API TextureUnit( TextureUnit && rhs )noexcept;
+		C3D_API TextureUnit & operator=( TextureUnit && rhs )noexcept = delete;
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -80,7 +80,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API ~TextureUnit()override;
+		C3D_API ~TextureUnit()noexcept override;
 		/**
 		 *\~english
 		 *\brief		Creates the texture in the render system.
@@ -96,7 +96,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Nettoie l'objet.
 		 */
-		C3D_API void cleanup();
+		C3D_API void cleanup()noexcept;
 		/**
 		 *\~english
 		 *\brief		Sets the sampler.
@@ -322,7 +322,7 @@ namespace castor3d
 		ashes::Image * m_gpuImage{};
 		SamplerObs m_sampler{};
 		Texture const * m_texture{};
-		ashes::WriteDescriptorSet m_descriptor;
+		ashes::WriteDescriptorSet m_descriptor{ 0u, 0u, 1u, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER };
 		uint32_t m_id{ 0u };
 		castor::String m_name{};
 		bool m_initialised{ false };

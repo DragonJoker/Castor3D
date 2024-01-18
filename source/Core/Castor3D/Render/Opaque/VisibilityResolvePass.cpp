@@ -2287,12 +2287,12 @@ namespace castor3d
 		return result;
 	}
 
-	bool VisibilityResolvePass::areValidPassFlags( PassComponentCombine const & passFlags )const
+	bool VisibilityResolvePass::areValidPassFlags( PassComponentCombine const & passFlags )const noexcept
 	{
 		return m_nodesPass.areValidPassFlags( passFlags );
 	}
 
-	ShaderFlags VisibilityResolvePass::getShaderFlags()const
+	ShaderFlags VisibilityResolvePass::getShaderFlags()const noexcept
 	{
 		return ShaderFlag::eNormal
 			| ShaderFlag::eTangentSpace
@@ -2303,7 +2303,7 @@ namespace castor3d
 			| ShaderFlag::eColour;
 	}
 
-	void VisibilityResolvePass::countNodes( RenderInfo & info )const
+	void VisibilityResolvePass::countNodes( RenderInfo & info )const noexcept
 	{
 		if ( m_deferredLightingFilter != DeferredLightingFilter::eDeferredOnly )
 		{
@@ -2313,13 +2313,13 @@ namespace castor3d
 		info.drawCalls += m_drawCalls;
 	}
 
-	bool VisibilityResolvePass::isPassEnabled()const
+	bool VisibilityResolvePass::isPassEnabled()const noexcept
 	{
 		return m_nodesPass.isPassEnabled()
 			&& doIsEnabled();
 	}
 
-	ComponentModeFlags VisibilityResolvePass::getComponentsMask()
+	ComponentModeFlags VisibilityResolvePass::getComponentsMask()noexcept
 	{
 		return ( ComponentModeFlag::eColour
 			| ComponentModeFlag::eOpacity
@@ -2330,7 +2330,7 @@ namespace castor3d
 			| ComponentModeFlag::eOcclusion );
 	}
 
-	bool VisibilityResolvePass::useCompute()
+	bool VisibilityResolvePass::useCompute()noexcept
 	{
 		return visres::useCompute;
 	}
@@ -2372,7 +2372,7 @@ namespace castor3d
 		}
 	}
 
-	bool VisibilityResolvePass::doIsEnabled()const
+	bool VisibilityResolvePass::doIsEnabled()const noexcept
 	{
 		return !m_activePipelines.empty()
 			|| !m_activeBillboardPipelines.empty();

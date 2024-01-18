@@ -130,45 +130,45 @@ namespace castor
 	enum class ParameterType
 		: uint8_t
 	{
-		eText,
-		eName,
-		ePath,
-		eCheckedText,
-		eBitwiseOred32BitsCheckedText,
-		eBitwiseOred64BitsCheckedText,
-		eBool,
-		eInt8,
-		eInt16,
-		eInt32,
-		eInt64,
-		eUInt8,
-		eUInt16,
-		eUInt32,
-		eUInt64,
-		eFloat,
-		eDouble,
-		eLongDouble,
-		ePixelFormat,
-		ePoint2I,
-		ePoint3I,
-		ePoint4I,
-		ePoint2U,
-		ePoint3U,
-		ePoint4U,
-		ePoint2F,
-		ePoint3F,
-		ePoint4F,
-		ePoint2D,
-		ePoint3D,
-		ePoint4D,
-		eSize,
-		ePosition,
-		eRectangle,
-		eRgbColour,
-		eRgbaColour,
-		eHdrRgbColour,
-		eHdrRgbaColour,
-		CU_ScopedEnumBounds( eText )
+		eText = 0,
+		eName = 1,
+		ePath = 2,
+		eCheckedText = 3,
+		eBitwiseOred32BitsCheckedText = 4,
+		eBitwiseOred64BitsCheckedText = 5,
+		eBool = 6,
+		eInt8 = 7,
+		eInt16 = 8,
+		eInt32 = 9,
+		eInt64 = 10,
+		eUInt8 = 11,
+		eUInt16 = 12,
+		eUInt32 = 13,
+		eUInt64 = 14,
+		eFloat = 15,
+		eDouble = 16,
+		eLongDouble = 17,
+		ePixelFormat = 18,
+		ePoint2I = 19,
+		ePoint3I = 20,
+		ePoint4I = 21,
+		ePoint2U = 22,
+		ePoint3U = 23,
+		ePoint4U = 24,
+		ePoint2F = 25,
+		ePoint3F = 26,
+		ePoint4F = 27,
+		ePoint2D = 28,
+		ePoint3D = 29,
+		ePoint4D = 30,
+		eSize = 31,
+		ePosition = 32,
+		eRectangle = 33,
+		eRgbColour = 34,
+		eRgbaColour = 35,
+		eHdrRgbColour = 36,
+		eHdrRgbaColour = 37,
+		CU_ScopedEnumBounds( eText, eHdrRgbaColour )
 	};
 	/**@name STL typedefs */
 	//@{
@@ -379,7 +379,7 @@ namespace castor
 	*\brief
 	*	Les parsers triés par nom de token.
 	*/
-	using AttributeParsers = std::map< String, SectionAttributeParsers, std::less<> >;
+	using AttributeParsers = StringMap< SectionAttributeParsers >;
 	/**
 	 *\~english
 	 *\brief		User defined parsing context creator.

@@ -26,21 +26,9 @@ namespace castor3d
 		C3D_API static MeshGeneratorUPtr create();
 
 	private:
-		C3D_API virtual void doGenerate( Mesh & mesh
+		C3D_API void doGenerate( Mesh & mesh
 			, Parameters const & parameters )override;
-
-	private:
-		float m_height;
-		float m_width;
-		float m_depth;
-		friend std::ostream & operator <<( std::ostream & o
-			, Cube const & c );
 	};
-
-	inline std::ostream & operator <<( std::ostream & o, Cube const & c )
-	{
-		return o << "Cube(" << c.m_height << "," << c.m_width << "," << c.m_depth << ")";
-	}
 }
 
 #endif

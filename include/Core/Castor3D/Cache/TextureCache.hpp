@@ -41,9 +41,8 @@ namespace castor3d
 		 *	Construction / Destruction.
 		 */
 		/**@{*/
-		C3D_API explicit TextureUnitCache( Engine & engine
+		C3D_API TextureUnitCache( Engine & engine
 			, crg::ResourcesCache & resources );
-		C3D_API ~TextureUnitCache();
 		/**@}*/
 		/**
 		 *\~english

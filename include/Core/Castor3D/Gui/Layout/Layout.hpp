@@ -19,7 +19,7 @@ namespace castor3d
 	{
 	public:
 		//! Set the spacer size to this value to create a dynamic spacer.
-		static uint32_t constexpr Dynamic = ~( 0u );
+		static uint32_t constexpr Dynamic = ~0u;
 
 	public:
 		/** Constructor
@@ -59,8 +59,8 @@ namespace castor3d
 		{
 			enum Type
 			{
-				eControl,
-				eSpacer,
+				eControl = 0,
+				eSpacer = 1,
 			};
 
 			union Value

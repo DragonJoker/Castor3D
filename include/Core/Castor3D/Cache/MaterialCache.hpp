@@ -54,13 +54,6 @@ namespace castor
 		C3D_API explicit ResourceCacheT( castor3d::Engine & engine );
 		/**
 		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API ~ResourceCacheT()override = default;
-		/**
-		 *\~english
 		 *\brief		Intialises the default material.
 		 *\param[in]	device		The GPU device.
 		 *\~french
@@ -81,7 +74,7 @@ namespace castor
 		 *\~french
 		 *\brief		Supprime le matériau par défaut, vide la collection
 		 */
-		C3D_API void clear();
+		C3D_API void clear()noexcept;
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, CPU wise.
@@ -129,7 +122,7 @@ namespace castor
 		 *\brief			Désenregistre un shader buffer de données spécifiques.
 		 *\param[in,out]	name	Le nom du shader buffer.
 		 */
-		C3D_API void unregisterSpecificsBuffer( std::string const & name );
+		C3D_API void unregisterSpecificsBuffer( std::string const & name )noexcept;
 		/**
 		 *\~english
 		 *\brief			Addw the pass' specific data buffer into the given descriptor layout bindings array.
@@ -184,7 +177,7 @@ namespace castor
 		 *\param[in]		set		L'indice de descriptor set.
 		 */
 		C3D_API void declareSpecificsShaderBuffers( sdw::ShaderWriter & writer
-			, std::map< std::string, castor3d::shader::BufferBaseUPtr, std::less<> > & buffers
+			, castor::StringMap< castor3d::shader::BufferBaseUPtr > & buffers
 			, uint32_t & binding
 			, uint32_t set )const;
 		/**
@@ -219,11 +212,11 @@ namespace castor
 		C3D_API uint32_t getPassTypeIndex( castor3d::PassComponentCombineID passType
 			, castor3d::TextureCombineID textureFlags )const;
 		C3D_API bool registerPass( castor3d::Pass & pass );
-		C3D_API void unregisterPass( castor3d::Pass & pass );
+		C3D_API void unregisterPass( castor3d::Pass & pass )noexcept;
 		C3D_API bool registerUnit( castor3d::TextureUnit & unit );
-		C3D_API void unregisterUnit( castor3d::TextureUnit & unit );
+		C3D_API void unregisterUnit( castor3d::TextureUnit & unit )noexcept;
 		C3D_API bool registerTexture( castor3d::AnimatedTexture const & texture );
-		C3D_API void unregisterTexture( castor3d::AnimatedTexture const & texture );
+		C3D_API void unregisterTexture( castor3d::AnimatedTexture const & texture )noexcept;
 		C3D_API uint32_t getCurrentPassTypeCount()const;
 
 		castor3d::MaterialObs getDefaultMaterial()const
@@ -304,7 +297,7 @@ namespace castor
 			*/
 			/**@{*/
 			void declareShaderBuffers( sdw::ShaderWriter & writer
-				, std::map< std::string, castor3d::shader::BufferBaseUPtr, std::less<> > & buffers
+				, castor::StringMap< castor3d::shader::BufferBaseUPtr > & buffers
 				, uint32_t & binding
 				, uint32_t set )const;
 			/**@}*/

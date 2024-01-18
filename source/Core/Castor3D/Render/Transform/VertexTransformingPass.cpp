@@ -41,7 +41,7 @@ namespace castor3d
 				, GetPipelineStateCallback( [](){ return crg::getPipelineState( VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT ); } )
 				, [this]( crg::RecordContext & ctx, VkCommandBuffer cb, uint32_t i ){ doRecordInto( ctx, cb, i ); }
 				, crg::defaultV< crg::RunnablePass::GetPassIndexCallback >
-				, crg::RunnablePass::IsEnabledCallback( [this](){ return !m_passes.empty(); } )
+				, crg::RunnablePass::IsEnabledCallback( [this](){ return !m_transformPasses.empty(); } )
 				, IsComputePassCallback( [this](){ return doIsComputePass(); } ) }
 			, crg::ru::Config{ 1u, true } }
 		, m_device{ device }
@@ -58,11 +58,11 @@ namespace castor3d
 		auto & input = node.getSourceBufferOffsets();
 		auto & output = node.getFinalBufferOffsets();
 		auto hash = vtxtrsg::makeHash( input, output, node.instance );
-		auto ires = m_passes.emplace( hash, nullptr );
+		auto [it, res] = m_transformPasses.try_emplace( hash );
 
-		if ( ires.second )
+		if ( res )
 		{
-			ires.first->second = castor::makeUnique< VertexTransformPass >( m_device
+			it->second = castor::makeUnique< VertexTransformPass >( m_device
 				, node
 				, pipeline
 				, input
@@ -80,17 +80,17 @@ namespace castor3d
 		auto & input = node.getSourceBufferOffsets();
 		auto & output = node.getFinalBufferOffsets();
 		auto hash = vtxtrsg::makeHash( input, output, node.instance );
-		auto it = m_passes.find( hash );
-
-		if ( it != m_passes.end() )
+		
+		if ( auto it = m_transformPasses.find( hash );
+			it != m_transformPasses.end() )
 		{
-			m_passes.erase( it );
+			m_transformPasses.erase( it );
 		}
 	}
 
 	void VertexTransformingPass::doRecordInto( crg::RecordContext & context
 		, VkCommandBuffer commandBuffer
-		, uint32_t index )
+		, uint32_t index )const
 	{
 		context.memoryBarrier( commandBuffer
 			, m_modelsBuffer.getBuffer()
@@ -100,9 +100,9 @@ namespace castor3d
 			, { VK_ACCESS_SHADER_READ_BIT
 				, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT } );
 
-		for ( auto & passIt : m_passes )
+		for ( auto const & [_, pass] : m_transformPasses )
 		{
-			passIt.second->recordInto( context, commandBuffer, index );
+			pass->recordInto( context, commandBuffer, index );
 		}
 		
 		context.memoryBarrier( commandBuffer
@@ -114,7 +114,7 @@ namespace castor3d
 				, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT } );
 	}
 
-	bool VertexTransformingPass::doIsComputePass()const
+	bool VertexTransformingPass::doIsComputePass()const noexcept
 	{
 		return true;
 	}

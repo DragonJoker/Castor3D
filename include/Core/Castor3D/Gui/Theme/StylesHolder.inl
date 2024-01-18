@@ -6,7 +6,7 @@ namespace castor3d
 	template< typename StyleT >
 	StyleT * StylesHolder::createControlStyle( castor::String name
 		, Scene * scene
-		, std::map< castor::String, castor::UniquePtr< StyleT > > & controls )
+		, castor::StringMap< castor::UniquePtr< StyleT > > & controls )
 	{
 		auto fullName{ name };
 
@@ -45,7 +45,7 @@ namespace castor3d
 
 	template< typename StyleT >
 	StyleT * StylesHolder::getControlStyle( castor::String name
-		, std::map< castor::String, castor::UniquePtr< StyleT > > const & controls )const
+		, castor::StringMap< castor::UniquePtr< StyleT > > const & controls )const
 	{
 		auto it = controls.find( name );
 

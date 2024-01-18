@@ -69,7 +69,7 @@ namespace castor
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API ~ResourceCacheT()override;
+		C3D_API ~ResourceCacheT()noexcept override;
 		/**
 		 *\~english
 		 *\brief		Initialises the cache buffers.

@@ -36,7 +36,7 @@ namespace castor
 	{
 	}
 
-	void ResourceCacheT< Plugin, String, PluginCacheTraits >::clear()
+	void ResourceCacheT< Plugin, String, PluginCacheTraits >::clear()noexcept
 	{
 		{
 			auto lock( makeUniqueLock( m_mutexLoadedPluginTypes ) );
@@ -117,14 +117,14 @@ namespace castor
 		return result;
 	}
 
-	std::map< castor::String, PluginRPtr > ResourceCacheT< Plugin, String, PluginCacheTraits >::getPlugins( PluginType type )
+	castor::StringMap< PluginRPtr > ResourceCacheT< Plugin, String, PluginCacheTraits >::getPlugins( PluginType type )
 	{
 		auto lock( makeUniqueLock( m_mutexLoadedPlugins ) );
-		std::map< castor::String, PluginRPtr > result;
+		castor::StringMap< PluginRPtr > result;
 
-		for ( auto & it : m_loadedPlugins[size_t( type )] )
+		for ( auto & [name, plugin] : m_loadedPlugins[size_t( type )] )
 		{
-			result.emplace( it.first, it.second.get() );
+			result.emplace( name, plugin.get() );
 		}
 
 		return result;
@@ -168,12 +168,12 @@ namespace castor
 			}
 
 			DynamicLibraryUPtr library{ castor::makeUnique< DynamicLibrary >( pathFile ) };
-			Plugin::PGetTypeFunction pfnGetType;
+			Plugin::GetTypeFunction pfnGetType;
 
 			if ( !library->getFunction( pfnGetType, cacheplgn::getTypeFunctionABIName ) )
 			{
 				String strError = cuT( "Error encountered while loading file [" ) + pathFile.getFileName( true ) + cuT( "] getType plug-in function => Not a Castor3D plug-in" );
-				CASTOR_PLUGIN_EXCEPTION( string::stringCast< char >( strError ), true );
+				C3D_PluginException( string::stringCast< char >( strError ), true );
 			}
 
 			PluginType type{ PluginType::eCount };
@@ -214,7 +214,7 @@ namespace castor
 				CU_Failure( "Unknown plug-in type" );
 				{
 					String strError = cuT( "Error encountered while loading plug-in [" ) + pathFile.getFileName() + cuT( "] Unknown plug-in type" );
-					CASTOR_PLUGIN_EXCEPTION( string::stringCast< char >( strError ), true );
+					C3D_PluginException( string::stringCast< char >( strError ), true );
 				}
 			}
 
@@ -233,7 +233,7 @@ namespace castor
 			}
 			else
 			{
-				CASTOR_VERSION_EXCEPTION( toCheck, version );
+				C3D_VersionException( toCheck, version );
 			}
 		}
 		else

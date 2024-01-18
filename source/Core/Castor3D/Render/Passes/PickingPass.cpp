@@ -86,7 +86,7 @@ namespace castor3d
 		getRenderQueue().update( shadowMaps, nullptr, scissor );
 	}
 
-	bool PickingPass::doIsValidPass( Pass const & pass )const
+	bool PickingPass::doIsValidPass( Pass const & pass )const noexcept
 	{
 		if ( !hasAny( pass.getPassFlags()
 			, pass.getPassComponentsRegister().getPlugin< PickableComponent >().getComponentFlags() ) )

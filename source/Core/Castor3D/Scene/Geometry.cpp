@@ -263,9 +263,9 @@ namespace castor3d
 	void Geometry::setId( Pass const & pass
 		, Submesh const & submesh
 		, SubmeshRenderNode * node
-		, uint32_t id )
+		, uint32_t id )noexcept
 	{
-		auto itPass = m_ids.emplace( &pass, std::unordered_map< uint32_t, IdRenderNode >{} ).first;
+		auto itPass = m_ids.try_emplace( &pass ).first;
 		itPass->second[submesh.getId()] = { id, node };
 	}
 

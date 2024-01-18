@@ -163,14 +163,14 @@ namespace castor
 		{
 			//!\~english	The offset is set from the beginning of the file.
 			//!\~french		L'offset est défini par rapport au début du fichier.
-			eBeginning,
+			eBeginning = 0,
 			//!\~english	The offset is set from the current position.
 			//!\~french		L'offset est défini par rapport à la position actuelle.
-			eCurrent,
+			eCurrent = 1,
 			//!\~english	The offset is set from the end of the file.
 			//!\~french		L'offset est défini par rapport à la fin du fichier.
-			eEnd,
-			CU_ScopedEnumBounds( eBeginning )
+			eEnd = 2,
+			CU_ScopedEnumBounds( eBeginning, eEnd )
 		};
 		/*!
 		\~english
@@ -183,17 +183,17 @@ namespace castor
 		{
 			//!\~english	Auto select text encoding.
 			//!\~french		Encodage de texte en sélection automatique.
-			eAuto,
+			eAuto = 0,
 			//!\~english	ASCII text encoding.
 			//!\~french		Encodage de texte en ASCII.
-			eASCII,
+			eASCII = 1,
 			//!\~english	UTF8 text encoding.
 			//!\~french		Encodage de texte en UTF8.
-			eUTF8,
+			eUTF8 = 2,
 			//!\~english	UTF16 text encoding.
 			//!\~french		Encodage de texte en UTF16.
-			eUTF16,
-			CU_ScopedEnumBounds( eAuto )
+			eUTF16 = 3,
+			CU_ScopedEnumBounds( eAuto, eUTF16 )
 		};
 
 	protected:

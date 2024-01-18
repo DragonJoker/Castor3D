@@ -12,12 +12,8 @@ namespace castor3d
 		: public Plugin
 	{
 	public:
-		typedef std::pair< castor::String, castor::String > Extension;
+		using Extension = std::pair< castor::String, castor::String >;
 		CU_DeclareVector( Extension, Extension );
-
-	private:
-		friend class Plugin;
-		friend class Engine;
 
 	public:
 		/**
@@ -38,7 +34,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API ~ImporterPlugin()override;
+		C3D_API ~ImporterPlugin()noexcept override;
 		/**
 		 *\~english
 		 *\brief		Retrieves the supported file extensions array

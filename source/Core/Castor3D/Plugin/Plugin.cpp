@@ -21,43 +21,36 @@ namespace castor3d
 
 	Plugin::Plugin( PluginType type, castor::DynamicLibraryUPtr library, Engine & engine )
 		: OwnedBy< Engine >( engine )
-		, m_library( std::move( library ) )
-		, m_pfnGetRequiredVersion( nullptr )
-		, m_pfnGetName( nullptr )
-		, m_type( type )
+		, m_library{ std::move( library ) }
+		, m_type{ type }
 	{
 		if ( !m_library->getFunction( m_pfnGetName, plugin::GetNameFunctionABIName ) )
 		{
 			castor::String strError = cuT( "Error encountered while loading dll [" ) + m_library->getPath().getFileName() + cuT( "] plug-in getName function : " );
 			strError += castor::system::getLastErrorText();
-			CASTOR_PLUGIN_EXCEPTION( castor::string::stringCast< char >( strError ), true );
+			C3D_PluginException( castor::string::stringCast< char >( strError ), true );
 		}
 
 		if ( !m_library->getFunction( m_pfnGetRequiredVersion, plugin::GetRequiredVersionFunctionABIName ) )
 		{
 			castor::String strError = cuT( "Error encountered while loading dll [" ) + m_library->getPath().getFileName() + cuT( "] plug-in getRequiredVersion function : " );
 			strError += castor::system::getLastErrorText();
-			CASTOR_PLUGIN_EXCEPTION( castor::string::stringCast< char >( strError ), true );
+			C3D_PluginException( castor::string::stringCast< char >( strError ), true );
 		}
 
 		if ( !m_library->getFunction( m_pfnOnLoad, plugin::GetOnLoadFunctionABIName ) )
 		{
 			castor::String strError = cuT( "Error encountered while loading dll [" ) + m_library->getPath().getFileName() + cuT( "] plug-in OnLoad function : " );
 			strError += castor::system::getLastErrorText();
-			CASTOR_PLUGIN_EXCEPTION( castor::string::stringCast< char >( strError ), true );
+			C3D_PluginException( castor::string::stringCast< char >( strError ), true );
 		}
 
 		if ( !m_library->getFunction( m_pfnOnUnload, plugin::GetOnUnloadFunctionABIName ) )
 		{
 			castor::String strError = cuT( "Error encountered while loading dll [" ) + m_library->getPath().getFileName() + cuT( "] plug-in OnUnload function : " );
 			strError += castor::system::getLastErrorText();
-			CASTOR_PLUGIN_EXCEPTION( castor::string::stringCast< char >( strError ), true );
+			C3D_PluginException( castor::string::stringCast< char >( strError ), true );
 		}
-
-	}
-
-	Plugin::~Plugin()
-	{
 	}
 
 	void Plugin::getRequiredVersion( Version & version )const
@@ -98,7 +91,7 @@ namespace castor3d
 		}
 	}
 
-	void Plugin::unload()
+	void Plugin::unload()const noexcept
 	{
 		if ( m_pfnOnUnload )
 		{

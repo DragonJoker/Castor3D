@@ -29,7 +29,6 @@ namespace castor3d
 			ashes::FrameBufferPtr frameBuffer;
 		};
 		std::array< FrameBuffer, 6u > m_frameBuffers;
-		RenderDevice const & m_device;
 		ashes::CommandBufferPtr m_commandBuffer;
 		ashes::ImageView const & m_view;
 		ashes::RenderPassPtr m_renderPass;

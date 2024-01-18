@@ -62,7 +62,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API ~ShadowMapPassPoint()override;
+		C3D_API ~ShadowMapPassPoint()noexcept override;
 		/**
 		 *\copydoc		castor3d::ShadowMapPass::update
 		 */
@@ -70,7 +70,7 @@ namespace castor3d
 
 		C3D_API void updateFrustum( castor::Matrix4x4f const & viewMatrix );
 
-		auto & getProjection()const
+		auto & getProjection()const noexcept
 		{
 			return m_projection;
 		}

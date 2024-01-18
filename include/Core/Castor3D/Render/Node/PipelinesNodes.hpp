@@ -10,13 +10,24 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
-#define C3D_EnsureNodesCounts 1
-
 namespace castor3d
 {
+	static bool constexpr C3D_EnsureNodesCounts = true;
+
 	template< typename NodeT >
 	struct RenderedNodeT
 	{
+		RenderedNodeT() = default;
+
+		RenderedNodeT( NodeT const * node
+			, bool visible
+			, NodeCommandT< NodeT > command )
+			: node{ node }
+			, visible{ visible }
+			, command{ std::move( command ) }
+		{
+		}
+
 		NodeT const * node{};
 		bool visible{};
 		NodeCommandT< NodeT > command{};
@@ -28,25 +39,21 @@ namespace castor3d
 		using RenderedNode = RenderedNodeT< NodeT >;
 		using NodeArray = NodeArrayT< NodeT, RenderedNodeT >;
 
-		static uint64_t constexpr maxNodes = 1024;
+		static uint64_t constexpr maxNodes = 1024ULL;
 		static uint64_t constexpr maxCount = maxNodes;
-
-		explicit NodesViewT()
-			: m_nodes{ maxCount }
-			, m_count{}
-		{
-		}
 
 		RenderedNode * emplace( RenderedNode node )
 		{
 			CU_Assert( size() < maxNodes
 				, "Too many nodes for given buffer and given pipeline" );
-#if C3D_EnsureNodesCounts
-			if ( size() == maxNodes )
+
+			if constexpr ( C3D_EnsureNodesCounts )
 			{
-				CU_Exception( "Too many nodes for given buffer and given pipeline" );
+				if ( size() == maxNodes )
+				{
+					CU_Exception( "Too many nodes for given buffer and given pipeline" );
+				}
 			}
-#endif
 
 			m_nodes[m_count] = std::move( node );
 			return &m_nodes[m_count++];
@@ -98,8 +105,8 @@ namespace castor3d
 		}
 
 	private:
-		NodeArray m_nodes;
-		size_t m_count;
+		NodeArray m_nodes{ maxCount };
+		size_t m_count{};
 	};
 
 	template< typename NodeT >
@@ -108,19 +115,19 @@ namespace castor3d
 		using RenderedNode = RenderedNodeT< NodeT >;
 		using NodesView = NodesViewT< NodeT >;
 
-		static uint64_t constexpr maxBuffers = 32ull;
+		static uint64_t constexpr maxBuffers = 32ULL;
 		static uint64_t constexpr maxCount = NodesView::maxCount * maxBuffers;
 
 		struct BufferNodes
 		{
+			explicit BufferNodes( ashes::BufferBase const * buffer = {} )
+				: buffer{ buffer }
+			{
+			}
+
 			ashes::BufferBase const * buffer{};
 			NodesView nodes{};
 		};
-
-		explicit BuffersNodesViewT()
-			: m_buffers{}
-		{
-		}
 
 		auto emplace( ashes::BufferBase const & buffer )
 		{
@@ -135,14 +142,16 @@ namespace castor3d
 			{
 				CU_Assert( size() < maxBuffers
 					, "Too many buffers for given pipeline" );
-#if C3D_EnsureNodesCounts
-				if ( size() == maxBuffers )
-				{
-					CU_Exception( "Too many buffers for given pipeline" );
-				}
-#endif
 
-				m_buffers.push_back( BufferNodes{ &buffer, NodesView{} } );
+				if constexpr ( C3D_EnsureNodesCounts )
+				{
+					if ( size() == maxBuffers )
+					{
+						CU_Exception( "Too many buffers for given pipeline" );
+					}
+				}
+
+				m_buffers.emplace_back( &buffer );
 				it = std::next( m_buffers.begin(), ptrdiff_t( m_buffers.size() ) - 1 );
 			}
 
@@ -193,7 +202,7 @@ namespace castor3d
 		}
 
 	private:
-		std::vector< BufferNodes > m_buffers;
+		std::vector< BufferNodes > m_buffers{};
 	};
 
 	template< typename NodeT >
@@ -205,11 +214,18 @@ namespace castor3d
 		using RenderedNode = RenderedNodeT< NodeT >;
 		using NodesView = BuffersNodesViewT< NodeT >;
 
-		static uint64_t constexpr maxPipelines = 128ull;
+		static uint64_t constexpr maxPipelines = 128ULL;
 		static uint64_t constexpr maxCount = NodesView::maxCount * maxPipelines;
 
 		struct PipelineNodes
 		{
+			PipelineNodes( PipelineAndID pipeline
+				, bool isFrontCulled )
+				: pipeline{ std::move( pipeline ) }
+				, isFrontCulled{ isFrontCulled }
+			{
+			}
+
 			PipelineAndID pipeline{};
 			bool isFrontCulled{};
 			NodesView nodes{};
@@ -225,17 +241,16 @@ namespace castor3d
 			{
 				CU_Assert( pipeline.id < maxPipelines
 					, "Too many pipelines" );
-#if C3D_EnsureNodesCounts
-				if ( pipeline.id >= maxPipelines / 2u )
-				{
-					CU_Exception( "Too many pipelines" );
-				}
-#endif
 
-				it = m_pipelines.emplace( id
-					, PipelineNodes{ pipeline
-						, isFrontCulled
-						, NodesView{} } ).first;
+				if constexpr ( C3D_EnsureNodesCounts )
+				{
+					if ( pipeline.id >= maxPipelines / 2u )
+					{
+						CU_Exception( "Too many pipelines" );
+					}
+				}
+
+				it = m_pipelines.try_emplace( id, pipeline, isFrontCulled ).first;
 			}
 
 			return &it->second;

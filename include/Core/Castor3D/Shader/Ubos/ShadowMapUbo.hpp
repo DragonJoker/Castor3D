@@ -55,9 +55,9 @@ namespace castor3d
 		C3D_API explicit ShadowMapUbo( RenderDevice const & device );
 		C3D_API ShadowMapUbo( ShadowMapUbo const & rhs ) = delete;
 		C3D_API ShadowMapUbo & operator=( ShadowMapUbo const & rhs ) = delete;
-		C3D_API ShadowMapUbo( ShadowMapUbo && rhs ) = default;
-		C3D_API ShadowMapUbo & operator=( ShadowMapUbo && rhs ) = delete;
-		C3D_API ~ShadowMapUbo();
+		C3D_API ShadowMapUbo( ShadowMapUbo && rhs )noexcept = default;
+		C3D_API ShadowMapUbo & operator=( ShadowMapUbo && rhs )noexcept = delete;
+		C3D_API ~ShadowMapUbo()noexcept;
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.

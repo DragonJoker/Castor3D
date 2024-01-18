@@ -14,7 +14,7 @@ namespace castor3d
 		C3D_API ParticleUpdater( ParticleSystem const & system
 			, ParticleDeclaration const & inputs
 			, ParticleEmitterArray & emitters );
-		C3D_API virtual ~ParticleUpdater() = default;
+		C3D_API virtual ~ParticleUpdater()noexcept = default;
 		/**
 		 *\~english
 		 *\brief		Updates a particle.

@@ -133,7 +133,7 @@ namespace castor3d
 			, rq::Config config );
 
 	public:
-		C3D_API virtual ~RenderQuad();
+		C3D_API virtual ~RenderQuad()noexcept;
 		C3D_API explicit RenderQuad( RenderQuad && rhs )noexcept;
 		/**
 		*\~english
@@ -143,7 +143,7 @@ namespace castor3d
 		*\brief
 		*	Nettoie les objets GPU.
 		*/
-		C3D_API void cleanup();
+		C3D_API void cleanup()noexcept;
 		/**
 		*\~english
 		*\brief
@@ -296,17 +296,17 @@ namespace castor3d
 			registerPass( commandBuffer, 0u );
 		}
 
-		RenderSystem * getRenderSystem()const
+		RenderSystem * getRenderSystem()const noexcept
 		{
 			return &m_renderSystem;
 		}
 
-		RenderDevice const & getDevice()const
+		RenderDevice const & getDevice()const noexcept
 		{
 			return m_device;
 		}
 
-		Sampler const & getSampler()const
+		Sampler const & getSampler()const noexcept
 		{
 			return *m_sampler;
 		}

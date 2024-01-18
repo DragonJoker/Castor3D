@@ -57,13 +57,6 @@ namespace castor3d
 			, SceneNodeRPtr rootNode
 			, SceneNodeRPtr rootCameraNode
 			, SceneNodeRPtr rootObjectNode );
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API ~ObjectCacheT()override = default;
 	};
 }
 

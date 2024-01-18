@@ -13,7 +13,7 @@ namespace castor3d
 	{
 	}
 
-	GpuFrameEvent::GpuFrameEvent( GpuFrameEvent && rhs )
+	GpuFrameEvent::GpuFrameEvent( GpuFrameEvent && rhs )noexcept
 		: m_type{ rhs.m_type }
 		, m_skip{ rhs.m_skip.load() }
 #if !defined( NDEBUG )
@@ -34,7 +34,7 @@ namespace castor3d
 		return *this;
 	}
 
-	GpuFrameEvent & GpuFrameEvent::operator=( GpuFrameEvent && rhs )
+	GpuFrameEvent & GpuFrameEvent::operator=( GpuFrameEvent && rhs )noexcept
 	{
 		m_type = rhs.m_type;
 		m_skip = rhs.m_skip.load();

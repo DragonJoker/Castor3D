@@ -20,9 +20,10 @@ namespace castor3d
 		using InstanceType = BillboardBase;
 
 		C3D_API BillboardRenderNode( BillboardRenderNode const & ) = delete;
-		C3D_API BillboardRenderNode( BillboardRenderNode && ) = default;
+		C3D_API BillboardRenderNode( BillboardRenderNode && )noexcept = default;
 		C3D_API BillboardRenderNode & operator=( BillboardRenderNode const & ) = delete;
-		C3D_API BillboardRenderNode & operator=( BillboardRenderNode && ) = delete;
+		C3D_API BillboardRenderNode & operator=( BillboardRenderNode && )noexcept = delete;
+		C3D_API ~BillboardRenderNode()noexcept = default;
 
 		C3D_API BillboardRenderNode( Pass & pass
 			, DataType & data

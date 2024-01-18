@@ -51,7 +51,7 @@ namespace castor3d
 			, VoxelizerUbo & voxelizerUbo
 			, VctConfig const & voxelConfig
 			, crg::FramePassArray previousPasses );
-		C3D_API ~Voxelizer();
+		C3D_API ~Voxelizer()noexcept;
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, CPU wise.
@@ -90,17 +90,17 @@ namespace castor3d
 		/**@{*/
 		static uint32_t countInitialisationSteps()noexcept;
 
-		Texture const & getFirstBounce()const
+		Texture const & getFirstBounce()const noexcept
 		{
 			return m_firstBounce;
 		}
 
-		Texture const & getSecondaryBounce()const
+		Texture const & getSecondaryBounce()const noexcept
 		{
 			return m_secondaryBounce;
 		}
 
-		crg::FrameGraph const & getGraph()const
+		crg::FrameGraph const & getGraph()const noexcept
 		{
 			return m_graph;
 		}

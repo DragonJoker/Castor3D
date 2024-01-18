@@ -27,10 +27,10 @@ namespace castor3d
 	enum class OverlayType
 		: uint8_t
 	{
-		ePanel,
-		eBorderPanel,
-		eText,
-		CU_ScopedEnumBounds( ePanel )
+		ePanel = 0,
+		eBorderPanel = 1,
+		eText = 2,
+		CU_ScopedEnumBounds( ePanel, eText )
 	};
 	C3D_API castor::String getName( OverlayType value );
 	/**
@@ -45,14 +45,14 @@ namespace castor3d
 	{
 		//!\~english	The text is cut.
 		//!\~french		Le texte qui dépasse est découpé.
-		eNone,
+		eNone = 0,
 		//!\~english	The text jumps to next line.
 		//!\~french		Le texte passe à la ligne suivante.
-		eBreak,
+		eBreak = 1,
 		//!\~english	The text jumps to next line without cutting words.
 		//!\~french		Le texte passe à la ligne suivante, sans découper les mots.
-		eBreakWords,
-		CU_ScopedEnumBounds( eNone )
+		eBreakWords = 2,
+		CU_ScopedEnumBounds( eNone, eBreakWords )
 	};
 	C3D_API castor::String getName( TextWrappingMode value );
 	/**
@@ -67,11 +67,11 @@ namespace castor3d
 	{
 		//!\~english	The texture is repeated on each character of the text.
 		//!\~french		La texture est répétée sut chaque caractère du texte.
-		eLetter,
+		eLetter = 0,
 		//!\~english	The texture is applied on the whole text.
 		//!\~french		La texture est appliquée sur tout le texte.
-		eText,
-		CU_ScopedEnumBounds( eLetter )
+		eText = 1,
+		CU_ScopedEnumBounds( eLetter, eText )
 	};
 	C3D_API castor::String getName( TextTexturingMode value );
 	/**
@@ -86,14 +86,14 @@ namespace castor3d
 	{
 		//!\~english	The height of each line is its own height.
 		//!\~french		La hauteur d'une ligne est sa propre hauteur.
-		eOwnHeight,
+		eOwnHeight = 0,
 		//!\~english	The height of the lines is the maximum height between them.
 		//!\~french		La hauteur des lignes est la plus grande hauteur parmi elles.
-		eMaxLineHeight,
+		eMaxLineHeight = 1,
 		//!\~english	The height of the lines is the maximum height from the font's characters.
 		//!\~french		La hauteur des lignes est la plus grande hauteur des caractères de la police.
-		eMaxFontHeight,
-		CU_ScopedEnumBounds( eOwnHeight )
+		eMaxFontHeight = 2,
+		CU_ScopedEnumBounds( eOwnHeight, eMaxFontHeight )
 	};
 	C3D_API castor::String getName( TextLineSpacingMode value );
 	/**
@@ -108,14 +108,14 @@ namespace castor3d
 	{
 		//!\~english	Aligned on the left.
 		//!\~french		Aligné à gauche.
-		eLeft,
+		eLeft = 0,
 		//!\~english	Centered horizontally.
 		//!\~french		Centré, horizontalement.
-		eCenter,
+		eCenter = 1,
 		//!\~english	Aligned on the right.
 		//!\~french		Aligné à droite.
-		eRight,
-		CU_ScopedEnumBounds( eLeft )
+		eRight = 2,
+		CU_ScopedEnumBounds( eLeft, eRight )
 	};
 	C3D_API castor::String getName( HAlign value );
 	/**
@@ -130,14 +130,14 @@ namespace castor3d
 	{
 		//!\~english	Aligned on the top.
 		//!\~french		Aligné en haut.
-		eTop,
+		eTop = 0,
 		//!\~english	Centered vertically.
 		//!\~french		Centré, verticalement.
-		eCenter,
+		eCenter = 1,
 		//!\~english	Aligned on the bottom.
 		//!\~french		Aligné en bas.
-		eBottom,
-		CU_ScopedEnumBounds( eTop )
+		eBottom = 2,
+		CU_ScopedEnumBounds( eTop, eBottom )
 	};
 	C3D_API castor::String getName( VAlign value );
 	/**
@@ -152,14 +152,14 @@ namespace castor3d
 	{
 		//!\~english	The border is outside the overlay.
 		//!\~french		La bordure est à l'intérieur de l'incrustation.
-		eInternal,
+		eInternal = 0,
 		//!\~english	The border is middle outside and middle inside the overlay.
 		//!\~french		La bordure est à moitié à l'intérieur, à moitié à l'extérieur de l'incrustation.
-		eMiddle,
+		eMiddle = 1,
 		//!\~english	The border is outside the overlay.
 		//!\~french		La bordure est à l'extérieur de l'incrustation.
-		eExternal,
-		CU_ScopedEnumBounds( eInternal )
+		eExternal = 2,
+		CU_ScopedEnumBounds( eInternal, eExternal )
 	};
 	C3D_API castor::String getName( BorderPosition value );
 	/**
@@ -326,7 +326,7 @@ namespace castor3d
 		//!\~french
 		uint32_t pad{};
 
-		auto chars( std::array< TextChar, MaxCharsPerOverlay > & cont )
+		auto chars( std::array< TextChar, MaxCharsPerOverlay > & cont )const
 		{
 			return castor::makeArrayView( cont.begin() + charBegin, charEnd - charBegin );
 		}
@@ -345,7 +345,9 @@ namespace castor3d
 
 		auto & getNext()
 		{
-			return elems[count++];
+			auto v = count;
+			++count;
+			return elems[v];
 		}
 
 		auto words()const
@@ -391,12 +393,12 @@ namespace castor3d
 		//!\~french
 		uint32_t pad{};
 
-		auto words( OverlayWords & cont )
+		auto words( OverlayWords & cont )const
 		{
 			return castor::makeArrayView( cont.elems.begin() + wordBegin, wordEnd - wordBegin );
 		}
 
-		auto chars( std::array< TextChar, MaxCharsPerOverlay > & cont )
+		auto chars( std::array< TextChar, MaxCharsPerOverlay > & cont )const
 		{
 			return castor::makeArrayView( cont.begin() + charBegin, charEnd - charBegin );
 		}
@@ -416,7 +418,9 @@ namespace castor3d
 
 		auto & getNext()
 		{
-			return elems[count++];
+			auto v = count;
+			++count;
+			return elems[v];
 		}
 
 		auto lines()const

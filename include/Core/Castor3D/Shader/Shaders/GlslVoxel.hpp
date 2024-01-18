@@ -9,34 +9,31 @@ See LICENSE file in root folder
 #include <ShaderWriter/BaseTypes/UInt.hpp>
 #include <ShaderWriter/CompositeTypes/StructInstance.hpp>
 
-namespace castor3d
+namespace castor3d::shader
 {
-	namespace shader
+	struct Voxel
+		: public sdw::StructInstance
 	{
-		struct Voxel
-			: public sdw::StructInstance
-		{
-			C3D_API Voxel( sdw::ShaderWriter & writer
-				, ast::expr::ExprPtr expr
-				, bool enabled );
-			SDW_DeclStructInstance( C3D_API, Voxel );
+		C3D_API Voxel( sdw::ShaderWriter & writer
+			, ast::expr::ExprPtr expr
+			, bool enabled );
+		SDW_DeclStructInstance( C3D_API, Voxel );
 
-			C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
-			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
+		C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
+		C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
 
-			// Raw values
-			sdw::UInt colorMask;
-			sdw::UInt normalMask;
+		// Raw values
+		sdw::UInt colorMask;
+		sdw::UInt normalMask;
 
-			static uint32_t constexpr DataSize = 8u;
+		static uint32_t constexpr DataSize = 8u;
 
-		private:
-			using sdw::StructInstance::getMember;
-			using sdw::StructInstance::getMemberArray;
-		};
+	private:
+		using sdw::StructInstance::getMember;
+		using sdw::StructInstance::getMemberArray;
+	};
 
-		Writer_Parameter( Voxel );
-	}
+	Writer_Parameter( Voxel );
 }
 
 #endif

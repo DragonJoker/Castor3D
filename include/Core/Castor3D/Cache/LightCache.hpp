@@ -58,13 +58,6 @@ namespace castor3d
 			, SceneNodeRPtr rootObjectNode );
 		/**
 		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API ~ObjectCacheT()override = default;
-		/**
-		 *\~english
 		 *\brief		Intialises GPU buffer.
 		 *\param[in]	device	The GPU device.
 		 *\~french

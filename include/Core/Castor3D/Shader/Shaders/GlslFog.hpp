@@ -10,29 +10,26 @@ See LICENSE file in root folder
 
 #include <ShaderWriter/Intrinsics/Intrinsics.hpp>
 
-namespace castor3d
+namespace castor3d::shader
 {
-	namespace shader
+	class Fog
 	{
-		class Fog
-		{
-		public:
-			C3D_API explicit Fog( sdw::ShaderWriter & writer );
-			C3D_API sdw::Vec4 apply( sdw::Vec4 const & bgColour
-				, sdw::Vec4 const & colour
-				, sdw::Vec3 const & wsPosition
-				, sdw::Vec3 const & wsCamera
-				, SceneData const & sceneData );
+	public:
+		C3D_API explicit Fog( sdw::ShaderWriter & writer );
+		C3D_API sdw::Vec4 apply( sdw::Vec4 const & bgColour
+			, sdw::Vec4 const & colour
+			, sdw::Vec3 const & wsPosition
+			, sdw::Vec3 const & wsCamera
+			, SceneData const & sceneData );
 
-		protected:
-			sdw::Function< sdw::Vec4
-				, sdw::InVec4
-				, sdw::InVec4
-				, sdw::InVec3
-				, sdw::InVec3
-				, InSceneData > m_fog;
-		};
-	}
+	protected:
+		sdw::Function< sdw::Vec4
+			, sdw::InVec4
+			, sdw::InVec4
+			, sdw::InVec3
+			, sdw::InVec3
+			, InSceneData > m_fog;
+	};
 }
 
 #endif

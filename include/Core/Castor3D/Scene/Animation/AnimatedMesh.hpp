@@ -15,18 +15,11 @@ namespace castor3d
 		: public AnimatedObject
 	{
 	public:
-		/**
-		 *\~english
-		 *name Copy / Move.
-		 *\~french
-		 *name Copie / Déplacement.
-		 **/
-		/**@{*/
-		C3D_API AnimatedMesh( AnimatedMesh && rhs ) = default;
-		C3D_API AnimatedMesh & operator=( AnimatedMesh && rhs ) = delete;
+		C3D_API AnimatedMesh( AnimatedMesh && rhs )noexcept = default;
+		C3D_API AnimatedMesh & operator=( AnimatedMesh && rhs )noexcept = delete;
 		C3D_API AnimatedMesh( AnimatedMesh const & rhs ) = delete;
 		C3D_API AnimatedMesh & operator=( AnimatedMesh const & rhs ) = delete;
-		/**@}*/
+		C3D_API ~AnimatedMesh()noexcept override = default;
 		/**
 		 *\~english
 		 *\brief		Constructor

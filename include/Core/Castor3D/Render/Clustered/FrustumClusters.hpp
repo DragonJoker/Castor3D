@@ -21,9 +21,11 @@ namespace castor3d
 	{
 	public:
 		C3D_API FrustumClusters( FrustumClusters const & ) = delete;
-		C3D_API FrustumClusters( FrustumClusters && ) = delete;
+		C3D_API FrustumClusters( FrustumClusters && )noexcept = delete;
 		C3D_API FrustumClusters & operator=( FrustumClusters const & ) = delete;
-		C3D_API FrustumClusters & operator=( FrustumClusters && ) = delete;
+		C3D_API FrustumClusters & operator=( FrustumClusters && )noexcept = delete;
+		C3D_API ~FrustumClusters()noexcept = default;
+
 		C3D_API FrustumClusters( RenderDevice const & device
 			, Camera const & camera
 			, ClustersConfig const & config );

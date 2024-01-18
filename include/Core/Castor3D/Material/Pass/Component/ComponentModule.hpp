@@ -49,18 +49,18 @@ namespace castor3d
 	//@{
 	enum class ComponentMode: uint16_t
 	{
-		eNone,
-		eOpacity,
-		eAlphaBlending,
-		eNormals,
-		eGeometry,
-		eColour,
-		eDiffuseLighting,
-		eSpecularLighting,
-		eSpecifics,
-		eDerivTex,
-		eOcclusion,
-		CU_ScopedEnumBounds( eNone ),
+		eNone = 0,
+		eOpacity = 1,
+		eAlphaBlending = 2,
+		eNormals = 3,
+		eGeometry = 4,
+		eColour = 5,
+		eDiffuseLighting = 6,
+		eSpecularLighting = 7,
+		eSpecifics = 8,
+		eDerivTex = 9,
+		eOcclusion = 10,
+		CU_ScopedEnumBounds( eNone, eOcclusion ),
 	};
 	enum class ComponentModeFlag : uint16_t
 	{
@@ -642,7 +642,7 @@ namespace castor3d
 
 	using ComponentConfigFiller = std::function< void( TextureContext & context ) >;
 	using ChannelFiller = std::pair< PassComponentTextureFlag, ComponentConfigFiller >;
-	using ChannelFillers = std::map< castor::String, ChannelFiller >;
+	using ChannelFillers = castor::StringMap< ChannelFiller >;
 
 	using UpdateComponent = std::function< void( PassComponentRegister const & passComponents
 		, TextureCombine const & combine

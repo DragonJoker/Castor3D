@@ -20,11 +20,11 @@ namespace castor
 	*/
 	enum class MemoryDataType
 	{
-		eFixed,
-		eMarked,
-		eFixedGrowing,
-		eFixedGrowingMarked,
-		CU_ScopedEnumBounds( eFixed )
+		eFixed = 0,
+		eMarked = 1,
+		eFixedGrowing = 2,
+		eFixedGrowingMarked = 3,
+		CU_ScopedEnumBounds( eFixed, eFixedGrowingMarked )
 	};
 	/**
 	\~english
@@ -34,16 +34,16 @@ namespace castor
 	*/
 	enum class PoolErrorType
 	{
-		eCommonOutOfMemory,
-		eCommonPoolIsFull,
-		eCommonMemoryLeaksDetected,
-		eCommonNotFromRange,
-		eMarkedLeakAddress,
-		eMarkedDoubleDelete,
-		eMarkedNotFromPool,
-		eGrowingNotFromRanges,
-		eSTLAllocatorUnique,
-		CU_ScopedEnumBounds( eCommonOutOfMemory )
+		eCommonOutOfMemory = 0,
+		eCommonPoolIsFull = 1,
+		eCommonMemoryLeaksDetected = 2,
+		eCommonNotFromRange = 3,
+		eMarkedLeakAddress = 4,
+		eMarkedDoubleDelete = 5,
+		eMarkedNotFromPool = 6,
+		eGrowingNotFromRanges = 7,
+		eSTLAllocatorUnique = 8,
+		CU_ScopedEnumBounds( eCommonOutOfMemory, eSTLAllocatorUnique )
 	};
 	/**
 	\~english

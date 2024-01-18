@@ -234,7 +234,7 @@ namespace castor3d
 		}
 
 		template< typename ComponentT >
-		PassComponentID registerComponent( CreatePassComponentPlugin createPlugin = &ComponentT::createPlugin )
+		PassComponentID registerComponent( CreatePassComponentPlugin const & createPlugin = &ComponentT::createPlugin )
 		{
 			return registerComponent( ComponentT::TypeName
 				, createPlugin( *this ) );

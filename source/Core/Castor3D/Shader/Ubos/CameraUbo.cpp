@@ -191,7 +191,7 @@ namespace castor3d
 	{
 	}
 
-	CameraUbo::~CameraUbo()
+	CameraUbo::~CameraUbo()noexcept
 	{
 		m_device.uboPool->putBuffer( m_ubo );
 	}

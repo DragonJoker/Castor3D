@@ -231,27 +231,27 @@ namespace castor3d
 		template< typename StyleT >
 		StyleT * createControlStyle( castor::String name
 			, Scene * scene
-			, std::map< castor::String, castor::UniquePtr< StyleT > > & controls );
+			, castor::StringMap< castor::UniquePtr< StyleT > > & controls );
 
 		template< typename StyleT >
 		StyleT * getControlStyle( castor::String name
-			, std::map< castor::String, castor::UniquePtr< StyleT > > const & controls )const;
+			, castor::StringMap< castor::UniquePtr< StyleT > > const & controls )const;
 
 	private:
 		Engine & m_engine;
 		castor::String m_holderName;
 		castor::FontResPtr m_defaultFont;
-		std::map< castor::String, ButtonStyleUPtr > m_buttonStyles;
-		std::map< castor::String, ComboBoxStyleUPtr > m_comboBoxStyles;
-		std::map< castor::String, EditStyleUPtr > m_editStyles;
-		std::map< castor::String, ExpandablePanelStyleUPtr > m_expandablePanelStyles;
-		std::map< castor::String, FrameStyleUPtr > m_frameStyles;
-		std::map< castor::String, ListBoxStyleUPtr > m_listBoxStyles;
-		std::map< castor::String, PanelStyleUPtr > m_panelStyles;
-		std::map< castor::String, ProgressStyleUPtr > m_progressStyles;
-		std::map< castor::String, ScrollBarStyleUPtr > m_scrollBarStyles;
-		std::map< castor::String, SliderStyleUPtr > m_sliderStyles;
-		std::map< castor::String, StaticStyleUPtr > m_staticStyles;
+		castor::StringMap< ButtonStyleUPtr > m_buttonStyles;
+		castor::StringMap< ComboBoxStyleUPtr > m_comboBoxStyles;
+		castor::StringMap< EditStyleUPtr > m_editStyles;
+		castor::StringMap< ExpandablePanelStyleUPtr > m_expandablePanelStyles;
+		castor::StringMap< FrameStyleUPtr > m_frameStyles;
+		castor::StringMap< ListBoxStyleUPtr > m_listBoxStyles;
+		castor::StringMap< PanelStyleUPtr > m_panelStyles;
+		castor::StringMap< ProgressStyleUPtr > m_progressStyles;
+		castor::StringMap< ScrollBarStyleUPtr > m_scrollBarStyles;
+		castor::StringMap< SliderStyleUPtr > m_sliderStyles;
+		castor::StringMap< StaticStyleUPtr > m_staticStyles;
 	};
 }
 

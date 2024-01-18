@@ -25,7 +25,7 @@ namespace castor3d
 		UploadData( UploadData const & ) = delete;
 		UploadData( UploadData && )noexcept = delete;
 		UploadData & operator=( UploadData const & ) = delete;
-		UploadData & operator=( UploadData && ) = delete;
+		UploadData & operator=( UploadData && )noexcept = delete;
 		C3D_API virtual ~UploadData()noexcept = default;
 
 		C3D_API void begin();
@@ -71,7 +71,7 @@ namespace castor3d
 			pushUpload( srcData.data()
 				, srcData.size()
 				, dstImage
-				, dstLayout
+				, std::move( dstLayout )
 				, dstRange
 				, dstImageLayout
 				, dstPipelineFlags );
@@ -101,7 +101,7 @@ namespace castor3d
 			pushUpload( srcData.data()
 				, srcData.size()
 				, dstImage
-				, dstLayout
+				, std::move( dstLayout )
 				, dstRange
 				, dstImageLayout
 				, dstPipelineFlags );

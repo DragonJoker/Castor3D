@@ -19,6 +19,11 @@ namespace castor3d
 	{
 	protected:
 		using ObjectArray = std::vector< SkeletonAnimationInstanceObjectRPtr >;
+
+		C3D_API SkeletonAnimationInstanceObject( SkeletonAnimationInstanceObject && rhs )noexcept = default;
+		C3D_API SkeletonAnimationInstanceObject( SkeletonAnimationInstanceObject const & rhs ) = delete;
+		C3D_API SkeletonAnimationInstanceObject & operator=( SkeletonAnimationInstanceObject const & rhs ) = delete;
+		C3D_API SkeletonAnimationInstanceObject & operator=( SkeletonAnimationInstanceObject && rhs )noexcept = delete;
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -34,16 +39,6 @@ namespace castor3d
 		C3D_API SkeletonAnimationInstanceObject( SkeletonAnimationInstance & animationInstance
 			, SkeletonAnimationObject & animationObject
 			, SkeletonAnimationInstanceObjectPtrArray & allObjects );
-		/**
-		 *\~english
-		 *\brief		Copy constructor.
-		 *\~french
-		 *\brief		Constructeur par copie.
-		 */
-		C3D_API SkeletonAnimationInstanceObject( SkeletonAnimationInstanceObject && rhs ) = default;
-		C3D_API SkeletonAnimationInstanceObject( SkeletonAnimationInstanceObject const & rhs ) = delete;
-		C3D_API SkeletonAnimationInstanceObject & operator=( SkeletonAnimationInstanceObject const & rhs ) = delete;
-		C3D_API SkeletonAnimationInstanceObject & operator=( SkeletonAnimationInstanceObject && rhs ) = delete;
 
 	public:
 		/**
@@ -52,7 +47,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API virtual ~SkeletonAnimationInstanceObject() = default;
+		C3D_API virtual ~SkeletonAnimationInstanceObject()noexcept = default;
 		/**
 		 *\~english
 		 *\brief		Adds a child to this object.

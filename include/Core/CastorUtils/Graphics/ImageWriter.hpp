@@ -92,7 +92,7 @@ namespace castor
 
 	private:
 		std::vector< ImageWriterPtr > m_writers;
-		std::map< String, ImageWriterImpl *, std::less<> > m_extWriters;
+		StringMap< ImageWriterImpl * > m_extWriters;
 	};
 }
 

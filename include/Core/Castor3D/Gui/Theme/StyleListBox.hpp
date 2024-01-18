@@ -66,7 +66,7 @@ namespace castor3d
 		}
 
 	private:
-		castor::HdrRgbColour doGetHighlightedColour( castor::HdrRgbColour colour )
+		castor::HdrRgbColour doGetHighlightedColour( castor::HdrRgbColour colour )const noexcept
 		{
 			colour.red() = std::min( 1.0f, colour.red() / 2.0f );
 			colour.green() = std::min( 1.0f, colour.green() / 2.0f );

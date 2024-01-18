@@ -52,7 +52,7 @@ namespace castor3d
 			, Texture const & depthObj
 			, Texture const & diffuse
 			, crg::RunnablePass::IsEnabledCallback const & isEnabled );
-		C3D_API ~SubsurfaceScatteringPass();
+		C3D_API ~SubsurfaceScatteringPass()noexcept;
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, CPU wise.
@@ -67,12 +67,12 @@ namespace castor3d
 		 */
 		C3D_API void accept( ConfigurationVisitorBase & visitor );
 
-		Texture const & getResult()const
+		Texture const & getResult()const noexcept
 		{
 			return m_result;
 		}
 
-		crg::FramePass const & getLastPass()const
+		crg::FramePass const & getLastPass()const noexcept
 		{
 			return *m_lastPass;
 		}

@@ -118,11 +118,11 @@ namespace castor3d
 		struct FontGlyphData
 			: ShaderBufferTypes
 		{
-			Float2 size;
-			Float2 bearing;
-			Float2 position;
-			Float1 advance;
-			Float1 pad;
+			Float2 size{};
+			Float2 bearing{};
+			Float2 position{};
+			Float1 advance{};
+			Float1 pad{};
 		};
 		using FontGlyphsData = castor::ArrayView< FontGlyphData >;
 		static uint32_t constexpr DataSize = uint32_t( sizeof( FontGlyphData ) );

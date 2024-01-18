@@ -79,7 +79,7 @@ namespace castor3d
 			, Texture const & srcTexture
 			, SamplerObs sampler
 			, bool isCharlie );
-		C3D_API ~EnvironmentPrefilter();
+		C3D_API ~EnvironmentPrefilter()noexcept;
 		/**
 		 *\~english
 		 *\brief		Generates the mipmap levels.
@@ -112,12 +112,12 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		Texture const & getResult()const
+		Texture const & getResult()const noexcept
 		{
 			return m_result;
 		}
 
-		ashes::Sampler const & getSampler()const
+		ashes::Sampler const & getSampler()const noexcept
 		{
 			CU_Require( m_sampler != nullptr );
 			return m_sampler->getSampler();

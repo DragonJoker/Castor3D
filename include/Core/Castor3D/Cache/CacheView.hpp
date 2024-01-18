@@ -45,24 +45,17 @@ namespace castor3d
 		 *\param[in]	clean		Le nettoyeur d'objet.
 		 *\param[in]	cache		The viewed cache.
 		 */
-		inline CacheViewT( castor::String const & name
+		CacheViewT( castor::String const & name
 			, ElementCacheT & cache
 			, ElementInitialiserT initialise = []( ElementObsT const & ){}
 			, ElementCleanerT clean = []( ElementObsT const & ){} );
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		~CacheViewT() = default;
 		/**
 		 *\~english
 		 *\brief		Removes from the cache the elements created through this view.
 		 *\~french
 		 *\brief		Supprime du cache les éléments créés via cette vue.
 		 */
-		inline void clear();
+		void clear();
 		/**
 		 *\~english
 		 *\brief		Creates an element with the given informations.
@@ -76,7 +69,7 @@ namespace castor3d
 		 *\return		L'élément créé.
 		 */
 		template< typename ... ParametersT >
-		inline ElementObsT add( ElementKeyT const & name
+		ElementObsT add( ElementKeyT const & name
 			, ParametersT && ... params );
 		/**
 		 *\~english
@@ -95,7 +88,7 @@ namespace castor3d
 		 *\return		L'élément créé ou existant.
 		 */
 		template< typename ... ParametersT >
-		inline ElementObsT tryAdd( ElementKeyT const & name
+		ElementObsT tryAdd( ElementKeyT const & name
 			, bool initialise
 			, ElementObsT & created
 			, ParametersT && ... params );
@@ -111,7 +104,7 @@ namespace castor3d
 		 *\param[in]	element		L'élément.
 		 *\param[in]	initialise	Dit si l'élément doit être initialisé après sa création.
 		 */
-		inline bool tryAdd( ElementKeyT const & name
+		bool tryAdd( ElementKeyT const & name
 			, ElementPtrT & element
 			, bool initialise = false );
 		/**
@@ -126,7 +119,7 @@ namespace castor3d
 		 *\param[in]	element		L'élément.
 		 *\param[in]	initialise	Dit si l'élément doit être initialisé après sa création.
 		 */
-		inline ElementObsT add( ElementKeyT const & name
+		ElementObsT add( ElementKeyT const & name
 			, ElementPtrT & element
 			, bool initialise = false );
 		/**
@@ -135,7 +128,7 @@ namespace castor3d
 		 *\~french
 		 *\return		\p true si la vue est vide.
 		 */
-		inline bool isEmpty()const;
+		bool isEmpty()const;
 		/**
 		 *\~english
 		 *\param[in]	name	The object name.
@@ -144,7 +137,7 @@ namespace castor3d
 		 *\param[in]	name	Le nom d'objet.
 		 *\return		\p true Si un élément avec le nom donné existe.
 		 */
-		inline bool has( ElementKeyT const & name )const;
+		bool has( ElementKeyT const & name )const;
 		/**
 		 *\~english
 		 *\brief		Looks for an element with given name.
@@ -155,7 +148,7 @@ namespace castor3d
 		 *\param[in]	name	Le nom d'objet.
 		 *\return		L'élément trouvé, nullptr si non trouvé.
 		 */
-		inline ElementObsT tryFind( ElementKeyT const & name )const;
+		ElementObsT tryFind( ElementKeyT const & name )const;
 		/**
 		 *\~english
 		 *\brief		Looks for an element with given name.
@@ -166,7 +159,7 @@ namespace castor3d
 		 *\param[in]	name	Le nom d'objet.
 		 *\return		L'élément trouvé, nullptr si non trouvé.
 		 */
-		inline ElementObsT find( ElementKeyT const & name )const;
+		ElementObsT find( ElementKeyT const & name )const;
 		/**
 		 *\~english
 		 *\brief		Removes an element, given a name.
@@ -175,7 +168,7 @@ namespace castor3d
 		 *\brief		Retire un élément à partir d'un nom.
 		 *\param[in]	name	Le nom d'élément.
 		 */
-		inline ElementPtrT tryRemove( ElementKeyT const & name );
+		ElementPtrT tryRemove( ElementKeyT const & name );
 		/**
 		 *\~english
 		 *\brief		Removes an object, given a name.
@@ -184,7 +177,7 @@ namespace castor3d
 		 *\brief		Retire un objet à partir d'un nom.
 		 *\param[in]	name	Le nom d'objet.
 		 */
-		inline ElementPtrT remove( ElementKeyT const & name );
+		ElementPtrT remove( ElementKeyT const & name );
 		/**
 		*\~english
 		*\name Iteration.
@@ -192,22 +185,22 @@ namespace castor3d
 		*\name Itération.
 		**/
 		/**@{*/
-		inline auto begin()
+		auto begin()
 		{
 			return m_createdElements.begin();
 		}
 
-		inline auto begin()const
+		auto begin()const
 		{
 			return m_createdElements.begin();
 		}
 
-		inline auto end()
+		auto end()
 		{
 			return m_createdElements.end();
 		}
 
-		inline auto end()const
+		auto end()const
 		{
 			return m_createdElements.end();
 		}

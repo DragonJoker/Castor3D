@@ -28,9 +28,10 @@ namespace castor3d
 		using InstanceType = Geometry;
 
 		C3D_API SubmeshRenderNode( SubmeshRenderNode const & ) = delete;
-		C3D_API SubmeshRenderNode( SubmeshRenderNode && ) = default;
+		C3D_API SubmeshRenderNode( SubmeshRenderNode && )noexcept = default;
 		C3D_API SubmeshRenderNode & operator=( SubmeshRenderNode const & ) = delete;
-		C3D_API SubmeshRenderNode & operator=( SubmeshRenderNode && ) = delete;
+		C3D_API SubmeshRenderNode & operator=( SubmeshRenderNode && )noexcept = delete;
+		C3D_API ~SubmeshRenderNode()noexcept = default;
 
 		C3D_API SubmeshRenderNode( Pass & pass
 			, DataType & data

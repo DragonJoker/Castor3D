@@ -36,7 +36,7 @@ namespace castor3d
 			, ElementPtrT ) >;
 
 		template< typename ... ParametersT >
-		static ElementPtrT makeElement( ElementCacheT const & cache
+		static ElementPtrT makeElement( ElementCacheT const & /*cache*/
 			, ElementKeyT const & key
 			, ParametersT && ... params )
 		{
@@ -187,11 +187,11 @@ namespace castor3d
 
 #define DECLARE_CACHE_MEMBER_MIN( memberName, className )\
 	public:\
-		className##Cache & get##className##Cache()\
+		className##Cache & get##className##Cache()noexcept\
 		{\
 			return *m_##memberName##Cache;\
 		}\
-		className##Cache const & get##className##Cache()const\
+		className##Cache const & get##className##Cache()const noexcept\
 		{\
 			return *m_##memberName##Cache;\
 		}\
@@ -221,7 +221,7 @@ namespace castor3d
 			return m_##memberName##Cache->add( key, element, initialise );\
 		}\
 		className##Cache::ElementPtrT remove##className( className##Cache::ElementKeyT const & key\
-			, bool cleanup = false )\
+			, bool cleanup = false )noexcept\
 		{\
 			return m_##memberName##Cache->remove( key, cleanup );\
 		}\
@@ -229,11 +229,11 @@ namespace castor3d
 		{\
 			return m_##memberName##Cache->find( key );\
 		}\
-		bool has##className( className##Cache::ElementKeyT const & key )const\
+		bool has##className( className##Cache::ElementKeyT const & key )const noexcept\
 		{\
 			return m_##memberName##Cache->has( key );\
 		}\
-		className##Cache::ElementObsT tryFind##className( className##Cache::ElementKeyT const & key )const\
+		className##Cache::ElementObsT tryFind##className( className##Cache::ElementKeyT const & key )const noexcept\
 		{\
 			return m_##memberName##Cache->tryFind( key );\
 		}\
@@ -241,11 +241,11 @@ namespace castor3d
 
 #define DECLARE_OBJECT_CACHE_MEMBER_MIN( memberName, className )\
 	public:\
-		className##Cache & get##className##Cache()\
+		className##Cache & get##className##Cache()noexcept\
 		{\
 			return *m_##memberName##Cache;\
 		}\
-		className##Cache const & get##className##Cache()const\
+		className##Cache const & get##className##Cache()const noexcept\
 		{\
 			return *m_##memberName##Cache;\
 		}\
@@ -258,7 +258,7 @@ namespace castor3d
 				, std::forward< ParametersT >( parameters )... );\
 		}\
 		className##Cache::ElementPtrT remove##className( className##Cache::ElementKeyT const & key\
-			, bool cleanup = false )\
+			, bool cleanup = false )noexcept\
 		{\
 			return m_##memberName##Cache->remove( key, cleanup );\
 		}\
@@ -266,11 +266,11 @@ namespace castor3d
 		{\
 			return m_##memberName##Cache->find( key );\
 		}\
-		bool has##className( className##Cache::ElementKeyT const & key )const\
+		bool has##className( className##Cache::ElementKeyT const & key )const noexcept\
 		{\
 			return m_##memberName##Cache->has( key );\
 		}\
-		className##Cache::ElementObsT tryFind##className( className##Cache::ElementKeyT const & key )const\
+		className##Cache::ElementObsT tryFind##className( className##Cache::ElementKeyT const & key )const noexcept\
 		{\
 			return m_##memberName##Cache->tryFind( key );\
 		}\
@@ -297,15 +297,15 @@ namespace castor3d
 
 #define DECLARE_CACHE_VIEW_MEMBER( memberName, className, eventType )\
 	public:\
-		castor3d::CacheViewT< className##Cache, castor3d::EventType( eventType ) > & get##className##View()\
+		castor3d::CacheViewT< className##Cache, castor3d::EventType( eventType ) > & get##className##View()noexcept\
 		{\
 			return *m_##memberName##CacheView;\
 		}\
-		castor3d::CacheViewT< className##Cache, castor3d::EventType( eventType ) > const & get##className##View()const\
+		castor3d::CacheViewT< className##Cache, castor3d::EventType( eventType ) > const & get##className##View()const noexcept\
 		{\
 			return *m_##memberName##CacheView;\
 		}\
-		bool has##className( className##Cache::ElementKeyT const & key )const\
+		bool has##className( className##Cache::ElementKeyT const & key )const noexcept\
 		{\
 			return m_##memberName##CacheView->has( key );\
 		}\
@@ -322,7 +322,7 @@ namespace castor3d
 		{\
 			return m_##memberName##CacheView->add( key, element, initialise );\
 		}\
-		className##Cache::ElementPtrT remove##className( className##Cache::ElementKeyT const & key )\
+		className##Cache::ElementPtrT remove##className( className##Cache::ElementKeyT const & key )noexcept\
 		{\
 			return m_##memberName##CacheView->remove( key );\
 		}\
@@ -330,7 +330,7 @@ namespace castor3d
 		{\
 			return m_##memberName##CacheView->find( key );\
 		}\
-		className##Cache::ElementObsT tryFind##className( className##Cache::ElementKeyT const & key )const\
+		className##Cache::ElementObsT tryFind##className( className##Cache::ElementKeyT const & key )const noexcept\
 		{\
 			return m_##memberName##CacheView->tryFind( key );\
 		}\
@@ -339,15 +339,15 @@ namespace castor3d
 
 #define DECLARE_CU_CACHE_VIEW_MEMBER( memberName, className, eventType )\
 	public:\
-		castor3d::CacheViewT< castor::className##Cache, castor3d::EventType( eventType ) > & get##className##View()\
+		castor3d::CacheViewT< castor::className##Cache, castor3d::EventType( eventType ) > & get##className##View()noexcept\
 		{\
 			return *m_##memberName##CacheView;\
 		}\
-		castor3d::CacheViewT< castor::className##Cache, castor3d::EventType( eventType ) > const & get##className##View()const\
+		castor3d::CacheViewT< castor::className##Cache, castor3d::EventType( eventType ) > const & get##className##View()const noexcept\
 		{\
 			return *m_##memberName##CacheView;\
 		}\
-		bool has##className( castor::className##Cache::ElementKeyT const & key )const\
+		bool has##className( castor::className##Cache::ElementKeyT const & key )const noexcept\
 		{\
 			return m_##memberName##CacheView->has( key );\
 		}\
@@ -364,7 +364,7 @@ namespace castor3d
 		{\
 			return m_##memberName##CacheView->add( key, element, initialise );\
 		}\
-		castor::className##Cache::ElementPtrT remove##className( castor::className##Cache::ElementKeyT const & key )\
+		castor::className##Cache::ElementPtrT remove##className( castor::className##Cache::ElementKeyT const & key )noexcept\
 		{\
 			return m_##memberName##CacheView->remove( key );\
 		}\
@@ -372,7 +372,7 @@ namespace castor3d
 		{\
 			return m_##memberName##CacheView->find( key );\
 		}\
-		castor::className##Cache::ElementObsT tryFind##className( castor::className##Cache::ElementKeyT const & key )const\
+		castor::className##Cache::ElementObsT tryFind##className( castor::className##Cache::ElementKeyT const & key )const noexcept\
 		{\
 			return m_##memberName##CacheView->tryFind( key );\
 		}\

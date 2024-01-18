@@ -24,7 +24,7 @@ namespace castor3d
 		//!\~english	The total number of scene nodes.
 		//!\~french		Le nombre total de noeuds de scène.
 		static uint64_t Count;
-		using SceneNodeMap = std::map< castor::String, SceneNodeRPtr >;
+		using SceneNodeMap = castor::StringMap< SceneNodeRPtr >;
 		using MovableArray = std::list< std::reference_wrapper< MovableObject > >;
 
 	public:
@@ -102,7 +102,7 @@ namespace castor3d
 		 *\brief		Détache un MovableObject fu noeud
 		 *\param[in]	object	L'objet à détacher
 		 */
-		C3D_API void detachObject( MovableObject & object );
+		C3D_API void detachObject( MovableObject const & object );
 		/**@}*/
 		/**
 		 *\name Children management.
@@ -123,7 +123,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Détache le noeud de son parent
 		 */
-		C3D_API void detach( bool cleanup );
+		C3D_API void detach( bool cleanup )noexcept;
 		/**
 		 *\~english
 		 *\param[in]	name	The name of the node
@@ -150,7 +150,7 @@ namespace castor3d
 		 *\brief		Détache un noeud des enfants de ce noeud, s'il en fait partie
 		 *\param[in]	child	Le noeud à détacher
 		 */
-		C3D_API void detachChild( SceneNode & child );
+		C3D_API void detachChild( SceneNode & child )noexcept;
 		/**
 		 *\~english
 		 *\brief		Detaches a child from my child's list, if it is one of my childs
@@ -159,14 +159,14 @@ namespace castor3d
 		 *\brief		Détache un noeud des enfants de ce noeud, s'il en fait partie
 		 *\param[in]	childName	Le nom du noeud à détacher
 		 */
-		C3D_API void detachChild( castor::String const & childName );
+		C3D_API void detachChild( castor::String const & childName )noexcept;
 		/**
 		 *\~english
 		 *\brief		Detaches all my childs
 		 *\~french
 		 *\brief		Détache tous les enfants de ce noeud
 		 */
-		C3D_API void detachChildren( bool cleanup );
+		C3D_API void detachChildren( bool cleanup )noexcept;
 		/**@}*/
 		/**
 		 *\name Local transformations.
@@ -288,26 +288,41 @@ namespace castor3d
 		C3D_API SceneNodeRPtr getChild( castor::String const & name )const;
 		C3D_API MovableArray const & getObjects()const;
 
-		C3D_API bool isVisible()const;
+		C3D_API bool isVisible()const noexcept;
 
-		bool isDisplayable()const
+		bool isDisplayable()const noexcept
 		{
 			return m_displayable;
 		}
 
-		SceneNode * getParent()const
+		SceneNode * getParent()const noexcept
 		{
 			return m_parent;
 		}
 
-		Scene * getScene()const
+		Scene * getScene()const noexcept
 		{
 			return &m_scene;
 		}
 
-		bool isSerialisable()const
+		bool isSerialisable()const noexcept
 		{
 			return m_serialisable;
+		}
+
+		bool isStatic()const noexcept
+		{
+			return m_static;
+		}
+
+		bool isModified()const noexcept
+		{
+			return m_mtxChanged || m_derivedMtxChanged;
+		}
+
+		uint64_t getId()const noexcept
+		{
+			return m_id;
 		}
 		/**@}*/
 		/**
@@ -320,22 +335,7 @@ namespace castor3d
 		C3D_API void setTransformationMatrix( castor::Matrix4x4f const & transform );
 		C3D_API void setVisible( bool visible );
 
-		bool isStatic()const
-		{
-			return m_static;
-		}
-
-		bool isModified()const
-		{
-			return m_mtxChanged || m_derivedMtxChanged;
-		}
-
-		uint64_t getId()const
-		{
-			return m_id;
-		}
-
-		void setSerialisable( bool value )
+		void setSerialisable( bool value )noexcept
 		{
 			m_serialisable = value;
 		}
@@ -345,10 +345,10 @@ namespace castor3d
 		void doComputeMatrix();
 		void doUpdateChildsDerivedTransform();
 		void doAttachTo( SceneNode & node );
-		void doDetach();
+		void doDetach()noexcept;
 		void doAddChild( SceneNode & child );
-		void doDetachChild( castor::String const & childName );
-		void doDetachChildren( bool cleanup );
+		void doDetachChild( castor::String const & childName )noexcept;
+		void doDetachChildren( bool cleanup )noexcept;
 
 	public:
 		//!\~english	Signal used to notify that the node has been attached to another one.
@@ -371,7 +371,7 @@ namespace castor3d
 		bool m_mtxChanged{ true };
 		castor::Matrix4x4f m_derivedTransform{ 1.0f };
 		bool m_derivedMtxChanged{ true };
-		SceneNode * m_parent{ nullptr };
+		SceneNode * m_parent{};
 		SceneNodeMap m_children;
 		MovableArray m_objects;
 	};
@@ -396,7 +396,7 @@ namespace castor3d
 	{
 		using ElementT = typename CacheT::ElementT;
 
-		void operator()( ElementT & element )
+		void operator()( ElementT & element )const
 		{
 			element.detach( true );
 		}

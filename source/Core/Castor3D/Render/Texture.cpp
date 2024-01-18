@@ -466,7 +466,7 @@ namespace castor3d
 		}
 	}
 
-	void Texture::destroy()
+	void Texture::destroy()noexcept
 	{
 		if ( !device || !resources )
 		{

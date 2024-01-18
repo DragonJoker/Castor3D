@@ -36,7 +36,6 @@ namespace castor3d
 			: UserInputEvent{ UserInputEventType::eKeyboard }
 			, m_keyboardEventType{ type }
 			, m_key{ key }
-			, m_char{}
 			, m_ctrl{ ctrl }
 			, m_alt{ alt }
 			, m_shift{ shift }

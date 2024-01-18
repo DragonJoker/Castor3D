@@ -24,9 +24,9 @@ namespace castor3d
 	enum class PpTexture
 		: uint8_t
 	{
-		eDepthObj, // R => Normalised depth, G => Linear depth, B => Node ID, A => Lighting Model ID
-		eVisibility, // R => node ID + pipeline ID, G => primitive ID
-		CU_ScopedEnumBounds( eDepthObj ),
+		eDepthObj = 0, // R => Normalised depth, G => Linear depth, B => Node ID, A => Lighting Model ID
+		eVisibility = 1, // R => node ID + pipeline ID, G => primitive ID
+		CU_ScopedEnumBounds( eDepthObj, eVisibility ),
 	};
 	C3D_API castor::String getTextureName( PpTexture texture );
 	C3D_API castor::String getTexName( PpTexture texture );
@@ -34,13 +34,13 @@ namespace castor3d
 	C3D_API VkClearValue getClearValue( PpTexture texture );
 	C3D_API VkImageUsageFlags getUsageFlags( PpTexture texture );
 	C3D_API VkBorderColor getBorderColor( PpTexture texture );
-	inline uint32_t getMipLevels( RenderDevice const & device
-		, PpTexture texture
-		, castor::Size const & size )
+	inline uint32_t getMipLevels( RenderDevice const & /*device*/
+		, PpTexture /*texture*/
+		, castor::Size const & /*size*/ )
 	{
 		return 1u;
 	}
-	inline VkCompareOp getCompareOp( PpTexture texture )
+	inline VkCompareOp getCompareOp( PpTexture /*texture*/ )
 	{
 		return VK_COMPARE_OP_NEVER;
 	}

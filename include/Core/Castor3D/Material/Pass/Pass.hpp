@@ -105,7 +105,7 @@ namespace castor3d
 		*/
 		/**@{*/
 		C3D_API void addComponent( PassComponentUPtr component );
-		C3D_API bool hasComponent( castor::String const & name )const;
+		C3D_API bool hasComponent( castor::String const & name )const noexcept;
 		C3D_API PassComponent * getComponent( castor::String const & name )const;
 		C3D_API std::vector< PassComponentUPtr > removeComponent( castor::String const & name );
 		C3D_API shader::PassMaterialShader * getMaterialShader( castor::String const & componentType )const;
@@ -154,13 +154,13 @@ namespace castor3d
 		}
 
 		template< typename ComponentT >
-		bool hasComponent()const
+		bool hasComponent()const noexcept
 		{
 			return this->hasComponent( ComponentT::TypeName );
 		}
 
 		template< typename ComponentT >
-		ComponentT * getComponent()const
+		ComponentT * getComponent()const noexcept
 		{
 			return this->hasComponent< ComponentT >()
 				? &static_cast< ComponentT & >( *this->getComponent( ComponentT::TypeName ) )
@@ -218,7 +218,7 @@ namespace castor3d
 		 *\brief		Supprime une unité de texture.
 		 *\param[in]	sourceInfo	La source de la texture.
 		 */
-		C3D_API void unregisterTexture( TextureSourceInfo sourceInfo );
+		C3D_API void unregisterTexture( TextureSourceInfo const & sourceInfo )noexcept;
 		/**
 		 *\~english
 		 *\brief		Replaces a texture source.
@@ -272,7 +272,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La combinaison d'indicateurs de passe.
 		 */
-		C3D_API PassComponentCombine getPassFlags()const;
+		C3D_API PassComponentCombine getPassFlags()const noexcept;
 		/**
 		*\~english
 		*\brief
@@ -289,15 +289,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief			Fills the pass buffer with this pass data.
-		 *\param[in,out]	buffer			The pass buffer.
-		 *\param[in]		passTypeIndex	The pass type index.
+		 *\param[in,out]	buffer	The pass buffer.
 		 *\~french
 		 *\brief			Remplit le pass buffer aves les données de cette passe.
-		 *\param[in,out]	buffer			Le pass buffer.
-		 *\param[in]		passTypeIndex	L'indice du type de passe.
+		 *\param[in,out]	buffer	Le pass buffer.
 		 */
-		C3D_API void fillBuffer( PassBuffer & buffer
-			, uint16_t passTypeIndex )const;
+		C3D_API void fillBuffer( PassBuffer & buffer )const;
 		/**
 		 *\~english
 		 *\brief			Writes the component content to text.
@@ -376,78 +373,78 @@ namespace castor3d
 		C3D_API bool isTwoSided()const;
 		C3D_API UnitArray getTextureUnits()const;
 		C3D_API uint32_t getTextureUnitsCount()const;
-		C3D_API TextureCombine getTexturesMask()const;
+		C3D_API TextureCombine getTexturesMask()const noexcept;
 		C3D_API bool hasLighting()const;
 		C3D_API PassComponentRegister & getPassComponentsRegister()const;
 		C3D_API castor::String getTextureFlagsName( PassComponentTextureFlag flags )const;
 		C3D_API LightingModelID getLightingModelId()const;
 
-		bool isInitialised()const
+		bool isInitialised()const noexcept
 		{
 			return m_initialised;
 		}
 
-		bool isInitialising()const
+		bool isInitialising()const noexcept
 		{
 			return m_initialising;
 		}
 
-		bool hasAutomaticShader()const
+		bool hasAutomaticShader()const noexcept
 		{
 			return m_automaticShader;
 		}
 
-		uint32_t getId()const
+		uint32_t getId()const noexcept
 		{
 			return m_id;
 		}
 
-		bool isImplicit()const
+		bool isImplicit()const noexcept
 		{
 			return m_implicit;
 		}
 
-		RenderPassRegisterInfo * getRenderPassInfo()const
+		RenderPassRegisterInfo * getRenderPassInfo()const noexcept
 		{
 			return m_renderPassInfo;
 		}
 
-		uint32_t getIndex()const
+		uint32_t getIndex()const noexcept
 		{
 			return m_index;
 		}
 
-		uint32_t getMaxTexCoordSet()const
+		uint32_t getMaxTexCoordSet()const noexcept
 		{
 			return m_maxTexcoordSet;
 		}
 
-		PassComponentTextureFlag getColourMapFlags()const
+		PassComponentTextureFlag getColourMapFlags()const noexcept
 		{
 			return m_colourMapFlag;
 		}
 
-		PassComponentTextureFlag getOpacityMapFlags()const
+		PassComponentTextureFlag getOpacityMapFlags()const noexcept
 		{
 			return m_opacityMapFlag;
 		}
 
-		PassComponentTextureFlag getNormalMapFlags()const
+		PassComponentTextureFlag getNormalMapFlags()const noexcept
 		{
 			return m_normalMapFlag;
 		}
 
-		PassComponentTextureFlag getHeightMapFlags()const
+		PassComponentTextureFlag getHeightMapFlags()const noexcept
 		{
 			return m_heightMapFlag;
 		}
 
-		PassComponentTextureFlag getOcclusionMapFlags()const
+		PassComponentTextureFlag getOcclusionMapFlags()const noexcept
 		{
 			return m_occlusionMapFlag;
 		}
 
-		PassComponentTextureFlag getReflRefrFlags()const
+		PassComponentTextureFlag getReflRefrFlags()const noexcept
 		{
 			return m_reflRefrFlag;
 		}
@@ -461,22 +458,22 @@ namespace castor3d
 		*	Itération sur les textures.
 		*/
 		/**@{*/
-		auto begin()const
+		auto begin()const noexcept
 		{
 			return m_textureUnits.begin();
 		}
 
-		auto begin()
+		auto begin()noexcept
 		{
 			return m_textureUnits.begin();
 		}
 
-		auto end()const
+		auto end()const noexcept
 		{
 			return m_textureUnits.end();
 		}
 
-		auto end()
+		auto end()noexcept
 		{
 			return m_textureUnits.end();
 		}
@@ -493,12 +490,12 @@ namespace castor3d
 		C3D_API void enableLighting( bool value );
 		C3D_API void enablePicking( bool value );
 
-		void setId( uint32_t value )
+		void setId( uint32_t value )noexcept
 		{
 			m_id = value;
 		}
 
-		void setImplicit( bool value = true )
+		void setImplicit( bool value = true )noexcept
 		{
 			m_implicit = value;
 		}
@@ -519,7 +516,7 @@ namespace castor3d
 			setColour( castor::HdrRgbColour{ v[0u], v[1u], v[2u] } );
 		}
 
-		void reset()const
+		void reset()const noexcept
 		{
 			m_dirty = false;
 		}
@@ -537,7 +534,7 @@ namespace castor3d
 
 	private:
 		void onSssChanged( SubsurfaceScattering const & sss );
-		void doPrepareImage( PassTextureSource cfg );
+		void doPrepareImage( PassTextureSource const & cfg );
 		void doAddUnit( TextureUnitData & unitData
 			, TextureUnitRPtr unit
 			, UnitArray & result );

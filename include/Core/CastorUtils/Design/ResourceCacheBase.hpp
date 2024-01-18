@@ -67,7 +67,7 @@ namespace castor
 		 *\~french
 		 *\brief		Met tous les éléments à nettoyer.
 		 */
-		void cleanup()
+		void cleanup()noexcept
 		{
 			auto lock( castor::makeUniqueLock( *this ) );
 			this->doCleanupNoLock();
@@ -78,7 +78,7 @@ namespace castor
 		 *\~french
 		 *\brief		Vide la collection.
 		 */
-		void clear()
+		void clear()noexcept
 		{
 			auto lock( castor::makeUniqueLock( *this ) );
 			this->doClearNoLock();
@@ -298,7 +298,7 @@ namespace castor
 		 *\param[in]	cleanup	\p true si l'évènement doit être nettoyé.
 		 */
 		ElementPtrT tryRemove( ElementKeyT const & name
-			, bool cleanup = false )
+			, bool cleanup = false )noexcept
 		{
 			auto lock( castor::makeUniqueLock( *this ) );
 			return this->doTryRemoveNoLock( name, cleanup );
@@ -314,7 +314,7 @@ namespace castor
 		 *\param[in]	cleanup	\p true si l'évènement doit être nettoyé.
 		 */
 		ElementPtrT tryRemoveNoLock( ElementKeyT const & name
-			, bool cleanup = false )
+			, bool cleanup = false )noexcept
 		{
 			return this->doTryRemoveNoLock( name, cleanup );
 		}
@@ -329,7 +329,7 @@ namespace castor
 		 *\param[in]	cleanup	\p true si l'évènement doit être nettoyé.
 		 */
 		ElementPtrT remove( ElementKeyT const & name
-			, bool cleanup = false )
+			, bool cleanup = false )noexcept
 		{
 			auto lock( castor::makeUniqueLock( *this ) );
 			auto result = this->doTryRemoveNoLock( name, cleanup );
@@ -352,7 +352,7 @@ namespace castor
 		 *\param[in]	cleanup	\p true si l'évènement doit être nettoyé.
 		 */
 		ElementPtrT removeNoLock( ElementKeyT const & name
-			, bool cleanup = false )
+			, bool cleanup = false )noexcept
 		{
 			auto result = this->doTryRemoveNoLock( name, cleanup );
 
@@ -408,7 +408,7 @@ namespace castor
 		 *\param[in]	name	Le nom d'élément.
 		 *\return		L'élément trouvé, nullptr si non trouvé.
 		 */
-		ElementObsT tryFind( ElementKeyT const & name )const
+		ElementObsT tryFind( ElementKeyT const & name )const noexcept
 		{
 			auto lock( castor::makeUniqueLock( *this ) );
 			return this->doTryFindNoLock( name );
@@ -423,7 +423,7 @@ namespace castor
 		 *\param[in]	name	Le nom d'élément.
 		 *\return		L'élément trouvé, nullptr si non trouvé.
 		 */
-		ElementObsT tryFindNoLock( ElementKeyT const & name )const
+		ElementObsT tryFindNoLock( ElementKeyT const & name )const noexcept
 		{
 			return this->doTryFindNoLock( name );
 		}
@@ -527,39 +527,39 @@ namespace castor
 		 *\name Accesseurs.
 		 **/
 		/**@{*/
-		uint32_t getObjectCount()const
+		uint32_t getObjectCount()const noexcept
 		{
 			auto lock( castor::makeUniqueLock( *this ) );
 			return uint32_t( m_resources.size() );
 		}
 
-		uint32_t getObjectCountNoLock()const
+		uint32_t getObjectCountNoLock()const noexcept
 		{
 			return uint32_t( m_resources.size() );
 		}
 
-		String const & getObjectTypeName()const
+		String const & getObjectTypeName()const noexcept
 		{
 			return ElementCacheTraitsT::Name;
 		}
 
-		bool has( ElementKeyT const & name )const
+		bool has( ElementKeyT const & name )const noexcept
 		{
 			return !ElementCacheTraitsT::isElementObsNull( tryFind( name ) );
 		}
 
-		bool hasNoLock( ElementKeyT const & name )const
+		bool hasNoLock( ElementKeyT const & name )const noexcept
 		{
 			return !ElementCacheTraitsT::isElementObsNull( tryFindNoLock( name ) );
 		}
 
-		bool isEmpty()const
+		bool isEmpty()const noexcept
 		{
 			auto lock( castor::makeUniqueLock( *this ) );
 			return m_resources.empty();
 		}
 
-		bool isEmptyNoLock()const
+		bool isEmptyNoLock()const noexcept
 		{
 			return m_resources.empty();
 		}
@@ -576,7 +576,7 @@ namespace castor
 			m_mutex.lock();
 		}
 
-		void unlock()const
+		void unlock()const noexcept
 		{
 			m_mutex.unlock();
 		}
@@ -588,22 +588,22 @@ namespace castor
 		*\name Itération.
 		**/
 		/**@{*/
-		auto begin()
+		auto begin()noexcept
 		{
 			return m_resources.begin();
 		}
 
-		auto begin()const
+		auto begin()const noexcept
 		{
 			return m_resources.begin();
 		}
 
-		auto end()
+		auto end()noexcept
 		{
 			return m_resources.end();
 		}
 
-		auto end()const
+		auto end()const noexcept
 		{
 			return m_resources.end();
 		}
@@ -657,7 +657,7 @@ namespace castor
 		/**@}*/
 
 	protected:
-		void doCleanupNoLock()const
+		void doCleanupNoLock()const noexcept
 		{
 			if ( m_clean )
 			{
@@ -668,7 +668,7 @@ namespace castor
 			}
 		}
 
-		void doClearNoLock()
+		void doClearNoLock()noexcept
 		{
 			m_resources.clear();
 		}
@@ -780,7 +780,7 @@ namespace castor
 		}
 
 		ElementPtrT doTryRemoveNoLock( ElementKeyT const & name
-			, bool cleanup = false )
+			, bool cleanup = false )noexcept
 		{
 			ElementPtrT result;
 
@@ -800,7 +800,7 @@ namespace castor
 			return result;
 		}
 
-		ElementObsT doTryFindNoLock( ElementKeyT const & name )const
+		ElementObsT doTryFindNoLock( ElementKeyT const & name )const noexcept
 		{
 			ElementObsT result{};
 

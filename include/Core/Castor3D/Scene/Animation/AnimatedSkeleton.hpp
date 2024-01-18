@@ -23,10 +23,11 @@ namespace castor3d
 		 *name Copie / Déplacement.
 		 **/
 		/**@{*/
-		C3D_API AnimatedSkeleton( AnimatedSkeleton && rhs ) = default;
-		C3D_API AnimatedSkeleton & operator=( AnimatedSkeleton && rhs ) = delete;
+		C3D_API AnimatedSkeleton( AnimatedSkeleton && rhs )noexcept = default;
+		C3D_API AnimatedSkeleton & operator=( AnimatedSkeleton && rhs )noexcept = delete;
 		C3D_API AnimatedSkeleton( AnimatedSkeleton const & rhs ) = delete;
 		C3D_API AnimatedSkeleton & operator=( AnimatedSkeleton const & rhs ) = delete;
+		C3D_API ~AnimatedSkeleton()noexcept override = default;
 		/**@}*/
 		/**
 		 *\~english

@@ -50,10 +50,10 @@ namespace castor3d
 	public:
 		C3D_API LpvLightConfigUbo( LpvLightConfigUbo const & rhs ) = delete;
 		C3D_API LpvLightConfigUbo & operator=( LpvLightConfigUbo const & rhs ) = delete;
-		C3D_API LpvLightConfigUbo( LpvLightConfigUbo && rhs ) = default;
-		C3D_API LpvLightConfigUbo & operator=( LpvLightConfigUbo && rhs ) = delete;
+		C3D_API LpvLightConfigUbo( LpvLightConfigUbo && rhs )noexcept = default;
+		C3D_API LpvLightConfigUbo & operator=( LpvLightConfigUbo && rhs )noexcept = delete;
 		C3D_API explicit LpvLightConfigUbo( RenderDevice const & device );
-		C3D_API ~LpvLightConfigUbo();
+		C3D_API ~LpvLightConfigUbo()noexcept;
 
 		C3D_API void cpuUpdate( Light const & light
 			, float lpvCellSize

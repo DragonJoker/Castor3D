@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_OverlayUbo_H___
@@ -224,7 +224,7 @@ namespace castor3d::shader
 		{
 		}
 
-		auto operator[]( sdw::UInt const & index )
+		auto operator[]( sdw::UInt const & index )const
 		{
 			return getMember< "v" >()[index];
 		}

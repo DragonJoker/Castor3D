@@ -111,7 +111,7 @@ namespace castor3d
 	{
 	}
 
-	bool ShadowMapPass::isPassEnabled()const
+	bool ShadowMapPass::isPassEnabled()const noexcept
 	{
 #if !C3D_MeasureShadowMapImpact
 		if ( getEngine()->areUpdateOptimisationsEnabled() )
@@ -133,7 +133,7 @@ namespace castor3d
 		m_outOfDate = getRenderQueue().isOutOfDate();
 	}
 
-	bool ShadowMapPass::doIsValidRenderable( RenderedObject const & object )const
+	bool ShadowMapPass::doIsValidRenderable( RenderedObject const & object )const noexcept
 	{
 		return object.isShadowCaster();
 	}

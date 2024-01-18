@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_EventHandler_H___
@@ -80,10 +80,7 @@ namespace castor3d
 		explicit EventHandler( castor::String const & name
 			, bool catchMouseEvents )
 			: castor::Named{ name }
-			, m_enabled{ true }
 			, m_catchMouseEvents{ catchMouseEvents }
-			, m_catchTabKey{ false }
-			, m_catchReturnKey{ false }
 		{
 		}
 		/**
@@ -92,11 +89,10 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		virtual ~EventHandler()
+		virtual ~EventHandler()noexcept
 		{
-			m_mutex.lock();
-			m_queue = {};
-			m_mutex.unlock();
+			auto lock( castor::makeUniqueLock( m_mutex ) );
+			m_queue.clear();
 		}
 		/**
 		 *\~english
@@ -106,11 +102,9 @@ namespace castor3d
 		 */
 		void processEvents()
 		{
-			EventQueue queue = doSwapQueue();
-
-			for ( auto const & eventPair : queue )
+			for ( auto const & [event, func] : doSwapQueue() )
 			{
-				eventPair.second();
+				func();
 			}
 		}
 		/**
@@ -177,7 +171,7 @@ namespace castor3d
 		void connect( MouseEventType event
 			, ClientMouseFunction function )
 		{
-			m_mouseSlotsConnections[size_t( event )].push_back( m_mouseSlots[size_t( event )].connect( function ) );
+			m_mouseSlotsConnections[size_t( event )].push_back( m_mouseSlots[size_t( event )].connect( std::move( function ) ) );
 		}
 		/**
 		 *\~english
@@ -235,7 +229,7 @@ namespace castor3d
 		void connect( KeyboardEventType event
 			, ClientKeyboardFunction function )
 		{
-			m_keyboardSlotsConnections[size_t( event )].push_back( m_keyboardSlots[size_t( event )].connect( function ) );
+			m_keyboardSlotsConnections[size_t( event )].push_back( m_keyboardSlots[size_t( event )].connect( std::move( function ) ) );
 		}
 		/**
 		 *\~english
@@ -293,7 +287,7 @@ namespace castor3d
 		 */
 		void connect( HandlerEventType event, ClientHandlerFunction function )
 		{
-			m_handlerSlotsConnections[size_t( event )].push_back( m_handlerSlots[size_t( event )].connect( function ) );
+			m_handlerSlotsConnections[size_t( event )].push_back( m_handlerSlots[size_t( event )].connect( std::move( function ) ) );
 		}
 
 		//@}
@@ -350,10 +344,9 @@ namespace castor3d
 		*/
 		EventQueue doSwapQueue()
 		{
+			auto lock( castor::makeUniqueLock( m_mutex ) );
 			EventQueue queue;
-			m_mutex.lock();
 			std::swap( queue, m_queue );
-			m_mutex.unlock();
 			return queue;
 		}
 		/**
@@ -428,7 +421,7 @@ namespace castor3d
 	private:
 		//!\~english	Activation status.
 		//!\~french		Le statut d'activation.
-		bool m_enabled;
+		bool m_enabled{ true };
 		//!\~english	The mutex used to protect the events queue.
 		//!\~french		Le mutex utilisà pour protàger la file d'évènements.
 		std::mutex m_mutex;
@@ -437,13 +430,13 @@ namespace castor3d
 		EventQueue m_queue;
 		//!\~english	Tells if the control catches mouse events.
 		//!\~french		Dit si le contrôle traite les évènements souris.
-		bool m_catchMouseEvents;
+		bool m_catchMouseEvents{};
 		//!\~english	Tells if the control catches 'tab' key.
 		//!\~french		Dit si le contrôle traite la touche 'tab'.
-		bool m_catchTabKey;
+		bool m_catchTabKey{};
 		//!\~english	Tells if the control catches 'return' key.
 		//!\~french		Dit si le contrôle traite la touche 'entrée'.
-		bool m_catchReturnKey;
+		bool m_catchReturnKey{};
 	};
 	/**
 	*\~english
@@ -603,25 +596,25 @@ namespace castor3d
 		}
 
 	private:
-		C3D_API void doProcessKeyboardEvent( KeyboardEventSPtr event )final override
+		C3D_API void doProcessKeyboardEvent( KeyboardEventSPtr event )final
 		{
 		}
 
-		C3D_API void doProcessHandlerEvent( HandlerEventSPtr event )final override
+		C3D_API void doProcessHandlerEvent( HandlerEventSPtr event )final
 		{
 		}
 
-		C3D_API bool doCatchesTabKey()const final override
-		{
-			return false;
-		}
-
-		C3D_API bool doCatchesReturnKey()const final override
+		C3D_API bool doCatchesTabKey()const final
 		{
 			return false;
 		}
 
-		C3D_API bool doCatchesMouseEvents()const final override
+		C3D_API bool doCatchesReturnKey()const final
+		{
+			return false;
+		}
+
+		C3D_API bool doCatchesMouseEvents()const final
 		{
 			return true;
 		}

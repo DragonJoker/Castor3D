@@ -31,7 +31,6 @@ namespace castor3d
 		, m_orientation{ std::move( orientation ) }
 		, m_position{ std::move( position ) }
 		, m_scale{ std::move( scale ) }
-		, m_parent{ nullptr }
 	{
 		if ( m_name.empty() )
 		{
@@ -86,7 +85,7 @@ namespace castor3d
 		object.attachTo( *this );
 	}
 
-	void SceneNode::detachObject( MovableObject & object )
+	void SceneNode::detachObject( MovableObject const & object )
 	{
 		auto it = std::find_if( m_objects.begin()
 			, m_objects.end()
@@ -106,7 +105,7 @@ namespace castor3d
 		doAttachTo( node );
 	}
 
-	void SceneNode::detach( bool cleanup )
+	void SceneNode::detach( bool cleanup )noexcept
 	{
 		if ( cleanup || !m_static )
 		{
@@ -126,7 +125,7 @@ namespace castor3d
 		{
 			found = m_children.end() != std::find_if( m_children.begin()
 				, m_children.end()
-				, [&name]( std::pair< castor::String, SceneNodeRPtr > pair )
+				, [&name]( std::pair< castor::String, SceneNodeRPtr > const & pair )
 				{
 					return pair.second->hasChild( name );
 				} );
@@ -140,17 +139,17 @@ namespace castor3d
 		doAddChild( child );
 	}
 
-	void SceneNode::detachChild( SceneNode & child )
+	void SceneNode::detachChild( SceneNode & child )noexcept
 	{
 		doDetachChild( child.getName() );
 	}
 
-	void SceneNode::detachChild( castor::String const & childName )
+	void SceneNode::detachChild( castor::String const & childName )noexcept
 	{
 		doDetachChild( childName );
 	}
 
-	void SceneNode::detachChildren( bool cleanup )
+	void SceneNode::detachChildren( bool cleanup )noexcept
 	{
 		doDetachChildren( cleanup );
 	}
@@ -312,9 +311,8 @@ namespace castor3d
 	castor::Point3f SceneNode::getDerivedPosition()const
 	{
 		castor::Point3f result( m_position );
-		auto parent = getParent();
 
-		if ( parent )
+		if ( auto parent = getParent() )
 		{
 			result = castor::matrix::getTransformed( parent->getDerivedTransformationMatrix(), m_position );
 		}
@@ -325,9 +323,8 @@ namespace castor3d
 	castor::Quaternion SceneNode::getDerivedOrientation()const
 	{
 		castor::Quaternion result( m_orientation );
-		auto parent = getParent();
 
-		if ( parent )
+		if ( auto parent = getParent() )
 		{
 			result  = result * parent->getDerivedOrientation();
 		}
@@ -338,9 +335,8 @@ namespace castor3d
 	castor::Point3f SceneNode::getDerivedScale()const
 	{
 		castor::Point3f result( m_scale );
-		auto parent = getParent();
 
-		if ( parent )
+		if ( auto parent = getParent() )
 		{
 			result *= parent->getDerivedScale();
 		}
@@ -367,7 +363,7 @@ namespace castor3d
 		}
 	}
 
-	bool SceneNode::isVisible()const
+	bool SceneNode::isVisible()const noexcept
 	{
 		auto parent = m_parent;
 		return isDisplayable()
@@ -406,9 +402,7 @@ namespace castor3d
 
 		if ( m_derivedMtxChanged )
 		{
-			auto parent = getParent();
-
-			if ( parent )
+			if ( auto parent = getParent() )
 			{
 				parent->doComputeMatrix();
 				m_derivedTransform = parent->getDerivedTransformationMatrix() * m_transform;
@@ -424,7 +418,7 @@ namespace castor3d
 
 	void SceneNode::doUpdateChildsDerivedTransform()
 	{
-		for ( auto & [key,current] : m_children )
+		for ( auto const & [key,current] : m_children )
 		{
 			if ( current )
 			{
@@ -460,7 +454,7 @@ namespace castor3d
 		}
 	}
 
-	void SceneNode::doDetach()
+	void SceneNode::doDetach()noexcept
 	{
 		auto parent = getParent();
 
@@ -488,7 +482,7 @@ namespace castor3d
 		}
 	}
 
-	void SceneNode::doDetachChild( castor::String const & childName )
+	void SceneNode::doDetachChild( castor::String const & childName )noexcept
 	{
 		auto it = m_children.find( childName );
 
@@ -508,7 +502,7 @@ namespace castor3d
 		}
 	}
 
-	void SceneNode::doDetachChildren( bool cleanup )
+	void SceneNode::doDetachChildren( bool cleanup )noexcept
 	{
 		SceneNodeMap flush;
 		std::swap( flush, m_children );

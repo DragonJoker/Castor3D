@@ -21,10 +21,10 @@ namespace castor
 		: uint8_t
 	{
 		//! Binary file
-		eBinary,
+		eBinary = 0,
 		//! Text file
-		eText,
-		CU_ScopedEnumBounds( eBinary )
+		eText = 1,
+		CU_ScopedEnumBounds( eBinary, eText )
 	};
 	/**
 	\~english

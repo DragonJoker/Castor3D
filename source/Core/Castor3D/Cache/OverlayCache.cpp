@@ -108,7 +108,7 @@ namespace castor
 		m_viewport.setOrtho( 0, 1, 1, 0, 0, 1000 );
 	}
 
-	void ResourceCacheT< Overlay, String, OverlayCacheTraits >::clear()
+	void ResourceCacheT< Overlay, String, OverlayCacheTraits >::clear()noexcept
 	{
 		auto lock( makeUniqueLock( *this ) );
 		doClearNoLock();

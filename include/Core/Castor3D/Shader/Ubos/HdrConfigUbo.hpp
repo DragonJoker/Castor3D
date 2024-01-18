@@ -59,10 +59,10 @@ namespace castor3d
 	public:
 		C3D_API HdrConfigUbo( HdrConfigUbo const & rhs ) = delete;
 		C3D_API HdrConfigUbo & operator=( HdrConfigUbo const & rhs ) = delete;
-		C3D_API HdrConfigUbo( HdrConfigUbo && rhs ) = default;
-		C3D_API HdrConfigUbo & operator=( HdrConfigUbo && rhs ) = delete;
+		C3D_API HdrConfigUbo( HdrConfigUbo && rhs )noexcept = default;
+		C3D_API HdrConfigUbo & operator=( HdrConfigUbo && rhs )noexcept = delete;
 		C3D_API explicit HdrConfigUbo( RenderDevice const & device );
-		C3D_API ~HdrConfigUbo();
+		C3D_API ~HdrConfigUbo()noexcept;
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.

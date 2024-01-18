@@ -108,18 +108,19 @@ namespace castor3d
 		void doImportMaterials( Scene & scene
 			, Parameters const & parameters
 			, std::map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps );
-		std::map< castor::String, SkeletonRPtr > doImportSkeletons( Scene & scene );
-		std::map< castor::String, MeshResPtr > doImportMeshes( Scene & scene
-			, std::map< castor::String, SkeletonRPtr > const & skeletons );
-		std::map< castor::String, SceneNodeRPtr > doImportNodes( Scene & scene );
+		castor::StringMap< SkeletonRPtr > doImportSkeletons( Scene & scene );
+		castor::StringMap< MeshResPtr > doImportMeshes( Scene & scene
+			, castor::StringMap< SkeletonRPtr > const & skeletons );
+		castor::StringMap< SceneNodeRPtr > doImportNodes( Scene & scene );
 		void doImportLights( Scene & scene );
 		void doImportCameras( Scene & scene );
 		void doCreateGeometries( Scene & scene
-			, std::map< castor::String, MeshResPtr > const & meshes
-			, std::map< castor::String, SceneNodeRPtr > const & nodes );
+			, castor::StringMap< MeshResPtr > const & meshes
+			, castor::StringMap< SceneNodeRPtr > const & nodes );
 
 		struct AnimObjects
 		{
+			AnimObjects() = default;
 			std::vector< SkeletonRPtr > skeletons;
 			std::vector< MeshRPtr > meshes;
 			std::vector< SceneNodeRPtr > nodes;
@@ -127,19 +128,19 @@ namespace castor3d
 
 		void doImportSkeletonsAnims( Scene & scene
 			, AnimationImporter & importer
-			, std::map< castor::String, AnimObjects > & anims );
+			, castor::StringMap< AnimObjects > & anims );
 		void doImportMeshesAnims( Scene & scene
 			, AnimationImporter & importer
-			, std::map< castor::String, AnimObjects > & anims );
+			, castor::StringMap< AnimObjects > & anims );
 		void doImportNodesAnims( Scene & scene
 			, AnimationImporter & importer
-			, std::map< castor::String, AnimObjects > & anims );
+			, castor::StringMap< AnimObjects > & anims );
 		void doCreateAnimationGroups( Scene & scene
-			, std::map< castor::String, AnimObjects > & anims );
+			, castor::StringMap< AnimObjects > & anims );
 
 		void doTransformScene( Scene & scene
 			, Parameters const & parameters
-			, std::map< castor::String, SceneNodeRPtr > const & nodes );
+			, castor::StringMap< SceneNodeRPtr > const & nodes );
 		void doAddAnimationGroup( Geometry & geometry );
 
 		void doCenterCamera( Scene & scene

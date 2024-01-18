@@ -31,22 +31,6 @@ namespace castor3d
 		explicit DebugOverlays( Engine & engine );
 		/**
 		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		~DebugOverlays();
-		/**
-		 *\~english
-		 *\brief		Initialisation function, retrieves the overlays from the given overlay cache.
-		 *\param[in]	cache	The overlay cache.
-		 *\~french
-		 *\brief		Fonction d'initialisation, récupère les incrustations à partir du cache d'incrustations donné.
-		 *\param[in]	cache	Le cache d'incrustations.
-		 */
-		void initialise( OverlayCache & cache );
-		/**
-		 *\~english
 		 *\brief		Clean up function.
 		 *\~french
 		 *\brief		Fonction de nettoyage.

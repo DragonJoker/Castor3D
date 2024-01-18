@@ -62,7 +62,7 @@ namespace castor3d
 		 *\param[in]	attach			L'attacheur d'objet (à un noeud de scène).
 		 *\param[in]	detach			Le détacheur d'objet (d'un noeud de scène).
 		 */
-		inline ObjectCacheBaseT( Scene & scene
+		ObjectCacheBaseT( Scene & scene
 			, SceneNodeRPtr rootNode
 			, SceneNodeRPtr rootCameraNode
 			, SceneNodeRPtr rootObjectNode
@@ -107,15 +107,6 @@ namespace castor3d
 			, m_detach{ std::move( detach ) }
 		{
 		}
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		inline ~ObjectCacheBaseT()override
-		{
-		}
 
 	public:
 		/**
@@ -126,7 +117,7 @@ namespace castor3d
 		 *\brief		Met les éléments de ce cache dans ceux de celui donné.
 		 *\param[out]	destination		Le cache de destination.
 		 */
-		inline void mergeInto( ElementObjectCacheT & destination )
+		void mergeInto( ElementObjectCacheT & destination )
 		{
 			auto lock( castor::makeUniqueLock( *this ) );
 			auto lockOther( castor::makeUniqueLock( destination ) );
@@ -152,7 +143,7 @@ namespace castor3d
 		*\~french
 		*\return		L'Engine.
 		*/
-		inline Engine * getEngine()const
+		Engine * getEngine()const noexcept
 		{
 			return &m_engine;
 		}
@@ -162,7 +153,7 @@ namespace castor3d
 		*\~french
 		*\return		Le nom du type des objets.
 		*/
-		inline castor::String const & getObjectTypeName()const
+		castor::String const & getObjectTypeName()const noexcept
 		{
 			return ElementCacheTraitsT::Name;
 		}

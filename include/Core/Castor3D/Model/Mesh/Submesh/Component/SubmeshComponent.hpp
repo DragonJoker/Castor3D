@@ -306,9 +306,9 @@ namespace castor3d
 		/**@{*/
 		SubmeshComponentPlugin( SubmeshComponentPlugin const & ) = delete;
 		SubmeshComponentPlugin & operator=( SubmeshComponentPlugin const & ) = delete;
-		SubmeshComponentPlugin & operator=( SubmeshComponentPlugin && rhs ) = delete;
+		SubmeshComponentPlugin & operator=( SubmeshComponentPlugin && rhs )noexcept = delete;
 		C3D_API virtual ~SubmeshComponentPlugin() = default;
-		C3D_API SubmeshComponentPlugin( SubmeshComponentPlugin && rhs ) = default;
+		C3D_API SubmeshComponentPlugin( SubmeshComponentPlugin && rhs )noexcept = default;
 		/**
 		*\~english
 		*\param[in] submeshComponents
@@ -318,7 +318,7 @@ namespace castor3d
 		*	Le registre de composants.
 		*/
 		C3D_API explicit SubmeshComponentPlugin( SubmeshComponentRegister const & submeshComponents
-			, castor::UserContextCreator pcreateParserContext = {} )
+			, castor::UserContextCreator const & pcreateParserContext = {} )
 			: createParserContext{ pcreateParserContext }
 			, m_submeshComponents{ submeshComponents }
 		{

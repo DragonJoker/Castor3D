@@ -139,7 +139,7 @@ namespace castor3d
 #endif
 	}
 
-	SceneRenderNodes::~SceneRenderNodes()
+	SceneRenderNodes::~SceneRenderNodes()noexcept
 	{
 #if C3D_DebugTimers
 		getOwner()->getEngine()->unregisterTimer( getOwner()->getName() + "/RenderNodes", *m_timerRenderNodes );
@@ -152,7 +152,7 @@ namespace castor3d
 		m_cullers.emplace_back( &culler );
 	}
 
-	void SceneRenderNodes::unregisterCuller( SceneCuller & culler )
+	void SceneRenderNodes::unregisterCuller( SceneCuller & culler )noexcept
 	{
 		auto it = std::find( m_cullers.begin()
 			, m_cullers.end()
@@ -161,21 +161,21 @@ namespace castor3d
 		m_cullers.erase( it );
 	}
 
-	void SceneRenderNodes::clear()
+	void SceneRenderNodes::clear()noexcept
 	{
 		auto lock( castor::makeUniqueLock( m_nodesMutex ) );
 
-		for ( auto & node : m_submeshNodes )
+		for ( auto const & [_, node] : m_submeshNodes )
 		{
-			node.second->instance.setId( *node.second->pass
-				, node.second->data
+			node->instance.setId( *node->pass
+				, node->data
 				, nullptr
 				, 0u );
 		}
 
-		for ( auto & node : m_billboardNodes )
+		for ( auto const & [_, node] : m_billboardNodes )
 		{
-			node.second->instance.setId( *node.second->pass
+			node->instance.setId( *node->pass
 				, nullptr
 				, 0u );
 		}

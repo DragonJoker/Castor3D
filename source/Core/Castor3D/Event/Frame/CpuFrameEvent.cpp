@@ -15,7 +15,7 @@ namespace castor3d
 	{
 	}
 
-	CpuFrameEvent::CpuFrameEvent( CpuFrameEvent && rhs )
+	CpuFrameEvent::CpuFrameEvent( CpuFrameEvent && rhs )noexcept
 		: m_type{ rhs.m_type }
 		, m_skip{ rhs.m_skip.load() }
 #if !defined( NDEBUG ) && C3D_UseEventsStack
@@ -36,7 +36,7 @@ namespace castor3d
 		return *this;
 	}
 
-	CpuFrameEvent & CpuFrameEvent::operator=( CpuFrameEvent && rhs )
+	CpuFrameEvent & CpuFrameEvent::operator=( CpuFrameEvent && rhs )noexcept
 	{
 		m_type = rhs.m_type;
 		m_skip = rhs.m_skip.load();

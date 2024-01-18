@@ -15,8 +15,6 @@ namespace castor3d
 {
 	Icosahedron::Icosahedron()
 		: MeshGenerator( cuT( "icosahedron" ) )
-		, m_radius( 0 )
-		, m_nbFaces( 0 )
 	{
 	}
 
@@ -28,15 +26,16 @@ namespace castor3d
 	void Icosahedron::doGenerate( Mesh & mesh, Parameters const & parameters )
 	{
 		castor::String param;
+		float radius{};
 
 		if ( parameters.get( cuT( "radius" ), param ) )
 		{
-			m_radius = castor::string::toFloat( param );
+			radius = castor::string::toFloat( param );
 		}
 
-		if ( m_radius < 0 )
+		if ( radius < 0 )
 		{
-			m_radius = -m_radius;
+			radius = -radius;
 		}
 
 		auto submesh = mesh.createDefaultSubmesh();
@@ -52,7 +51,7 @@ namespace castor3d
 		uint32_t index{ 0u };
 		castor::Point3f vertex;
 		auto phi = float( ( 1.0f + sqrt( 5.0f ) ) / 2.0f );
-		auto X = float( m_radius / sqrt( phi * sqrt( 5.0f ) ) );
+		auto X = float( radius / sqrt( phi * sqrt( 5.0f ) ) );
 		float Z = X * phi;
 		vertex = castor::Point3f( -X, 0, Z );
 		std::copy( vertex.begin(), vertex.end(), vertices[index].pos.begin() );

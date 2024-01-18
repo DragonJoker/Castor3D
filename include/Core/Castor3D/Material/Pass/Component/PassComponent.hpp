@@ -44,7 +44,7 @@ namespace castor3d
 		struct PassComponentsShader
 			: public PassShader
 		{
-			explicit PassComponentsShader( PassComponentPlugin const & plugin )
+			C3D_API explicit PassComponentsShader( PassComponentPlugin const & plugin )
 				: m_plugin{ plugin }
 			{
 			}
@@ -471,9 +471,9 @@ namespace castor3d
 		/**@{*/
 		PassComponentPlugin( PassComponentPlugin const & ) = delete;
 		PassComponentPlugin & operator=( PassComponentPlugin const & ) = delete;
-		PassComponentPlugin & operator=( PassComponentPlugin && rhs ) = delete;
+		PassComponentPlugin & operator=( PassComponentPlugin && rhs )noexcept = delete;
 		C3D_API virtual ~PassComponentPlugin() = default;
-		C3D_API PassComponentPlugin( PassComponentPlugin && rhs ) = default;
+		C3D_API PassComponentPlugin( PassComponentPlugin && rhs )noexcept = default;
 		/**
 		*\~english
 		*\param[in] passComponents
@@ -491,8 +491,8 @@ namespace castor3d
 		*	Fonction pour ajuster les données du composant après que les matériaux aon tété blended.
 		*/
 		C3D_API explicit PassComponentPlugin( PassComponentRegister const & passComponents
-			, UpdateComponent pupdateComponent = nullptr
-			, FinishComponent pfinishComponent = nullptr )
+			, UpdateComponent const & pupdateComponent = nullptr
+			, FinishComponent const & pfinishComponent = nullptr )
 			: finishComponent{ pfinishComponent }
 			, updateComponent{ pupdateComponent }
 			, m_passComponents{ passComponents }

@@ -43,13 +43,9 @@ namespace castor3d
 			, castor::makeUnique< crg::FramePassTimer >( m_renderSystem.getRenderDevice().makeContext(), "Events/GPU/QueueRender", crg::TimerScope::eUpdate )
 			, castor::makeUnique< crg::FramePassTimer >( m_renderSystem.getRenderDevice().makeContext(), "Events/GPU/PostRender", crg::TimerScope::eUpdate ) }
 	{
-		{
-			auto lock( castor::makeUniqueLock( m_debugOverlaysMtx ) );
-			m_debugOverlays->initialise( getEngine()->getOverlayCache() );
-		}
 	}
 
-	RenderLoop::~RenderLoop()
+	RenderLoop::~RenderLoop()noexcept
 	{
 		m_timerCpuEvents[0].reset();
 		m_timerCpuEvents[1].reset();

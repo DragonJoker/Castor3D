@@ -551,7 +551,7 @@ namespace c3d_assimp
 		return *bonesRootNodes.begin();
 	}
 
-	inline castor::String findSkeletonName( std::map< castor::String, castor::Matrix4x4f > const & bonesNodes
+	inline castor::String findSkeletonName( castor::StringMap< castor::Matrix4x4f > const & bonesNodes
 		, aiNode const & rootNode )
 	{
 		std::vector< aiNode const * > bones;

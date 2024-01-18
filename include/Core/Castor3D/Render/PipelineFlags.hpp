@@ -22,10 +22,10 @@ namespace castor3d
 	};
 
 	C3D_API bool operator<( PipelineBaseHash const & lhs
-		, PipelineBaseHash const & rhs );
+		, PipelineBaseHash const & rhs )noexcept;
 
 	inline bool operator==( PipelineBaseHash const & lhs
-		, PipelineBaseHash const & rhs )
+		, PipelineBaseHash const & rhs )noexcept
 	{
 		return lhs.hi == rhs.hi
 			&& lhs.lo == rhs.lo;
@@ -43,7 +43,7 @@ namespace castor3d
 			, VkCompareOp palphaFunc = VkCompareOp::VK_COMPARE_OP_ALWAYS
 			, uint32_t ppassLayerIndex = 0u
 			, uint32_t psubmeshDataBindings = 0u
-			, bool pisStatic = false )
+			, bool pisStatic = false )noexcept
 			: pass{ std::move( ppassComponents ) }
 			, submesh{ std::move( psubmeshComponents ) }
 			, textures{ std::move( ptextures ) }
@@ -58,25 +58,25 @@ namespace castor3d
 		{
 		}
 
-		PassComponentCombine pass;
-		SubmeshComponentCombine submesh;
-		TextureCombine textures;
-		LightingModelID lightingModelId;
+		PassComponentCombine pass{};
+		SubmeshComponentCombine submesh{};
+		TextureCombine textures{};
+		LightingModelID lightingModelId{};
 		BackgroundModelID backgroundModelId{};
 		VkCompareOp alphaFunc;
 		uint32_t submeshDataBindings{};
 		uint32_t passLayerIndex{};
-		bool isStatic;
-		ProgramFlags m_programFlags;
-		ShaderFlags m_shaderFlags;
+		bool isStatic{};
+		ProgramFlags m_programFlags{};
+		ShaderFlags m_shaderFlags{};
 	};
 
-	C3D_API bool operator==( PipelineHiHashDetails const & lhs, PipelineHiHashDetails const & rhs );
+	C3D_API bool operator==( PipelineHiHashDetails const & lhs, PipelineHiHashDetails const & rhs )noexcept;
 
 	struct PipelineLoHashDetails
 	{
 		explicit PipelineLoHashDetails( VkDeviceSize pmorphTargetsOffset = 0u
-			, SubmeshRenderData * psubmeshData = nullptr )
+			, SubmeshRenderData const * psubmeshData = nullptr )noexcept
 			: morphTargetsOffset{ pmorphTargetsOffset }
 			, submeshData{ psubmeshData }
 		{
@@ -86,7 +86,7 @@ namespace castor3d
 		SubmeshRenderData const * submeshData{};
 	};
 
-	C3D_API bool operator==( PipelineLoHashDetails const & lhs, PipelineLoHashDetails const & rhs );
+	C3D_API bool operator==( PipelineLoHashDetails const & lhs, PipelineLoHashDetails const & rhs )noexcept;
 	/**
 	*\~english
 	*\brief
@@ -106,7 +106,7 @@ namespace castor3d
 			, BlendMode alphaBlendMode = BlendMode::eNoBlend
 			, RenderPassTypeID renderPassType = 0u
 			, VkPrimitiveTopology ptopology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST
-			, uint32_t ppatchVertices = 3u )
+			, uint32_t ppatchVertices = 3u )noexcept
 			: PipelineHiHashDetails{ std::move( hiDetails ) }
 			, PipelineLoHashDetails{ std::move( loDetails ) }
 			, m_sceneFlags{ sceneFlags }
@@ -135,8 +135,8 @@ namespace castor3d
 			, TextureCombine textures = {}
 			, uint32_t ppassLayerIndex = {}
 			, VkDeviceSize pmorphTargetsOffset = {}
-			, SubmeshRenderData * psubmeshData = {}
-			, bool pisStatic = false )
+			, SubmeshRenderData const * psubmeshData = {}
+			, bool pisStatic = false )noexcept
 			: PipelineFlags{ PipelineHiHashDetails{ std::move( ppassComponents )
 					, std::move( psubmeshComponents )
 					, plightingModelId
@@ -188,168 +188,168 @@ namespace castor3d
 		}
 
 		/* Vertex inputs */
-		C3D_API bool enableTexcoords()const;
-		C3D_API bool enableVertexInput( SubmeshData data )const;
-		C3D_API bool enableIndices()const;
-		C3D_API bool enablePosition()const;
-		C3D_API bool enableNormal()const;
-		C3D_API bool enableTangentSpace()const;
-		C3D_API bool enableBitangent()const;
-		C3D_API bool enableColours()const;
-		C3D_API bool enablePassMasks()const;
-		C3D_API bool enableTexcoord0()const;
-		C3D_API bool enableTexcoord1()const;
-		C3D_API bool enableTexcoord2()const;
-		C3D_API bool enableTexcoord3()const;
+		C3D_API bool enableTexcoords()const noexcept;
+		C3D_API bool enableVertexInput( SubmeshData data )const noexcept;
+		C3D_API bool enableIndices()const noexcept;
+		C3D_API bool enablePosition()const noexcept;
+		C3D_API bool enableNormal()const noexcept;
+		C3D_API bool enableTangentSpace()const noexcept;
+		C3D_API bool enableBitangent()const noexcept;
+		C3D_API bool enableColours()const noexcept;
+		C3D_API bool enablePassMasks()const noexcept;
+		C3D_API bool enableTexcoord0()const noexcept;
+		C3D_API bool enableTexcoord1()const noexcept;
+		C3D_API bool enableTexcoord2()const noexcept;
+		C3D_API bool enableTexcoord3()const noexcept;
 		/**/
-		C3D_API bool enableTextures()const;
-		C3D_API bool enableVertexID()const;
-		C3D_API bool enableMeshletID()const;
-		C3D_API bool enableInstantiation()const;
-		C3D_API bool enableParallaxOcclusionMapping( PassComponentRegister const & passComponents )const;
-		C3D_API bool enableParallaxOcclusionMappingOne( PassComponentRegister const & passComponents )const;
-		C3D_API bool enableVelocity()const;
+		C3D_API bool enableTextures()const noexcept;
+		C3D_API bool enableVertexID()const noexcept;
+		C3D_API bool enableMeshletID()const noexcept;
+		C3D_API bool enableInstantiation()const noexcept;
+		C3D_API bool enableParallaxOcclusionMapping( PassComponentRegister const & passComponents )const noexcept;
+		C3D_API bool enableParallaxOcclusionMappingOne( PassComponentRegister const & passComponents )const noexcept;
+		C3D_API bool enableVelocity()const noexcept;
 
-		C3D_API bool hasFog()const;
+		C3D_API bool hasFog()const noexcept;
 
 		/**@name ShaderFlags */
 		//@{
-		bool usesWorldSpace()const
+		bool usesWorldSpace()const noexcept
 		{
 			return checkFlag( m_shaderFlags, ShaderFlag::eWorldSpace );
 		}
 
-		bool usesViewSpace()const
+		bool usesViewSpace()const noexcept
 		{
 			return checkFlag( m_shaderFlags, ShaderFlag::eViewSpace );
 		}
 
-		bool usesGeometry()const
+		bool usesGeometry()const noexcept
 		{
 			return checkFlag( m_shaderFlags, ShaderFlag::eGeometry );
 		}
 
-		bool usesTessellation()const
+		bool usesTessellation()const noexcept
 		{
 			return checkFlag( m_shaderFlags, ShaderFlag::eTessellation );
 		}
 
-		bool usesColour()const
+		bool usesColour()const noexcept
 		{
 			return checkFlag( m_shaderFlags, ShaderFlag::eColour );
 		}
 
-		bool usesOpacity()const
+		bool usesOpacity()const noexcept
 		{
 			return checkFlag( m_shaderFlags, ShaderFlag::eOpacity );
 		}
 
-		bool forceTexCoords()const
+		bool forceTexCoords()const noexcept
 		{
 			return checkFlag( m_shaderFlags, ShaderFlag::eForceTexCoords );
 		}
 
-		bool writeEnvironmentMap()const
+		bool writeEnvironmentMap()const noexcept
 		{
 			return checkFlag( m_shaderFlags, ShaderFlag::eEnvironmentMapping );
 		}
 
-		bool writeShadowMap()const
+		bool writeShadowMap()const noexcept
 		{
 			return checkFlag( m_shaderFlags, ShaderFlag::eShadowMapDirectional )
 				|| checkFlag( m_shaderFlags, ShaderFlag::eShadowMapSpot )
 				|| checkFlag( m_shaderFlags, ShaderFlag::eShadowMapPoint );
 		}
 
-		bool writeShadowVSM()const
+		bool writeShadowVSM()const noexcept
 		{
 			return checkFlag( m_shaderFlags, ShaderFlag::eVsmShadowMap );
 		}
 
-		bool writeShadowRSM()const
+		bool writeShadowRSM()const noexcept
 		{
 			return checkFlag( m_shaderFlags, ShaderFlag::eRsmShadowMap );
 		}
 
-		bool writeVelocity()const
+		bool writeVelocity()const noexcept
 		{
 			return checkFlag( m_shaderFlags, ShaderFlag::eVelocity );
 		}
 
-		bool writeVisibility()const
+		bool writeVisibility()const noexcept
 		{
 			return checkFlag( m_shaderFlags, ShaderFlag::eVisibility );
 		}
 
-		bool writeDepth()const
+		bool writeDepth()const noexcept
 		{
 			return checkFlag( m_shaderFlags, ShaderFlag::eDepth );
 		}
 
-		bool writePicking()const
+		bool writePicking()const noexcept
 		{
 			return checkFlag( m_shaderFlags, ShaderFlag::ePicking );
 		}
 		//@}
 		/**@name SceneFlags */
 		//@{
-		SceneFlags getShadowFlags()const
+		SceneFlags getShadowFlags()const noexcept
 		{
 			return m_sceneFlags & SceneFlag::eShadowAny;
 		}
 
-		SceneFlags getGlobalIlluminationFlags()const
+		SceneFlags getGlobalIlluminationFlags()const noexcept
 		{
 			return m_sceneFlags & SceneFlag::eGIAny;
 		}
 
-		bool hasDiffuseGI()const
+		bool hasDiffuseGI()const noexcept
 		{
 			return hasAny( m_sceneFlags, SceneFlag::eGIAny );
 		}
 		//@}
 		/**@name SubmeshComponents */
 		//@{
-		bool hasWorldPosInputs()const
+		bool hasWorldPosInputs()const noexcept
 		{
 			return submesh.hasVelocityFlag;
 		}
 
-		bool hasSkinData()const
+		bool hasSkinData()const noexcept
 		{
 			return submesh.hasSkinFlag;
 		}
 		//@}
 		/**@name ProgramFlags */
 		//@{
-		bool isBillboard()const
+		bool isBillboard()const noexcept
 		{
 			return checkFlag( m_programFlags, ProgramFlag::eBillboards );
 		}
 
-		bool isFrontCulled()const
+		bool isFrontCulled()const noexcept
 		{
 			return checkFlag( m_programFlags, ProgramFlag::eFrontCulled );
 		}
 
-		bool usesMesh()const
+		bool usesMesh()const noexcept
 		{
 			return checkFlag( m_programFlags, ProgramFlag::eHasMesh );
 		}
 
-		bool usesTask()const
+		bool usesTask()const noexcept
 		{
 			return checkFlag( m_programFlags, ProgramFlag::eHasTask );
 		}
 		//@}
 		/**@name Components */
 		//@{
-		C3D_API bool hasPassFlag( PassComponentFlag flag )const;
-		C3D_API bool hasSubmeshFlag( SubmeshComponentFlag flag )const;
+		C3D_API bool hasPassFlag( PassComponentFlag flag )const noexcept;
+		C3D_API bool hasSubmeshFlag( SubmeshComponentFlag flag )const noexcept;
 		//@}
 		/**@name Textures */
 		//@{
-		C3D_API bool hasMap( PassComponentTextureFlag flag )const;
+		C3D_API bool hasMap( PassComponentTextureFlag flag )const noexcept;
 		//@}
 
 	public:
@@ -361,29 +361,29 @@ namespace castor3d
 		uint32_t patchVertices;
 
 	private:
-		bool enableTexcoord( SubmeshData data )const;
-		bool enableNonTexcoord( SubmeshData data )const;
-		bool hasSubmeshData( SubmeshData data )const;
+		bool enableTexcoord( SubmeshData data )const noexcept;
+		bool enableNonTexcoord( SubmeshData data )const noexcept;
+		bool hasSubmeshData( SubmeshData data )const noexcept;
 	};
 
-	C3D_API bool operator==( PipelineFlags const & lhs, PipelineFlags const & rhs );
+	C3D_API bool operator==( PipelineFlags const & lhs, PipelineFlags const & rhs )noexcept;
 	C3D_API PipelineBaseHash getPipelineBaseHash( PassComponentRegister const & passComponents
 		, SubmeshComponentRegister const & submeshComponents
-		, PipelineFlags const & flags );
+		, PipelineFlags const & flags )noexcept;
 	C3D_API PipelineBaseHash getPipelineBaseHash( RenderNodesPass const & renderPass
 		, Submesh const & data
 		, Pass const & pass
-		, bool isFrontCulled );
+		, bool isFrontCulled )noexcept;
 	C3D_API PipelineBaseHash getPipelineBaseHash( RenderNodesPass const & renderPass
 		, BillboardBase const & data
 		, Pass const & pass
-		, bool isFrontCulled );
+		, bool isFrontCulled )noexcept;
 	C3D_API PipelineHiHashDetails getPipelineHiHashDetails( RenderNodesPass const & renderPass
 		, PipelineBaseHash const & hash
-		, ShaderFlags shaderFlags );
+		, ShaderFlags shaderFlags )noexcept;
 	C3D_API PipelineHiHashDetails getPipelineHiHashDetails( RenderTechniquePass const & renderPass
 		, PipelineBaseHash const & hash
-		, ShaderFlags shaderFlags );
+		, ShaderFlags shaderFlags )noexcept;
 }
 
 #endif

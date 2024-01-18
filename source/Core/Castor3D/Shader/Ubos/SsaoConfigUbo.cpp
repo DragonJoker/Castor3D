@@ -97,7 +97,7 @@ namespace castor3d
 	{
 	}
 
-	SsaoConfigUbo::~SsaoConfigUbo()
+	SsaoConfigUbo::~SsaoConfigUbo()noexcept
 	{
 		m_device.uboPool->putBuffer( m_ubo );
 	}

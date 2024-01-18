@@ -60,7 +60,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API virtual ~LightCategory() = default;
+		C3D_API virtual ~LightCategory()noexcept = default;
 		/**
 		 *\~english
 		 *\brief		Updates the light.

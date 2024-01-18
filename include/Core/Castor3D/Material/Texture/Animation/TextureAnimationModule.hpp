@@ -19,11 +19,11 @@ namespace castor3d
 
 	struct TextureAnimationData
 	{
-		castor::Point3f translate;
-		float rotateU;
-		castor::Point3f scale;
-		float rotateV;
-		castor::Point4f tileSet;
+		castor::Point3f translate{};
+		float rotateU{};
+		castor::Point3f scale{};
+		float rotateV{};
+		castor::Point4f tileSet{};
 	};
 
 	class TextureAnimation;

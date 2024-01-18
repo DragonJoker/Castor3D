@@ -18,10 +18,7 @@ namespace castor3d
 			: public PassComponentPlugin
 		{
 		public:
-			explicit Plugin( PassComponentRegister const & passComponent )
-				: PassComponentPlugin{ passComponent }
-			{
-			}
+			using PassComponentPlugin::PassComponentPlugin;
 
 			PassComponentUPtr createComponent( Pass & pass )const override
 			{

@@ -35,9 +35,10 @@ namespace castor3d
 
 	public:
 		C3D_API Viewport & operator=( Viewport const & rhs ) = delete;
-		C3D_API Viewport & operator=( Viewport && rhs ) = delete;
+		C3D_API Viewport & operator=( Viewport && rhs )noexcept = delete;
 		C3D_API Viewport( Viewport const & rhs );
-		C3D_API Viewport( Viewport && rhs );
+		C3D_API Viewport( Viewport && rhs )noexcept;
+		C3D_API ~Viewport()noexcept = default;
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -47,13 +48,6 @@ namespace castor3d
 		 *\param[in]	engine	Le moteur.
 		 */
 		C3D_API explicit Viewport( Engine const & engine );
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		C3D_API ~Viewport() = default;
 		/**
 		 *\~english
 		 *\brief		Applies the perspective
@@ -172,97 +166,97 @@ namespace castor3d
 		C3D_API castor::Matrix4x4f getRescaledProjection( float scale )const;
 		C3D_API castor::Matrix4x4f getRescaledSafeBandedProjection( float scale )const;
 
-		castor::Size const & getSize()const
+		castor::Size const & getSize()const noexcept
 		{
 			return m_size.value();
 		}
 
-		castor::Position const & getPosition()const
+		castor::Position const & getPosition()const noexcept
 		{
 			return m_position.value();
 		}
 
-		ViewportType getType()const
+		ViewportType getType()const noexcept
 		{
 			return m_type;
 		}
 
-		float getRatio()const
+		float getRatio()const noexcept
 		{
 			return m_ratio;
 		}
 
-		float getNear()const
+		float getNear()const noexcept
 		{
 			return m_near.value();
 		}
 
-		float getFar()const
+		float getFar()const noexcept
 		{
 			return m_far.value();
 		}
 
-		castor::Angle const & getFovY()const
+		castor::Angle const & getFovY()const noexcept
 		{
 			return m_fovY.value();
 		}
 
-		float getLeft()const
+		float getLeft()const noexcept
 		{
 			return m_left.value();
 		}
 
-		float getRight()const
+		float getRight()const noexcept
 		{
 			return m_right.value();
 		}
 
-		float getTop()const
+		float getTop()const noexcept
 		{
 			return m_top.value();
 		}
 
-		float getBottom()const
+		float getBottom()const noexcept
 		{
 			return m_bottom.value();
 		}
 
-		uint32_t getWidth()const
+		uint32_t getWidth()const noexcept
 		{
 			return m_size.value().getWidth();
 		}
 
-		uint32_t getHeight()const
+		uint32_t getHeight()const noexcept
 		{
 			return m_size.value().getHeight();
 		}
 
-		bool isModified()const
+		bool isModified()const noexcept
 		{
 			return m_modified;
 		}
 
-		castor::Matrix4x4f const & getProjection()const
+		castor::Matrix4x4f const & getProjection()const noexcept
 		{
 			return m_projection;
 		}
 
-		castor::Matrix4x4f const & getSafeBandedProjection()const
+		castor::Matrix4x4f const & getSafeBandedProjection()const noexcept
 		{
 			return m_safeBandedProjection;
 		}
 
-		VkViewport const & getViewport()const
+		VkViewport const & getViewport()const noexcept
 		{
 			return m_viewport;
 		}
 
-		VkRect2D const & getScissor()const
+		VkRect2D const & getScissor()const noexcept
 		{
 			return m_scissor;
 		}
 
-		Engine const & getEngine()const
+		Engine const & getEngine()const noexcept
 		{
 			return m_engine;
 		}
@@ -276,52 +270,52 @@ namespace castor3d
 		*	Mutateurs.
 		*/
 		/**@{*/
-		void setPosition( const castor::Position & value )
+		void setPosition( castor::Position value )noexcept
 		{
-			m_position = value;
+			m_position = std::move( value );
 		}
 
-		void updateType( ViewportType value )
+		void updateType( ViewportType value )noexcept
 		{
 			m_type = value;
 		}
 
-		void updateRatio( float value )
+		void updateRatio( float value )noexcept
 		{
 			m_ratio = value;
 		}
 
-		void updateNear( float value )
+		void updateNear( float value )noexcept
 		{
 			m_near = value;
 		}
 
-		void updateFar( float value )
+		void updateFar( float value )noexcept
 		{
 			m_far = value;
 		}
 
-		void updateFovY( castor::Angle const & value )
+		void updateFovY( castor::Angle value )noexcept
 		{
-			m_fovY = value;
+			m_fovY = std::move( value );
 		}
 
-		void updateLeft( float value )
+		void updateLeft( float value )noexcept
 		{
 			m_left = value;
 		}
 
-		void updateRight( float value )
+		void updateRight( float value )noexcept
 		{
 			m_right = value;
 		}
 
-		void updateTop( float value )
+		void updateTop( float value )noexcept
 		{
 			m_top = value;
 		}
 
-		void updateBottom( float value )
+		void updateBottom( float value )noexcept
 		{
 			m_bottom = value;
 		}

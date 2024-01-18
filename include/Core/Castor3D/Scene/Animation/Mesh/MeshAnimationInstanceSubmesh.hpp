@@ -14,18 +14,10 @@ namespace castor3d
 		: public castor::OwnedBy< MeshAnimationInstance >
 	{
 	public:
-		/**
-		*\~english
-		*name Copy / Move.
-		*\~french
-		*name Copie / Déplacement.
-		**/
-		/**@{*/
 		C3D_API MeshAnimationInstanceSubmesh( MeshAnimationInstanceSubmesh && rhs ) = default;
 		C3D_API MeshAnimationInstanceSubmesh & operator=( MeshAnimationInstanceSubmesh && rhs ) = delete;
 		C3D_API MeshAnimationInstanceSubmesh( MeshAnimationInstanceSubmesh const & rhs ) = delete;
 		C3D_API MeshAnimationInstanceSubmesh & operator=( MeshAnimationInstanceSubmesh const & rhs ) = delete;
-		/**@}*/
 		/**
 		 *\~english
 		 *\brief		Constructor.

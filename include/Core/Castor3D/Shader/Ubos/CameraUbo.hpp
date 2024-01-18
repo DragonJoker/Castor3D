@@ -140,10 +140,10 @@ namespace castor3d
 		using Configuration = CameraUboConfiguration;
 		C3D_API CameraUbo( CameraUbo const & rhs ) = delete;
 		C3D_API CameraUbo & operator=( CameraUbo const & rhs ) = delete;
-		C3D_API CameraUbo( CameraUbo && rhs ) = default;
-		C3D_API CameraUbo & operator=( CameraUbo && rhs ) = delete;
+		C3D_API CameraUbo( CameraUbo && rhs )noexcept = default;
+		C3D_API CameraUbo & operator=( CameraUbo && rhs )noexcept = delete;
 		C3D_API explicit CameraUbo( RenderDevice const & device );
-		C3D_API ~CameraUbo();
+		C3D_API ~CameraUbo()noexcept;
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.

@@ -103,11 +103,11 @@ namespace castor3d
 		using Configuration = ClustersUboConfiguration;
 		C3D_API ClustersUbo( ClustersUbo const & rhs ) = delete;
 		C3D_API ClustersUbo & operator=( ClustersUbo const & rhs ) = delete;
-		C3D_API ClustersUbo( ClustersUbo && rhs ) = default;
-		C3D_API ClustersUbo & operator=( ClustersUbo && rhs ) = delete;
+		C3D_API ClustersUbo( ClustersUbo && rhs )noexcept = default;
+		C3D_API ClustersUbo & operator=( ClustersUbo && rhs )noexcept = delete;
 
 		C3D_API explicit ClustersUbo( RenderDevice const & device );
-		C3D_API ~ClustersUbo();
+		C3D_API ~ClustersUbo()noexcept;
 
 		C3D_API void cpuUpdate( castor::Point3ui gridDim
 			, castor::Point2ui clusterSize

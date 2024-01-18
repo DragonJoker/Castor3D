@@ -35,7 +35,7 @@ namespace castor3d
 			, bool meshShading );
 		C3D_API ~QueueRenderNodes()noexcept;
 		C3D_API void fillConfig( crg::ru::Config & config )const;
-		C3D_API void clear();
+		C3D_API void clear()noexcept;
 		C3D_API void checkEmpty();
 		C3D_API bool sortNodes( ShadowMapLightTypeArray & shadowMaps
 			, ShadowBuffer const * shadowBuffer );
@@ -67,27 +67,27 @@ namespace castor3d
 			, ashes::BufferBase const & buffer
 			, bool isFrontCulled )const;
 
-		auto & getNodesIds()const
+		auto & getNodesIds()const noexcept
 		{
 			return *m_pipelinesNodes;
 		}
 
-		auto & getSubmeshNodes()const
+		auto & getSubmeshNodes()const noexcept
 		{
 			return m_submeshNodes;
 		}
 
-		auto & getInstancedSubmeshNodes()const
+		auto & getInstancedSubmeshNodes()const noexcept
 		{
 			return m_instancedSubmeshNodes;
 		}
 
-		auto & getBillboardNodes()const
+		auto & getBillboardNodes()const noexcept
 		{
 			return m_billboardNodes;
 		}
 
-		bool hasCulledNodes()const
+		bool hasCulledNodes()const noexcept
 		{
 			return m_hasNodes;
 		}

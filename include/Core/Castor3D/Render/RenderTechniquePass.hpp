@@ -143,7 +143,7 @@ namespace castor3d
 			, bool outputScattering );
 
 	public:
-		C3D_API virtual ~RenderTechniquePass() = default;
+		C3D_API virtual ~RenderTechniquePass()noexcept = default;
 		/**
 		*\~english
 		*\brief
@@ -189,19 +189,19 @@ namespace castor3d
 		/**
 		 *\copydoc	castor3d::RenderNodesPass::areValidPassFlags
 		 */
-		C3D_API virtual bool areValidPassFlags( PassComponentCombine const & passFlags )const = 0;
+		C3D_API virtual bool areValidPassFlags( PassComponentCombine const & passFlags )const noexcept = 0;
 		/**
 		 *\copydoc	castor3d::RenderNodesPass::getShaderFlags
 		 */
-		C3D_API virtual ShaderFlags getShaderFlags()const = 0;
+		C3D_API virtual ShaderFlags getShaderFlags()const noexcept = 0;
 		/**
 		 *\copydoc	castor3d::RenderNodesPass::countNodes
 		 */
-		C3D_API virtual void countNodes( RenderInfo & info )const = 0;
+		C3D_API virtual void countNodes( RenderInfo & info )const noexcept = 0;
 		/**
 		 *\copydoc	castor3d::RenderNodesPass::isPassEnabled
 		 */
-		C3D_API virtual bool isPassEnabled()const = 0;
+		C3D_API virtual bool isPassEnabled()const noexcept = 0;
 		/**
 		*\~english
 		*name
@@ -211,24 +211,24 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		C3D_API Engine * getEngine()const;
+		C3D_API Engine * getEngine()const noexcept;
 		C3D_API IndirectLightingData const & getIndirectLighting()const noexcept;
-		C3D_API DebugConfig & getDebugConfig()const;
+		C3D_API DebugConfig & getDebugConfig()const noexcept;
 		C3D_API bool areDebugTargetsEnabled()const noexcept;
-		C3D_API virtual ClustersConfig const * getClustersConfig()const = 0;
-		C3D_API virtual bool hasSsao()const = 0;
+		C3D_API virtual ClustersConfig const * getClustersConfig()const noexcept = 0;
+		C3D_API virtual bool hasSsao()const noexcept = 0;
 
-		Scene const & getScene()
+		Scene const & getScene()noexcept
 		{
 			return m_scene;
 		}
 
-		Scene const & getScene()const
+		Scene const & getScene()const noexcept
 		{
 			return m_scene;
 		}
 
-		RenderTechnique const & getTechnique()const
+		RenderTechnique const & getTechnique()const noexcept
 		{
 			return *m_parent;
 		}
@@ -321,28 +321,28 @@ namespace castor3d
 		/**
 		 *\copydoc	castor3d::RenderNodesPass::getShaderFlags
 		 */
-		C3D_API ShaderFlags getShaderFlags()const override
+		C3D_API ShaderFlags getShaderFlags()const noexcept override
 		{
 			return m_shaderFlags;
 		}
 		/**
 		 *\copydoc	castor3d::RenderNodesPass::countNodes
 		 */
-		C3D_API void countNodes( RenderInfo & info )const override
+		C3D_API void countNodes( RenderInfo & info )const noexcept override
 		{
 			RenderNodesPass::countNodes( info );
 		}
 		/**
 		 *\copydoc	castor3d::RenderNodesPass::areValidPassFlags
 		 */
-		C3D_API bool areValidPassFlags( PassComponentCombine const & passFlags )const override
+		C3D_API bool areValidPassFlags( PassComponentCombine const & passFlags )const noexcept override
 		{
 			return RenderNodesPass::areValidPassFlags( passFlags );
 		}
 		/**
 		 *\copydoc	castor3d::RenderNodesPass::isPassEnabled
 		 */
-		C3D_API bool isPassEnabled()const override
+		C3D_API bool isPassEnabled()const noexcept override
 		{
 			return RenderNodesPass::isPassEnabled();
 		}
@@ -355,27 +355,27 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		Engine * getEngine()const
+		Engine * getEngine()const noexcept
 		{
 			return RenderTechniquePass::getEngine();
 		}
 
-		Scene const & getScene()const
+		Scene const & getScene()const noexcept
 		{
 			return RenderTechniquePass::getScene();
 		}
 
-		RenderTechnique const & getTechnique()const
+		RenderTechnique const & getTechnique()const noexcept
 		{
 			return RenderTechniquePass::getTechnique();
 		}
 
-		DebugConfig & getDebugConfig()const
+		DebugConfig & getDebugConfig()const noexcept
 		{
 			return RenderTechniquePass::getDebugConfig();
 		}
 
-		ClustersConfig const * getClustersConfig()const override
+		ClustersConfig const * getClustersConfig()const noexcept override
 		{
 			return m_clustersConfig;
 		}

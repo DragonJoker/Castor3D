@@ -40,7 +40,7 @@ namespace castor3d
 		{
 		}
 
-		void setHeaderFont( castor::String const & value )
+		void setHeaderFont( castor::StringView value )
 		{
 			m_headerStyle.setFont( value );
 		}

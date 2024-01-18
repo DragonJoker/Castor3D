@@ -37,10 +37,7 @@ namespace castor3d
 			: public PassComponentsShader
 		{
 		public:
-			C3D_API explicit PassMapComponentsShader( PassComponentPlugin const & plugin )
-				: PassComponentsShader{ plugin }
-			{
-			}
+			using PassComponentsShader::PassComponentsShader;
 
 			C3D_API virtual void applyTexture( PassShaders const & passShaders
 				, TextureConfigurations const & textureConfigs
@@ -57,7 +54,7 @@ namespace castor3d
 	{
 	public:
 		C3D_API explicit PassMapComponentPlugin( PassComponentRegister const & passComponent
-			, UpdateComponent pupdateComponent = nullptr )
+			, UpdateComponent const & pupdateComponent = nullptr )
 			: PassComponentPlugin{ passComponent, pupdateComponent }
 		{
 		}
@@ -122,12 +119,6 @@ namespace castor3d
 
 		C3D_API void fillConfig( TextureConfiguration & config
 			, ConfigurationVisitorBase & vis )const override;
-
-		void fillChannel( TextureConfiguration & configuration
-			, uint32_t mask )const
-		{
-			getPlugin().fillTextureConfiguration( configuration, mask );
-		}
 		/**@}*/
 
 	private:

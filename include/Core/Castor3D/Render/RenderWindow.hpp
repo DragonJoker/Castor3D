@@ -61,7 +61,7 @@ namespace castor3d
 			{
 			}
 
-			~RenderingResources()
+			~RenderingResources()noexcept
 			{
 				imageAvailableSemaphore.reset();
 				finishedRenderingSemaphore.reset();
@@ -162,7 +162,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API ~RenderWindow();
+		C3D_API ~RenderWindow()noexcept;
 		/**
 		 *\~english
 		 *\brief		Initialises the render window with given RenderTarget.
@@ -344,15 +344,6 @@ namespace castor3d
 		C3D_API VkFormat getPixelFormat()const;
 		/**
 		 *\~english
-		 *\brief		Adds a scene that can be picked.
-		 *\param[in]	scene	The scene.
-		 *\~french
-		 *\brief		Ajoute une scène qui peut être pickée.
-		 *\param[in]	scene	La scène.
-		 */
-		C3D_API void addPickingScene( Scene & scene );
-		/**
-		 *\~english
 		 *\brief		Picks a geometry at given mouse position.
 		 *\param[in]	position	The position in the pass.
 		 *\return		PickNodeType::eNone if nothing was picked.
@@ -391,59 +382,59 @@ namespace castor3d
 		C3D_API ShadowMapLightTypeArray getShadowMaps()const;
 		C3D_API ShadowBuffer * getShadowBuffer()const;
 
-		uint32_t getIndex()const
+		uint32_t getIndex()const noexcept
 		{
 			return m_index;
 		}
 
-		FrameListenerRPtr getListener()const
+		FrameListenerRPtr getListener()const noexcept
 		{
 			return m_listener;
 		}
 
-		RenderDevice const & getDevice()const
+		RenderDevice const & getDevice()const noexcept
 		{
 			return m_device;
 		}
 
-		RenderTargetRPtr getRenderTarget()const
+		RenderTargetRPtr getRenderTarget()const noexcept
 		{
 			return m_renderTarget;
 		}
 
-		bool isVSyncEnabled()const
+		bool isVSyncEnabled()const noexcept
 		{
 			return m_vsync;
 		}
 
-		bool isFullscreen()const
+		bool isFullscreen()const noexcept
 		{
 			return m_fullscreen;
 		}
 
-		bool isSkipped()const
+		bool isSkipped()const noexcept
 		{
 			return m_skip;
 		}
 
-		castor::PxBufferBaseRPtr getSavedFrame()const
+		castor::PxBufferBaseRPtr getSavedFrame()const noexcept
 		{
 			return m_saveBuffer.get();
 		}
 
-		ashes::Surface const & getSurface()const
+		ashes::Surface const & getSurface()const noexcept
 		{
 			CU_Require( m_surface );
 			return *m_surface;
 		}
 
-		ProgressBar & getProgressBar()
+		ProgressBar & getProgressBar()noexcept
 		{
 			CU_Require( m_progressBar );
 			return *m_progressBar;
 		}
 
-		EventHandlerRPtr getEventHandler()
+		EventHandlerRPtr getEventHandler()const noexcept
 		{
 			return m_evtHandler.get();
 		}
@@ -460,17 +451,17 @@ namespace castor3d
 		C3D_API void enableLoading();
 		C3D_API void allowHdrSwapchain( bool value = true );
 
-		void enableVSync( bool value )
+		void enableVSync( bool value )noexcept
 		{
 			m_vsync = value;
 		}
 
-		void setFullscreen( bool value )
+		void setFullscreen( bool value )noexcept
 		{
 			m_fullscreen = value;
 		}
 
-		void enableSaveFrame( bool value = true )
+		void enableSaveFrame( bool value = true )noexcept
 		{
 			m_toSave = value;
 		}
@@ -478,31 +469,31 @@ namespace castor3d
 
 	private:
 		void doCreateRenderPass();
-		void doDestroyRenderPass();
+		void doDestroyRenderPass()noexcept;
 		void doCreateProgram();
-		void doDestroyProgram();
-		void doCreateSwapchain( QueueData const & queueData );
-		void doDestroySwapchain();
-		void doCreateRenderingResources( QueueData const & queueData );
-		void doDestroyRenderingResources();
+		void doDestroyProgram()noexcept;
+		void doCreateSwapchain();
+		void doDestroySwapchain()noexcept;
+		void doCreateRenderingResources();
+		void doDestroyRenderingResources()noexcept;
 		ashes::ImageViewCRefArray doPrepareAttaches( size_t index );
 		void doCreateFrameBuffers();
-		void doDestroyFrameBuffers();
+		void doDestroyFrameBuffers()noexcept;
 		void doCreateLoadingScreen();
-		void doDestroyLoadingScreen();
+		void doDestroyLoadingScreen()noexcept;
 		void doCreatePickingPass( QueueData const & queueData );
-		void doDestroyPickingPass();
+		void doDestroyPickingPass()noexcept;
 		void doCreateRenderQuad( QueueData const & queueData );
-		void doDestroyRenderQuad();
+		void doDestroyRenderQuad()noexcept;
 		void doRecordCommandBuffer( QueueData const & queueData
 			, uint32_t index );
 		void doCreateCommandBuffers( QueueData const & queueData );
-		void doDestroyCommandBuffers();
+		void doDestroyCommandBuffers()noexcept;
 		void doCreateIntermediateViews( QueueData const & queueData );
-		void doDestroyIntermediateViews();
+		void doDestroyIntermediateViews()noexcept;
 		void doCreateSaveData( QueueData const & queueData );
-		void doDestroySaveData();
-		void doResetSwapChain( QueueData const & queueData );
+		void doDestroySaveData()noexcept;
+		void doResetSwapChain();
 		void doResetSwapChainAndCommands();
 		RenderingResources * doGetResources();
 		crg::SemaphoreWaitArray doSubmitLoadingFrame( QueueData const & queueData

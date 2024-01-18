@@ -201,7 +201,7 @@ namespace castor3d
 	{
 	}
 
-	RenderNodesPass::~RenderNodesPass()
+	RenderNodesPass::~RenderNodesPass()noexcept
 	{
 		getRenderQueue().cleanup();
 		m_backPipelines.clear();
@@ -213,7 +213,7 @@ namespace castor3d
 		getRenderQueue().setIgnoredNode( node );
 	}
 
-	void RenderNodesPass::countNodes( RenderInfo & info )const
+	void RenderNodesPass::countNodes( RenderInfo & info )const noexcept
 	{
 		auto & visible = getVisibleCounts();
 		info.visible.objectCount += visible.objectCount;
@@ -301,7 +301,7 @@ namespace castor3d
 		, bool isFrontCulled
 		, uint32_t passLayerIndex
 		, GpuBufferOffsetT< castor::Point4f > const & morphTargets
-		, SubmeshRenderData * submeshData )const
+		, SubmeshRenderData * submeshData )const noexcept
 	{
 		auto result = PipelineFlags{ adjustFlags( components )
 			, adjustFlags( submeshComponents )
@@ -345,7 +345,7 @@ namespace castor3d
 		, VkPrimitiveTopology topology
 		, bool isFrontCulled
 		, GpuBufferOffsetT< castor::Point4f > const & morphTargets
-		, SubmeshRenderData * submeshData )const
+		, SubmeshRenderData * submeshData )const noexcept
 	{
 		return createPipelineFlags( pass.getPassFlags()
 			, submeshComponents
@@ -882,7 +882,7 @@ namespace castor3d
 		bindBuffer( frustumClusters.getSpotLightClusterGridBuffer(), descriptorWrites, index );
 	}
 
-	bool RenderNodesPass::areValidPassFlags( PassComponentCombine const & passFlags )const
+	bool RenderNodesPass::areValidPassFlags( PassComponentCombine const & passFlags )const noexcept
 	{
 		if ( !passFlags.hasDeferredDiffuseLightingFlag
 			&& ( m_deferredLightingFilter == DeferredLightingFilter::eDeferredOnly ) )
@@ -920,12 +920,12 @@ namespace castor3d
 		return !checkFlag( m_filters, RenderFilter::eOpaque );
 	}
 
-	bool RenderNodesPass::isPassEnabled()const
+	bool RenderNodesPass::isPassEnabled()const noexcept
 	{
 		return hasNodes();
 	}
 
-	ShaderFlags RenderNodesPass::getShaderFlags()const
+	ShaderFlags RenderNodesPass::getShaderFlags()const noexcept
 	{
 		return ShaderFlag::eWorldSpace
 			| ShaderFlag::eTangentSpace
@@ -937,17 +937,17 @@ namespace castor3d
 		return getEngine()->areDebugTargetsEnabled();
 	}
 
-	bool RenderNodesPass::isValidPass( Pass const & pass )const
+	bool RenderNodesPass::isValidPass( Pass const & pass )const noexcept
 	{
 		return doIsValidPass( pass );
 	}
 
-	bool RenderNodesPass::isValidRenderable( RenderedObject const & object )const
+	bool RenderNodesPass::isValidRenderable( RenderedObject const & object )const noexcept
 	{
 		return doIsValidRenderable( object );
 	}
 
-	bool RenderNodesPass::isValidNode( SceneNode const & node )const
+	bool RenderNodesPass::isValidNode( SceneNode const & node )const noexcept
 	{
 		return &node != getIgnoredNode()
 			&& ( !handleStatic()
@@ -955,27 +955,27 @@ namespace castor3d
 				|| ( filtersNonStatic() && node.isStatic() ) );
 	}
 
-	bool RenderNodesPass::allowClusteredLighting( ClustersConfig const & config )const
+	bool RenderNodesPass::allowClusteredLighting( ClustersConfig const & config )const noexcept
 	{
 		return m_allowClusteredLighting && config.enabled;
 	}
 
-	bool RenderNodesPass::hasNodes()const
+	bool RenderNodesPass::hasNodes()const noexcept
 	{
 		return getRenderQueue().hasNodes();
 	}
 
-	Scene & RenderNodesPass::getScene()const
+	Scene & RenderNodesPass::getScene()const noexcept
 	{
 		return getCuller().getScene();
 	}
 
-	SceneNode const * RenderNodesPass::getIgnoredNode()const
+	SceneNode const * RenderNodesPass::getIgnoredNode()const noexcept
 	{
 		return getRenderQueue().getIgnoredNode();
 	}
 
-	bool RenderNodesPass::isMeshShading()const
+	bool RenderNodesPass::isMeshShading()const noexcept
 	{
 #if C3D_UseMeshShaders
 		return m_meshShading;
@@ -1211,23 +1211,22 @@ namespace castor3d
 		}
 	}
 
-	bool RenderNodesPass::doIsValidPass( Pass const & pass )const
+	bool RenderNodesPass::doIsValidPass( Pass const & pass )const noexcept
 	{
 		return ( pass.getRenderPassInfo() == nullptr || pass.getRenderPassInfo()->create == nullptr )
 			&& areValidPassFlags( pass.getPassFlags() );
 	}
 
-	bool RenderNodesPass::doIsValidRenderable( RenderedObject const & object )const
+	bool RenderNodesPass::doIsValidRenderable( RenderedObject const & object )const noexcept
 	{
 		return true;
 	}
 	
 	SubmeshComponentCombine RenderNodesPass::doAdjustSubmeshComponents( SubmeshComponentCombine submeshCombine )const
 	{
-		auto & components = getEngine()->getSubmeshComponentsRegister();
-
 		if ( !isMeshShading() )
 		{
+			auto const & components = getEngine()->getSubmeshComponentsRegister();
 			remFlags( submeshCombine, components.getMeshletFlag() );
 		}
 

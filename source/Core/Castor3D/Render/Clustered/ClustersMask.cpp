@@ -69,14 +69,14 @@ namespace castor3d
 			{
 			}
 
-			ShaderFlags getShaderFlags()const override
+			ShaderFlags getShaderFlags()const noexcept override
 			{
 				return ( ShaderFlag::eOpacity
 					| ShaderFlag::eViewSpace
 					| ShaderFlag::eDepth );
 			}
 
-			bool isPassEnabled()const override
+			bool isPassEnabled()const noexcept override
 			{
 				return m_parent->getClustersConfig()
 					&& m_parent->getClustersConfig()->parseDepthBuffer

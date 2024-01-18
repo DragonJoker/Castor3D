@@ -228,7 +228,7 @@ namespace castor3d
 		 *\return		Les indicateurs de programme.
 		 *\param[in]	material	Le matériau pour lequel on veut les indicateurs.
 		 */
-		C3D_API ProgramFlags getProgramFlags( Pass const & pass )const;
+		C3D_API ProgramFlags getProgramFlags( Pass const & pass )const noexcept;
 		/**
 		 *\~english
 		 *\return		The morphing flags.
@@ -298,17 +298,17 @@ namespace castor3d
 		C3D_API void setBaseData( SubmeshData submeshData, castor::Point3fArray data );
 		C3D_API void setBaseData( SubmeshData submeshData, castor::Point4fArray data );
 		C3D_API void addComponent( SubmeshComponentUPtr component );
-		inline void disableSceneUpdate();
-		inline void needsUpdate();
-		inline void addPoints( std::vector< InterleavedVertex > const & vertices );
+		void disableSceneUpdate();
+		void needsUpdate();
+		void addPoints( std::vector< InterleavedVertex > const & vertices );
 		template< size_t Count >
-		inline void addPoints( std::array< InterleavedVertex, Count > const & vertices );
-		inline void setDefaultMaterial( MaterialObs material );
-		inline void setIndexMapping( IndexMappingUPtr mapping );
-		inline IndexMappingRPtr getIndexMapping()const;
+		void addPoints( std::array< InterleavedVertex, Count > const & vertices );
+		void setDefaultMaterial( MaterialObs material );
+		void setIndexMapping( IndexMappingUPtr mapping );
+		IndexMappingRPtr getIndexMapping()const;
 		template< typename ComponentT, typename ... ParamsT >
-		inline ComponentT * createComponent( ParamsT && ... params );
-		inline void setTopology( VkPrimitiveTopology value );
+		ComponentT * createComponent( ParamsT && ... params );
+		void setTopology( VkPrimitiveTopology value );
 		/**
 		*\~english
 		*name
@@ -361,34 +361,33 @@ namespace castor3d
 		C3D_API SubmeshComponentRegister & getSubmeshComponentsRegister()const;
 		C3D_API SubmeshComponentID getComponentId( castor::String const & componentType )const;
 		C3D_API SubmeshComponentPlugin const & getComponentPlugin( SubmeshComponentID componentId )const;
-		C3D_API SubmeshComponentCombineID getComponentCombineID()const;
-		C3D_API bool hasRenderComponent()const;
+		C3D_API SubmeshComponentCombineID getComponentCombineID()const noexcept;
+		C3D_API bool hasRenderComponent()const noexcept;
 		C3D_API SubmeshRenderData * getRenderData()const;
-		inline SkeletonRPtr getSkeleton()const noexcept;
-		inline MaterialObs getDefaultMaterial()const noexcept;
-		inline castor::BoundingBox const & getBoundingBox()const noexcept;
-		inline castor::BoundingBox & getBoundingBox()noexcept;
-		inline castor::BoundingSphere const & getBoundingSphere()const noexcept;
-		inline castor::BoundingSphere & getBoundingSphere()noexcept;
-		inline bool isInitialised()const noexcept;
-		inline Mesh const & getParent()const noexcept;
-		inline Mesh & getParent()noexcept;
-		inline uint32_t getId()const noexcept;
-		inline bool hasComponent( castor::String const & name )const noexcept;
-		inline SubmeshComponentRPtr getComponent( castor::String const & name )const noexcept;
-		inline InstantiationComponent & getInstantiation()noexcept;
-		inline InstantiationComponent const & getInstantiation()const noexcept;
-		inline SubmeshComponentIDMap const & getComponents()const noexcept;
-		inline VkPrimitiveTopology getTopology()const noexcept;
-		inline SubmeshComponentCombine getComponentCombine()const noexcept;
-		inline SubmeshComponentPlugin const & getComponentPlugin( castor::String const & componentType )const;
+		SkeletonRPtr getSkeleton()const noexcept;
+		MaterialObs getDefaultMaterial()const noexcept;
+		castor::BoundingBox const & getBoundingBox()const noexcept;
+		castor::BoundingBox & getBoundingBox()noexcept;
+		castor::BoundingSphere const & getBoundingSphere()const noexcept;
+		castor::BoundingSphere & getBoundingSphere()noexcept;
+		bool isInitialised()const noexcept;
+		Mesh & getParent()const noexcept;
+		uint32_t getId()const noexcept;
+		bool hasComponent( castor::String const & name )const noexcept;
+		SubmeshComponentRPtr getComponent( castor::String const & name )const noexcept;
+		InstantiationComponent & getInstantiation()noexcept;
+		InstantiationComponent const & getInstantiation()const noexcept;
+		SubmeshComponentIDMap const & getComponents()const noexcept;
+		VkPrimitiveTopology getTopology()const noexcept;
+		SubmeshComponentCombine getComponentCombine()const noexcept;
+		SubmeshComponentPlugin const & getComponentPlugin( castor::String const & componentType )const;
 
 		template< typename ComponentT >
-		inline ComponentT * getComponent()const noexcept;
+		ComponentT * getComponent()const noexcept;
 		template< typename ComponentT >
 		SubmeshComponentPlugin const & getComponentPlugin()const;
 		template< typename ComponentT >
-		inline bool hasComponent()const;
+		bool hasComponent()const;
 		/**@}*/
 
 	private:

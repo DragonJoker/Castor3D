@@ -403,7 +403,7 @@ namespace castor3d
 			queueData = m_queues->getQueue();
 		}
 
-		doCreateSwapchain( *queueData );
+		doCreateSwapchain();
 
 		if ( engine.isThreaded() )
 		{
@@ -421,7 +421,7 @@ namespace castor3d
 		log::debug << "Created render window " << m_index << std::endl;
 	}
 
-	RenderWindow::~RenderWindow()
+	RenderWindow::~RenderWindow()noexcept
 	{
 		log::debug << "Destroyed render window " << m_index << std::endl;
 		auto & engine = *getEngine();
@@ -900,16 +900,6 @@ namespace castor3d
 		return m_size;
 	}
 
-	void RenderWindow::addPickingScene( Scene & scene )
-	{
-		auto camera = getCamera();
-
-		if ( camera )
-		{
-			m_picking->addScene( scene, *camera );
-		}
-	}
-
 	PickNodeType RenderWindow::pick( castor::Position const & position )
 	{
 #if C3D_DebugPicking || C3D_DebugBackgroundPicking
@@ -1049,14 +1039,14 @@ namespace castor3d
 			, std::move( createInfo ) );
 	}
 
-	void RenderWindow::doDestroyRenderPass()
+	void RenderWindow::doDestroyRenderPass()noexcept
 	{
 		m_renderPass.reset();
 	}
 
 	void RenderWindow::doCreateProgram()
 	{
-		ProgramModule module{ getName() };
+		ProgramModule programModule{ getName() };
 		{
 			sdw::TraditionalGraphicsWriter writer{ &getEngine()->getShaderAllocator() };
 
@@ -1109,18 +1099,18 @@ namespace castor3d
 					FI;
 #endif
 				} );
-			module.shader = writer.getBuilder().releaseShader();
+			programModule.shader = writer.getBuilder().releaseShader();
 		}
 
-		m_program = makeProgramStates( getDevice(), module );
+		m_program = makeProgramStates( getDevice(), programModule );
 	}
 
-	void RenderWindow::doDestroyProgram()
+	void RenderWindow::doDestroyProgram()noexcept
 	{
 		m_program.clear();
 	}
 
-	void RenderWindow::doCreateSwapchain( QueueData const & queueData )
+	void RenderWindow::doCreateSwapchain()
 	{
 		m_swapChain = getDevice()->createSwapChain( rendwndw::getSwapChainCreateInfo( *m_surface
 			, { m_size.getWidth(), m_size.getHeight() }
@@ -1138,7 +1128,7 @@ namespace castor3d
 		}
 
 		m_swapchainFormat = m_swapChain->getFormat();
-		doCreateRenderingResources( queueData );
+		doCreateRenderingResources();
 		doCreateFrameBuffers();
 
 #if !C3D_PersistLoadingScreen
@@ -1149,7 +1139,7 @@ namespace castor3d
 #endif
 	}
 
-	void RenderWindow::doDestroySwapchain()
+	void RenderWindow::doDestroySwapchain()noexcept
 	{
 #if !C3D_PersistLoadingScreen
 		if ( getEngine()->isThreaded() )
@@ -1164,7 +1154,7 @@ namespace castor3d
 		log::info << "Destroyed SwapChain [" << getName() << "]" << std::endl;
 	}
 
-	void RenderWindow::doCreateRenderingResources( QueueData const & queueData )
+	void RenderWindow::doCreateRenderingResources()
 	{
 		for ( uint32_t i = 0u; i < uint32_t( m_swapChain->getImageCount() ); ++i )
 		{
@@ -1176,7 +1166,7 @@ namespace castor3d
 		}
 	}
 
-	void RenderWindow::doDestroyRenderingResources()
+	void RenderWindow::doDestroyRenderingResources()noexcept
 	{
 		m_renderingResources.clear();
 	}
@@ -1219,7 +1209,7 @@ namespace castor3d
 		}
 	}
 
-	void RenderWindow::doDestroyFrameBuffers()
+	void RenderWindow::doDestroyFrameBuffers()noexcept
 	{
 		m_frameBuffers.clear();
 		m_swapchainViews.clear();
@@ -1234,7 +1224,7 @@ namespace castor3d
 			return;
 		}
 
-		auto & manager = static_cast< ControlsManager & >( *getEngine()->getUserInputListener() );
+		auto const & manager = static_cast< ControlsManager & >( *getEngine()->getUserInputListener() );
 		auto global = manager.findControl( cuT( "C3D_LoadingScreen/GlobalProgress" ) );
 		auto local = manager.findControl( cuT( "C3D_LoadingScreen/LocalProgress" ) );
 
@@ -1267,7 +1257,7 @@ namespace castor3d
 		}
 	}
 
-	void RenderWindow::doDestroyLoadingScreen()
+	void RenderWindow::doDestroyLoadingScreen()noexcept
 	{
 		if ( m_loading && m_loadingScreen )
 		{
@@ -1295,7 +1285,7 @@ namespace castor3d
 			, target->getCuller() );
 	}
 
-	void RenderWindow::doDestroyPickingPass()
+	void RenderWindow::doDestroyPickingPass()noexcept
 	{
 		m_picking.reset();
 	}
@@ -1336,7 +1326,7 @@ namespace castor3d
 
 #else
 
-		for ( auto & intermediate : m_intermediateSampledViews )
+		for ( auto const & intermediate : m_intermediateSampledViews )
 		{
 			m_renderQuad->registerPassInputs( { makeImageViewDescriptorWrite( m_resources.createImageView( context, intermediate.viewId ), m_renderQuad->getSampler().getSampler(), 0u )
 					, makeDescriptorWrite( m_configUbo, 1u ) }
@@ -1345,11 +1335,11 @@ namespace castor3d
 
 #endif
 
-		auto & debugConfig = target->getDebugConfig();
+		auto const & debugConfig = target->getDebugConfig();
 		m_renderQuad->initialisePass( debugConfig.intermediateImageIndex );
 	}
 
-	void RenderWindow::doDestroyRenderQuad()
+	void RenderWindow::doDestroyRenderQuad()noexcept
 	{
 		m_renderQuad.reset();
 	}
@@ -1364,7 +1354,7 @@ namespace castor3d
 		CU_Require( target );
 		auto & intermediates = target->getIntermediateViews();
 		auto & intermediate = intermediates[passIndex];
-		auto & intermediateBarrierView = m_intermediateBarrierViews[passIndex];
+		auto const & intermediateBarrierView = m_intermediateBarrierViews[passIndex];
 		auto & context = m_device.makeContext();
 #endif
 		auto & commandBuffers = m_commandBuffers[passIndex];
@@ -1373,7 +1363,7 @@ namespace castor3d
 
 		for ( auto & commandBuffer : commandBuffers )
 		{
-			auto & frameBuffer = *m_frameBuffers[index];
+			auto const & frameBuffer = *m_frameBuffers[index];
 			auto name = getName() + castor::string::toString( index );
 
 			if ( !commandBuffer )
@@ -1457,7 +1447,7 @@ namespace castor3d
 		}
 	}
 
-	void RenderWindow::doDestroyCommandBuffers()
+	void RenderWindow::doDestroyCommandBuffers()noexcept
 	{
 		m_commandBuffers.clear();
 	}
@@ -1495,7 +1485,7 @@ namespace castor3d
 #endif
 	}
 
-	void RenderWindow::doDestroyIntermediateViews()
+	void RenderWindow::doDestroyIntermediateViews()noexcept
 	{
 #if !C3D_DebugPicking && !C3D_DebugBackgroundPicking
 		m_texture3Dto2D.reset();
@@ -1530,7 +1520,7 @@ namespace castor3d
 #endif
 	}
 
-	void RenderWindow::doDestroySaveData()
+	void RenderWindow::doDestroySaveData()noexcept
 	{
 		m_transferCommands.clear();
 		m_snapshotData = {};
@@ -1544,14 +1534,14 @@ namespace castor3d
 		m_saveBuffer.reset();
 	}
 
-	void RenderWindow::doResetSwapChain( QueueData const & queueData )
+	void RenderWindow::doResetSwapChain()
 	{
 #if C3D_PersistLoadingScreen
 		if ( m_progressBar && m_loadingScreen )
 		{
 			m_progressBar->lock();
 			doDestroySwapchain();
-			doCreateSwapchain( queueData );
+			doCreateSwapchain();
 			m_loadingScreen->setRenderPass( *m_renderPass, m_size, m_swapchainFormat );
 			m_progressBar->unlock();
 		}
@@ -1559,7 +1549,7 @@ namespace castor3d
 #endif
 		{
 			doDestroySwapchain();
-			doCreateSwapchain( queueData );
+			doCreateSwapchain();
 		}
 	}
 
@@ -1576,7 +1566,7 @@ namespace castor3d
 
 					if ( !m_initialised || m_loading )
 					{
-						doResetSwapChain( queueData );
+						doResetSwapChain();
 
 						if ( m_loading )
 						{
@@ -1594,7 +1584,7 @@ namespace castor3d
 						doDestroyCommandBuffers();
 						doDestroyRenderQuad();
 						doDestroyIntermediateViews();
-						doResetSwapChain( queueData );
+						doResetSwapChain();
 						doCreateIntermediateViews( queueData );
 						doCreateRenderQuad( queueData );
 						doCreateCommandBuffers( queueData );

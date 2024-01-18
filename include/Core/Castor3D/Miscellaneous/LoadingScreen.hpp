@@ -40,10 +40,10 @@ namespace castor3d
 			, SceneRPtr scene
 			, VkRenderPass renderPass
 			, castor::Size const & size );
-		C3D_API ~LoadingScreen();
+		C3D_API ~LoadingScreen()noexcept;
 
-		C3D_API void enable();
-		C3D_API void disable();
+		C3D_API void enable()noexcept;
+		C3D_API void disable()noexcept;
 		C3D_API void update( CpuUpdater & updater );
 		C3D_API void update( GpuUpdater & updater );
 		C3D_API void setRenderPass( VkRenderPass renderPass

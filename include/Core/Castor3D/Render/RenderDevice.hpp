@@ -125,27 +125,27 @@ namespace castor3d
 			addProperty( std::string{}, propStruct );
 		}
 
-		ashes::StringArray const & getExtensionsNames()const
+		ashes::StringArray const & getExtensionsNames()const noexcept
 		{
 			return m_extensionsNames;
 		}
 
-		FeatureArray & getFeatures()
+		FeatureArray & getFeatures()noexcept
 		{
 			return m_features;
 		}
 
-		FeatureArray const & getFeatures()const
+		FeatureArray const & getFeatures()const noexcept
 		{
 			return m_features;
 		}
 
-		PropertyArray & getProperties()
+		PropertyArray & getProperties()noexcept
 		{
 			return m_properties;
 		}
 
-		PropertyArray const & getProperties()const
+		PropertyArray const & getProperties()const noexcept
 		{
 			return m_properties;
 		}
@@ -170,10 +170,10 @@ namespace castor3d
 	{
 		QueueData( QueueData const & ) = delete;
 		QueueData & operator=( QueueData const & ) = delete;
-		C3D_API QueueData( QueueData && ) = default;
-		C3D_API QueueData & operator=( QueueData && ) = default;
+		C3D_API QueueData( QueueData && )noexcept = default;
+		C3D_API QueueData & operator=( QueueData && )noexcept = default;
 
-		explicit QueueData( QueuesData const * parent )
+		explicit QueueData( QueuesData const * parent )noexcept
 			: parent{ parent }
 		{
 		}
@@ -190,12 +190,12 @@ namespace castor3d
 		QueueDataWrapper & operator=( QueueDataWrapper const & ) = delete;
 
 		C3D_API QueueDataWrapper();
-		C3D_API QueueDataWrapper( QueueDataWrapper && rhs );
-		C3D_API QueueDataWrapper & operator=( QueueDataWrapper && rhs );
+		C3D_API QueueDataWrapper( QueueDataWrapper && rhs )noexcept;
+		C3D_API QueueDataWrapper & operator=( QueueDataWrapper && rhs )noexcept;
 		C3D_API explicit QueueDataWrapper( QueuesData * parent );
-		C3D_API ~QueueDataWrapper();
+		C3D_API ~QueueDataWrapper()noexcept;
 
-		QueueData const * release()
+		QueueData const * release()noexcept
 		{
 			auto result = data;
 			data = nullptr;
@@ -203,12 +203,12 @@ namespace castor3d
 			return result;
 		}
 
-		QueueData const * operator->()
+		QueueData const * operator->()const noexcept
 		{
 			return data;
 		}
 
-		QueueData const & operator*()
+		QueueData const & operator*()const noexcept
 		{
 			return *data;
 		}
@@ -223,8 +223,9 @@ namespace castor3d
 
 		QueuesData( QueuesData const & ) = delete;
 		QueuesData & operator=( QueuesData const & ) = delete;
-		C3D_API QueuesData( QueuesData && rhs );
-		C3D_API QueuesData & operator=( QueuesData && rhs );
+		C3D_API QueuesData( QueuesData && rhs )noexcept;
+		C3D_API QueuesData & operator=( QueuesData && rhs )noexcept;
+		C3D_API ~QueuesData()noexcept = default;
 
 		C3D_API QueuesData( QueueFamilyFlags familySupport = QueueFamilyFlag::eNone
 			, uint32_t familyIndex = 0xFFFFFFFFu );
@@ -232,26 +233,26 @@ namespace castor3d
 		C3D_API void initialise( ashes::Device const & device );
 		C3D_API void setQueueSize( size_t count );
 		C3D_API QueueData const * reserveQueue()const;
-		C3D_API void unreserveQueue( QueueData const * queue )const;
+		C3D_API void unreserveQueue( QueueData const * queue )const noexcept;
 		C3D_API QueueData const * getQueue();
-		C3D_API void putQueue( QueueData const * queue );
+		C3D_API void putQueue( QueueData const * queue )noexcept;
 
-		size_t getQueueSize()const
+		size_t getQueueSize()const noexcept
 		{
 			return m_allQueuesData.size();
 		}
 
-		auto begin()const
+		auto begin()const noexcept
 		{
 			return m_allQueuesData.begin();
 		}
 
-		auto end()const
+		auto end()const noexcept
 		{
 			return m_allQueuesData.end();
 		}
 
-		QueueData const & front()const
+		QueueData const & front()const noexcept
 		{
 			return *m_allQueuesData.front();
 		}
@@ -283,7 +284,7 @@ namespace castor3d
 			, ashes::PhysicalDevice const & gpu
 			, AshPluginDescription const & desc
 			, Extensions deviceExtensions );
-		C3D_API ~RenderDevice();
+		C3D_API ~RenderDevice()noexcept;
 
 		C3D_API VkFormat selectSuitableDepthFormat( VkFormatFeatureFlags requiredFeatures )const;
 		C3D_API VkFormat selectSuitableStencilFormat( VkFormatFeatureFlags requiredFeatures )const;
@@ -294,27 +295,27 @@ namespace castor3d
 		C3D_API VkFormat selectSmallestFormatRGBSFloatFormat( VkFormatFeatureFlags requiredFeatures )const;
 		C3D_API VkFormat selectSuitableFormat( std::vector< VkFormat > const & formats
 			, VkFormatFeatureFlags requiredFeatures )const;
-		C3D_API QueueDataWrapper graphicsData()const;
-		C3D_API size_t graphicsQueueSize()const;
-		C3D_API QueueData const * reserveGraphicsData()const;
-		C3D_API void unreserveGraphicsData( QueueData const * queueData )const;
-		C3D_API void putGraphicsData( QueueData const * queueData )const;
-		C3D_API crg::GraphContext & makeContext()const;
-		C3D_API bool hasExtension( std::string_view const & name )const;
-		C3D_API bool hasTerminateInvocation()const;
-		C3D_API bool hasDemoteToHelperInvocation()const;
-		C3D_API bool hasMeshAndTaskShaders()const;
-		C3D_API bool hasMeshShaders()const;
-		C3D_API bool hasTaskShaders()const;
-		C3D_API bool hasAtomicFloatAdd()const;
-		C3D_API bool hasBufferDeviceAddress()const;
-		C3D_API bool hasRayTracing()const;
-		C3D_API bool hasBindless()const;
-		C3D_API uint32_t getMaxBindlessSampled()const;
-		C3D_API uint32_t getMaxBindlessStorage()const;
-		C3D_API void fillGPUMeshInformations( GpuInformations & gpuInformations )const;
+		C3D_API QueueDataWrapper graphicsData()const noexcept;
+		C3D_API size_t graphicsQueueSize()const noexcept;
+		C3D_API QueueData const * reserveGraphicsData()const noexcept;
+		C3D_API void unreserveGraphicsData( QueueData const * queueData )const noexcept;
+		C3D_API void putGraphicsData( QueueData const * queueData )const noexcept;
+		C3D_API crg::GraphContext & makeContext()const noexcept;
+		C3D_API bool hasExtension( std::string_view const & name )const noexcept;
+		C3D_API bool hasTerminateInvocation()const noexcept;
+		C3D_API bool hasDemoteToHelperInvocation()const noexcept;
+		C3D_API bool hasMeshAndTaskShaders()const noexcept;
+		C3D_API bool hasMeshShaders()const noexcept;
+		C3D_API bool hasTaskShaders()const noexcept;
+		C3D_API bool hasAtomicFloatAdd()const noexcept;
+		C3D_API bool hasBufferDeviceAddress()const noexcept;
+		C3D_API bool hasRayTracing()const noexcept;
+		C3D_API bool hasBindless()const noexcept;
+		C3D_API uint32_t getMaxBindlessSampled()const noexcept;
+		C3D_API uint32_t getMaxBindlessStorage()const noexcept;
+		C3D_API void fillGPUMeshInformations( GpuInformations & gpuInformations )const noexcept;
 
-		bool prefersMeshShaderEXT()const
+		bool prefersMeshShaderEXT()const noexcept
 		{
 			return m_prefersMeshShaderEXT;
 		}
@@ -340,39 +341,39 @@ namespace castor3d
 #endif
 		}
 
-		ashes::Device const * operator->()const
+		ashes::Device const * operator->()const noexcept
 		{
 			return device.get();
 		}
 
-		ashes::Device * operator->()
+		ashes::Device * operator->()noexcept
 		{
 			return device.get();
 		}
 
-		ashes::Device & operator*()
+		ashes::Device & operator*()noexcept
 		{
 			return *device;
 		}
 
-		ashes::Device const & operator*()const
+		ashes::Device const & operator*()const noexcept
 		{
 			return *device;
 		}
 
-		uint32_t getGraphicsQueueFamilyIndex()const
+		uint32_t getGraphicsQueueFamilyIndex()const noexcept
 		{
 			CU_Require( m_preferredGraphicsQueue );
 			return m_preferredGraphicsQueue->familyIndex;
 		}
 
-		uint32_t getComputeQueueFamilyIndex()const
+		uint32_t getComputeQueueFamilyIndex()const noexcept
 		{
 			CU_Require( m_preferredComputeQueue );
 			return m_preferredComputeQueue->familyIndex;
 		}
 
-		uint32_t getTransferQueueFamilyIndex()const
+		uint32_t getTransferQueueFamilyIndex()const noexcept
 		{
 			CU_Require( m_preferredTransferQueue );
 			return m_preferredTransferQueue->familyIndex;

@@ -21,10 +21,7 @@ namespace castor3d
 		struct ComponentsShader
 			: shader::PassComponentsShader
 		{
-			explicit ComponentsShader( PassComponentPlugin const & plugin )
-				: shader::PassComponentsShader{ plugin }
-			{
-			}
+			using shader::PassComponentsShader::PassComponentsShader;
 
 			C3D_API void fillComponents( ComponentModeFlags componentsMask
 				, sdw::type::BaseStruct & components
@@ -46,10 +43,7 @@ namespace castor3d
 			: public PassComponentPlugin
 		{
 		public:
-			explicit Plugin( PassComponentRegister const & passComponent )
-				: PassComponentPlugin{ passComponent }
-			{
-			}
+			using PassComponentPlugin::PassComponentPlugin;
 
 			PassComponentUPtr createComponent( Pass & pass )const override
 			{

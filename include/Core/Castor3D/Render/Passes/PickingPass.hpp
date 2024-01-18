@@ -81,7 +81,7 @@ namespace castor3d
 		*/
 		/**@{*/
 
-		C3D_API ShaderFlags getShaderFlags()const override
+		C3D_API ShaderFlags getShaderFlags()const noexcept override
 		{
 			return ShaderFlag::ePicking
 				| ShaderFlag::eOpacity;
@@ -89,7 +89,7 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		bool doIsValidPass( Pass const & pass )const override;
+		bool doIsValidPass( Pass const & pass )const noexcept override;
 		void doFillAdditionalBindings( PipelineFlags const & flags
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings )const override;
 		void doFillAdditionalDescriptor( PipelineFlags const & flags
@@ -111,7 +111,7 @@ namespace castor3d
 		C3D_API static uint32_t const UboBindingPoint;
 
 	private:
-		std::map< castor::String, GeometryRPtr > m_pickable{};
+		castor::StringMap< GeometryRPtr > m_pickable{};
 	};
 }
 

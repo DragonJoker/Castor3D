@@ -28,11 +28,11 @@ namespace castor3d
 		{
 #pragma clang push
 #pragma clang diagnostic ignored "-Wduplicate-enum"
-			eTextures,
-			eBuffers,
-			eMeshBuffers,
-			eVertexBuffers,
-			CU_EnumBounds( Descriptor, eTextures )
+			eTextures = 0,
+			eBuffers = 1,
+			eMeshBuffers = 2,
+			eVertexBuffers = 3,
+			CU_EnumBounds( Descriptor, eTextures, eVertexBuffers )
 #pragma clang pop
 		};
 
@@ -88,15 +88,6 @@ namespace castor3d
 		/**
 		*\~english
 		*\brief
-		*	Denstructor.
-		*\~french
-		*\brief
-		*	Destructeur.
-		*/
-		C3D_API ~RenderPipeline();
-		/**
-		*\~english
-		*\brief
 		*	Initialises the pipeline.
 		*\param[in] device
 		*	The GPU device.
@@ -136,30 +127,30 @@ namespace castor3d
 		/**@{*/
 		C3D_API void setVertexLayouts( ashes::PipelineVertexInputStateCreateInfoCRefArray const & layouts );
 
-		void setAdditionalDescriptorSetLayout( ashes::DescriptorSetLayout const & layout )
+		void setAdditionalDescriptorSetLayout( ashes::DescriptorSetLayout const & layout )noexcept
 		{
 			CU_Require( !m_pipeline );
 			m_addDescriptorLayout = &layout;
 		}
 
-		void setAdditionalDescriptorSet( ashes::DescriptorSet const & descriptorSet )
+		void setAdditionalDescriptorSet( ashes::DescriptorSet const & descriptorSet )noexcept
 		{
 			m_addDescriptorSet = &descriptorSet;
 		}
 
-		void setMeshletDescriptorSetLayout( ashes::DescriptorSetLayout const & layout )
+		void setMeshletDescriptorSetLayout( ashes::DescriptorSetLayout const & layout )noexcept
 		{
 			CU_Require( !m_pipeline );
 			m_meshletDescriptorLayout = &layout;
 		}
 
-		void setVertexLayouts( std::vector< ashes::PipelineVertexInputStateCreateInfo > layouts )
+		void setVertexLayouts( std::vector< ashes::PipelineVertexInputStateCreateInfo > layouts )noexcept
 		{
 			CU_Require( !m_pipeline );
 			m_vertexLayouts = std::move( layouts );
 		}
 
-		void setPushConstantRanges( ashes::VkPushConstantRangeArray const & pushConstantRanges )
+		void setPushConstantRanges( ashes::VkPushConstantRangeArray const & pushConstantRanges )noexcept
 		{
 			CU_Require( !m_pipeline );
 			m_pushConstantRanges = pushConstantRanges;
@@ -186,62 +177,62 @@ namespace castor3d
 		*	Accesseurs.
 		**/
 		/**@{*/
-		ashes::DescriptorSet const & getAdditionalDescriptorSet()const
+		ashes::DescriptorSet const & getAdditionalDescriptorSet()const noexcept
 		{
 			CU_Require( m_addDescriptorSet != nullptr );
 			return *m_addDescriptorSet;
 		}
 
-		PipelineFlags const & getFlags()const
+		PipelineFlags const & getFlags()const noexcept
 		{
 			return m_flags;
 		}
 
-		PipelineBaseHash const & getFlagsHash()const
+		PipelineBaseHash const & getFlagsHash()const noexcept
 		{
 			return m_flagsHash;
 		}
 
-		bool hasPipeline()const
+		bool hasPipeline()const noexcept
 		{
 			return m_pipeline != nullptr;
 		}
 
-		ashes::GraphicsPipeline const & getPipeline()const
+		ashes::GraphicsPipeline const & getPipeline()const noexcept
 		{
 			hasPipeline();
 			return *m_pipeline;
 		}
 
-		ashes::PipelineLayout const & getPipelineLayout()const
+		ashes::PipelineLayout const & getPipelineLayout()const noexcept
 		{
 			CU_Require( m_pipelineLayout );
 			return *m_pipelineLayout;
 		}
 
-		ashes::DescriptorSetLayout const & getAdditionalDescriptorSetLayout()const
+		ashes::DescriptorSetLayout const & getAdditionalDescriptorSetLayout()const noexcept
 		{
 			CU_Require( m_addDescriptorLayout );
 			return *m_addDescriptorLayout;
 		}
 
-		bool hasAdditionalDescriptorSetLayout()const
+		bool hasAdditionalDescriptorSetLayout()const noexcept
 		{
 			return m_addDescriptorLayout != nullptr;
 		}
 
-		ashes::DescriptorSetLayout const & getMeshletDescriptorSetLayout()const
+		ashes::DescriptorSetLayout const & getMeshletDescriptorSetLayout()const noexcept
 		{
 			CU_Require( m_meshletDescriptorLayout );
 			return *m_meshletDescriptorLayout;
 		}
 
-		bool hasMeshletDescriptorSetLayout()const
+		bool hasMeshletDescriptorSetLayout()const noexcept
 		{
 			return m_meshletDescriptorLayout != nullptr;
 		}
 
-		RenderSystem & getRenderSystem()const
+		RenderSystem & getRenderSystem()const noexcept
 		{
 			return m_renderSystem;
 		}

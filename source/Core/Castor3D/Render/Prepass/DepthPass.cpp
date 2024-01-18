@@ -60,7 +60,7 @@ namespace castor3d
 	{
 	}
 
-	ShaderFlags DepthPass::getShaderFlags()const
+	ShaderFlags DepthPass::getShaderFlags()const noexcept
 	{
 		return ShaderFlag::eWorldSpace
 			| ShaderFlag::eTangentSpace

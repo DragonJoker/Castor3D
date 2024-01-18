@@ -38,13 +38,13 @@ namespace castor3d
 	// Base count for objects buffers pool
 	static uint32_t constexpr BaseObjectPoolBufferCount = 1'048'576u;
 	// Maximum pipelines count.
-	static uint64_t constexpr MaxPipelines = 2'048ull;
+	static uint64_t constexpr MaxPipelines = 2'048ULL;
 	// Maximum Nodes ID per pipeline.
-	static uint64_t constexpr MaxPipelinesNodes = 32'768ull;
+	static uint64_t constexpr MaxPipelinesNodes = 32'768ULL;
 	// Maximum pipelines and buffer count.
-	static uint64_t constexpr MaxCommandsCount = 32'768ull;
+	static uint64_t constexpr MaxCommandsCount = 32'768ULL;
 	// Maximum nodes per Pipeline Nodes buffer.
-	static uint64_t constexpr MaxNodesPerPipeline = 1'024ull;
+	static uint64_t constexpr MaxNodesPerPipeline = 1'024ULL;
 	// Maximum nodes per meshlet indirect commands buffer.
 	static uint64_t constexpr MaxSubmeshMeshletDrawIndirectCommand = MaxCommandsCount;
 	// Maximum nodes per indexed indirect commands buffer.
@@ -54,7 +54,7 @@ namespace castor3d
 	// Maximum billboard nodes per indirect commands buffer.
 	static uint64_t constexpr MaxBillboardDrawIndirectCommand = MaxCommandsCount;
 	// Maximum objects nodes count in a scene (submesh or billboards).
-	static uint64_t constexpr MaxObjectNodesCount = 262'144ull;
+	static uint64_t constexpr MaxObjectNodesCount = 262'144ULL;
 	//@}
 	/**
 	*\name
@@ -157,7 +157,7 @@ namespace castor3d
 	*/
 	//@{
 	// Maximum overlay pipelines and buffer count.
-	static uint32_t constexpr MaxOverlayPipelines = 16'384ull;
+	static uint32_t constexpr MaxOverlayPipelines = 16'384u;
 	// Max overlay count per buffer
 	static uint32_t constexpr MaxOverlaysPerBuffer = 65'536u;
 	// Max counts for text overlays

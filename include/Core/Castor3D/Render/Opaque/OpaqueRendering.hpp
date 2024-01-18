@@ -68,7 +68,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API ~OpaqueRendering();
+		C3D_API ~OpaqueRendering()noexcept;
 		/**
 		 *\~english
 		 *\return		The number of steps needed for initialisation, to show progression.
@@ -125,28 +125,28 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		C3D_API Engine * getEngine()const;
-		C3D_API crg::FramePass const & getLastPass()const;
-		C3D_API Texture const & getSsaoResult()const;
-		C3D_API Texture const & getSssDiffuse()const;
-		C3D_API bool isEnabled()const;
+		C3D_API Engine * getEngine()const noexcept;
+		C3D_API crg::FramePass const & getLastPass()const noexcept;
+		C3D_API Texture const & getSsaoResult()const noexcept;
+		C3D_API Texture const & getSssDiffuse()const noexcept;
+		C3D_API bool isEnabled()const noexcept;
 
-		ashes::Buffer< uint32_t > const & getMaterialsCounts()const
+		ashes::Buffer< uint32_t > const & getMaterialsCounts()const noexcept
 		{
 			return *m_materialsCounts;
 		}
 
-		ashes::Buffer< castor::Point3ui > const & getMaterialsIndirectCounts()const
+		ashes::Buffer< castor::Point3ui > const & getMaterialsIndirectCounts()const noexcept
 		{
 			return *m_materialsIndirectCounts;
 		}
 
-		ashes::Buffer< uint32_t > const & getMaterialsStarts()const
+		ashes::Buffer< uint32_t > const & getMaterialsStarts()const noexcept
 		{
 			return *m_materialsStarts;
 		}
 
-		ashes::Buffer< castor::Point2ui > const & getPixelXY()const
+		ashes::Buffer< castor::Point2ui > const & getPixelXY()const noexcept
 		{
 			return *m_pixelsXY;
 		}

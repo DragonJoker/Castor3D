@@ -11,9 +11,6 @@ namespace castor3d
 	class ParticlePlugin
 		: public Plugin
 	{
-	private:
-		friend class Plugin;
-
 	public:
 		/**
 		 *\~english
@@ -33,7 +30,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API ~ParticlePlugin()override;
+		C3D_API ~ParticlePlugin()noexcept override;
 	};
 }
 

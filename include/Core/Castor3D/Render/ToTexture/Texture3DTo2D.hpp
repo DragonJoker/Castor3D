@@ -34,7 +34,7 @@ namespace castor3d
 			, crg::ResourcesCache & resources
 			, VkExtent2D const & size
 			, CameraUbo const & cameraUbo );
-		C3D_API ~Texture3DTo2D();
+		C3D_API ~Texture3DTo2D()noexcept;
 
 		C3D_API void createPasses( QueueData const & queueData
 			, IntermediateViewArray intermediates );
@@ -46,7 +46,7 @@ namespace castor3d
 			, ashes::VkSemaphoreArray & semaphores
 			, ashes::VkPipelineStageFlagsArray & stages );
 
-		Texture const & getTarget()
+		Texture const & getTarget()const noexcept
 		{
 			return m_target;
 		}
@@ -76,7 +76,7 @@ namespace castor3d
 
 		struct Texture3DToScreen
 		{
-			Texture3DToScreen();
+			Texture3DToScreen() = default;
 			Texture3DToScreen( RenderDevice const & device
 				, QueueData const & queueData
 				, crg::ResourcesCache & resources

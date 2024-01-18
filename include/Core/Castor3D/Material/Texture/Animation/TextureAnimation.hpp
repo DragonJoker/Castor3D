@@ -27,10 +27,11 @@ namespace castor3d
 		 *name Copie / Déplacement.
 		 **/
 		/**@{*/
-		C3D_API TextureAnimation( TextureAnimation && rhs ) = default;
-		C3D_API TextureAnimation & operator=( TextureAnimation && rhs ) = delete;
+		C3D_API TextureAnimation( TextureAnimation && rhs )noexcept = default;
+		C3D_API TextureAnimation & operator=( TextureAnimation && rhs )noexcept = delete;
 		C3D_API TextureAnimation( TextureAnimation const & rhs ) = delete;
 		C3D_API TextureAnimation & operator=( TextureAnimation const & rhs ) = delete;
+		C3D_API ~TextureAnimation()noexcept override = default;
 		/**@}*/
 		/**
 		 *\~english
@@ -53,58 +54,58 @@ namespace castor3d
 		C3D_API castor::Point3f getScale( castor::Milliseconds const & time )const;
 		C3D_API bool isTransformAnimated()const;
 
-		void addPendingAnimated( AnimatedObject & object )
+		void addPendingAnimated( AnimatedObject & object )noexcept
 		{
 			m_pending.insert( &object );
 		}
 
-		TextureTranslateSpeed const & getTranslateSpeed()const
+		TextureTranslateSpeed const & getTranslateSpeed()const noexcept
 		{
 			return m_translate;
 		}
 
-		TextureRotateSpeed const & getRotateSpeed()const
+		TextureRotateSpeed const & getRotateSpeed()const noexcept
 		{
 			return m_rotate;
 		}
 
-		TextureScaleSpeed const & getScaleSpeed()const
+		TextureScaleSpeed const & getScaleSpeed()const noexcept
 		{
 			return m_scale;
 		}
 
-		void setTranslateSpeed( TextureTranslateSpeed const & translate )
+		void setTranslateSpeed( TextureTranslateSpeed translate )noexcept
 		{
-			m_translate = translate;
+			m_translate = std::move( translate );
 		}
 
-		void setRotateSpeed( TextureRotateSpeed const & rotate )
+		void setRotateSpeed( TextureRotateSpeed rotate )noexcept
 		{
-			m_rotate = rotate;
+			m_rotate = std::move( rotate );
 		}
 
-		void setScaleSpeed( TextureScaleSpeed const & scale )
+		void setScaleSpeed( TextureScaleSpeed scale )noexcept
 		{
-			m_scale = scale;
+			m_scale = std::move( scale );
 		}
 
-		void enableTileAnim()
+		void enableTileAnim()noexcept
 		{
 			m_tileAnim = true;
 		}
 
-		bool isTileAnimated()const
+		bool isTileAnimated()const noexcept
 		{
 			return m_tileAnim;
 		}
 
-		void setTransformSpeed( TextureTranslateSpeed const & translate
-			, TextureRotateSpeed const & rotate
-			, TextureScaleSpeed const & scale )
+		void setTransformSpeed( TextureTranslateSpeed translate
+			, TextureRotateSpeed rotate
+			, TextureScaleSpeed scale )noexcept
 		{
-			setTranslateSpeed( translate );
-			setRotateSpeed( rotate );
-			setScaleSpeed( scale );
+			setTranslateSpeed( std::move( translate ) );
+			setRotateSpeed( std::move( rotate ) );
+			setScaleSpeed( std::move( scale ) );
 		}
 
 	protected:

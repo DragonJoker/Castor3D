@@ -76,13 +76,6 @@ namespace castor3d
 			, VkCommandBufferLevel level = VK_COMMAND_BUFFER_LEVEL_PRIMARY );
 		/**
 		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API ~OverlayRenderer();
-		/**
-		 *\~english
 		 *\brief			Updates the render pass, GPU wise.
 		 *\param[in, out]	updater	The update data.
 		 *\~french
@@ -136,18 +129,18 @@ namespace castor3d
 		*	Accesseurs.
 		**/
 		/**@{*/
-		ashes::CommandBuffer const & getCommands()const
+		ashes::CommandBuffer const & getCommands()const noexcept
 		{
 			CU_Require( m_draw.commands.commandBuffer );
 			return *m_draw.commands.commandBuffer;
 		}
 
-		castor::Size const & getSize()const
+		castor::Size const & getSize()const noexcept
 		{
 			return m_size;
 		}
 
-		bool isSizeChanged()const
+		bool isSizeChanged()const noexcept
 		{
 			return m_sizeChanged;
 		}
@@ -289,7 +282,7 @@ namespace castor3d
 			, Pass const & pass
 			, bool secondary );
 
-		void doResetCompute()
+		void doResetCompute()noexcept
 		{
 			m_compute.reset();
 		}

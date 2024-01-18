@@ -155,7 +155,8 @@ namespace castor3d
 		}
 
 		auto & pipelineData = it->second;
-		auto pipelineIndex = pipelineData.count++;
+		auto pipelineIndex = pipelineData.count;
+		++pipelineData.count;
 		auto count = overlay.getCount( secondary );
 
 		if ( !count

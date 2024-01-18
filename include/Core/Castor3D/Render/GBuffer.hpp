@@ -192,8 +192,8 @@ namespace castor3d
 	public:
 		GBufferT( GBufferT const & rhs ) = delete;
 		GBufferT & operator=( GBufferT const & rhs ) = delete;
-		GBufferT( GBufferT && rhs ) = default;
-		GBufferT & operator=( GBufferT && rhs ) = default;
+		GBufferT( GBufferT && rhs )noexcept = default;
+		GBufferT & operator=( GBufferT && rhs )noexcept = default;
 		/**
 		*\~english
 		*\brief
@@ -307,17 +307,17 @@ namespace castor3d
 		{
 		}
 
-		~GBufferT()
+		~GBufferT()noexcept
 		{
-			for ( auto & texture : m_owned )
+			for ( auto const & texture : m_owned )
 			{
 				texture->destroy();
 			}
 		}
 
-		void create()
+		void create()const
 		{
-			for ( auto & texture : m_owned )
+			for ( auto const & texture : m_owned )
 			{
 				texture->create();
 			}
@@ -331,42 +331,42 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		Texture const & operator[]( TextureEnumT texture )const
+		Texture const & operator[]( TextureEnumT texture )const noexcept
 		{
 			return *m_result[size_t( texture )];
 		}
 
-		auto cbegin()const
+		auto cbegin()const noexcept
 		{
 			return m_result.begin();
 		}
 
-		auto cend()const
+		auto cend()const noexcept
 		{
 			return m_result.end();
 		}
 
-		auto begin()const
+		auto begin()const noexcept
 		{
 			return m_result.begin();
 		}
 
-		auto end()const
+		auto end()const noexcept
 		{
 			return m_result.end();
 		}
 
-		auto begin()
+		auto begin()noexcept
 		{
 			return m_result.begin();
 		}
 
-		auto end()
+		auto end()noexcept
 		{
 			return m_result.end();
 		}
 
-		auto size()
+		auto size()noexcept
 		{
 			return m_result.size();
 		}

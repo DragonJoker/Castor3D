@@ -24,10 +24,7 @@ namespace castor3d
 		struct ComponentsShader
 			: shader::PassComponentsShader
 		{
-			explicit ComponentsShader( PassComponentPlugin const & plugin )
-				: shader::PassComponentsShader{ plugin }
-			{
-			}
+			using shader::PassComponentsShader::PassComponentsShader;
 
 			C3D_API void fillComponents( ComponentModeFlags componentsMask
 				, sdw::type::BaseStruct & components
@@ -57,10 +54,7 @@ namespace castor3d
 			: public PassComponentPlugin
 		{
 		public:
-			explicit Plugin( PassComponentRegister const & passComponent )
-				: PassComponentPlugin{ passComponent }
-			{
-			}
+			using PassComponentPlugin::PassComponentPlugin;
 
 			PassComponentUPtr createComponent( Pass & pass )const override
 			{
@@ -135,23 +129,23 @@ namespace castor3d
 		 */
 		C3D_API void fillProfileBuffer( SssProfileBuffer & buffer )const;
 
-		bool hasSubsurfaceScattering()const
+		bool hasSubsurfaceScattering()const noexcept
 		{
 			return m_value.value() != nullptr;
 		}
 
-		SubsurfaceScattering const & getSubsurfaceScattering()const
+		SubsurfaceScattering const & getSubsurfaceScattering()const noexcept
 		{
 			CU_Require( hasSubsurfaceScattering() );
 			return *m_value.value();
 		}
 
-		uint32_t getSssProfileId()const
+		uint32_t getSssProfileId()const noexcept
 		{
 			return m_sssProfileId;
 		}
 
-		void setSssProfileId( uint32_t value )
+		void setSssProfileId( uint32_t value )noexcept
 		{
 			m_sssProfileId = value;
 		}

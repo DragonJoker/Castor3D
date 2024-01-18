@@ -93,17 +93,17 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		VkDeviceSize getSize()
+		VkDeviceSize getSize()const noexcept
 		{
 			return m_size;
 		}
 
-		RenderDevice const & getDevice()const
+		RenderDevice const & getDevice()const noexcept
 		{
 			return m_device;
 		}
 
-		ashes::BufferBase const & getBuffer()const
+		ashes::BufferBase const & getBuffer()const noexcept
 		{
 			return *m_buffer;
 		}

@@ -76,10 +76,6 @@ namespace castor3d
 	{
 	}
 
-	RenderQueue::~RenderQueue()
-	{
-	}
-
 	void RenderQueue::initialise()
 	{
 	}
@@ -93,7 +89,7 @@ namespace castor3d
 		m_commandsChanged = true;
 	}
 
-	void RenderQueue::cleanup()
+	void RenderQueue::cleanup()noexcept
 	{
 		CU_Require( m_renderNodes );
 		m_toDelete = std::move( m_pass );
@@ -167,7 +163,7 @@ namespace castor3d
 		m_renderNodes->fillConfig( config );
 	}
 
-	bool RenderQueue::hasNodes()const
+	bool RenderQueue::hasNodes()const noexcept
 	{
 		return getCuller().hasNodes()
 			&& m_renderNodes

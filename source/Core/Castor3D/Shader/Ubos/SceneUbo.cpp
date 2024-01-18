@@ -58,7 +58,7 @@ namespace castor3d
 	{
 	}
 
-	SceneUbo::~SceneUbo()
+	SceneUbo::~SceneUbo()noexcept
 	{
 		m_device.uboPool->putBuffer( m_ubo );
 	}

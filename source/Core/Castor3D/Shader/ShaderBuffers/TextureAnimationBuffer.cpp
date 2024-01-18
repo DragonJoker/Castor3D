@@ -49,7 +49,7 @@ namespace castor3d
 		++m_count;
 	}
 
-	void TextureAnimationBuffer::removeTextureAnimation( AnimatedTexture const & texture )
+	void TextureAnimationBuffer::removeTextureAnimation( AnimatedTexture const & texture )noexcept
 	{
 		if ( texture.hasTextureUnit() )
 		{

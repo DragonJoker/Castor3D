@@ -52,21 +52,14 @@ namespace castor
 		 *\brief		Constructeur.
 		 *\param[in]	engine	Le moteur.
 		 */
-		C3D_API ResourceCacheT( castor3d::Engine & engine );
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		C3D_API ~ResourceCacheT()override = default;
+		C3D_API explicit ResourceCacheT( castor3d::Engine & engine );
 		/**
 		 *\~english
 		 *\brief		Clears all overlays lists
 		 *\~french
 		 *\brief		Vide les listes d'incrustations
 		 */
-		C3D_API void clear();
+		C3D_API void clear()noexcept;
 		/**
 		 *\~english
 		 *\brief		Cleans all overlays up.
@@ -106,7 +99,7 @@ namespace castor
 		*\name Itération.
 		**/
 		/**@{*/
-		inline auto const & getCategories()const
+		auto const & getCategories()const noexcept
 		{
 			return m_overlays;
 		}
@@ -118,17 +111,17 @@ namespace castor
 		 *\name Accesseurs.
 		 **/
 		/**@{*/
-		inline castor3d::OverlayFactory const & getOverlayFactory()const
+		castor3d::OverlayFactory const & getOverlayFactory()const noexcept
 		{
 			return m_overlayFactory;
 		}
 
-		inline castor3d::OverlayFactory & getFactory()
+		castor3d::OverlayFactory & getFactory()noexcept
 		{
 			return m_overlayFactory;
 		}
 
-		castor3d::Engine & getEngine()const
+		castor3d::Engine & getEngine()const noexcept
 		{
 			return m_engine;
 		}
