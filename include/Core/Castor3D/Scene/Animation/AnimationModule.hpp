@@ -106,7 +106,7 @@ namespace castor3d
 		castor::Milliseconds stoppingPoint{};
 		InterpolatorType interpolation{ InterpolatorType::eLinear };
 	};
-	using GroupAnimationMap = std::map< castor::String, GroupAnimation >;
+	using GroupAnimationMap = castor::StringMap< GroupAnimation >;
 
 	using Animable = AnimableT< Engine >;
 	using Animation = AnimationT< Engine >;

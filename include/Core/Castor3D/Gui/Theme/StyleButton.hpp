@@ -94,7 +94,7 @@ namespace castor3d
 			m_disabledTextMaterial = material;
 		}
 
-		void setFont( castor::String const & value )
+		void setFont( castor::StringView value )
 		{
 			m_fontName = value;
 		}

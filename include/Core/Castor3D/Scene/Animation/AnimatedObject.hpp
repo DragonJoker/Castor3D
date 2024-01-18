@@ -14,7 +14,7 @@ namespace castor3d
 		: public castor::Named
 	{
 	public:
-		using AnimationInstancesMap = std::map< castor::String, AnimationInstanceUPtr >;
+		using AnimationInstancesMap = castor::StringMap< AnimationInstanceUPtr >;
 		/**
 		 *\~english
 		 *name Copy / Move.
@@ -22,8 +22,8 @@ namespace castor3d
 		 *name Copie / Déplacement.
 		 **/
 		/**@{*/
-		C3D_API AnimatedObject( AnimatedObject && rhs ) = default;
-		C3D_API AnimatedObject & operator=( AnimatedObject && rhs ) = default;
+		C3D_API AnimatedObject( AnimatedObject && rhs )noexcept = default;
+		C3D_API AnimatedObject & operator=( AnimatedObject && rhs )noexcept = default;
 		C3D_API AnimatedObject( AnimatedObject const & rhs ) = delete;
 		C3D_API AnimatedObject & operator=( AnimatedObject const & rhs ) = delete;
 		/**@}*/
@@ -45,7 +45,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API virtual ~AnimatedObject() = default;
+		C3D_API virtual ~AnimatedObject()noexcept = default;
 		/**
 		 *\~english
 		 *\brief		adds the animation to the list

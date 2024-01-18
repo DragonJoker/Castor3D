@@ -51,7 +51,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API virtual ~OverlayCategory();
+		C3D_API virtual ~OverlayCategory()noexcept = default;
 		/**
 		 *\~english
 		 *\brief		Updates the overlay position, size...

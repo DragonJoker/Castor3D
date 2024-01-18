@@ -42,9 +42,6 @@ namespace castor3d
 		}
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\version	0.7.0.0
-	\date 		08/04/2014
 	\~english
 	\brief		Chunk parser
 	\~french
@@ -78,7 +75,7 @@ namespace castor3d
 				return true;
 			}
 
-			bool result{ ChunkParserBase::parse( reinterpret_cast< uint8_t * >( values )
+			bool result{ ChunkParserBase::parse( BytePtr( values )
 				, count * sizeof( T )
 				, chunk ) };
 
@@ -112,9 +109,6 @@ namespace castor3d
 		}
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\version	0.7.0.0
-	\date 		08/04/2014
 	\~english
 	\brief		ChunkParser specialisation for castor::String
 	\~french
@@ -145,8 +139,8 @@ namespace castor3d
 
 			if ( result )
 			{
-				std::vector< char > buffer( size + 1ull, 0 );
-				result = ChunkParserBase::parse( reinterpret_cast< uint8_t * >( buffer.data() )
+				std::vector< char > buffer( size + 1ULL, 0 );
+				result = ChunkParserBase::parse( BytePtr( buffer.data() )
 					, size
 					, chunk );
 
@@ -160,9 +154,6 @@ namespace castor3d
 		}
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\version	0.7.0.0
-	\date 		08/04/2014
 	\~english
 	\brief		ChunkParser specialisation for castor::Path
 	\~french
@@ -193,8 +184,8 @@ namespace castor3d
 
 			if ( result )
 			{
-				std::vector< char > buffer( size + 1ull, 0 );
-				result = ChunkParserBase::parse( reinterpret_cast< uint8_t * >( buffer.data() )
+				std::vector< char > buffer( size + 1ULL, 0 );
+				result = ChunkParserBase::parse( BytePtr( buffer.data() )
 					, size
 					, chunk );
 

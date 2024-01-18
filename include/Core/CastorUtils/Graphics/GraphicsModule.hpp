@@ -25,7 +25,7 @@ namespace castor
 #define CUPF_ENUM_VALUE( name, value, components, alpha, colour, depth, stencil, compressed ) e##name = value,
 #include "CastorUtils/Graphics/PixelFormat.enum"
 
-		CU_ScopedEnumBounds( eUNDEFINED ),
+		CU_ScopedEnumBounds( eUNDEFINED, eASTC_12x12_SRGB_BLOCK ),
 	};
 	/**
 	\~english
@@ -124,17 +124,17 @@ namespace castor
 	{
 		//!\~english	Red component
 		//!\~french		Composante rouge
-		eRed,
+		eRed = 0,
 		//!\~english	Green component
 		//!\~french		Composante verte
-		eGreen,
+		eGreen = 1,
 		//!\~english	Blue component
 		//!\~french		Composante bleue
-		eBlue,
+		eBlue = 2,
 		//!\~english	Alpha component
 		//!\~french		Composante alpha
-		eAlpha,
-		CU_ScopedEnumBounds( eRed )
+		eAlpha = 3,
+		CU_ScopedEnumBounds( eRed, eAlpha )
 	};
 	/**
 	\~english
@@ -147,14 +147,14 @@ namespace castor
 	{
 		//!\~english	Red component
 		//!\~french		Composante rouge
-		eRed,
+		eRed = 0,
 		//!\~english	Green component
 		//!\~french		Composante verte
-		eGreen,
+		eGreen = 1,
 		//!\~english	Blue component
 		//!\~french		Composante bleue
-		eBlue,
-		CU_ScopedEnumBounds( eRed )
+		eBlue = 2,
+		CU_ScopedEnumBounds( eRed, eBlue )
 	};
 	/**
 	\~english
@@ -169,14 +169,14 @@ namespace castor
 	{
 		//!\~english	Completely inside.
 		//!\~french		Complètement à l'intérieur.
-		eIn,
+		eIn = 0,
 		//!\~english	Completely outside.
 		//!\~french		Complètement à l'extérieur.
-		eOut,
+		eOut = 1,
 		//!\~english	Intersection.
 		//!\~french		Intersection
-		eIntersect,
-		CU_ScopedEnumBounds( eIn )
+		eIntersect = 2,
+		CU_ScopedEnumBounds( eIn, eIntersect )
 	};
 	/**
 	\~english

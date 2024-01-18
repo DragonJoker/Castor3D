@@ -132,10 +132,10 @@ namespace castor3d
 	public:
 		C3D_API SsaoConfigUbo( SsaoConfigUbo const & rhs ) = delete;
 		C3D_API SsaoConfigUbo & operator=( SsaoConfigUbo const & rhs ) = delete;
-		C3D_API SsaoConfigUbo( SsaoConfigUbo && rhs ) = default;
-		C3D_API SsaoConfigUbo & operator=( SsaoConfigUbo && rhs ) = delete;
+		C3D_API SsaoConfigUbo( SsaoConfigUbo && rhs )noexcept = default;
+		C3D_API SsaoConfigUbo & operator=( SsaoConfigUbo && rhs )noexcept = delete;
 		C3D_API explicit SsaoConfigUbo( RenderDevice const & device );
-		C3D_API ~SsaoConfigUbo();
+		C3D_API ~SsaoConfigUbo()noexcept;
 		/**
 		 *\~english
 		 *\brief		Updates the UBO content.

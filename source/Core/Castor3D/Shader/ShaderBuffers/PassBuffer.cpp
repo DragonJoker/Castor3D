@@ -116,7 +116,7 @@ namespace castor3d
 		return pass.getId();
 	}
 
-	void PassBuffer::removePass( Pass & pass )
+	void PassBuffer::removePass( Pass & pass )noexcept
 	{
 		auto lock( castor::makeUniqueLock( m_mutex ) );
 
@@ -161,7 +161,7 @@ namespace castor3d
 				}
 				else
 				{
-					pass->fillBuffer( *this, it->second.index );
+					pass->fillBuffer( *this );
 				}
 
 				for ( auto const & [name, buffer] : specifics )

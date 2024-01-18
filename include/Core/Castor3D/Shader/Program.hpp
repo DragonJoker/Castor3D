@@ -43,13 +43,6 @@ namespace castor3d
 			, RenderSystem & renderSystem );
 		/**
 		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API ~ShaderProgram();
-		/**
-		 *\~english
 		 *\brief		Sets the shader file.
 		 *\param[in]	target		The shader module concerned.
 		 *\param[in]	pathFile	The file name.
@@ -126,14 +119,14 @@ namespace castor3d
 	};
 
 	C3D_API SpirVShader const & compileShader( RenderDevice const & device
-		, ShaderModule & module );
+		, ShaderModule & shaderModule );
 	C3D_API SpirVShader const & compileShader( RenderSystem & renderSystem
-		, ShaderModule & module );
+		, ShaderModule & shaderModule );
 	C3D_API SpirVShader const & compileShader( RenderDevice const & device
-		, ProgramModule & module
+		, ProgramModule & shaderModule
 		, ast::EntryPointConfig const & entryPoint );
 	C3D_API SpirVShader const & compileShader( RenderSystem & renderSystem
-		, ProgramModule & module
+		, ProgramModule & shaderModule
 		, ast::EntryPointConfig const & entryPoint );
 	C3D_API ashes::PipelineShaderStageCreateInfoArray makeProgramStates( RenderDevice const & device
 		, ProgramModule & programModule
@@ -152,13 +145,13 @@ namespace castor3d
 		, std::string mainFuncName = "main"
 		, ashes::Optional< ashes::SpecializationInfo > specialization = ashes::nullopt )
 	{
-		auto module = device.createShaderModule( name + "ShdMod" + "_" + ashes::getName( stage )
+		auto shaderModule = device.createShaderModule( name + "ShdMod" + "_" + ashes::getName( stage )
 			, code.spirv );
 		return ashes::PipelineShaderStageCreateInfo
 		{
 			0u,
 			stage,
-			std::move( module ),
+			std::move( shaderModule ),
 			std::move( mainFuncName ),
 			std::move( specialization ),
 		};

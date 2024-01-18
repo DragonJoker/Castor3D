@@ -16,9 +16,9 @@ namespace castor3d
 	{
 	public:
 		C3D_API GpuFrameEvent( GpuFrameEvent const & rhs );
-		C3D_API GpuFrameEvent( GpuFrameEvent && rhs );
+		C3D_API GpuFrameEvent( GpuFrameEvent && rhs )noexcept;
 		C3D_API GpuFrameEvent & operator=( GpuFrameEvent const & rhs );
-		C3D_API GpuFrameEvent & operator=( GpuFrameEvent && rhs );
+		C3D_API GpuFrameEvent & operator=( GpuFrameEvent && rhs )noexcept;
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -34,7 +34,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API virtual ~GpuFrameEvent() = default;
+		C3D_API virtual ~GpuFrameEvent()noexcept = default;
 		/**
 		 *\~english
 		 *\brief		Applies the event.

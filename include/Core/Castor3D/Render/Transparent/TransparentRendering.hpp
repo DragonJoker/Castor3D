@@ -57,7 +57,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API ~TransparentRendering();
+		C3D_API ~TransparentRendering()noexcept;
 		/**
 		 *\~english
 		 *\return		The number of steps needed for initialisation, to show progression.
@@ -114,8 +114,8 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		C3D_API Engine * getEngine()const;
-		C3D_API crg::FramePass const & getLastPass()const;
+		C3D_API Engine * getEngine()const noexcept;
+		C3D_API crg::FramePass const & getLastPass()const noexcept;
 		/**@}*/
 
 	private:

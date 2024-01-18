@@ -41,21 +41,14 @@ namespace castor
 		 *\brief		Constructeur.
 		 *\param[in]	engine	Le moteur.
 		 */
-		C3D_API ResourceCacheT( castor3d::Engine & engine );
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API ~ResourceCacheT()override = default;
+		C3D_API explicit ResourceCacheT( castor3d::Engine & engine );
 		/**
 		 *\~english
 		 *\brief		Flushes the collection.
 		 *\~french
 		 *\brief		Vide la collection.
 		 */
-		C3D_API void clear();
+		C3D_API void clear()noexcept;
 		/**
 		 *\~english
 		 *\brief		Loads a plug-in, given the plug-in name (ex: libGlRenderSystem.dll => GlRenderSystem)
@@ -91,7 +84,7 @@ namespace castor
 		 *\param[in]	type	Le type de plu-ins
 		 *\return		\p nullptr si non trouvé
 		 */
-		C3D_API std::map< castor::String, castor3d::PluginRPtr > getPlugins( castor3d::PluginType type );
+		C3D_API castor::StringMap< castor3d::PluginRPtr > getPlugins( castor3d::PluginType type );
 		/**
 		 *\~english
 		 *\brief		Loads all the plug-ins located in working folder

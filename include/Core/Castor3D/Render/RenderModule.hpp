@@ -48,7 +48,7 @@ namespace castor3d
 			castor::Point2f position;
 		};
 
-		Vertex vertex[6];
+		castor::Array< Vertex, 6u > vertex;
 	};
 	/**
 	*\~english
@@ -66,7 +66,7 @@ namespace castor3d
 			castor::Point2f texture;
 		};
 
-		Vertex vertex[6];
+		castor::Array< Vertex, 6u > vertex;
 	};
 	/**
 	*\~english
@@ -85,10 +85,10 @@ namespace castor3d
 				castor::Point3f position;
 			};
 
-			Vertex vertex[6];
+			castor::Array< Vertex, 6u > vertex;
 		};
 
-		Quad faces[6];
+		castor::Array< Quad, 6u > faces;
 	};
 	/**
 	*\~english
@@ -108,10 +108,10 @@ namespace castor3d
 				castor::Point2f texture;
 			};
 
-			Vertex vertex[6];
+			castor::Array< Vertex, 6u > vertex;
 		};
 
-		Quad faces[6];
+		castor::Array< Quad, 6u > faces;
 	};
 	/**
 	*\~english
@@ -154,16 +154,16 @@ namespace castor3d
 	enum class GlobalBuffersIdx
 		: uint32_t
 	{
-		eCamera,
-		eScene,
-		eObjectsNodeID,
-		eModelsData,
-		eMaterials,
-		eSssProfiles,
-		eTexConfigs,
-		eTexAnims,
-		eBillboardsData,
-		CU_ScopedEnumBounds( eCamera ),
+		eCamera = 0,
+		eScene = 1,
+		eObjectsNodeID = 2,
+		eModelsData = 3,
+		eMaterials = 4,
+		eSssProfiles = 5,
+		eTexConfigs = 6,
+		eTexAnims = 7,
+		eBillboardsData = 8,
+		CU_ScopedEnumBounds( eCamera, eBillboardsData ),
 	};
 	/**
 	*\~english
@@ -176,21 +176,21 @@ namespace castor3d
 	enum class MeshBuffersIdx
 		: uint32_t
 	{
-		eCullData,
-		eMeshlets,
-		ePosition,
-		eNormal,
-		eTangent,
-		eBitangent,
-		eTexcoord0,
-		eTexcoord1,
-		eTexcoord2,
-		eTexcoord3,
-		eColour,
-		ePassMasks,
-		eVelocity,
-		eInstances,
-		CU_ScopedEnumBounds( eMeshlets ),
+		eCullData = 0,
+		eMeshlets = 1,
+		ePosition = 2,
+		eNormal = 3,
+		eTangent = 4,
+		eBitangent = 5,
+		eTexcoord0 = 6,
+		eTexcoord1 = 7,
+		eTexcoord2 = 8,
+		eTexcoord3 = 9,
+		eColour = 10,
+		ePassMasks = 11,
+		eVelocity = 12,
+		eInstances = 13,
+		CU_ScopedEnumBounds( eMeshlets, eInstances ),
 	};
 	/**
 	*\~english
@@ -204,29 +204,29 @@ namespace castor3d
 	{
 		//!\~english	Far left bottom corner.
 		//!\~french		Coin éloigné bas gauche.
-		eFarLeftBottom,
+		eFarLeftBottom = 0,
 		//!\~english	Far left top corner.
 		//!\~french		Coin éloigné haut gauche.
-		eFarLeftTop,
+		eFarLeftTop = 1,
 		//!\~english	Far right top corner.
 		//!\~french		Coin éloigné haut droit.
-		eFarRightTop,
+		eFarRightTop = 2,
 		//!\~english	Far right bottom corner.
 		//!\~french		Coin éloigné bas droit.
-		eFarRightBottom,
+		eFarRightBottom = 3,
 		//!\~english	Near left bottom corner.
 		//!\~french		Coin proche bas gauche.
-		eNearLeftBottom,
+		eNearLeftBottom = 4,
 		//!\~english	Near left top corner.
 		//!\~french		Coin proche haut gauche.
-		eNearLeftTop,
+		eNearLeftTop = 5,
 		//!\~english	Near right top corner.
 		//!\~french		Coin proche haut droit.
-		eNearRightTop,
+		eNearRightTop = 6,
 		//!\~english	Near right bottom corner.
 		//!\~french		Coin proche bas droit.
-		eNearRightBottom,
-		CU_ScopedEnumBounds( eFarLeftBottom )
+		eNearRightBottom = 7,
+		CU_ScopedEnumBounds( eFarLeftBottom, eNearRightBottom )
 	};
 	C3D_API castor::String getName( FrustumCorner value );
 	/**
@@ -241,23 +241,23 @@ namespace castor3d
 	{
 		//!\~english	Near plane.
 		//!\~french		Plan proche.
-		eNear,
+		eNear = 0,
 		//!\~english	Far plane.
 		//!\~french		Plan éloigné.
-		eFar,
+		eFar = 1,
 		//!\~english	Left plane.
 		//!\~french		Plan gauche.
-		eLeft,
+		eLeft = 2,
 		//!\~english	Right plane.
 		//!\~french		Plan droit.
-		eRight,
+		eRight = 3,
 		//!\~english	Top plane.
 		//!\~french		Plan haut.
-		eTop,
+		eTop = 4,
 		//!\~english	Bottom plane.
 		//!\~french		Plan bas.
-		eBottom,
-		CU_ScopedEnumBounds( eNear )
+		eBottom = 5,
+		CU_ScopedEnumBounds( eNear, eBottom )
 	};
 	C3D_API castor::String getName( FrustumPlane value );
 	/**
@@ -271,9 +271,10 @@ namespace castor3d
 	enum class PickNodeType
 		: uint8_t
 	{
-		eNone,
-		eSubmesh,
-		eBillboard
+		eNone = 0,
+		eSubmesh = 1,
+		eBillboard = 2,
+		CU_ScopedEnumBounds( eNone, eBillboard )
 	};
 	C3D_API castor::String getName( PickNodeType value );
 	/**
@@ -287,9 +288,9 @@ namespace castor3d
 	enum class TargetType
 		: uint8_t
 	{
-		eWindow,
-		eTexture,
-		CU_ScopedEnumBounds( eWindow )
+		eWindow = 0,
+		eTexture = 1,
+		CU_ScopedEnumBounds( eWindow, eWindow )
 	};
 	C3D_API castor::String getName( TargetType value );
 	/**
@@ -303,12 +304,12 @@ namespace castor3d
 	enum class ViewportType
 		: uint8_t
 	{
-		eUndefined,
-		eOrtho,
-		ePerspective,
-		eInfinitePerspective,
-		eFrustum,
-		CU_ScopedEnumBounds( eUndefined )
+		eUndefined = 0,
+		eOrtho = 1,
+		ePerspective = 2,
+		eInfinitePerspective = 3,
+		eFrustum = 4,
+		CU_ScopedEnumBounds( eUndefined, eFrustum )
 	};
 	C3D_API castor::String getName( ViewportType value );
 	/**
@@ -405,11 +406,11 @@ namespace castor3d
 		eIgnore = 0,
 		//!\~english	Defers lighting to a next pass.
 		//\~french		Diffère l'éclairage à une autre passe.
-		eDeferLighting,
+		eDeferLighting = 1,
 		//!\~english	Only processes deferred lighting.
 		//\~french		N'effectue que l'éclairage différé.
-		eDeferredOnly,
-		CU_ScopedEnumBounds( eIgnore )
+		eDeferredOnly = 2,
+		CU_ScopedEnumBounds( eIgnore, eDeferredOnly )
 	};
 	/**
 	*\~english
@@ -425,11 +426,11 @@ namespace castor3d
 		eIgnore = 0,
 		//!\~english	Only process nodes without parallax occlusion.
 		//\~french		Prend en compte uniquement les noeuds sans parallax occlusion.
-		eDisabled,
+		eDisabled = 1,
 		//!\~english	Only process nodes with parallax occlusion.
 		//\~french		Prend en compte uniquement les noeuds avec parallax occlusion.
-		eEnabled,
-		CU_ScopedEnumBounds( eIgnore )
+		eEnabled = 2,
+		CU_ScopedEnumBounds( eIgnore, eEnabled )
 	};
 	/**
 	*\~english
@@ -777,13 +778,13 @@ namespace castor3d
 
 	CU_DeclareVector( IntermediateView, IntermediateView );
 
-	using RenderQueueArray = std::vector< std::reference_wrapper< RenderQueue > >;
-	using TextureArray = std::vector< Texture >;
+	using RenderQueueArray = castor::Vector< std::reference_wrapper< RenderQueue > >;
+	using TextureArray = castor::Vector< Texture >;
 
 	using ShadowMapRefIds = std::pair< std::reference_wrapper< ShadowMap >, UInt32Array >;
-	using ShadowMapRefArray = std::vector< ShadowMapRefIds >;
-	using ShadowMapLightTypeArray = std::array< ShadowMapRefArray, size_t( LightType::eCount ) >;
-	using LightIdArray = std::vector< std::pair< Light *, uint32_t > >;
+	using ShadowMapRefArray = castor::Vector< ShadowMapRefIds >;
+	using ShadowMapLightTypeArray = castor::Array< ShadowMapRefArray, size_t( LightType::eCount ) >;
+	using LightIdArray = castor::Vector< std::pair< Light *, uint32_t > >;
 
 	template< typename NodeT >
 	struct CulledNodeT
@@ -807,7 +808,7 @@ namespace castor3d
 	using CulledNodePtrT = std::unique_ptr< CulledNodeT< NodeT > >;
 
 	template< typename NodeT, template< typename NodeU > typename NodeWrapperT = CulledNodeT >
-	using NodeArrayT = std::vector< NodeWrapperT< NodeT > >;
+	using NodeArrayT = castor::Vector< NodeWrapperT< NodeT > >;
 
 	struct PipelineAndID
 	{
@@ -820,8 +821,8 @@ namespace castor3d
 		std::reference_wrapper< ShadowMap > shadowMap;
 		LightIdArray ids;
 	};
-	using ShadowMapLightIdArray = std::vector< ShadowMapLightIds >;
-	using ShadowMapLightArray = std::array< ShadowMapLightIdArray, size_t( LightType::eCount ) >;
+	using ShadowMapLightIdArray = castor::Vector< ShadowMapLightIds >;
+	using ShadowMapLightArray = castor::Array< ShadowMapLightIdArray, size_t( LightType::eCount ) >;
 
 	struct TechniqueQueues
 	{
@@ -832,20 +833,20 @@ namespace castor3d
 
 	enum class TechniquePassEvent
 	{
-		eBeforeDepth,
-		eBeforeBackground,
-		eBeforeOpaque,
-		eBeforeTransparent,
-		eBeforePostEffects,
-		CU_ScopedEnumBounds( eBeforeDepth )
+		eBeforeDepth = 0,
+		eBeforeBackground = 1,
+		eBeforeOpaque = 2,
+		eBeforeTransparent = 3,
+		eBeforePostEffects = 4,
+		CU_ScopedEnumBounds( eBeforeDepth, eBeforePostEffects )
 	};
 
 	using RenderNodesPassChangeSignalFunction = std::function< void( RenderNodesPass const & ) >;
 	using RenderNodesPassChangeSignal = castor::SignalT< RenderNodesPassChangeSignalFunction >;
 	using RenderNodesPassChangeSignalConnection = castor::ConnectionT< RenderNodesPassChangeSignal >;
 
-	using TechniquePassVector = std::vector< RenderTechniqueNodesPass * >;
-	using TechniquePasses = std::array< TechniquePassVector, size_t( TechniquePassEvent::eCount ) >;
+	using TechniquePassVector = castor::Vector< RenderTechniqueNodesPass * >;
+	using TechniquePasses = castor::Array< TechniquePassVector, size_t( TechniquePassEvent::eCount ) >;
 
 	struct RenderWindowDesc
 	{
@@ -870,7 +871,7 @@ namespace castor3d
 			: name{ std::move( pname ) }
 			, create{ std::move( pcreate ) }
 			, event{ std::move( pevent ) }
-			, id{ std::move( pid ) }
+			, id{ pid }
 		{
 		}
 
@@ -882,9 +883,7 @@ namespace castor3d
 
 	struct CpuUpdater
 	{
-		CpuUpdater()
-		{
-		}
+		CpuUpdater() = default;
 
 		RenderQueueArray * queues{ nullptr };
 		Scene * scene{ nullptr };
@@ -902,7 +901,7 @@ namespace castor3d
 		castor::Milliseconds tslf{};
 		castor::Milliseconds time{};
 		castor::Milliseconds total{};
-		std::vector< TechniqueQueues > techniquesQueues{};
+		castor::Vector< TechniqueQueues > techniquesQueues{};
 		castor::Point2f bandRatio{};
 		castor::Matrix4x4f bgMtxModl{};
 		castor::Matrix4x4f bgMtxView{};
@@ -920,11 +919,11 @@ namespace castor3d
 					&& dirtyCameras.empty();
 			}
 
-			std::vector< SceneNode * > dirtyNodes;
-			std::vector< Geometry * > dirtyGeometries;
-			std::vector< BillboardBase * > dirtyBillboards;
-			std::vector< Light * > dirtyLights;
-			std::vector< Camera * > dirtyCameras;
+			castor::Vector< SceneNode * > dirtyNodes;
+			castor::Vector< Geometry * > dirtyGeometries;
+			castor::Vector< BillboardBase * > dirtyBillboards;
+			castor::Vector< Light * > dirtyLights;
+			castor::Vector< Camera * > dirtyCameras;
 		};
 		std::map< Scene const *, DirtyObjects > dirtyScenes;
 	};
@@ -940,15 +939,15 @@ namespace castor3d
 
 		RenderDevice const & device;
 		RenderInfo & info;
-		castor::Point2f jitter;
+		castor::Point2f jitter{};
 		Scene * scene{ nullptr };
 		Camera * camera{ nullptr };
 		Light * light{ nullptr };
 		uint32_t index{ 0u };
 		bool voxelConeTracing{ false };
 		FramePassTimer * timer{ nullptr };
-		castor::Milliseconds time;
-		castor::Milliseconds total;
+		castor::Milliseconds time{};
+		castor::Milliseconds total{};
 	};
 
 	struct TargetDebugConfig

@@ -78,7 +78,7 @@ namespace castor3d
 		return unit.getId();
 	}
 
-	void TextureConfigurationBuffer::removeTextureConfiguration( TextureUnit & unit )
+	void TextureConfigurationBuffer::removeTextureConfiguration( TextureUnit & unit )noexcept
 	{
 		auto lock( castor::makeUniqueLock( m_mutex ) );
 		unit.setId( 0u );

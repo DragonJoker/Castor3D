@@ -33,7 +33,7 @@ namespace castor3d
 		 *\param[in]	debugName		Le nom debug du tampon.
 		 *\param[in]	sharingMode		Le mode de partage du tampon.
 		 */
-		inline UniformBufferT( RenderSystem const & renderSystem
+		UniformBufferT( RenderSystem const & renderSystem
 			, VkDeviceSize count
 			, VkBufferUsageFlags usage
 			, VkMemoryPropertyFlags flags
@@ -57,7 +57,7 @@ namespace castor3d
 		 *\param[in]	offset			L'offset de départ.
 		 *\param[in]	flags			Les indicateurs de pipeline stage pour la barrière mémoire de sortie.
 		 */
-		inline void upload( ashes::BufferBase const & stagingBuffer
+		void upload( ashes::BufferBase const & stagingBuffer
 			, ashes::Queue const & queue
 			, ashes::CommandPool const & commandPool
 			, uint32_t offset
@@ -78,7 +78,7 @@ namespace castor3d
 		 *\param[in]	offset			L'offset de départ.
 		 *\param[in]	flags			Les indicateurs de pipeline stage pour la barrière mémoire de sortie.
 		 */
-		inline void upload( ashes::BufferBase const & stagingBuffer
+		void upload( ashes::BufferBase const & stagingBuffer
 			, ashes::CommandBuffer const & commandBuffer
 			, uint32_t offset
 			, VkPipelineStageFlags flags )const;
@@ -104,7 +104,7 @@ namespace castor3d
 		 *\param[in]	timer			Le timer de passe de rendu.
 		 *\param[in]	index			L'indice de passe de rendu.
 		 */
-		inline void upload( ashes::BufferBase const & stagingBuffer
+		void upload( ashes::BufferBase const & stagingBuffer
 			, ashes::Queue const & queue
 			, ashes::CommandPool const & commandPool
 			, uint32_t offset
@@ -131,7 +131,7 @@ namespace castor3d
 		 *\param[in]	timer			Le timer de passe de rendu.
 		 *\param[in]	index			L'indice de passe de rendu.
 		 */
-		inline void upload( ashes::BufferBase const & stagingBuffer
+		void upload( ashes::BufferBase const & stagingBuffer
 			, ashes::CommandBuffer const & commandBuffer
 			, uint32_t offset
 			, VkPipelineStageFlags flags
@@ -153,7 +153,7 @@ namespace castor3d
 		*\param[in] range
 		*	Le nombre d'éléments à mapper.
 		*/
-		inline void upload( VkDeviceSize offset = 0u
+		void upload( VkDeviceSize offset = 0u
 			, VkDeviceSize range = 1u )const;
 		/**
 		 *\~english
@@ -177,7 +177,7 @@ namespace castor3d
 		 *\param[in]	timer			Le timer de passe de rendu.
 		 *\param[in]	index			L'indice de passe de rendu.
 		 */
-		inline void download( ashes::BufferBase const & stagingBuffer
+		void download( ashes::BufferBase const & stagingBuffer
 			, ashes::Queue const & queue
 			, ashes::CommandPool const & commandPool
 			, uint32_t offset

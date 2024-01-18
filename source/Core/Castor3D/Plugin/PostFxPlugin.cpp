@@ -12,7 +12,7 @@ namespace castor3d
 		load();
 	}
 
-	PostFxPlugin::~PostFxPlugin()
+	PostFxPlugin::~PostFxPlugin()noexcept
 	{
 		unload();
 	}

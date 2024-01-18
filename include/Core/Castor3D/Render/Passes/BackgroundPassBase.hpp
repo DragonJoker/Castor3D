@@ -43,7 +43,7 @@ namespace castor3d
 			, RenderDevice const & device
 			, SceneBackground & background
 			, bool forceVisible );
-		C3D_API virtual ~BackgroundPassBase() = default;
+		C3D_API virtual ~BackgroundPassBase()noexcept = default;
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, CPU wise.

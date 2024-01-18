@@ -31,14 +31,14 @@ namespace castor3d
 	{
 		//!\~english Directional light type.
 		//!\~french Lumière directionnelle.
-		eDirectional,
+		eDirectional = 0,
 		//!\~english Point light type.
 		//!\~french Lumière ponctuelle.
-		ePoint,
+		ePoint = 1,
 		//!\~english Spot light type.
 		//!\~french Lumière projecteur.
-		eSpot,
-		CU_ScopedEnumBounds( eDirectional )
+		eSpot = 2,
+		CU_ScopedEnumBounds( eDirectional, eSpot )
 	};
 	C3D_API castor::String getName( LightType value );
 	/**

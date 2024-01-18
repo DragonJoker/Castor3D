@@ -25,6 +25,7 @@ namespace castor3d
 	class DebugDrawer;
 
 	CU_DeclareSmartPtr( castor3d, DebugDrawer, C3D_API );
+
 	//@}
 	//@}
 }

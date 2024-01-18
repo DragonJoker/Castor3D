@@ -61,7 +61,7 @@ namespace castor3d
 	{
 	}
 
-	HdrConfigUbo::~HdrConfigUbo()
+	HdrConfigUbo::~HdrConfigUbo()noexcept
 	{
 		m_device.uboPool->putBuffer( m_ubo );
 	}

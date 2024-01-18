@@ -23,20 +23,22 @@ namespace castor3d
 {
 	struct Renderer
 	{
-		Renderer() = default;
+		Renderer()noexcept = default;
 		Renderer( Renderer && ) = default;
 		Renderer & operator=( Renderer && ) = default;
 		Renderer( Renderer const & ) = delete;
 		Renderer & operator=( Renderer const & ) = delete;
+		~Renderer()noexcept = default;
+
 		C3D_API Renderer( Engine & engine
 			, AshPluginDescription desc
 			, Extensions pinstanceExtensions = {}
 			, uint32_t gpuIndex = 0u );
 
-		AshPluginDescription desc;
-		Extensions instanceExtensions;
-		ashes::InstancePtr instance;
-		ashes::PhysicalDevicePtrArray gpus;
+		AshPluginDescription desc{};
+		Extensions instanceExtensions{};
+		ashes::InstancePtr instance{};
+		ashes::PhysicalDevicePtrArray gpus{};
 		ashes::PhysicalDevice * gpu{};
 	};
 
@@ -77,7 +79,6 @@ namespace castor3d
 		C3D_API RenderSystem( Engine & engine
 			, Renderer renderer
 			, Extensions deviceExtensions = {} );
-		C3D_API ~RenderSystem();
 		/**
 		*\~english
 		*\brief
@@ -162,25 +163,25 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Compiles a shader module to the necessary shader language.
-		 *\param[in]	module	The shader to compile.
+		 *\param[in]	shaderModule	The shader to compile.
 		 *\return		The compiled shader.
 		 *\~french
 		 *\brief		Compile un shader dans le langage shader nécessaire.
-		 *\param[in]	module	Le shader à compiler.
+		 *\param[in]	shaderModule	Le shader à compiler.
 		 *\return		Le shader compilé.
 		 */
-		C3D_API SpirVShader const & compileShader( ShaderModule & module );
+		C3D_API SpirVShader const & compileShader( ShaderModule & shaderModule );
 		/**
 		 *\~english
 		 *\brief		Compiles a shader module to the necessary shader language.
-		 *\param[in]	module	The shader to compile.
+		 *\param[in]	shaderModule	The shader to compile.
 		 *\return		The compiled shader.
 		 *\~french
 		 *\brief		Compile un shader dans le langage shader nécessaire.
-		 *\param[in]	module	Le shader à compiler.
+		 *\param[in]	shaderModule	Le shader à compiler.
 		 *\return		Le shader compilé.
 		 */
-		C3D_API SpirVShader const & compileShader( ProgramModule & module
+		C3D_API SpirVShader const & compileShader( ProgramModule & shaderModule
 			, ast::EntryPointConfig const & entryPoint );
 		/**
 		*\~english
@@ -295,98 +296,98 @@ namespace castor3d
 		/**@{*/
 		C3D_API Texture const & getPrefilteredBrdfTexture()const;
 
-		AshPluginDescription const & getDescription()const
+		AshPluginDescription const & getDescription()const noexcept
 		{
 			return m_renderer.desc;
 		}
 
-		GpuInformations const & getGpuInformations()const
+		GpuInformations const & getGpuInformations()const noexcept
 		{
 			return m_gpuInformations;
 		}
 
-		castor::String getRendererType()const
+		castor::String getRendererType()const noexcept
 		{
 			return getDescription().name;
 		}
 
-		bool hasDevice()const
+		bool hasDevice()const noexcept
 		{
 			return m_device != nullptr;
 		}
 
-		RenderDevice & getRenderDevice()const
+		RenderDevice & getRenderDevice()const noexcept
 		{
 			CU_Require( hasDevice() );
 			return *m_device;
 		}
 
-		bool hasSsbo()const
+		bool hasSsbo()const noexcept
 		{
 			return getDescription().features.hasStorageBuffers == VK_TRUE;
 		}
 
-		ashes::Instance const & getInstance()const
+		ashes::Instance const & getInstance()const noexcept
 		{
 			return *m_renderer.instance;
 		}
 
-		VkPhysicalDeviceProperties const & getProperties()const
+		VkPhysicalDeviceProperties const & getProperties()const noexcept
 		{
 			return m_properties;
 		}
 
-		VkPhysicalDeviceMemoryProperties const & getMemoryProperties()const
+		VkPhysicalDeviceMemoryProperties const & getMemoryProperties()const noexcept
 		{
 			return m_memoryProperties;
 		}
 
-		VkPhysicalDeviceFeatures const & getFeatures()const
+		VkPhysicalDeviceFeatures const & getFeatures()const noexcept
 		{
 			return m_features;
 		}
 
-		ashes::PhysicalDevice const & getPhysicalDevice()const
+		ashes::PhysicalDevice const & getPhysicalDevice()const noexcept
 		{
 			return *m_renderer.gpu;
 		}
 
-		bool hasFeature( GpuFeature feature )const
+		bool hasFeature( GpuFeature feature )const noexcept
 		{
 			return m_gpuInformations.hasFeature( feature );
 		}
 
-		bool hasStereoRendering()const
+		bool hasStereoRendering()const noexcept
 		{
 			return m_gpuInformations.hasStereoRendering();
 		}
 
-		bool hasShaderStorageBuffers()const
+		bool hasShaderStorageBuffers()const noexcept
 		{
 			return m_gpuInformations.hasShaderStorageBuffers();
 		}
 
-		bool hasShaderType( VkShaderStageFlagBits type )const
+		bool hasShaderType( VkShaderStageFlagBits type )const noexcept
 		{
 			return m_gpuInformations.hasShaderType( type );
 		}
 
-		uint32_t getValue( GpuMin index )const
+		uint32_t getValue( GpuMin index )const noexcept
 		{
 			return m_gpuInformations.getValue( index );
 		}
 
-		uint32_t getValue( GpuMax index )const
+		uint32_t getValue( GpuMax index )const noexcept
 		{
 			return m_gpuInformations.getValue( index );
 		}
 
-		bool hasLLPV()const
+		bool hasLLPV()const noexcept
 		{
 			return m_properties.limits.maxDescriptorSetSampledImages > 16u;
 		}
 
-		ashes::Buffer< castor::Point4f > const & getRandomStorage()const
+		ashes::Buffer< castor::Point4f > const & getRandomStorage()const noexcept
 		{
 			return *m_randomStorage;
 		}

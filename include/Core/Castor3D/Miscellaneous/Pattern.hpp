@@ -14,10 +14,10 @@ namespace castor3d
 	class Pattern
 	{
 	private:
-		typedef T TObj;
-		typedef T & TObjRef;
-		typedef T const & TObjConstRef;
-		typedef typename std::list< TObj > TObjList;
+		using TObj = T;
+		using TObjRef = T &;
+		using TObjConstRef = T const &;
+		using TObjList = typename std::list< TObj > ;
 
 	public:
 		/**

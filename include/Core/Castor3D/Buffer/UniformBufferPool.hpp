@@ -77,7 +77,7 @@ namespace castor3d
 		 *\param[in]	bufferOffset	Le tampon à libérer.
 		 */
 		template< typename DataT >
-		void putBuffer( UniformBufferOffsetT< DataT > const & bufferOffset );
+		void putBuffer( UniformBufferOffsetT< DataT > const & bufferOffset )noexcept;
 		/**
 		 *\~english
 		 *\return		The pool buffers count.

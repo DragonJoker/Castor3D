@@ -39,7 +39,7 @@ namespace castor3d
 		 *\brief		Dit si l'exception est critique
 		 *\return		Le statut
 		 */
-		bool isCritical()const
+		bool isCritical()const noexcept
 		{
 			return m_critical;
 		}
@@ -50,7 +50,7 @@ namespace castor3d
 }
 
 //! helper macro to ease the use of PluginException
-#define CASTOR_PLUGIN_EXCEPTION( description, critical ) throw castor3d::PluginException{ critical, description, __FILE__, __FUNCTION__, uint32_t( __LINE__ ) }
+#define C3D_PluginException( description, critical ) throw castor3d::PluginException{ critical, description, __FILE__, __FUNCTION__, uint32_t( __LINE__ ) }
 
 #endif
 

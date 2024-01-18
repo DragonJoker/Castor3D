@@ -388,7 +388,7 @@ namespace castor3d
 		}
 	}
 
-	EnvironmentPrefilter::~EnvironmentPrefilter()
+	EnvironmentPrefilter::~EnvironmentPrefilter()noexcept
 	{
 		m_result.destroy();
 	}

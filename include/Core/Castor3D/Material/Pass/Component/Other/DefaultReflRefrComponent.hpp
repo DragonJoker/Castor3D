@@ -17,10 +17,7 @@ namespace castor3d
 		struct ReflRefrShader
 			: shader::PassReflRefrShader
 		{
-			explicit ReflRefrShader( PassComponentPlugin const & plugin )
-				: shader::PassReflRefrShader{ plugin }
-			{
-			}
+			using shader::PassReflRefrShader::PassReflRefrShader;
 
 			C3D_API void computeReflRefr( shader::ReflectionModel & reflections
 				, shader::BlendComponents & components
@@ -68,10 +65,7 @@ namespace castor3d
 			: public PassComponentPlugin
 		{
 		public:
-			explicit Plugin( PassComponentRegister const & passComponent )
-				: PassComponentPlugin{ passComponent }
-			{
-			}
+			using PassComponentPlugin::PassComponentPlugin;
 
 			PassComponentUPtr createComponent( Pass & pass )const override
 			{

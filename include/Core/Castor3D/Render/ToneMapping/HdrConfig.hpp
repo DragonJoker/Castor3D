@@ -24,7 +24,7 @@ namespace castor3d
 		float gamma{ 2.2f };
 	};
 
-	inline bool operator==( HdrConfig const & lhs, HdrConfig const & rhs )
+	inline bool operator==( HdrConfig const & lhs, HdrConfig const & rhs )noexcept
 	{
 		return lhs.exposure == rhs.exposure
 			&& lhs.gamma == rhs.gamma;

@@ -226,7 +226,7 @@ namespace castor3d
 		log::trace << "Created EnvironmentMap " << scene.getName() << std::endl;
 	}
 
-	void EnvironmentMap::cleanup()
+	void EnvironmentMap::cleanup()noexcept
 	{
 		m_passes.clear();
 		m_environmentMapViews.clear();

@@ -46,7 +46,7 @@ namespace castor3d
 	{
 	}
 
-	FrameListener::~FrameListener()
+	FrameListener::~FrameListener()noexcept
 	{
 		for ( auto & list : m_cpuEvents )
 		{

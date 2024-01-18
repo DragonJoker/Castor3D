@@ -258,10 +258,6 @@ namespace castor3d
 		registerTextureCombine( dummy );
 	}
 
-	TextureUnitCache::~TextureUnitCache()
-	{
-	}
-
 	TextureCombine TextureUnitCache::registerTextureCombine( Pass const & pass )
 	{
 		auto loadLock( castor::makeUniqueLock( m_loadMtx ) );

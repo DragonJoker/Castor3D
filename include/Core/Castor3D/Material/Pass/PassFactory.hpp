@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_PassFactory_H___
@@ -37,13 +37,6 @@ namespace castor3d
 		 *\brief		Constructeur
 		 */
 		C3D_API explicit PassFactory( Engine & engine );
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		C3D_API ~PassFactory();
 
 		C3D_API void registerType( LightingModelID lightingModelId
 			, PassRegisterInfo info );
@@ -56,7 +49,7 @@ namespace castor3d
 		C3D_API castor::String getIdName( LightingModelID lightingModelId )const;
 		C3D_API bool hasIBLSupport( LightingModelID lightingModelId )const;
 
-		ObjCont const & listRegisteredTypes()const
+		ObjCont const & listRegisteredTypes()const noexcept
 		{
 			return m_registered;
 		}

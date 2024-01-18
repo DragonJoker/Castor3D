@@ -376,7 +376,7 @@ namespace castor3d
 		mutable std::mutex m_mutexControlsByZIndex;
 		mutable std::vector< ControlRPtr > m_controlsByZIndex;
 		mutable std::atomic< CpuFrameEvent * > m_event{};
-		std::map< castor::String, ThemeUPtr > m_themes;
+		castor::StringMap< ThemeUPtr > m_themes;
 		std::map< Control const *, OnButtonEventConnection > m_onButtonClicks;
 		std::map< Control const *, OnComboEventConnection > m_onComboSelects;
 		std::map< Control const *, OnEditEventConnection > m_onEditUpdates;

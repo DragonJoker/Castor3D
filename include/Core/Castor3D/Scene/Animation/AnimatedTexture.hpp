@@ -17,18 +17,11 @@ namespace castor3d
 		: public AnimatedObject
 	{
 	public:
-		/**
-		 *\~english
-		 *name Copy / Move.
-		 *\~french
-		 *name Copie / Déplacement.
-		 **/
-		/**@{*/
-		C3D_API AnimatedTexture( AnimatedTexture && rhs ) = default;
-		C3D_API AnimatedTexture & operator=( AnimatedTexture && rhs ) = delete;
+		C3D_API AnimatedTexture( AnimatedTexture && rhs )noexcept = default;
+		C3D_API AnimatedTexture & operator=( AnimatedTexture && rhs )noexcept = delete;
 		C3D_API AnimatedTexture( AnimatedTexture const & rhs ) = delete;
 		C3D_API AnimatedTexture & operator=( AnimatedTexture const & rhs ) = delete;
-		/**@}*/
+		C3D_API ~AnimatedTexture()noexcept override = default;
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -60,23 +53,23 @@ namespace castor3d
 		 *name Getters.
 		**/
 		/**@{*/
-		bool hasTextureUnit()const
+		bool hasTextureUnit()const noexcept
 		{
 			return m_texture != nullptr;
 		}
 
-		TextureUnit & getTextureUnit()const
+		TextureUnit & getTextureUnit()const noexcept
 		{
 			CU_Require( hasTextureUnit() );
 			return *m_texture;
 		}
 
-		Pass & getPass()const
+		Pass & getPass()const noexcept
 		{
 			return m_pass;
 		}
 
-		TextureAnimationInstance & getPlayingAnimation()const
+		TextureAnimationInstance & getPlayingAnimation()const noexcept
 		{
 			CU_Require( m_playingAnimation );
 			return *m_playingAnimation;
@@ -86,7 +79,7 @@ namespace castor3d
 		 *name Setters.
 		**/
 		/**@{*/
-		void setTextureUnit( TextureUnit & texture )
+		void setTextureUnit( TextureUnit & texture )noexcept
 		{
 			CU_Require( !m_texture );
 			m_texture = &texture;

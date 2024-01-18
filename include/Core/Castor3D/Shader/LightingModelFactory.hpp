@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_LightingModelFactory_H___
@@ -22,10 +22,10 @@ namespace castor3d
 		using ObjPtr = PtrType;
 		struct Entry
 		{
-			Key name;
-			Creator create;
-			LightingModelID lightingModelId;
-			BackgroundModelID backgroundModelId;
+			Key name{};
+			Creator create{};
+			LightingModelID lightingModelId{};
+			BackgroundModelID backgroundModelId{};
 		};
 		using ObjCont = std::vector< Entry >;
 

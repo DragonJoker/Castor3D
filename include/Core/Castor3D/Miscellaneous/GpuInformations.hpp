@@ -20,19 +20,10 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 */
 		GpuInformations()
-			: m_useShader
-			{
-				{ VK_SHADER_STAGE_VERTEX_BIT, false },
-				{ VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT, false },
-				{ VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT, false },
-				{ VK_SHADER_STAGE_GEOMETRY_BIT, false },
-				{ VK_SHADER_STAGE_FRAGMENT_BIT, false },
-				{ VK_SHADER_STAGE_COMPUTE_BIT, false },
-			}
 		{
 			for ( auto i = 0u; i < uint32_t( GpuMax::eCount ); ++i )
 			{
-				m_maxValues.insert( { GpuMax( i ), std::numeric_limits< int32_t >::lowest() } );
+				m_maxValues.emplace( GpuMax( i ), std::numeric_limits< int32_t >::lowest() );
 			}
 		}
 		/**
@@ -41,7 +32,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Ajoute une caractéristique supportée.
 		 */
-		void addFeature( GpuFeature feature )
+		void addFeature( GpuFeature feature )noexcept
 		{
 			addFlag( m_features, feature );
 		}
@@ -51,7 +42,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Enlève une caractéristique supportée.
 		 */
-		void removeFeature( GpuFeature feature )
+		void removeFeature( GpuFeature feature )noexcept
 		{
 			remFlag( m_features, feature );
 		}
@@ -61,7 +52,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Met à jour le support d'une caractéristique.
 		 */
-		void updateFeature( GpuFeature feature, bool supported )
+		void updateFeature( GpuFeature feature, bool supported )noexcept
 		{
 			supported
 				? addFeature( feature )
@@ -73,7 +64,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Dit si la caractéristique est supportée.
 		 */
-		bool hasFeature( GpuFeature feature )const
+		bool hasFeature( GpuFeature feature )const noexcept
 		{
 			return checkFlag( m_features, feature );
 		}
@@ -83,7 +74,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le statut du support de la stéréo.
 		 */
-		bool hasStereoRendering()const
+		bool hasStereoRendering()const noexcept
 		{
 			return hasFeature( GpuFeature::eStereoRendering );
 		}
@@ -93,7 +84,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le statut du support des SSBO.
 		 */
-		bool hasShaderStorageBuffers()const
+		bool hasShaderStorageBuffers()const noexcept
 		{
 			return hasFeature( GpuFeature::eShaderStorageBuffers );
 		}
@@ -105,7 +96,7 @@ namespace castor3d
 		 *\param[in]	type	Le type de shader.
 		 *\return		Le statut du support du type de shader.
 		 */
-		bool hasShaderType( VkShaderStageFlagBits type )const
+		bool hasShaderType( VkShaderStageFlagBits type )const noexcept
 		{
 			return m_useShader.at( type );
 		}
@@ -119,7 +110,7 @@ namespace castor3d
 		 *\param[in]	type	Le type de shader.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		void useShaderType( VkShaderStageFlagBits type, bool value )
+		void useShaderType( VkShaderStageFlagBits type, bool value )noexcept
 		{
 			m_useShader[type] = value;
 		}
@@ -131,7 +122,7 @@ namespace castor3d
 		 *\param[in]	index	L'index.
 		 *\return		La valeur minimale pour l'index défini.
 		 */
-		uint32_t getValue( GpuMin index )const
+		uint32_t getValue( GpuMin index )const noexcept
 		{
 			return m_minValues.find( index )->second;
 		}
@@ -143,7 +134,7 @@ namespace castor3d
 		 *\param[in]	index	L'index.
 		 *\param[in]	value	La valeur minimale pour l'index défini.
 		 */
-		void setValue( GpuMin index, uint32_t value )
+		void setValue( GpuMin index, uint32_t value )noexcept
 		{
 			m_minValues[index] = value;
 		}
@@ -155,7 +146,7 @@ namespace castor3d
 		 *\param[in]	index	L'index.
 		 *\return		La valeur maximale pour l'index défini.
 		 */
-		uint32_t getValue( GpuMax index )const
+		uint32_t getValue( GpuMax index )const noexcept
 		{
 			return m_maxValues.find( index )->second;
 		}
@@ -167,7 +158,7 @@ namespace castor3d
 		 *\param[in]	index	L'index.
 		 *\param[in]	value	La valeur maximale pour l'index défini.
 		 */
-		void setValue( GpuMax index, uint32_t value )
+		void setValue( GpuMax index, uint32_t value )noexcept
 		{
 			m_maxValues[index] = value;
 		}
@@ -177,7 +168,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La taille totale de la VRAM.
 		 */
-		uint32_t getTotalMemorySize()const
+		uint32_t getTotalMemorySize()const noexcept
 		{
 			return m_totalMemorySize;
 		}
@@ -187,7 +178,7 @@ namespace castor3d
 		 *\~french
 		 *\param[in]	value	La taille totale de la VRAM.
 		 */
-		void setTotalMemorySize( uint32_t value )
+		void setTotalMemorySize( uint32_t value )noexcept
 		{
 			m_totalMemorySize = value;
 		}
@@ -197,7 +188,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le nom du vendeur du GPU.
 		 */
-		castor::String const & getVendor()const
+		castor::String const & getVendor()const noexcept
 		{
 			return m_vendor;
 		}
@@ -207,7 +198,7 @@ namespace castor3d
 		 *\~french
 		 *\param[in]	value	Le nom du vendeur du GPU.
 		 */
-		void setVendor( castor::String const & value )
+		void setVendor( castor::StringView value )noexcept
 		{
 			m_vendor = value;
 		}
@@ -217,7 +208,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le type de GPU.
 		 */
-		castor::String const & getRenderer()const
+		castor::String const & getRenderer()const noexcept
 		{
 			return m_renderer;
 		}
@@ -227,7 +218,7 @@ namespace castor3d
 		 *\~french
 		 *\param[in]	value	Le type de GPU.
 		 */
-		void setRenderer( castor::String const & value )
+		void setRenderer( castor::StringView value )noexcept
 		{
 			m_renderer = value;
 		}
@@ -237,7 +228,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La version de l'API de rendu.
 		 */
-		castor::String const & getVersion()const
+		castor::String const & getVersion()const noexcept
 		{
 			return m_version;
 		}
@@ -247,14 +238,22 @@ namespace castor3d
 		 *\~french
 		 *\param[in]	value	La version de l'API de rendu.
 		 */
-		void setVersion( castor::String const & value )
+		void setVersion( castor::StringView value )noexcept
 		{
 			m_version = value;
 		}
 
 	private:
 		GpuFeatures m_features{ 0u };
-		std::map< VkShaderStageFlagBits, bool > m_useShader;
+		std::map< VkShaderStageFlagBits, bool > m_useShader
+		{
+			{ VK_SHADER_STAGE_VERTEX_BIT, false },
+			{ VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT, false },
+			{ VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT, false },
+			{ VK_SHADER_STAGE_GEOMETRY_BIT, false },
+			{ VK_SHADER_STAGE_FRAGMENT_BIT, false },
+			{ VK_SHADER_STAGE_COMPUTE_BIT, false },
+		};
 		std::map< GpuMin, uint32_t > m_minValues;
 		std::map< GpuMax, uint32_t > m_maxValues;
 		uint32_t m_totalMemorySize{};

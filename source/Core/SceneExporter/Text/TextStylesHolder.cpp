@@ -61,7 +61,7 @@ namespace castor
 		template< typename StyleT, typename ... ParamsT >
 		bool write( TextWriterBase & writer
 			, Scene const * scene
-			, std::map< castor::String, castor::UniquePtr< StyleT > > const & styles
+			, castor::StringMap< castor::UniquePtr< StyleT > > const & styles
 			, castor::String const & sectionName
 			, StringStream & file
 			, ParamsT && ... params )

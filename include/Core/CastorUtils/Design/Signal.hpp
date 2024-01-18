@@ -248,7 +248,7 @@ namespace castor
 				index = m_slots.rbegin()->first + 1u;
 			}
 
-			m_slots.emplace( index, function );
+			m_slots.emplace( index, std::move( function ) );
 			return my_connection{ index, *this };
 		}
 		/**

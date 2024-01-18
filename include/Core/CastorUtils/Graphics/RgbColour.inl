@@ -26,7 +26,7 @@ namespace castor
 			{ PredefinedRgbColour::eWhite, cuT( "white" ) },
 		};
 
-		static std::map< String, PredefinedRgbColour, std::less<> > const PredefinedColours
+		static StringMap< PredefinedRgbColour > const PredefinedColours
 		{
 			{ cuT( "black" ), PredefinedRgbColour::eBlack },
 			{ cuT( "darkblue" ), PredefinedRgbColour::eDarkBlue },

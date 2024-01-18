@@ -14,10 +14,6 @@ namespace castor3d
 	{
 	}
 
-	PassFactory::~PassFactory()
-	{
-	}
-
 	void PassFactory::registerType( LightingModelID lightingModelId
 		, PassRegisterInfo info )
 	{

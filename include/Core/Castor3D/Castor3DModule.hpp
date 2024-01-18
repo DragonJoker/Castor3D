@@ -45,7 +45,7 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	static uint32_t constexpr InvalidIndex = ~( 0u );
+	static uint32_t constexpr InvalidIndex = ~0u;
 	static VkColorComponentFlags const defaultColorWriteMask{ VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT };
 
 	using castor::StringHash;
@@ -71,6 +71,9 @@ namespace castor3d
 	using castor::UInt32Array;
 
 	using crg::FramePassTimer;
+
+	using BytePtr = uint8_t *;
+	using ByteCPtr = uint8_t const *;
 	/**
 	*\~english
 	*\brief		Castor3D engine.
@@ -473,8 +476,8 @@ namespace castor3d
 			registerValue( "Default", "Result" );
 		}
 
-		uint32_t registerValue( castor::String category
-			, castor::String name )
+		uint32_t registerValue( castor::String const & category
+			, castor::String const & name )
 		{
 			auto fullName = category + cuT( "/" ) + name;
 			auto it = std::find( m_intermediateValueNames.begin()

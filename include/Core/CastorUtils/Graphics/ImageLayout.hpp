@@ -18,14 +18,14 @@ namespace castor
 		{
 #pragma clang push
 #pragma clang diagnostic ignored "-Wduplicate-enum"
-			e1D,
-			e2D,
-			e3D,
-			eCube,
-			e1DArray,
-			e2DArray,
-			eCubeArray,
-			CU_EnumBounds( Type, e1D ),
+			e1D = 0,
+			e2D = 1,
+			e3D = 2,
+			eCube = 3,
+			e1DArray = 4,
+			e2DArray = 5,
+			eCubeArray = 6,
+			CU_EnumBounds( Type, e1D, eCubeArray ),
 #pragma clang pop
 		};
 		static castor::StringView getName( Type t )

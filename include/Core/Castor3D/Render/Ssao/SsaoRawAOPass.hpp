@@ -60,7 +60,7 @@ namespace castor3d
 			, crg::ImageViewIdArray const & linearisedDepthBuffer
 			, Texture const & normals
 			, uint32_t const & passIndex );
-		C3D_API ~SsaoRawAOPass();
+		C3D_API ~SsaoRawAOPass()noexcept;
 		/**
 		 *\~english
 		 *\brief		Accepts a visitor.
@@ -83,17 +83,18 @@ namespace castor3d
 		*/
 		/**@{*/
 		static uint32_t countInitialisationSteps()noexcept;
-		Texture const & getResult()const
+
+		Texture const & getResult()const noexcept
 		{
 			return m_result;
 		}
 
-		Texture const & getBentResult()const
+		Texture const & getBentResult()const noexcept
 		{
 			return m_bentNormals;
 		}
 
-		crg::FramePass const & getLastPass()const
+		crg::FramePass const & getLastPass()const noexcept
 		{
 			return *m_lastPass;
 		}

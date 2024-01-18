@@ -77,23 +77,23 @@ namespace castor3d
 	{
 		//!\~english Face on positive X
 		//!\~french Face des X positifs.
-		ePositiveX,
+		ePositiveX = 0,
 		//!\~english Face on negative X
 		//!\~french Face des X négatifs.
-		eNegativeX,
+		eNegativeX = 1,
 		//!\~english Face on positive Y
 		//!\~french Face des Y positifs.
-		ePositiveY,
+		ePositiveY = 2,
 		//!\~english Face on negative Y
 		//!\~french Face des Y négatifs.
-		eNegativeY,
+		eNegativeY = 3,
 		//!\~english Face on positive Z
 		//!\~french Face des Z positifs.
-		ePositiveZ,
+		ePositiveZ = 4,
 		//!\~english Face on negative Z
 		//!\~french Face des Z négatifs.
-		eNegativeZ,
-		CU_ScopedEnumBounds( ePositiveX )
+		eNegativeZ = 5,
+		CU_ScopedEnumBounds( ePositiveX, eNegativeZ )
 	};
 	C3D_API castor::String getName( CubeMapFace value );
 	/**

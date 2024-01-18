@@ -12,7 +12,7 @@ namespace castor3d
 		load();
 	}
 
-	ImporterPlugin::~ImporterPlugin()
+	ImporterPlugin::~ImporterPlugin()noexcept
 	{
 		unload();
 	}

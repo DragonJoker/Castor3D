@@ -361,7 +361,7 @@ namespace castor3d
 		}
 	}
 
-	void LayeredLightPropagationVolumesBase::cleanup()
+	void LayeredLightPropagationVolumesBase::cleanup()noexcept
 	{
 		m_initialised = false;
 		m_lightPropagationPasses = {};

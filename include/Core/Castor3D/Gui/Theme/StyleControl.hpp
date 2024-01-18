@@ -115,14 +115,14 @@ namespace castor3d
 	protected:
 		MaterialObs doCreateMaterial( MaterialObs material
 			, float offset
-			, castor::String const & suffix )
+			, castor::String const & suffix )const
 		{
 			if ( !material )
 			{
-				return nullptr;
+				return material;
 			}
 
-			auto colour = getMaterialColour( *material->getPass( 0u ) );
+			castor::HdrRgbColour colour = getMaterialColour( *material->getPass( 0u ) );
 			colour.red() = float( colour.red() ) + offset;
 			colour.green() = float( colour.green() ) + offset;
 			colour.blue() = float( colour.blue() ) + offset;

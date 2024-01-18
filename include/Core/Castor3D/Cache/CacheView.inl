@@ -68,7 +68,7 @@ namespace castor3d
 	inline typename CacheViewT< CacheT, EventT >::ElementObsT CacheViewT< CacheT, EventT >::add( ElementKeyT const & name
 		, ParametersT && ... params )
 	{
-		ElementObsT created;
+		ElementObsT created{};
 		return this->tryAdd( name
 			, true
 			, created

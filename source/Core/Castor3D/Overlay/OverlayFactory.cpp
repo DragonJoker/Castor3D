@@ -15,8 +15,4 @@ namespace castor3d
 		registerType( OverlayType::eBorderPanel, &BorderPanelOverlay::create );
 		registerType( OverlayType::eText, &TextOverlay::create );
 	}
-
-	OverlayFactory::~OverlayFactory()
-	{
-	}
 }

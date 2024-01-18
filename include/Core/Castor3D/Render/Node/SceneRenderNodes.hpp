@@ -40,11 +40,11 @@ namespace castor3d
 
 	public:
 		C3D_API explicit SceneRenderNodes( Scene & scene );
-		C3D_API ~SceneRenderNodes();
+		C3D_API ~SceneRenderNodes()noexcept;
 
 		C3D_API void registerCuller( SceneCuller & culler );
-		C3D_API void unregisterCuller( SceneCuller & culler );
-		C3D_API void clear();
+		C3D_API void unregisterCuller( SceneCuller & culler )noexcept;
+		C3D_API void clear()noexcept;
 		C3D_API SubmeshRenderNode & createNode( Pass & pass
 			, Submesh & data
 			, Geometry & instance
@@ -70,28 +70,28 @@ namespace castor3d
 
 		C3D_API crg::FramePass const & createVertexTransformPass( crg::FramePassGroup & graph );
 
-		bool hasNodes()const
+		bool hasNodes()const noexcept
 		{
 			return !m_submeshNodes.empty()
 				|| !m_billboardNodes.empty();
 		}
 
-		ashes::Buffer< ModelBufferConfiguration > const & getModelBuffer()const
+		ashes::Buffer< ModelBufferConfiguration > const & getModelBuffer()const noexcept
 		{
 			return *m_modelsData;
 		}
 
-		ashes::Buffer< BillboardUboConfiguration > const & getBillboardsBuffer()const
+		ashes::Buffer< BillboardUboConfiguration > const & getBillboardsBuffer()const noexcept
 		{
 			return *m_billboardsData;
 		}
 
-		NodesPtrMapT< SubmeshRenderNode > const & getSubmeshNodes()const
+		NodesPtrMapT< SubmeshRenderNode > const & getSubmeshNodes()const noexcept
 		{
 			return m_submeshNodes;
 		}
 
-		NodesPtrMapT< BillboardRenderNode > const & getBillboardNodes()const
+		NodesPtrMapT< BillboardRenderNode > const & getBillboardNodes()const noexcept
 		{
 			return m_billboardNodes;
 		}

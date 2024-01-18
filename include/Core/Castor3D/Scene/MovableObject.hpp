@@ -59,7 +59,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API virtual ~MovableObject();
+		C3D_API virtual ~MovableObject()noexcept;
 		/**
 		 *\~english
 		 *\brief		Detaches the movable object from it's parent
@@ -90,14 +90,14 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		C3D_API EngineRPtr getEngine()const;
+		C3D_API EngineRPtr getEngine()const noexcept;
 
-		SceneNode *  getParent()const
+		SceneNode *  getParent()const noexcept
 		{
 			return m_sceneNode;
 		}
 
-		MovableType getMovableType()const
+		MovableType getMovableType()const noexcept
 		{
 			return m_type;
 		}
@@ -119,8 +119,8 @@ namespace castor3d
 	struct MovableMergerT
 		: public castor::Named
 	{
-		explicit MovableMergerT( castor::String const & name )
-			: castor::Named{ name }
+		explicit MovableMergerT( castor::String name )
+			: castor::Named{ std::move( name ) }
 		{
 		}
 
@@ -166,7 +166,7 @@ namespace castor3d
 			, SceneNode & parent
 			, SceneNodeRPtr rootNode
 			, SceneNodeRPtr rootCameraNode
-			, SceneNodeRPtr rootObjectNode )
+			, SceneNodeRPtr rootObjectNode )const
 		{
 			parent.attachObject( element );
 		}
@@ -177,7 +177,7 @@ namespace castor3d
 	{
 		using ElementT = typename CacheT::ElementT;
 
-		void operator()( ElementT & element )
+		void operator()( ElementT & element )const
 		{
 			element.detach();
 		}

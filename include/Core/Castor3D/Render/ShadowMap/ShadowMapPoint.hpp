@@ -48,7 +48,7 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		Texture const & getTexture()const
+		Texture const & getTexture()const noexcept
 		{
 			return m_result[SmTexture::eVariance];
 		}

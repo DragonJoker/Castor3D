@@ -25,42 +25,42 @@ namespace castor3d
 			, VkDeviceSize indexOffset
 			, VkDeviceSize meshletOffset );
 
-		void setVisible( bool value )
+		void setVisible( bool value )noexcept
 		{
 			m_visible = value;
 		}
 
-		void setShadowCaster( bool value )
+		void setShadowCaster( bool value )noexcept
 		{
 			m_castsShadows = value;
 		}
 
-		void setShadowReceiver( bool value )
+		void setShadowReceiver( bool value )noexcept
 		{
 			m_receivesShadows = value;
 		}
 
-		void setCullable( bool value )
+		void setCullable( bool value )noexcept
 		{
 			m_cullable = value;
 		}
 
-		bool isVisible()const
+		bool isVisible()const noexcept
 		{
 			return m_visible;
 		}
 
-		bool isShadowCaster()const
+		bool isShadowCaster()const noexcept
 		{
 			return m_castsShadows;
 		}
 
-		bool isShadowReceiver()const
+		bool isShadowReceiver()const noexcept
 		{
 			return m_receivesShadows;
 		}
 
-		bool isCullable()const
+		bool isCullable()const noexcept
 		{
 			return m_cullable;
 		}

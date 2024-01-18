@@ -14,18 +14,11 @@ namespace castor3d
 		: public AnimatedObject
 	{
 	public:
-		/**
-		 *\~english
-		 *name Copy / Move.
-		 *\~french
-		 *name Copie / Déplacement.
-		 **/
-		/**@{*/
-		C3D_API AnimatedSceneNode( AnimatedSceneNode && rhs ) = default;
-		C3D_API AnimatedSceneNode & operator=( AnimatedSceneNode && rhs ) = delete;
+		C3D_API AnimatedSceneNode( AnimatedSceneNode && rhs )noexcept = default;
+		C3D_API AnimatedSceneNode & operator=( AnimatedSceneNode && rhs )noexcept = delete;
 		C3D_API AnimatedSceneNode( AnimatedSceneNode const & rhs ) = delete;
 		C3D_API AnimatedSceneNode & operator=( AnimatedSceneNode const & rhs ) = delete;
-		/**@}*/
+		C3D_API ~AnimatedSceneNode()noexcept override = default;
 		/**
 		 *\~english
 		 *\brief		Constructor

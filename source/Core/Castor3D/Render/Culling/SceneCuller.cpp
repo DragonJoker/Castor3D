@@ -131,7 +131,7 @@ namespace castor3d
 #endif
 	}
 
-	SceneCuller::~SceneCuller()
+	SceneCuller::~SceneCuller()noexcept
 	{
 		m_scene.getRenderNodes().unregisterCuller( *this );
 	}

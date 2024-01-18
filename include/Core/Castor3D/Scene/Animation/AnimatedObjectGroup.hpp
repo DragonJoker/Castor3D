@@ -22,7 +22,7 @@ namespace castor3d
 		, public castor::OwnedBy< Scene >
 	{
 	public:
-		using AnimatedObjectMap = std::map< castor::String, AnimatedObjectUPtr >;
+		using AnimatedObjectMap = castor::StringMap< AnimatedObjectUPtr >;
 		/**
 		 *\~english
 		 *\brief		Specified constructor
@@ -41,7 +41,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API ~AnimatedObjectGroup();
+		C3D_API ~AnimatedObjectGroup()noexcept;
 		/**
 		 *\~english
 		 *\brief		Creates an AnimatedObject from the SceneNode given as a parameter, adds it to the list.
@@ -319,4 +319,3 @@ namespace castor
 }
 
 #endif
-

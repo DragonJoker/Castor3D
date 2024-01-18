@@ -553,7 +553,7 @@ namespace castor3d
 		}
 	}
 
-	ProgramFlags Submesh::getProgramFlags( Pass const & pass )const
+	ProgramFlags Submesh::getProgramFlags( Pass const & pass )const noexcept
 	{
 		ProgramFlags result{};
 
@@ -1218,13 +1218,13 @@ namespace castor3d
 		return getSubmeshComponentsRegister().getPlugin( componentId );
 	}
 
-	SubmeshComponentCombineID Submesh::getComponentCombineID()const
+	SubmeshComponentCombineID Submesh::getComponentCombineID()const noexcept
 	{
 		CU_Require( m_componentCombine.baseId != 0 );
 		return m_componentCombine.baseId;
 	}
 
-	bool Submesh::hasRenderComponent()const
+	bool Submesh::hasRenderComponent()const noexcept
 	{
 		return m_render != nullptr;
 	}

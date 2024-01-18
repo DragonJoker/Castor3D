@@ -13,9 +13,6 @@ namespace castor3d
 {
 	SphereSection::SphereSection()
 		: MeshGenerator( cuT( "sphere_section" ) )
-		, m_radius( 0 )
-		, m_angle( 0.0_degrees )
-		, m_nbFaces( 0 )
 	{
 	}
 
@@ -27,37 +24,40 @@ namespace castor3d
 	void SphereSection::doGenerate( Mesh & mesh, Parameters const & parameters )
 	{
 		castor::String param;
+		float radius{};
+		castor::Angle angle{};
+		uint32_t nbFaces{};
 
 		if ( parameters.get( cuT( "subdiv" ), param ) )
 		{
-			m_nbFaces = castor::string::toUInt( param );
+			nbFaces = castor::string::toUInt( param );
 		}
 
 		if ( parameters.get( cuT( "radius" ), param ) )
 		{
-			m_radius = castor::string::toFloat( param );
+			radius = castor::string::toFloat( param );
 		}
 
 		if ( parameters.get( cuT( "angle" ), param ) )
 		{
-			m_angle = castor::Angle::fromDegrees( castor::string::toFloat( param ) );
+			angle = castor::Angle::fromDegrees( castor::string::toFloat( param ) );
 		}
 
-		if ( m_nbFaces >= 3
-			&& m_angle.degrees() > 0.0f )
+		if ( nbFaces >= 3
+			&& angle.degrees() > 0.0f )
 		{
-			auto arcAngle = m_angle / ( 2.0f * float( m_nbFaces ) );
-			std::vector< castor::Point2f > arc( m_nbFaces + 1u );
+			auto arcAngle = angle / ( 2.0f * float( nbFaces ) );
+			std::vector< castor::Point2f > arc( nbFaces + 1u );
 			castor::Angle arcAlpha = 0.0_degrees;
 			uint32_t iCur = 0;
 			uint32_t iPrv = 0;
 			float rAlphaI = 0;
-			auto rAngle = castor::PiMult2< float > / float( m_nbFaces );
+			auto rAngle = castor::PiMult2< float > / float( nbFaces );
 
-			for ( uint32_t i = 0; i <= m_nbFaces; i++ )
+			for ( uint32_t i = 0; i <= nbFaces; i++ )
 			{
-				arc[i]->x = float( m_radius * arcAlpha.sin() );
-				arc[i]->y = float( m_radius * arcAlpha.cos() );
+				arc[i]->x = float( radius * arcAlpha.sin() );
+				arc[i]->y = float( radius * arcAlpha.cos() );
 				arcAlpha += arcAngle;
 			}
 
@@ -66,7 +66,7 @@ namespace castor3d
 			auto baseIndexMapping = baseSubmesh.createComponent< TriFaceMapping >();
 			auto & baseIndexMappingData = baseIndexMapping->getData();
 
-			for ( uint32_t k = 0; k < m_nbFaces; k++ )
+			for ( uint32_t k = 0; k < nbFaces; k++ )
 			{
 				castor::Point2f ptT = arc[k + 0];
 				castor::Point2f ptB = arc[k + 1];
@@ -74,7 +74,7 @@ namespace castor3d
 				if ( k == 0 )
 				{
 					// Calcul de la position des points du haut
-					for ( uint32_t i = 0; i <= m_nbFaces; rAlphaI += rAngle, i++ )
+					for ( uint32_t i = 0; i <= nbFaces; rAlphaI += rAngle, i++ )
 					{
 						auto rCos = float( cos( rAlphaI ) );
 						auto rSin = float( sin( rAlphaI ) );
@@ -90,7 +90,7 @@ namespace castor3d
 				// Calcul de la position des points
 				rAlphaI = 0;
 
-				for ( uint32_t i = 0; i <= m_nbFaces; rAlphaI += rAngle, i++ )
+				for ( uint32_t i = 0; i <= nbFaces; rAlphaI += rAngle, i++ )
 				{
 					auto rCos = float( cos( rAlphaI ) );
 					auto rSin = float( sin( rAlphaI ) );
@@ -98,13 +98,13 @@ namespace castor3d
 					InterleavedVertex vertex{};
 					vertex.position( pos )
 						.normal( castor::point::getNormalised( pos ) )
-						.texcoord( castor::Point2f{ 0.5 + ( float( k ) / float( m_nbFaces ) ) * rCos / 2.0f
-							, 0.5 + ( float( k ) / float( m_nbFaces ) ) * rSin / 2.0f } );
+						.texcoord( castor::Point2f{ 0.5 + ( float( k ) / float( nbFaces ) ) * rCos / 2.0f
+							, 0.5 + ( float( k ) / float( nbFaces ) ) * rSin / 2.0f } );
 					baseSubmesh.addPoint( vertex );
 				}
 
 				// Reconstition des faces de la base sphérique
-				for ( uint32_t i = 0; i < m_nbFaces; i++ )
+				for ( uint32_t i = 0; i < nbFaces; i++ )
 				{
 					baseIndexMappingData.addFace( iCur + 0, iPrv + 0, iPrv + 1 );
 					baseIndexMappingData.addFace( iCur + 1, iCur + 0, iPrv + 1 );
@@ -120,20 +120,20 @@ namespace castor3d
 
 			// Constitution des côtés
 			Submesh & sideSubmesh = *mesh.createDefaultSubmesh();
-			castor::Point2f ptA = arc[m_nbFaces];
+			castor::Point2f ptA = arc[nbFaces];
 			rAlphaI = 0;
 
 			// Calcul de la position des points des côtés
-			for ( uint32_t i = 0; i <= m_nbFaces; rAlphaI += rAngle, i++ )
+			for ( uint32_t i = 0; i <= nbFaces; rAlphaI += rAngle, i++ )
 			{
 				auto rCos = float( cos( rAlphaI ) );
 				auto rSin = float( sin( rAlphaI ) );
 				sideSubmesh.addPoint( InterleavedVertex{}
 					.position( { ptA->x * rCos, ptA->x * rSin, ptA->y } )
-					.texcoord( castor::Point2f{ float( i ) / float( m_nbFaces ), float( 0.0 ) } ) );
+					.texcoord( castor::Point2f{ float( i ) / float( nbFaces ), float( 0.0 ) } ) );
 				sideSubmesh.addPoint( InterleavedVertex{}
 					.position( { 0.0f, 0.0f, 0.0f } )
-					.texcoord( castor::Point2f{ float( i ) / float( m_nbFaces ), float( 1.0 ) } ) );
+					.texcoord( castor::Point2f{ float( i ) / float( nbFaces ), float( 1.0 ) } ) );
 				iCur++;
 			}
 
@@ -141,7 +141,7 @@ namespace castor3d
 			auto sideIndexMapping = sideSubmesh.createComponent< TriFaceMapping >();
 			auto & sideIndexMappingData = sideIndexMapping->getData();
 
-			for ( uint32_t i = 0; i < 2 * m_nbFaces; i += 2 )
+			for ( uint32_t i = 0; i < 2 * nbFaces; i += 2 )
 			{
 				sideIndexMappingData.addFace( i + 1, i + 0, i + 2 );
 			}

@@ -24,9 +24,6 @@ namespace castor3d
 
 	Cone::Cone()
 		: MeshGenerator( cuT( "cone" ) )
-		, m_nbFaces( 0 )
-		, m_height( 0 )
-		, m_radius( 0 )
 	{
 	}
 
@@ -39,21 +36,24 @@ namespace castor3d
 		, Parameters const & parameters )
 	{
 		castor::String param;
+		uint32_t nbFaces{};
+		float height{};
+		float radius{};
 		uint32_t axis = 1u;
 
 		if ( parameters.get( cuT( "faces" ), param ) )
 		{
-			m_nbFaces = castor::string::toUInt( param );
+			nbFaces = castor::string::toUInt( param );
 		}
 
 		if ( parameters.get( cuT( "radius" ), param ) )
 		{
-			m_radius = castor::string::toFloat( param );
+			radius = castor::string::toFloat( param );
 		}
 
 		if ( parameters.get( cuT( "height" ), param ) )
 		{
-			m_height = castor::string::toFloat( param );
+			height = castor::string::toFloat( param );
 		}
 
 		if ( parameters.get( cuT( "axis" ), param ) )
@@ -68,38 +68,38 @@ namespace castor3d
 			}
 		}
 
-		if ( m_nbFaces >= 2
-			&& m_height > std::numeric_limits< float >::epsilon()
-			&& m_radius > std::numeric_limits< float >::epsilon() )
+		if ( nbFaces >= 2
+			&& height > std::numeric_limits< float >::epsilon()
+			&& radius > std::numeric_limits< float >::epsilon() )
 		{
 			Submesh & submeshBase = *mesh.createDefaultSubmesh();
 			Submesh & submeshSide = *mesh.createDefaultSubmesh();
 			//CALCUL DE LA POSITION DES POINTS
-			float const dalpha = castor::PiMult2< float > / float( m_nbFaces );
+			float const dalpha = castor::PiMult2< float > / float( nbFaces );
 			uint32_t i = 0;
 			InterleavedVertexArray baseVertex;
 			InterleavedVertexArray sideVertex;
-			baseVertex.reserve( size_t( m_nbFaces ) + 1u );
-			sideVertex.reserve( ( size_t( m_nbFaces ) + 1u ) * 2u );
+			baseVertex.reserve( size_t( nbFaces ) + 1u );
+			sideVertex.reserve( ( size_t( nbFaces ) + 1u ) * 2u );
 
-			for ( float alpha = 0; i <= m_nbFaces; alpha += dalpha )
+			for ( float alpha = 0; i <= nbFaces; alpha += dalpha )
 			{
 				auto rCos = cos( alpha );
 				auto rSin = sin( alpha );
 
-				if ( i < m_nbFaces )
+				if ( i < nbFaces )
 				{
 					baseVertex.push_back( InterleavedVertex{}
-						.position( castor::Point3f{ m_radius * rCos, 0.0, m_radius * rSin } )
+						.position( castor::Point3f{ radius * rCos, 0.0, radius * rSin } )
 						.texcoord( castor::Point2f{ ( 1 + rCos ) / 2, ( 1 + rSin ) / 2 } ) );
 				}
 
 				sideVertex.push_back( InterleavedVertex{}
-					.position( castor::Point3f{ m_radius * rCos, 0.0, m_radius * rSin } )
-					.texcoord( castor::Point2f{ float( i ) / float( m_nbFaces ), float( 1.0 ) } ) );
+					.position( castor::Point3f{ radius * rCos, 0.0, radius * rSin } )
+					.texcoord( castor::Point2f{ float( i ) / float( nbFaces ), float( 1.0 ) } ) );
 				sideVertex.push_back( InterleavedVertex{}
-					.position( castor::Point3f{ float( 0 ), m_height, float( 0 ) } )
-					.texcoord( castor::Point2f{ float( i ) / float( m_nbFaces ), float( 0.0 ) } ) );
+					.position( castor::Point3f{ float( 0 ), height, float( 0 ) } )
+					.texcoord( castor::Point2f{ float( i ) / float( nbFaces ), float( 0.0 ) } ) );
 				i++;
 			}
 
@@ -117,9 +117,9 @@ namespace castor3d
 			submeshSide.addPoints( sideVertex );
 
 			//RECONSTITION DES FACES
-			if ( m_height < 0 )
+			if ( height < 0 )
 			{
-				m_height = -m_height;
+				height = -height;
 			}
 
 			auto indexMappingBase = submeshBase.createComponent< TriFaceMapping >();
@@ -128,17 +128,17 @@ namespace castor3d
 			auto & indexMappingSideData = indexMappingSide->getData();
 
 			//Composition des extrémités
-			for ( i = 0; i < m_nbFaces - 1; i++ )
+			for ( i = 0; i < nbFaces - 1; i++ )
 			{
 				//Composition du bas
 				indexMappingBaseData.addFace( i + 1, i, bottomCenterIndex );
 			}
 
 			//Composition du bas
-			indexMappingBaseData.addFace( 0, m_nbFaces - 1, bottomCenterIndex );
+			indexMappingBaseData.addFace( 0, nbFaces - 1, bottomCenterIndex );
 
 			//Composition des côtés
-			for ( i = 0; i < 2 * m_nbFaces; i += 2 )
+			for ( i = 0; i < 2 * nbFaces; i += 2 )
 			{
 				indexMappingSideData.addFace( i + 1, i + 0, i + 2 );
 			}

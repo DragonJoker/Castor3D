@@ -39,7 +39,6 @@ namespace castor3d
 			, Texture const & source
 			, Texture const & brdf
 			, SamplerObs sampler );
-		C3D_API ~IblTextures();
 		/**
 		 *\~english
 		 *\brief		Updates the environment maps.
@@ -72,42 +71,42 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		Texture const & getIrradianceTexture()const
+		Texture const & getIrradianceTexture()const noexcept
 		{
 			return m_radianceComputer.getResult();
 		}
 
-		Texture const & getPrefilteredEnvironmentTexture()const
+		Texture const & getPrefilteredEnvironmentTexture()const noexcept
 		{
 			return m_environmentPrefilter.getResult();
 		}
 
-		Texture const & getPrefilteredEnvironmentSheenTexture()const
+		Texture const & getPrefilteredEnvironmentSheenTexture()const noexcept
 		{
 			return m_environmentSheenPrefilter.getResult();
 		}
 
-		Texture const & getPrefilteredBrdfTexture()const
+		Texture const & getPrefilteredBrdfTexture()const noexcept
 		{
 			return m_brdf;
 		}
 
-		ashes::Sampler const & getIrradianceSampler()const
+		ashes::Sampler const & getIrradianceSampler()const noexcept
 		{
 			return m_radianceComputer.getSampler();
 		}
 
-		ashes::Sampler const & getPrefilteredEnvironmentSampler()const
+		ashes::Sampler const & getPrefilteredEnvironmentSampler()const noexcept
 		{
 			return m_environmentPrefilter.getSampler();
 		}
 
-		ashes::Sampler const & getPrefilteredEnvironmentSheenSampler()const
+		ashes::Sampler const & getPrefilteredEnvironmentSheenSampler()const noexcept
 		{
 			return m_environmentSheenPrefilter.getSampler();
 		}
 
-		ashes::Sampler const & getPrefilteredBrdfSampler()const
+		ashes::Sampler const & getPrefilteredBrdfSampler()const noexcept
 		{
 			CU_Require( m_sampler != nullptr );
 			return m_sampler->getSampler();

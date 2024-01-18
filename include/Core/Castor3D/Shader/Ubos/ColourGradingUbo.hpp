@@ -113,10 +113,10 @@ namespace castor3d
 	public:
 		C3D_API ColourGradingUbo( ColourGradingUbo const & rhs ) = delete;
 		C3D_API ColourGradingUbo & operator=( ColourGradingUbo const & rhs ) = delete;
-		C3D_API ColourGradingUbo( ColourGradingUbo && rhs ) = default;
-		C3D_API ColourGradingUbo & operator=( ColourGradingUbo && rhs ) = delete;
+		C3D_API ColourGradingUbo( ColourGradingUbo && rhs )noexcept = default;
+		C3D_API ColourGradingUbo & operator=( ColourGradingUbo && rhs )noexcept = delete;
 		C3D_API explicit ColourGradingUbo( RenderDevice const & device );
-		C3D_API ~ColourGradingUbo();
+		C3D_API ~ColourGradingUbo()noexcept;
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.

@@ -9,11 +9,10 @@ namespace castor3d
 		m_data.resize( description.stride() );
 		uint32_t index{ 0u };
 
-		for ( auto element : m_description )
+		for ( auto const & element : m_description )
 		{
-			auto it = defaultValues.find( element.m_name );
-
-			if ( it != defaultValues.end() && !it->second.empty() )
+			if ( auto it = defaultValues.find( element.m_name );
+				it != defaultValues.end() && !it->second.empty() )
 			{
 				parseValue( it->second, element.m_dataType, *this, index );
 			}

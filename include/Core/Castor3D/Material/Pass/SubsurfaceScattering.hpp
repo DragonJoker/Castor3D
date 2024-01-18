@@ -29,27 +29,27 @@ namespace castor3d
 		 *name Accesseurs.
 		**/
 		/**@{*/
-		float getGaussianWidth()const
+		float getGaussianWidth()const noexcept
 		{
 			return m_gaussianWidth;
 		}
 
-		float getStrength()const
+		float getStrength()const noexcept
 		{
 			return m_strength;
 		}
 
-		float getThicknessScale()const
+		float getThicknessScale()const noexcept
 		{
 			return m_thicknessScale;
 		}
 
-		float getSubsurfaceRadius()const
+		float getSubsurfaceRadius()const noexcept
 		{
 			return m_subsurfaceRadius;
 		}
 
-		uint32_t getProfileSize()const
+		uint32_t getProfileSize()const noexcept
 		{
 			return uint32_t( m_profileFactors.size() );
 		}
@@ -99,22 +99,22 @@ namespace castor3d
 		 *name Itération.
 		**/
 		/**@{*/
-		auto begin()
+		auto begin()noexcept
 		{
 			return m_profileFactors.begin();
 		}
 
-		auto begin()const
+		auto begin()const noexcept
 		{
 			return m_profileFactors.begin();
 		}
 
-		auto end()
+		auto end()noexcept
 		{
 			return m_profileFactors.end();
 		}
 
-		auto end()const
+		auto end()const noexcept
 		{
 			return m_profileFactors.end();
 		}

@@ -274,9 +274,8 @@ namespace castor3d
 			, castor::String const & name
 			, Creator create )
 		{
-			auto it = m_registered.emplace( type
-				, std::unordered_map< castor::String, Creator >{} ).first;
-			it->second.emplace( name, create );
+			auto it = m_registered.try_emplace( type ).first;
+			it->second.try_emplace( name, create );
 		}
 		/**
 		 *\~english
@@ -291,13 +290,11 @@ namespace castor3d
 		void unregisterType( castor::String const & type
 			, castor::String const & name )
 		{
-			auto it = m_registered.find( type );
-
-			if ( it != m_registered.end() )
+			if ( auto it = m_registered.find( type );
+				it != m_registered.end() )
 			{
-				auto tit = it->second.find( name );
-
-				if ( tit != it->second.end() )
+				if ( auto tit = it->second.find( name );
+					tit != it->second.end() )
 				{
 					it->second.erase( tit );
 				}
@@ -333,7 +330,7 @@ namespace castor3d
 			, ProgressBar * progress )const;
 
 	private:
-		std::unordered_map< castor::String, std::unordered_map< castor::String, Creator > > m_registered;
+		castor::UnorderedStringMap< castor::UnorderedStringMap< Creator > > m_registered;
 	};
 }
 

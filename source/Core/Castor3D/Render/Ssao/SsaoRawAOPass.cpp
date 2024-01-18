@@ -617,7 +617,7 @@ namespace castor3d
 		m_bentNormals.create();
 	}
 
-	SsaoRawAOPass::~SsaoRawAOPass()
+	SsaoRawAOPass::~SsaoRawAOPass()noexcept
 	{
 		m_result.destroy();
 		m_bentNormals.destroy();

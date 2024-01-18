@@ -24,20 +24,20 @@ namespace castor3d
 	enum class GlobalIlluminationType
 		: uint32_t
 	{
-		eNone,
+		eNone = 0,
 		// Reflective shadow maps.
-		eRsm,
+		eRsm = 1,
 		// Voxel Cone Tracing.
-		eVoxelConeTracing,
+		eVoxelConeTracing = 2,
 		// Light Propagation Volumes without geometry injection.
-		eLpv,
+		eLpv = 3,
 		// Light Propagation Volumes with geometry injection.
-		eLpvG,
+		eLpvG = 4,
 		// Layered Light Propagation Volumes without geometry injection.
-		eLayeredLpv,
+		eLayeredLpv = 5,
 		// Layered Light Propagation Volumes with geometry injection.
-		eLayeredLpvG,
-		CU_ScopedEnumBounds( eNone ),
+		eLayeredLpvG = 6,
+		CU_ScopedEnumBounds( eNone, eLayeredLpvG ),
 	};
 	C3D_API castor::String getName( GlobalIlluminationType giType );
 	/**

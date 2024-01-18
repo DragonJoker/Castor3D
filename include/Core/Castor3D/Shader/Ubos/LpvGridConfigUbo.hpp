@@ -80,10 +80,10 @@ namespace castor3d
 	public:
 		C3D_API LpvGridConfigUbo( LpvGridConfigUbo const & rhs ) = delete;
 		C3D_API LpvGridConfigUbo & operator=( LpvGridConfigUbo const & rhs ) = delete;
-		C3D_API LpvGridConfigUbo( LpvGridConfigUbo && rhs ) = default;
-		C3D_API LpvGridConfigUbo & operator=( LpvGridConfigUbo && rhs ) = delete;
+		C3D_API LpvGridConfigUbo( LpvGridConfigUbo && rhs )noexcept = default;
+		C3D_API LpvGridConfigUbo & operator=( LpvGridConfigUbo && rhs )noexcept = delete;
 		C3D_API explicit LpvGridConfigUbo( RenderDevice const & device );
-		C3D_API ~LpvGridConfigUbo();
+		C3D_API ~LpvGridConfigUbo()noexcept;
 
 		C3D_API castor::Grid const & cpuUpdate( castor::BoundingBox const & aabb
 			, castor::Point3f const & cameraPos

@@ -50,7 +50,7 @@ namespace castor3d
 		 *\brief		Supprime une configuration du tampon.
 		 *\param[in]	unit	La texture.
 		 */
-		C3D_API void removeTextureConfiguration( TextureUnit & unit );
+		C3D_API void removeTextureConfiguration( TextureUnit & unit )noexcept;
 		/**
 		 *\~english
 		 *\brief		Updates the configurations buffer.
@@ -105,19 +105,19 @@ namespace castor3d
 	public:
 		struct Data
 		{
-			castor::Point3f translate;
-			float rotateU;
-			castor::Point3f scale;
-			float rotateV;
-			castor::Point4f tileSet;
-			float normalGMult;
-			float normalFactor;
-			uint32_t normal2Chan;
-			float heightFactor;
-			uint32_t isTransformAnim;
-			uint32_t isTileAnim;
-			uint32_t needsYInv;
-			uint32_t texcoordSet;
+			castor::Point3f translate{};
+			float rotateU{};
+			castor::Point3f scale{};
+			float rotateV{};
+			castor::Point4f tileSet{};
+			float normalGMult{};
+			float normalFactor{};
+			uint32_t normal2Chan{};
+			float heightFactor{};
+			uint32_t isTransformAnim{};
+			uint32_t isTileAnim{};
+			uint32_t needsYInv{};
+			uint32_t texcoordSet{};
 		};
 
 		using TextureConfigurationsData = castor::ArrayView< Data >;

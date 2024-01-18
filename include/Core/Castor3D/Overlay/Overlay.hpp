@@ -304,7 +304,7 @@ namespace castor3d
 			m_category->setPixelSize( size );
 		}
 
-		void rename( castor::String const & name )
+		void rename( castor::StringView name )
 		{
 			m_name = name;
 		}
@@ -353,7 +353,7 @@ namespace castor
 	template<>
 	struct ParserEnumTraits< castor3d::TextWrappingMode >
 	{
-		static inline xchar const * const Name = cuT( "TextWrappingMode" );
+		static inline StringView constexpr Name = cuT( "TextWrappingMode" );
 		static inline UInt32StrMap const Values = []()
 			{
 				UInt32StrMap result;
@@ -365,7 +365,7 @@ namespace castor
 	template<>
 	struct ParserEnumTraits< castor3d::BorderPosition >
 	{
-		static inline xchar const * const Name = cuT( "BorderPosition" );
+		static inline StringView constexpr Name = cuT( "BorderPosition" );
 		static inline UInt32StrMap const Values = []()
 			{
 				UInt32StrMap result;
@@ -377,7 +377,7 @@ namespace castor
 	template<>
 	struct ParserEnumTraits< castor3d::VAlign >
 	{
-		static inline xchar const * const Name = cuT( "VAlign" );
+		static inline StringView constexpr Name = cuT( "VAlign" );
 		static inline UInt32StrMap const Values = []()
 			{
 				UInt32StrMap result;
@@ -389,7 +389,7 @@ namespace castor
 	template<>
 	struct ParserEnumTraits< castor3d::HAlign >
 	{
-		static inline xchar const * const Name = cuT( "HAlign" );
+		static inline StringView constexpr Name = cuT( "HAlign" );
 		static inline UInt32StrMap const Values = []()
 			{
 				UInt32StrMap result;
@@ -401,7 +401,7 @@ namespace castor
 	template<>
 	struct ParserEnumTraits< castor3d::TextTexturingMode >
 	{
-		static inline xchar const * const Name = cuT( "TextTexturingMode" );
+		static inline StringView constexpr Name = cuT( "TextTexturingMode" );
 		static inline UInt32StrMap const Values = []()
 			{
 				UInt32StrMap result;
@@ -413,7 +413,7 @@ namespace castor
 	template<>
 	struct ParserEnumTraits< castor3d::TextLineSpacingMode >
 	{
-		static inline xchar const * const Name = cuT( "TextLineSpacingMode" );
+		static inline StringView constexpr Name = cuT( "TextLineSpacingMode" );
 		static inline UInt32StrMap const Values = []()
 			{
 				UInt32StrMap result;

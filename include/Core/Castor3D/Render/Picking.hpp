@@ -57,19 +57,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API ~Picking();
-		/**
-		 *\~english
-		 *\brief		Adds a scene rendered through this technique.
-		 *\param[in]	scene	The scene.
-		 *\param[in]	camera	The camera through which the scene is viewed.
-		 *\~french
-		 *\brief		Ajoute une scène dessinée via cette technique.
-		 *\param[in]	scene	La scène.
-		 *\param[in]	camera	La caméra à travers laquelle la scène est vue.
-		 */
-		C3D_API void addScene( Scene & scene
-			, Camera & camera );
+		C3D_API ~Picking()noexcept;
 		/**
 		 *\~english
 		 *\brief		Picks a geometry at given mouse position.
@@ -96,42 +84,42 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		Geometry const * getPickedGeometry()const
+		Geometry const * getPickedGeometry()const noexcept
 		{
 			return m_geometry;
 		}
 
-		BillboardBase const * getPickedBillboard()const
+		BillboardBase const * getPickedBillboard()const noexcept
 		{
 			return m_billboard;
 		}
 
-		Submesh const * getPickedSubmesh()const
+		Submesh const * getPickedSubmesh()const noexcept
 		{
 			return m_submesh;
 		}
 
-		uint32_t getPickedFace()const
+		uint32_t getPickedFace()const noexcept
 		{
 			return m_face;
 		}
 
-		PickNodeType getPickedNodeType()const
+		PickNodeType getPickedNodeType()const noexcept
 		{
 			return m_pickNodeType;
 		}
 
-		crg::ImageViewId const & getImageView()const
+		crg::ImageViewId const & getImageView()const noexcept
 		{
 			return m_colourImageView;
 		}
 
-		crg::SemaphoreWaitArray const & getSemaphoreWait()const
+		crg::SemaphoreWaitArray const & getSemaphoreWait()const noexcept
 		{
 			return m_toWait;
 		}
 
-		bool isPicking()const
+		bool isPicking()const noexcept
 		{
 			return m_picking;
 		}

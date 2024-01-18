@@ -36,13 +36,6 @@ namespace castor3d
 			, uint32_t count );
 		/**
 		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API ~StructuredShaderBuffer();
-		/**
-		 *\~english
 		 *\brief		Adds an element to the buffer.
 		 *\remarks		Sets the element's ID.
 		 *\param[in]	element	The element.

@@ -39,12 +39,12 @@ namespace castor3d
 	enum class MovableType
 		: uint8_t
 	{
-		eCamera,
-		eGeometry,
-		eLight,
-		eBillboard,
-		eParticleEmitter,
-		CU_ScopedEnumBounds( eCamera )
+		eCamera = 0,
+		eGeometry = 1,
+		eLight = 2,
+		eBillboard = 3,
+		eParticleEmitter = 4,
+		CU_ScopedEnumBounds( eCamera, eParticleEmitter )
 	};
 	C3D_API castor::String getName( MovableType value );
 	/**
@@ -60,17 +60,17 @@ namespace castor3d
 	{
 		//!\~english	No shadows at all.
 		//!\~french		Pas d'ombres du tout.
-		eNone,
+		eNone = 0,
 		//!\~english	No filtering.
 		//!\~french		Pas de filtrage.
-		eRaw,
+		eRaw = 1,
 		//!\~english	PCF filtering.
 		//!\~french		Filtrage PCF.
-		ePCF,
+		ePCF = 2,
 		//!\~english	Variance shadow mapping.
 		//!\~french		Filtrage par variance.
-		eVariance,
-		CU_ScopedEnumBounds( eNone )
+		eVariance = 3,
+		CU_ScopedEnumBounds( eNone, eVariance )
 	};
 	C3D_API castor::String getName( ShadowType value );
 	/**
@@ -85,17 +85,17 @@ namespace castor3d
 	{
 		//!\~english	No fog.
 		//!\~french		Pas de brouillard
-		eDisabled,
+		eDisabled = 0,
 		//!\~english	Fog intensity increases linearly with distance to camera.
 		//!\~french		L'intensité du brouillard augmente lin�airement avec la distance à la caméra.
-		eLinear,
+		eLinear = 1,
 		//!\~english	Fog intensity increases exponentially with distance to camera.
 		//!\~french		L'intensité du brouillard augmente exponentiellement avec la distance à la caméra.
-		eExponential,
+		eExponential = 2,
 		//!\~english	Fog intensity increases even more with distance to camera.
 		//!\~french		L'intensité du brouillard augmente encore plus avec la distance à la caméra.
-		eSquaredExponential,
-		CU_ScopedEnumBounds( eDisabled )
+		eSquaredExponential = 3,
+		CU_ScopedEnumBounds( eDisabled, eSquaredExponential )
 	};
 	C3D_API castor::String getName( FogType value );
 	/**
@@ -171,11 +171,11 @@ namespace castor3d
 	{
 		//!\~english	Billboards always face the camera.
 		//!\~french		Les billboards font toujours face à la caméra.
-		eSpherical,
+		eSpherical = 0,
 		//!\~english	Billboards rotate only on Y axis.
 		//!\~french		Les billboards tournent uniquement sur l'axe Y.
-		eCylindrical,
-		CU_ScopedEnumBounds( eSpherical )
+		eCylindrical = 1,
+		CU_ScopedEnumBounds( eSpherical, eCylindrical )
 	};
 	C3D_API castor::String getName( BillboardType value );
 	/**
@@ -190,11 +190,11 @@ namespace castor3d
 	{
 		//!\~english	Billboards size changes with camera position.
 		//!\~french		Les dimensions des billboards changent en fonction de la position de la caméra.
-		eDynamic,
+		eDynamic = 0,
 		//!\~english	Billboards size doesn't change.
 		//!\~french		Les dimensions des billboards ne changent pas.
-		eFixed,
-		CU_ScopedEnumBounds( eDynamic )
+		eFixed = 1,
+		CU_ScopedEnumBounds( eDynamic, eFixed )
 	};
 	C3D_API castor::String getName( BillboardSize value );
 	/**

@@ -15,7 +15,7 @@ namespace castor3d
 	protected:
 		using Animation = AnimationT< AnimableHandlerT >;
 		using AnimationPtr = castor::UniquePtr< Animation >;
-		using AnimationsMap = std::map< castor::String, AnimationPtr >;
+		using AnimationsMap = castor::StringMap< AnimationPtr >;
 		/**
 		 *\~english
 		 *\name Construction / Destruction.
@@ -24,28 +24,28 @@ namespace castor3d
 		 **/
 		/**@{*/
 		inline explicit AnimableT( AnimableHandlerT & owner );
-		C3D_API AnimableT( AnimableT && rhs ) = default;
-		C3D_API AnimableT & operator=( AnimableT && rhs ) = delete;
+		C3D_API AnimableT( AnimableT && rhs )noexcept = default;
+		C3D_API AnimableT & operator=( AnimableT && rhs )noexcept = delete;
 		C3D_API AnimableT( AnimableT const & rhs ) = delete;
 		C3D_API AnimableT & operator=( AnimableT const & rhs ) = delete;
 		/**@}*/
 
 	public:
-		C3D_API virtual ~AnimableT() = default;
+		C3D_API virtual ~AnimableT()noexcept = default;
 		/**
 		 *\~english
 		 *\brief		Empties the animations map.
 		 *\~french
 		 *\brief		Vid ela map d'animations.
 		 */
-		inline void cleanupAnimations();
+		void cleanupAnimations();
 		/**
 		 *\~english
 		 *\return		\p true if the object has an animation.
 		 *\~french
 		 *\return		\p true si l'objet a une animation.
 		 */
-		inline bool hasAnimation()const;
+		bool hasAnimation()const;
 		/**
 		 *\~english
 		 *\param[in]	name	The animation name
@@ -54,7 +54,7 @@ namespace castor3d
 		 *\param[in]	name	Le nom de l'animation
 		 *\return		\p true si l'objet a une animation ayant le nom donné.
 		 */
-		inline bool hasAnimation( castor::String const & name )const;
+		bool hasAnimation( castor::String const & name )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves an animation
@@ -65,7 +65,7 @@ namespace castor3d
 		 *\param[in]	name	Le nom de l'animation
 		 *\return		L'animation
 		 */
-		inline Animation const & getAnimation( castor::String const & name )const;
+		Animation const & getAnimation( castor::String const & name )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves an animation
@@ -76,7 +76,7 @@ namespace castor3d
 		 *\param[in]	name	Le nom de l'animation
 		 *\return		L'animation
 		 */
-		inline Animation & getAnimation( castor::String const & name );
+		Animation & getAnimation( castor::String const & name );
 		/**
 		 *\~english
 		 *\brief		Adds an animation.
@@ -92,7 +92,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Les animations.
 		 */
-		inline AnimationsMap const & getAnimations()const
+		AnimationsMap const & getAnimations()const
 		{
 			return m_animations;
 		}
@@ -106,7 +106,7 @@ namespace castor3d
 		 *\brief		Enlève une animation.
 		 *\param[in]	name	Le nom de l'animation
 		 */
-		inline void doRemoveAnimation( castor::String const & name );
+		void doRemoveAnimation( castor::String const & name );
 		/**
 		 *\~english
 		 *\brief		Retrieves an animation
@@ -118,7 +118,7 @@ namespace castor3d
 		 *\return		L'animation
 		 */
 		template< typename AnimationType >
-		inline AnimationType & doGetAnimation( castor::String const & name );
+		AnimationType & doGetAnimation( castor::String const & name );
 		/**
 		 *\~english
 		 *\brief		Retrieves an animation
@@ -130,7 +130,7 @@ namespace castor3d
 		 *\return		L'animation
 		 */
 		template< typename AnimationType >
-		inline AnimationType const & doGetAnimation( castor::String const & name )const;
+		AnimationType const & doGetAnimation( castor::String const & name )const;
 
 	protected:
 		//!\~english	All animations.

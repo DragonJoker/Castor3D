@@ -226,11 +226,11 @@ namespace c3d_gltf
 		}
 
 		static auto findNodeMesh( size_t meshIndex
-			, std::map< castor::String, GltfMeshData > const & meshes )
+			, castor::StringMap< GltfMeshData > const & meshes )
 		{
 			return std::find_if( meshes.begin()
 				, meshes.end()
-				, [&meshIndex]( std::map< castor::String, GltfMeshData >::value_type const & lookup )
+				, [&meshIndex]( castor::StringMap< GltfMeshData >::value_type const & lookup )
 				{
 					return lookup.second.submeshes.end() != std::find_if( lookup.second.submeshes.begin()
 						, lookup.second.submeshes.end()
@@ -306,7 +306,7 @@ namespace c3d_gltf
 		template< typename IterT, typename TypeT >
 		static std::pair< IterT, castor::String > replaceIter( castor::String const & name
 			, IterT iter
-			, std::map< castor::String, TypeT > & map )
+			, castor::StringMap< TypeT > & map )
 		{
 			auto common = getLongestCommonSubstring( name, iter->first );
 
@@ -362,10 +362,10 @@ namespace c3d_gltf
 			}
 		}
 
-		static std::map< castor::String, GltfMeshData >::iterator mergeMeshes( GltfImporterFile const & file
+		static castor::StringMap< GltfMeshData >::iterator mergeMeshes( GltfImporterFile const & file
 			, size_t meshIndex
 			, castor::String const & meshName
-			, std::map< castor::String, GltfMeshData > & meshes
+			, castor::StringMap< GltfMeshData > & meshes
 			, size_t & skinIndex
 			, fastgltf::Skin const *& skin )
 		{
@@ -387,7 +387,7 @@ namespace c3d_gltf
 				skin = &asset.skins[skinIndex];
 				result = std::find_if( meshes.begin()
 					, meshes.end()
-					, [skin]( std::map< castor::String, GltfMeshData >::value_type const & lookup )
+					, [skin]( castor::StringMap< GltfMeshData >::value_type const & lookup )
 					{
 						return skin == lookup.second.skin;
 					} );
@@ -403,7 +403,7 @@ namespace c3d_gltf
 
 		static void listNodeMeshes( GltfImporterFile const & file
 			, std::map< size_t, castor::Matrix4x4f > const & cumulativeTransforms
-			, std::map< castor::String, GltfMeshData > const & meshes
+			, castor::StringMap< GltfMeshData > const & meshes
 			, size_t meshIndex
 			, castor::Matrix4x4f const & matrix
 			, std::map< GltfMeshData const *, std::vector< size_t > > & processedMeshes
@@ -896,7 +896,7 @@ namespace c3d_gltf
 					{
 						auto it = std::find_if( m_sceneData.meshes.begin()
 							, m_sceneData.meshes.end()
-							, [meshData]( std::map< castor::String, GltfMeshData >::value_type const & lookup )
+							, [meshData]( castor::StringMap< GltfMeshData >::value_type const & lookup )
 							{
 								return meshData == &lookup.second;
 							} );

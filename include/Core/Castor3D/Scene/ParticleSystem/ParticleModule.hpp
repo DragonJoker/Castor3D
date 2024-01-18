@@ -56,22 +56,22 @@ namespace castor3d
 	C3D_API castor::String getName( ElementUsage value );
 	enum class ParticleFormat
 	{
-		eInt,
-		eVec2i,
-		eVec3i,
-		eVec4i,
-		eUInt,
-		eVec2ui,
-		eVec3ui,
-		eVec4ui,
-		eFloat,
-		eVec2f,
-		eVec3f,
-		eVec4f,
-		eMat2f,
-		eMat3f,
-		eMat4f,
-		CU_ScopedEnumBounds( eInt )
+		eInt = 0,
+		eVec2i = 1,
+		eVec3i = 2,
+		eVec4i = 3,
+		eUInt = 4,
+		eVec2ui = 5,
+		eVec3ui = 6,
+		eVec4ui = 7,
+		eFloat = 8,
+		eVec2f = 9,
+		eVec3f = 10,
+		eVec4f = 11,
+		eMat2f = 12,
+		eMat3f = 13,
+		eMat4f = 14,
+		CU_ScopedEnumBounds( eInt, eMat4f )
 	};
 	C3D_API castor::String getName( ParticleFormat value );
 	/**

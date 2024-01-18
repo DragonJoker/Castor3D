@@ -12,18 +12,11 @@ namespace castor3d
 		: public SkeletonAnimationInstanceObject
 	{
 	public:
-		/**
-		 *\~english
-		 *name Copy / Move.
-		 *\~french
-		 *name Copie / Déplacement.
-		 **/
-		/**@{*/
-		C3D_API SkeletonAnimationInstanceBone( SkeletonAnimationInstanceBone && rhs ) = default;
-		C3D_API SkeletonAnimationInstanceBone & operator=( SkeletonAnimationInstanceBone && rhs ) = delete;
+		C3D_API SkeletonAnimationInstanceBone( SkeletonAnimationInstanceBone && rhs )noexcept = default;
+		C3D_API SkeletonAnimationInstanceBone & operator=( SkeletonAnimationInstanceBone && rhs )noexcept = delete;
 		C3D_API SkeletonAnimationInstanceBone( SkeletonAnimationInstanceBone const & rhs ) = delete;
 		C3D_API SkeletonAnimationInstanceBone & operator=( SkeletonAnimationInstanceBone const & rhs ) = delete;
-		/**@}*/
+		C3D_API ~SkeletonAnimationInstanceBone()noexcept override = default;
 		/**
 		 *\~english
 		 *\brief		Constructor.

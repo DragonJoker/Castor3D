@@ -37,7 +37,7 @@ namespace castor3d
 		float voxelSizeFactor{ 1.0f };
 	};
 
-	inline bool operator==( VctConfig const & lhs, VctConfig const & rhs )
+	inline bool operator==( VctConfig const & lhs, VctConfig const & rhs )noexcept
 	{
 		return lhs.enabled == rhs.enabled
 			&& lhs.enableConservativeRasterization == rhs.enableConservativeRasterization

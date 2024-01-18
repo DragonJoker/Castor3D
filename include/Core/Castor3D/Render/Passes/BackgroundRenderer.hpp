@@ -141,7 +141,7 @@ namespace castor3d
 		 */
 		C3D_API void update( GpuUpdater & updater );
 
-		crg::FramePass const & getPass()const
+		crg::FramePass const & getPass()const noexcept
 		{
 			return *m_backgroundPassDesc;
 		}

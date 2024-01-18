@@ -11,10 +11,6 @@ namespace castor3d
 	class DividerPlugin
 		: public Plugin
 	{
-	private:
-		friend class Plugin;
-		friend class Engine;
-
 	public:
 		/**
 		 *\~english
@@ -34,7 +30,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API ~DividerPlugin()override;
+		C3D_API ~DividerPlugin()noexcept override;
 	};
 }
 

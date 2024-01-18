@@ -223,29 +223,29 @@ namespace castor3d
 		}
 	}
 
-	Engine * OpaqueRendering::getEngine()const
+	Engine * OpaqueRendering::getEngine()const noexcept
 	{
 		return getOwner()->getEngine();
 	}
 
-	crg::FramePass const & OpaqueRendering::getLastPass()const
+	crg::FramePass const & OpaqueRendering::getLastPass()const noexcept
 	{
 		return m_visibilityOpaquePassDesc
 			? *m_visibilityOpaquePassDesc
 			: *m_deferredOpaquePassDesc;
 	}
 
-	Texture const & OpaqueRendering::getSsaoResult()const
+	Texture const & OpaqueRendering::getSsaoResult()const noexcept
 	{
 		return m_ssao->getResult();
 	}
 
-	Texture const & OpaqueRendering::getSssDiffuse()const
+	Texture const & OpaqueRendering::getSssDiffuse()const noexcept
 	{
 		return m_subsurfaceScattering->getResult();
 	}
 
-	bool OpaqueRendering::isEnabled()const
+	bool OpaqueRendering::isEnabled()const noexcept
 	{
 		return m_opaquePassEnabled()
 			|| m_deferredOpaquePassEnabled()

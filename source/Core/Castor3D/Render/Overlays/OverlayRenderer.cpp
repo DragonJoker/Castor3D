@@ -1010,10 +1010,6 @@ namespace castor3d
 			, 0u );
 	}
 
-	OverlayRenderer::~OverlayRenderer()
-	{
-	}
-
 	void OverlayRenderer::update( GpuUpdater & updater )
 	{
 		if ( auto timerBlock = std::make_unique< crg::FramePassTimerBlock >( m_timer.start() ) )

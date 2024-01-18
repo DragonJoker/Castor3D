@@ -153,7 +153,7 @@ namespace CastorViewer
 		castor::RangedValue< float > m_camSpeed;
 		std::unique_ptr< GuiCommon::CubeBoxManager > m_cubeManager{};
 
-		std::map< castor::String, GuiCommon::NodeStatePtr > m_nodesStates{};
+		castor::StringMap< GuiCommon::NodeStatePtr > m_nodesStates{};
 		GuiCommon::NodeState * m_currentState{};
 		castor3d::GeometryRPtr m_selectedGeometry{};
 		castor3d::Submesh const * m_selectedSubmesh{};

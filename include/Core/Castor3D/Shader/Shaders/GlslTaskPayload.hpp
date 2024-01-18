@@ -10,29 +10,26 @@ See LICENSE file in root folder
 #include <ShaderWriter/CompositeTypes/IOStructHelper.hpp>
 #include <ShaderWriter/CompositeTypes/IOStructInstanceHelper.hpp>
 
-namespace castor3d
+namespace castor3d::shader
 {
-	namespace shader
+	template< sdw::var::Flag FlagT >
+	using PayloadStructT = sdw::IOStructInstanceHelperT< FlagT
+		, "C3D_Payload"
+		, sdw::IOUIntArrayField< "meshletIndices", ast::type::Struct::InvalidLocation, 32u > >;
+
+	template< sdw::var::Flag FlagT >
+	struct PayloadT
+		: public PayloadStructT< FlagT >
 	{
-		template< sdw::var::Flag FlagT >
-		using PayloadStructT = sdw::IOStructInstanceHelperT< FlagT
-			, "C3D_Payload"
-			, sdw::IOUIntArrayField< "meshletIndices", ast::type::Struct::InvalidLocation, 32u > >;
-
-		template< sdw::var::Flag FlagT >
-		struct PayloadT
-			: public PayloadStructT< FlagT >
+		PayloadT( sdw::ShaderWriter & writer
+			, sdw::expr::ExprPtr expr
+			, bool enabled = true )
+			: PayloadStructT< FlagT >{ writer, std::move( expr ), enabled }
 		{
-			PayloadT( sdw::ShaderWriter & writer
-				, sdw::expr::ExprPtr expr
-				, bool enabled = true )
-				: PayloadStructT< FlagT >{ writer, std::move( expr ), enabled }
-			{
-			}
+		}
 
-			auto meshletIndices()const { return this->template getMember< "meshletIndices" >(); }
-		};
-	}
+		auto meshletIndices()const { return this->template getMember< "meshletIndices" >(); }
+	};
 }
 
 #endif

@@ -79,7 +79,7 @@ namespace castor3d
 		}
 	}
 
-	TransparentRendering::~TransparentRendering()
+	TransparentRendering::~TransparentRendering()noexcept
 	{
 		m_mippedColour.destroy();
 		m_weightedBlendRendering.reset();
@@ -133,12 +133,12 @@ namespace castor3d
 		}
 	}
 
-	Engine * TransparentRendering::getEngine()const
+	Engine * TransparentRendering::getEngine()const noexcept
 	{
 		return getOwner()->getEngine();
 	}
 
-	crg::FramePass const & TransparentRendering::getLastPass()const
+	crg::FramePass const & TransparentRendering::getLastPass()const noexcept
 	{
 		return m_weightedBlendRendering
 			? m_weightedBlendRendering->getLastPass()

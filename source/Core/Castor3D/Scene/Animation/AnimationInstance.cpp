@@ -9,7 +9,7 @@ CU_ImplementSmartPtr( castor3d, AnimationInstance )
 
 namespace castor3d
 {
-	AnimationInstance::AnimationInstance( AnimationInstance && rhs )
+	AnimationInstance::AnimationInstance( AnimationInstance && rhs )noexcept
 		: castor::OwnedBy< AnimatedObject >{ *rhs.getOwner() }
 		, m_animation{ std::move( rhs.m_animation ) }
 		, m_looped{ rhs.m_looped.load() }

@@ -19,10 +19,10 @@ namespace castor3d
 		 *name Copie / Déplacement.
 		 **/
 		/**@{*/
-		C3D_API AnimationInstance & operator=( AnimationInstance && rhs ) = delete;
+		C3D_API AnimationInstance & operator=( AnimationInstance && rhs )noexcept = delete;
 		C3D_API AnimationInstance( AnimationInstance const & rhs ) = delete;
 		C3D_API AnimationInstance & operator=( AnimationInstance const & rhs ) = delete;
-		C3D_API AnimationInstance( AnimationInstance && rhs );
+		C3D_API AnimationInstance( AnimationInstance && rhs )noexcept;
 		/**@}*/
 		/**
 		 *\~english
@@ -45,7 +45,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API virtual ~AnimationInstance() = default;
+		C3D_API virtual ~AnimationInstance()noexcept = default;
 		/**
 		 *\~english
 		 *\brief		Updates the animation, updates the key frame at the good time index.

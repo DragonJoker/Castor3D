@@ -52,10 +52,6 @@ namespace castor3d
 	{
 	}
 
-	RenderPipeline::~RenderPipeline()
-	{
-	}
-
 	void RenderPipeline::initialise( RenderDevice const & device
 		, VkRenderPass renderPass )
 	{

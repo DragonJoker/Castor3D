@@ -529,7 +529,7 @@ namespace castor3d
 		}
 	}
 
-	SubsurfaceScatteringPass::~SubsurfaceScatteringPass()
+	SubsurfaceScatteringPass::~SubsurfaceScatteringPass()noexcept
 	{
 		for ( auto & texture : m_blurImages )
 		{

@@ -41,7 +41,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API virtual ~UserInputEvent() = default;
+		C3D_API virtual ~UserInputEvent()noexcept = default;
 		/**
 		 *\~english
 		 *\return		The user input event type.

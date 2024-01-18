@@ -59,7 +59,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API ~ShadowMapPassSpot()override;
+		C3D_API ~ShadowMapPassSpot()noexcept override;
 		/**
 		 *\copydoc		castor3d::ShadowMapPass::update
 		 */
@@ -73,7 +73,7 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		ShadowType getShadowType()const
+		ShadowType getShadowType()const noexcept
 		{
 			return m_shadowType;
 		}

@@ -29,7 +29,6 @@ namespace castor3d
 			, radianceMips{ getMember< sdw::Float >( "radianceMips" ) }
 			, radianceNumCones{ getMember< sdw::UInt >( "radianceNumCones" ) }
 			, radianceNumConesInv{ getMember< sdw::Float >( "radianceNumConesInv" ) }
-			//, pad{ getMember< sdw::Vec3 >( "pad" ) }
 			, rayStepSize{ getMember< sdw::Float >( "rayStepSize" ) }
 			, enabled{ getMember< sdw::UInt >( "enabled" ) }
 			, enableConservativeRasterization{ getMember< sdw::UInt >( "enableConservativeRasterization" ) }
@@ -97,7 +96,7 @@ namespace castor3d
 	{
 	}
 
-	VoxelizerUbo::~VoxelizerUbo()
+	VoxelizerUbo::~VoxelizerUbo()noexcept
 	{
 		m_device.uboPool->putBuffer( m_ubo );
 	}

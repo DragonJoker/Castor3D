@@ -34,13 +34,6 @@ namespace castor3d
 		C3D_API explicit RenderTargetCache( Engine & engine );
 		/**
 		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API ~RenderTargetCache();
-		/**
-		 *\~english
 		 *\brief		Creates a render target of given type.
 		 *\param[in]	type		The render target type.
 		 *\param[in]	size		The render target dimensions.
@@ -64,7 +57,7 @@ namespace castor3d
 		 *\brief		Enlève une cible de rendu de la boucle de rendu
 		 *\param[in]	target	La cible de rendu
 		 */
-		C3D_API void remove( RenderTargetRPtr target );
+		C3D_API void remove( RenderTargetRPtr target )noexcept;
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, CPU wise.

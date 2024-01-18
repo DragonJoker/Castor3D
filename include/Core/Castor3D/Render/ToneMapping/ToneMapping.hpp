@@ -122,12 +122,12 @@ namespace castor3d
 		/**@{*/
 		C3D_API castor::String const & getFullName()const;
 
-		crg::FramePass const & getPass()const
+		crg::FramePass const & getPass()const noexcept
 		{
 			return *m_pass;
 		}
 
-		castor::String const & getName()const
+		castor::String const & getName()const noexcept
 		{
 			return m_name;
 		}

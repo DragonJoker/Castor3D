@@ -174,7 +174,7 @@ namespace castor3d
 		doInitialiseMinifyPass( progress );
 	}
 
-	LineariseDepthPass::~LineariseDepthPass()
+	LineariseDepthPass::~LineariseDepthPass()noexcept
 	{
 		for ( auto & level : m_previousLevel )
 		{

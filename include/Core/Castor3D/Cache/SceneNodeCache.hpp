@@ -57,13 +57,6 @@ namespace castor3d
 			, ElementDetacherT detach );
 		/**
 		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API ~ObjectCacheT()override = default;
-		/**
-		 *\~english
 		 *\brief			Logging version of tryAdd.
 		 *\param[in]		name		The resource name.
 		 *\param[in,out]	element		The resource, will be emptied on add (the cache now owns it).

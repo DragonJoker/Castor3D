@@ -34,7 +34,8 @@ namespace castor3d
 		C3D_API SceneCuller( Scene & scene
 			, Camera * camera
 			, std::optional< bool > isStatic = std::nullopt );
-		C3D_API virtual ~SceneCuller();
+		C3D_API virtual ~SceneCuller()noexcept;
+
 		C3D_API void update( CpuUpdater & updater );
 		C3D_API void removeCulled( SubmeshRenderNode const & node );
 		C3D_API void removeCulled( BillboardRenderNode const & node );
@@ -48,50 +49,50 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		Scene & getScene()const
+		Scene & getScene()const noexcept
 		{
 			return m_scene;
 		}
 
-		bool hasCamera()const
+		bool hasCamera()const noexcept
 		{
 			return m_camera != nullptr;
 		}
 
-		bool hasNodes()const
+		bool hasNodes()const noexcept
 		{
 			return !m_culledSubmeshes.empty()
 				|| !m_culledBillboards.empty();
 		}
 
-		Camera const & getCamera()const
+		Camera const & getCamera()const noexcept
 		{
 			CU_Require( hasCamera() );
 			return *m_camera;
 		}
 
-		Camera & getCamera()
+		Camera & getCamera()noexcept
 		{
 			CU_Require( hasCamera() );
 			return *m_camera;
 		}
 
-		bool areAnyChanged()const
+		bool areAnyChanged()const noexcept
 		{
 			return m_anyChanged;
 		}
 
-		bool areCulledChanged()const
+		bool areCulledChanged()const noexcept
 		{
 			return m_culledChanged;
 		}
 
-		NodeArrayT< SubmeshRenderNode, CulledNodePtrT > const & getSubmeshes()const
+		NodeArrayT< SubmeshRenderNode, CulledNodePtrT > const & getSubmeshes()const noexcept
 		{
 			return m_culledSubmeshes;
 		}
 
-		NodeArrayT< BillboardRenderNode, CulledNodePtrT > const & getBillboards()const
+		NodeArrayT< BillboardRenderNode, CulledNodePtrT > const & getBillboards()const noexcept
 		{
 			return m_culledBillboards;
 		}

@@ -27,13 +27,6 @@ namespace castor3d
 		C3D_API explicit ShaderProgramCache( Engine & engine );
 		/**
 		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		C3D_API ~ShaderProgramCache();
-		/**
-		 *\~english
 		 *\brief		Destroys all the shaders of the array of shaders to destroy
 		 *\~french
 		 *\brief		Détruit tous les shaders du tableau de shaders à détruire

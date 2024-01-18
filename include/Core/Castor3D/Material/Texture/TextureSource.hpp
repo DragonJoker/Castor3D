@@ -32,9 +32,9 @@ namespace castor3d
 		explicit TextureSource( castor::Image & image
 			, castor::String name
 			, castor::ImageLayout layout )
-			: castor::Named{ name }
+			: castor::Named{ std::move( name ) }
 			, m_image{ &image }
-			, m_layout{ layout }
+			, m_layout{ std::move( layout ) }
 		{
 		}
 
@@ -57,47 +57,47 @@ namespace castor3d
 		 *\name		Accesseurs.
 		 */
 		//@{
-		castor::String const & toString()const
+		castor::String const & toString()const noexcept
 		{
 			return getName();
 		}
 
-		uint32_t getBaseLayer()const
+		uint32_t getBaseLayer()const noexcept
 		{
 			return m_layout.baseLayer;
 		}
 
-		uint32_t getLayerCount()const
+		uint32_t getLayerCount()const noexcept
 		{
 			return m_layout.layers;
 		}
 
-		uint32_t getBaseLevel()const
+		uint32_t getBaseLevel()const noexcept
 		{
 			return m_layout.baseLevel;
 		}
 
-		uint32_t getLevelCount()const
+		uint32_t getLevelCount()const noexcept
 		{
 			return m_layout.levels;
 		}
 
-		uint32_t getDepth()const
+		uint32_t getDepth()const noexcept
 		{
 			return m_layout.extent->z;
 		}
 
-		bool hasBuffer()const
+		bool hasBuffer()const noexcept
 		{
 			return m_layout.hasBuffer( m_image->getPxBuffer() );
 		}
 
-		castor::ImageLayout::ConstBuffer getBuffer()const
+		castor::ImageLayout::ConstBuffer getBuffer()const noexcept
 		{
 			return m_layout.buffer( const_cast< castor::Image const & >( *m_image ).getPxBuffer() );
 		}
 
-		castor::ImageLayout::Buffer getBuffer()
+		castor::ImageLayout::Buffer getBuffer()noexcept
 		{
 			return m_layout.buffer( m_image->getPxBuffer() );
 		}

@@ -92,17 +92,17 @@ namespace castor3d
 		 */
 		C3D_API bool isVisible( castor::Point3f const & point )const;
 
-		std::array< InterleavedVertex, 8u > const & getPoints()const
+		std::array< InterleavedVertex, 8u > const & getPoints()const noexcept
 		{
 			return m_points;
 		}
 
-		Planes const & getPlanes()const
+		Planes const & getPlanes()const noexcept
 		{
 			return m_planes;
 		}
 
-		castor::BoundingBox const & getBoundingBox()const
+		castor::BoundingBox const & getBoundingBox()const noexcept
 		{
 			return m_boundingBox;
 		}

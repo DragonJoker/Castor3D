@@ -198,7 +198,7 @@ namespace castor3d
 		 *\param[in]	params	Les paramètres de construction de l'élément.
 		 */
 		template< typename ... Params >
-		inline void emplace_back( Params const & ... params )
+		inline void emplace_back( Params && ... params )
 		{
 			m_elements.emplace_back( std::forward< Params >( params )... );
 			m_stride += uint32_t( getSize( m_elements.back().m_dataType ) );

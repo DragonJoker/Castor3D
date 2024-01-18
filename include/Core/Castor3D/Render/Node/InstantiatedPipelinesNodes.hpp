@@ -14,7 +14,7 @@ namespace castor3d
 		using NodeObject = NodeObjectT< NodeT >;
 		using RenderedNode = RenderedNodeT< NodeT >;
 
-		static uint64_t constexpr maxObjects = 1024ull;
+		static uint64_t constexpr maxObjects = 1024ULL;
 		static uint64_t constexpr maxCount = maxObjects;
 
 		auto emplace( RenderedNode node )
@@ -31,12 +31,14 @@ namespace castor3d
 			{
 				CU_Assert( size() < maxObjects
 					, "Too many objects for given pass, buffer and pipeline" );
-#if C3D_EnsureNodesCounts
-				if ( size() == maxObjects )
+
+				if constexpr ( C3D_EnsureNodesCounts )
 				{
-					CU_Exception( "Too many objects for given pass, buffer and pipeline" );
+					if ( size() == maxObjects )
+					{
+						CU_Exception( "Too many objects for given pass, buffer and pipeline" );
+					}
 				}
-#endif
 
 				m_objects.emplace_back( data, std::move( node ) );
 				it = std::next( begin(), ptrdiff_t( size() - 1u ) );
@@ -100,6 +102,11 @@ namespace castor3d
 
 		struct BufferNodes
 		{
+			explicit BufferNodes( ashes::BufferBase const * buffer )
+				: buffer{ buffer }
+			{
+			}
+
 			ashes::BufferBase const * buffer{};
 			NodesView nodes;
 		};
@@ -117,14 +124,16 @@ namespace castor3d
 			{
 				CU_Assert( size() < maxBuffers
 					, "Too many buffers for given pipeline" );
-#if C3D_EnsureNodesCounts
-				if ( size() == maxBuffers )
-				{
-					CU_Exception( "Too many buffers for given pipeline" );
-				}
-#endif
 
-				m_buffers.push_back( BufferNodes{ &buffer, NodesView{} } );
+				if constexpr ( C3D_EnsureNodesCounts )
+				{
+					if ( size() == maxBuffers )
+					{
+						CU_Exception( "Too many buffers for given pipeline" );
+					}
+				}
+
+				m_buffers.emplace_back( &buffer );
 				it = std::next( begin(), ptrdiff_t( size() - 1u ) );
 			}
 
@@ -204,6 +213,13 @@ namespace castor3d
 
 		struct PipelineNodes
 		{
+			PipelineNodes( PipelineAndID pipeline
+				, bool isFrontCulled )
+				: pipeline{ std::move( pipeline ) }
+				, isFrontCulled{ isFrontCulled }
+			{
+			}
+
 			PipelineAndID pipeline{};
 			bool isFrontCulled{};
 			NodesView nodes{};
@@ -219,14 +235,16 @@ namespace castor3d
 			{
 				CU_Assert( pipeline.id < maxPipelines
 					, "Too many pipelines" );
-#if C3D_EnsureNodesCounts
-				if ( pipeline.id >= maxPipelines / 2u )
+
+				if constexpr ( C3D_EnsureNodesCounts )
 				{
-					CU_Exception( "Too many pipelines" );
+					if ( pipeline.id >= maxPipelines / 2u )
+					{
+						CU_Exception( "Too many pipelines" );
+					}
 				}
-#endif
-				it = m_pipelines.emplace( id
-					, PipelineNodes{ pipeline, isFrontCulled, NodesView{} } ).first;
+
+				it = m_pipelines.try_emplace( id, pipeline, isFrontCulled ).first;
 			}
 
 			return &it->second;
@@ -242,9 +260,8 @@ namespace castor3d
 			size_t hash = std::hash< NodeObject const * >{}( &node.data );
 			hash = castor::hashCombine( hash, node.pass->getHash() );
 			hash = castor::hashCombine( hash, isFrontCulled );
-			auto ires = m_countedNodes.emplace( hash );
 
-			if ( ires.second )
+			if ( m_countedNodes.emplace( hash ).second )
 			{
 				CU_Assert( m_countedNodes.size() < maxCount
 					, "Too many nodes" );

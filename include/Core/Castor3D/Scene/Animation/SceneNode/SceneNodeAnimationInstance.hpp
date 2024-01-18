@@ -17,18 +17,11 @@ namespace castor3d
 		: public AnimationInstance
 	{
 	public:
-		/**
-		 *\~english
-		 *name Copy / Move.
-		 *\~french
-		 *name Copie / Déplacement.
-		 **/
-		/**@{*/
 		C3D_API SceneNodeAnimationInstance( SceneNodeAnimationInstance && rhs ) = default;
 		C3D_API SceneNodeAnimationInstance & operator=( SceneNodeAnimationInstance && rhs ) = delete;
 		C3D_API SceneNodeAnimationInstance( SceneNodeAnimationInstance const & rhs ) = delete;
 		C3D_API SceneNodeAnimationInstance & operator=( SceneNodeAnimationInstance const & rhs ) = delete;
-		/**@}*/
+		C3D_API ~SceneNodeAnimationInstance()noexcept override = default;
 		/**
 		 *\~english
 		 *\brief		Constructor.

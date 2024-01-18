@@ -30,7 +30,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API ~RenderLoopSync()override;
+		C3D_API ~RenderLoopSync()noexcept override;
 		/**
 		 *\copydoc		castor3d::RenderLoop::beginRendering
 		 */

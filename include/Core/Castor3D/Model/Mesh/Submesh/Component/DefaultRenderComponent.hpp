@@ -52,10 +52,7 @@ namespace castor3d
 			: public SubmeshComponentPlugin
 		{
 		public:
-			explicit Plugin( SubmeshComponentRegister const & submeshComponents )
-				: SubmeshComponentPlugin{ submeshComponents }
-			{
-			}
+			using SubmeshComponentPlugin::SubmeshComponentPlugin;
 			/**
 			 *\copydoc		castor3d::SubmeshComponentPlugin::createComponent
 			*/

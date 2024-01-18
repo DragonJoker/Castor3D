@@ -32,10 +32,10 @@ namespace castor3d
 	enum class LpvTexture
 		: uint8_t
 	{
-		eR,
-		eG,
-		eB,
-		CU_ScopedEnumBounds( eR ),
+		eR = 0,
+		eG = 1,
+		eB = 2,
+		CU_ScopedEnumBounds( eR, eB ),
 	};
 	C3D_API castor::String getTextureName( LpvTexture texture
 		, std::string const & infix );
@@ -44,9 +44,9 @@ namespace castor3d
 	C3D_API VkClearValue getClearValue( LpvTexture texture );
 	C3D_API VkImageUsageFlags getUsageFlags( LpvTexture texture );
 	C3D_API VkBorderColor getBorderColor( LpvTexture texture );
-	inline uint32_t getMipLevels( RenderDevice const & device
-		, LpvTexture texture
-		, castor::Size const & size )
+	inline uint32_t getMipLevels( RenderDevice const & /*device*/
+		, LpvTexture /*texture*/
+		, castor::Size const & /*size*/ )
 	{
 		return 1u;
 	}
@@ -58,7 +58,7 @@ namespace castor3d
 			, texture
 			, castor::Size{ size.width, size.height } );
 	}
-	inline VkCompareOp getCompareOp( LpvTexture texture )
+	inline VkCompareOp getCompareOp( LpvTexture /*texture*/ )
 	{
 		return VK_COMPARE_OP_NEVER;
 	}
@@ -139,6 +139,7 @@ namespace castor3d
 
 	CU_DeclareVector( GeometryInjectionPass, GeometryInjectionPass );
 	CU_DeclareVector( LightInjectionPass, LightInjectionPass );
+
 	//@}
 	//@}
 	//@}

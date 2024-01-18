@@ -47,7 +47,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderNodesPass::getShaderFlags
 		 */
-		C3D_API ShaderFlags getShaderFlags()const override;
+		C3D_API ShaderFlags getShaderFlags()const noexcept override;
 
 	private:
 		ProgramFlags doAdjustProgramFlags( ProgramFlags flags )const override;

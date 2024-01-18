@@ -14,6 +14,11 @@ namespace castor3d
 		: public SkeletonAnimationObject
 	{
 	public:
+		C3D_API SkeletonAnimationNode( SkeletonAnimationNode && rhs )noexcept = default;
+		C3D_API SkeletonAnimationNode & operator=( SkeletonAnimationNode && rhs ) = delete;
+		C3D_API SkeletonAnimationNode( SkeletonAnimationNode const & rhs ) = delete;
+		C3D_API SkeletonAnimationNode & operator=( SkeletonAnimationNode const & rhs )noexcept = delete;
+		C3D_API ~SkeletonAnimationNode()noexcept override = default;
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -23,34 +28,6 @@ namespace castor3d
 		 *\param[in]	animation	L'animation parente.
 		 */
 		C3D_API explicit SkeletonAnimationNode( SkeletonAnimation & animation );
-		/**
-		 *\~english
-		 *\brief		Move constructor.
-		 *\~french
-		 *\brief		Constructeur par déplacement.
-		 */
-		C3D_API SkeletonAnimationNode( SkeletonAnimationNode && rhs ) = default;
-		/**
-		 *\~english
-		 *\brief		Move assignment operator.
-		 *\~french
-		 *\brief		Opérateur d'affectation par déplacement.
-		 */
-		C3D_API SkeletonAnimationNode & operator=( SkeletonAnimationNode && rhs ) = delete;
-		/**
-		 *\~english
-		 *\brief		Copy constructor.
-		 *\~french
-		 *\brief		Constructeur par copie.
-		 */
-		C3D_API SkeletonAnimationNode( SkeletonAnimationNode const & rhs ) = delete;
-		/**
-		 *\~english
-		 *\brief		Copy assignment operator.
-		 *\~french
-		 *\brief		Opérateur d'affectation par copie.
-		 */
-		C3D_API SkeletonAnimationNode & operator=( SkeletonAnimationNode const & rhs ) = delete;
 		/**
 		 *\~english
 		 *\brief		Retrieves the object name

@@ -34,10 +34,6 @@ namespace castor3d
 	{
 	}
 
-	OverlayCategory::~OverlayCategory()
-	{
-	}
-
 	void OverlayCategory::reset()
 	{
 		m_positionChanged = false;

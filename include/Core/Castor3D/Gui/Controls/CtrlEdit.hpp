@@ -69,7 +69,7 @@ namespace castor3d
 		OnEditEventConnection connect( EditEvent event
 			, OnEditEventFunction function )
 		{
-			return m_signals[size_t( event )].connect( function );
+			return m_signals[size_t( event )].connect( std::move( function ) );
 		}
 
 		/** Retreves the multiline status of the edit.
@@ -347,7 +347,7 @@ namespace castor3d
 		bool m_active;
 		TextOverlayRPtr m_text{};
 		Caret m_caret;
-		OnEditEvent m_signals[size_t( EditEvent::eCount )];
+		std::array< OnEditEvent, size_t( EditEvent::eCount ) > m_signals;
 		bool m_hasSelection{};
 		bool m_isMouseSelecting{};
 		Selection m_selection{};

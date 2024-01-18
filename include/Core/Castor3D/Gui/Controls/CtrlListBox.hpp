@@ -145,7 +145,7 @@ namespace castor3d
 		 */
 		OnListEventConnection connect( ListBoxEvent event, OnListEventFunction function )
 		{
-			return m_signals[size_t( event )].connect( function );
+			return m_signals[size_t( event )].connect( std::move( function ) );
 		}
 
 		/** \return	The listbox style.
@@ -245,7 +245,7 @@ namespace castor3d
 		int m_selected{};
 		StaticCtrlRPtr m_selectedItem{};
 		std::vector< StaticCtrlRPtr > m_items;
-		OnListEvent m_signals[size_t( ListBoxEvent::eCount )];
+		std::array< OnListEvent, size_t( ListBoxEvent::eCount ) > m_signals;
 	};
 }
 

@@ -53,7 +53,7 @@ namespace castor3d
 		 *\brief		Supprime une configuration du tampon.
 		 *\param[in]	texture	La texture.
 		 */
-		C3D_API void removeTextureAnimation( AnimatedTexture const & texture );
+		C3D_API void removeTextureAnimation( AnimatedTexture const & texture )noexcept;
 		/**
 		 *\~english
 		 *\brief		Updates the configurations buffer.

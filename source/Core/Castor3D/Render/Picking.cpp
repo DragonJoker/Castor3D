@@ -171,7 +171,7 @@ namespace castor3d
 			, m_colourTexture.get() };
 	}
 
-	Picking::~Picking()
+	Picking::~Picking()noexcept
 	{
 		getEngine()->unregisterTimer( m_runnable->getName() + "/Graph"
 			, m_runnable->getTimer() );
@@ -179,10 +179,6 @@ namespace castor3d
 		m_pickBuffer->unlock();
 		m_pickBuffer.reset();
 		m_colourTexture.reset();
-	}
-
-	void Picking::addScene( Scene & scene, Camera & camera )
-	{
 	}
 
 	PickNodeType Picking::pick( RenderDevice const & device

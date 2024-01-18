@@ -164,7 +164,7 @@ namespace castor3d
 	castor::String SceneFileParser::doGetSectionName( castor::SectionId section )const
 	{
 		castor::String result;
-		static const std::map< uint32_t, castor::String > baseSections{ registerSceneFileSections() };
+		static const castor::Map< uint32_t, castor::String > baseSections{ registerSceneFileSections() };
 		auto it = baseSections.find( section );
 
 		if ( it != baseSections.end() )

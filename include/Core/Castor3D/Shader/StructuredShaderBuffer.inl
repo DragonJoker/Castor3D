@@ -13,11 +13,6 @@ namespace castor3d
 	}
 
 	template< typename ElementTypeTraits >
-	StructuredShaderBuffer< ElementTypeTraits >::~StructuredShaderBuffer()
-	{
-	}
-
-	template< typename ElementTypeTraits >
 	uint32_t StructuredShaderBuffer< ElementTypeTraits >::add( ElementType & element )
 	{
 		CU_Require( m_elements.getId() == 0u );

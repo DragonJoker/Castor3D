@@ -29,14 +29,14 @@ namespace castor3d
 	{
 		//!\~english	Mouse event type.
 		//!\~french		Type d'evènement de souris.
-		eMouse,
+		eMouse = 0,
 		//!\~english	Keyboard event type.
 		//!\~french		Type d'évènement de clavier.
-		eKeyboard,
+		eKeyboard = 1,
 		//!\~english	Handle event type.
 		//!\~french		Type d'évènement de handler.
-		eHandler,
-		CU_ScopedEnumBounds( eMouse )
+		eHandler = 2,
+		CU_ScopedEnumBounds( eMouse, eHandler )
 	};
 	C3D_API castor::String getName( UserInputEventType value );
 	/**
@@ -52,26 +52,26 @@ namespace castor3d
 	{
 		//!\~english	The mouse moves.
 		//!\~french		La souris se déplace.
-		eMove,
+		eMove = 0,
 		//!\~english	The mouse enters an handler's zone.
 		//!\~french		La souris entre dans la zone d'action d'un gestionnaire.
-		eEnter,
+		eEnter = 1,
 		//!\~english	The mouse remains still in an handler's zone during hover time.
 		//!\~french		La souris reste immobile pendant un temps déterminé, dans la zone d'action d'un gestionnaire.
-		eHover,
+		eHover = 2,
 		//!\~english	The mouse leaves an handler's zone.
 		//!\~french		La souris quitte la zone d'action d'un gestionnaire.
-		eLeave,
+		eLeave = 3,
 		//!\~english	One mouse button is pushed.
 		//!\~french		Un bouton appuyé.
-		ePushed,
+		ePushed = 4,
 		//!\~english	One mouse button is released.
 		//!\~french		Un bouton relâché.
-		eReleased,
+		eReleased = 5,
 		//!\~english	One mouse wheel is rolled.
 		//!\~french		Une molette de la souris est tournée.
-		eWheel,
-		CU_ScopedEnumBounds( eMove )
+		eWheel = 6,
+		CU_ScopedEnumBounds( eMove, eWheel )
 	};
 	C3D_API castor::String getName( MouseEventType value );
 	/**
@@ -87,14 +87,14 @@ namespace castor3d
 	{
 		//!\~english	A key is pushed.
 		//!\~french		Une touche est appuyée.
-		ePushed,
+		ePushed = 0,
 		//!\~english	A key is released.
 		//!\~french		Une touche est relâchée.
-		eReleased,
+		eReleased = 1,
 		//!\~english	A displayable char key is stroked.
 		//!\~french		Une touche de caractère imprimable est tapée.
-		eChar,
-		CU_ScopedEnumBounds( ePushed )
+		eChar = 2,
+		CU_ScopedEnumBounds( ePushed, eChar )
 	};
 	C3D_API castor::String getName( KeyboardEventType value );
 	/**
@@ -110,11 +110,11 @@ namespace castor3d
 	{
 		//!\~english	Handler activated.
 		//!\~french		Gestionnaire activé.
-		eActivate,
+		eActivate = 0,
 		//!\~english	Handler deactivated.
 		//!\~french		Gestionnaire désactivé.
-		eDeactivate,
-		CU_ScopedEnumBounds( eActivate )
+		eDeactivate = 1,
+		CU_ScopedEnumBounds( eActivate, eDeactivate )
 	};
 	C3D_API castor::String getName( HandlerEventType value );
 	/**
@@ -129,14 +129,14 @@ namespace castor3d
 	{
 		//!\~english	Left mouse button.
 		//!\~french		Le bouton gauche.
-		eLeft,
+		eLeft = 0,
 		//!\~english	Middle mouse button.
 		//!\~french		Le bouton du milieu.
-		eMiddle,
+		eMiddle = 1,
 		//!\~english	Right mouse button.
 		//!\~french		Le bouton droit.
-		eRight,
-		CU_ScopedEnumBounds( eLeft )
+		eRight = 2,
+		CU_ScopedEnumBounds( eLeft, eRight )
 	};
 	C3D_API castor::String getName( MouseButton value );
 	/**
@@ -151,26 +151,26 @@ namespace castor3d
 	{
 		//!\~english	Usual arrow cursor.
 		//!\~french		Pointeur en flèche habituel.
-		eArrow,
+		eArrow = 0,
 		//!\~english	Hand cursor.
 		//!\~french		Curseur en forme de main.
-		eHand,
+		eHand = 1,
 		//!\~english	Text cursor.
 		//!\~french		Curseur pour texte.
-		eText,
+		eText = 2,
 		//!\~english	Arrows pointing left and right cursor.
 		//!\~french		Flèches gauche-droite.
-		eSizeWE,
+		eSizeWE = 3,
 		//!\~english	Arrows pointing up and down cursor.
 		//!\~french		Flèches haut-bas.
-		eSizeNS,
+		eSizeNS = 4,
 		//!\~english	Diagonal arrows pointing top-left and bottom-right cursor.
 		//!\~french		Flèches en diagonale haut-gauche vers bas-droite.
-		eSizeNWSE,
+		eSizeNWSE = 5,
 		//!\~english	Diagonal arrows pointing top-right and bottom-left cursor.
 		//!\~french		Flèches en diagonale haut-droite vers bas-gauche.
-		eSizeNESW,
-		CU_ScopedEnumBounds( eArrow )
+		eSizeNESW = 6,
+		CU_ScopedEnumBounds( eArrow, eSizeNESW )
 	};
 	/**
 	*\~english
@@ -182,7 +182,7 @@ namespace castor3d
 	*/
 	enum class KeyboardKey
 	{
-		eNone,
+		eNone = 0x00,
 		eBackspace = 0x08,
 		eTab = 0x0A,
 		eReturn = 0x0D,
@@ -198,98 +198,98 @@ namespace castor3d
 
 		eAsciiEnd = 0xFF,
 		eStart = 0x100,
-		eLButton,
-		eRButton,
-		eCancel,
-		eMButton,
-		eClear,
-		eShift,
-		eAlt,
-		eControl,
-		eMenu,
-		ePause,
-		eCapital,
-		eEnd,
-		eHome,
-		eLeft,
-		eUp,
-		eRight,
-		eDown,
-		eSelect,
-		ePrint,
-		eExecute,
-		eSnapshot,
-		eInsert,
-		eHelp,
-		eNumpad0,
-		eNumpad1,
-		eNumpad2,
-		eNumpad3,
-		eNumpad4,
-		eNumpad5,
-		eNumpad6,
-		eNumpad7,
-		eNumpad8,
-		eNumpad9,
-		eMultiply,
-		eAdd,
-		eSeparator,
-		eSubtract,
-		eDecimal,
-		eDivide,
-		eF1,
-		eF2,
-		eF3,
-		eF4,
-		eF5,
-		eF6,
-		eF7,
-		eF8,
-		eF9,
-		eF10,
-		eF11,
-		eF12,
-		eF13,
-		eF14,
-		eF15,
-		eF16,
-		eF17,
-		eF18,
-		eF19,
-		eF20,
-		eF21,
-		eF22,
-		eF23,
-		eF24,
-		eNumlock,
-		eScroll,
-		ePageUp,
-		ePageDown,
-		eNumpadSpace,
-		eNumpadTab,
-		eNumpadEnter,
-		eNumpadF1,
-		eNumpadF2,
-		eNumpadF3,
-		eNumpadF4,
-		eNumpadHome,
-		eNumpadLeft,
-		eNumpadUp,
-		eNumpadRight,
-		eNumpadDown,
-		eNumpadPageUp,
-		eNumpadPageDown,
-		eNumpadEnd,
-		eNumpadBegin,
-		eNumpadInsert,
-		eNumpadDelete,
-		eNumpadEqual,
-		eNumpadMultiply,
-		eNumpadAdd,
-		eNumpadSeparator,
-		eNumpadSubtract,
-		eNumpadDecimal,
-		eNumpadDivide,
+		eLButton = 0x101,
+		eRButton = 0x102,
+		eCancel = 0x103,
+		eMButton = 0x104,
+		eClear = 0x105,
+		eShift = 0x106,
+		eAlt = 0x107,
+		eControl = 0x108,
+		eMenu = 0x109,
+		ePause = 0x10A,
+		eCapital = 0x10B,
+		eEnd = 0x10C,
+		eHome = 0x10D,
+		eLeft = 0x10E,
+		eUp = 0x10F,
+		eRight = 0x110,
+		eDown = 0x111,
+		eSelect = 0x112,
+		ePrint = 0x113,
+		eExecute = 0x114,
+		eSnapshot = 0x115,
+		eInsert = 0x116,
+		eHelp = 0x117,
+		eNumpad0 = 0x118,
+		eNumpad1 = 0x119,
+		eNumpad2 = 0x11A,
+		eNumpad3 = 0x11B,
+		eNumpad4 = 0x11C,
+		eNumpad5 = 0x11D,
+		eNumpad6 = 0x11E,
+		eNumpad7 = 0x11F,
+		eNumpad8 = 0x120,
+		eNumpad9 = 0x121,
+		eMultiply = 0x122,
+		eAdd = 0x123,
+		eSeparator = 0x124,
+		eSubtract = 0x125,
+		eDecimal = 0x126,
+		eDivide = 0x127,
+		eF1 = 0x128,
+		eF2 = 0x129,
+		eF3 = 0x12A,
+		eF4 = 0x12B,
+		eF5 = 0x12C,
+		eF6 = 0x12D,
+		eF7 = 0x12E,
+		eF8 = 0x12F,
+		eF9 = 0x130,
+		eF10 = 0x131,
+		eF11 = 0x132,
+		eF12 = 0x133,
+		eF13 = 0x134,
+		eF14 = 0x135,
+		eF15 = 0x136,
+		eF16 = 0x137,
+		eF17 = 0x138,
+		eF18 = 0x139,
+		eF19 = 0x13A,
+		eF20 = 0x13B,
+		eF21 = 0x13C,
+		eF22 = 0x13D,
+		eF23 = 0x13E,
+		eF24 = 0x13F,
+		eNumlock = 0x140,
+		eScroll = 0x141,
+		ePageUp = 0x142,
+		ePageDown = 0x143,
+		eNumpadSpace = 0x144,
+		eNumpadTab = 0x145,
+		eNumpadEnter = 0x146,
+		eNumpadF1 = 0x147,
+		eNumpadF2 = 0x148,
+		eNumpadF3 = 0x149,
+		eNumpadF4 = 0x14A,
+		eNumpadHome = 0x14B,
+		eNumpadLeft = 0x14C,
+		eNumpadUp = 0x14D,
+		eNumpadRight = 0x14E,
+		eNumpadDown = 0x14F,
+		eNumpadPageUp = 0x150,
+		eNumpadPageDown = 0x151,
+		eNumpadEnd = 0x152,
+		eNumpadBegin = 0x153,
+		eNumpadInsert = 0x154,
+		eNumpadDelete = 0x155,
+		eNumpadEqual = 0x156,
+		eNumpadMultiply = 0x157,
+		eNumpadAdd = 0x158,
+		eNumpadSeparator = 0x159,
+		eNumpadSubtract = 0x15A,
+		eNumpadDecimal = 0x15B,
+		eNumpadDivide = 0x15C,
 	};
 	/**
 	*\~english
@@ -364,30 +364,12 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Structure holding mouse state.
-	*\~french
-	*\brief
-	*	Structure contenant l'état du clavier.
-	*/
-	struct KeyboardState;
-	/**
-	*\~english
-	*\brief
 	*	Description of a mouse event.
 	*\~french
 	*\brief
 	*	Description d'un évènement de souris.
 	*/
 	class MouseEvent;
-	/**
-	*\~english
-	*\brief
-	*	Structure holding mouse state.
-	*\~french
-	*\brief
-	*	Structure contenant l'état de la souris.
-	*/
-	struct MouseState;
 	/**
 	*\~english
 	*\brief

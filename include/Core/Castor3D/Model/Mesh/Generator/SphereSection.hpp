@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_SphereSection_H___
@@ -28,20 +28,9 @@ namespace castor3d
 		C3D_API static MeshGeneratorUPtr create();
 
 	private:
-		C3D_API virtual void doGenerate( Mesh & mesh
+		C3D_API void doGenerate( Mesh & mesh
 			, Parameters const & parameters )override;
-
-	private:
-		float m_radius;
-		castor::Angle m_angle;
-		uint32_t m_nbFaces;
-		friend std::ostream & operator <<( std::ostream & o, SphereSection const & c );
 	};
-
-	inline std::ostream & operator <<( std::ostream & o, SphereSection const & c )
-	{
-		return o << "SphereSection(" << c.m_nbFaces << "," << c.m_radius << "," << c.m_angle.degrees() << "°)";
-	}
 }
 
 #endif

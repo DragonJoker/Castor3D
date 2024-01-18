@@ -13,7 +13,7 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	static uint32_t constexpr InvalidPipelineIndex = ~( 0u );
+	static uint32_t constexpr InvalidPipelineIndex = ~0u;
 
 	void registerPipelineNodes( PipelineBaseHash hash
 		, ashes::BufferBase const & buffer

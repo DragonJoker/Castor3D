@@ -60,7 +60,7 @@ namespace castor3d
 
 			for ( auto & source : sources )
 			{
- 				result.emplace( *getFlags( source.first.textureConfig() ).begin()
+ 				result.try_emplace( *getFlags( source.first.textureConfig() ).begin()
 					, source );
 			}
 
@@ -189,17 +189,15 @@ namespace castor3d
 		m_automaticShader = rhs.m_automaticShader;
 		m_renderPassInfo = rhs.m_renderPassInfo;
 
-		for ( auto & component : rhs.m_components )
+		for ( auto & [id, component] : rhs.m_components )
 		{
-			addComponent( component.second->clone( *this ) );
+			addComponent( component->clone( *this ) );
 		}
 
-		for ( auto & source : rhs.m_sources )
+		for ( auto const & [info, config] : rhs.m_sources )
 		{
-			auto it = rhs.m_animations.find( source.first );
-
-			if ( it != rhs.m_animations.end()
-				&& it->second )
+			if ( auto it = rhs.m_animations.find( info );
+				it != rhs.m_animations.end() && it->second )
 			{
 				auto & srcAnim = static_cast< TextureAnimation const & >( *it->second );
 				auto clonedAnim = castor::makeUnique< TextureAnimation >( *srcAnim.getEngine()
@@ -207,14 +205,13 @@ namespace castor3d
 				clonedAnim->setRotateSpeed( srcAnim.getRotateSpeed() );
 				clonedAnim->setScaleSpeed( srcAnim.getScaleSpeed() );
 				clonedAnim->setTranslateSpeed( srcAnim.getTranslateSpeed() );
-				registerTexture( source.first
-					, source.second
+				registerTexture( info
+					, config
 					, std::move( clonedAnim ) );
 			}
 			else
 			{
-				registerTexture( source.first
-					, source.second );
+				registerTexture( info, config );
 			}
 		}
 
@@ -302,9 +299,9 @@ namespace castor3d
 
 	void Pass::update()
 	{
-		for ( auto & component : m_components )
+		for ( auto const & [id, component] : m_components )
 		{
-			component.second->update();
+			component->update();
 		}
 
 		if ( m_dirty.exchange( false ) )
@@ -318,7 +315,7 @@ namespace castor3d
 	void Pass::addComponent( PassComponentUPtr component )
 	{
 		// First add the components this one depends on.
-		for ( auto dep : component->getDependencies() )
+		for ( auto const & dep : component->getDependencies() )
 		{
 			if ( !hasComponent( dep ) )
 			{
@@ -388,7 +385,7 @@ namespace castor3d
 		m_dirty = true;
 	}
 
-	bool Pass::hasComponent( castor::String const & name )const
+	bool Pass::hasComponent( castor::String const & name )const noexcept
 	{
 		auto it = std::find_if( m_components.begin()
 			, m_components.end()
@@ -402,14 +399,14 @@ namespace castor3d
 	PassComponent * Pass::getComponent( castor::String const & name )const
 	{
 		PassComponent * result{};
-		auto it = std::find_if( m_components.begin()
+
+		if ( auto it = std::find_if( m_components.begin()
 			, m_components.end()
 			, [&name]( PassComponentMap::value_type const & lookup )
 			{
 				return lookup.second->getType() == name;
 			} );
-
-		if ( it != m_components.end() )
+			it != m_components.end() )
 		{
 			result = it->second.get();
 		}
@@ -419,15 +416,15 @@ namespace castor3d
 
 	std::vector< PassComponentUPtr > Pass::removeComponent( castor::String const & name )
 	{
-		auto it = std::find_if( m_components.begin()
+		std::vector< PassComponentUPtr > result;
+
+		if ( auto it = std::find_if( m_components.begin()
 			, m_components.end()
 			, [&name]( PassComponentMap::value_type const & lookup )
 			{
 				return lookup.second->getType() == name;
 			} );
-		std::vector< PassComponentUPtr > result;
-
-		if ( it != m_components.end() )
+			it != m_components.end() )
 		{
 			auto tmp = std::move( it->second );
 			m_components.erase( it );
@@ -511,7 +508,7 @@ namespace castor3d
 	void Pass::registerTexture( TextureSourceInfo sourceInfo
 		, PassTextureConfig configuration )
 	{
-		auto it = std::find_if( m_sources.begin()
+		if ( auto it = std::find_if( m_sources.begin()
 			, m_sources.end()
 			, [&sourceInfo, &configuration]( PassTextureSource const & lookup )
 			{
@@ -519,8 +516,7 @@ namespace castor3d
 					&& configuration.sampler == lookup.second.sampler
 					&& configuration.texcoordSet == lookup.second.texcoordSet;
 			} );
-
-		if ( it == m_sources.end() )
+			it == m_sources.end() )
 		{
 			m_sources.emplace_back( std::move( sourceInfo )
 				, std::move( configuration ) );
@@ -529,7 +525,7 @@ namespace castor3d
 		{
 			auto resConfig = it->first.textureConfig();
 
-			for ( auto & flagConfig : sourceInfo.textureConfig().components )
+			for ( auto const & flagConfig : sourceInfo.textureConfig().components )
 			{
 				if ( flagConfig.flag )
 				{
@@ -548,13 +544,13 @@ namespace castor3d
 		, PassTextureConfig configuration
 		, TextureAnimationUPtr animation )
 	{
-		m_animations.emplace( sourceInfo
+		m_animations.try_emplace( sourceInfo
 			, std::move( animation ) );
 		registerTexture( std::move( sourceInfo )
 			, std::move( configuration ) );
 	}
 
-	void Pass::unregisterTexture( TextureSourceInfo sourceInfo )
+	void Pass::unregisterTexture( TextureSourceInfo const & sourceInfo )noexcept
 	{
 		auto it = std::find_if( m_sources.begin()
 			, m_sources.end()
@@ -575,18 +571,17 @@ namespace castor3d
 	void Pass::resetTexture( TextureSourceInfo const & srcSourceInfo
 		, TextureSourceInfo dstSourceInfo )
 	{
-		auto it = std::find_if( m_sources.begin()
+		if ( auto it = std::find_if( m_sources.begin()
 			, m_sources.end()
 			, [&srcSourceInfo]( PassTextureSource const & lookup )
 			{
 				return srcSourceInfo == lookup.first;
 			} );
-
-		if ( it != m_sources.end() )
+			it != m_sources.end() )
 		{
 			auto configuration = it->second;
 			m_sources.erase( it );
-			registerTexture( dstSourceInfo, configuration );
+			registerTexture( std::move( dstSourceInfo ), configuration );
 		}
 	}
 
@@ -594,7 +589,7 @@ namespace castor3d
 		, TextureConfiguration configuration )
 	{
 		resetTexture( sourceInfo
-			, { sourceInfo, configuration } );
+			, { sourceInfo, std::move( configuration ) } );
 	}
 
 	void Pass::prepareTextures()
@@ -604,7 +599,7 @@ namespace castor3d
 			auto sorted = matpass::sortSources( m_sources );
 			m_prepared.clear();
 
-			for ( auto & [flag, source] : sorted )
+			for ( auto const & [flag, source] : sorted )
 			{
 				doPrepareImage( source );
 			}
@@ -625,11 +620,11 @@ namespace castor3d
 
 	void Pass::setColour( castor::HdrRgbColour const & value )
 	{
-		for ( auto & component : m_components )
+		for ( auto const & [id, component] : m_components )
 		{
-			if ( component.second->hasColour() )
+			if ( component->hasColour() )
 			{
-				component.second->setColour( value );
+				component->setColour( value );
 			}
 		}
 	}
@@ -648,21 +643,20 @@ namespace castor3d
 			: it->second->getColour();
 	}
 
-	PassComponentCombine Pass::getPassFlags()const
+	PassComponentCombine Pass::getPassFlags()const noexcept
 	{
 		return m_componentCombine;
 	}
 
 	void Pass::accept( ConfigurationVisitorBase & vis )
 	{
-		for ( auto & component : m_components )
+		for ( auto const & [id, component] : m_components )
 		{
-			component.second->accept( vis );
+			component->accept( vis );
 		}
 	}
 
-	void Pass::fillBuffer( PassBuffer & buffer
-		, uint16_t passTypeIndex )const
+	void Pass::fillBuffer( PassBuffer & buffer )const
 	{
 		if ( !getId() )
 		{
@@ -679,10 +673,10 @@ namespace castor3d
 	{
 		bool result = true;
 
-		for ( auto & component : m_components )
+		for ( auto const & [id, component] : m_components )
 		{
 			result = result
-				&& component.second->writeText( tabs, folder, subfolder, file );
+				&& component->writeText( tabs, folder, subfolder, file );
 		}
 
 		return result;
@@ -691,9 +685,9 @@ namespace castor3d
 	void Pass::fillConfig( TextureConfiguration & configuration
 		, ConfigurationVisitorBase & vis )
 	{
-		for ( auto & component : m_components )
+		for ( auto const & [id, component] : m_components )
 		{
-			component.second->fillConfig( configuration, vis );
+			component->fillConfig( configuration, vis );
 		}
 	}
 
@@ -856,7 +850,7 @@ namespace castor3d
 		return uint32_t( m_textureUnits.size() );
 	}
 
-	TextureCombine Pass::getTexturesMask()const
+	TextureCombine Pass::getTexturesMask()const noexcept
 	{
 		return m_textureCombine;
 	}
@@ -918,7 +912,7 @@ namespace castor3d
 		}
 	}
 
-	void Pass::doPrepareImage( PassTextureSource cfg )
+	void Pass::doPrepareImage( PassTextureSource const & cfg )
 	{
 		auto & [sourceInfo, passConfig] = cfg;
 		auto & engine = *getOwner()->getEngine();
@@ -944,7 +938,7 @@ namespace castor3d
 
 		auto it = std::find_if( result.begin()
 			, result.end()
-			, [&unitData]( TextureUnitRPtr lookup )
+			, [&unitData]( TextureUnit const * lookup )
 			{
 				return shallowEqual( unitData.base->sourceInfo.textureConfig(), lookup->getConfiguration() );
 			} );
@@ -977,9 +971,9 @@ namespace castor3d
 		}
 		else
 		{
-			for ( auto & source : m_sources )
+			for ( auto const & [info, config] : m_sources )
 			{
-				for ( auto & component : source.first.textureConfig().components )
+				for ( auto & component : info.textureConfig().components )
 				{
 					if ( component.componentsMask )
 					{
@@ -999,7 +993,7 @@ namespace castor3d
 		// First gather the ones depending directly from it.
 		castor::StringArray depends;
 
-		for ( auto & [id, component] : m_components )
+		for ( auto const & [id, component] : m_components )
 		{
 			auto & compDeps = component->getDependencies();
 			auto compIt = std::find_if( compDeps.begin()
@@ -1016,7 +1010,7 @@ namespace castor3d
 		}
 
 		// Then recursively remove them.
-		for ( auto dep : depends )
+		for ( auto const & dep : depends )
 		{
 			auto removed = removeComponent( dep );
 

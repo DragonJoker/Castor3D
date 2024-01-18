@@ -17,7 +17,7 @@ namespace castor3d
 	protected:
 		inline RenderTechniqueVisitor( PipelineFlags flags
 			, Scene const & scene
-			, Config config = { false } )
+			, Config config = { false } )noexcept
 			: ConfigurationVisitor{ std::move( config ) }
 			, m_flags{ std::move( flags ) }
 			, m_scene{ scene }
@@ -34,12 +34,12 @@ namespace castor3d
 		*	Accesseurs.
 		**/
 		/**@{*/
-		PipelineFlags const & getFlags()const
+		PipelineFlags const & getFlags()const noexcept
 		{
 			return m_flags;
 		}
 
-		Scene const & getScene()const
+		Scene const & getScene()const noexcept
 		{
 			return m_scene;
 		}

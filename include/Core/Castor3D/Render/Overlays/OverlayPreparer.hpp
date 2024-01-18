@@ -41,7 +41,7 @@ namespace castor3d
 		C3D_API OverlaysCounts registerOverlay( Overlay const & overlay );
 		C3D_API void fillDrawData();
 
-		void setDrawCounts( uint32_t & value )
+		void setDrawCounts( uint32_t & value )noexcept
 		{
 			m_drawCounts = &value;
 		}

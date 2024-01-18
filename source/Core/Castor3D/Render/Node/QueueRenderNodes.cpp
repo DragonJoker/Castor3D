@@ -886,7 +886,7 @@ namespace castor3d
 			} );
 	}
 
-	void QueueRenderNodes::clear()
+	void QueueRenderNodes::clear()noexcept
 	{
 		m_pipelines.clear();
 		m_submeshNodes.clear();

@@ -16,9 +16,9 @@ See LICENSE file in root folder
 
 namespace c3d_assimp
 {
-	using SkeletonAnimations = std::map< castor::String, aiAnimation const * >;
-	using MeshAnimations = std::map< castor::String, std::pair< aiMesh const *, aiMeshMorphAnim const * > >;
-	using NodeAnimations = std::map< castor::String, std::pair< aiAnimation const *, aiNodeAnim const * > >;
+	using SkeletonAnimations = castor::StringMap< aiAnimation const * >;
+	using MeshAnimations = castor::StringMap< std::pair< aiMesh const *, aiMeshMorphAnim const * > >;
+	using NodeAnimations = castor::StringMap< std::pair< aiAnimation const *, aiNodeAnim const * > >;
 	using aiNodeArray = std::vector< aiNode const * >;
 
 	struct AssimpSkeletonData
@@ -87,12 +87,12 @@ namespace c3d_assimp
 
 	struct AssimpSceneData
 	{
-		std::map< castor::String, aiMaterial const * > materials;
+		castor::StringMap< aiMaterial const * > materials;
 		std::vector< AssimpNodeData > nodes;
-		std::map< castor::String, AssimpMeshData > meshes;
-		std::map< castor::String, AssimpSkeletonData > skeletons;
-		std::map< castor::String, aiLight const * > lights;
-		std::map< castor::String, aiCamera const * > cameras;
+		castor::StringMap< AssimpMeshData > meshes;
+		castor::StringMap< AssimpSkeletonData > skeletons;
+		castor::StringMap< aiLight const * > lights;
+		castor::StringMap< aiCamera const * > cameras;
 	};
 
 	class AssimpImporterFile
@@ -215,7 +215,7 @@ namespace c3d_assimp
 	private:
 		Assimp::Importer m_importer;
 		aiScene const * m_aiScene{};
-		std::map< castor::String, castor::Matrix4x4f > m_bonesNodes;
+		castor::StringMap< castor::Matrix4x4f > m_bonesNodes;
 		std::set< uint32_t > m_meshes;
 		std::vector< castor::String > m_listedMeshes;
 		std::vector< castor::String > m_listedSkeletons;

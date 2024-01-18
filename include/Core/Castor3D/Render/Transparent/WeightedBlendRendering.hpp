@@ -69,7 +69,8 @@ namespace castor3d
 		*/
 		/**@{*/
 		static uint32_t countInitialisationSteps()noexcept;
-		crg::FramePass const & getLastPass()const
+
+		crg::FramePass const & getLastPass()const noexcept
 		{
 			return m_finalCombinePassDesc;
 		}

@@ -38,6 +38,6 @@ namespace castor3d
 	};
 }
 
-#define CASTOR_VERSION_EXCEPTION( given, expected ) throw castor3d::VersionException{ given, expected, __FILE__, __FUNCTION__, uint32_t( __LINE__ ) }
+#define C3D_VersionException( given, expected ) throw castor3d::VersionException{ given, expected, __FILE__, __FUNCTION__, uint32_t( __LINE__ ) }
 
 #endif

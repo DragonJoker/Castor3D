@@ -42,11 +42,10 @@ namespace castor3d
 	{
 		ShaderModule( ShaderModule const & ) = delete;
 		ShaderModule & operator=( ShaderModule const & ) = delete;
-
 		C3D_API ShaderModule( ShaderModule && rhs )noexcept;
 		C3D_API ShaderModule & operator=( ShaderModule && rhs )noexcept;
-
 		C3D_API ShaderModule() = default;
+		C3D_API ~ShaderModule()noexcept = default;
 
 		C3D_API ShaderModule( VkShaderStageFlagBits stage
 			, std::string const & name );
@@ -75,11 +74,10 @@ namespace castor3d
 	{
 		ProgramModule( ProgramModule const & ) = delete;
 		ProgramModule & operator=( ProgramModule const & ) = delete;
-
 		C3D_API ProgramModule( ProgramModule && rhs )noexcept;
 		C3D_API ProgramModule & operator=( ProgramModule && rhs )noexcept;
-
 		C3D_API ProgramModule() = default;
+		C3D_API ~ProgramModule()noexcept = default;
 
 		C3D_API explicit ProgramModule( std::string const & name );
 		C3D_API ProgramModule( std::string const & name

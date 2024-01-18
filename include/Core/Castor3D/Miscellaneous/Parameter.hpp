@@ -79,9 +79,9 @@ namespace castor3d
 			, uint32_t count )
 		{
 			bool result = false;
-			auto it = m_values.find( name );
 
-			if ( it == m_values.end() )
+			if ( auto it = m_values.find( name );
+				it == m_values.end() )
 			{
 				ByteArray param( sizeof( ValueT ) * count, 0 );
 				std::memcpy( &param[0], values, sizeof( ValueT ) * count );
@@ -161,12 +161,12 @@ namespace castor3d
 		 *\return		\p false si un paramètre avec le nom donné existe déjà
 		 */
 		bool add( KeyT const & name
-			, castor::String const & value )
+			, castor::StringView value )
 		{
 			bool result = false;
-			auto it = m_values.find( name );
 
-			if ( it == m_values.end() )
+			if ( auto it = m_values.find( name );
+				it == m_values.end() )
 			{
 				size_t size = sizeof( xchar ) * value.size();
 				ByteArray param( size + 1, 0 );
@@ -213,9 +213,9 @@ namespace castor3d
 			, ValueT const & value )
 		{
 			bool result = false;
-			auto it = m_values.find( name );
 
-			if ( it != m_values.end() )
+			if ( auto it = m_values.find( name );
+				it != m_values.end() )
 			{
 				std::memcpy( &it->second[0], &value, sizeof( ValueT ) );
 				result = true;
@@ -243,18 +243,16 @@ namespace castor3d
 			, uint32_t count )const
 		{
 			bool result = false;
-			auto it = m_values.find( name );
 
-			if ( it != m_values.end() )
+			if ( auto it = m_values.find( name );
+				it != m_values.end() && sizeof( ValueT ) * count >= it->second.size() )
 			{
-				if ( sizeof( ValueT ) * count >= it->second.size() )
-				{
-					auto begin = reinterpret_cast< ValueT const * >( it->second.data() );
-					std::copy( begin
-						, begin + count
-						, values );
-					result = true;
-				}
+				using ValueCPtr = ValueT const *;
+				auto begin = ValueCPtr( it->second.data() );
+				std::copy( begin
+					, begin + count
+					, values );
+				result = true;
 			}
 
 			return result;
@@ -311,11 +309,12 @@ namespace castor3d
 			, castor::String & value )const
 		{
 			bool result = false;
-			auto it = m_values.find( name );
 
-			if ( it != m_values.end() )
+			if ( auto it = m_values.find( name );
+				it != m_values.end() )
 			{
-				value = reinterpret_cast< xchar const * const >( it->second.data() );
+				using CharCPtr = xchar const * const;
+				value = CharCPtr( it->second.data() );
 				result = true;
 			}
 
@@ -371,7 +370,7 @@ namespace castor3d
 
 	private:
 		using ByteArray = std::vector< uint8_t >;
-		using ParamNameMap = std::map< KeyT, ByteArray >;
+		using ParamNameMap = std::map< KeyT, ByteArray, std::less<> >;
 		ParamNameMap m_values;
 	};
 }

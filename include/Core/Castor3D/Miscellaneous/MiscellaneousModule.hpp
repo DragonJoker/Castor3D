@@ -56,41 +56,41 @@ namespace castor3d
 	enum class GpuMax
 		: uint32_t
 	{
-		eTexture1DSize,
-		eTexture2DSize,
-		eTexture3DSize,
-		eTextureCubeSize,
-		eTextureLayers,
-		eSamplerLodBias,
-		eClipDistances,
-		eFramebufferWidth,
-		eFramebufferHeight,
-		eFramebufferLayers,
-		eFramebufferSamples,
-		eTexelBufferSize,
-		eUniformBufferSize,
-		eStorageBufferSize,
-		eViewportWidth,
-		eViewportHeight,
-		eViewports,
-		eWorkGroupCountX,
-		eWorkGroupCountY,
-		eWorkGroupCountZ,
-		eWorkGroupSizeX,
-		eWorkGroupSizeY,
-		eWorkGroupSizeZ,
-		eWorkGroupInvocations,
-		eMeshWorkGroupInvocations,
-		eMeshWorkGroupSizeX,
-		eMeshWorkGroupSizeY,
-		eMeshWorkGroupSizeZ,
-		eMeshOutputVertices,
-		eMeshOutputPrimitives,
-		eTaskWorkGroupInvocations,
-		eTaskWorkGroupSizeX,
-		eTaskWorkGroupSizeY,
-		eTaskWorkGroupSizeZ,
-		CU_ScopedEnumBounds( eTexture1DSize )
+		eTexture1DSize = 0,
+		eTexture2DSize = 1,
+		eTexture3DSize = 2,
+		eTextureCubeSize = 3,
+		eTextureLayers = 4,
+		eSamplerLodBias = 5,
+		eClipDistances = 6,
+		eFramebufferWidth = 7,
+		eFramebufferHeight = 8,
+		eFramebufferLayers = 9,
+		eFramebufferSamples = 10,
+		eTexelBufferSize = 11,
+		eUniformBufferSize = 12,
+		eStorageBufferSize = 13,
+		eViewportWidth = 14,
+		eViewportHeight = 15,
+		eViewports = 16,
+		eWorkGroupCountX = 17,
+		eWorkGroupCountY = 18,
+		eWorkGroupCountZ = 19,
+		eWorkGroupSizeX = 20,
+		eWorkGroupSizeY = 21,
+		eWorkGroupSizeZ = 22,
+		eWorkGroupInvocations = 23,
+		eMeshWorkGroupInvocations = 24,
+		eMeshWorkGroupSizeX = 25,
+		eMeshWorkGroupSizeY = 26,
+		eMeshWorkGroupSizeZ = 27,
+		eMeshOutputVertices = 28,
+		eMeshOutputPrimitives = 29,
+		eTaskWorkGroupInvocations = 30,
+		eTaskWorkGroupSizeX = 31,
+		eTaskWorkGroupSizeY = 32,
+		eTaskWorkGroupSizeZ = 33,
+		CU_ScopedEnumBounds( eTexture1DSize, eTaskWorkGroupSizeZ )
 	};
 	/**
 	*\~english
@@ -103,9 +103,9 @@ namespace castor3d
 	enum class GpuMin
 		: uint32_t
 	{
-		eBufferMapSize,
-		eUniformBufferOffsetAlignment,
-		CU_ScopedEnumBounds( eBufferMapSize )
+		eBufferMapSize = 0,
+		eUniformBufferOffsetAlignment = 1,
+		CU_ScopedEnumBounds( eBufferMapSize, eUniformBufferOffsetAlignment )
 	};
 	/**
 	*\~english

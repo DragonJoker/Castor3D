@@ -22,14 +22,11 @@ namespace castor3d
 		{
 			//!\~english	Particles are updated on CPU.
 			//!\~french		Les particules sont mises à jour sur le CPU.
-			eCpu,
-			//!\~english	Particles are updated using Geometry shader and Transform feedback.
-			//!\~french		Les particules sont mises à jour en utilisant les geometry shaders et le Transform feedback.
-			eTransformFeedback,
+			eCpu = 0,
 			//!\~english	Particles are updated using a compute shader.
 			//!\~french		Les particules sont mises à jour en utilisant un compute shader.
-			eComputeShader,
-			CU_ScopedEnumBounds( eCpu )
+			eComputeShader = 1,
+			CU_ScopedEnumBounds( eCpu, eComputeShader )
 		};
 
 	public:
@@ -50,7 +47,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API virtual ~ParticleSystemImpl();
+		C3D_API virtual ~ParticleSystemImpl()noexcept = default;
 		/**
 		 *\~english
 		 *\brief		Initialises the implementation.

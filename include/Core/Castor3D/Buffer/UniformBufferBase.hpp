@@ -51,7 +51,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API virtual ~UniformBufferBase() = default;
+		C3D_API virtual ~UniformBufferBase()noexcept = default;
 		/**
 		 *\~english
 		 *\brief		Initialises the GPU buffer.
@@ -478,10 +478,6 @@ namespace castor3d
 		{
 			return *m_buffer;
 		}
-		operator ashes::UniformBuffer const &()const
-		{
-			return *m_buffer;
-		}
 		/**
 		*\~english
 		*\return
@@ -491,10 +487,6 @@ namespace castor3d
 		*	Le tampon interne.
 		*/
 		ashes::UniformBuffer & getBuffer()
-		{
-			return *m_buffer;
-		}
-		operator ashes::UniformBuffer & ()
 		{
 			return *m_buffer;
 		}

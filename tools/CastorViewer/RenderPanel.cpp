@@ -235,7 +235,6 @@ namespace CastorViewer
 				doSetCamera( *camera );
 			}
 
-			m_renderWindow->addPickingScene( *scene );
 			m_scene = scene;
 		}
 	}

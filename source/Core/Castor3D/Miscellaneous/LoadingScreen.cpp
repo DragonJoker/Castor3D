@@ -292,7 +292,7 @@ namespace castor3d
 		m_device.renderSystem.getEngine()->getControlsManager()->setSize( m_renderSize );
 	}
 
-	LoadingScreen::~LoadingScreen()
+	LoadingScreen::~LoadingScreen()noexcept
 	{
 		m_runnable.reset();
 		m_backgroundRenderer.reset();
@@ -302,12 +302,12 @@ namespace castor3d
 		m_colour.destroy();
 	}
 
-	void LoadingScreen::enable()
+	void LoadingScreen::enable()noexcept
 	{
 		m_enabled = true;
 	}
 
-	void LoadingScreen::disable()
+	void LoadingScreen::disable()noexcept
 	{
 		m_enabled = false;
 	}

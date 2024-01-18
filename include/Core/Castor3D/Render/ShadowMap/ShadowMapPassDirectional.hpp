@@ -62,7 +62,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API ~ShadowMapPassDirectional()override;
+		C3D_API ~ShadowMapPassDirectional()noexcept override;
 		/**
 		 *\copydoc		castor3d::ShadowMapPass::update
 		 */

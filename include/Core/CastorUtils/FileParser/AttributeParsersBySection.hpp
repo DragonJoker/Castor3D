@@ -13,7 +13,7 @@ namespace castor
 	class AttributeParserMap
 	{
 	private:
-		using Map = std::map< String, ParserFunctionAndParams, std::less<> >;
+		using Map = StringMap< ParserFunctionAndParams >;
 		Map m_map;
 
 	public:

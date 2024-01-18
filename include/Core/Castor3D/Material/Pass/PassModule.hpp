@@ -40,10 +40,10 @@ namespace castor3d
 	*/
 	enum class ParallaxOcclusionMode
 	{
-		eNone,
-		eOne,
-		eRepeat,
-		CU_ScopedEnumBounds( eNone )
+		eNone = 0,
+		eOne = 1,
+		eRepeat = 2,
+		CU_ScopedEnumBounds( eNone, eRepeat )
 	};
 	C3D_API castor::String getName( ParallaxOcclusionMode value );
 	/**
@@ -59,23 +59,23 @@ namespace castor3d
 	{
 		//!\~english Order dependent blending.
 		//!\~french Mélange dépendant de l'ordre.
-		eNoBlend,
+		eNoBlend = 0,
 		//!\~english Order independent, add the components.
 		//!\~french Mélange indépendant de l'ordre, additionnant les composantes.
-		eAdditive,
+		eAdditive = 1,
 		//!\~english Order independent, multiply the components.
 		//!\~french Indépendant de l'ordre, multipliant les composantes.
-		eMultiplicative,
+		eMultiplicative = 2,
 		//!\~english Order dependent, interpolate the components.
 		//!\~french Indépendant de l'ordre, interpolant les composantes.
-		eInterpolative,
+		eInterpolative = 3,
 		//!\~english Order independent, using A-buffer, not implemented yet.
 		//!\~french Indépendant de l'ordre, utilisant les A-Buffer (non implémenté).
-		eABuffer,
+		eABuffer = 4,
 		//!\~english Order independent, using depth peeling, not implemented yet.
 		//!\~french Indépendant de l'ordre, utilisant le pelage en profondeur (non implémenté).
-		eDepthPeeling,
-		CU_ScopedEnumBounds( eNoBlend )
+		eDepthPeeling = 5,
+		CU_ScopedEnumBounds( eNoBlend, eDepthPeeling )
 	};
 	C3D_API castor::String getName( BlendMode value );
 	/**
@@ -165,7 +165,7 @@ namespace castor3d
 		, PassCreator
 		, PassTypeID
 		, PassFactoryEntry >;
-	using SpecificsBuffers = std::map< std::string, std::pair< SpecificsBuffer, ShaderBufferUPtr > >;
+	using SpecificsBuffers = castor::StringMap< std::pair< SpecificsBuffer, ShaderBufferUPtr > >;
 
 	CU_DeclareSmartPtr( castor3d, RenderPassRegisterInfo, C3D_API );
 

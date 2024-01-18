@@ -67,13 +67,6 @@ namespace castor3d
 			, SceneNodeRPtr rootObjectNode );
 		/**
 		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API ~ObjectCacheT()override = default;
-		/**
-		 *\~english
 		 *\brief		Adds an object.
 		 *\param[in]	element	The object.
 		 *\~french

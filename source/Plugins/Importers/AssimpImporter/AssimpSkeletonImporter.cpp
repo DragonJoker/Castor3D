@@ -10,7 +10,7 @@ namespace c3d_assimp
 	namespace skeletons
 	{
 		static castor3d::SkeletonNode * addNode( castor3d::Skeleton & skeleton
-			, std::map< castor::String, castor::Matrix4x4f > const & bonesNodes
+			, castor::StringMap< castor::Matrix4x4f > const & bonesNodes
 			, castor::String const & nodeName
 			, castor::String const & name )
 		{
@@ -27,7 +27,7 @@ namespace c3d_assimp
 		}
 
 		static castor3d::SkeletonNode * processSkeletonNode( AssimpImporterFile const & file
-			, std::map< castor::String, castor::Matrix4x4f > const & bonesNodes
+			, castor::StringMap< castor::Matrix4x4f > const & bonesNodes
 			, castor3d::Skeleton & skeleton
 			, aiNode const & aiNode
 			, castor3d::SkeletonNode * parentSkelNode )
@@ -59,7 +59,7 @@ namespace c3d_assimp
 		}
 
 		static void processSkeletonNodes( AssimpImporterFile const & file
-			, std::map< castor::String, castor::Matrix4x4f > const & bonesNodes
+			, castor::StringMap< castor::Matrix4x4f > const & bonesNodes
 			, castor3d::Skeleton & skeleton
 			, aiNode const & parentAiNode
 			, castor3d::SkeletonNode * parentSkelNode )

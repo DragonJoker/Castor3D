@@ -537,10 +537,6 @@ namespace castor3d
 	{
 	}
 
-	Texture3DTo2D::Texture3DToScreen::Texture3DToScreen()
-	{
-	}
-
 	//*********************************************************************************************
 
 	Texture3DTo2D::Texture3DTo2D( RenderDevice const & device
@@ -585,7 +581,7 @@ namespace castor3d
 		m_sampler->initialise( device );
 	}
 
-	Texture3DTo2D::~Texture3DTo2D()
+	Texture3DTo2D::~Texture3DTo2D()noexcept
 	{
 		m_sampler->cleanup();
 		m_depthBuffer.destroy();

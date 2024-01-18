@@ -50,7 +50,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API ~PrepassRendering();
+		C3D_API ~PrepassRendering()noexcept;
 		/**
 		 *\~english
 		 *\return		The number of steps needed for initialisation, to show progression.
@@ -107,39 +107,39 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		C3D_API Engine * getEngine()const;
-		C3D_API crg::FramePass const & getLastPass()const;
-		C3D_API crg::FramePass const & getDepthRangePass()const;
-		C3D_API bool hasVisibility()const;
+		C3D_API Engine * getEngine()const noexcept;
+		C3D_API crg::FramePass const & getLastPass()const noexcept;
+		C3D_API crg::FramePass const & getDepthRangePass()const noexcept;
+		C3D_API bool hasVisibility()const noexcept;
 
-		Texture const & getDepthObj()const
+		Texture const & getDepthObj()const noexcept
 		{
 			return m_result[PpTexture::eDepthObj];
 		}
 
-		Texture const & getVisibility()const
+		Texture const & getVisibility()const noexcept
 		{
 			CU_Require( hasVisibility() );
 			return m_result[PpTexture::eVisibility];
 		}
 
-		ashes::Buffer< int32_t > const & getDepthRange()const
+		ashes::Buffer< int32_t > const & getDepthRange()const noexcept
 		{
 			CU_Require( m_depthRange );
 			return *m_depthRange;
 		}
 
-		bool needsDepthRange()const
+		bool needsDepthRange()const noexcept
 		{
 			return m_needsDepthRange;
 		}
 
-		void setNeedsDepthRange( bool value )
+		void setNeedsDepthRange( bool value )noexcept
 		{
 			m_needsDepthRange = value;
 		}
 
-		VisibilityPass const & getVisibilityPass()const
+		VisibilityPass const & getVisibilityPass()const noexcept
 		{
 			CU_Require( m_visibilityPass );
 			return *m_visibilityPass;

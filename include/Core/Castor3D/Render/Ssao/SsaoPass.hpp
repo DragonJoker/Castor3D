@@ -76,16 +76,16 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		C3D_API Texture const & getResult()const;
-		C3D_API Texture const & getBentNormals()const;
+		C3D_API Texture const & getResult()const noexcept;
+		C3D_API Texture const & getBentNormals()const noexcept;
 		static uint32_t countInitialisationSteps()noexcept;
 
-		SsaoConfig const & getConfig()const
+		SsaoConfig const & getConfig()const noexcept
 		{
 			return m_ssaoConfig;
 		}
 
-		crg::FramePass const & getLastPass()const
+		crg::FramePass const & getLastPass()const noexcept
 		{
 			return *m_lastPass;
 		}

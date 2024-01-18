@@ -41,50 +41,50 @@ namespace castor3d
 	{
 		//!\~english	The submesh has indices.
 		//!\~french		Le submesh a des indices.
-		eIndex,
+		eIndex = 0,
 		//!\~english	The submesh has positions.
 		//!\~french		Le submesh a des positions.
-		ePositions,
+		ePositions = 1,
 		//!\~english	The submesh has normals.
 		//!\~french		Le submesh a des normales.
-		eNormals,
+		eNormals = 2,
 		//!\~english	The submesh has tangents.
 		//!\~french		Le submesh a des tangentes.
-		eTangents,
+		eTangents = 3,
 		//!\~english	The submesh has bitangents.
 		//!\~french		Le submesh a des bitangentes.
-		eBitangents,
+		eBitangents = 4,
 		//!\~english	Submesh has texture coordinates.
 		//!\~french		Le submesh a des coordonnées de texture.
-		eTexcoords0,
+		eTexcoords0 = 5,
 		//!\~english	Submesh has a 2nd set of texture coordinates.
 		//!\~french		Le submesh a un 2e set de coordonnées de texture.
-		eTexcoords1,
+		eTexcoords1 = 6,
 		//!\~english	Submesh has a 3rd set of texture coordinates.
 		//!\~french		Le submesh a un 3e set de coordonnées de texture.
-		eTexcoords2,
+		eTexcoords2 = 7,
 		//!\~english	Submesh has a 4th set of texture coordinates.
 		//!\~french		Le submesh a un 4e set de coordonnées de texture.
-		eTexcoords3,
+		eTexcoords3 = 8,
 		//!\~english	Submesh has colours.
 		//!\~french		Le submesh a des couleurs.
-		eColours,
+		eColours = 9,
 		//!\~english	Minimum value for components not derived from BaseDataComponentT.
 		//!\~french		Valeur minimale pour les composants n'héritant pas de BaseDataComponentT.
-		eOtherMin,
+		eOtherMin = 10,
 		//!\~english	Submesh has skin data.
 		//!\~french		Le submesh a des données de skin.
 		eSkin = eOtherMin,
 		//!\~english	Submesh has subpasses masks.
 		//!\~french		Le submesh a des masques de subpasses.
-		ePassMasks,
+		ePassMasks = 11,
 		//!\~english	Submesh has velocity data.
 		//!\~french		Le submesh a des données de vélocité.
-		eVelocity,
+		eVelocity = 12,
 		//!\~english	Submesh has meshlets.
 		//!\~french		Le submesh a des meshlets.
-		eMeshlets,
-		CU_ScopedEnumBounds( eIndex ),
+		eMeshlets = 13,
+		CU_ScopedEnumBounds( eIndex, eMeshlets ),
 	};
 
 	inline castor::String getName( SubmeshData value )
@@ -125,7 +125,7 @@ namespace castor3d
 		}
 	}
 
-	inline constexpr uint32_t getSize( SubmeshData value )
+	constexpr uint32_t getSize( SubmeshData value )
 	{
 		constexpr std::array< size_t, size_t( SubmeshData::eCount ) > sizes = { sizeof( uint32_t ) /* SubmeshData::eIndex */
 			, sizeof( castor::Point4f ) /* SubmeshData::ePositions */
@@ -148,12 +148,12 @@ namespace castor3d
 	using SubmeshComponentCombineID = uint16_t;
 	using SubmeshComponentFlag = uint32_t;
 
-	inline constexpr SubmeshComponentFlag makeSubmeshComponentFlag( SubmeshComponentID componentId )noexcept
+	constexpr SubmeshComponentFlag makeSubmeshComponentFlag( SubmeshComponentID componentId )noexcept
 	{
 		return uint32_t( componentId );
 	}
 
-	inline constexpr SubmeshComponentID splitSubmeshComponentFlag( SubmeshComponentFlag flag )noexcept
+	constexpr SubmeshComponentID splitSubmeshComponentFlag( SubmeshComponentFlag flag )noexcept
 	{
 		return SubmeshComponentID( flag );
 	}
@@ -172,32 +172,32 @@ namespace castor3d
 	{
 		//!\~english	The submesh has morphing positions.
 		//!\~french		Le submesh a des positions de morphing.
-		ePositions,
+		ePositions = 0,
 		//!\~english	The submesh has morphing normals.
 		//!\~french		Le submesh a des normales de morphing.
-		eNormals,
+		eNormals = 1,
 		//!\~english	The submesh has morphing tangents.
 		//!\~french		Le submesh a des tangentes de morphing.
-		eTangents,
+		eTangents = 2,
 		//!\~english	The submesh has morphing bitangents.
 		//!\~french		Le submesh a des bitangentes de morphing.
-		eBitangents,
+		eBitangents = 3,
 		//!\~english	The submesh has morphing texture coordinates.
 		//!\~french		Le submesh a des coordonnées de texture de morphing.
-		eTexcoords0,
+		eTexcoords0 = 4,
 		//!\~english	The submesh has a 2nd set of morphing texture coordinates.
 		//!\~french		Le submesh a un 2e set de coordonnées de texture de morphing.
-		eTexcoords1,
+		eTexcoords1 = 5,
 		//!\~english	The submesh has a 3rd set of morphing texture coordinates.
 		//!\~french		Le submesh a un 3e set de coordonnées de texture de morphing.
-		eTexcoords2,
+		eTexcoords2 = 6,
 		//!\~english	The submesh has a 4th set of morphing texture coordinates.
 		//!\~french		Le submesh a un 4e set de coordonnées de texture de morphing.
-		eTexcoords3,
+		eTexcoords3 = 7,
 		//!\~english	Submesh has a morphing colours.
 		//!\~french		Le submesh a des couleurs de morphing.
-		eColours,
-		CU_ScopedEnumBounds( ePositions ),
+		eColours = 8,
+		CU_ScopedEnumBounds( ePositions, eColours ),
 	};
 
 	inline castor::String getName( MorphData value )
@@ -238,7 +238,7 @@ namespace castor3d
 	enum class MorphFlag
 		: uint32_t
 	{
-		eNone,
+		eNone = 0x00,
 		//!\~english	The submesh has morphing positions.
 		//!\~french		Le submesh a des positions de morphing.
 		ePositions = 0x01 << size_t( MorphData::ePositions ),

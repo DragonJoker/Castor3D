@@ -85,33 +85,33 @@ namespace castor3d
 
 		/** @copydoc Control::doUpdateClientRect
 		*/
-		castor::Point4ui doUpdateClientRect( castor::Point4ui const & clientRect )final override;
+		castor::Point4ui doUpdateClientRect( castor::Point4ui const & clientRect )final;
 
 		/** Sets the background borders size.
 		 *\param[in]	value		The new value.
 		 */
-		void doSetBorderSize( castor::Point4ui const & value )final override;
+		void doSetBorderSize( castor::Point4ui const & value )final;
 
 		/** Sets the position
 		*\param[in]	value		The new value
 		*/
-		void doSetPosition( castor::Position const & value )final override;
+		void doSetPosition( castor::Position const & value )final;
 
 		/** Sets the size
 		*\param[in]	value	The new value
 		*/
-		void doSetSize( castor::Size const & value )final override;
+		void doSetSize( castor::Size const & value )final;
 
 		/** Sets the caption.
 		*\param[in]	caption	The new value
 		*/
-		void doSetCaption( castor::U32String const & caption )final override;
+		void doSetCaption( castor::U32String const & caption )final;
 
 		/** Sets the visibility
 		 *\remarks		Used for derived control specific behavious
 		 *\param[in]	visible		The new value
 		 */
-		void doSetVisible( bool visible )final override;
+		void doSetVisible( bool visible )final;
 
 		/** @copydoc Control::doUpdateClientRect
 		*/

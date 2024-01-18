@@ -73,7 +73,7 @@ namespace castor3d
 		log::trace << "Created " << getName() << std::endl;
 	}
 
-	ShadowMapPassDirectional::~ShadowMapPassDirectional()
+	ShadowMapPassDirectional::~ShadowMapPassDirectional()noexcept
 	{
 		m_camera.detach();
 	}

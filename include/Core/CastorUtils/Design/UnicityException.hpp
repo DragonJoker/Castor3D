@@ -19,10 +19,10 @@ namespace castor
 	enum class UnicityError
 	{
 		//\~english No instance found when expecting one.	\~french Pas d'intance alors qu'on en attend une.
-		eNoInstance,
+		eNoInstance = 0,
 		//\~english An instance found when there shouldn't be one.	\~french Un intance alors qu'on ne devrait pas en avoir.
-		eAnInstance,
-		CU_ScopedEnumBounds( eNoInstance )
+		eAnInstance = 1,
+		CU_ScopedEnumBounds( eNoInstance, eAnInstance )
 	};
 	/**
 	\~english

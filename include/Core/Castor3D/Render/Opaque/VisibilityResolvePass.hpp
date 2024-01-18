@@ -96,19 +96,19 @@ namespace castor3d
 		/**
 		 *\copydoc	castor3d::RenderNodesPass::areValidPassFlags
 		 */
-		C3D_API bool areValidPassFlags( PassComponentCombine const & passFlags )const override;
+		C3D_API bool areValidPassFlags( PassComponentCombine const & passFlags )const noexcept override;
 		/**
 		 *\copydoc	castor3d::RenderNodesPass::getShaderFlags
 		 */
-		C3D_API ShaderFlags getShaderFlags()const override;
+		C3D_API ShaderFlags getShaderFlags()const noexcept override;
 		/**
 		 *\copydoc	castor3d::RenderNodesPass::countNodes
 		 */
-		C3D_API void countNodes( RenderInfo & info )const override;
+		C3D_API void countNodes( RenderInfo & info )const noexcept override;
 		/**
 		 *\copydoc	castor3d::RenderNodesPass::isPassEnabled
 		 */
-		C3D_API bool isPassEnabled()const override;
+		C3D_API bool isPassEnabled()const noexcept override;
 		/**
 		 *\copydoc	castor3d::RenderNodesPass::getDeferredLightingFilter
 		 */
@@ -126,16 +126,16 @@ namespace castor3d
 		/**
 		 *\copydoc	castor3d::RenderNodesPass::getComponentsMask
 		 */
-		C3D_API static ComponentModeFlags getComponentsMask();
+		C3D_API static ComponentModeFlags getComponentsMask()noexcept;
 
-		C3D_API static bool useCompute();
+		C3D_API static bool useCompute()noexcept;
 
 		bool hasSsao()const noexcept override
 		{
 			return m_ssao && m_ssaoConfig && m_ssaoConfig->enabled;
 		}
 
-		ClustersConfig const * getClustersConfig()const override
+		ClustersConfig const * getClustersConfig()const noexcept override
 		{
 			return m_clustersConfig;
 		}
@@ -173,7 +173,7 @@ namespace castor3d
 
 	private:
 		void doAccept( castor3d::RenderTechniqueVisitor & visitor )override;
-		bool doIsEnabled()const;
+		bool doIsEnabled()const noexcept;
 		void doRecordInto( crg::RecordContext & context
 			, VkCommandBuffer commandBuffer
 			, uint32_t index );

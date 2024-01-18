@@ -867,7 +867,7 @@ namespace castor3d::exporter
 		{
 			log::info << cuT( "SceneExporter::write - Textures\n" );
 			castor::StringStream sceneStream;
-			std::map< castor::String, castor3d::TextureData const * > sorted;
+			castor::StringMap< castor3d::TextureData const * > sorted;
 
 			for ( auto & [hash, textureData] : scene.getEngine()->getTextureUnitCache() )
 			{

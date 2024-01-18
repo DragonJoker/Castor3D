@@ -17,7 +17,7 @@ namespace castor3d
 	class TextureSourceInfo
 	{
 	public:
-		C3D_API TextureSourceInfo() = default;
+		C3D_API TextureSourceInfo()noexcept = default;
 		C3D_API TextureSourceInfo( TextureSourceInfo const & rhs
 			, TextureConfiguration textureConfig );
 		C3D_API TextureSourceInfo( castor::String name
@@ -37,124 +37,124 @@ namespace castor3d
 			, TextureConfiguration textureConfig
 			, ashes::ImageCreateInfo const & createInfo );
 
-		bool isSerialisable()const
+		bool isSerialisable()const noexcept
 		{
 			return m_serialisable;
 		}
 
-		bool isRenderTarget()const
+		bool isRenderTarget()const noexcept
 		{
 			return m_renderTarget != nullptr;
 		}
 
-		bool isFileImage()const
+		bool isFileImage()const noexcept
 		{
 			return !m_relative.empty();
 		}
 
-		bool isBufferImage()const
+		bool isBufferImage()const noexcept
 		{
 			return !m_data.empty();
 		}
 
-		bool isVulkanImage()const
+		bool isVulkanImage()const noexcept
 		{
 			return m_createInfo->format != VK_FORMAT_UNDEFINED;
 		}
 
-		TextureConfiguration const & textureConfig()const
+		TextureConfiguration const & textureConfig()const noexcept
 		{
 			return m_textureConfig;
 		}
 
-		RenderTargetRPtr renderTarget()const
+		RenderTargetRPtr renderTarget()const noexcept
 		{
 			CU_Require( isRenderTarget() );
 			return m_renderTarget;
 		}
 
-		castor::Path const & folder()const
+		castor::Path const & folder()const noexcept
 		{
 			CU_Require( isFileImage() );
 			return m_folder;
 		}
 
-		castor::Path const & relative()const
+		castor::Path const & relative()const noexcept
 		{
 			CU_Require( isFileImage() );
 			return m_relative;
 		}
 
-		castor::String name()const
+		castor::String name()const noexcept
 		{
 			return m_name;
 		}
 
-		castor::String const & type()const
+		castor::String const & type()const noexcept
 		{
 			CU_Require( isBufferImage() );
 			return m_type;
 		}
 
-		castor::ByteArray const & buffer()const
+		castor::ByteArray const & buffer()const noexcept
 		{
 			CU_Require( isBufferImage() );
 			return m_data;
 		}
 
-		bool allowCompression()const
+		bool allowCompression()const noexcept
 		{
 			CU_Require( isFileImage() || isBufferImage() );
 			return m_loadConfig.allowCompression;
 		}
 
-		void allowCompression( bool v )
+		void allowCompression( bool v )noexcept
 		{
 			CU_Require( isFileImage() || isBufferImage() );
 			m_loadConfig.allowCompression = v;
 		}
 
-		bool allowSRGB()const
+		bool allowSRGB()const noexcept
 		{
 			return m_loadConfig.allowSRGB;
 		}
 
-		void allowSRGB( bool v )
+		void allowSRGB( bool v )noexcept
 		{
 			m_loadConfig.allowSRGB = v;
 		}
 
-		bool generateMips()const
+		bool generateMips()const noexcept
 		{
 			CU_Require( isFileImage() || isBufferImage() );
 			return m_loadConfig.generateMips;
 		}
 
-		bool layersToTiles()const
+		bool layersToTiles()const noexcept
 		{
 			CU_Require( isFileImage() || isBufferImage() );
 			return m_loadConfig.layersToTiles;
 		}
 
-		castor::ImageLoaderConfig const & loadConfig()const
+		castor::ImageLoaderConfig const & loadConfig()const noexcept
 		{
 			CU_Require( isFileImage() || isBufferImage() );
 			return m_loadConfig;
 		}
 
-		ashes::ImageCreateInfo const & createInfo()const
+		ashes::ImageCreateInfo const & createInfo()const noexcept
 		{
 			CU_Require( isVulkanImage() );
 			return m_createInfo;
 		}
 
-		void setBuffer( castor::ByteArray data )
+		void setBuffer( castor::ByteArray data )noexcept
 		{
 			CU_Require( !isRenderTarget() );
 			m_data = std::move( data );
 		}
 
-		void setSerialisable( bool v )
+		void setSerialisable( bool v )noexcept
 		{
 			m_serialisable = v;
 		}

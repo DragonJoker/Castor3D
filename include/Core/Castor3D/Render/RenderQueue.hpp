@@ -48,7 +48,6 @@ namespace castor3d
 			, castor::String const & typeName
 			, bool meshShading
 			, SceneNode const * ignored );
-		C3D_API ~RenderQueue();
 		/**
 		 *\~english
 		 *\brief		Initialises the queue.
@@ -69,7 +68,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Nettoie la file de rendu.
 		 */
-		C3D_API void cleanup();
+		C3D_API void cleanup()noexcept;
 		/**
 		 *\~english
 		 *\brief			Updates the render nodes.
@@ -134,7 +133,7 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		C3D_API bool hasNodes()const;
+		C3D_API bool hasNodes()const noexcept;
 		C3D_API bool needsInitialise()const;
 		C3D_API RenderFilters getFilters()const;
 		C3D_API ashes::CommandBuffer const & initCommandBuffer();
@@ -188,7 +187,7 @@ namespace castor3d
 
 			PassData( PassData && rhs )noexcept
 				: initEvent{ std::move( rhs.initEvent ) }
-				, initialised{ std::move( rhs.initialised ) }
+				, initialised{ rhs.initialised }
 				, commandBuffer{ std::move( rhs.commandBuffer ) }
 				, renderPassAtInit{ std::move( rhs.renderPassAtInit ) }
 			{

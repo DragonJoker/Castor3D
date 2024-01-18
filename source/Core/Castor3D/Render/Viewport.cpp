@@ -149,7 +149,7 @@ namespace castor3d
 	{
 	}
 
-	Viewport::Viewport( Viewport && rhs )
+	Viewport::Viewport( Viewport && rhs )noexcept
 		: m_engine{ rhs.m_engine }
 		, m_modified{ rhs.m_modified }
 		, m_left{ m_modified, rhs.m_left.value() }

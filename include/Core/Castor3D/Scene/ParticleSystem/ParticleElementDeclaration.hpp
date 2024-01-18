@@ -32,29 +32,29 @@ namespace castor3d
 			, ParticleFormat type
 			, uint32_t offset = 0u
 			, uint32_t divisor = 0u )
-			: m_name( name )
-			, m_usages( usages )
-			, m_dataType( type )
-			, m_offset( offset )
-			, m_divisor( divisor )
+			: m_name{ name }
+			, m_usages{ usages }
+			, m_dataType{ type }
+			, m_offset{ offset }
+			, m_divisor{ divisor }
 		{
 		}
 
 		//!\~english	The associated variable name.
 		//!\~french		Le nom de la variable associée.
-		castor::String m_name;
+		castor::String m_name{};
 		//!\~english	Element usage.
 		//!\~french		Utilisation de l'élément.
-		ElementUsages m_usages;
+		ElementUsages m_usages{};
 		//!\~english	Element type.
 		//!\~french		Type de l'élément.
 		ParticleFormat m_dataType{ ParticleFormat::eVec4f };
 		//!\~english	Offset in buffer.
 		//!\~french		Offset dans le tampon.
-		uint32_t m_offset{ 0u };
+		uint32_t m_offset{};
 		//!\~english	Instantiation attribute increment.
 		//!\~french		Incrément d'attribut d'instanciation.
-		uint32_t m_divisor{ 0u };
+		uint32_t m_divisor{};
 	};
 	/**
 	 *\~english

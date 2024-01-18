@@ -130,22 +130,22 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		uint8_t * getPtr()
+		uint8_t * getPtr()const noexcept
 		{
 			return m_data;
 		}
 
-		VkDeviceSize getSize()
+		VkDeviceSize getSize()const noexcept
 		{
 			return m_size;
 		}
 
-		RenderDevice const & getDevice()const
+		RenderDevice const & getDevice()const noexcept
 		{
 			return m_device;
 		}
 
-		ashes::BufferBase const & getBuffer()const
+		ashes::BufferBase const & getBuffer()const noexcept
 		{
 			return *m_buffer;
 		}
@@ -159,27 +159,27 @@ namespace castor3d
 		*	Mutateurs.
 		*/
 		/**@{*/
-		void setFirstCount( uint32_t value )
+		void setFirstCount( uint32_t value )noexcept
 		{
 			m_counts[0] = value;
 		}
 
-		void setSecondCount( uint32_t value )
+		void setSecondCount( uint32_t value )noexcept
 		{
 			m_counts[1] = value;
 		}
 
-		void setThirdCount( uint32_t value )
+		void setThirdCount( uint32_t value )noexcept
 		{
 			m_counts[2] = value;
 		}
 
-		void setFourthCount( uint32_t value )
+		void setFourthCount( uint32_t value )noexcept
 		{
 			m_counts[3] = value;
 		}
 
-		void setCount( uint32_t value )
+		void setCount( uint32_t value )noexcept
 		{
 			setFirstCount( value );
 		}

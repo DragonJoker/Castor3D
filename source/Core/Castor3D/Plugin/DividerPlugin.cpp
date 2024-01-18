@@ -12,7 +12,7 @@ namespace castor3d
 		load();
 	}
 
-	DividerPlugin::~DividerPlugin()
+	DividerPlugin::~DividerPlugin()noexcept
 	{
 		unload();
 	}

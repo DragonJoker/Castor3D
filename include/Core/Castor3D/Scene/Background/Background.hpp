@@ -19,8 +19,8 @@ namespace castor3d
 		, public castor::Named
 	{
 	public:
-		static inline uint32_t constexpr VisiblePassIndex = 0u;
-		static inline uint32_t constexpr HiddenPassIndex = 1u;
+		static uint32_t constexpr VisiblePassIndex = 0u;
+		static uint32_t constexpr HiddenPassIndex = 1u;
 
 		OnBackgroundChanged onChanged;
 		/**

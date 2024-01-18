@@ -16,11 +16,7 @@ namespace castor3d
 		struct ComponentData
 			: public IndexMapping::ComponentData
 		{
-			explicit ComponentData( Submesh & submesh
-				, VkBufferUsageFlags bufferUsageFlags )
-				: IndexMapping::ComponentData{ submesh, bufferUsageFlags }
-			{
-			}
+			using IndexMapping::ComponentData::ComponentData;
 			/**
 			 *\copydoc		castor3d::SubmeshComponentData::copy
 			 */
@@ -153,10 +149,7 @@ namespace castor3d
 			: public SubmeshComponentPlugin
 		{
 		public:
-			explicit Plugin( SubmeshComponentRegister const & submeshComponents )
-				: SubmeshComponentPlugin{ submeshComponents }
-			{
-			}
+			using SubmeshComponentPlugin::SubmeshComponentPlugin;
 
 			SubmeshComponentUPtr createComponent( Submesh & submesh )const override
 			{

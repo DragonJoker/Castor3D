@@ -498,7 +498,7 @@ namespace castor
 		int m_ignoreLevel{ 0 };
 		Path m_path;
 		String m_fileName;
-		std::map< castor::String, AdditionalParsers, std::less<> > m_additionalParsers;
+		StringMap< AdditionalParsers > m_additionalParsers;
 		std::deque< SectionId > m_sections{};
 
 	protected:

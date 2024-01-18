@@ -3,7 +3,7 @@
 namespace castor3d
 {
 	template< typename AnimableHandlerT >
-	AnimationT< AnimableHandlerT >::AnimationT( AnimableHandlerT & handler
+	inline AnimationT< AnimableHandlerT >::AnimationT( AnimableHandlerT & handler
 		, AnimationType type
 		, AnimableT< AnimableHandlerT > & animable
 		, castor::String const & name )
@@ -15,7 +15,7 @@ namespace castor3d
 	}
 
 	template< typename AnimableHandlerT >
-	AnimationT< AnimableHandlerT >::AnimationT( AnimableHandlerT & handler
+	inline AnimationT< AnimableHandlerT >::AnimationT( AnimableHandlerT & handler
 		, AnimationType type
 		, castor::String const & name )
 		: castor::Named{ name }
@@ -25,7 +25,7 @@ namespace castor3d
 	}
 	
 	template< typename AnimableHandlerT >
-	void AnimationT< AnimableHandlerT >::addKeyFrame( AnimationKeyFrameUPtr keyFrame )
+	inline void AnimationT< AnimableHandlerT >::addKeyFrame( AnimationKeyFrameUPtr keyFrame )
 	{
 		auto it = std::lower_bound( m_keyframes.begin()
 			, m_keyframes.end()
@@ -40,7 +40,7 @@ namespace castor3d
 	}
 
 	template< typename AnimableHandlerT >
-	AnimationKeyFrameArray::iterator AnimationT< AnimableHandlerT >::find( castor::Milliseconds const & time )
+	inline AnimationKeyFrameArray::iterator AnimationT< AnimableHandlerT >::find( castor::Milliseconds const & time )
 	{
 		return std::find_if( m_keyframes.begin()
 			, m_keyframes.end()
@@ -51,7 +51,7 @@ namespace castor3d
 	}
 
 	template< typename AnimableHandlerT >
-	void AnimationT< AnimableHandlerT >::findKeyFrame( castor::Milliseconds const & time
+	inline void AnimationT< AnimableHandlerT >::findKeyFrame( castor::Milliseconds const & time
 		, AnimationKeyFrameArray::iterator & prv
 		, AnimationKeyFrameArray::iterator & cur )const
 	{
@@ -75,7 +75,7 @@ namespace castor3d
 	}
 
 	template< typename AnimableHandlerT >
-	void AnimationT< AnimableHandlerT >::updateLength()
+	inline void AnimationT< AnimableHandlerT >::updateLength()
 	{
 		for ( auto const & keyFrame : m_keyframes )
 		{

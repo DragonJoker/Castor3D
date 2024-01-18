@@ -36,7 +36,7 @@ namespace castor3d
 		 *\param[in]	name				Le nom du noeud.
 		 *\param[in]	skeleton			Le squelette parent.
 		 */
-		C3D_API explicit SkeletonNode( SkeletonNodeType type
+		C3D_API SkeletonNode( SkeletonNodeType type
 			, castor::String name
 			, Skeleton & skeleton );
 
@@ -51,7 +51,7 @@ namespace castor3d
 		 *\param[in]	name				Le nom du noeud.
 		 *\param[in]	skeleton			Le squelette parent.
 		 */
-		C3D_API explicit SkeletonNode( castor::String name
+		C3D_API SkeletonNode( castor::String name
 			, Skeleton & skeleton );
 		/**
 		 *\~english
@@ -59,7 +59,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API virtual ~SkeletonNode() = default;
+		C3D_API virtual ~SkeletonNode()noexcept = default;
 
 		const Skeleton & getSkeleton()const noexcept
 		{
@@ -111,7 +111,7 @@ namespace castor3d
 		Skeleton & m_skeleton;
 		SkeletonNode * m_parent{};
 		NodeTransform m_transform{};
-		std::map< castor::String, SkeletonNode * > m_children;
+		castor::StringMap< SkeletonNode * > m_children;
 	};
 }
 

@@ -17,10 +17,6 @@ namespace castor3d
 	{
 	}
 
-	ShaderProgramCache::~ShaderProgramCache()
-	{
-	}
-
 	void ShaderProgramCache::clear()
 	{
 		auto lock( castor::makeUniqueLock( m_mutex ) );

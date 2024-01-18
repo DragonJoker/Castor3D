@@ -57,7 +57,7 @@ namespace castor3d
 	{
 	}
 
-	LayeredLpvGridConfigUbo::~LayeredLpvGridConfigUbo()
+	LayeredLpvGridConfigUbo::~LayeredLpvGridConfigUbo()noexcept
 	{
 		m_device.uboPool->putBuffer( m_ubo );
 	}

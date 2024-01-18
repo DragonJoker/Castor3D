@@ -180,10 +180,6 @@ namespace castor3d
 		CU_Require( m_info.sType == VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO );
 	}
 
-	Sampler::~Sampler()
-	{
-	}
-
 	bool Sampler::initialise( RenderDevice const & device )
 	{
 		if ( !m_initialised

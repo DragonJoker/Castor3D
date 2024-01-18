@@ -184,7 +184,7 @@ namespace castor3d
 		C3D_API void setId( Pass const & pass
 			, Submesh const & submesh
 			, SubmeshRenderNode * renderNode
-			, uint32_t id );
+			, uint32_t id )noexcept;
 		/**
 		 *\~english
 		 *\brief		Retrieves the object hash.

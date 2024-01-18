@@ -122,7 +122,7 @@ namespace castor3d
 #endif
 	}
 
-	Texture const & SsaoPass::getResult()const
+	Texture const & SsaoPass::getResult()const noexcept
 	{
 #if C3D_DebugRawPass
 		return m_rawAoPass->getResult();
@@ -131,7 +131,7 @@ namespace castor3d
 #endif
 	}
 
-	Texture const & SsaoPass::getBentNormals()const
+	Texture const & SsaoPass::getBentNormals()const noexcept
 	{
 #if C3D_DebugRawPass
 		return m_rawAoPass->getBentResult();

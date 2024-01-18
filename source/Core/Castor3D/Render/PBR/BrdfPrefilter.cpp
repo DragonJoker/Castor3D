@@ -45,13 +45,13 @@ namespace castor3d
 		// Initialise the vertex buffer.
 		auto queueData = m_device.graphicsData();
 		m_vertexBuffer = device.vertexPools->getBuffer< TexturedQuad >( 1u );
-		auto & vb = m_vertexBuffer.getBufferChunk( SubmeshData::ePositions );
-		TexturedQuad data = { { { castor::Point2f{ -1.0, -1.0 }, castor::Point2f{ 0.0, 0.0 } }
-			, { castor::Point2f{ -1.0, +1.0 }, castor::Point2f{ 0.0, 1.0 } }
-			, { castor::Point2f{ +1.0, -1.0 }, castor::Point2f{ 1.0, 0.0 } }
-			, { castor::Point2f{ +1.0, -1.0 }, castor::Point2f{ 1.0, 0.0 } }
-			, { castor::Point2f{ -1.0, +1.0 }, castor::Point2f{ 0.0, 1.0 } }
-			, { castor::Point2f{ +1.0, +1.0 }, castor::Point2f{ 1.0, 1.0 } } } };
+		auto const & vb = m_vertexBuffer.getBufferChunk( SubmeshData::ePositions );
+		TexturedQuad data{ { TexturedQuad::Vertex{ castor::Point2f{ -1.0, -1.0 }, castor::Point2f{ 0.0, 0.0 } }
+			, TexturedQuad::Vertex{ castor::Point2f{ -1.0, +1.0 }, castor::Point2f{ 0.0, 1.0 } }
+			, TexturedQuad::Vertex{ castor::Point2f{ +1.0, -1.0 }, castor::Point2f{ 1.0, 0.0 } }
+			, TexturedQuad::Vertex{ castor::Point2f{ +1.0, -1.0 }, castor::Point2f{ 1.0, 0.0 } }
+			, TexturedQuad::Vertex{ castor::Point2f{ -1.0, +1.0 }, castor::Point2f{ 0.0, 1.0 } }
+			, TexturedQuad::Vertex{ castor::Point2f{ +1.0, +1.0 }, castor::Point2f{ 1.0, 1.0 } } } };
 		{
 			InstantDirectUploadData uploader{ *queueData->queue
 				, m_device

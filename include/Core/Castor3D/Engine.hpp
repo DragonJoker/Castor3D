@@ -402,7 +402,7 @@ namespace castor3d
 		 *\param[in]	timer		Le timer à désenregistrer.
 		 */
 		C3D_API void unregisterTimer( castor::String const & category
-			, FramePassTimer & timer );
+			, FramePassTimer & timer )noexcept;
 		/**
 		 *\~english
 		 *\brief		Registers a Lighting Model.
@@ -602,7 +602,7 @@ namespace castor3d
 		 *\param[in]		set		L'indice de descriptor set.
 		 */
 		C3D_API void declareSpecificsShaderBuffers( sdw::ShaderWriter & writer
-			, std::map< std::string, castor3d::shader::BufferBaseUPtr, std::less<> > & buffers
+			, castor::StringMap< castor3d::shader::BufferBaseUPtr > & buffers
 			, uint32_t & binding
 			, uint32_t set )const;
 		/**
@@ -867,7 +867,7 @@ namespace castor3d
 			return m_lightsSampler;
 		}
 
-		std::map< castor::String, castor::AdditionalParsers > const & getAdditionalParsers()const noexcept
+		auto const & getAdditionalParsers()const noexcept
 		{
 			return m_additionalParsers;
 		}
@@ -882,12 +882,12 @@ namespace castor3d
 			return m_renderLoop != nullptr;
 		}
 
-		RenderLoop & getRenderLoop()const
+		RenderLoop & getRenderLoop()const noexcept
 		{
 			return *m_renderLoop;
 		}
 
-		bool isThreaded()
+		bool isThreaded()const noexcept
 		{
 			return m_threaded;
 		}
@@ -967,7 +967,7 @@ namespace castor3d
 			return m_maxImageSize;
 		}
 
-		std::map< castor::String, RenderWindow * > const & getRenderWindows()const noexcept
+		auto const & getRenderWindows()const noexcept
 		{
 			return m_renderWindows;
 		}
@@ -1045,14 +1045,14 @@ namespace castor3d
 		}
 
 		template< typename ComponentT >
-		PassComponentID registerPassComponent( CreatePassComponentPlugin createPlugin = &ComponentT::createPlugin )
+		PassComponentID registerPassComponent( CreatePassComponentPlugin const & createPlugin = &ComponentT::createPlugin )
 		{
 			return registerPassComponent( ComponentT::TypeName
 				, createPlugin( *m_passComponents ) );
 		}
 
 		template< typename ComponentT >
-		SubmeshComponentID registerSubmeshComponent( CreateSubmeshComponentPlugin createPlugin = &ComponentT::createPlugin )
+		SubmeshComponentID registerSubmeshComponent( CreateSubmeshComponentPlugin const & createPlugin = &ComponentT::createPlugin )
 		{
 			return registerSubmeshComponent( ComponentT::TypeName
 				, createPlugin( *m_submeshComponents ) );
@@ -1141,7 +1141,7 @@ namespace castor3d
 		}
 
 		void removeImage( castor::ImageCache::ElementKeyT const & key
-			, bool cleanup = false )
+			, bool cleanup = false )noexcept
 		{
 			getImageCache().remove( key, cleanup );
 		}
@@ -1156,7 +1156,7 @@ namespace castor3d
 			return getImageCache().has( key );
 		}
 
-		castor::ImageCache::ElementObsT tryFindImage( castor::ImageCache::ElementKeyT const & key )const
+		castor::ImageCache::ElementObsT tryFindImage( castor::ImageCache::ElementKeyT const & key )const noexcept
 		{
 			return getImageCache().tryFind( key );
 		}
@@ -1200,14 +1200,14 @@ namespace castor3d
 		DECLARE_CACHE_MEMBER( scene, Scene );
 		DECLARE_CACHE_MEMBER( listener, FrameListener );
 		FrameListenerRPtr m_defaultListener{};
-		std::map< castor::String, RenderWindow * > m_renderWindows;
+		castor::StringMap< RenderWindow * > m_renderWindows;
 		std::map< RenderWindow const *, UserInputListenerUPtr > m_windowInputListeners;
 		UserInputListenerUPtr m_userInputListener;
 		DECLARE_CACHE_MEMBER_MIN( target, RenderTarget );
 		DECLARE_CACHE_MEMBER_MIN( texture, TextureUnit );
 		castor::FontCache m_fontCache;
 		castor::ImageCache m_imageCache;
-		std::map< castor::String, castor::AdditionalParsers > m_additionalParsers;
+		castor::StringMap< castor::AdditionalParsers > m_additionalParsers;
 		MeshFactoryUPtr m_meshFactory;
 		ImporterFileFactoryUPtr m_importerFileFactory;
 		ParticleFactoryUPtr m_particleFactory;
@@ -1224,8 +1224,8 @@ namespace castor3d
 		LightingModelFactoryUPtr m_lightingModelFactory;
 		shader::BackgroundModelFactory m_backgroundModelFactory;
 		SceneUPtr m_loadingScene;
-		std::unordered_map< castor::String, castor::UniquePtr< RenderPassRegisterInfo > > m_passRenderPassTypes;
-		std::unordered_map< castor::String, std::pair< RenderPassTypeID, Parameters > > m_renderPassTypes;
+		castor::UnorderedStringMap< castor::UniquePtr< RenderPassRegisterInfo > > m_passRenderPassTypes;
+		castor::UnorderedStringMap< std::pair< RenderPassTypeID, Parameters > > m_renderPassTypes;
 		castor::LengthUnit m_unit{ castor::LengthUnit::eMetre };
 		mutable std::mutex m_allocMutex;
 		std::unordered_map< std::thread::id, std::unique_ptr< ast::ShaderAllocator > > m_shaderAllocators;

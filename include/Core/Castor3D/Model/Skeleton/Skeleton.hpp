@@ -52,7 +52,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API ~Skeleton()override;
+		C3D_API ~Skeleton()noexcept override;
 		/**
 		 *\~english
 		 *\brief		Creates a node.
@@ -161,9 +161,8 @@ namespace castor3d
 
 		std::vector< castor::BoundingBox > const & getContainers( Mesh & mesh )const
 		{
-			auto it = m_boxes.find( &mesh );
-
-			if ( it != m_boxes.end() )
+			if ( auto it = m_boxes.find( &mesh );
+				it != m_boxes.end() )
 			{
 				return it->second;
 			}

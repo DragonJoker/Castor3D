@@ -32,7 +32,7 @@ namespace castor3d
 			, crg::RunnablePass::IsEnabledCallback isEnabled );
 		void accept( ConfigurationVisitorBase & visitor )const;
 
-		crg::FramePass const & getLastPass()const
+		crg::FramePass const & getLastPass()const noexcept
 		{
 			return *m_lastPass;
 		}

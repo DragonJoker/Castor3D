@@ -89,7 +89,7 @@ namespace c3d_assimp
 		template< typename IterT, typename TypeT >
 		static std::pair< IterT, castor::String > replaceIter( castor::String const & name
 			, IterT iter
-			, std::map< castor::String, TypeT > & map )
+			, castor::StringMap< TypeT > & map )
 		{
 			auto common = getLongestCommonSubstring( name, iter->first );
 
@@ -124,8 +124,8 @@ namespace c3d_assimp
 
 		static bool isSkeletonNode( aiNode const & node
 			, castor::String const & aiNodeName
-			, std::map< castor::String, castor::Matrix4x4f > const & bonesNodes
-			, std::map< castor::String, AssimpSkeletonData > const & skeletons )
+			, castor::StringMap< castor::Matrix4x4f > const & bonesNodes
+			, castor::StringMap< AssimpSkeletonData > const & skeletons )
 		{
 			if ( bonesNodes.find( aiNodeName ) != bonesNodes.end() )
 			{
@@ -134,7 +134,7 @@ namespace c3d_assimp
 
 			return skeletons.end() != std::find_if( skeletons.begin()
 				, skeletons.end()
-				, [&aiNodeName]( std::map< castor::String, AssimpSkeletonData >::value_type const & lookup )
+				, [&aiNodeName]( castor::StringMap< AssimpSkeletonData >::value_type const & lookup )
 				{
 					return lookup.second.rootNode->FindNode( aiNodeName.c_str() ) != nullptr;
 				} );
@@ -210,12 +210,12 @@ namespace c3d_assimp
 			return { nullptr, nullptr };
 		}
 
-		static std::map< castor::String, aiMeshMorphAnim const * > findMorphAnims( uint32_t aiMeshIndex
+		static castor::StringMap< aiMeshMorphAnim const * > findMorphAnims( uint32_t aiMeshIndex
 			, uint32_t aiNumAnimMeshes
 			, aiNode const & rootNode
 			, castor::ArrayView< aiAnimation * > animations )
 		{
-			std::map< castor::String, aiMeshMorphAnim const * > result;
+			castor::StringMap< aiMeshMorphAnim const * > result;
 
 			for ( auto anim : animations )
 			{
@@ -251,11 +251,11 @@ namespace c3d_assimp
 		}
 
 		static auto findNodeMesh( uint32_t meshIndex
-			, std::map< castor::String, AssimpMeshData > const & meshes )
+			, castor::StringMap< AssimpMeshData > const & meshes )
 		{
 			return std::find_if( meshes.begin()
 				, meshes.end()
-				, [&meshIndex]( std::map< castor::String, AssimpMeshData >::value_type const & lookup )
+				, [&meshIndex]( castor::StringMap< AssimpMeshData >::value_type const & lookup )
 				{
 					return lookup.second.submeshes.end() != std::find_if( lookup.second.submeshes.begin()
 						, lookup.second.submeshes.end()
@@ -556,7 +556,7 @@ namespace c3d_assimp
 			{
 				auto it = std::find_if( m_sceneData.meshes.begin()
 					, m_sceneData.meshes.end()
-					, [mesh]( std::map< castor::String, AssimpMeshData >::value_type const & lookup )
+					, [mesh]( castor::StringMap< AssimpMeshData >::value_type const & lookup )
 					{
 						return mesh == &lookup.second;
 					} );
@@ -854,7 +854,7 @@ namespace c3d_assimp
 						skelNode = it->second;
 						regIt = std::find_if( m_sceneData.meshes.begin()
 							, m_sceneData.meshes.end()
-							, [&skelNode]( std::map< castor::String, AssimpMeshData >::value_type const & lookup )
+							, [&skelNode]( castor::StringMap< AssimpMeshData >::value_type const & lookup )
 							{
 								return skelNode == lookup.second.skelNode;
 							} );

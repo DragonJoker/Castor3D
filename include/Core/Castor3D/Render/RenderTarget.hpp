@@ -70,7 +70,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API ~RenderTarget();
+		C3D_API ~RenderTarget()noexcept;
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, CPU wise.
@@ -411,6 +411,11 @@ namespace castor3d
 		{
 			return m_clustersConfig;
 		}
+
+		FrustumClusters * getFrustumClusters()const noexcept
+		{
+			return m_frustumClusters.get();
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -444,11 +449,6 @@ namespace castor3d
 		TargetDebugConfig & getDebugConfig()noexcept
 		{
 			return m_debugConfig;
-		}
-
-		FrustumClusters * getFrustumClusters()const noexcept
-		{
-			return m_frustumClusters.get();
 		}
 
 		ClustersConfig & getClustersConfig()noexcept

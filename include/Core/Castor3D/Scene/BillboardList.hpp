@@ -385,27 +385,27 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline castor::Point3f const & getAt( uint32_t index )const
+		castor::Point3f const & getAt( uint32_t index )const
 		{
 			return m_arrayPositions[index];
 		}
 
-		inline castor::Point3fArrayIt begin()
+		castor::Point3fArrayIt begin()
 		{
 			return m_arrayPositions.begin();
 		}
 
-		inline castor::Point3fArrayConstIt begin()const
+		castor::Point3fArrayConstIt begin()const
 		{
 			return m_arrayPositions.begin();
 		}
 
-		inline castor::Point3fArrayIt end()
+		castor::Point3fArrayIt end()
 		{
 			return m_arrayPositions.end();
 		}
 
-		inline castor::Point3fArrayConstIt end()const
+		castor::Point3fArrayConstIt end()const
 		{
 			return m_arrayPositions.end();
 		}
@@ -419,7 +419,7 @@ namespace castor3d
 		*	Mutateurs.
 		*/
 		/**@{*/
-		inline void setAt( uint32_t index, castor::Point3f const & position )
+		void setAt( uint32_t index, castor::Point3f const & position )
 		{
 			m_needUpdate = true;
 			m_arrayPositions[index] = position;

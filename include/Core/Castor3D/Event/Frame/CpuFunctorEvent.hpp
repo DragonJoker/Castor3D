@@ -32,7 +32,7 @@ namespace castor3d
 		CpuFunctorEvent( CpuEventType type
 			, Functor functor )
 			: CpuFrameEvent{ type }
-			, m_functor{ functor }
+			, m_functor{ std::move( functor ) }
 		{
 		}
 

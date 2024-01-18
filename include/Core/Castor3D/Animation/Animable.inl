@@ -66,7 +66,8 @@ namespace castor3d
 
 			while ( it->second )
 			{
-				auto name = animation->getName() + castor::string::toString( index++ );
+				auto name = animation->getName() + castor::string::toString( index );
+				++index;
 				it = m_animations.emplace( name, nullptr ).first;
 			}
 		}

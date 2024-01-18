@@ -522,7 +522,7 @@ namespace castor3d
 #endif
 	}
 
-	RenderTechnique::~RenderTechnique()
+	RenderTechnique::~RenderTechnique()noexcept
 	{
 		if ( m_clearLpvRunnable )
 		{

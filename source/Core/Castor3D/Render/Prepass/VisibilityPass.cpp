@@ -65,7 +65,7 @@ namespace castor3d
 		doAccept( visitor );
 	}
 
-	ShaderFlags VisibilityPass::getShaderFlags()const
+	ShaderFlags VisibilityPass::getShaderFlags()const noexcept
 	{
 		return ShaderFlag::eWorldSpace
 			| ShaderFlag::eTangentSpace

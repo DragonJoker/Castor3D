@@ -54,7 +54,7 @@ namespace castor3d
 	 */
 	static inline uint8_t const * getBuffer( bool const & value )
 	{
-		return reinterpret_cast< uint8_t const * >( &value );
+		return ByteCPtr( &value );
 	}
 	/**
 	 *\~english
@@ -68,7 +68,7 @@ namespace castor3d
 	 */
 	static inline uint8_t * getBuffer( bool & value )
 	{
-		return reinterpret_cast< uint8_t * >( &value );
+		return BytePtr( &value );
 	}
 	/**
 	 *\~english
@@ -82,7 +82,7 @@ namespace castor3d
 	 */
 	static inline uint8_t const * getBuffer( int8_t const & value )
 	{
-		return reinterpret_cast< uint8_t const * >( &value );
+		return ByteCPtr( &value );
 	}
 	/**
 	 *\~english
@@ -96,7 +96,7 @@ namespace castor3d
 	 */
 	static inline uint8_t * getBuffer( int8_t & value )
 	{
-		return reinterpret_cast< uint8_t * >( &value );
+		return BytePtr( &value );
 	}
 	/**
 	 *\~english
@@ -138,7 +138,7 @@ namespace castor3d
 	 */
 	static inline uint8_t const * getBuffer( int16_t const & value )
 	{
-		return reinterpret_cast< uint8_t const * >( &value );
+		return ByteCPtr( &value );
 	}
 	/**
 	 *\~english
@@ -152,7 +152,7 @@ namespace castor3d
 	 */
 	static inline uint8_t * getBuffer( int16_t & value )
 	{
-		return reinterpret_cast< uint8_t * >( &value );
+		return BytePtr( &value );
 	}
 	/**
 	 *\~english
@@ -166,7 +166,7 @@ namespace castor3d
 	 */
 	static inline uint8_t const * getBuffer( uint16_t const & value )
 	{
-		return reinterpret_cast< uint8_t const * >( &value );
+		return ByteCPtr( &value );
 	}
 	/**
 	 *\~english
@@ -180,7 +180,7 @@ namespace castor3d
 	 */
 	static inline uint8_t * getBuffer( uint16_t & value )
 	{
-		return reinterpret_cast< uint8_t * >( &value );
+		return BytePtr( &value );
 	}
 	/**
 	 *\~english
@@ -194,7 +194,7 @@ namespace castor3d
 	 */
 	static inline uint8_t const * getBuffer( int32_t const & value )
 	{
-		return reinterpret_cast< uint8_t const * >( &value );
+		return ByteCPtr( &value );
 	}
 	/**
 	 *\~english
@@ -208,7 +208,7 @@ namespace castor3d
 	 */
 	static inline uint8_t * getBuffer( int32_t & value )
 	{
-		return reinterpret_cast< uint8_t * >( &value );
+		return BytePtr( &value );
 	}
 	/**
 	 *\~english
@@ -222,7 +222,7 @@ namespace castor3d
 	 */
 	static inline uint8_t const * getBuffer( uint32_t const & value )
 	{
-		return reinterpret_cast< uint8_t const * >( &value );
+		return ByteCPtr( &value );
 	}
 	/**
 	 *\~english
@@ -236,7 +236,7 @@ namespace castor3d
 	 */
 	static inline uint8_t * getBuffer( uint32_t & value )
 	{
-		return reinterpret_cast< uint8_t * >( &value );
+		return BytePtr( &value );
 	}
 	/**
 	 *\~english
@@ -250,7 +250,7 @@ namespace castor3d
 	 */
 	static inline uint8_t const * getBuffer( int64_t const & value )
 	{
-		return reinterpret_cast< uint8_t const * >( &value );
+		return ByteCPtr( &value );
 	}
 	/**
 	 *\~english
@@ -264,7 +264,7 @@ namespace castor3d
 	 */
 	static inline uint8_t * getBuffer( int64_t & value )
 	{
-		return reinterpret_cast< uint8_t * >( &value );
+		return BytePtr( &value );
 	}
 	/**
 	 *\~english
@@ -278,7 +278,7 @@ namespace castor3d
 	 */
 	static inline uint8_t const * getBuffer( uint64_t const & value )
 	{
-		return reinterpret_cast< uint8_t const * >( &value );
+		return ByteCPtr( &value );
 	}
 	/**
 	 *\~english
@@ -292,7 +292,7 @@ namespace castor3d
 	 */
 	static inline uint8_t * getBuffer( uint64_t & value )
 	{
-		return reinterpret_cast< uint8_t * >( &value );
+		return BytePtr( &value );
 	}
 	/**
 	 *\~english
@@ -306,7 +306,7 @@ namespace castor3d
 	 */
 	static inline uint8_t const * getBuffer( float const & value )
 	{
-		return reinterpret_cast< uint8_t const * >( &value );
+		return ByteCPtr( &value );
 	}
 	/**
 	 *\~english
@@ -320,7 +320,7 @@ namespace castor3d
 	 */
 	static inline uint8_t * getBuffer( float & value )
 	{
-		return reinterpret_cast< uint8_t * >( &value );
+		return BytePtr( &value );
 	}
 	/**
 	 *\~english
@@ -334,7 +334,7 @@ namespace castor3d
 	 */
 	static inline uint8_t const * getBuffer( double const & value )
 	{
-		return reinterpret_cast< uint8_t const * >( &value );
+		return ByteCPtr( &value );
 	}
 	/**
 	 *\~english
@@ -348,7 +348,7 @@ namespace castor3d
 	 */
 	static inline uint8_t * getBuffer( double & value )
 	{
-		return reinterpret_cast< uint8_t * >( &value );
+		return BytePtr( &value );
 	}
 	/**
 	 *\~english
@@ -362,7 +362,7 @@ namespace castor3d
 	 */
 	static inline uint8_t const * getBuffer( long double const & value )
 	{
-		return reinterpret_cast< uint8_t const * >( &value );
+		return ByteCPtr( &value );
 	}
 	/**
 	 *\~english
@@ -376,7 +376,7 @@ namespace castor3d
 	 */
 	static inline uint8_t * getBuffer( long double & value )
 	{
-		return reinterpret_cast< uint8_t * >( &value );
+		return BytePtr( &value );
 	}
 	/**
 	 *\~english
@@ -406,7 +406,7 @@ namespace castor3d
 	template< typename T >
 	static inline uint8_t const * getBuffer( std::vector< T > const & value )
 	{
-		return reinterpret_cast< uint8_t const * >( value.data() );
+		return ByteCPtr( value.data() );
 	}
 	/**
 	 *\~english
@@ -421,7 +421,7 @@ namespace castor3d
 	template< typename T >
 	static inline uint8_t * getBuffer( std::vector< T > & value )
 	{
-		return reinterpret_cast< uint8_t * >( value.data() );
+		return BytePtr( value.data() );
 	}
 	/**
 	 *\~english
@@ -451,7 +451,7 @@ namespace castor3d
 	template< typename T, size_t Count >
 	static inline uint8_t const * getBuffer( std::array< T, Count > const & value )
 	{
-		return reinterpret_cast< uint8_t const * >( value.data() );
+		return ByteCPtr( value.data() );
 	}
 	/**
 	 *\~english
@@ -466,7 +466,7 @@ namespace castor3d
 	template< typename T, size_t Count >
 	static inline uint8_t * getBuffer( std::array< T, Count > & value )
 	{
-		return reinterpret_cast< uint8_t * >( value.data() );
+		return BytePtr( value.data() );
 	}
 	/**
 	 *\~english
@@ -479,7 +479,7 @@ namespace castor3d
 	 *\return		La taille (sizeof( value ) pour les types basiques).
 	 */
 	template< typename T, size_t Count >
-	static inline size_t getDataSize( std::array< T, Count > const & value )
+	static inline size_t getDataSize( std::array< T, Count > const & /*value*/ )
 	{
 		return Count * sizeof( T );
 	}
@@ -496,7 +496,7 @@ namespace castor3d
 	template< typename T, uint32_t Count >
 	static inline uint8_t const * getBuffer( castor::Point< T, Count > const & value )
 	{
-		return reinterpret_cast< uint8_t const * >( value.constPtr() );
+		return ByteCPtr( value.constPtr() );
 	}
 	/**
 	 *\~english
@@ -511,7 +511,7 @@ namespace castor3d
 	template< typename T, uint32_t Count >
 	static inline uint8_t * getBuffer( castor::Point< T, Count > & value )
 	{
-		return reinterpret_cast< uint8_t * >( value.ptr() );
+		return BytePtr( value.ptr() );
 	}
 	/**
 	 *\~english
@@ -524,7 +524,7 @@ namespace castor3d
 	 *\return		La taille (sizeof( value ) pour les types basiques).
 	 */
 	template< typename T, uint32_t Count >
-	static inline size_t getDataSize( castor::Point< T, Count > const & value )
+	static inline size_t getDataSize( castor::Point< T, Count > const & /*value*/ )
 	{
 		return Count * sizeof( T );
 	}
@@ -541,7 +541,7 @@ namespace castor3d
 	template< typename T, uint32_t Count >
 	static inline uint8_t const * getBuffer( castor::Coords< T, Count > const & value )
 	{
-		return reinterpret_cast< uint8_t const * >( value.constPtr() );
+		return ByteCPtr( value.constPtr() );
 	}
 	/**
 	 *\~english
@@ -556,7 +556,7 @@ namespace castor3d
 	template< typename T, uint32_t Count >
 	static inline uint8_t * getBuffer( castor::Coords< T, Count > & value )
 	{
-		return reinterpret_cast< uint8_t * >( value.ptr() );
+		return BytePtr( value.ptr() );
 	}
 	/**
 	 *\~english
@@ -569,7 +569,7 @@ namespace castor3d
 	 *\return		La taille (sizeof( value ) pour les types basiques).
 	 */
 	template< typename T, uint32_t Count >
-	static inline size_t getDataSize( castor::Coords< T, Count > const & value )
+	static inline size_t getDataSize( castor::Coords< T, Count > const & /*value*/ )
 	{
 		return Count * sizeof( T );
 	}
@@ -586,7 +586,7 @@ namespace castor3d
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	static inline uint8_t const * getBuffer( castor::Matrix< T, Columns, Rows > const & value )
 	{
-		return reinterpret_cast< uint8_t const * >( value.constPtr() );
+		return ByteCPtr( value.constPtr() );
 	}
 	/**
 	 *\~english
@@ -601,7 +601,7 @@ namespace castor3d
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	static inline uint8_t * getBuffer( castor::Matrix< T, Columns, Rows > & value )
 	{
-		return reinterpret_cast< uint8_t * >( value.ptr() );
+		return BytePtr( value.ptr() );
 	}
 	/**
 	 *\~english
@@ -614,7 +614,7 @@ namespace castor3d
 	 *\return		La taille (sizeof( value ) pour les types basiques).
 	 */
 	template< typename T, uint32_t Columns, uint32_t Rows >
-	static inline size_t getDataSize( castor::Matrix< T, Columns, Rows > const & value )
+	static inline size_t getDataSize( castor::Matrix< T, Columns, Rows > const & /*value*/ )
 	{
 		return Columns * Rows * sizeof( T );
 	}
@@ -631,7 +631,7 @@ namespace castor3d
 	template< typename T, uint32_t Count >
 	static inline uint8_t const * getBuffer( castor::SquareMatrix< T, Count > const & value )
 	{
-		return reinterpret_cast< uint8_t const * >( value.constPtr() );
+		return ByteCPtr( value.constPtr() );
 	}
 	/**
 	 *\~english
@@ -646,7 +646,7 @@ namespace castor3d
 	template< typename T, uint32_t Count >
 	static inline uint8_t * getBuffer( castor::SquareMatrix< T, Count > & value )
 	{
-		return reinterpret_cast< uint8_t * >( value.ptr() );
+		return BytePtr( value.ptr() );
 	}
 	/**
 	 *\~english
@@ -659,7 +659,7 @@ namespace castor3d
 	 *\return		La taille (sizeof( value ) pour les types basiques).
 	 */
 	template< typename T, uint32_t Count >
-	static inline size_t getDataSize( castor::SquareMatrix< T, Count > const & value )
+	static inline size_t getDataSize( castor::SquareMatrix< T, Count > const & /*value*/ )
 	{
 		return Count * Count * sizeof( T );
 	}
@@ -675,7 +675,7 @@ namespace castor3d
 	 */
 	static inline uint8_t const * getBuffer( castor::RgbColour const & value )
 	{
-		return reinterpret_cast< uint8_t const * >( value.constPtr() );
+		return ByteCPtr( value.constPtr() );
 	}
 	/**
 	 *\~english
@@ -689,7 +689,7 @@ namespace castor3d
 	 */
 	static inline uint8_t * getBuffer( castor::RgbColour & value )
 	{
-		return reinterpret_cast< uint8_t * >( value.ptr() );
+		return BytePtr( value.ptr() );
 	}
 	/**
 	 *\~english
@@ -701,7 +701,7 @@ namespace castor3d
 	 *\param[in]	value	La valeur.
 	 *\return		La taille (sizeof( value ) pour les types basiques).
 	 */
-	static inline size_t getDataSize( castor::RgbColour const & value )
+	static inline size_t getDataSize( castor::RgbColour const & /*value*/ )
 	{
 		return 3u * sizeof( float );
 	}
@@ -717,7 +717,7 @@ namespace castor3d
 	 */
 	static inline uint8_t const * getBuffer( castor::RgbaColour const & value )
 	{
-		return reinterpret_cast< uint8_t const * >( value.constPtr() );
+		return ByteCPtr( value.constPtr() );
 	}
 	/**
 	 *\~english
@@ -731,7 +731,7 @@ namespace castor3d
 	 */
 	static inline uint8_t * getBuffer( castor::RgbaColour & value )
 	{
-		return reinterpret_cast< uint8_t * >( value.ptr() );
+		return BytePtr( value.ptr() );
 	}
 	/**
 	 *\~english
@@ -743,7 +743,7 @@ namespace castor3d
 	 *\param[in]	value	La valeur.
 	 *\return		La taille (sizeof( value ) pour les types basiques).
 	 */
-	static inline size_t getDataSize( castor::RgbaColour const & value )
+	static inline size_t getDataSize( castor::RgbaColour const & /*value*/ )
 	{
 		return 4u * sizeof( float );
 	}
@@ -759,7 +759,7 @@ namespace castor3d
 	 */
 	static inline uint8_t const * getBuffer( castor::Size const & value )
 	{
-		return reinterpret_cast< uint8_t const * >( value.constPtr() );
+		return ByteCPtr( value.constPtr() );
 	}
 	/**
 	 *\~english
@@ -773,7 +773,7 @@ namespace castor3d
 	 */
 	static inline uint8_t * getBuffer( castor::Size & value )
 	{
-		return reinterpret_cast< uint8_t * >( value.ptr() );
+		return BytePtr( value.ptr() );
 	}
 	/**
 	 *\~english
@@ -785,7 +785,7 @@ namespace castor3d
 	 *\param[in]	value	La valeur.
 	 *\return		La taille (sizeof( value ) pour les types basiques).
 	 */
-	static inline size_t getDataSize( castor::Size const & value )
+	static inline size_t getDataSize( castor::Size const & /*value*/ )
 	{
 		return 2 * sizeof( uint32_t );
 	}
@@ -801,7 +801,7 @@ namespace castor3d
 	 */
 	static inline uint8_t const * getBuffer( castor::Position const & value )
 	{
-		return reinterpret_cast< uint8_t const * >( value.constPtr() );
+		return ByteCPtr( value.constPtr() );
 	}
 	/**
 	 *\~english
@@ -815,7 +815,7 @@ namespace castor3d
 	 */
 	static inline uint8_t * getBuffer( castor::Position & value )
 	{
-		return reinterpret_cast< uint8_t * >( value.ptr() );
+		return BytePtr( value.ptr() );
 	}
 	/**
 	 *\~english
@@ -827,7 +827,7 @@ namespace castor3d
 	 *\param[in]	value	La valeur.
 	 *\return		La taille (sizeof( value ) pour les types basiques).
 	 */
-	static inline size_t getDataSize( castor::Position const & value )
+	static inline size_t getDataSize( castor::Position const & /*value*/ )
 	{
 		return 2 * sizeof( int32_t );
 	}
@@ -844,7 +844,7 @@ namespace castor3d
 	template< typename T >
 	static inline uint8_t const * getBuffer( castor::QuaternionT< T > const & value )
 	{
-		return reinterpret_cast< uint8_t const * >( value.constPtr() );
+		return ByteCPtr( value.constPtr() );
 	}
 	/**
 	 *\~english
@@ -859,7 +859,7 @@ namespace castor3d
 	template< typename T >
 	static inline uint8_t * getBuffer( castor::QuaternionT< T > & value )
 	{
-		return reinterpret_cast< uint8_t * >( value.ptr() );
+		return BytePtr( value.ptr() );
 	}
 	/**
 	 *\~english
@@ -872,7 +872,7 @@ namespace castor3d
 	 *\return		La taille (sizeof( value ) pour les types basiques).
 	 */
 	template< typename T >
-	static inline size_t getDataSize( castor::QuaternionT< T > const & value )
+	static inline size_t getDataSize( castor::QuaternionT< T > const & /*value*/ )
 	{
 		return 4 * sizeof( T );
 	}
@@ -884,7 +884,7 @@ namespace castor3d
 	 *\brief			Met la valeur donnée en big endian.
 	 *\param[in,out]	value	La valeur.
 	 */
-	static inline void prepareChunkData( bool & value )
+	static inline void prepareChunkData( bool const & /*value*/ )
 	{
 		// noop
 	}
@@ -896,7 +896,7 @@ namespace castor3d
 	 *\brief			Met la valeur donnée en big endian.
 	 *\param[in,out]	value	La valeur.
 	 */
-	static inline void prepareChunkData( int8_t & value )
+	static inline void prepareChunkData( int8_t const & /*value*/ )
 	{
 		// noop
 	}
@@ -908,7 +908,7 @@ namespace castor3d
 	 *\brief			Met la valeur donnée en big endian.
 	 *\param[in,out]	value	La valeur.
 	 */
-	static inline void prepareChunkData( uint8_t & value )
+	static inline void prepareChunkData( uint8_t const & /*value*/ )
 	{
 		// noop
 	}

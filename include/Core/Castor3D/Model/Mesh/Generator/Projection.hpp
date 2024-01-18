@@ -46,18 +46,12 @@ namespace castor3d
 			, Parameters const & parameters )override;
 
 	private:
-		Pattern< castor::Point3f > m_pattern;
-		castor::Point3f m_axis;
-		float m_depth;
-		bool m_closed;
-		uint32_t m_nbFaces;
-		friend std::ostream & operator <<( std::ostream & o, Projection const & c );
+		Pattern< castor::Point3f > m_pattern{};
+		castor::Point3f m_axis{};
+		float m_depth{};
+		bool m_closed{};
+		uint32_t m_nbFaces{};
 	};
-
-	inline std::ostream & operator <<( std::ostream & o, Projection const & c )
-	{
-		return o << "Projection( (" << c.m_axis[0] << "," << c.m_axis[1] << "," << c.m_axis[2] << ")," << c.m_depth << "," << c.m_closed << "," << c.m_nbFaces << ")";
-	}
 }
 
 #endif

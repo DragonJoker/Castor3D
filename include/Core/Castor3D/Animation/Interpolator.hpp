@@ -12,13 +12,13 @@ namespace castor3d
 	class Interpolator
 	{
 	protected:
-		Interpolator( InterpolatorType type )
+		explicit Interpolator( InterpolatorType type )
 			: m_type{ type }
 		{
 		}
 
 	public:
-		C3D_API virtual ~Interpolator() = default;
+		C3D_API virtual ~Interpolator()noexcept = default;
 		/**
 		 *\~english
 		 *\brief		Interpolation function.

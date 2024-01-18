@@ -102,12 +102,7 @@ namespace castor3d
 		return m_initialised;
 	}
 
-	inline Mesh const & Submesh::getParent()const noexcept
-	{
-		return *getOwner();
-	}
-
-	inline Mesh & Submesh::getParent()noexcept
+	inline Mesh & Submesh::getParent()const noexcept
 	{
 		return *getOwner();
 	}

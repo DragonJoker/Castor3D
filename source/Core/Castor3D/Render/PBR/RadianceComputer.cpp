@@ -269,7 +269,7 @@ namespace castor3d
 		cmd.end();
 	}
 
-	RadianceComputer::~RadianceComputer()
+	RadianceComputer::~RadianceComputer()noexcept
 	{
 		auto & dstTexture = m_result;
 
@@ -294,7 +294,7 @@ namespace castor3d
 			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT } };
 	}
 
-	ashes::Sampler const & RadianceComputer::getSampler()const
+	ashes::Sampler const & RadianceComputer::getSampler()const noexcept
 	{
 		return m_sampler->getSampler();
 	}

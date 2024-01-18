@@ -22,10 +22,7 @@ namespace castor3d
 		struct ComponentData
 			: public SubmeshComponentData
 		{
-			explicit ComponentData( Submesh & submesh )
-				: SubmeshComponentData{ submesh }
-			{
-			}
+			using SubmeshComponentData::SubmeshComponentData;
 			/**
 			 *\copydoc		castor3d::SubmeshComponentData::gather
 			 */
@@ -123,10 +120,7 @@ namespace castor3d
 			: public SubmeshComponentPlugin
 		{
 		public:
-			explicit Plugin( SubmeshComponentRegister const & submeshComponents )
-				: SubmeshComponentPlugin{ submeshComponents }
-			{
-			}
+			using SubmeshComponentPlugin::SubmeshComponentPlugin;
 
 			SubmeshComponentUPtr createComponent( Submesh & submesh )const override
 			{

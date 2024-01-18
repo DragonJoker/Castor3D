@@ -34,7 +34,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API ~RenderLoopAsync()override;
+		C3D_API ~RenderLoopAsync()noexcept override;
 		/**
 		 *\~english
 		 *\brief		Retrieves the render start status.

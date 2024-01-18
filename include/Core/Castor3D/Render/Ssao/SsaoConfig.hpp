@@ -69,7 +69,7 @@ namespace castor3d
 		float bendStepSize{ 0.5f };
 	};
 
-	inline bool operator==( SsaoConfig const & lhs, SsaoConfig const & rhs )
+	inline bool operator==( SsaoConfig const & lhs, SsaoConfig const & rhs )noexcept
 	{
 		return lhs.enabled == rhs.enabled
 			&& lhs.logMaxOffset == rhs.logMaxOffset

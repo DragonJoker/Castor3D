@@ -209,7 +209,7 @@ namespace castor3d::shader
 
 	private:
 		PassShaders & m_passShaders;
-		std::map< std::string, BufferBaseUPtr, std::less<> > m_buffers;
+		castor::StringMap< BufferBaseUPtr > m_buffers;
 	};
 }
 

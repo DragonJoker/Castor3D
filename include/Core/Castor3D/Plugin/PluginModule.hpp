@@ -26,26 +26,26 @@ namespace castor3d
 	{
 		//!\~english	Importer plug-in.
 		//!\~french		Plug-in d'importation.
-		eImporter,
+		eImporter = 0,
 		//!\~english	Mesh Divider plug-in.
 		//!\~french		Plug-in de subdivision de maillage.
-		eDivider,
+		eDivider = 1,
 		//!\~english	Procedural generator.
 		//!\~french		Plug-in de génération procédurale.
-		eGenerator,
+		eGenerator = 2,
 		//!\~english	Tone mapping plug-in.
 		//!\~french		Plug-in d'effet de mappage de tons.
-		eToneMapping,
+		eToneMapping = 3,
 		//!\~english	Post effect plug-in.
 		//!\~french		Plug-in d'effet post-rendu.
-		ePostEffect,
+		ePostEffect = 4,
 		//!\~english	Generic plug-in.
 		//!\~french		Plug-in générique.
-		eGeneric,
+		eGeneric = 5,
 		//!\~english	Particle plug-in.
 		//!\~french		Plug-in de particule.
-		eParticle,
-		CU_ScopedEnumBounds( eImporter )
+		eParticle = 6,
+		CU_ScopedEnumBounds( eImporter, eParticle )
 	};
 
 	/**

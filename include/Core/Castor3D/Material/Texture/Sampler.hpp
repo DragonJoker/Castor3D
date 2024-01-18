@@ -61,13 +61,6 @@ namespace castor3d
 			, ashes::SamplerCreateInfo createInfo );
 		/**
 		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		C3D_API virtual ~Sampler();
-		/**
-		 *\~english
 		 *\brief		Initialises the GPU sampler.
 		 *\param[in]	device	The GPU device.
 		 *\return		\p true if ok.

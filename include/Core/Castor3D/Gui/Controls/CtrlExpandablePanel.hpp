@@ -61,7 +61,7 @@ namespace castor3d
 		OnExpandablePanelEventConnection connect( ExpandablePanelEvent event
 			, OnExpandablePanelEventFunction function )
 		{
-			return m_signals[size_t( event )].connect( function );
+			return m_signals[size_t( event )].connect( std::move( function ) );
 		}
 
 		/** \return	The expandable panel style.
@@ -156,7 +156,7 @@ namespace castor3d
 		PanelCtrlRPtr m_header;
 		ButtonCtrlRPtr m_expand;
 		PanelCtrlRPtr m_content;
-		OnExpandablePanelEvent m_signals[size_t( ExpandablePanelEvent::eCount )];
+		std::array< OnExpandablePanelEvent, size_t( ExpandablePanelEvent::eCount ) > m_signals;
 		OnButtonEventConnection m_expandClickedConnection;
 		bool m_expanded{ true };
 	};

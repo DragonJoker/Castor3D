@@ -12,7 +12,7 @@ namespace castor3d
 		load();
 	}
 
-	ToneMappingPlugin::~ToneMappingPlugin()
+	ToneMappingPlugin::~ToneMappingPlugin()noexcept
 	{
 		unload();
 	}

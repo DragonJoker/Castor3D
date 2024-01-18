@@ -25,7 +25,7 @@ namespace castor3d
 		 */
 		/**@{*/
 		C3D_API explicit SubmeshComponentRegister( Engine & engine );
-		C3D_API ~SubmeshComponentRegister();
+		C3D_API ~SubmeshComponentRegister()noexcept;
 		/**@}*/
 		/**
 		 *\~english

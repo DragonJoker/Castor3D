@@ -68,7 +68,7 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		void setDepthFormat( VkFormat value )
+		void setDepthFormat( VkFormat value )noexcept
 		{
 			m_depthFormat = value;
 		}

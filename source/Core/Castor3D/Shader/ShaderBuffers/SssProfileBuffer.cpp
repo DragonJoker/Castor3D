@@ -50,7 +50,7 @@ namespace castor3d
 		return component.getSssProfileId();
 	}
 
-	void SssProfileBuffer::removePass( SubsurfaceScatteringComponent & component )
+	void SssProfileBuffer::removePass( SubsurfaceScatteringComponent & component )noexcept
 	{
 		auto lock( castor::makeUniqueLock( m_mutex ) );
 

@@ -32,7 +32,7 @@ namespace castor3d
 		GpuFunctorEvent( GpuEventType type
 			, Functor functor )
 			: GpuFrameEvent{ type }
-			, m_functor{ functor }
+			, m_functor{ std::move( functor ) }
 		{
 		}
 
@@ -74,7 +74,7 @@ namespace castor3d
 	{
 		return makeGpuFunctorEvent( GpuEventType::ePreUpload
 			, [&object]( RenderDevice const & device
-				, QueueData const & queueData )
+				, QueueData const & /*queueData*/ )
 			{
 				object.cleanup( device );
 			} );
@@ -92,7 +92,7 @@ namespace castor3d
 	{
 		return makeGpuFunctorEvent( GpuEventType::ePreUpload
 			, [&object]( RenderDevice const & device
-				, QueueData const & queueData )
+				, QueueData const & /*queueData*/ )
 			{
 				object.initialise( device );
 			} );

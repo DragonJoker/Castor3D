@@ -69,15 +69,15 @@ namespace castor3d
 			}
 
 			ConfigurationVisitorBlock visit( castor::String const & name
-				, ControlsList controls = ControlsList{} )
+				, ControlsList const & controls = ControlsList{} )
 			{
-				return configuration->visit( name, std::move( controls ) );
+				return configuration->visit( name, controls );
 			}
 
 			ConfigurationVisitorBlock visit( castor::String const & name
-				, AtomicControlsList controls )
+				, AtomicControlsList const & controls )
 			{
-				return configuration->visit( name, std::move( controls ) );
+				return configuration->visit( name, controls );
 			}
 
 			template< typename ValueT, typename ... ParamsT >
@@ -124,13 +124,13 @@ namespace castor3d
 		**/
 		/**@{*/
 		ConfigurationVisitorBlock visit( castor::String const & name
-			, ControlsList const & controls )
+			, ControlsList const & /*controls*/ )
 		{
 			return doPushConfigurationBlock( name );
 		}
 
 		ConfigurationVisitorBlock visit( castor::String const & name
-			, AtomicControlsList const & controls )
+			, AtomicControlsList const & /*controls*/ )
 		{
 			return doPushConfigurationBlock( name );
 		}
@@ -183,12 +183,11 @@ namespace castor3d
 				return;
 			}
 
-			auto it = shader.compiled.find( getShaderStage( entryPoint ) );
-
-			if ( !shader.shader
-				&& ( it == shader.compiled.end()
-					|| ( it->second.text.empty()
-						&& it->second.spirv.empty() ) ) )
+			if ( auto it = shader.compiled.find( getShaderStage( entryPoint ) );
+				!shader.shader
+					&& ( it == shader.compiled.end()
+						|| ( it->second.text.empty()
+							&& it->second.spirv.empty() ) ) )
 			{
 				return;
 			}
@@ -524,8 +523,9 @@ namespace castor3d
 			, OnEnumValueChangeT< ValueT > onChange
 			, ControlT control = ControlT{} )
 		{
+			using UnderlyingPtr = std::underlying_type_t< ValueT > *;
 			visit( name
-				, *reinterpret_cast< std::underlying_type_t< ValueT > * >( &enumValue )
+				, *UnderlyingPtr( &enumValue )
 				, enumNames
 				, [onChange]( std::underlying_type_t< ValueT > oldV, std::underlying_type_t< ValueT > newV )
 				{

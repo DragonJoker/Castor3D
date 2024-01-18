@@ -19,6 +19,10 @@ namespace castor3d
 		, public std::enable_shared_from_this< SkeletonAnimationObject >
 	{
 	protected:
+		C3D_API SkeletonAnimationObject( SkeletonAnimationObject const & rhs ) = default;
+		C3D_API SkeletonAnimationObject( SkeletonAnimationObject && rhs )noexcept = default;
+		C3D_API SkeletonAnimationObject & operator=( SkeletonAnimationObject const & rhs ) = default;
+		C3D_API SkeletonAnimationObject & operator=( SkeletonAnimationObject && rhs )noexcept = default;
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -31,13 +35,6 @@ namespace castor3d
 		 */
 		C3D_API SkeletonAnimationObject( SkeletonAnimation & animation
 			, SkeletonNodeType type );
-		/**
-		 *\~english
-		 *\brief		Copy constructor.
-		 *\~french
-		 *\brief		Constructeur par copie.
-		 */
-		C3D_API SkeletonAnimationObject( SkeletonAnimationObject const & rhs ) = default;
 
 	public:
 		/**
@@ -46,7 +43,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API virtual ~SkeletonAnimationObject() = default;
+		C3D_API virtual ~SkeletonAnimationObject()noexcept = default;
 		/**
 		 *\~english
 		 *\brief		adds a child to this object.

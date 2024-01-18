@@ -166,7 +166,7 @@ namespace castor3d
 		*	Accesseurs.
 		**/
 		/**@{*/
-		crg::FramePass const & getLastPass()const
+		crg::FramePass const & getLastPass()const noexcept
 		{
 			CU_Require( m_lastPass );
 			return *m_lastPass;

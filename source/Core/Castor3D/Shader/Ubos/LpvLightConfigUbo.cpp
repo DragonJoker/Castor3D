@@ -41,7 +41,7 @@ namespace castor3d
 	{
 	}
 	
-	LpvLightConfigUbo::~LpvLightConfigUbo()
+	LpvLightConfigUbo::~LpvLightConfigUbo()noexcept
 	{
 		m_device.uboPool->putBuffer( m_ubo );
 	}

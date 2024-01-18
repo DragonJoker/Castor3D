@@ -34,7 +34,7 @@ namespace castor3d
 		{
 		}
 
-		void setFont( castor::String const & value )
+		void setFont( castor::StringView value )
 		{
 			m_fontName = value;
 		}

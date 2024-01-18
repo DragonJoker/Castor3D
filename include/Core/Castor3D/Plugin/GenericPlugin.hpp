@@ -13,13 +13,6 @@ namespace castor3d
 	class GenericPlugin
 		: public Plugin
 	{
-	private:
-		friend class Plugin;
-		friend class Engine;
-		typedef void addOptionalParsersFunction( SceneFileParser * parser );
-
-		typedef addOptionalParsersFunction * PAddOptionalParsersFunction;
-
 	public:
 		/**
 		 *\~english
@@ -39,10 +32,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API ~GenericPlugin()override;
-
-	private:
-		PAddOptionalParsersFunction m_pfnAddOptionalParsers{};
+		C3D_API ~GenericPlugin()noexcept override;
 	};
 }
 

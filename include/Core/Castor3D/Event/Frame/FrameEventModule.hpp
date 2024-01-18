@@ -26,14 +26,14 @@ namespace castor3d
 	{
 		//!\~english	This kind of event happens before the GPU step.
 		//!\~french		Ce type d'évènement est traité avant la phase GPU
-		ePreGpuStep,
+		ePreGpuStep = 0,
 		//!\~english	This kind of event happens after GPU step and before CPU step.
 		//!\~french		Ce type d'évènement est traité après la phase GPU et avant la phase CPU.
-		ePreCpuStep,
+		ePreCpuStep = 1,
 		//!\~english	This kind of event happens after the CPU step.
 		//!\~french		Ce type d'évènement est traité après la phase CPU.
-		ePostCpuStep,
-		CU_ScopedEnumBounds( ePreGpuStep )
+		ePostCpuStep = 2,
+		CU_ScopedEnumBounds( ePreGpuStep, ePostCpuStep )
 	};
 	C3D_API castor::String getName( CpuEventType value );
 	/**
@@ -49,14 +49,14 @@ namespace castor3d
 	{
 		//!\~english	This kind of event happens before the upload.
 		//!\~french		Ce type d'évènement est traité avant l'upload.
-		ePreUpload,
+		ePreUpload = 0,
 		//!\~english	This kind of event happens after the upload and before render.
 		//!\~french		Ce type d'évènement est traité après l'upload et avant le rendu.
-		ePreRender,
+		ePreRender = 1,
 		//!\~english	This kind of event happens after the render.
 		//!\~french		Ce type d'évènement est traité après le rendu.
-		ePostRender,
-		CU_ScopedEnumBounds( ePreUpload )
+		ePostRender = 2,
+		CU_ScopedEnumBounds( ePreUpload, ePostRender )
 	};
 	C3D_API castor::String getName( GpuEventType value );
 	/**

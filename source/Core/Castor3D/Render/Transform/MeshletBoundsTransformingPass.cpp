@@ -33,7 +33,7 @@ namespace castor3d
 				, GetPipelineStateCallback( [](){ return crg::getPipelineState( VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT ); } )
 				, [this]( crg::RecordContext & ctx, VkCommandBuffer cb, uint32_t i ){ doRecordInto( ctx, cb, i ); }
 				, crg::defaultV< crg::RunnablePass::GetPassIndexCallback >
-				, crg::RunnablePass::IsEnabledCallback( [this](){ return !m_passes.empty(); } )
+				, crg::RunnablePass::IsEnabledCallback( [this](){ return !m_transformPasses.empty(); } )
 				, IsComputePassCallback( [this](){ return doIsComputePass(); } ) }
 			, crg::ru::Config{ 1u, true } }
 		, m_device{ device }
@@ -45,11 +45,11 @@ namespace castor3d
 	{
 		auto & output = node.getFinalMeshletsBounds();
 		auto hash = mlttrsg::makeHash( output );
-		auto ires = m_passes.emplace( hash, nullptr );
 
-		if ( ires.second )
+		if ( auto [it, res] = m_transformPasses.emplace( hash, nullptr );
+			res )
 		{
-			ires.first->second = castor::makeUnique< MeshletBoundsTransformPass >( m_device
+			it->second = castor::makeUnique< MeshletBoundsTransformPass >( m_device
 				, node
 				, pipeline
 				, output );
@@ -61,25 +61,25 @@ namespace castor3d
 	{
 		auto & output = node.getFinalMeshletsBounds();
 		auto hash = mlttrsg::makeHash( output );
-		auto it = m_passes.find( hash );
 
-		if ( it != m_passes.end() )
+		if ( auto it = m_transformPasses.find( hash );
+			it != m_transformPasses.end() )
 		{
-			m_passes.erase( it );
+			m_transformPasses.erase( it );
 		}
 	}
 
 	void MeshletBoundsTransformingPass::doRecordInto( crg::RecordContext & context
 		, VkCommandBuffer commandBuffer
-		, uint32_t index )
+		, uint32_t index )const
 	{
-		for ( auto & passIt : m_passes )
+		for ( auto const& [_, pass] : m_transformPasses )
 		{
-			passIt.second->recordInto( context, commandBuffer, index );
+			pass->recordInto( context, commandBuffer, index );
 		}
 	}
 
-	bool MeshletBoundsTransformingPass::doIsComputePass()const
+	bool MeshletBoundsTransformingPass::doIsComputePass()const noexcept
 	{
 		return true;
 	}

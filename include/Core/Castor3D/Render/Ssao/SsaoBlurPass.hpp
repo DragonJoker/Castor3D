@@ -67,7 +67,7 @@ namespace castor3d
 			, Texture const & bentInput
 			, Texture const & normals
 			, uint32_t const & passIndex );
-		C3D_API ~SsaoBlurPass();
+		C3D_API ~SsaoBlurPass()noexcept;
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, CPU wise.
@@ -102,17 +102,18 @@ namespace castor3d
 		*/
 		/**@{*/
 		static uint32_t countInitialisationSteps()noexcept;
-		Texture const & getResult()const
+
+		Texture const & getResult()const noexcept
 		{
 			return m_result;
 		}
 
-		Texture const & getBentResult()const
+		Texture const & getBentResult()const noexcept
 		{
 			return m_bentResult;
 		}
 
-		crg::FramePass const & getLastPass()const
+		crg::FramePass const & getLastPass()const noexcept
 		{
 			return *m_lastPass;
 		}
@@ -149,9 +150,9 @@ namespace castor3d
 	private:
 		struct Configuration
 		{
-			castor::Point2i axis;
-			castor::Point2i dummy;
-			castor::Point4f gaussian[2];
+			castor::Point2i axis{};
+			castor::Point2i dummy{};
+			std::array< castor::Point4f, 2u > gaussian{};
 		};
 
 		RenderDevice const & m_device;
