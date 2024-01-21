@@ -96,7 +96,7 @@ namespace castor3d
 			auto gsAABBMax = writer.declSharedVariable< sdw::Vec4 >( "gsAABBMax", NumThreads );
 
 			auto logStepReduction = writer.implementFunction< sdw::Void >( "logStepReduction"
-				, [&]( sdw::UInt groupIndex )
+				, [&]( sdw::UInt const & groupIndex )
 				{
 					auto mod32GroupIndex = writer.declLocale( "mod32GroupIndex"
 						, groupIndex % 32_u );
@@ -113,7 +113,7 @@ namespace castor3d
 
 							reduceIndex >>= 1_u;
 						}
-						ELIHW;
+						ELIHW
 					}
 					else
 					{
@@ -127,7 +127,7 @@ namespace castor3d
 								gsAABBMax[groupIndex] = max( gsAABBMax[groupIndex], gsAABBMax[groupIndex + i] );
 							}
 						}
-						FI;
+						FI
 
 						shader::groupMemoryBarrierWithGroupSync( writer );
 					}
@@ -135,9 +135,9 @@ namespace castor3d
 				, sdw::InUInt{ writer, "groupIndex" } );
 
 			writer.implementMainT< sdw::VoidT >( NumThreads
-				, [&]( sdw::ComputeIn in )
+				, [&]( sdw::ComputeIn const & in )
 				{
-					auto groupIndex = in.localInvocationIndex;
+					auto const & groupIndex = in.localInvocationIndex;
 					auto threadIndex = in.globalInvocationID.x();
 					auto aabbMin = writer.declLocale( "aabbMin"
 						, vec4( sdw::Float{ FltMax }, FltMax, FltMax, 1.0f ) );
@@ -151,9 +151,9 @@ namespace castor3d
 							gsAABBMin[n] = aabbMin;
 							gsAABBMax[n] = aabbMax;
 						}
-						ROF;
+						ROF
 					}
-					FI;
+					FI
 
 					shader::groupMemoryBarrierWithGroupSync( writer );
 
@@ -163,7 +163,8 @@ namespace castor3d
 							? c3d_clustersData.pointLightLevels()
 							: c3d_clustersData.spotLightLevels() ) );
 
-					auto writeToGlobalMemory = [&]( sdw::UInt childLevel, sdw::UInt currentLevel )
+					auto writeToGlobalMemory = [&]( sdw::UInt const & childLevel
+						, sdw::UInt const & currentLevel )
 					{
 						// The first thread of each warp will write the AABB to global memory.
 						IF( writer, threadIndex % 32_u == 0_u )
@@ -178,9 +179,9 @@ namespace castor3d
 									, c3d_firstNodeIndex[currentLevel - 1_u] + nodeOffset );
 								c3d_lightBVH[nodeIndex] = shader::AABB{ gsAABBMin[groupIndex], gsAABBMax[groupIndex] };
 							}
-							FI;
+							FI
 						}
-						FI;
+						FI
 					};
 
 					if ( bottomLevel )
@@ -211,7 +212,7 @@ namespace castor3d
 								aabbMin = vec4( sdw::Float{ FltMax }, FltMax, FltMax, 1.0f );
 								aabbMax = vec4( sdw::Float{ -FltMax }, -FltMax, -FltMax, 1.0f );
 							}
-							FI;
+							FI
 
 							gsAABBMin[groupIndex] = aabbMin;
 							gsAABBMax[groupIndex] = aabbMax;
@@ -222,7 +223,7 @@ namespace castor3d
 
 							writeToGlobalMemory( 0_u, numLevels );
 						}
-						FI;
+						FI
 					}
 					else
 					{
@@ -245,14 +246,14 @@ namespace castor3d
 								aabbMin = vec4( sdw::Float{ FltMax }, FltMax, FltMax, 1.0f );
 								aabbMax = vec4( sdw::Float{ -FltMax }, -FltMax, -FltMax, 1.0f );
 							}
-							FI;
+							FI
 						}
 						ELSE
 						{
 							aabbMin = vec4( sdw::Float{ FltMax }, FltMax, FltMax, 1.0f );
 							aabbMax = vec4( sdw::Float{ -FltMax }, -FltMax, -FltMax, 1.0f );
 						}
-						FI;
+						FI
 
 						gsAABBMin[groupIndex] = aabbMin;
 						gsAABBMax[groupIndex] = aabbMax;
@@ -295,8 +296,7 @@ namespace castor3d
 			{
 			}
 
-			CRG_API void resetPipeline( crg::VkPipelineShaderStageCreateInfoArray config
-				, uint32_t index )
+			CRG_API void resetPipeline( uint32_t index )
 			{
 				resetCommandBuffer( index );
 				m_bottom.pipeline.resetPipeline( m_bottom.pipeline.getProgram( index ), index );
@@ -311,8 +311,9 @@ namespace castor3d
 			{
 				struct ProgramData
 				{
-					ShaderModule module;
-					ashes::PipelineShaderStageCreateInfoArray stages;
+					ProgramData() = default;
+					ShaderModule shaderModule{};
+					ashes::PipelineShaderStageCreateInfoArray stages{};
 				};
 				crg::cp::ConfigData cpConfig;
 				crg::PipelineHolder pipeline;
@@ -324,7 +325,7 @@ namespace castor3d
 					, RenderDevice const & device
 					, ClustersConfig const & config
 					, bool bottomLevel
-					, FramePass * parent
+					, FramePass const * parent
 					, LightType lightType )
 					: cpConfig{ crg::getDefaultV< InitialiseCallback >()
 						, nullptr
@@ -353,18 +354,18 @@ namespace castor3d
 					, bool bottomLevel
 					, LightType lightType )
 				{
-					auto ires = programs.emplace( passIndex, ProgramData{} );
+					auto [it, res] = programs.try_emplace( passIndex );
 
-					if ( ires.second )
+					if ( res )
 					{
-						auto & program = ires.first->second;
-						program.module = ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT
+						auto & program = it->second;
+						program.shaderModule = ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT
 							, "BuildLightsBVH/" + ( bottomLevel ? castor::String{ "Bottom/" } : castor::String{ "Top/" } ) + getName( lightType )
 							, createShader( device, config, lightType, bottomLevel ) };
-						program.stages = ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, program.module ) };
+						program.stages = ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, program.shaderModule ) };
 					}
 
-					return ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( ires.first->second.stages );
+					return ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( it->second.stages );
 				}
 			};
 
@@ -384,7 +385,7 @@ namespace castor3d
 				doCreatePipeline( index, m_top );
 			}
 
-			uint32_t doGetPassIndex()
+			uint32_t doGetPassIndex()const
 			{
 				u32 result = {};
 
@@ -396,9 +397,9 @@ namespace castor3d
 				if ( m_clusters.getConfig().sortLights )
 				{
 					auto totalValues = m_lightCache.getLightsBufferCount( m_lightType );
-					auto numChunks = getLightsMortonCodeChunkCount( totalValues );
 
-					if ( numChunks > 1u )
+					if ( auto numChunks = getLightsMortonCodeChunkCount( totalValues );
+						numChunks > 1u )
 					{
 						result += ( ( numChunks - 1u ) % 2u );
 					}
@@ -450,7 +451,7 @@ namespace castor3d
 			void doBarriers( crg::RecordContext & context
 				, VkCommandBuffer commandBuffer
 				, uint32_t passIndex
-				, int idx )
+				, int idx )const
 			{
 				for ( auto & attach : m_pass.buffers )
 				{
@@ -476,7 +477,7 @@ namespace castor3d
 			}
 
 			void doCreatePipeline( uint32_t index
-				, Pipeline & pipeline )
+				, Pipeline & pipeline )const
 			{
 				auto & program = pipeline.pipeline.getProgram( index );
 				VkComputePipelineCreateInfo createInfo{ VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO

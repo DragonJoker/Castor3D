@@ -88,14 +88,14 @@ namespace castor3d
 	{
 		SkeletonAnimationInstanceObjectRPtr result{};
 		auto fullName = sklanminst::getObjectTypeName( type ) + name;
-		auto it = std::find_if( m_toMove.begin()
+
+		if ( auto it = std::find_if( m_toMove.begin()
 			, m_toMove.end()
 			, [&fullName]( SkeletonAnimationInstanceObjectUPtr const & lookup )
 			{
 				return sklanminst::getObjectTypeName( lookup->getObject().getType() ) + lookup->getObject().getName() == fullName;
 			} );
-
-		if ( it != m_toMove.end() )
+			it != m_toMove.end() )
 		{
 			result = it->get();
 		}

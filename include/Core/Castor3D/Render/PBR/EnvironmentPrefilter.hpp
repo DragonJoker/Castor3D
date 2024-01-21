@@ -38,8 +38,8 @@ namespace castor3d
 				, SamplerObs sampler
 				, bool isCharlie );
 			void registerFrames();
-			void render( QueueData const & queueData );
-			crg::SemaphoreWaitArray render( crg::SemaphoreWaitArray signalsToWait
+			void render( QueueData const & queueData )const;
+			crg::SemaphoreWaitArray render( crg::SemaphoreWaitArray const & signalsToWait
 				, ashes::Queue const & queue )const;
 
 		private:
@@ -88,7 +88,7 @@ namespace castor3d
 		 *\brief		Génère les niveaux de mipmap.
 		 *\param[in]	queueData	La queue recevant les commandes GPU.
 		 */
-		C3D_API void render( QueueData const & queueData );
+		C3D_API void render( QueueData const & queueData )const;
 		/**
 		 *\~english
 		 *\brief		Generates the mipmap levels.

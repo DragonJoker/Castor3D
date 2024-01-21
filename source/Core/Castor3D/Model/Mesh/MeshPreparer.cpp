@@ -59,7 +59,7 @@ namespace castor3d
 								, sizeof( castor::Point3f ) } );
 						}
 
-						remapped.baseBuffers.emplace( submeshData, submesh.getBaseData( submeshData ) );
+						remapped.baseBuffers.try_emplace( submeshData, submesh.getBaseData( submeshData ) );
 					}
 				}
 			}
@@ -144,8 +144,8 @@ namespace castor3d
 			}
 		}
 
-		static void applyRemap( size_t originalVertexCount
-			, size_t destinationVertexCount
+		static void applyRemap( size_t /*originalVertexCount*/
+			, size_t /*destinationVertexCount*/
 			, std::vector< uint32_t > const & remap
 			, std::vector< Face > & buffer )
 		{
@@ -218,12 +218,12 @@ namespace castor3d
 				, remap
 				, remapped.indices );
 
-			for ( auto & data : remapped.baseBuffers )
+			for ( auto & [_, data] : remapped.baseBuffers )
 			{
 				applyRemap( originalVertexCount
 					, destinationVertexCount
 					, remap
-					, data.second );
+					, data );
 			}
 
 			if ( !remapped.tangentBuffer.empty() )
@@ -403,7 +403,7 @@ namespace castor3d
 	}
 
 	bool MeshPreparer::prepare( Submesh & submesh
-		, Parameters const & parameters )
+		, Parameters const & /*parameters*/ )
 	{
 		auto indexMapping = submesh.getIndexMapping();
 
@@ -413,7 +413,7 @@ namespace castor3d
 			return true;
 		}
 
-		auto & triangles = static_cast< TriFaceMapping & >( *indexMapping );
+		auto const & triangles = static_cast< TriFaceMapping const & >( *indexMapping );
 		meshopt::Remapped remapped;
 		auto streams = meshopt::gather( submesh
 			, triangles
@@ -444,9 +444,9 @@ namespace castor3d
 
 		triangles.getData().getFaces() = std::move( remapped.indices );
 
-		for ( auto & data : remapped.baseBuffers )
+		for ( auto & [comp, data] : remapped.baseBuffers )
 		{
-			submesh.setBaseData( data.first, std::move( data.second ) );
+			submesh.setBaseData( comp, std::move( data ) );
 		}
 
 		if ( auto tangents = submesh.getComponent< TangentsComponent >() )

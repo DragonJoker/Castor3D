@@ -56,7 +56,7 @@ namespace castor3d
 		{
 			for ( auto bone : skeleton.getBones() )
 			{
-				castor::Matrix4x4f final{ skeleton.getGlobalInverseTransform() };
+				castor::Matrix4x4f finalTransform{ skeleton.getGlobalInverseTransform() };
 
 				for ( auto animation : m_playingAnimations )
 				{
@@ -64,11 +64,11 @@ namespace castor3d
 
 					if ( object )
 					{
-						final *= object->getFinalTransform();
+						finalTransform *= object->getFinalTransform();
 					}
 				}
 
-				buffer->bonesMatrix[bone->getId()] = final;
+				buffer->bonesMatrix[bone->getId()] = finalTransform;
 			}
 		}
 
@@ -96,7 +96,7 @@ namespace castor3d
 	{
 		m_playingAnimations.erase( std::find_if( m_playingAnimations.begin()
 			, m_playingAnimations.end()
-			, [&animation]( SkeletonAnimationInstance * instance )
+			, [&animation]( SkeletonAnimationInstance const * instance )
 			{
 				return instance == &static_cast< SkeletonAnimationInstance & >( animation );
 			} ) );

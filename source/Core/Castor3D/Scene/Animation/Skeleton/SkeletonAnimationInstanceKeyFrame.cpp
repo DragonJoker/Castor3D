@@ -127,9 +127,9 @@ namespace castor3d
 
 	void SkeletonAnimationInstanceKeyFrame::apply()
 	{
-		for ( auto object : m_objects )
+		for ( auto const & [object, transform] : m_objects )
 		{
-			object.first->update( object.second );
+			object->update( transform );
 		}
 
 		m_skeleton.getGeometry().updateContainers( m_boxes );

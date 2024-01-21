@@ -26,7 +26,7 @@ namespace castor3d
 	SssProfileBuffer::SssProfileBuffer( Engine & engine
 		, RenderDevice const & device
 		, uint32_t count )
-		: m_buffer{ engine, device, count * DataSize, cuT( "SssProfileBuffer" ) }
+		: m_buffer{ device, count * DataSize, cuT( "SssProfileBuffer" ) }
 		, m_data{ sssbuf::doBindData( m_buffer.getPtr(), count ) }
 	{
 	}
@@ -39,7 +39,8 @@ namespace castor3d
 
 			CU_Require( m_components.size() < MaxMaterialsCount );
 			m_components.emplace_back( &component );
-			component.setSssProfileId( m_profileID++ );
+			component.setSssProfileId( m_profileID );
+			++m_profileID;
 			m_connections.emplace_back( component.onProfileChanged.connect( [this]( SubsurfaceScatteringComponent const & comp )
 				{
 					m_dirty.emplace_back( &comp );

@@ -52,7 +52,7 @@ namespace castor3d
 
 		/** Updates the given client rect regarding scrollbars dimensions and visibility.
 		*/
-		C3D_API castor::Point4ui updateScrollableClientRect( castor::Point4ui const & clientRect );
+		C3D_API castor::Point4ui updateScrollableClientRect( castor::Point4ui const & clientRect )const;
 
 		/** Updates scrollbars thumb from external event.
 		*/
@@ -95,6 +95,13 @@ namespace castor3d
 	protected:
 		struct ScrolledControl
 		{
+			ScrolledControl( OnControlChangedConnection connection
+				, castor::Position originalPosition )
+				: connection{ std::move( connection ) }
+				, originalPosition{ std::move( originalPosition ) }
+			{
+			}
+
 			OnControlChangedConnection connection;
 			castor::Position originalPosition;
 		};

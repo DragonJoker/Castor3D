@@ -42,9 +42,8 @@ namespace castor3d
 
 		while ( result && doGetSubChunk( chunk ) )
 		{
-			switch ( chunk.getChunkType() )
+			if ( chunk.getChunkType() == ChunkType::eSubmesh )
 			{
-			case ChunkType::eSubmesh:
 				submesh = castor::makeUnique< Submesh >( obj, obj.getSubmeshCount() );
 				result = createBinaryParser< Submesh >().parse( *submesh, chunk );
 				checkError( result, "Couldn't parse submesh." );
@@ -56,11 +55,6 @@ namespace castor3d
 				{
 					obj.m_submeshes.push_back( std::move( submesh ) );
 				}
-
-				break;
-
-			default:
-				break;
 			}
 		}
 
@@ -75,9 +69,8 @@ namespace castor3d
 
 		while ( result && doGetSubChunk( chunk ) )
 		{
-			switch ( chunk.getChunkType() )
+			if ( chunk.getChunkType() == ChunkType::eSkeleton )
 			{
-			case ChunkType::eSkeleton:
 				skeleton = obj.getScene()->addNewSkeleton( obj.getName(), *obj.getScene() );
 				result = createBinaryParser< Skeleton >().parse( *skeleton, chunk );
 				checkError( result, "Couldn't parse skeleton." );
@@ -86,11 +79,6 @@ namespace castor3d
 				{
 					obj.setSkeleton( skeleton );
 				}
-
-				break;
-
-			default:
-				break;
 			}
 		}
 
@@ -104,14 +92,9 @@ namespace castor3d
 
 		while ( doGetSubChunk( chunk ) )
 		{
-			switch ( chunk.getChunkType() )
+			if ( chunk.getChunkType() == ChunkType::eName )
 			{
-			case ChunkType::eName:
 				// Name is ignored, since it's now set by the scene file
-				break;
-
-			default:
-				break;
 			}
 		}
 

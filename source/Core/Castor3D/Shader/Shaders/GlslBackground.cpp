@@ -106,17 +106,17 @@ namespace castor3d::shader
 		return sdw::RetVec3{ vec3( 0.0_f ) };
 	}
 
-	void BackgroundModel::applyVolume( sdw::Vec2 const fragCoord
-		, sdw::Float const linearDepth
-		, sdw::Vec2 const targetSize
-		, sdw::Vec2 const cameraPlanes
-		, sdw::Vec4 & output )
+	void BackgroundModel::applyVolume( sdw::Vec2 const
+		, sdw::Float const
+		, sdw::Vec2 const
+		, sdw::Vec2 const
+		, sdw::Vec4 & )
 	{
 	}
 
 	sdw::Vec3 BackgroundModel::getBrdf( sdw::CombinedImage2DRgba32 const & brdfMap
 		, sdw::Float const & NdotV
-		, sdw::Float const & roughness )
+		, sdw::Float const & roughness )const
 	{
 		auto brdfSamplePoint = clamp( vec2( NdotV, roughness )
 			, vec2( 0.0_f, 0.0_f )

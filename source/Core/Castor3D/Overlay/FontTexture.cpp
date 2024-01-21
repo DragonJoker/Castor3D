@@ -20,7 +20,7 @@ namespace castor3d
 
 	namespace fonttex
 	{
-		static TextureLayoutUPtr createTexture( Engine & engine, castor::FontResPtr font )
+		static TextureLayoutUPtr createTexture( Engine const & engine, castor::FontResPtr font )
 		{
 			if ( !font )
 			{
@@ -52,13 +52,13 @@ namespace castor3d
 	void postPreRenderGpuEvent( Engine & engine
 		, std::function< void( RenderDevice const &, QueueData const & ) > event )
 	{
-		engine.postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload, event ) );
+		engine.postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload, std::move( event ) ) );
 	}
 
 	void postQueueRenderCpuEvent( Engine & engine
 		, std::function< void() > event )
 	{
-		engine.postEvent( makeCpuFunctorEvent( CpuEventType::ePreCpuStep, event ) );
+		engine.postEvent( makeCpuFunctorEvent( CpuEventType::ePreCpuStep, std::move( event ) ) );
 	}
 
 	//*********************************************************************************************
@@ -88,10 +88,6 @@ namespace castor3d
 		}
 	}
 
-	FontTexture::~FontTexture()noexcept
-	{
-	}
-
 	void FontTexture::initialise( RenderDevice const & device
 		, QueueData const & queueData )
 	{
@@ -99,16 +95,15 @@ namespace castor3d
 		onResourceChanged( *this );
 	}
 
-	void FontTexture::cleanup( RenderDevice const & device )
+	void FontTexture::cleanup( RenderDevice const & )
 	{
 		doCleanup();
 	}
 
 	void FontTexture::upload( UploadData & uploader )
 	{
-		auto & resource = doGetResource();
-
-		if ( resource.needsUpload )
+		if ( auto & resource = doGetResource();
+			resource.needsUpload )
 		{
 			resource.resource->upload( uploader );
 			resource.needsUpload = false;
@@ -121,9 +116,9 @@ namespace castor3d
 	{
 		castor::UInt32Array result;
 		result.resize( text.size() );
-		auto defaultIt = m_charIndices.find( U'?' );
 
-		if ( defaultIt != m_charIndices.end() )
+		if ( auto defaultIt = m_charIndices.find( U'?' );
+			defaultIt != m_charIndices.end() )
 		{
 			auto dst = result.begin();
 			for ( auto c : text )
@@ -217,9 +212,9 @@ namespace castor3d
 					offX += maxWidth;
 					++it;
 
-					auto ires = m_charIndices.emplace( glyph.getCharacter(), uint32_t( m_charIndices.size() ) );
+					auto res = m_charIndices.try_emplace( glyph.getCharacter(), uint32_t( m_charIndices.size() ) ).second;
 
-					if ( ires.second )
+					if ( res )
 					{
 						m_buffer->add( glyph );
 					}

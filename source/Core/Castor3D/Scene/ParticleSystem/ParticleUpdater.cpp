@@ -13,8 +13,8 @@ namespace castor3d
 	{
 	}
 
-	void ParticleUpdater::update( castor::Milliseconds const & time
-		, Particle & particle )
+	void ParticleUpdater::update( castor::Milliseconds const &
+		, Particle & )
 	{
 	}
 }

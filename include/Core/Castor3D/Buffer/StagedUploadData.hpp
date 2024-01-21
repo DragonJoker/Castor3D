@@ -84,7 +84,7 @@ namespace castor3d
 		GpuBufferOffset doGetBuffer( BufferArray & pool
 			, VkDeviceSize size );
 		void doPutBuffer( BufferArray & pool
-			, GpuBufferOffset const & bufferOffset );
+			, GpuBufferOffset const & bufferOffset )const noexcept;
 
 		struct BufferRange
 		{

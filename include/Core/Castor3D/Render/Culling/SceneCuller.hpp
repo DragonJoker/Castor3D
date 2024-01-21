@@ -111,10 +111,10 @@ namespace castor3d
 	private:
 		void doInitialiseCulled();
 		void doUpdateChanged( CpuUpdater::DirtyObjects & sceneObjs );
-		void doUpdateCulled( CpuUpdater::DirtyObjects & sceneObjs );
-		void doMarkDirty( CpuUpdater::DirtyObjects & sceneObjs
+		void doUpdateCulled( CpuUpdater::DirtyObjects const & sceneObjs );
+		void doMarkDirty( CpuUpdater::DirtyObjects const & sceneObjs
 			, std::vector< SubmeshRenderNode const * > & dirtySubmeshes
-			, std::vector< BillboardRenderNode const * > & dirtyBillboards );
+			, std::vector< BillboardRenderNode const * > & dirtyBillboards )const;
 		void duUpdateCulledSubmeshes( std::vector< SubmeshRenderNode const * > const & dirtySubmeshes );
 		void duUpdateCulledBillboards( std::vector< BillboardRenderNode const * > const & dirtyBillboards );
 		void doMakeDirty( Geometry const & object

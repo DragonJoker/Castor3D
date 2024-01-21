@@ -194,7 +194,7 @@ namespace castor3d::shader
 		sdw::Vec4 getLightData( sdw::UInt & index )const;
 
 		void getBaseLight( sdw::Vec4 & lightData
-			, Light light
+			, Light const & light
 			, sdw::UInt & offset );
 
 	private:

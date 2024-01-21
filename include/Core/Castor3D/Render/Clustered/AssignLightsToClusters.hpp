@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_AssignLightsToClusters_H___
@@ -9,7 +9,7 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	C3D_API crg::FramePass const & createAssignLightsToClustersPass( crg::FramePassGroup & graph
-		, crg::FramePassArray previousPasses
+		, crg::FramePassArray const & previousPasses
 		, RenderDevice const & device
 		, CameraUbo const & cameraUbo
 		, FrustumClusters & clusters );

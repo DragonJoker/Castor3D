@@ -36,7 +36,7 @@ namespace castor3d
 	}
 
 	sdw::Mat4 SkinningUbo::computeTransform( shader::SkinningData const & data
-		, sdw::Mat4 transform
+		, sdw::Mat4 const & transform
 		, sdw::ShaderWriter & writer
 		, sdw::UInt const & skinningId
 		, sdw::UVec4 const & boneIds0
@@ -47,7 +47,7 @@ namespace castor3d
 		auto mtxBoneTransform = writer.declLocale< sdw::Mat4 >( "mtxBoneTransform" );
 		auto mtxInstanceOffset = writer.declLocale( "mtxInstanceOffset", skinningId * MaxBonesCount );
 
-		auto & ssbo = *data.transforms;
+		auto const & ssbo = *data.transforms;
 		mtxBoneTransform = ssbo[mtxInstanceOffset + writer.cast< sdw::UInt >( boneIds0[0_i] )] * boneWeights0[0_i];
 		mtxBoneTransform += ssbo[mtxInstanceOffset + writer.cast< sdw::UInt >( boneIds0[1_i] )] * boneWeights0[1_i];
 		mtxBoneTransform += ssbo[mtxInstanceOffset + writer.cast< sdw::UInt >( boneIds0[2_i] )] * boneWeights0[2_i];

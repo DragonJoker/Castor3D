@@ -27,6 +27,21 @@ namespace castor3d
 	public:
 		struct ObjectDeclaration
 		{
+			ObjectDeclaration( uint32_t id
+				, std::string name
+				, void * object
+				, std::string file
+				, int line
+				, std::string stack )
+				: m_id{ id }
+				, m_name{ std::move( name ) }
+				, m_object{ object }
+				, m_file{ std::move( file ) }
+				, m_line{ line }
+				, m_stack{ std::move( stack ) }
+			{
+			}
+
 			uint32_t m_id;
 			std::string m_name;
 			void * m_object;
@@ -39,7 +54,7 @@ namespace castor3d
 		C3D_API bool track( void * object, std::string const & type, std::string const & file, int line, std::string & name );
 		C3D_API bool track( castor::Named * object, std::string const & type, std::string const & file, int line, std::string & name );
 		C3D_API bool untrack( void * object, ObjectDeclaration & declaration );
-		C3D_API void reportTracked();
+		C3D_API void reportTracked()const;
 
 	private:
 		uint32_t m_id = 0;

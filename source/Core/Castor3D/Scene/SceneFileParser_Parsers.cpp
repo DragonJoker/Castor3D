@@ -785,15 +785,7 @@ namespace castor3d
 			}
 			else
 			{
-				Parameters parameters;
-
-				if ( params.size() > 1 )
-				{
-					castor::String tmp;
-					parameters.parse( params[1]->get( tmp ) );
-				}
-
-				blockContext->renderTarget->setToneMappingType( params[0]->get< castor::String >(), parameters );
+				blockContext->renderTarget->setToneMappingType( params[0]->get< castor::String >() );
 			}
 		}
 		CU_EndAttribute()
@@ -1943,8 +1935,8 @@ namespace castor3d
 			{
 				castor::String type;
 
-				if ( Engine * engine = getEngine( *blockContext );
-					!engine->getParticleFactory().isTypeRegistered( castor::string::lowerCase( params[0]->get( type ) ) ) )
+				if ( Engine const * engine = getEngine( *blockContext );
+					engine && !engine->getParticleFactory().isTypeRegistered( castor::string::lowerCase( params[0]->get( type ) ) ) )
 				{
 					CU_ParsingError( cuT( "Particle type [" ) + type + cuT( "] is not registered, make sure you've got the matching plug-in installed." ) );
 				}

@@ -33,8 +33,7 @@ namespace castor3d
 {
 	namespace ibltex
 	{
-		static SamplerObs doCreateSampler( Engine & engine
-			, RenderDevice const & device )
+		static SamplerObs doCreateSampler( Engine & engine )
 		{
 			auto name = cuT( "IblTexturesBRDF" );
 			auto result = engine.tryFindSampler( name );
@@ -64,7 +63,7 @@ namespace castor3d
 		, SamplerObs sampler )
 		: OwnedBy< Scene >{ scene }
 		, m_brdf{ brdf }
-		, m_sampler{ ibltex::doCreateSampler( *scene.getEngine(), device ) }
+		, m_sampler{ ibltex::doCreateSampler( *scene.getEngine() ) }
 		, m_radianceComputer{ *scene.getEngine()
 			, device
 			, castor::Size{ RadianceMapSize, RadianceMapSize }

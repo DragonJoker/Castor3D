@@ -290,7 +290,7 @@ namespace castor3d
 	{
 		eWindow = 0,
 		eTexture = 1,
-		CU_ScopedEnumBounds( eWindow, eWindow )
+		CU_ScopedEnumBounds( eWindow, eTexture )
 	};
 	C3D_API castor::String getName( TargetType value );
 	/**
@@ -818,6 +818,13 @@ namespace castor3d
 
 	struct ShadowMapLightIds
 	{
+		explicit ShadowMapLightIds( std::reference_wrapper< ShadowMap > shadowMap
+			, LightIdArray ids = {} )
+			: shadowMap{ std::move( shadowMap ) }
+			, ids{ std::move( ids ) }
+		{
+		}
+
 		std::reference_wrapper< ShadowMap > shadowMap;
 		LightIdArray ids;
 	};
@@ -910,6 +917,8 @@ namespace castor3d
 		crg::ImageViewIdArray targetImage{};
 		struct DirtyObjects
 		{
+			DirtyObjects() = default;
+
 			bool isEmpty()const
 			{
 				return dirtyNodes.empty()
@@ -919,11 +928,11 @@ namespace castor3d
 					&& dirtyCameras.empty();
 			}
 
-			castor::Vector< SceneNode * > dirtyNodes;
-			castor::Vector< Geometry * > dirtyGeometries;
-			castor::Vector< BillboardBase * > dirtyBillboards;
-			castor::Vector< Light * > dirtyLights;
-			castor::Vector< Camera * > dirtyCameras;
+			castor::Vector< SceneNode * > dirtyNodes{};
+			castor::Vector< Geometry * > dirtyGeometries{};
+			castor::Vector< BillboardBase * > dirtyBillboards{};
+			castor::Vector< Light * > dirtyLights{};
+			castor::Vector< Camera * > dirtyCameras{};
 		};
 		std::map< Scene const *, DirtyObjects > dirtyScenes;
 	};
@@ -1023,16 +1032,12 @@ namespace castor3d
 	C3D_API ashes::Image makeImage( ashes::Device const & device
 		, VkImage image
 		, crg::ImageId data );
-	C3D_API ashes::ImageView makeImageView( ashes::Device const & device
-		, ashes::Image const & image
+	C3D_API ashes::ImageView makeImageView( ashes::Image const & image
 		, VkImageView view
 		, crg::ImageViewId data );
-	C3D_API ashes::ImageView makeTargetImageView( ashes::Device const & device
-		, Texture const & texture );
-	C3D_API ashes::ImageView makeSampledImageView( ashes::Device const & device
-		, Texture const & texture );
-	C3D_API ashes::ImageView makeWholeImageView( ashes::Device const & device
-		, Texture const & texture );
+	C3D_API ashes::ImageView makeTargetImageView( Texture const & texture );
+	C3D_API ashes::ImageView makeSampledImageView( Texture const & texture );
+	C3D_API ashes::ImageView makeWholeImageView( Texture const & texture );
 	C3D_API void printGraph( crg::RunnableGraph const & graph );
 	/**
 	*\~english

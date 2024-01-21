@@ -65,6 +65,13 @@ namespace castor3d
 		{
 			struct ImageViewSlice
 			{
+				ImageViewSlice( VkImageViewCreateInfo info
+					, uint32_t slice )
+					: info{ std::move( info ) }
+					, slice{ slice }
+				{
+				}
+
 				VkImageViewCreateInfo info;
 				uint32_t slice;
 			};
@@ -166,7 +173,7 @@ namespace castor3d
 
 				if ( factors.isSlice )
 				{
-					m_cache.insert( { info, factors.slice } );
+					m_cache.emplace( info, factors.slice );
 					m_result.emplace_back( name
 						, viewId
 						, layout
@@ -174,7 +181,7 @@ namespace castor3d
 				}
 				else
 				{
-					m_cache.insert( { info, 0u } );
+					m_cache.emplace( info, 0u );
 					m_result.emplace_back( name
 						, viewId
 						, layout
@@ -190,10 +197,10 @@ namespace castor3d
 				auto info = viewId.data->info;
 				info.image = VkImage( uint64_t( viewId.data->image.id ) );
 
-				if ( ( info.viewType == VK_IMAGE_VIEW_TYPE_2D_ARRAY
+				if ( info.viewType == VK_IMAGE_VIEW_TYPE_2D_ARRAY
 					|| info.viewType == VK_IMAGE_VIEW_TYPE_1D_ARRAY
 					|| info.viewType == VK_IMAGE_VIEW_TYPE_CUBE
-					|| info.viewType == VK_IMAGE_VIEW_TYPE_CUBE_ARRAY ) )
+					|| info.viewType == VK_IMAGE_VIEW_TYPE_CUBE_ARRAY )
 				{
 					auto layerInfo = info;
 					layerInfo.subresourceRange.layerCount = 1u;
@@ -201,14 +208,14 @@ namespace castor3d
 					for ( uint32_t layerIdx = 0u; layerIdx < info.subresourceRange.layerCount; ++layerIdx )
 					{
 						auto layer = layerIdx + info.subresourceRange.baseArrayLayer;
-						auto layerViewId = m_handler.createViewId( crg::ImageViewData{ viewId.data->name + std::to_string( layer )
-							, viewId.data->image
-							, layerInfo.flags
-							, layerInfo.viewType
-							, layerInfo.format
-							, layerInfo.subresourceRange } );
 
-						if ( doFilter( layerViewId, {} ) )
+						if ( auto layerViewId = m_handler.createViewId( crg::ImageViewData{ viewId.data->name + std::to_string( layer )
+								, viewId.data->image
+								, layerInfo.flags
+								, layerInfo.viewType
+								, layerInfo.format
+								, layerInfo.subresourceRange } );
+							doFilter( layerViewId, {} ) )
 						{
 							doVisit( name + std::to_string( layer )
 								, layerViewId
@@ -232,7 +239,7 @@ namespace castor3d
 					&& ( info.subresourceRange.layerCount == 1u ) )
 				{
 					info.image = VkImage( uint64_t( viewId.data->image.id ) );
-					m_cache.insert( { info, 0u } );
+					m_cache.emplace( info, 0u );
 					m_result.emplace_back( name
 						, viewId
 						, layout
@@ -252,12 +259,12 @@ namespace castor3d
 				, TextureFactors const & factors )const
 			{
 				bool result = false;
-				auto & info = viewId.data->info;
 
-				if ( ( info.viewType == VK_IMAGE_VIEW_TYPE_2D_ARRAY
-					|| info.viewType == VK_IMAGE_VIEW_TYPE_1D_ARRAY
-					|| info.viewType == VK_IMAGE_VIEW_TYPE_CUBE
-					|| info.viewType == VK_IMAGE_VIEW_TYPE_CUBE_ARRAY ) )
+				if ( auto & info = viewId.data->info;
+					info.viewType == VK_IMAGE_VIEW_TYPE_2D_ARRAY
+						|| info.viewType == VK_IMAGE_VIEW_TYPE_1D_ARRAY
+						|| info.viewType == VK_IMAGE_VIEW_TYPE_CUBE
+						|| info.viewType == VK_IMAGE_VIEW_TYPE_CUBE_ARRAY )
 				{
 					auto layerInfo = info;
 					layerInfo.subresourceRange.layerCount = 1u;
@@ -335,8 +342,6 @@ namespace castor3d
 		, m_pixelFormat{ VkFormat( pixelFormat ) }
 		, m_initialised{ false }
 		, m_resources{ getOwner()->getGraphResourceHandler() }
-		, m_renderTechnique{}
-		, m_camera{}
 		, m_index{ ++sm_uiCount }
 		, m_name{ cuT( "Target" ) + castor::string::toString( m_index ) }
 		, m_toneMappingName{ ( castor::isFloatingPoint( m_pixelFormat )
@@ -436,7 +441,7 @@ namespace castor3d
 		sampler->setMinFilter( VK_FILTER_NEAREST );
 		sampler->setMagFilter( VK_FILTER_NEAREST );
 
-		for ( auto entry : engine.getPostEffectFactory().listRegisteredTypes() )
+		for ( auto const & entry : engine.getPostEffectFactory().listRegisteredTypes() )
 		{
 			auto effect = engine.getPostEffectFactory().create( entry.key
 				, *this
@@ -523,23 +528,21 @@ namespace castor3d
 		}
 	}
 
-	void RenderTarget::initialise( OnInitialisedFunc onInitialised
+	void RenderTarget::initialise( OnInitialisedFunc const & onInitialised
 		, ProgressBar * progress )
 	{
-		if ( !m_initialising.exchange( true ) )
+		if ( !m_initialising.exchange( true )
+			&& !m_initialised )
 		{
-			if ( !m_initialised )
-			{
-				getEngine()->pushCpuJob( [this, progress]()
-					{
-						auto &device = getEngine()->getRenderSystem()->getRenderDevice();
-						auto queueWrapper = device.graphicsData();
-						auto & queue = *queueWrapper;
-						doInitialise( device, queue, progress );
-						m_onInitialised( *this, queue );
-						m_onTargetInitialised.clear();
-					} );
-			}
+			getEngine()->pushCpuJob( [this, progress]()
+				{
+					auto const & device = getEngine()->getRenderSystem()->getRenderDevice();
+					auto queueWrapper = device.graphicsData();
+					auto & queue = *queueWrapper;
+					doInitialise( device, queue, progress );
+					m_onInitialised( *this, queue );
+					m_onTargetInitialised.clear();
+				} );
 		}
 
 		if ( m_initialising )
@@ -549,7 +552,7 @@ namespace castor3d
 
 		if ( m_initialised )
 		{
-			auto & device = getEngine()->getRenderSystem()->getRenderDevice();
+			auto const & device = getEngine()->getRenderSystem()->getRenderDevice();
 			auto queueWrapper = device.graphicsData();
 			auto & queue = *queueWrapper;
 			onInitialised( *this, queue );
@@ -578,14 +581,14 @@ namespace castor3d
 			m_combinePassSource = {};
 			m_combinePass = {};
 
-			for ( auto & effect : m_srgbPostEffects )
+			for ( auto const & effect : m_srgbPostEffects )
 			{
 				effect->cleanup( device );
 			}
 
 			m_toneMapping.reset();
 
-			for ( auto & effect : m_hdrPostEffects )
+			for ( auto const & effect : m_hdrPostEffects )
 			{
 				effect->cleanup( device );
 			}
@@ -624,9 +627,9 @@ namespace castor3d
 		{
 			auto lock( castor::makeUniqueLock( cache ) );
 
-			for ( auto & mesh : cache )
+			for ( auto const & [_, mesh] : cache )
 			{
-				mesh.second->update( updater );
+				mesh->update( updater );
 			}
 		}
 
@@ -682,12 +685,12 @@ namespace castor3d
 		m_renderTechnique->update( updater );
 		m_overlayPass->update( updater );
 
-		for ( auto & effect : m_hdrPostEffects )
+		for ( auto const & effect : m_hdrPostEffects )
 		{
 			effect->update( updater );
 		}
 
-		for ( auto & effect : m_srgbPostEffects )
+		for ( auto const & effect : m_srgbPostEffects )
 		{
 			effect->update( updater );
 		}
@@ -701,9 +704,7 @@ namespace castor3d
 		}
 	}
 
-	crg::SemaphoreWaitArray RenderTarget::render( RenderDevice const & device
-		, RenderInfo & info
-		, ashes::Queue const & queue
+	crg::SemaphoreWaitArray RenderTarget::render( ashes::Queue const & queue
 		, crg::SemaphoreWaitArray const & signalsToWait )
 	{
 		if ( !m_initialised )
@@ -712,12 +713,12 @@ namespace castor3d
 		}
 
 		crg::SemaphoreWaitArray result{};
-		auto scene = getScene();
 
-		if ( m_initialised
-			&& scene
-			&& scene->isInitialised()
-			&& getCamera() )
+		if ( auto scene = getScene();
+			m_initialised
+				&& scene
+				&& scene->isInitialised()
+				&& getCamera() )
 		{
 			result = doRender( queue, signalsToWait );
 
@@ -777,8 +778,7 @@ namespace castor3d
 		}
 	}
 
-	void RenderTarget::setToneMappingType( castor::String const & name
-		, Parameters const & parameters )
+	void RenderTarget::setToneMappingType( castor::StringView name )
 	{
 		if ( !castor::isFloatingPoint( getPixelFormat() ) )
 		{
@@ -787,8 +787,8 @@ namespace castor3d
 			if ( m_toneMapping )
 			{
 				getEngine()->postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
-					, [this]( RenderDevice const & device
-						, QueueData const & queueData )
+					, [this]( RenderDevice const &
+						, QueueData const & )
 					{
 						if ( m_initialised )
 						{
@@ -942,16 +942,16 @@ namespace castor3d
 			m_frustumClusters = castor::makeUnique< FrustumClusters >( device, *getCamera(), m_clustersConfig );
 		}
 
-		doInitCombineProgram( progress );
+		doInitCombineProgram();
 		crg::FramePassArray passes;
 
 		stepProgressBarGlobalStartLocal( progress
 			, "Initialising: Meshes"
 			, getScene()->getMeshCache().getObjectCount() );
-		for ( auto & mesh : getScene()->getMeshCache() )
+		for ( auto & [name, mesh] : getScene()->getMeshCache() )
 		{
-			stepProgressBarLocal( progress, mesh.first );
-			passes = mesh.second->record( m_resources
+			stepProgressBarLocal( progress, name );
+			passes = mesh->record( m_resources
 				, m_graph
 				, passes );
 		}
@@ -996,15 +996,12 @@ namespace castor3d
 				, "Creating: Tone Mapping"
 				, uint32_t( m_hdrPostEffects.size() ) );
 			m_toneMapping = castor::makeUnique< ToneMapping >( *getEngine()
-				, device
-				, m_size
 				, m_graph
 				, crg::ImageViewIdArray{ hdrSource->sampledViewId, hdrTarget->sampledViewId }
 				, m_srgbObjects.front().wholeViewId
 				, *m_hdrLastPass
 				, *m_hdrConfigUbo
 				, *m_colourGradingUbo
-				, Parameters{}
 				, progress );
 			m_toneMapping->initialise( m_toneMappingName
 				, m_hdrObjects.back().sampledViewId );
@@ -1048,7 +1045,7 @@ namespace castor3d
 
 			stepProgressBarGlobalStartLocal( progress
 				, "Compiling render graph"
-				, m_renderTechnique->countInitialisationSteps() );
+				, RenderTechnique::countInitialisationSteps() );
 			m_runnable = m_graph.compile( device.makeContext() );
 			getEngine()->registerTimer( m_runnable->getName() + "/Graph"
 				, m_runnable->getTimer() );
@@ -1139,7 +1136,7 @@ namespace castor3d
 				return result;
 			} );
 		result.addDependency( m_overlayPassDesc );
-		result.addSampledView( source
+		result.addSampledView( std::move( source )
 			, rendtgt::CombineIdxScene );
 		result.addSampledView( m_overlays.sampledViewId
 			, rendtgt::CombineIdxOverlays );
@@ -1193,9 +1190,9 @@ namespace castor3d
 	{
 	}
 
-	void RenderTarget::doInitCombineProgram( ProgressBar * progress )
+	void RenderTarget::doInitCombineProgram()
 	{
-		auto & renderSystem = *getEngine()->getRenderSystem();
+		auto const & renderSystem = *getEngine()->getRenderSystem();
 		auto bandSize = double( castor3d::getSafeBandSize(m_size ) );
 		auto bandedSize = castor3d::getSafeBandedExtent3D(m_size );
 		auto bandRatioU = bandSize / bandedSize.width;
@@ -1205,7 +1202,7 @@ namespace castor3d
 			, float( 1.0 - 2.0 * bandRatioU )
 			, float( 1.0 - 2.0 * bandRatioV ) };
 
-		ProgramModule module{ getName() + "/Combine" };
+		ProgramModule programModule{ getName() + "/Combine" };
 		{
 			sdw::TraditionalGraphicsWriter writer{ &getEngine()->getShaderAllocator() };
 
@@ -1232,7 +1229,7 @@ namespace castor3d
 					, texcoord.y() * velocityMetrics->w + velocityMetrics->y );
 			};
 
-			writer.implementEntryPoint( [&]( sdw::VertexIn in
+			writer.implementEntryPoint( [&]( sdw::VertexIn const & in
 				, sdw::VertexOut out )
 				{
 					outTextureScene = utils.topDownToBottomUp( inUv );
@@ -1248,8 +1245,8 @@ namespace castor3d
 					out.vtx.position = vec4( inPosition, 0.0_f, 1.0_f );
 				} );
 
-			writer.implementEntryPoint( [&]( sdw::FragmentIn in
-				, sdw::FragmentOut out )
+			writer.implementEntryPoint( [&]( sdw::FragmentIn const & in
+				, sdw::FragmentOut const & )
 				{
 					auto sceneColor = writer.declLocale( "sceneColor"
 						, c3d_mapScene.lod( inTextureScene, 0.0_f ).rgb() );
@@ -1259,10 +1256,10 @@ namespace castor3d
 					sceneColor *= 1.0_f - overlaysColor.a();
 					outColour = vec4( sceneColor + overlaysColor.rgb(), 1.0_f );
 				} );
-			module.shader = writer.getBuilder().releaseShader();
+			programModule.shader = writer.getBuilder().releaseShader();
 		}
 
-		m_combineStages = makeProgramStates( renderSystem.getRenderDevice(), module );
+		m_combineStages = makeProgramStates( renderSystem.getRenderDevice(), programModule );
 	}
 
 	void RenderTarget::doCleanupCombineProgram()

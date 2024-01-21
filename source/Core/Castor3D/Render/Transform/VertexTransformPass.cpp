@@ -180,8 +180,7 @@ namespace castor3d
 	}
 
 	void VertexTransformPass::recordInto( crg::RecordContext & context
-		, VkCommandBuffer commandBuffer
-		, uint32_t index )
+		, VkCommandBuffer commandBuffer )const
 	{
 		if ( m_morphTargets )
 		{

@@ -185,14 +185,12 @@ namespace castor3d
 		void doAdjustZIndex( uint32_t offset )override;
 
 		/** Event when the control is activated
-		 *\param[in]	event		The control event
 		 */
-		void onActivate( HandlerEvent const & event );
+		void onActivate();
 
 		/** Event when the control is deactivated
-		 *\param[in]	event		The control event
 		 */
-		void onDeactivate( HandlerEvent const & event );
+		void onDeactivate();
 
 		/** @copydoc Control::doOnMouseMove
 		*/
@@ -290,7 +288,7 @@ namespace castor3d
 
 		/** Begins the selection.
 		 */
-		void doBeginSelection( CaretIndices begin );
+		void doBeginSelection( CaretIndices const & begin );
 
 		/** Updates the selection overlays.
 		 */
@@ -336,17 +334,18 @@ namespace castor3d
 		}
 
 	private:
-		struct Caret : CaretIndices
+		struct Caret
 		{
+			CaretIndices indices{};
 			bool visible{};
 			PanelOverlayRPtr overlay{};
 		};
 
-		castor::U32String m_caption;
-		castor::TextMetrics m_metrics;
-		bool m_active;
+		castor::U32String m_caption{};
+		castor::TextMetrics m_metrics{};
+		bool m_active{};
 		TextOverlayRPtr m_text{};
-		Caret m_caret;
+		Caret m_caret{};
 		std::array< OnEditEvent, size_t( EditEvent::eCount ) > m_signals;
 		bool m_hasSelection{};
 		bool m_isMouseSelecting{};

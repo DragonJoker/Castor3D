@@ -109,15 +109,15 @@ namespace film_grain
 				, sdw::InVec3{ writer, "color" }
 				, sdw::InVec2{ writer, "texcoord" } );
 
-			writer.implementEntryPointT< c3d::PosUv2FT, c3d::Uv2FT >( [&]( sdw::VertexInT< c3d::PosUv2FT > in
+			writer.implementEntryPointT< c3d::PosUv2FT, c3d::Uv2FT >( []( sdw::VertexInT< c3d::PosUv2FT > const & in
 				, sdw::VertexOutT< c3d::Uv2FT > out )
 				{
 					out.uv() = in.uv();
 					out.vtx.position = vec4( in.position().xy(), 0.0_f, 1.0_f );
 				} );
 
-			writer.implementEntryPointT< c3d::Uv2FT, c3d::Colour4FT >( [&]( sdw::FragmentInT< c3d::Uv2FT > in
-				, sdw::FragmentOutT< c3d::Colour4FT > out )
+			writer.implementEntryPointT< c3d::Uv2FT, c3d::Colour4FT >( [&writer, &c3d_srcTex, &addNoise]( sdw::FragmentInT< c3d::Uv2FT > const & in
+				, sdw::FragmentOutT< c3d::Colour4FT > const & out )
 				{
 					auto colour = writer.declLocale( "colour"
 						, c3d_srcTex.sample( in.uv() ).xyz() );
@@ -130,12 +130,12 @@ namespace film_grain
 		static std::array< castor::Image, PostEffect::NoiseMapCount > loadImages( castor3d::Engine const & engine )
 		{
 			auto & loader = engine.getImageLoader();
-			return { loader.load( cuT( "FilmGrainNoise0" ), "xpm", reinterpret_cast< uint8_t const * >( NoiseLayer1_xpm ), uint32_t( castor::getCountOf( NoiseLayer1_xpm ) ), {} )
-				, loader.load( cuT( "FilmGrainNoise1" ), "xpm", reinterpret_cast< uint8_t const * >( NoiseLayer2_xpm ), uint32_t( castor::getCountOf( NoiseLayer2_xpm ) ), {} )
-				, loader.load( cuT( "FilmGrainNoise2" ), "xpm", reinterpret_cast< uint8_t const * >( NoiseLayer3_xpm ), uint32_t( castor::getCountOf( NoiseLayer3_xpm ) ), {} )
-				, loader.load( cuT( "FilmGrainNoise3" ), "xpm", reinterpret_cast< uint8_t const * >( NoiseLayer4_xpm ), uint32_t( castor::getCountOf( NoiseLayer4_xpm ) ), {} )
-				, loader.load( cuT( "FilmGrainNoise4" ), "xpm", reinterpret_cast< uint8_t const * >( NoiseLayer5_xpm ), uint32_t( castor::getCountOf( NoiseLayer5_xpm ) ), {} )
-				, loader.load( cuT( "FilmGrainNoise5" ), "xpm", reinterpret_cast< uint8_t const * >( NoiseLayer6_xpm ), uint32_t( castor::getCountOf( NoiseLayer6_xpm ) ), {} ) };
+			return { loader.load( cuT( "FilmGrainNoise0" ), "xpm", castor3d::ByteCPtr( NoiseLayer1_xpm ), uint32_t( castor::getCountOf( NoiseLayer1_xpm ) ), {} )
+				, loader.load( cuT( "FilmGrainNoise1" ), "xpm", castor3d::ByteCPtr( NoiseLayer2_xpm ), uint32_t( castor::getCountOf( NoiseLayer2_xpm ) ), {} )
+				, loader.load( cuT( "FilmGrainNoise2" ), "xpm", castor3d::ByteCPtr( NoiseLayer3_xpm ), uint32_t( castor::getCountOf( NoiseLayer3_xpm ) ), {} )
+				, loader.load( cuT( "FilmGrainNoise3" ), "xpm", castor3d::ByteCPtr( NoiseLayer4_xpm ), uint32_t( castor::getCountOf( NoiseLayer4_xpm ) ), {} )
+				, loader.load( cuT( "FilmGrainNoise4" ), "xpm", castor3d::ByteCPtr( NoiseLayer5_xpm ), uint32_t( castor::getCountOf( NoiseLayer5_xpm ) ), {} )
+				, loader.load( cuT( "FilmGrainNoise5" ), "xpm", castor3d::ByteCPtr( NoiseLayer6_xpm ), uint32_t( castor::getCountOf( NoiseLayer6_xpm ) ), {} ) };
 		}
 	}
 

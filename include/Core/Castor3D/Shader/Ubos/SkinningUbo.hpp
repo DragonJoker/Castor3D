@@ -73,7 +73,7 @@ namespace castor3d
 		 *\return		La matrice résultat.
 		 */
 		C3D_API static sdw::Mat4 computeTransform( shader::SkinningData const & data
-			, sdw::Mat4 transform
+			, sdw::Mat4 const & transform
 			, sdw::ShaderWriter & writer
 			, sdw::UInt const & skinningId
 			, sdw::UVec4 const & boneIds0

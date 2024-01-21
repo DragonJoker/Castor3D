@@ -32,7 +32,6 @@ namespace castor3d
 		}
 
 		static bool updateBuffer( RenderDevice const & device
-			, castor::String const & name
 			, uint32_t count
 			, GpuBufferOffsetT< InstantiationData > & buffer )
 		{
@@ -101,7 +100,7 @@ namespace castor3d
 
 				if ( layoutIt == m_mtxLayouts.end() )
 				{
-					layoutIt = m_mtxLayouts.emplace( hash
+					layoutIt = m_mtxLayouts.try_emplace( hash
 						, smshcompinst::getInstantiationLayout( currentBinding, currentLocation ) ).first;
 				}
 				else
@@ -121,13 +120,13 @@ namespace castor3d
 	{
 	}
 
-	bool InstantiationComponent::ComponentData::ref( MaterialObs material )
+	bool InstantiationComponent::ComponentData::ref( Material const * material )
 	{
 		bool result{ true };
 
 		if ( material )
 		{
-			for ( auto & pass : *material )
+			for ( auto const & pass : *material )
 			{
 				if ( !result )
 				{
@@ -138,7 +137,7 @@ namespace castor3d
 
 				if ( it == m_instances.end() )
 				{
-					it = m_instances.emplace( pass->getHash(), Data{ 0u, GpuBufferOffsetT< InstantiationData >{} } ).first;
+					it = m_instances.try_emplace( pass->getHash(), 0u, GpuBufferOffsetT< InstantiationData >{} ).first;
 				}
 
 				auto & data = it->second;
@@ -148,7 +147,6 @@ namespace castor3d
 				{
 					data.data.resize( data.count );
 					result = smshcompinst::updateBuffer( material->getEngine()->getRenderSystem()->getRenderDevice()
-						, m_submesh.getParent().getName() + "_" + castor::string::toString( it->first )
 						, data.count
 						, data.buffer );
 				}
@@ -158,14 +156,14 @@ namespace castor3d
 		return result;
 	}
 
-	void InstantiationComponent::ComponentData::unref( MaterialObs material )
+	void InstantiationComponent::ComponentData::unref( Material const * material )
 	{
 		if ( !material )
 		{
 			return;
 		}
 
-		for ( auto & pass : *material )
+		for ( auto const & pass : *material )
 		{
 			auto it = find( *pass );
 
@@ -194,9 +192,8 @@ namespace castor3d
 	{
 		uint32_t result = 0;
 
-		auto it = find( pass );
-
-		if ( it != end() )
+		if ( auto it = find( pass );
+			it != end() )
 		{
 			result = m_submesh.isDynamic()
 				? 1u
@@ -210,9 +207,9 @@ namespace castor3d
 	{
 		uint32_t count = 0;
 
-		for ( auto & it : m_instances )
+		for ( auto const & [_, data] : m_instances )
 		{
-			count = std::max( count, it.second.count );
+			count = std::max( count, data.count );
 		}
 
 		return count;
@@ -235,14 +232,13 @@ namespace castor3d
 
 		if ( isInstanced( getMaxRefCount() ) )
 		{
-			for ( auto & data : m_instances )
+			for ( auto & [_, data] : m_instances )
 			{
-				if ( isInstanced( data.second.count ) )
+				if ( isInstanced( data.count ) )
 				{
 					smshcompinst::updateBuffer( device
-						, m_submesh.getParent().getName() + "_" + castor::string::toString( data.first )
-						, data.second.count
-						, data.second.buffer );
+						, data.count
+						, data.buffer );
 				}
 			}
 		}
@@ -252,26 +248,26 @@ namespace castor3d
 
 	void InstantiationComponent::ComponentData::doCleanup( RenderDevice const & device )
 	{
-		for ( auto & data : m_instances )
+		for ( auto & [_, data] : m_instances )
 		{
-			if ( data.second.buffer )
+			if ( data.buffer )
 			{
-				device.bufferPool->putBuffer( data.second.buffer );
-				data.second.buffer = {};
+				device.bufferPool->putBuffer( data.buffer );
+				data.buffer = {};
 			}
 		}
 	}
 
 	void InstantiationComponent::ComponentData::doUpload( UploadData & uploader )
 	{
-		for ( auto & data : m_instances )
+		for ( auto & [_, data] : m_instances )
 		{
-			if ( data.second.buffer && data.second.count )
+			if ( data.buffer && data.count )
 			{
-				std::copy( data.second.data.begin()
-					, data.second.data.end()
-					, data.second.buffer.getData().begin() );
-				data.second.buffer.markDirty( VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
+				std::copy( data.data.begin()
+					, data.data.end()
+					, data.buffer.getData().begin() );
+				data.buffer.markDirty( VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
 					, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
 			}
 		}

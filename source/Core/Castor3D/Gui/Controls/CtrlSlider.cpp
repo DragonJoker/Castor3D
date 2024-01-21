@@ -67,9 +67,9 @@ namespace castor3d
 			, castor::Size{} ) );
 		m_line->setVisible( visible );
 		m_line->connectNC( KeyboardEventType::ePushed
-			, [this]( ControlRPtr control, KeyboardEvent const & event )
+			, [this]( ControlRPtr, KeyboardEvent const & event )
 			{
-				onNcKeyDown( control, event );
+				onNcKeyDown( event );
 			} );
 
 		m_tick = manager.registerControlT( castor::makeUnique< StaticCtrl >( m_scene
@@ -82,24 +82,24 @@ namespace castor3d
 		m_tick->setVisible( visible );
 		m_tick->setCatchesMouseEvents( true );
 		m_tick->connectNC( MouseEventType::eMove
-			, [this]( ControlRPtr control, MouseEvent const & event )
+			, [this]( ControlRPtr, MouseEvent const & event )
 			{
-				onTickMouseMove( control, event );
+				onTickMouseMove( event );
 			} );
 		m_tick->connectNC( MouseEventType::ePushed
-			, [this]( ControlRPtr control, MouseEvent const & event )
+			, [this]( ControlRPtr, MouseEvent const & event )
 			{
-				onTickMouseButtonDown( control, event );
+				onTickMouseButtonDown( event );
 			} );
 		m_tick->connectNC( MouseEventType::eReleased
-			, [this]( ControlRPtr control, MouseEvent const & event )
+			, [this]( ControlRPtr, MouseEvent const & event )
 			{
-				onTickMouseButtonUp( control, event );
+				onTickMouseButtonUp( event );
 			} );
 		m_tick->connectNC( KeyboardEventType::ePushed
-			, [this]( ControlRPtr control, KeyboardEvent const & event )
+			, [this]( ControlRPtr, KeyboardEvent const & event )
 			{
-				onNcKeyDown( control, event );
+				onNcKeyDown( event );
 			} );
 
 		setStyle( style );
@@ -274,14 +274,12 @@ namespace castor3d
 		}
 	}
 
-	void SliderCtrl::onTickMouseMove( ControlRPtr control
-		, MouseEvent const & event )
+	void SliderCtrl::onTickMouseMove( MouseEvent const & event )
 	{
 		doOnMouseMove( event );
 	}
 
-	void SliderCtrl::onTickMouseButtonDown( ControlRPtr control
-		, MouseEvent const & event )
+	void SliderCtrl::onTickMouseButtonDown( MouseEvent const & event )
 	{
 		if ( event.getButton() == MouseButton::eLeft )
 		{
@@ -291,7 +289,7 @@ namespace castor3d
 		}
 	}
 
-	void SliderCtrl::onTickMouseButtonUp( ControlRPtr control, MouseEvent const & event )
+	void SliderCtrl::onTickMouseButtonUp( MouseEvent const & event )
 	{
 		doOnMouseButtonUp( event );
 	}
@@ -329,8 +327,7 @@ namespace castor3d
 		}
 	}
 
-	void SliderCtrl::onNcKeyDown( ControlRPtr control
-		, KeyboardEvent const & event )
+	void SliderCtrl::onNcKeyDown( KeyboardEvent const & event )
 	{
 		onKeyDown( event );
 	}

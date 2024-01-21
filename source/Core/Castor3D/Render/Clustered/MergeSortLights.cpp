@@ -103,9 +103,9 @@ namespace castor3d
 				* @return
 				*/
 			auto mergePath = writer.implementFunction< sdw::Int >( "c3d_mergePath"
-				, [&]( sdw::Int a0, sdw::Int aCount
-					, sdw::Int b0, sdw::Int bCount
-					, sdw::Int diag, sdw::Boolean bUseSharedMem )
+				, [&]( sdw::Int const & a0, sdw::Int const & aCount
+					, sdw::Int const & b0, sdw::Int const & bCount
+					, sdw::Int const & diag, sdw::Boolean const & bUseSharedMem )
 				{
 					auto begin = writer.declLocale( "begin", max( 0_i, diag - bCount ) );
 					auto end = writer.declLocale( "end", min( diag, aCount ) );
@@ -125,9 +125,9 @@ namespace castor3d
 						{
 							end = mid;
 						}
-						FI;
+						FI
 					}
-					ELIHW;
+					ELIHW
 
 					writer.returnStmt( begin );
 				}
@@ -141,10 +141,10 @@ namespace castor3d
 				* Perform a serial merge using shared memory. Write results to global memory.
 				*/
 			auto serialMerge = writer.implementFunction< sdw::Void >( "c3d_serialMerge"
-				, [&]( sdw::Int a0, sdw::Int a1
-					, sdw::Int b0, sdw::Int b1
-					, sdw::Int diag
-					, sdw::Int numValues, sdw::Int out0 )
+				, [&]( sdw::Int a0, sdw::Int const & a1
+					, sdw::Int b0, sdw::Int const & b1
+					, sdw::Int const & diag
+					, sdw::Int const & numValues, sdw::Int const & out0 )
 				{
 					auto aKey = writer.declLocale( "aKey", gsKeys[a0] );
 					auto bKey = writer.declLocale( "bKey", gsKeys[b0] );
@@ -174,9 +174,9 @@ namespace castor3d
 							bKey = gsKeys[b0];
 							bValue = gsValues[b0];
 						}
-						FI;
+						FI
 					}
-					ROF;
+					ROF
 				}
 				, sdw::InInt{ writer, "a0" }
 				, sdw::InInt{ writer, "a1" }
@@ -187,10 +187,10 @@ namespace castor3d
 				, sdw::InInt{ writer, "out0" } );
 
 			writer.implementMainT< sdw::VoidT >( NumThreads
-				, [&]( sdw::ComputeIn in )
+				, [&]( sdw::ComputeIn const & in )
 				{
-					auto threadIndex = in.globalInvocationID.x();
-					auto chunkSize = c3d_chunkSize;
+					auto const & threadIndex = in.globalInvocationID.x();
+					auto const & chunkSize = c3d_chunkSize;
 					// Number of chunks to sort.
 					auto numChunks = writer.declLocale( "numChunks", writer.cast< sdw::UInt >( ceil( writer.cast< sdw::Float >( c3d_numElements ) / writer.cast< sdw::Float >( chunkSize ) ) ) );
 					// Num values to sort per sort group.
@@ -232,12 +232,12 @@ namespace castor3d
 							// Write the merge path to global memory.
 							c3d_mergePathPartitions[globalPartition] = mergedPath;
 						}
-						FI;
+						FI
 					}
 					else
 					{
-						auto groupID = in.workGroupID.x();
-						auto groupIndex = in.localInvocationIndex;
+						auto const & groupID = in.workGroupID.x();
+						auto const & groupIndex = in.localInvocationIndex;
 
 						// Compute the number of thread groups required to sort a single sort group.
 						auto numThreadGroupsPerSortGroup = writer.declLocale( "numThreadGroupsPerSortGroup", writer.cast< sdw::UInt >( ceil( writer.cast< sdw::Float >( numValuesPerSortGroup ) / float( NumValuesPerThreadGroup ) ) ) );
@@ -304,7 +304,7 @@ namespace castor3d
 								key = c3d_inputKeys[chunkOffsetB0 + b];
 								value = c3d_inputValues[chunkOffsetB0 + b];
 							}
-							FI;
+							FI
 
 							gsKeys[diag + i] = key;
 							gsValues[diag + i] = value;
@@ -351,8 +351,7 @@ namespace castor3d
 			{
 			}
 
-			CRG_API void resetPipeline( crg::VkPipelineShaderStageCreateInfoArray config
-				, uint32_t index )
+			void resetPipeline( uint32_t index )
 			{
 				resetCommandBuffer( index );
 				m_partitions.pipeline.resetPipeline( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_partitions.createInfo ), index );
@@ -375,7 +374,7 @@ namespace castor3d
 					, crg::RunnableGraph & graph
 					, RenderDevice const & device
 					, bool mergePathPartitions
-					, FramePass * parent
+					, FramePass const * parent
 					, LightType lightType )
 					: shader{ VK_SHADER_STAGE_COMPUTE_BIT
 						, ( mergePathPartitions ? std::string{ "MergePathPartitions/" } : std::string{ "MergeSort/" } ) + getName( lightType )
@@ -509,7 +508,7 @@ namespace castor3d
 							// copy last chunk, there is no merging required but we still need data in the destination buffer
 							// note: no additional barriers as we are still doing read from source-> write to dest, so that should be good
 							u32 lastChunkOffset = chunkSize * ( numChunks - 1 ) * sizeof( u32 );
-							u32 lastChunkSize = u32( totalValues * sizeof( u32 ) - lastChunkOffset );
+							auto lastChunkSize = u32( totalValues * sizeof( u32 ) - lastChunkOffset );
 							auto & srcMorton = m_pass.buffers[0].buffer.buffer.buffer( index );
 							auto & srcIndices = m_pass.buffers[1].buffer.buffer.buffer( index );
 							auto & dstMorton = m_pass.buffers[0].buffer.buffer.buffer( 1u - index );
@@ -530,7 +529,7 @@ namespace castor3d
 
 			void doBarriers( crg::RecordContext & context
 				, VkCommandBuffer commandBuffer
-				, uint32_t passIndex )
+				, uint32_t passIndex )const
 			{
 				for ( auto & attach : m_pass.buffers )
 				{
@@ -554,7 +553,7 @@ namespace castor3d
 			}
 
 			void doCreatePipeline( uint32_t index
-				, Pipeline & pipeline )
+				, Pipeline & pipeline )const
 			{
 				auto & program = pipeline.pipeline.getProgram( index );
 				VkComputePipelineCreateInfo createInfo{ VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO

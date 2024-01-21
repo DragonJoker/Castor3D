@@ -44,7 +44,7 @@ namespace castor3d
 		 *\param[in]	sceneUbo	L'UBO de scène.
 		 *\param[in]	culler		Le culler pour cette passe.
 		 */
-		C3D_API Picking( crg::ResourcesCache & resources
+		C3D_API Picking( crg::ResourcesCache const & resources
 			, RenderDevice const & device
 			, QueueData const & queueData
 			, castor::Size const & size
@@ -72,9 +72,7 @@ namespace castor3d
 		 *\param[in]	camera		La caméra regardant la scène.
 		 *\return		PickingPass::PickNodeType si rien n'a été pické.
 		 */
-		C3D_API PickNodeType pick( RenderDevice const & device
-			, castor::Position position
-			, Camera const & camera );
+		C3D_API PickNodeType pick( castor::Position position );
 		/**
 		*\~english
 		*name

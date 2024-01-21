@@ -52,7 +52,7 @@ namespace castor3d
 				, 0u );
 
 			auto screenToView = writer.implementFunction< sdw::Vec4 >( "screenToView"
-				, [&]( sdw::Vec4 const screen )
+				, [&]( sdw::Vec4 const & screen )
 				{
 					// Convert to normalized texture coordinates in the range [0 .. 1].
 					auto texCoord = writer.declLocale( "texCoord"
@@ -71,9 +71,9 @@ namespace castor3d
 				, sdw::InVec4{ writer, "screen" } );
 
 			auto intersectLinePlane = writer.implementFunction< sdw::Vec3 >( "c3d_intersectLinePlane"
-				, [&]( sdw::Vec3 const a
-					, sdw::Vec3 const b
-					, sdw::Float const d )
+				, [&]( sdw::Vec3 const & a
+					, sdw::Vec3 const & b
+					, sdw::Float const & d )
 				{
 					auto ab = b - a;
 					auto normal = vec3( 0.0_f, 0.0_f, 1.0_f );
@@ -86,9 +86,9 @@ namespace castor3d
 				, sdw::InFloat{ writer, "d" } );
 
 			writer.implementMainT< sdw::VoidT >( 1u, 1u, 1u
-				, [&]( sdw::ComputeIn in )
+				, [&]( sdw::ComputeIn const & in )
 				{
-					auto clusterIndex3D = in.globalInvocationID;
+					auto const & clusterIndex3D = in.globalInvocationID;
 					auto clusterIndex1D = writer.declLocale( "clusterIndex1D"
 						, c3d_clustersData.computeClusterIndex1D( clusterIndex3D ) );
 
@@ -166,7 +166,7 @@ namespace castor3d
 		private:
 			void doPostRecord( crg::RecordContext & context
 				, VkCommandBuffer commandBuffer
-				, uint32_t index )
+				, uint32_t index )const
 			{
 				for ( auto & attach : m_pass.buffers )
 				{
@@ -196,7 +196,7 @@ namespace castor3d
 		, crg::FramePass const * previousPass
 		, RenderDevice const & device
 		, CameraUbo const & cameraUbo
-		, FrustumClusters & clusters )
+		, FrustumClusters const & clusters )
 	{
 		auto & pass = graph.createPass( "ComputeClustersAABB"
 			, [&clusters, &device]( crg::FramePass const & framePass

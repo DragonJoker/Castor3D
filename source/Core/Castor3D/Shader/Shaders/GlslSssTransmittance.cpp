@@ -40,7 +40,7 @@ namespace castor3d::shader
 		if ( !m_computeDirectional )
 		{
 			m_computeDirectional = m_writer.implementFunction< sdw::Vec3 >( "C3D_computeSssTransmittanceDirectional"
-				, [&]( sdw::UInt const & sssProfileIndex
+				, [this, &debugOutput]( sdw::UInt const & sssProfileIndex
 					, sdw::Float const & sssTransmittance
 					, DirectionalLight const & light
 					, sdw::Mat4x4 const & lightTransform
@@ -111,7 +111,7 @@ namespace castor3d::shader
 		if ( !m_computePoint )
 		{
 			m_computePoint = m_writer.implementFunction< sdw::Vec3 >( "C3D_computeSssTransmittancePoint"
-				, [&]( sdw::UInt const & sssProfileIndex
+				, [this, &debugOutput]( sdw::UInt const & sssProfileIndex
 					, sdw::Float const & sssTransmittance
 					, PointLight const & light
 					, sdw::Int const & shadowMapIndex
@@ -175,7 +175,7 @@ namespace castor3d::shader
 		if ( !m_computeSpot )
 		{
 			m_computeSpot = m_writer.implementFunction< sdw::Vec3 >( "C3D_computeSssTransmittanceSpot"
-				, [&]( sdw::UInt const & sssProfileIndex
+				, [this, &debugOutput]( sdw::UInt const & sssProfileIndex
 					, sdw::Float const & sssTransmittance
 					, SpotLight const & light
 					, sdw::Mat4x4 const & lightTransform
@@ -288,7 +288,7 @@ namespace castor3d::shader
 				, sssProfile.transmittanceProfile()[i] );
 			profile += profileFactors.rgb() * exp( dd / profileFactors.a() );
 		}
-		ROF;
+		ROF
 		debugOutput.registerOutput( "SSSTransmittance", "Profile", profile );
 		/**
 		* Using the profile, we finally approximate the transmitted lighting from

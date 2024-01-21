@@ -14,14 +14,15 @@ namespace castor3d
 
 	namespace sklanm
 	{
+		static std::map< SkeletonNodeType, castor::String > const MovingTypeNames
+		{
+			{ SkeletonNodeType::eNode, cuT( "Node_" ) },
+			{ SkeletonNodeType::eBone, cuT( "Bone_" ) },
+		};
+
 		static castor::String const & getMovingTypeName( SkeletonNodeType type )
 		{
-			static std::map< SkeletonNodeType, castor::String > const names
-			{
-				{ SkeletonNodeType::eNode, cuT( "Node_" ) },
-				{ SkeletonNodeType::eBone, cuT( "Bone_" ) },
-			};
-			return names.at( type );
+			return MovingTypeNames.at( type );
 		}
 	}
 
@@ -34,7 +35,7 @@ namespace castor3d
 	}
 
 	SkeletonAnimationObjectRPtr SkeletonAnimation::addObject( SkeletonNode & node
-		, SkeletonAnimationObjectRPtr parent )
+		, SkeletonAnimationObject const * parent )
 	{
 		auto result = castor::makeUnique< SkeletonAnimationNode >( *this );
 		result->setNode( node );
@@ -42,7 +43,7 @@ namespace castor3d
 	}
 
 	SkeletonAnimationObjectRPtr SkeletonAnimation::addObject( BoneNode & bone
-		, SkeletonAnimationObjectRPtr parent )
+		, SkeletonAnimationObject const * parent )
 	{
 		auto result = castor::makeUnique< SkeletonAnimationBone >( *this );
 		result->setBone( bone );
@@ -50,7 +51,7 @@ namespace castor3d
 	}
 
 	SkeletonAnimationObjectRPtr SkeletonAnimation::addObject( SkeletonAnimationObjectUPtr object
-		, SkeletonAnimationObjectRPtr parent )
+		, SkeletonAnimationObject const * parent )
 	{
 		castor::String name = sklanm::getMovingTypeName( object->getType() ) + object->getName();
 		auto it = m_toMove.find( name );
@@ -59,7 +60,7 @@ namespace castor3d
 		if ( it == m_toMove.end() )
 		{
 			result = object.get();
-			m_toMove.emplace( name, std::move( object ) );
+			m_toMove.try_emplace( name, std::move( object ) );
 
 			if ( !parent )
 			{
@@ -95,9 +96,9 @@ namespace castor3d
 		, castor::String const & name )const
 	{
 		SkeletonAnimationObjectRPtr result{};
-		auto it = m_toMove.find( sklanm::getMovingTypeName( type ) + name );
 
-		if ( it != m_toMove.end() )
+		if ( auto it = m_toMove.find( sklanm::getMovingTypeName( type ) + name );
+			it != m_toMove.end() )
 		{
 			result = it->second.get();
 		}

@@ -29,7 +29,8 @@ namespace castor3d
 		{
 			std::stringstream stream;
 			stream << castor::Debug::Backtrace();
-			m_allocated.push_back( { ++m_id, type, object, file, line, stream.str() } );
+			++m_id;
+			m_allocated.emplace_back( m_id, type, object, file, line, stream.str() );
 			std::stringstream nameStream;
 			nameStream << "(" << m_id << ") " << typeStream.str() << " [0x" << ptrStream.str() << "]";
 			log::debug << nameStream.str() << std::endl;
@@ -54,7 +55,7 @@ namespace castor3d
 	{
 		auto it = std::find_if( m_allocated.begin()
 			, m_allocated.end()
-			, [&object]( ObjectDeclaration lookup )
+			, [&object]( ObjectDeclaration const & lookup )
 			{
 				return object == lookup.m_object;
 			} );
@@ -83,7 +84,7 @@ namespace castor3d
 		return result;
 	}
 
-	void GpuObjectTracker::reportTracked()
+	void GpuObjectTracker::reportTracked()const
 	{
 		for ( auto const & decl : m_allocated )
 		{

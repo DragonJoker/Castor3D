@@ -70,7 +70,7 @@ namespace castor3d::shader
 
 		C3D_API sdw::Vec3 getBrdf( sdw::CombinedImage2DRgba32 const & brdfMap
 			, sdw::Float const & NdotV
-			, sdw::Float const & roughness );
+			, sdw::Float const & roughness )const;
 
 		VkExtent2D const & getTargetSize()const
 		{

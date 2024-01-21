@@ -107,7 +107,6 @@ namespace castor3d
 		, float nearZ
 		, float farZ )
 		: m_engine{ engine }
-		, m_modified{ true }
 		, m_left{ m_modified, left }
 		, m_right{ m_modified, right }
 		, m_top{ m_modified, top }
@@ -119,8 +118,6 @@ namespace castor3d
 		, m_type{ m_modified, type }
 		, m_size{ m_modified }
 		, m_position{ m_modified }
-		, m_viewport{ 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f }
-		, m_scissor{ { 0, 0 }, { 1u, 1u } }
 	{
 		if ( m_type != ViewportType::eOrtho && m_near == 0.0f )
 		{
@@ -294,7 +291,6 @@ namespace castor3d
 			return m_engine.getRenderSystem()->getInfinitePerspective( m_fovY
 				, m_ratio
 				, m_near * scale );
-		case castor3d::ViewportType::eFrustum:
 		default:
 			return m_engine.getRenderSystem()->getFrustum( m_left
 				, m_right
@@ -331,7 +327,6 @@ namespace castor3d
 				, m_fovY
 				, m_ratio
 				, m_near * scale );
-		case castor3d::ViewportType::eFrustum:
 		default:
 			return viewport::getSafeBandedFrustum( *m_engine.getRenderSystem()
 				, m_size

@@ -31,7 +31,6 @@ namespace castor3d
 		, ControlsManager & container )
 		: castor::Named{ typeName }
 		, m_manager{ &container }
-		, m_container{}
 	{
 	}
 
@@ -68,7 +67,7 @@ namespace castor3d
 		}
 	}
 
-	void Layout::removeControl( Control & control )
+	void Layout::removeControl( Control const & control )
 	{
 		auto it = std::find_if( m_items.begin()
 			, m_items.end()
@@ -90,14 +89,13 @@ namespace castor3d
 	void Layout::addControl( Control & control
 		, LayoutItemFlags flags )
 	{
-		auto it = std::find_if( m_items.begin()
+		if ( auto it = std::find_if( m_items.begin()
 			, m_items.end()
 			, [&control]( Item const & lookup )
 			{
 				return lookup.control() == &control;
 			} );
-
-		if ( it != m_items.end() )
+			it != m_items.end() )
 		{
 			CU_SrcException( "Layout", "The control already exists in the layout." );
 		}
@@ -107,7 +105,7 @@ namespace castor3d
 
 		m_items.emplace_back( control
 			, std::move( flags )
-			, control.onChanged.connect( [this]( Control const & ctrl )
+			, control.onChanged.connect( [this]( Control const & )
 				{
 					if ( !m_updating )
 					{
@@ -119,8 +117,8 @@ namespace castor3d
 
 	void Layout::addSpacer( uint32_t size )
 	{
-		auto & spacer = m_spacers.emplace_back( castor::makeUnique< Spacer >( size ) );
-		m_items.emplace_back( *spacer );
+		auto & spacer = *m_spacers.emplace_back( castor::makeUnique< Spacer >( size ) );
+		m_items.emplace_back( spacer );
 		markDirty();
 	}
 

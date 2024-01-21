@@ -36,12 +36,9 @@ namespace castor3d
 {
 	OpaqueRendering::OpaqueRendering( RenderTechnique & parent
 		, RenderDevice const & device
-		, QueueData const & queueData
 		, PrepassRendering const & previous
 		, crg::FramePassArray const & previousPasses
-		, SsaoConfig const & ssaoConfig
-		, ProgressBar * progress
-		, Texture const * normal )
+		, ProgressBar * progress )
 		: castor::OwnedBy< RenderTechnique >{ parent }
 		, m_device{ device }
 		, m_graph{ getOwner()->getGraph().createPassGroup( "Opaque" ) }
@@ -117,11 +114,6 @@ namespace castor3d
 		m_graph.addGroupOutput( getOwner()->getTargetResult().back() );
 	}
 
-	OpaqueRendering::~OpaqueRendering()
-	{
-		m_visibilityReorder.reset();
-	}
-
 	SsaoPassUPtr OpaqueRendering::doCreateSsaoPass( ProgressBar * progress
 		, crg::FramePass const & lastPass
 		, crg::FramePassArray previousPasses )const
@@ -142,7 +134,7 @@ namespace castor3d
 	{
 		uint32_t result = 0u;
 		result += SsaoPass::countInitialisationSteps();
-		result += 1;// visibility pass;
+		result += 1;// visibility pass
 		return result;
 	}
 
@@ -177,7 +169,7 @@ namespace castor3d
 		}
 	}
 
-	void OpaqueRendering::update( GpuUpdater & updater )
+	void OpaqueRendering::update( GpuUpdater & updater )const
 	{
 		if ( !m_opaquePass )
 		{
@@ -331,17 +323,20 @@ namespace castor3d
 		result.addDependencies( previousPasses );
 		uint32_t index = 0u;
 		result.addInputStorageView( previous.getVisibility().targetViewId
-			, index++ );
+			, index );
+		++index;
 
 		if ( isDeferredLighting )
 		{
 			result.addInputStorageView( getOwner()->getSssDiffuse().targetViewId
-				, index++ );
+				, index );
+			++index;
 		}
 		else
 		{
 			result.addClearableOutputStorageView( getOwner()->getDiffuse().targetViewId
-				, index++ );
+				, index );
+			++index;
 		}
 
 		if ( m_ssao )
@@ -355,26 +350,30 @@ namespace castor3d
 		{
 			result.addDependency( m_visibilityReorder->getLastPass() );
 			result.addInputStorageBuffer( { m_materialsCounts->getBuffer(), "MaterialsCounts" }
-				, index++
+				, index
 				, 0u
 				, uint32_t( m_materialsCounts->getBuffer().getSize() ) );
+			++index;
 			result.addInputStorageBuffer( { m_materialsStarts->getBuffer(), "MaterialsStarts" }
-				, index++
+				, index
 				, 0u
 				, uint32_t( m_materialsStarts->getBuffer().getSize() ) );
+			++index;
 			result.addInputStorageBuffer( { m_pixelsXY->getBuffer(), "PixelsXY" }
-				, index++
+				, index
 				, 0u
 				, uint32_t( m_pixelsXY->getBuffer().getSize() ) );
-			result.addInOutStorageView( targetResult, index++ );
+			++index;
+			result.addInOutStorageView( targetResult, index );
+			++index;
 
 			if ( isDeferredLighting )
 			{
-				result.addInOutStorageView( getOwner()->getScattering().targetViewId, index++ );
+				result.addInOutStorageView( getOwner()->getScattering().targetViewId, index );
 			}
 			else
 			{
-				result.addClearableOutputStorageView( getOwner()->getScattering().targetViewId, index++ );
+				result.addClearableOutputStorageView( getOwner()->getScattering().targetViewId, index );
 			}
 		}
 		else

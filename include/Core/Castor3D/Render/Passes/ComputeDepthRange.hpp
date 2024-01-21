@@ -44,18 +44,14 @@ namespace castor3d
 			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
-			, bool & enabled );
+			, bool const & enabled );
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
 		C3D_API void accept( RenderTechniqueVisitor & visitor );
 
 	private:
-		void doRecordInto( crg::RecordContext & context
-			, VkCommandBuffer commandBuffer
-			, uint32_t index );
-		uint32_t doGetPassIndex()const;
-		bool doIsComputePass()const;
+		void doRecordInto( VkCommandBuffer commandBuffer )const;
 
 	private:
 		RenderDevice const & m_device;

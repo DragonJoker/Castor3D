@@ -32,7 +32,7 @@ namespace castor
 		{
 		}
 
-		bool operator()( StringStream & file )
+		bool operator()( StringStream & file )const
 		{
 			return writeMask( file, cuT( "transmittance_mask" ), m_mask );
 		}
@@ -78,7 +78,7 @@ namespace castor3d
 		static CU_ImplementAttributeParserBlock( parserTexRemapTransmittance, SceneImportContext )
 		{
 			auto & plugin = getEngine( *blockContext )->getPassComponentsRegister().getPlugin( TransmittanceMapComponent::TypeName );
-			blockContext->textureRemapIt = blockContext->textureRemaps.emplace( plugin.getTextureFlags(), TextureConfiguration{} ).first;
+			blockContext->textureRemapIt = blockContext->textureRemaps.try_emplace( plugin.getTextureFlags() ).first;
 			blockContext->textureRemapIt->second = TextureConfiguration{};
 		}
 		CU_EndAttributePushBlock( CSCNSection::eTextureRemapChannel, blockContext )
@@ -123,13 +123,14 @@ namespace castor3d
 	void TransmittanceMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		channelFillers.emplace( "transmittance", ChannelFiller{ getTextureFlags()
+		channelFillers.try_emplace( "transmittance"
+			, getTextureFlags()
 			, []( TextureContext & blockContext )
 			{
-				auto & component = getPassComponent< TransmittanceMapComponent >( blockContext );
+				auto const & component = getPassComponent< TransmittanceMapComponent >( blockContext );
 				component.fillChannel( blockContext.configuration
 					, 0xFF000000 );
-			} } );
+			} );
 
 		castor::addParserT( parsers
 			, CSCNSection::eTexture

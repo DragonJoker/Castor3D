@@ -15,6 +15,18 @@ namespace castor3d
 	/**@name Background */
 	//@{
 
+	enum class SkyboxFace : uint8_t
+	{
+		eRight = 0,
+		eLeft = 1,
+		eBottom = 2,
+		eTop = 3,
+		eBack = 4,
+		eFront = 5,
+		CU_ScopedEnumBounds( eLeft, eBack )
+	};
+	castor::StringView getName( SkyboxFace face );
+
 	using BackgroundModelID = uint8_t;
 	/**
 	*\~english

@@ -35,7 +35,7 @@ namespace castor3d::shader
 			, BlendComponents & output )
 		{
 			auto & writer = findWriterMandat( textureConfigs, textureAnims, maps, material, output );
-			auto & passShaders = materials.getPassShaders();
+			auto const & passShaders = materials.getPassShaders();
 			auto opacity = output.getMember< sdw::Float >( "opacity", true );
 
 			if ( flags.enablePassMasks() )
@@ -55,7 +55,7 @@ namespace castor3d::shader
 						, passComponents );
 					passShaders.blendComponents( materials, passMultiplier, result, passComponents );
 				}
-				FI;
+				FI
 
 				FOR( writer, sdw::UInt, passIdx, 1_u, passIdx < material.passCount && passIdx < MaxPassLayers, ++passIdx )
 				{
@@ -74,9 +74,9 @@ namespace castor3d::shader
 						material.lighting += curMaterial.lighting;
 						passShaders.blendComponents( materials, passMultiplier, result, passComponents );
 					}
-					FI;
+					FI
 				}
-				ROF;
+				ROF
 
 				output = result;
 				output.normal = normalize( result.normal );
@@ -127,7 +127,7 @@ namespace castor3d::shader
 	}
 
 	ast::type::BaseStructPtr Material::makeType( ast::type::TypesCache & cache
-		, PassShaders & passShaders
+		, PassShaders const & passShaders
 		, sdw::expr::ExprList & inits )
 	{
 		auto result = cache.getStruct( ast::type::MemoryLayout::eStd430, "C3D_Material" );
@@ -137,21 +137,19 @@ namespace castor3d::shader
 
 	void Material::getPassMultipliers( PipelineFlags const & flags
 		, sdw::UVec4 const & passMasks
-		, sdw::Array< sdw::Vec4 > & passMultipliers )const
+		, sdw::Array< sdw::Vec4 > const & passMultipliers )const
 	{
-		if ( passMultipliers.isEnabled() )
+		if ( passMultipliers.isEnabled()
+			&& passMasks.isEnabled()
+			&& flags.enablePassMasks() )
 		{
-			if ( flags.enablePassMasks()
-				&& passMasks.isEnabled() )
+			FOR( *m_writer, sdw::UInt, passIdx, 0_u, passIdx < passCount && passIdx < MaxPassLayers, ++passIdx )
 			{
-				FOR( *m_writer, sdw::UInt, passIdx, 0_u, passIdx < passCount && passIdx < MaxPassLayers, ++passIdx )
-				{
-					auto mask32 = passMasks[passIdx / 4_u];
-					auto mask8 = ( mask32 >> ( ( passIdx % 4_u ) * 8_u ) ) & 0xFF_u;
-					passMultipliers[passIdx / 4_u][passIdx % 4_u] = m_writer->cast< sdw::Float >( mask8 ) / 255.0_f;
-				}
-				ROF;
+				auto mask32 = passMasks[passIdx / 4_u];
+				auto mask8 = ( mask32 >> ( ( passIdx % 4_u ) * 8_u ) ) & 0xFF_u;
+				passMultipliers[passIdx / 4_u][passIdx % 4_u] = m_writer->cast< sdw::Float >( mask8 ) / 255.0_f;
 			}
+			ROF
 		}
 	}
 
@@ -175,7 +173,7 @@ namespace castor3d::shader
 				{
 					writer.demote();
 				}
-				FI;
+				FI
 				if ( opaque )
 				{
 					alpha = 1.0_f;
@@ -186,7 +184,7 @@ namespace castor3d::shader
 				{
 					writer.demote();
 				}
-				FI;
+				FI
 				if ( opaque )
 				{
 					alpha = 1.0_f;
@@ -197,7 +195,7 @@ namespace castor3d::shader
 				{
 					writer.demote();
 				}
-				FI;
+				FI
 				if ( opaque )
 				{
 					alpha = 1.0_f;
@@ -208,7 +206,7 @@ namespace castor3d::shader
 				{
 					writer.demote();
 				}
-				FI;
+				FI
 				if ( opaque )
 				{
 					alpha = 1.0_f;
@@ -219,7 +217,7 @@ namespace castor3d::shader
 				{
 					writer.demote();
 				}
-				FI;
+				FI
 				if ( opaque )
 				{
 					alpha = 1.0_f;
@@ -230,7 +228,7 @@ namespace castor3d::shader
 				{
 					writer.demote();
 				}
-				FI;
+				FI
 				if ( opaque )
 				{
 					alpha = 1.0_f;
@@ -245,7 +243,7 @@ namespace castor3d::shader
 		}
 	}
 
-	sdw::expr::ExprPtr Material::makeInit( sdw::ShaderWriter & writer
+	sdw::expr::ExprPtr Material::makeInit( sdw::ShaderWriter const & writer
 		, PassShaders & passShaders )
 	{
 		sdw::expr::ExprList initializers;

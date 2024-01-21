@@ -225,14 +225,14 @@ namespace castor3d
 		vis.visit( cuT( "Alpha func" )
 			, m_value.alphaFunc
 			, names
-			, ConfigurationVisitorBase::OnEnumValueChangeT< VkCompareOp >( [this]( VkCompareOp oldV, VkCompareOp newV )
+			, ConfigurationVisitorBase::OnEnumValueChangeT< VkCompareOp >( [this]( VkCompareOp, VkCompareOp newV )
 			{
 				m_value.alphaFunc = newV;
 			} ) );
 		vis.visit( cuT( "Blend alpha func" )
 			, m_value.blendAlphaFunc
 			, names
-			, ConfigurationVisitorBase::OnEnumValueChangeT< VkCompareOp >( [this]( VkCompareOp oldV, VkCompareOp newV )
+			, ConfigurationVisitorBase::OnEnumValueChangeT< VkCompareOp >( [this]( VkCompareOp, VkCompareOp newV )
 			{
 				m_value.blendAlphaFunc = newV;
 			} ) );

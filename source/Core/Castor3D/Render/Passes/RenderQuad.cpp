@@ -66,7 +66,7 @@ namespace castor3d
 				return false;
 			}
 
-			for ( auto & write : writes )
+			for ( auto const & write : writes )
 			{
 				if ( write->descriptorType != bindings[write->dstBinding].descriptorType )
 				{
@@ -86,11 +86,12 @@ namespace castor3d
 
 			for ( auto & binding : bindings )
 			{
-				result.push_back( { index++
+				result.push_back( { index
 					, binding.descriptorType
 					, 1u
 					, binding.stageFlags
 					, nullptr } );
+				++index;
 			}
 
 			return result;
@@ -102,61 +103,66 @@ namespace castor3d
 		template<>
 		struct DefaultValueGetterT< VkImageSubresourceRange >
 		{
+			static inline VkImageSubresourceRange const Value{ 0u, 0u, 1u, 0u, 1u };
+
 			static VkImageSubresourceRange const & get()
 			{
-				static VkImageSubresourceRange const result = VkImageSubresourceRange{ 0u, 0u, 1u, 0u, 1u };
-				return result;
+				return Value;
 			}
 		};
 
 		template<>
 		struct DefaultValueGetterT< BlendMode >
 		{
+			static BlendMode const Value = BlendMode::eNoBlend;
+
 			static BlendMode const & get()
 			{
-				static BlendMode const result = BlendMode::eNoBlend;
-				return result;
+				return Value;
 			}
 		};
 
 		template<>
 		struct DefaultValueGetterT< rq::Texcoord >
 		{
+			static inline rq::Texcoord const Value{ false, false };
+
 			static rq::Texcoord const & get()
 			{
-				static rq::Texcoord const result{ false, false };
-				return result;
+				return Value;
 			}
 		};
 
 		template<>
 		struct DefaultValueGetterT< rq::BindingDescriptionArray >
 		{
+			static inline rq::BindingDescriptionArray const Value{ []()
+				{
+					rq::BindingDescriptionArray tmp
+					{
+						{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },
+					};
+					return tmp;
+				}() };
+
 			static rq::BindingDescriptionArray const & get()
 			{
-				static rq::BindingDescriptionArray const result = rq::BindingDescriptionArray{ []()
-					{
-						rq::BindingDescriptionArray tmp
-						{
-							{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },
-						};
-						return tmp;
-				}( ) };
-				return result;
+				return Value;
 			}
 		};
 
 		template<>
 		struct DefaultValueGetterT< IntermediateView >
 		{
+			static inline IntermediateView const Value{ []()
+				{
+					IntermediateView tmp{};
+					return tmp;
+				}() };
+
 			static IntermediateView const & get()
 			{
-				static IntermediateView const result = IntermediateView{ []()
-					{
-						IntermediateView tmp{};
-						return tmp;
-				}( ) };
-				return result;
+				return Value;
 			}
 		};
 
@@ -197,12 +203,12 @@ namespace castor3d
 	}
 
 	RenderQuad::RenderQuad( RenderQuad && rhs )noexcept
-		: castor::Named{ std::forward< castor::Named && >( rhs ) }
+		: castor::Named{ std::move( rhs ) }
 		, m_renderSystem{ rhs.m_renderSystem }
 		, m_device{ rhs.m_device }
 		, m_sampler{ std::move( rhs.m_sampler ) }
 		, m_config{ std::move( rhs.m_config ) }
-		, m_useTexCoord{ std::move( rhs.m_useTexCoord ) }
+		, m_useTexCoord{ rhs.m_useTexCoord }
 		, m_descriptorSetLayout{ std::move( rhs.m_descriptorSetLayout ) }
 		, m_pipelineLayout{ std::move( rhs.m_pipelineLayout ) }
 		, m_pipeline{ std::move( rhs.m_pipeline ) }

@@ -65,7 +65,7 @@ namespace castor3d
 		/** Sets the background centerUV.
 		 *\param[in]	value		The new value.
 		 */
-		C3D_API void setUV( castor::Point4d const & value );
+		C3D_API void setUV( castor::Point4d const & value )const;
 
 		/** Sets the background borders size.
 		 *\param[in]	value		The new value.
@@ -75,12 +75,12 @@ namespace castor3d
 		/** Sets the background borders inner UV.
 		 *\param[in]	value		The new value.
 		 */
-		C3D_API void setBorderInnerUV( castor::Point4d const & value );
+		C3D_API void setBorderInnerUV( castor::Point4d const & value )const;
 
 		/** Sets the background borders outer UV.
 		 *\param[in]	value		The new value.
 		 */
-		C3D_API void setBorderOuterUV( castor::Point4d const & value );
+		C3D_API void setBorderOuterUV( castor::Point4d const & value )const;
 
 		/** Sets the caption.
 		 *\param[in]	caption	The new value
@@ -308,22 +308,22 @@ namespace castor3d
 		/** Sets the background material.
 		 *\param[in]	value		The new value.
 		 */
-		C3D_API void setBackgroundMaterial( MaterialObs value );
+		C3D_API void setBackgroundMaterial( MaterialObs value )const;
 
 		/** Sets the background size.
 		 *\param[in]	value		The new value.
 		 */
-		C3D_API void setBackgroundSize( castor::Size const & value );
+		C3D_API void setBackgroundSize( castor::Size const & value )const;
 
 		/** Sets the background borders position.
 		 *\param[in]	value		The new value.
 		 */
-		C3D_API void setBackgroundBorderPosition( BorderPosition value );
+		C3D_API void setBackgroundBorderPosition( BorderPosition value )const;
 
 		/** Sets the background borders material.
 		 *\param[in]	value		The new value.
 		 */
-		C3D_API void setBackgroundBorderMaterial( MaterialObs value );
+		C3D_API void setBackgroundBorderMaterial( MaterialObs value )const;
 
 		/** Creates the control's overlays.
 		 *\param[in]	ctrlManager	The controls manager.
@@ -391,7 +391,7 @@ namespace castor3d
 		/** Ends dragging of the control.
 		 *\param[in]	event		The mouse event.
 		 */
-		void endMove( MouseEvent const & event );
+		void endMove();
 
 		/** Begins dragging of the control.
 		 *\param[in]	event		The mouse event.
@@ -406,7 +406,7 @@ namespace castor3d
 		/** Ends dragging of the control.
 		 *\param[in]	event		The mouse event.
 		 */
-		void endResize( MouseEvent const & event );
+		void endResize();
 
 		/** Updates the area where sub-controls can be draw.
 		 */

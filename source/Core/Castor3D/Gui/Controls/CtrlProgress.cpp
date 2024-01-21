@@ -29,7 +29,6 @@ namespace castor3d
 			, castor::Size{}
 			, ControlFlagType( ProgressFlag::eLeftRight | ProgressFlag::eHasTitle )
 			, true }
-		, m_value{ castor::makeRangedValue( 0, 0, 100 ) }
 	{
 		setBorderSize( castor::Point4ui{} );
 		auto title = m_scene
@@ -109,7 +108,7 @@ namespace castor3d
 		{
 			if ( auto title = m_title )
 			{
-				title->setCaption( value );
+				title->setCaption( std::move( value ) );
 			}
 		}
 	}
@@ -283,7 +282,8 @@ namespace castor3d
 		{
 			if ( auto title = m_title )
 			{
-				title->setOrder( index++, 0u );
+				title->setOrder( index, 0u );
+				++index;
 			}
 		}
 	}
@@ -354,21 +354,19 @@ namespace castor3d
 		int32_t top{ clientOffset.y() };
 		int32_t left{ clientOffset.x() };
 
-		if ( !isVertical() )
+		if ( !isVertical()
+			&& hasTitle() )
 		{
-			if ( hasTitle() )
+			if ( auto title = m_title )
 			{
-				if ( auto title = m_title )
-				{
-					auto titleHeight = ( title->getFontTexture() && title->getFontTexture()->getFont() )
-						? title->getFontTexture()->getFont()->getHeight()
-						: 0u;
-					auto titleOffset = titleHeight / 2u;
-					titleHeight += titleOffset;
-					title->setPixelPosition( clientOffset );
-					title->setPixelSize( { clientSize->x, titleHeight } );
-					top += titleHeight;
-				}
+				auto titleHeight = ( title->getFontTexture() && title->getFontTexture()->getFont() )
+					? title->getFontTexture()->getFont()->getHeight()
+					: 0u;
+				auto titleOffset = titleHeight / 2u;
+				titleHeight += titleOffset;
+				title->setPixelPosition( clientOffset );
+				title->setPixelSize( { clientSize->x, titleHeight } );
+				top += titleHeight;
 			}
 		}
 

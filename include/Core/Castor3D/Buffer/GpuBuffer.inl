@@ -6,23 +6,21 @@ namespace castor3d
 	GpuBufferT< AllocatorT >::GpuBufferT( RenderSystem const & renderSystem
 		, VkBufferUsageFlags usage
 		, VkMemoryPropertyFlags memoryFlags
-		, castor::String debugName
+		, castor::String const & debugName
 		, ashes::QueueShare sharingMode
-		, AllocatorT allocator
-		, bool smallData )
+		, AllocatorT allocator )
 		: GpuBufferBase{ renderSystem
 			, usage
 			, memoryFlags
-			, std::move( debugName )
+			, debugName
 			, std::move( sharingMode )
-			, allocator.getTotalSize()
-			, smallData }
+			, allocator.getTotalSize() }
 		, m_allocator{ std::move( allocator ) }
 	{
 	}
 
 	template< typename AllocatorT >
-	bool GpuBufferT< AllocatorT >::hasAvailable( VkDeviceSize size )const
+	bool GpuBufferT< AllocatorT >::hasAvailable( VkDeviceSize size )const noexcept
 	{
 		size = ashes::getAlignedSize( size, m_allocator.getAlignSize() );
 		return m_allocator.hasAvailable( size );
@@ -41,13 +39,13 @@ namespace castor3d
 	}
 
 	template< typename AllocatorT >
-	void GpuBufferT< AllocatorT >::deallocate( MemChunk const & mem )
+	void GpuBufferT< AllocatorT >::deallocate( MemChunk const & mem )noexcept
 	{
 		m_allocator.deallocate( mem.offset );
 	}
 
 	template< typename AllocatorT >
-	size_t GpuBufferT< AllocatorT >::getMinAlignment()const
+	size_t GpuBufferT< AllocatorT >::getMinAlignment()const noexcept
 	{
 		return m_allocator.getAlignSize();
 	}
@@ -58,7 +56,7 @@ namespace castor3d
 	GpuBaseBufferT< AllocatorT >::GpuBaseBufferT( RenderDevice const & device
 		, VkBufferUsageFlags usage
 		, VkMemoryPropertyFlags memoryFlags
-		, castor::String debugName
+		, castor::String const & debugName
 		, ashes::QueueShare sharingMode
 		, AllocatorT allocator )
 		: m_device{ device }
@@ -77,14 +75,14 @@ namespace castor3d
 	}
 
 	template< typename AllocatorT >
-	bool GpuBaseBufferT< AllocatorT >::hasAvailable( VkDeviceSize size )const
+	bool GpuBaseBufferT< AllocatorT >::hasAvailable( VkDeviceSize size )const noexcept
 	{
 		size = ashes::getAlignedSize( size, m_allocator.getAlignSize() );
 		return m_allocator.hasAvailable( size );
 	}
 
 	template< typename AllocatorT >
-	MemChunk GpuBaseBufferT< AllocatorT >::allocate( VkDeviceSize size )
+	MemChunk GpuBaseBufferT< AllocatorT >::allocate( VkDeviceSize size )noexcept
 	{
 		auto realSize = ashes::getAlignedSize( size, m_allocator.getAlignSize() );
 		return
@@ -96,13 +94,13 @@ namespace castor3d
 	}
 
 	template< typename AllocatorT >
-	void GpuBaseBufferT< AllocatorT >::deallocate( MemChunk const & mem )
+	void GpuBaseBufferT< AllocatorT >::deallocate( MemChunk const & mem )noexcept
 	{
 		m_allocator.deallocate( mem.offset );
 	}
 
 	template< typename AllocatorT >
-	size_t GpuBaseBufferT< AllocatorT >::getMinAlignment()const
+	size_t GpuBaseBufferT< AllocatorT >::getMinAlignment()const noexcept
 	{
 		return m_allocator.getAlignSize();
 	}

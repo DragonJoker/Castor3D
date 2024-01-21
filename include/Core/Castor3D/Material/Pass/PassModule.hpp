@@ -169,7 +169,7 @@ namespace castor3d
 
 	CU_DeclareSmartPtr( castor3d, RenderPassRegisterInfo, C3D_API );
 
-	C3D_API PassRPtr getComponentPass( PassComponent & component );
+	C3D_API PassRPtr getComponentPass( PassComponent const & component );
 	C3D_API castor::String const & getPassComponentType( PassComponent const & component );
 	//@}
 	//@}

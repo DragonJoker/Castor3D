@@ -36,7 +36,7 @@ namespace castor3d
 
 			if ( points.size() > 1 )
 			{
-				for ( auto & vertex : castor::makeArrayView( &points[1], points.data() + points.size() ) )
+				for ( auto const & vertex : castor::makeArrayView( &points[1], points.data() + points.size() ) )
 				{
 					castor::Point3f cur{ vertex };
 					max[0] = std::max( cur[0], max[0] );
@@ -141,10 +141,9 @@ namespace castor3d
 	bool MorphComponent::ComponentData::doInitialise( RenderDevice const & device )
 	{
 		auto vertexCount = m_submesh.getPointsCount();
-		auto size = m_targetDataCount * vertexCount * MaxMorphTargets;
 
-		if ( !m_buffer
-			|| size > m_buffer.getCount() )
+		if ( auto size = m_targetDataCount * vertexCount * MaxMorphTargets;
+			!m_buffer || size > m_buffer.getCount() )
 		{
 			m_buffer = device.bufferPool->getBuffer< castor::Point4f >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 				, size

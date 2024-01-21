@@ -87,13 +87,10 @@ namespace castor3d
 
 		C3D_API castor::Grid const & cpuUpdate( castor::BoundingBox const & aabb
 			, castor::Point3f const & cameraPos
-			, castor::Point3f const & cameraDir
 			, uint32_t gridDim
 			, float indirectAttenuation );
-		C3D_API castor::Grid const & cpuUpdate( uint32_t gridLevel
-			, float gridLevelScale
+		C3D_API castor::Grid const & cpuUpdate( float gridLevelScale
 			, castor::Grid const & grid
-			, castor::BoundingBox const & aabb
 			, castor::Point3f const & cameraPos
 			, castor::Point3f const & cameraDir
 			, float indirectAttenuation );
@@ -124,6 +121,14 @@ namespace castor3d
 			, uint32_t dstArrayElement = 0u )const
 		{
 			return m_ubo.getDescriptorWrite( dstBinding, dstArrayElement );
+		}
+
+		void addDescriptorWrite( ashes::WriteDescriptorSetArray & descriptorWrites
+			, uint32_t & dstBinding
+			, uint32_t dstArrayElement = 0u )const
+		{
+			descriptorWrites.emplace_back( getDescriptorWrite( dstBinding, dstArrayElement ) );
+			++dstBinding;
 		}
 
 	private:

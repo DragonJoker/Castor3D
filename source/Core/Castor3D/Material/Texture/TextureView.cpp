@@ -54,7 +54,7 @@ namespace castor3d
 		, m_info{ std::move( info ) }
 		, m_debugName{ std::move( debugName ) }
 		, m_source{ getOwner()->getImage()
-			, debugName + texview::getName( m_info )
+			, m_debugName + texview::getName( m_info )
 			, texview::getLayout( m_info, layout.getImage().getLayout().extent ) }
 	{
 	}

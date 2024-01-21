@@ -71,8 +71,7 @@ namespace castor3d
 	}
 
 	void MeshletBoundsTransformPass::recordInto( crg::RecordContext & context
-		, VkCommandBuffer commandBuffer
-		, uint32_t index )
+		, VkCommandBuffer commandBuffer )const
 	{
 		if ( m_output.buffer )
 		{

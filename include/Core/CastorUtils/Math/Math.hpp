@@ -177,7 +177,7 @@ namespace castor
 	static DataT minValueT = details::MinRecT< DataT, ValuesT... >::value;
 
 	template< details::ValueTypeT DataT, DataT ... ValuesT >
-	static DataT maxValueT = details::MaxRecT< DataT, ValuesT... >::value;
+	static DataT constexpr maxValueT = details::MaxRecT< DataT, ValuesT... >::value;
 
 	//************************************************************************************************
 

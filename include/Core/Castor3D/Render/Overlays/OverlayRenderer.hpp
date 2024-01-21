@@ -40,6 +40,20 @@ namespace castor3d
 
 		struct TextComputePipelineDescriptor
 		{
+			TextComputePipelineDescriptor( ashes::DescriptorSetPtr descriptorSet )
+				: descriptorSet{ std::move( descriptorSet ) }
+			{
+			}
+
+			TextComputePipelineDescriptor( ashes::DescriptorSetPtr descriptorSet
+				, uint32_t count
+				, OverlayTextBuffer const * textBuffer = {} )
+				: descriptorSet{ std::move( descriptorSet ) }
+				, count{ count }
+				, textBuffer{ textBuffer }
+			{
+			}
+
 			ashes::DescriptorSetPtr descriptorSet;
 			uint32_t count{};
 			OverlayTextBuffer const * textBuffer{};
@@ -149,7 +163,8 @@ namespace castor3d
 	public:
 		struct FontTextureDescriptorConnection
 		{
-			ashes::DescriptorSetPtr descriptorSet;
+			FontTextureDescriptorConnection() = default;
+			ashes::DescriptorSetPtr descriptorSet{};
 			FontTexture::OnChanged::connection connection{};
 		};
 
@@ -183,16 +198,16 @@ namespace castor3d
 			void registerCommands( crg::RecordContext & context
 				, VkCommandBuffer commandBuffer )const;
 
-			TextComputePipelineDescriptor & getTextPipeline( FontTexture & fontTexture );
+			TextComputePipelineDescriptor & getTextPipeline( FontTexture const & fontTexture );
 
 		private:
 			ComputePipeline doCreatePanelPipeline( RenderDevice const & device
 				, PanelVertexBufferPool & vertexBuffer
-				, CameraUbo const & cameraUbo );
+				, CameraUbo const & cameraUbo )const;
 			ComputePipeline doCreateBorderPipeline( RenderDevice const & device
 				, BorderPanelVertexBufferPool & vertexBuffer
-				, CameraUbo const & cameraUbo );
-			TextComputePipeline doCreateTextPipeline( RenderDevice const & device );
+				, CameraUbo const & cameraUbo )const;
+			TextComputePipeline doCreateTextPipeline( RenderDevice const & device )const;
 			ashes::DescriptorSetPtr doGetTextDescriptorSet( FontTexture const & fontTexture );
 			void doRegisterComputeBufferCommands( crg::RecordContext & context
 				, VkCommandBuffer commandBuffer
@@ -230,9 +245,7 @@ namespace castor3d
 				, Pass const & pass );
 			OverlayDrawNode & getTextNode( RenderDevice const & device
 				, VkRenderPass renderPass
-				, Pass const & pass
-				, TextureLayout const & texture
-				, Sampler const & sampler );
+				, Pass const & pass );
 			ashes::DescriptorSet const & createTextDescriptorSet( FontTexture & fontTexture );
 			void beginPrepare( VkRenderPass renderPass
 				, VkFramebuffer framebuffer
@@ -250,15 +263,13 @@ namespace castor3d
 				, bool textOverlay );
 			OverlayDrawPipeline doCreatePipeline( RenderDevice const & device
 				, VkRenderPass renderPass
-				, Pass const & pass
 				, ashes::PipelineShaderStageCreateInfoArray program
 				, TextureCombine const & texturesFlags
 				, bool borderOverlay
 				, bool textOverlay );
 			ashes::PipelineShaderStageCreateInfoArray doCreateOverlayProgram( RenderDevice const & device
 				, TextureCombine const & texturesFlags
-				, bool borderOverlay
-				, bool textOverlay );
+				, bool textOverlay )const;
 
 		private:
 			std::map< Pass const *, OverlayDrawNode > m_mapPanelNodes;

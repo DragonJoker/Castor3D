@@ -166,7 +166,7 @@ namespace castor3d::shader
 		if ( !m_transformUV )
 		{
 			m_transformUV = m_writer.implementFunction< sdw::Vec2 >( "transformUV"
-				, [&]( TextureConfigData const & config
+				, [this]( TextureConfigData const & config
 					, TextureTransformData const & anim
 					, sdw::Vec2 uv )
 				{
@@ -186,7 +186,7 @@ namespace castor3d::shader
 						uv = rotateUV( anim.rotateU(), anim.rotateV(), uv );
 						uv = translateUV( anim.translate().xy(), uv );
 					}
-					FI;
+					FI
 
 					uv.x() = ( uv.x() + config.tileSet().x() ) / config.tileSet().z();
 					uv.y() = ( uv.y() + config.tileSet().y() ) / config.tileSet().w();
@@ -196,7 +196,7 @@ namespace castor3d::shader
 						uv.x() += anim.tileSet().x() / anim.tileSet().z();
 						uv.y() += anim.tileSet().y() / anim.tileSet().w();
 					}
-					FI;
+					FI
 
 					m_writer.returnStmt( uv );
 				}
@@ -215,7 +215,7 @@ namespace castor3d::shader
 		if ( !m_transformUVW )
 		{
 			m_transformUVW = m_writer.implementFunction< sdw::Vec3 >( "transformUVW"
-				, [&]( TextureConfigData const & config
+				, [this]( TextureConfigData const & config
 					, TextureTransformData const & anim
 					, sdw::Vec3 uvw )
 				{
@@ -233,7 +233,7 @@ namespace castor3d::shader
 								, vec3( uvw.x(), 1.0_f - uvw.y(), uvw.z() ) ) );
 						uvw = translateUV( anim.translate(), uvw );
 					}
-					FI;
+					FI
 
 					m_writer.returnStmt( uvw );
 				}
@@ -251,7 +251,7 @@ namespace castor3d::shader
 		if ( !m_swap1F )
 		{
 			m_swap1F = m_writer.implementFunction< sdw::Void >( "c3d_swap1F"
-				, [&]( sdw::Float A
+				, [this]( sdw::Float A
 					, sdw::Float B )
 				{
 					auto tmp = m_writer.declLocale( "tmp", A );
@@ -271,7 +271,7 @@ namespace castor3d::shader
 		if ( !m_distanceSquared2F )
 		{
 			m_distanceSquared2F = m_writer.implementFunction< sdw::Float >( "c3d_distanceSquared2F"
-				, [&]( sdw::Vec2 A
+				, [this]( sdw::Vec2 A
 					, sdw::Vec2 const & B )
 				{
 					A -= B;
@@ -290,7 +290,7 @@ namespace castor3d::shader
 		if ( !m_distanceSquared3F )
 		{
 			m_distanceSquared3F = m_writer.implementFunction< sdw::Float >( "c3d_distanceSquared3F"
-				, [&]( sdw::Vec3 A
+				, [this]( sdw::Vec3 A
 					, sdw::Vec3 const & B )
 				{
 					A -= B;
@@ -310,7 +310,7 @@ namespace castor3d::shader
 		if ( !m_calcVSPosition )
 		{
 			m_calcVSPosition = m_writer.implementFunction< sdw::Vec3 >( "c3d_calcVSPosition"
-				, [&]( sdw::Vec2 const & uv
+				, [this]( sdw::Vec2 const & uv
 					, sdw::Float const & depth
 					, sdw::Mat4 const & invProj )
 				{
@@ -337,7 +337,7 @@ namespace castor3d::shader
 		if ( !m_calcWSPosition )
 		{
 			m_calcWSPosition = m_writer.implementFunction< sdw::Vec3 >( "c3d_calcWSPosition"
-				, [&]( sdw::Vec2 const & uv
+				, [this]( sdw::Vec2 const & uv
 					, sdw::Float const & depth
 					, sdw::Mat4 const & invViewProj )
 				{
@@ -364,7 +364,7 @@ namespace castor3d::shader
 		if ( !m_getMapNormal )
 		{
 			m_getMapNormal = m_writer.implementFunction< sdw::Vec3 >( "c3d_getMapNormal"
-				, [&]( sdw::Vec2 const & uv
+				, [this]( sdw::Vec2 const & uv
 					, sdw::Vec3 const & normal
 					, sdw::Vec3 const & position )
 				{
@@ -408,7 +408,7 @@ namespace castor3d::shader
 		if ( !m_rescaleDepth )
 		{
 			m_rescaleDepth = m_writer.implementFunction< sdw::Float >( "c3d_rescaleDepth"
-				, [&]( sdw::Float const & depth
+				, [this]( sdw::Float const & depth
 					, sdw::Float const & nearPlane
 					, sdw::Float const & farPlane )
 				{
@@ -441,7 +441,7 @@ namespace castor3d::shader
 		if ( !m_computeAccumulation )
 		{
 			m_computeAccumulation = m_writer.implementFunction< sdw::Vec4 >( "c3d_computeAccumulation"
-				, [&]( sdw::Float const & depth
+				, [this]( sdw::Float const & depth
 					, sdw::Vec3 const & colour
 					, sdw::Float const & alpha
 					, sdw::Float const & nearPlane
@@ -523,7 +523,7 @@ namespace castor3d::shader
 						}
 						ESAC;
 					}
-					HCTIWS;
+					HCTIWS
 
 					m_writer.returnStmt( vec4( colour * alpha, alpha ) * weight );
 				}
@@ -550,7 +550,7 @@ namespace castor3d::shader
 		if ( !m_conductorFresnel1 )
 		{
 			m_conductorFresnel1 = m_writer.implementFunction< sdw::Float >( "c3d_conductorFresnel1"
-				, [&]( sdw::Float const & product
+				, [this]( sdw::Float const & product
 					, sdw::Float const & f0
 					, sdw::Float const & f90 )
 				{
@@ -581,7 +581,7 @@ namespace castor3d::shader
 		if ( !m_conductorFresnel3 )
 		{
 			m_conductorFresnel3 = m_writer.implementFunction< sdw::Vec3 >( "c3d_conductorFresnel3"
-				, [&]( sdw::Float const & product
+				, [this]( sdw::Float const & product
 					, sdw::Vec3 const & f0
 					, sdw::Vec3 const & f90 )
 				{
@@ -627,7 +627,7 @@ namespace castor3d::shader
 		if ( !m_clipToScreen )
 		{
 			m_clipToScreen = m_writer.implementFunction< sdw::Vec4 >( "c3d_clipToScreen"
-				, [&]( sdw::Vec4 const & in )
+				, [this]( sdw::Vec4 const & in )
 				{
 					auto epsilon = m_writer.declConstant( "epsilon", 0.00001_f );
 					auto result = m_writer.declLocale( "result", in );
@@ -654,8 +654,8 @@ namespace castor3d::shader
 		if ( !m_reconstructCSZ )
 		{
 			m_reconstructCSZ = m_writer.implementFunction< sdw::Float >( "c3d_reconstructCSZ"
-				, [&]( sdw::Float const & depth
-					, sdw::Vec3 const clipInfo )
+				, [this]( sdw::Float const & depth
+					, sdw::Vec3 const & clipInfo )
 				{
 					m_writer.returnStmt( clipInfo[0] / ( depth * clipInfo[1] + clipInfo[2] ) );
 				}
@@ -671,7 +671,7 @@ namespace castor3d::shader
 		if ( !m_isSaturated3D )
 		{
 			m_isSaturated3D = m_writer.implementFunction< sdw::Boolean >( "c3d_isSaturated"
-				, [&]( sdw::Vec3 const & p )
+				, [this]( sdw::Vec3 const & p )
 				{
 					m_writer.returnStmt( p.x() == clamp( p.x(), 0.0_f, 1.0_f )
 						&& p.y() == clamp( p.y(), 0.0_f, 1.0_f )
@@ -689,7 +689,7 @@ namespace castor3d::shader
 		if ( !m_isSaturated3DImg )
 		{
 			m_isSaturated3DImg = m_writer.implementFunction< sdw::Boolean >( "c3d_isSaturatedImg"
-				, [&]( sdw::IVec3 const & p
+				, [this]( sdw::IVec3 const & p
 					, sdw::Int const & imax )
 				{
 					m_writer.returnStmt( p.x() == clamp( p.x(), 0_i, imax )
@@ -708,7 +708,7 @@ namespace castor3d::shader
 		if ( !m_encodeColor )
 		{
 			m_encodeColor = m_writer.implementFunction<  sdw::UInt >( "c3d_encodeColor"
-				, [&]( sdw::Vec4 const & color )
+				, [this]( sdw::Vec4 const & color )
 				{
 					auto hdrRange = m_writer.declConstant( "hdrRange", 10.0_f );
 
@@ -743,7 +743,7 @@ namespace castor3d::shader
 		if ( !m_encodeNormal )
 		{
 			m_encodeNormal = m_writer.implementFunction<  sdw::UInt >( "c3d_encodeNormal"
-				, [&]( sdw::Vec3 const & normal )
+				, [this]( sdw::Vec3 const & normal )
 				{
 					auto iNormal = m_writer.declLocale( "iNormal"
 						, ivec3( normal * 255.0_f ) );
@@ -770,7 +770,7 @@ namespace castor3d::shader
 		if ( !m_decodeColor )
 		{
 			m_decodeColor = m_writer.implementFunction< sdw::Vec4 >( "c3d_decodeColor"
-				, [&]( sdw::UInt const & colorMask )
+				, [this]( sdw::UInt const & colorMask )
 				{
 					auto hdrRange = m_writer.declConstant( "hdrRange", 10.0_f );
 
@@ -801,7 +801,7 @@ namespace castor3d::shader
 		if ( !m_decodeNormal )
 		{
 			m_decodeNormal = m_writer.implementFunction< sdw::Vec3 >( "c3d_decodeNormal"
-				, [&]( sdw::UInt const & normalMask )
+				, [this]( sdw::UInt const & normalMask )
 				{
 					auto iNormal = m_writer.declLocale( "iNormal"
 						, ivec3( m_writer.cast< sdw::Int >( ( normalMask >> 18_u ) & 0x000000ff_u )
@@ -828,7 +828,7 @@ namespace castor3d::shader
 		if ( !m_encodeFloatRGBA )
 		{
 			m_encodeFloatRGBA = m_writer.implementFunction< sdw::Vec4 >( "c3d_encodeFloatRGBA"
-				, [&]( sdw::Float const & v )
+				, [this]( sdw::Float const & v )
 			{
 				auto bitEnc = vec4( 1.0_f, 255.0_f, 65025.0_f, 16581375.0_f );
 				auto enc = m_writer.declLocale( "enc"
@@ -849,7 +849,7 @@ namespace castor3d::shader
 		if ( !m_flatten3D )
 		{
 			m_flatten3D = m_writer.implementFunction<  sdw::UInt >( "c3d_flatten3D"
-				, [&]( sdw::UVec3 const & coord
+				, [this]( sdw::UVec3 const & coord
 					, sdw::UVec3 const & dim )
 				{
 					m_writer.returnStmt( ( coord.z() * dim.x() * dim.y() ) + ( coord.y() * dim.x() ) + coord.x() );
@@ -867,7 +867,7 @@ namespace castor3d::shader
 		if ( !m_unflatten3D )
 		{
 			m_unflatten3D = m_writer.implementFunction< sdw::UVec3 >( "c3d_unflatten3D"
-				, [&]( sdw::UInt idx
+				, [this]( sdw::UInt idx
 					, sdw::UVec3 const & dim )
 				{
 					auto z = m_writer.declLocale( "z"
@@ -892,7 +892,7 @@ namespace castor3d::shader
 		if ( !m_ior1ToFresnel0 )
 		{
 			m_ior1ToFresnel0 = m_writer.implementFunction< sdw::Float >( "c3d_ior1ToFresnel0"
-				, [&]( sdw::Float const & transmittedIor
+				, [this]( sdw::Float const & transmittedIor
 					, sdw::Float const & incidentIor )
 				{
 					auto v = m_writer.declLocale( "v"
@@ -913,7 +913,7 @@ namespace castor3d::shader
 		if ( !m_ior3ToFresnel0 )
 		{
 			m_ior3ToFresnel0 = m_writer.implementFunction< sdw::Vec3 >( "c3d_ior3ToFresnel0"
-				, [&]( sdw::Vec3 const & transmittedIor
+				, [this]( sdw::Vec3 const & transmittedIor
 					, sdw::Float const & incidentIor )
 				{
 					auto v = m_writer.declLocale( "v"
@@ -933,7 +933,7 @@ namespace castor3d::shader
 		if ( !m_fresnel0ToIor )
 		{
 			m_fresnel0ToIor = m_writer.implementFunction< sdw::Vec3 >( "c3d_fresnel0ToIor"
-				, [&]( sdw::Vec3 const & fresnel0 )
+				, [this]( sdw::Vec3 const & fresnel0 )
 				{
 					auto sqrtF0 = m_writer.declLocale( "sqrtF0"
 						, sqrt( fresnel0 ) );
@@ -951,7 +951,7 @@ namespace castor3d::shader
 		if ( !m_fresnelToF0 )
 		{
 			m_fresnelToF0 = m_writer.implementFunction< sdw::Vec3 >( "c3d_fresnelToF0"
-				, [&]( sdw::Vec3 const & f
+				, [this]( sdw::Vec3 const & f
 					, sdw::Float const & VdotH )
 				{
 					auto x = m_writer.declLocale( "x"
@@ -979,7 +979,7 @@ namespace castor3d::shader
 		if ( !m_evalIridescence )
 		{
 			m_evalIridescence = m_writer.implementFunction< sdw::Vec3 >( "c3d_evalIridescence"
-				, [&]( sdw::Float const & outsideIOR
+				, [this]( sdw::Float const & outsideIOR
 					, sdw::Float const & eta2
 					, sdw::Float const & cosTheta1
 					, sdw::Float const & thinFilmThickness
@@ -1004,7 +1004,7 @@ namespace castor3d::shader
 					{
 						m_writer.returnStmt( vec3( 1.0_f ) );
 					}
-					FI;
+					FI
 
 					auto cosTheta2 = m_writer.declLocale( "cosTheta2"
 						, sqrt( cosTheta2Sq ) );
@@ -1025,7 +1025,7 @@ namespace castor3d::shader
 					{
 						phi12 = castor::Pi< float >;
 					}
-					FI;
+					FI
 
 					auto phi21 = m_writer.declLocale( "phi21"
 						, castor::Pi< float > - phi12 );
@@ -1044,17 +1044,17 @@ namespace castor3d::shader
 					{
 						phi23[0] = castor::Pi< float >;
 					}
-					FI;
+					FI
 					IF( m_writer, baseIOR[1] < iridescenceIor )
 					{
 						phi23[1] = castor::Pi< float >;
 					}
-					FI;
+					FI
 					IF( m_writer, baseIOR[2] < iridescenceIor )
 					{
 						phi23[2] = castor::Pi< float >;
 					}
-					FI;
+					FI
 
 					// Phase shift
 					auto OPD = m_writer.declLocale( "OPD"
@@ -1107,7 +1107,7 @@ namespace castor3d::shader
 		if ( !m_evalSensitivity )
 		{
 			m_evalSensitivity = m_writer.implementFunction< sdw::Vec3 >( "c3d_evalSensitivity"
-				, [&]( sdw::Float const & OPD
+				, [this]( sdw::Float const & OPD
 					, sdw::Vec3 const & shift )
 				{
 					auto XYZ_TO_REC709 = m_writer.declConstant( "XYZ_TO_REC709"

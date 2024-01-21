@@ -62,9 +62,8 @@ namespace castor3d
 		void removeElem( Control const & control
 			, std::map< Control const *, ConnectionT > & map )
 		{
-			auto it = map.find( &control );
-
-			if ( it != map.end() )
+			if ( auto it = map.find( &control );
+				it != map.end() )
 			{
 				map.erase( it );
 			}
@@ -97,10 +96,9 @@ namespace castor3d
 	ThemeRPtr ControlsManager::createTheme( castor::String const & name
 		, Scene * scene )
 	{
-		auto ires = m_themes.emplace( name, nullptr );
-		auto it = ires.first;
+		auto [it, res] = m_themes.try_emplace( name );
 
-		if ( ires.second )
+		if ( res )
 		{
 			it->second = castor::makeUnique< Theme >( name, scene, *getEngine() );
 		}
@@ -110,14 +108,13 @@ namespace castor3d
 
 	ThemeRPtr ControlsManager::getTheme( castor::String const & name )const
 	{
-		auto it = m_themes.find( name );
-
-		if ( it == m_themes.end() )
+		if ( auto it = m_themes.find( name );
+			it != m_themes.end() )
 		{
-			return nullptr;
+			return it->second.get();
 		}
 
-		return it->second.get();
+		return nullptr;
 	}
 
 	ButtonStyleRPtr ControlsManager::getButtonStyle( castor::String const & name )const
@@ -247,7 +244,7 @@ namespace castor3d
 		return &static_cast< Control & >( *doAddHandler( castor::ptrRefCast< EventHandler >( control ) ) );
 	}
 
-	void ControlsManager::unregisterControl( Control & control )
+	void ControlsManager::unregisterControl( Control const & control )
 	{
 		doRemoveHandlerNL( control );
 	}
@@ -319,7 +316,7 @@ namespace castor3d
 		auto controls = doGetHandlers();
 		auto it = std::find_if( controls.begin()
 			, controls.end()
-			, [&name]( EventHandlerRPtr lookup )
+			, [&name]( EventHandler const * lookup )
 			{
 				return lookup->getName() == name;
 			} );
@@ -341,7 +338,7 @@ namespace castor3d
 
 		if ( m_movedControl )
 		{
-			m_movedControl->endMove( event );
+			m_movedControl->endMove();
 		}
 
 		m_movedControl = control;
@@ -361,7 +358,7 @@ namespace castor3d
 
 		if ( m_resizedControl )
 		{
-			m_resizedControl->endResize( event );
+			m_resizedControl->endResize();
 		}
 
 		m_resizedControl = control;
@@ -374,7 +371,7 @@ namespace castor3d
 		return m_rootControls;
 	}
 
-	castor::AttributeParsers ControlsManager::createParsers( castor3d::Engine & engine )
+	castor::AttributeParsers ControlsManager::createParsers()
 	{
 		return createGuiParsers();
 	}
@@ -386,115 +383,125 @@ namespace castor3d
 
 	void ControlsManager::connectEvents( ButtonCtrl & control )
 	{
-		m_onButtonClicks.emplace( &control, control.connect( ButtonEvent::eClicked
-			, [this, &control]()
-			{
-				onClickAction( control.getName() );
-			} ) );
+		m_onButtonClicks.try_emplace( &control
+			, control.connect( ButtonEvent::eClicked
+				, [this, &control]()
+				{
+					onClickAction( control.getName() );
+				} ) );
 	}
 
 	void ControlsManager::connectEvents( ComboBoxCtrl & control )
 	{
-		m_onComboSelects.emplace( &control, control.connect( ComboBoxEvent::eSelected
-			, [this, &control]( int index )
-			{
-				onSelectAction( control.getName(), index );
-			} ) );
+		m_onComboSelects.try_emplace( &control
+			, control.connect( ComboBoxEvent::eSelected
+				, [this, &control]( int index )
+				{
+					onSelectAction( control.getName(), index );
+				} ) );
 	}
 
 	void ControlsManager::connectEvents( EditCtrl & control )
 	{
-		m_onEditUpdates.emplace( &control, control.connect( EditEvent::eUpdated
-			, [this, &control]( castor::U32String const & text )
-			{
-				onTextAction( control.getName(), text );
-			} ) );
+		m_onEditUpdates.try_emplace( &control
+			, control.connect( EditEvent::eUpdated
+				, [this, &control]( castor::U32String const & text )
+				{
+					onTextAction( control.getName(), text );
+				} ) );
 	}
 
 	void ControlsManager::connectEvents( ExpandablePanelCtrl & control )
 	{
-		m_onPanelExpands.emplace( &control, control.connect( ExpandablePanelEvent::eExpand
-			, [this, &control]()
-			{
-				onExpandAction( control.getName(), true );
-			} ) );
-		m_onPanelRetracts.emplace( &control, control.connect( ExpandablePanelEvent::eRetract
-			, [this, &control]()
-			{
-				onExpandAction( control.getName(), false );
-			} ) );
+		m_onPanelExpands.try_emplace( &control
+			, control.connect( ExpandablePanelEvent::eExpand
+				, [this, &control]()
+				{
+					onExpandAction( control.getName(), true );
+				} ) );
+		m_onPanelRetracts.try_emplace( &control
+			, control.connect( ExpandablePanelEvent::eRetract
+				, [this, &control]()
+				{
+					onExpandAction( control.getName(), false );
+				} ) );
 	}
 
 	void ControlsManager::connectEvents( ListBoxCtrl & control )
 	{
-		m_onListSelects.emplace( &control, control.connect( ListBoxEvent::eSelected
-			, [this, &control]( int index )
-			{
-				onSelectAction( control.getName(), index );
-			} ) );
+		m_onListSelects.try_emplace( &control
+			, control.connect( ListBoxEvent::eSelected
+				, [this, &control]( int index )
+				{
+					onSelectAction( control.getName(), index );
+				} ) );
 	}
 
 	void ControlsManager::connectEvents( ScrollBarCtrl & control )
 	{
-		m_onScrollTracks.emplace( &control, control.connect( ScrollBarEvent::eThumbTrack
-			, [this, &control]( int index )
-			{
-				onSelectAction( control.getName(), index );
-			} ) );
-		m_onScrollReleases.emplace( &control, control.connect( ScrollBarEvent::eThumbRelease
-			, [this, &control]( int index )
-			{
-				onSelectAction( control.getName(), index );
-			} ) );
+		m_onScrollTracks.try_emplace( &control
+			, control.connect( ScrollBarEvent::eThumbTrack
+				, [this, &control]( int index )
+				{
+					onSelectAction( control.getName(), index );
+				} ) );
+		m_onScrollReleases.try_emplace( &control
+			, control.connect( ScrollBarEvent::eThumbRelease
+				, [this, &control]( int index )
+				{
+					onSelectAction( control.getName(), index );
+				} ) );
 	}
 
 	void ControlsManager::connectEvents( SliderCtrl & control )
 	{
-		m_onSliderTracks.emplace( &control, control.connect( SliderEvent::eThumbTrack
-			, [this, &control]( int index )
-			{
-				onSelectAction( control.getName(), index );
-			} ) );
-		m_onSliderReleases.emplace( &control, control.connect( SliderEvent::eThumbRelease
-			, [this, &control]( int index )
-			{
-				onSelectAction( control.getName(), index );
-			} ) );
+		m_onSliderTracks.try_emplace( &control
+			, control.connect( SliderEvent::eThumbTrack
+				, [this, &control]( int index )
+				{
+					onSelectAction( control.getName(), index );
+				} ) );
+		m_onSliderReleases.try_emplace( &control
+			, control.connect( SliderEvent::eThumbRelease
+				, [this, &control]( int index )
+				{
+					onSelectAction( control.getName(), index );
+				} ) );
 	}
 
-	void ControlsManager::disconnectEvents( ButtonCtrl & control )
+	void ControlsManager::disconnectEvents( ButtonCtrl const & control )
 	{
 		ctrlmgr::removeElem( control, m_onButtonClicks );
 	}
 
-	void ControlsManager::disconnectEvents( ComboBoxCtrl & control )
+	void ControlsManager::disconnectEvents( ComboBoxCtrl const & control )
 	{
 		ctrlmgr::removeElem( control, m_onComboSelects );
 	}
 
-	void ControlsManager::disconnectEvents( EditCtrl & control )
+	void ControlsManager::disconnectEvents( EditCtrl const & control )
 	{
 		ctrlmgr::removeElem( control, m_onEditUpdates );
 	}
 
-	void ControlsManager::disconnectEvents( ExpandablePanelCtrl & control )
+	void ControlsManager::disconnectEvents( ExpandablePanelCtrl const & control )
 	{
 		ctrlmgr::removeElem( control, m_onPanelExpands );
 		ctrlmgr::removeElem( control, m_onPanelRetracts );
 	}
 
-	void ControlsManager::disconnectEvents( ListBoxCtrl & control )
+	void ControlsManager::disconnectEvents( ListBoxCtrl const & control )
 	{
 		ctrlmgr::removeElem( control, m_onListSelects );
 	}
 
-	void ControlsManager::disconnectEvents( ScrollBarCtrl & control )
+	void ControlsManager::disconnectEvents( ScrollBarCtrl const & control )
 	{
 		ctrlmgr::removeElem( control, m_onScrollTracks );
 		ctrlmgr::removeElem( control, m_onScrollReleases );
 	}
 
-	void ControlsManager::disconnectEvents( SliderCtrl & control )
+	void ControlsManager::disconnectEvents( SliderCtrl const & control )
 	{
 		ctrlmgr::removeElem( control, m_onSliderTracks );
 		ctrlmgr::removeElem( control, m_onSliderReleases );
@@ -507,9 +514,9 @@ namespace castor3d
 
 	void ControlsManager::doCleanup()
 	{
-		for ( auto cit : m_controlsById )
+		for ( auto const & [id, controls] : m_controlsById )
 		{
-			if ( auto control = cit.second )
+			if ( auto control = controls )
 			{
 				control->destroy();
 			}
@@ -562,15 +569,14 @@ namespace castor3d
 
 		while ( !result && it != controls.rend() )
 		{
-			ControlRPtr control = *it;
-
-			if ( control
-				&& !control->isBackgroundInvisible()
-				&& control->catchesMouseEvents()
-				&& control->getAbsolutePosition().x() <= position.x()
-				&& control->getAbsolutePosition().x() + int32_t( control->getSize().getWidth() ) > position.x()
-				&& control->getAbsolutePosition().y() <= position.y()
-				&& control->getAbsolutePosition().y() + int32_t( control->getSize().getHeight() ) > position.y() )
+			if ( ControlRPtr control = *it;
+				control
+					&& !control->isBackgroundInvisible()
+					&& control->catchesMouseEvents()
+					&& control->getAbsolutePosition().x() <= position.x()
+					&& control->getAbsolutePosition().x() + int32_t( control->getSize().getWidth() ) > position.x()
+					&& control->getAbsolutePosition().y() <= position.y()
+					&& control->getAbsolutePosition().y() + int32_t( control->getSize().getHeight() ) > position.y() )
 			{
 				auto cursor = control->getCursor();
 

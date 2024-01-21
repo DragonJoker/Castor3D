@@ -688,7 +688,7 @@ namespace castor3d
 	{
 	}
 
-	ashes::InstancePtr RenderSystem::createInstance( Engine & engine
+	ashes::InstancePtr RenderSystem::createInstance( Engine const & engine
 		, AshPluginDescription const & desc
 		, Extensions & instanceExtensions )
 	{
@@ -708,7 +708,7 @@ namespace castor3d
 
 		// On récupère la liste d'extensions pour chaque couche de l'instance.
 		castor::StringMap< ashes::VkExtensionPropertiesArray > layersExtensions;
-		for ( auto layerProperties : layers )
+		for ( auto const & layerProperties : layers )
 		{
 			layersExtensions.try_emplace( layerProperties.layerName
 				, rendsys::enumerateExtensionProperties( enumInstanceExtensionProperties
@@ -988,7 +988,7 @@ namespace castor3d
 
 	SpirVShader RenderSystem::compileShader( VkShaderStageFlagBits stage
 		, castor::String const & name
-		, castor::String const & glsl )
+		, castor::String const & glsl )const
 	{
 		SpirVShader result;
 		CU_Require( !glsl.empty() );

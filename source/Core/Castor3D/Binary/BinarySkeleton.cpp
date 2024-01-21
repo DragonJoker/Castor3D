@@ -68,7 +68,7 @@ namespace castor3d
 						{
 							if ( !parser.parentName.empty() )
 							{
-								hierarchy.emplace( &bone, parser.parentName );
+								hierarchy.try_emplace( &bone, parser.parentName );
 							}
 						}
 						else
@@ -90,12 +90,10 @@ namespace castor3d
 
 					if ( result )
 					{
-						if ( m_fileVersion > Version{ 1, 5, 0 } )
+						if ( m_fileVersion > Version{ 1, 5, 0 }
+							&& !parser.parentName.empty() )
 						{
-							if ( !parser.parentName.empty() )
-							{
-								hierarchy.emplace( node.get(), parser.parentName );
-							}
+							hierarchy.try_emplace( node.get(), parser.parentName );
 						}
 
 						obj.m_nodes.emplace_back( std::move( node ) );
@@ -109,7 +107,7 @@ namespace castor3d
 				if ( result )
 				{
 					auto name = animation->getName();
-					obj.m_animations.emplace( name
+					obj.m_animations.try_emplace( name
 						, castor::ptrRefCast< Animation >( animation ) );
 				}
 				break;
@@ -121,17 +119,17 @@ namespace castor3d
 
 		if ( m_fileVersion > Version{ 1, 5, 0 } )
 		{
-			for ( auto it : hierarchy )
+			for ( auto const & [subnode, name] : hierarchy )
 			{
 				if ( result )
 				{
-					auto parent = obj.findNode( it.second );
+					auto parent = obj.findNode( name );
 					result = parent != nullptr;
 					checkError( result, "Couldn't find parent node." );
 
 					if ( result )
 					{
-						obj.setNodeParent( *it.first, *parent );
+						obj.setNodeParent( *subnode, *parent );
 					}
 				}
 			}

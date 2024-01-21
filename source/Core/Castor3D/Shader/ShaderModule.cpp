@@ -45,7 +45,7 @@ namespace castor3d
 		, std::string source )
 		: stage{ stage }
 		, name{ name }
-		, source{ source }
+		, source{ std::move( source ) }
 	{
 	}
 

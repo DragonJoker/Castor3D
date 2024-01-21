@@ -31,38 +31,29 @@ namespace castor3d
 		 *\~english
 		 *\brief		Specified constructor.
 		 *\param[in]	engine			The engine.
-		 *\param[in]	device			The GPU device.
-		 *\param[in]	size			The render area dimensions.
 		 *\param[in]	graph			The render graph.
 		 *\param[in]	source			L'image source.
 		 *\param[in]	target			L'image cible.
 		 *\param[in]	previousPass	The previous frame pass.
 		 *\param[in]	hdrConfigUbo	The configuration data.
-		 *\param[in]	parameters		The implementation specific parameters.
 		 *\param[in]	progress		The progress bar.
 		 *\~french
 		 *\brief		Constructeur spécifié.
 		 *\param[in]	engine			Le moteur.
-		 *\param[in]	device			Le device GPU.
-		 *\param[in]	size			Les dimensions de la zone de rendu.
 		 *\param[in]	graph			Le render graph.
 		 *\param[in]	source			The source image.
 		 *\param[in]	target			The target image.
 		 *\param[in]	previousPass	La frame pass précédente.
 		 *\param[in]	hdrConfigUbo	Les données de confiuration.
-		 *\param[in]	parameters		Les paramètres spécifiques à l'implémentation.
 		 *\param[in]	progress		La barre de progression.
 		 */
 		C3D_API ToneMapping( Engine & engine
-			, RenderDevice const & device
-			, castor::Size const & size
 			, crg::FrameGraph & graph
 			, crg::ImageViewIdArray const & source
 			, crg::ImageViewId const & target
 			, crg::FramePass const & previousPass
 			, HdrConfigUbo & hdrConfigUbo
 			, ColourGradingUbo & colourGradingUbo
-			, Parameters const & parameters
 			, ProgressBar * progress );
 		/**
 		 *\~english
@@ -134,8 +125,7 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		crg::FramePass & doCreatePass( castor::Size const & size
-			, crg::FrameGraph & graph
+		crg::FramePass & doCreatePass( crg::FrameGraph & graph
 			, crg::ImageViewIdArray const & source
 			, crg::ImageViewId const & target
 			, crg::FramePass const & previousPass
@@ -144,10 +134,10 @@ namespace castor3d
 		void doUpdatePassIndex( crg::ImageViewId const & source );
 
 	protected:
-		castor::String m_name;
+		castor::String m_name{ cuT( "linear" ) };
 		HdrConfigUbo & m_hdrConfigUbo;
 		ColourGradingUbo & m_colourGradingUbo;
-		castor3d::ProgramModule m_shader;
+		castor3d::ProgramModule m_shader{ "ToneMapping" };
 		crg::ImageViewId m_source;
 		ashes::PipelineShaderStageCreateInfoArray m_program;
 		crg::FramePass * m_pass{};

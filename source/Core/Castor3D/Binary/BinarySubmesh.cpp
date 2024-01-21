@@ -126,63 +126,63 @@ namespace castor3d
 		if ( result
 			&& obj.hasComponent( PositionsComponent::TypeName ) )
 		{
-			auto & values = obj.getComponent< PositionsComponent >()->getData().getData();
+			auto const & values = obj.getComponent< PositionsComponent >()->getData().getData();
 			result = doWriteChunk( values, ChunkType::eSubmeshPositions, m_chunk );
 		}
 
 		if ( result
 			&& obj.hasComponent( NormalsComponent::TypeName ) )
 		{
-			auto & values = obj.getComponent< NormalsComponent >()->getData().getData();
+			auto const & values = obj.getComponent< NormalsComponent >()->getData().getData();
 			result = doWriteChunk( values, ChunkType::eSubmeshNormals, m_chunk );
 		}
 
 		if ( result
 			&& obj.hasComponent( TangentsComponent::TypeName ) )
 		{
-			auto & values = obj.getComponent< TangentsComponent >()->getData().getData();
+			auto const & values = obj.getComponent< TangentsComponent >()->getData().getData();
 			result = doWriteChunk( values, ChunkType::eSubmeshTangentsMikkt, m_chunk );
 		}
 
 		if ( result
 			&& obj.hasComponent( BitangentsComponent::TypeName ) )
 		{
-			auto & values = obj.getComponent< BitangentsComponent >()->getData().getData();
+			auto const & values = obj.getComponent< BitangentsComponent >()->getData().getData();
 			result = doWriteChunk( values, ChunkType::eSubmeshBitangents, m_chunk );
 		}
 
 		if ( result
 			&& obj.hasComponent( Texcoords0Component::TypeName ) )
 		{
-			auto & values = obj.getComponent< Texcoords0Component >()->getData().getData();
+			auto const & values = obj.getComponent< Texcoords0Component >()->getData().getData();
 			result = doWriteChunk( values, ChunkType::eSubmeshTexcoords0, m_chunk );
 		}
 
 		if ( result
 			&& obj.hasComponent( Texcoords1Component::TypeName ) )
 		{
-			auto & values = obj.getComponent< Texcoords1Component >()->getData().getData();
+			auto const & values = obj.getComponent< Texcoords1Component >()->getData().getData();
 			result = doWriteChunk( values, ChunkType::eSubmeshTexcoords1, m_chunk );
 		}
 
 		if ( result
 			&& obj.hasComponent( Texcoords2Component::TypeName ) )
 		{
-			auto & values = obj.getComponent< Texcoords2Component >()->getData().getData();
+			auto const & values = obj.getComponent< Texcoords2Component >()->getData().getData();
 			result = doWriteChunk( values, ChunkType::eSubmeshTexcoords2, m_chunk );
 		}
 
 		if ( result
 			&& obj.hasComponent( Texcoords3Component::TypeName ) )
 		{
-			auto & values = obj.getComponent< Texcoords3Component >()->getData().getData();
+			auto const & values = obj.getComponent< Texcoords3Component >()->getData().getData();
 			result = doWriteChunk( values, ChunkType::eSubmeshTexcoords3, m_chunk );
 		}
 
 		if ( result
 			&& obj.hasComponent( ColoursComponent::TypeName ) )
 		{
-			auto & values = obj.getComponent< ColoursComponent >()->getData().getData();
+			auto const & values = obj.getComponent< ColoursComponent >()->getData().getData();
 			result = doWriteChunk( values, ChunkType::eSubmeshColours, m_chunk );
 		}
 

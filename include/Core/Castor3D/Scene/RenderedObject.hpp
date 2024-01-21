@@ -68,6 +68,8 @@ namespace castor3d
 	private:
 		struct Offsets
 		{
+			Offsets() = default;
+
 			VkDeviceSize vertexOffset{};
 			VkDeviceSize indexOffset{};
 			VkDeviceSize meshletOffset{};

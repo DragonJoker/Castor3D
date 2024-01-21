@@ -13,31 +13,31 @@ namespace castor3d
 	C3D_API void createUniformPassBinding( crg::FramePass & pass
 		, uint32_t binding
 		, std::string const & name
-		, std::vector< ashes::BufferBase const * > buffers
+		, std::vector< ashes::BufferBase const * > const & buffers
 		, VkDeviceSize offset
 		, VkDeviceSize size );
 	C3D_API void createInputStoragePassBinding( crg::FramePass & pass
 		, uint32_t binding
 		, std::string const & name
-		, std::vector< ashes::BufferBase const * > buffers
+		, std::vector< ashes::BufferBase const * > const & buffers
 		, VkDeviceSize offset
 		, VkDeviceSize size );
 	C3D_API void createInOutStoragePassBinding( crg::FramePass & pass
 		, uint32_t binding
 		, std::string const & name
-		, std::vector< ashes::BufferBase const * > buffers
+		, std::vector< ashes::BufferBase const * > const & buffers
 		, VkDeviceSize offset
 		, VkDeviceSize size );
 	C3D_API void createOutputStoragePassBinding( crg::FramePass & pass
 		, uint32_t binding
 		, std::string const & name
-		, std::vector< ashes::BufferBase const * > buffers
+		, std::vector< ashes::BufferBase const * > const & buffers
 		, VkDeviceSize offset
 		, VkDeviceSize size );
 	C3D_API void createClearableOutputStorageBinding( crg::FramePass & pass
 		, uint32_t binding
 		, std::string const & name
-		, std::vector< ashes::BufferBase const * > buffers
+		, std::vector< ashes::BufferBase const * > const & buffers
 		, VkDeviceSize offset
 		, VkDeviceSize size );
 	C3D_API void createUniformPassBinding( crg::FramePass & pass
@@ -109,6 +109,8 @@ namespace castor3d
 		VkBufferUsageFlags target{};
 		VkMemoryPropertyFlags memory{};
 		MemChunk chunk{};
+
+		GpuBufferOffsetT()noexcept = default;
 
 		void setPool( GpuBufferBase & pool )
 		{

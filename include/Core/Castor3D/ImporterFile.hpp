@@ -229,13 +229,13 @@ namespace castor3d
 			, Engine & engine
 			, castor::Path const & file
 			, Parameters const & parameters
-			, ProgressBar * progress = nullptr );
+			, ProgressBar * progress = nullptr )const;
 		C3D_API ImporterFileUPtr create( castor::String const & type
 			, castor::String const & name
 			, Scene & scene
 			, castor::Path const & file
 			, Parameters const & parameters
-			, ProgressBar * progress = nullptr );
+			, ProgressBar * progress = nullptr )const;
 		/**
 		 *\~english
 		 *\brief		Creates an importer from a file type.
@@ -252,12 +252,12 @@ namespace castor3d
 			, Engine & engine
 			, castor::Path const & file
 			, Parameters const & parameters
-			, ProgressBar * progress = nullptr );
+			, ProgressBar * progress = nullptr )const;
 		C3D_API ImporterFileUPtr create( castor::String const & type
 			, Scene & scene
 			, castor::Path const & file
 			, Parameters const & parameters
-			, ProgressBar * progress = nullptr );
+			, ProgressBar * progress = nullptr )const;
 		/**
 		 *\~english
 		 *\brief		Registers an file type.
@@ -288,7 +288,7 @@ namespace castor3d
 		 *\param[in]	name	Le nom de l'importeur.
 		 */
 		void unregisterType( castor::String const & type
-			, castor::String const & name )
+			, castor::String const & name )noexcept
 		{
 			if ( auto it = m_registered.find( type );
 				it != m_registered.end() )

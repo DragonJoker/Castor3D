@@ -9,17 +9,16 @@ namespace castor3d
 {
 	namespace rendlpsnc
 	{
-		static const char * CALL_START_RENDERING = "Can't call beginRendering in a synchronous render loop";
-		static const char * CALL_END_RENDERING = "Can't call endRendering in a synchronous render loop";
-		static const char * CALL_PAUSE_RENDERING = "Can't call Pause in a synchronous render loop";
-		static const char * CALL_RESUME_RENDERING = "Can't call Resume in a synchronous render loop";
-		static const char * RLS_UNKNOWN_EXCEPTION = "Unknown exception";
+		static char const * const CALL_START_RENDERING = "Can't call beginRendering in a synchronous render loop";
+		static char const * const CALL_END_RENDERING = "Can't call endRendering in a synchronous render loop";
+		static char const * const CALL_PAUSE_RENDERING = "Can't call Pause in a synchronous render loop";
+		static char const * const CALL_RESUME_RENDERING = "Can't call Resume in a synchronous render loop";
+		static char const * const RLS_UNKNOWN_EXCEPTION = "Unknown exception";
 	}
 
 	RenderLoopSync::RenderLoopSync( Engine & engine
 		, uint32_t wantedFPS )
-		: RenderLoop( engine, wantedFPS, true )
-		, m_active( true )
+		: RenderLoop{ engine, wantedFPS }
 	{
 	}
 

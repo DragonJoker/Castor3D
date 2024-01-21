@@ -33,17 +33,18 @@ namespace castor3d
 
 			if ( result )
 			{
-				for ( auto & it : objects )
+				for ( auto const & [_, animated] : objects )
 				{
-					if ( it.second->hasAnimation( name ) )
+					if ( animated->hasAnimation( name ) )
 					{
-						auto & animation = it.second->getAnimation( name );
+						auto & animation = animated->getAnimation( name );
 						( animation.*func )( value );
 					}
 				}
 
-				auto buffer = reinterpret_cast< uint8_t * >( &itAnim->second );
-				*reinterpret_cast< ParamT * >( buffer + outputOffset ) = value;
+				auto buffer = BytePtr( &itAnim->second );
+				using ParamPtr = ParamT *;
+				*ParamPtr( buffer + outputOffset ) = value;
 			}
 
 			return result;
@@ -134,7 +135,7 @@ namespace castor3d
 		{
 			if ( result )
 			{
-				m_objects.emplace( name, std::move( object ) );
+				m_objects.try_emplace( name, std::move( object ) );
 
 				switch ( obj->getKind() )
 				{
@@ -155,14 +156,14 @@ namespace castor3d
 				}
 			}
 
-			for ( auto it : m_animations )
+			for ( auto const & [nm, group] : m_animations )
 			{
-				obj->addAnimation( it.first );
-				auto & animation = obj->getAnimation( it.first );
-				animation.setLooped( it.second.looped );
-				animation.setScale( it.second.scale );
-				animation.setStartingPoint( it.second.startingPoint );
-				animation.setStoppingPoint( it.second.stoppingPoint );
+				obj->addAnimation( nm );
+				auto & animation = obj->getAnimation( nm );
+				animation.setLooped( group.looped );
+				animation.setScale( group.scale );
+				animation.setStartingPoint( group.startingPoint );
+				animation.setStoppingPoint( group.stoppingPoint );
 			}
 		}
 
@@ -171,11 +172,11 @@ namespace castor3d
 
 	AnimatedObject * AnimatedObjectGroup::findObject( castor::String const & name )const
 	{
-		for ( auto & it : m_objects )
+		for ( auto & [nm, obj] : m_objects )
 		{
-			if ( it.first == name )
+			if ( nm == name )
 			{
-				return it.second.get();
+				return obj.get();
 			}
 		}
 
@@ -189,11 +190,11 @@ namespace castor3d
 		if ( m_animations.find( name ) == m_animations.end() )
 		{
 			result = true;
-			m_animations.insert( { name, { name, AnimationState::eStopped, false, 1.0f } } );
+			m_animations.try_emplace( name, name, AnimationState::eStopped, false, 1.0f );
 
-			for ( auto & it : m_objects )
+			for ( auto const & [nm, obj] : m_objects )
 			{
-				it.second->addAnimation( name );
+				obj->addAnimation( name );
 			}
 		}
 
@@ -255,7 +256,7 @@ namespace castor3d
 			, offsetof( GroupAnimation, interpolation ) );
 	}
 
-	void AnimatedObjectGroup::update( CpuUpdater & updater )
+	void AnimatedObjectGroup::update( [[maybe_unused]] CpuUpdater & updater )
 	{
 #if defined( NDEBUG )
 
@@ -269,21 +270,20 @@ namespace castor3d
 
 #endif
 
-		for ( auto & it : m_objects )
+		for ( auto const & [nm, obj] : m_objects )
 		{
-			it.second->update( tslf );
+			obj->update( tslf );
 		}
 	}
 
 	void AnimatedObjectGroup::startAnimation( castor::String const & name )
 	{
-		auto itAnim = m_animations.find( name );
-
-		if ( itAnim != m_animations.end() )
+		if ( auto itAnim = m_animations.find( name );
+			itAnim != m_animations.end() )
 		{
-			for ( auto & it : m_objects )
+			for ( auto const & [nm, obj] : m_objects )
 			{
-				it.second->startAnimation( name );
+				obj->startAnimation( name );
 			}
 
 			itAnim->second.state = AnimationState::ePlaying;
@@ -292,13 +292,12 @@ namespace castor3d
 
 	void AnimatedObjectGroup::stopAnimation( castor::String const & name )
 	{
-		auto itAnim = m_animations.find( name );
-
-		if ( itAnim != m_animations.end() )
+		if ( auto itAnim = m_animations.find( name );
+			itAnim != m_animations.end() )
 		{
-			for ( auto & it : m_objects )
+			for ( auto const & [nm, obj] : m_objects )
 			{
-				it.second->stopAnimation( name );
+				obj->stopAnimation( name );
 			}
 
 			itAnim->second.state = AnimationState::eStopped;
@@ -307,13 +306,12 @@ namespace castor3d
 
 	void AnimatedObjectGroup::pauseAnimation( castor::String const & name )
 	{
-		auto itAnim = m_animations.find( name );
-
-		if ( itAnim != m_animations.end() )
+		if ( auto itAnim = m_animations.find( name );
+			itAnim != m_animations.end() )
 		{
-			for ( auto & it : m_objects )
+			for ( auto const & [nm, obj] : m_objects )
 			{
-				it.second->pauseAnimation( name );
+				obj->pauseAnimation( name );
 			}
 
 			itAnim->second.state = AnimationState::ePaused;
@@ -322,40 +320,40 @@ namespace castor3d
 
 	void AnimatedObjectGroup::startAllAnimations()
 	{
-		for ( auto & it : m_objects )
+		for ( auto const & [nm, obj] : m_objects )
 		{
-			it.second->startAllAnimations();
+			obj->startAllAnimations();
 		}
 
-		for ( auto it : m_animations )
+		for ( auto & [nm, group] : m_animations )
 		{
-			it.second.state = AnimationState::ePlaying;
+			group.state = AnimationState::ePlaying;
 		}
 	}
 
 	void AnimatedObjectGroup::stopAllAnimations()
 	{
-		for ( auto & it : m_objects )
+		for ( auto const & [nm, obj] : m_objects )
 		{
-			it.second->stopAllAnimations();
+			obj->stopAllAnimations();
 		}
 
-		for ( auto it : m_animations )
+		for ( auto & [nm, group] : m_animations )
 		{
-			it.second.state = AnimationState::eStopped;
+			group.state = AnimationState::eStopped;
 		}
 	}
 
 	void AnimatedObjectGroup::pauseAllAnimations()
 	{
-		for ( auto & it : m_objects )
+		for ( auto const & [nm, obj] : m_objects )
 		{
-			it.second->pauseAllAnimations();
+			obj->pauseAllAnimations();
 		}
 
-		for ( auto it : m_animations )
+		for ( auto & [nm, group] : m_animations )
 		{
-			it.second.state = AnimationState::ePaused;
+			group.state = AnimationState::ePaused;
 		}
 	}
 

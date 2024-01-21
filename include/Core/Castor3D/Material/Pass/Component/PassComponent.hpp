@@ -1143,7 +1143,7 @@ namespace castor3d
 		*	La valeur du masque.
 		*/
 		C3D_API void fillChannel( TextureConfiguration & configuration
-			, uint32_t mask );
+			, uint32_t mask )const;
 		/**
 		*\~english
 		*\brief

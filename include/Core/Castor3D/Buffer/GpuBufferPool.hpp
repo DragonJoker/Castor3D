@@ -44,7 +44,7 @@ namespace castor3d
 		 *\brief		Met à jour tous les intervalles mémoire prêts en VRAM.
 		 *\param[in]	cb	Le command buffer sur lequel les commandes de transfert sont enregistrées.
 		 */
-		C3D_API void upload( UploadData & uploader );
+		C3D_API void upload( UploadData & uploader )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves a GPU buffer with the given size.
@@ -72,13 +72,13 @@ namespace castor3d
 		 *\param[in]	bufferOffset	Le tampon à libérer.
 		 */
 		template< typename DataT >
-		void putBuffer( GpuBufferOffsetT< DataT > const & bufferOffset );
+		void putBuffer( GpuBufferOffsetT< DataT > const & bufferOffset )noexcept;
 
 	private:
 		C3D_API BufferArray::iterator doFindBuffer( VkDeviceSize size
-			, BufferArray & array );
+			, BufferArray & array )const;
 		C3D_API uint32_t doMakeKey( VkBufferUsageFlags target
-			, VkMemoryPropertyFlags flags );
+			, VkMemoryPropertyFlags flags )const noexcept;
 		C3D_API GpuBufferBase & doGetBuffer( VkDeviceSize size
 			, VkBufferUsageFlags target
 			, VkMemoryPropertyFlags memory
@@ -86,7 +86,7 @@ namespace castor3d
 		C3D_API void doPutBuffer( GpuBufferBase const & buffer
 			, VkBufferUsageFlags target
 			, VkMemoryPropertyFlags memory
-			, MemChunk const & chunk );
+			, MemChunk const & chunk )noexcept;
 
 	private:
 		castor::String m_debugName;

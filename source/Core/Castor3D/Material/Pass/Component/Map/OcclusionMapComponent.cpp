@@ -31,7 +31,7 @@ namespace castor
 		{
 		}
 
-		bool operator()( StringStream & file )
+		bool operator()( StringStream & file )const
 		{
 			return writeMask( file, cuT( "occlusion_mask" ), m_mask );
 		}
@@ -77,7 +77,7 @@ namespace castor3d
 		static CU_ImplementAttributeParserBlock( parserTexRemapOcclusion, SceneImportContext )
 		{
 			auto & plugin = getEngine( *blockContext )->getPassComponentsRegister().getPlugin( OcclusionMapComponent::TypeName );
-			blockContext->textureRemapIt = blockContext->textureRemaps.emplace( plugin.getTextureFlags(), TextureConfiguration{} ).first;
+			blockContext->textureRemapIt = blockContext->textureRemaps.try_emplace( plugin.getTextureFlags() ).first;
 			blockContext->textureRemapIt->second = TextureConfiguration{};
 		}
 		CU_EndAttributePushBlock( CSCNSection::eTextureRemapChannel, blockContext )
@@ -165,13 +165,14 @@ namespace castor3d
 	void OcclusionMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		channelFillers.emplace( "occlusion", ChannelFiller{ getTextureFlags()
+		channelFillers.try_emplace( "occlusion"
+			, getTextureFlags()
 			, []( TextureContext & blockContext )
 			{
-				auto & component = getPassComponent< OcclusionMapComponent >( blockContext );
+				auto const & component = getPassComponent< OcclusionMapComponent >( blockContext );
 				component.fillChannel( blockContext.configuration
 					, 0x00FF0000 );
-			} } );
+			} );
 
 		castor::addParserT( parsers
 			, CSCNSection::eTexture

@@ -43,7 +43,7 @@ namespace castor
 		}
 
 		bool operator()( StringStream & file
-			, uint32_t mask )
+			, uint32_t mask )const
 		{
 			return writeMask( file, cuT( "normal_mask" ), mask )
 				&& writeOpt( file, cuT( "normal_factor" ), m_configuration.normalFactor, 1.0f )
@@ -125,7 +125,7 @@ namespace castor3d
 		static CU_ImplementAttributeParserBlock( parserTexRemapNormal, SceneImportContext )
 		{
 			auto & plugin = getEngine( *blockContext )->getPassComponentsRegister().getPlugin( NormalMapComponent::TypeName );
-			blockContext->textureRemapIt = blockContext->textureRemaps.emplace( plugin.getTextureFlags(), TextureConfiguration{} ).first;
+			blockContext->textureRemapIt = blockContext->textureRemaps.try_emplace( plugin.getTextureFlags() ).first;
 			blockContext->textureRemapIt->second = TextureConfiguration{};
 		}
 		CU_EndAttributePushBlock( CSCNSection::eTextureRemapChannel, blockContext )
@@ -197,7 +197,6 @@ namespace castor3d
 			, material.getMember< sdw::UInt >( textureName ) >> 16u );
 		auto mask = writer.declLocale( mapName + "Mask"
 			, material.getMember< sdw::UInt >( textureName ) & 0xFFFFu );
-		auto value = components.getMember< sdw::Vec3 >( valueName );
 
 		auto config = writer.declLocale( valueName + "Config"
 			, textureConfigs.getTextureConfiguration( map ) );
@@ -209,15 +208,14 @@ namespace castor3d
 			, components );
 		auto sampled = writer.declLocale( valueName + "Sampled"
 			, sampleTexture( map, config, components ) );
-		computeMikktNormal( config.nmlGMul(), config.nml2Chan(), mask, components, sampled, value );
+		computeMikktNormal( config.nmlGMul(), config.nml2Chan(), mask, components, sampled );
 	}
 
 	void NormalMapComponent::ComponentsShader::computeMikktNormal( sdw::Float const & nmlGMul
 		, sdw::UInt const & nml2Chan
 		, sdw::UInt const & mask
-		, shader::BlendComponents & components
-		, sdw::Vec4 const & sampled
-		, sdw::Vec3 normal )
+		, shader::BlendComponents const & components
+		, sdw::Vec4 const & sampled )
 	{
 		auto & writer{ *sampled.getWriter() };
 		auto tbn = shader::Utils::getTBN( components.getMember< sdw::Vec3 >( "normal" )
@@ -237,13 +235,14 @@ namespace castor3d
 	void NormalMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		channelFillers.emplace( "normal", ChannelFiller{ getTextureFlags()
+		channelFillers.try_emplace( "normal"
+			, getTextureFlags()
 			, []( TextureContext & blockContext )
 			{
-				auto & component = getPassComponent< NormalMapComponent >( blockContext );
+				auto const & component = getPassComponent< NormalMapComponent >( blockContext );
 				component.fillChannel( blockContext.configuration
 					, 0x00FFFFFF );
-			} } );
+			} );
 
 		castor::addParserT( parsers
 			, CSCNSection::eTexture

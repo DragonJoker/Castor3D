@@ -33,8 +33,7 @@ namespace castor3d
 			, GpuBufferOffsetT< MeshletCullData > const & output );
 
 		void recordInto( crg::RecordContext & context
-			, VkCommandBuffer commandBuffer
-			, uint32_t index );
+			, VkCommandBuffer commandBuffer )const;
 
 	private:
 		RenderDevice const & m_device;

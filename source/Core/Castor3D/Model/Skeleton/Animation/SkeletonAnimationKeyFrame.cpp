@@ -24,13 +24,11 @@ namespace castor3d
 		, castor::Quaternion const & rotate
 		, castor::Point3f const & scale )
 	{
-		auto it = find( object );
-
-		if ( it == m_transforms.end() )
+		if ( auto it = find( object );
+			it == m_transforms.end() )
 		{
-			auto parent = object.getParent();
-
-			if ( parent && find( *parent ) == m_transforms.end() )
+			if ( auto parent = object.getParent();
+				parent && find( *parent ) == m_transforms.end() )
 			{
 				addAnimationObject( *parent
 					, castor::Point3f{}

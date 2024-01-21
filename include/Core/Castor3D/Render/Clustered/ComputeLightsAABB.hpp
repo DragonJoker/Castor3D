@@ -12,7 +12,7 @@ namespace castor3d
 		, crg::FramePass const * previousPass
 		, RenderDevice const & device
 		, CameraUbo const & cameraUbo
-		, FrustumClusters & clusters );
+		, FrustumClusters const & clusters );
 }
 
 #endif

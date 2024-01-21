@@ -139,7 +139,7 @@ namespace castor3d
 			passData.ownCuller = castor::makeUniqueDerived< SceneCuller, FrustumCuller >( m_scene, *passData.frustum, isStatic );
 			passData.culler = passData.ownCuller.get();
 			auto & pass = group.createPass( "Nodes"
-				, [faceIndex, &passData, this, vsm, rsm, isStatic, &cameraUbo]( crg::FramePass const & framePass
+				, [&passData, this, vsm, rsm, isStatic, &cameraUbo]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & runnableGraph )
 				{
@@ -147,7 +147,6 @@ namespace castor3d
 						, context
 						, runnableGraph
 						, m_device
-						, faceIndex
 						, cameraUbo
 						, *passData.culler
 						, *this
@@ -258,7 +257,6 @@ namespace castor3d
 					, *previousPass
 					, m_device
 					, cuT( "ShadowMapPoint" )
-					, debugName
 					, variance.subViewsId[faceIndex]
 					, m_blurIntermediateView
 					, 5u
@@ -277,9 +275,8 @@ namespace castor3d
 	bool ShadowMapPoint::doIsUpToDate( uint32_t index
 		, ShadowMap::Passes const & passes )const
 	{
-		uint32_t offset = index * 6u;
-
-		if ( passes.passes.size() >= offset + 6u )
+		if ( uint32_t offset = index * 6u;
+			passes.passes.size() >= offset + 6u )
 		{
 			return std::all_of( passes.passes.begin() + offset
 				, passes.passes.begin() + offset + 6u
@@ -295,11 +292,10 @@ namespace castor3d
 	void ShadowMapPoint::doSetUpToDate( uint32_t index
 		, ShadowMap::Passes & passes )
 	{
-		uint32_t offset = index * 6u;
-
-		if ( passes.passes.size() >= offset + 6u )
+		if ( uint32_t offset = index * 6u;
+			passes.passes.size() >= offset + 6u )
 		{
-			for ( auto & data : castor::makeArrayView( passes.passes.begin() + offset, passes.passes.begin() + offset + 6u ) )
+			for ( auto const & data : castor::makeArrayView( passes.passes.begin() + offset, passes.passes.begin() + offset + 6u ) )
 			{
 				data->pass->setUpToDate();
 			}
@@ -318,7 +314,7 @@ namespace castor3d
 			auto & pass = *passes.passes[face];
 			pass.pass->update( updater );
 
-			auto & pointLight = *updater.light->getPointLight();
+			auto const & pointLight = *updater.light->getPointLight();
 			m_passes[m_passesIndex].cameraUbos[face]->cpuUpdate( *updater.camera
 				, pointLight.getViewMatrix( CubeMapFace( updater.index ) )
 				, static_cast< ShadowMapPassPoint const & >( *pass.pass ).getProjection()

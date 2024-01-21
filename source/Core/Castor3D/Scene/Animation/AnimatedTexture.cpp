@@ -107,16 +107,15 @@ namespace castor3d
 
 	void AnimatedTexture::doAddAnimation( castor::String const & name )
 	{
-		auto it = m_animations.find( name );
-
-		if ( it == m_animations.end() )
+		if ( auto it = m_animations.find( name );
+			it == m_animations.end() )
 		{
 			if ( m_texture
 				&& m_texture->hasAnimation() )
 			{
 				auto & animation = m_texture->getAnimation();
 				auto instance = castor::makeUniqueDerived< AnimationInstance, TextureAnimationInstance >( *this, animation );
-				m_animations.emplace( name, std::move( instance ) );
+				m_animations.try_emplace( name, std::move( instance ) );
 				m_pass.getOwner()->getEngine()->getMaterialCache().registerTexture( *this );
 				startAnimation( animation.getName() );
 			}

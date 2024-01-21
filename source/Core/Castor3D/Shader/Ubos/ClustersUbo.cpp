@@ -21,7 +21,7 @@ namespace castor3d
 			{
 				auto & writer = *getWriter();
 				m_computeClusterIndex3DIdx = writer.implementFunction< sdw::U32Vec3 >( "c3d_computeClusterIndex3DIdx"
-					, [&]( sdw::UInt32 const index )
+					, [this, &writer]( sdw::UInt32 const & index )
 					{
 						auto i = writer.declLocale( "i"
 							, index % dimensions().x() );
@@ -46,9 +46,9 @@ namespace castor3d
 			{
 				auto & writer = *getWriter();
 				m_computeClusterIndex3DPos = writer.implementFunction< sdw::U32Vec3 >( "c3d_computeClusterIndex3DPos"
-					, [&]( sdw::Vec2 const screenPos
-						, sdw::Float viewZ
-						, sdw::Vec4 const clustersLightsData )
+					, [this, &writer]( sdw::Vec2 const & screenPos
+						, sdw::Float const & viewZ
+						, sdw::Vec4 const & clustersLightsData )
 					{
 						auto i = writer.declLocale( "i"
 							, screenPos.x() / writer.cast< sdw::Float >( clusterSize().x() ) );
@@ -90,7 +90,7 @@ namespace castor3d
 								, sdw::log( limZ / nearZ ) / sdw::log( farZ / limZ ) );
 							k = max( 0.0_f, floor( sdw::log( -viewZ / nearZ ) * clustersLightsData.z() - writer.cast< sdw::Float >( dimensions().z() ) * depthBias ) );
 						}
-						FI;
+						FI
 
 						writer.returnStmt( u32vec3( i, j, k ) );
 					}
@@ -110,7 +110,7 @@ namespace castor3d
 			{
 				auto & writer = *getWriter();
 				m_computeClusterIndex1D = writer.implementFunction< sdw::UInt32 >( "c3d_computeClusterIndex1D"
-					, [&]( sdw::U32Vec3 const clusterIndex3D )
+					, [this, &writer]( sdw::U32Vec3 const & clusterIndex3D )
 					{
 						writer.returnStmt( clusterIndex3D.x() + ( dimensions().x() * ( clusterIndex3D.y() + dimensions().y() * clusterIndex3D.z() ) ) );
 					}
@@ -128,9 +128,9 @@ namespace castor3d
 			{
 				auto & writer = *getWriter();
 				m_getClusterDepthBounds = writer.implementFunction< sdw::Vec2 >( "c3d_getClusterDepthBounds"
-					, [&]( sdw::U32Vec3 const clusterIndex3D
-						, sdw::Vec4 const clustersLightsData
-						, sdw::Vec4 const lightsAABBRange )
+					, [this, &writer]( sdw::U32Vec3 const & clusterIndex3D
+						, sdw::Vec4 const & clustersLightsData
+						, sdw::Vec4 const & )
 					{
 						auto nearZ = writer.declLocale( "nearZ"
 							, clustersLightsData.x() );
@@ -182,7 +182,7 @@ namespace castor3d
 									, -clustersLightsData.w() * pow( farZ / nearZ, writer.cast< sdw::Float >( clusterIndex3D.z() + 1_u ) / ( writer.cast< sdw::Float >( dimensions().z() ) * ( 1.0_f + depthBias ) ) ) ) );
 							writer.returnStmt( vec2( nearTile, farTile ) );
 						}
-						FI;
+						FI
 					}
 					, sdw::InU32Vec3{ writer, "clusterIndex3D" }
 					, sdw::InVec4{ writer, "clustersLightsData" }
@@ -203,10 +203,10 @@ namespace castor3d
 			{
 				auto & writer = *getWriter();
 				m_computeGlobalLightsData = writer.implementFunction< sdw::Void >( "c3d_computeGlobalLightsData"
-					, [&]( sdw::Vec4 lightsMin
-						, sdw::Vec4 lightsMax
-						, sdw::Float const nearPlane
-						, sdw::Float const farPlane
+					, [this, &writer]( sdw::Vec4 const & lightsMin
+						, sdw::Vec4 const & lightsMax
+						, sdw::Float const & nearPlane
+						, sdw::Float const & farPlane
 						, sdw::Vec4 clustersLightsData
 						, sdw::Vec4 lightsAABBRange )
 					{
@@ -272,7 +272,7 @@ namespace castor3d
 								, nearZ * pow( farZ / nearZ, depthBias / ( 1.0f + depthBias ) ) );
 							clustersLightsData = vec4( nearZ, farZ, d, e );
 						}
-						FI;
+						FI
 
 						lightsAABBRange = vec4( vec3( 1.0_f ) / ( lightsMax - lightsMin ).xyz(), 1.0_f );
 					}

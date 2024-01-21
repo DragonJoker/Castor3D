@@ -12,6 +12,5 @@ namespace castor3d
 		: castor::Exception( "Plugin loading error : " + description, file, function, line )
 		, m_critical( critical )
 	{
-		log::debug << description << std::endl;
 	}
 }

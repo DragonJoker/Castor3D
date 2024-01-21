@@ -59,8 +59,7 @@ namespace castor3d
 				, false };
 		}
 
-		static ashes::BufferPtr< Voxel > createSsbo( Engine & engine
-			, RenderDevice const & device
+		static ashes::BufferPtr< Voxel > createSsbo( RenderDevice const & device
 			, castor::String const & name
 			, uint32_t voxelGridSize )
 		{
@@ -84,18 +83,17 @@ namespace castor3d
 				: crg::RunnablePass{ pass
 				, context
 				, graph
-				, { []( uint32_t index ) {}
+				, { crg::defaultV< InitialiseCallback >
 					, GetPipelineStateCallback( []() { return crg::getPipelineState( VK_PIPELINE_STAGE_TRANSFER_BIT ); } )
-					, [this]( crg::RecordContext & ctx, VkCommandBuffer cb, uint32_t i ) { doRecordInto( ctx, cb, i ); }
-					, GetPassIndexCallback( [](){ return 0u; } )
-					, isEnabled } }
+					, [this]( crg::RecordContext &, VkCommandBuffer cb, uint32_t i ) { doRecordInto( cb, i ); }
+					, crg::defaultV< GetPassIndexCallback >
+					, std::move( isEnabled ) } }
 			{
 			}
 
 		protected:
-			void doRecordInto( crg::RecordContext & context
-				, VkCommandBuffer commandBuffer
-				, uint32_t index )
+			void doRecordInto( VkCommandBuffer commandBuffer
+				, uint32_t index )const
 			{
 				for ( auto & attach : m_pass.buffers )
 				{
@@ -119,7 +117,7 @@ namespace castor3d
 		, Camera & camera
 		, VoxelizerUbo & voxelizerUbo
 		, VctConfig const & voxelConfig
-		, crg::FramePassArray previousPasses )
+		, crg::FramePassArray const & previousPasses )
 		: m_engine{ *device.renderSystem.getEngine() }
 		, m_device{ device }
 		, m_voxelConfig{ voxelConfig }
@@ -132,8 +130,8 @@ namespace castor3d
 		, m_sceneUbo{ device }
 		, m_firstBounce{ vxlsr::createTexture( device, resources, "VoxelizedSceneFirstBounce", { m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value() } ) }
 		, m_secondaryBounce{ vxlsr::createTexture( device, resources, "VoxelizedSceneSecondaryBounce", { m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value() } ) }
-		, m_staticsVoxels{ vxlsr::createSsbo( m_engine, device, "VoxelizedStaticSceneBuffer", m_voxelConfig.gridSize.value() ) }
-		, m_dynamicsVoxels{ vxlsr::createSsbo( m_engine, device, "VoxelizedSceneBuffer", m_voxelConfig.gridSize.value() ) }
+		, m_staticsVoxels{ vxlsr::createSsbo( device, "VoxelizedStaticSceneBuffer", m_voxelConfig.gridSize.value() ) }
+		, m_dynamicsVoxels{ vxlsr::createSsbo( device, "VoxelizedSceneBuffer", m_voxelConfig.gridSize.value() ) }
 		, m_voxelizerUbo{ voxelizerUbo }
 		, m_clearStatics{ doCreateClearStaticsPass( previousPasses, progress ) }
 		, m_staticsVoxelizePassDesc{ doCreateVoxelizePass( { &m_clearStatics }, progress, *m_staticsVoxels, *m_staticsCuller, true ) }
@@ -184,8 +182,8 @@ namespace castor3d
 	{
 		if ( m_staticsVoxelizePass )
 		{
-			auto & camera = *updater.camera;
-			auto & scene = *updater.scene;
+			auto const & camera = *updater.camera;
+			auto const & scene = *updater.scene;
 			auto & aabb = scene.getBoundingBox();
 			auto max = std::max( aabb.getDimensions()->x, std::max( aabb.getDimensions()->y, aabb.getDimensions()->z ) );
 			auto cellSize = float( m_voxelConfig.gridSize.value() ) / max;
@@ -201,7 +199,7 @@ namespace castor3d
 					return res;
 				}() };
 			//Orthograhic projection
-			auto sceneBoundingBox = scene.getBoundingBox();
+			auto const & sceneBoundingBox = scene.getBoundingBox();
 			auto ortho = m_device.renderSystem.getOrtho( sceneBoundingBox.getMin()->x
 				, sceneBoundingBox.getMax()->x
 				, sceneBoundingBox.getMin()->y
@@ -443,7 +441,7 @@ namespace castor3d
 	{
 		stepProgressBarLocal( progress, "Creating voxel mipmap generation pass" );
 		auto & result = m_graph.createPass( name
-			, [this, progress, isEnabled]( crg::FramePass const & framePass
+			, [this, progress, enable = std::move( isEnabled )]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
@@ -454,7 +452,7 @@ namespace castor3d
 					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 					, crg::ru::Config{}
 					, crg::defaultV< crg::RunnablePass::GetPassIndexCallback >
-					, isEnabled );
+					, enable );
 				m_device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, res->getTimer() );
 				return res;

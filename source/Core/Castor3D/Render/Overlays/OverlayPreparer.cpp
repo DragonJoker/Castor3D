@@ -23,7 +23,7 @@ namespace castor3d
 				return castor::Point4f{ 0.0f, 0.0f, 1.0f, 1.0f };
 			}
 
-			auto & parent = overlay.getParent()->getCategory();
+			auto const & parent = overlay.getParent()->getCategory();
 			auto pos = parent.getAbsolutePosition();
 			auto dim = parent.getAbsoluteSize();
 			auto renderRatio = parent.getRenderRatio( renderSize );
@@ -103,20 +103,19 @@ namespace castor3d
 		if ( m_renderPass )
 		{
 			fillDrawData();
-			auto & commandBuffer = m_renderer.doBeginPrepare( m_renderPass, m_framebuffer, m_fence );
+			auto const & commandBuffer = m_renderer.doBeginPrepare( m_renderPass, m_framebuffer, m_fence );
 
-			for ( auto [level, pipelines] : m_levelsOverlays )
+			for ( auto const & [level, pipelines] : m_levelsOverlays )
 			{
-				for ( auto [pipelineData, overlayDatas] : pipelines )
+				for ( auto const & [pipelineData, overlayDatas] : pipelines )
 				{
 					if ( !overlayDatas.empty() )
 					{
-						auto & data = overlayDatas.front();
+						auto const & data = overlayDatas.front();
 						auto & count = m_descriptorsCounts[ovrlprep::makeHash( data.node->pipeline.pipeline.get(), &pipelineData->descriptorSets->all )];
 #if !defined( NDEBUG )
-						auto commands = castor::makeArrayView( pipelineData->indirectCommands.begin() + count
-							, uint32_t( overlayDatas.size() ) );
-						for ( auto & command : commands )
+						for ( auto const & command : castor::makeArrayView( pipelineData->indirectCommands.begin() + count
+							, uint32_t( overlayDatas.size() ) ) )
 						{
 							if ( command.vertexCount == 0
 								|| command.instanceCount == 0 )
@@ -132,7 +131,7 @@ namespace castor3d
 							, pipelineData->indirectCommandsBuffer->getBuffer()
 							, uint32_t( overlayDatas.size() )
 							, count
-							, commandBuffer );;
+							, commandBuffer );
 					}
 				}
 			}
@@ -151,9 +150,9 @@ namespace castor3d
 
 			if ( size->x > 0 && size->y > 0 )
 			{
-				auto & pipelines = m_levelsOverlays.emplace( overlay.getLevel(), OverlayDatasMap{} ).first->second;
+				auto & pipelines = m_levelsOverlays.try_emplace( overlay.getLevel() ).first->second;
 
-				for ( auto & pass : *material )
+				for ( auto const & pass : *material )
 				{
 					if ( !pass->isImplicit() )
 					{
@@ -166,15 +165,8 @@ namespace castor3d
 							, overlay
 							, *pass
 							, false );
-						auto & overlays = pipelines.emplace( pipelineData, OverlayDataArray{} ).first->second;
-						overlays.push_back( { &overlay
-							, node
-							, pipelineData
-							, nullptr
-							, uint32_t{}
-							, uint32_t{}
-							, OverlayTextBufferIndex{}
-						, false } );
+						auto & overlays = pipelines.try_emplace( pipelineData ).first->second;
+						overlays.emplace_back( &overlay, node, pipelineData );
 					}
 				}
 			}
@@ -188,9 +180,9 @@ namespace castor3d
 
 				if ( borderSize->x != 0 || borderSize->y != 0 || borderSize->z != 0 || borderSize->w != 0 )
 				{
-					auto & pipelines = m_levelsOverlays.emplace( overlay.getLevel(), OverlayDatasMap{} ).first->second;
+					auto & pipelines = m_levelsOverlays.try_emplace( overlay.getLevel() ).first->second;
 
-					for ( auto & pass : *borderMaterial )
+					for ( auto const & pass : *borderMaterial )
 					{
 						if ( !pass->isImplicit() )
 						{
@@ -201,15 +193,11 @@ namespace castor3d
 								, overlay
 								, *pass
 								, true );
-							auto & overlays = pipelines.emplace( pipelineData, OverlayDataArray{} ).first->second;
-							overlays.push_back( { &overlay
+							auto & overlays = pipelines.try_emplace( pipelineData ).first->second;
+							overlays.emplace_back( &overlay
 								, node
-								, pipelineData
-								, nullptr
-								, uint32_t{}
-								, uint32_t{}
-								, OverlayTextBufferIndex{}
-							, true } );
+								, pipelineData )
+								.secondary = true;
 						}
 					}
 				}
@@ -219,17 +207,16 @@ namespace castor3d
 		return counts;
 	}
 
-	void OverlayPreparer::fillDrawData()
+	void OverlayPreparer::fillDrawData()noexcept
 	{
-		for ( auto [level, pipelines] : m_levelsOverlays )
+		for ( auto & [level, pipelines] : m_levelsOverlays )
 		{
-			for ( auto [pipelineData, overlayDatas] : pipelines )
+			for ( auto & [pipelineData, overlayDatas] : pipelines )
 			{
-				for ( auto data : overlayDatas )
+				for ( auto & data : overlayDatas )
 				{
-					auto overlay = data.overlay;
-
-					switch ( overlay->getType() )
+					switch ( auto overlay = data.overlay;
+						overlay->getType() )
 					{
 					case OverlayType::ePanel:
 						if ( auto panel = overlay->getPanelOverlay() )
@@ -316,7 +303,7 @@ namespace castor3d
 		, ashes::BufferBase const & indirectCommands
 		, uint32_t drawCount
 		, uint32_t & offset
-		, ashes::CommandBuffer & commandBuffer )
+		, ashes::CommandBuffer const & commandBuffer )noexcept
 	{
 		commandBuffer.bindPipeline( *pipeline.pipeline );
 		commandBuffer.bindDescriptorSets( descriptorSets, *pipeline.pipelineLayout );
@@ -343,7 +330,7 @@ namespace castor3d
 		, Pass const & pass
 		, castor::Size const & renderSize
 		, uint32_t vertexOffset
-		, OverlayTextBufferIndex const & textBuffer )const
+		, OverlayTextBufferIndex const & )const
 	{
 		ovrlprep::updateUbo( data
 			, static_cast< OverlayCategory const & >( overlay )
@@ -357,7 +344,7 @@ namespace castor3d
 		, Pass const & pass
 		, castor::Size const & renderSize
 		, uint32_t vertexOffset
-		, OverlayTextBufferIndex const & textBuffer )const
+		, OverlayTextBufferIndex const & )const
 	{
 		auto ratio = ovrlprep::updateUbo( data
 			, static_cast< OverlayCategory const & >( overlay )

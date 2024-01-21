@@ -35,10 +35,9 @@ namespace castor3d
 		 *\param[in]	name		Le nom du tampon shader.
 		 *\param[in]	wantedState	L'accès souhaité après l'upload.
 		 */
-		C3D_API ShaderBuffer( Engine & engine
-			, RenderDevice const & device
+		C3D_API ShaderBuffer( RenderDevice const & device
 			, VkDeviceSize size
-			, castor::String name
+			, castor::String const & name
 			, crg::AccessState wantedState = { VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT } );
 		/**
 		 *\~english

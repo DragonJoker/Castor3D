@@ -24,11 +24,11 @@ namespace castor3d::shader
 		SDW_DeclStructInstance( C3D_API, Material );
 
 		C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache
-			, PassShaders & passShaders
+			, PassShaders const & passShaders
 			, sdw::expr::ExprList & inits );
 
 		static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache
-			, PassShaders & passShaders )
+			, PassShaders const & passShaders )
 		{
 			sdw::expr::ExprList inits;
 			return makeType( cache, passShaders, inits );
@@ -59,7 +59,7 @@ namespace castor3d::shader
 
 		C3D_API void getPassMultipliers( PipelineFlags const & flags
 			, sdw::UVec4 const & passMasks
-			, sdw::Array< sdw::Vec4 > & passMultipliers )const;
+			, sdw::Array< sdw::Vec4 > const & passMultipliers )const;
 		C3D_API sdw::UInt getTexture( uint32_t index )const;
 		C3D_API sdw::UInt getTexture( sdw::UInt const & index )const;
 
@@ -82,7 +82,7 @@ namespace castor3d::shader
 		sdw::Float thicknessFactor;
 
 	private:
-		static sdw::expr::ExprPtr makeInit( sdw::ShaderWriter & writer
+		static sdw::expr::ExprPtr makeInit( sdw::ShaderWriter const & writer
 			, PassShaders & passShaders );
 	};
 

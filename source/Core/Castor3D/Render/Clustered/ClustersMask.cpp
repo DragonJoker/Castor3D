@@ -101,12 +101,14 @@ namespace castor3d
 				auto index = uint32_t( GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
 				auto frustumClusters = getTechnique().getRenderTarget().getFrustumClusters();
 				CU_Require( frustumClusters );
-				bindings.emplace_back( frustumClusters->getClustersUbo().createLayoutBinding( index++ // ClustersUbo
+				bindings.emplace_back( frustumClusters->getClustersUbo().createLayoutBinding( index // ClustersUbo
 					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++ // LightsAABB
+				++index;
+				bindings.emplace_back( makeDescriptorSetLayoutBinding( index // LightsAABB
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++ // ClustersFlags
+				++index;
+				bindings.emplace_back( makeDescriptorSetLayoutBinding( index // ClustersFlags
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 			}
@@ -119,7 +121,8 @@ namespace castor3d
 				auto index = uint32_t( GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
 				auto frustumClusters = getTechnique().getRenderTarget().getFrustumClusters();
 				CU_Require( frustumClusters );
-				descriptorWrites.emplace_back( frustumClusters->getClustersUbo().getDescriptorWrite( index++ ) );
+				descriptorWrites.emplace_back( frustumClusters->getClustersUbo().getDescriptorWrite( index ) );
+				++index;
 				bindBuffer( frustumClusters->getReducedLightsAABBBuffer(), descriptorWrites, index );
 				bindBuffer( frustumClusters->getClusterFlagsBuffer(), descriptorWrites, index );
 			}
@@ -193,8 +196,8 @@ namespace castor3d
 						, passShaders
 						, flags }
 					, sdw::FragmentOut{ writer }
-					, [&]( sdw::FragmentInT< shader::FragmentSurfaceT > in
-						, sdw::FragmentOut out )
+					, [&]( sdw::FragmentInT< shader::FragmentSurfaceT > const & in
+						, sdw::FragmentOut const & )
 					{
 						auto modelData = writer.declLocale( "modelData"
 							, c3d_modelsData[in.nodeId - 1u] );

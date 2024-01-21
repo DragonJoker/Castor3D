@@ -17,7 +17,7 @@ namespace castor3d
 		unload();
 	}
 
-	ImporterPlugin::ExtensionArray const & ImporterPlugin::getExtensions()
+	ImporterPlugin::ExtensionArray const & ImporterPlugin::getExtensions()const
 	{
 		return m_extensions;
 	}

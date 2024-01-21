@@ -24,17 +24,16 @@ namespace castor3d
 		for ( auto & submesh : animation.m_submeshes )
 		{
 			// using std::make_pair to prevent GCC from using copy ctor...
-			m_submeshes.insert( std::make_pair( submesh.getSubmesh().getId(),
-				MeshAnimationInstanceSubmesh{ *this, submesh } ) );
+			m_submeshes.try_emplace( submesh.getSubmesh().getId(), *this, submesh );
 		}
 	}
 
 	MeshAnimationInstanceSubmesh const * MeshAnimationInstance::getAnimationSubmesh( uint32_t index )const
 	{
-		auto it = m_submeshes.find( index );
 		MeshAnimationInstanceSubmesh const * result = nullptr;
 
-		if ( it != m_submeshes.end() )
+		if ( auto it = m_submeshes.find( index );
+			it != m_submeshes.end() )
 		{
 			result = &it->second;
 		}
@@ -55,9 +54,9 @@ namespace castor3d
 		{
 			if ( m_stopping )
 			{
-				for ( auto & submesh : m_submeshes )
+				for ( auto & [_, submesh] : m_submeshes )
 				{
-					submesh.second.clear();
+					submesh.clear();
 				}
 			}
 			else
@@ -69,12 +68,12 @@ namespace castor3d
 				auto & prvKF = static_cast< MeshMorphTarget const & >( *( *m_prev ) );
 				auto & curKF = static_cast< MeshMorphTarget const & >( *( *m_curr ) );
 
-				for ( auto & submesh : m_submeshes )
+				for ( auto & [_, submesh] : m_submeshes )
 				{
-					auto prvIt = prvKF.find( submesh.second.getSubmesh() );
-					auto curIt = curKF.find( submesh.second.getSubmesh() );
+					auto prvIt = prvKF.find( submesh.getSubmesh() );
+					auto curIt = curKF.find( submesh.getSubmesh() );
 					CU_Require( prvIt != prvKF.end() && curIt != curKF.end() );
-					submesh.second.update( ratio
+					submesh.update( ratio
 						, prvIt->second
 						, curIt->second
 						, prvKF.getBoundingBox()

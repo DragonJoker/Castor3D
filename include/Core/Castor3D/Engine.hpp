@@ -183,7 +183,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API ~Engine();
+		C3D_API ~Engine()noexcept;
 		/**
 		 *\~english
 		 *\brief		Initialisation function, Sets the wanted frame rate
@@ -232,7 +232,7 @@ namespace castor3d
 		 *\brief		Ajoute un évènement de frame au frame listener par défaut
 		 *\param[in]	event	L'évènement
 		 */
-		C3D_API CpuFrameEvent * postEvent( CpuFrameEventUPtr event );
+		C3D_API CpuFrameEvent * postEvent( CpuFrameEventUPtr event )const;
 		/**
 		 *\~english
 		 *\brief		If a device is enabled, executes the given event, if not posts it to the default frame listener.
@@ -241,7 +241,7 @@ namespace castor3d
 		 *\brief		Si un device est actif, exécute l'évènement donné, sinon il est ajouté au frame listener par défaut.
 		 *\param[in]	event	L'évènement.
 		 */
-		C3D_API void sendEvent( GpuFrameEventUPtr event );
+		C3D_API void sendEvent( GpuFrameEventUPtr event )const;
 		/**
 		 *\~english
 		 *\brief		Posts a frame event to the default frame listener
@@ -250,7 +250,7 @@ namespace castor3d
 		 *\brief		Ajoute un évènement de frame au frame listener par défaut
 		 *\param[in]	event	L'évènement
 		 */
-		C3D_API GpuFrameEvent * postEvent( GpuFrameEventUPtr event );
+		C3D_API GpuFrameEvent * postEvent( GpuFrameEventUPtr event )const;
 		/**
 		 *\~english
 		 *\brief		Fires a mouse move event.
@@ -308,7 +308,7 @@ namespace castor3d
 		 *\remarks		Thread-safe
 		 *\return		\p true si nettoyé
 		 */
-		C3D_API bool isCleaned();
+		C3D_API bool isCleaned()const noexcept;
 		/**
 		 *\~english
 		 *\brief		Tells the engine is cleaned up
@@ -317,7 +317,7 @@ namespace castor3d
 		 *\brief		Dit que le moteur est nettoyé
 		 *\remarks		Thread-safe
 		 */
-		C3D_API void setCleaned();
+		C3D_API void setCleaned()noexcept;
 		/**
 		 *\~english
 		 *\brief		Enqueues the given CPU job.
@@ -366,9 +366,9 @@ namespace castor3d
 		 *\param[in]	sections		Les sections.
 		 *\param[in]	contextCreator	La fonction de création de contexte de parser.
 		 */
-		C3D_API void registerParsers( castor::String const & name
-			, castor::AttributeParsers const & parsers
-			, castor::StrUInt32Map const & sections
+		C3D_API void registerParsers( castor::String name
+			, castor::AttributeParsers parsers
+			, castor::StrUInt32Map sections
 			, castor::UserContextCreator contextCreator );
 		/**
 		 *\~english
@@ -378,7 +378,7 @@ namespace castor3d
 		 *\brief		Désenregistre des analyseurs pour SceneFileParser.
 		 *\param[in]	name	Le nom d'enregistrement.
 		 */
-		C3D_API void unregisterParsers( castor::String const & name );
+		C3D_API void unregisterParsers( castor::String const & name )noexcept;
 		/**
 		 *\~english
 		 *\brief		Registers a render pass timer.
@@ -419,7 +419,7 @@ namespace castor3d
 		 */
 		C3D_API LightingModelID registerLightingModel( castor::String const & name
 			, shader::LightingModelCreator creator
-			, BackgroundModelID backgroundModelId );
+			, BackgroundModelID backgroundModelId )const;
 		/**
 		 *\~english
 		 *\brief		Unregisters a combination of Lighting Model and Background Model.
@@ -431,7 +431,7 @@ namespace castor3d
 		 *\param[in]	backgroundModelId	L'ID du modèle de fond.
 		 */
 		C3D_API void unregisterLightingModel( LightingModelID lightingModelId
-			, BackgroundModelID backgroundModelId );
+			, BackgroundModelID backgroundModelId )const;
 		/**
 		 *\~english
 		 *\brief		Unregisters a Lighting Model.
@@ -443,7 +443,7 @@ namespace castor3d
 		 *\param[in]	backgroundModelId	L'ID du modèle de fond.
 		 */
 		C3D_API void unregisterLightingModel( castor::String const & name
-			, BackgroundModelID backgroundModelId );
+			, BackgroundModelID backgroundModelId )const;
 		/**
 		 *\~english
 		 *\brief		Registers a Background Model.
@@ -496,7 +496,7 @@ namespace castor3d
 		 *\param[in]	info				Les informations d'enregistrement de la passe.
 		 */
 		C3D_API void registerPassModel( BackgroundModelID backgroundModelId
-			, PassRegisterInfo info );
+			, PassRegisterInfo const & info )const;
 		/**
 		 *\~english
 		 *\brief		Registers the given pass info with all background models.
@@ -505,7 +505,7 @@ namespace castor3d
 		 *\brief		Enregistre les informations de passe avec tous les modèles de fond.
 		 *\param[in]	info	Les informations d'enregistrement de la passe.
 		 */
-		C3D_API void registerPassModels( PassRegisterInfo info );
+		C3D_API void registerPassModels( PassRegisterInfo const & info )const;
 		/**
 		 *\~english
 		 *\brief		Unregisters a combination of lighting model and background model.
@@ -517,7 +517,7 @@ namespace castor3d
 		 *\param[in]	lightingModelId		Le modèle d'éclairage.
 		 */
 		C3D_API void unregisterPassModel( BackgroundModelID backgroundModelId
-			, LightingModelID lightingModelId );
+			, LightingModelID lightingModelId )const;
 		/**
 		 *\~english
 		 *\brief		Unregisters all combinations of given lighting model and background models.
@@ -526,7 +526,7 @@ namespace castor3d
 		 *\brief		Désenregistre toutes les combinaisons du modèle d'éclairage et des modèles de fond.
 		 *\param[in]	type	Le nom du modèle d'éclairage.
 		 */
-		C3D_API void unregisterPassModels( castor::String const & type );
+		C3D_API void unregisterPassModels( castor::String const & type )const;
 		/**
 		 *\~english
 		 *\brief			Registers a specific data shader buffer.
@@ -538,7 +538,7 @@ namespace castor3d
 		 *\param[out]		buffer	Le shader buffer.
 		 */
 		C3D_API void registerSpecificsBuffer( std::string const & name
-			, castor3d::SpecificsBuffer buffer );
+			, castor3d::SpecificsBuffer buffer )const;
 		/**
 		 *\~english
 		 *\brief			Unregisters a pass' specific data buffer.
@@ -547,7 +547,7 @@ namespace castor3d
 		 *\brief			Désenregistre un shader buffer de données spécifiques.
 		 *\param[in,out]	name	Le nom du shader buffer.
 		 */
-		C3D_API void unregisterSpecificsBuffer( std::string const & name );
+		C3D_API void unregisterSpecificsBuffer( std::string const & name )const;
 		/**
 		 *\~english
 		 *\brief			Addw the pass' specific data buffer into the given descriptor layout bindings array.
@@ -616,7 +616,7 @@ namespace castor3d
 		 *\param[in]	componentPlugin	Les fonctions spécifiques du composant.
 		 */
 		C3D_API PassComponentID registerPassComponent( castor::String const & type
-			, PassComponentPluginUPtr componentPlugin );
+			, PassComponentPluginUPtr componentPlugin )const;
 		/**
 		 *\~english
 		 *\brief		Unregisters a pass component.
@@ -625,7 +625,7 @@ namespace castor3d
 		 *\brief		Désenregistre un composant de passe.
 		 *\param[in]	type	Le nom du type de composant.
 		 */
-		C3D_API void unregisterPassComponent( castor::String const & type );
+		C3D_API void unregisterPassComponent( castor::String const & type )const;
 		/**
 		 *\~english
 		 *\brief		Registers a pass component.
@@ -637,7 +637,7 @@ namespace castor3d
 		 *\param[in]	componentPlugin	Les fonctions spécifiques du composant.
 		 */
 		C3D_API SubmeshComponentID registerSubmeshComponent( castor::String const & type
-			, SubmeshComponentPluginUPtr componentPlugin );
+			, SubmeshComponentPluginUPtr componentPlugin )const;
 		/**
 		 *\~english
 		 *\brief		Unregisters a pass component.
@@ -646,7 +646,7 @@ namespace castor3d
 		 *\brief		Désenregistre un composant de passe.
 		 *\param[in]	type	Le nom du type de composant.
 		 */
-		C3D_API void unregisterSubmeshComponent( castor::String const & type );
+		C3D_API void unregisterSubmeshComponent( castor::String const & type )const;
 		/**
 		 *\~english
 		 *\brief		Registers a scene render pass type, used to render given material pass type.
@@ -708,7 +708,7 @@ namespace castor3d
 		 *\brief		Récupère les informations de création des types de passes de rendu de scène.
 		 *\param[in]	event	Le type d'évènement des passes considérées.
 		 */
-		C3D_API std::vector< RenderPassRegisterInfo * > getRenderPassInfos( TechniquePassEvent event )const;
+		C3D_API castor::Vector< RenderPassRegisterInfo * > getRenderPassInfos( TechniquePassEvent event )const;
 		/**
 		 *\~english
 		 *\brief		Unregisters a scene render pass type.

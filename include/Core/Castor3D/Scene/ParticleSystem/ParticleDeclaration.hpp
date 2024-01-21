@@ -93,7 +93,7 @@ namespace castor3d
 		 *\param[in]	elements	Tableau des éléments
 		 */
 		template< uint32_t N >
-		inline explicit ParticleDeclaration( ParticleElementDeclaration const( & elements )[N] )
+		explicit ParticleDeclaration( ParticleElementDeclaration const( & elements )[N] )
 			: ParticleDeclaration( elements, N )
 		{
 		}
@@ -105,24 +105,17 @@ namespace castor3d
 		 *\brief		Constructeur
 		 *\param[in]	elements	Tableau d'éléments
 		 */
-		inline explicit ParticleDeclaration( std::vector< ParticleElementDeclaration > const & elements )
+		explicit ParticleDeclaration( std::vector< ParticleElementDeclaration > const & elements )
 			: ParticleDeclaration( elements.data(), uint32_t( elements.size() ) )
 		{
 		}
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		C3D_API ~ParticleDeclaration();
 		/**
 		 *\~english
 		 *\return		The elements count.
 		 *\~french
 		 *\return		Le compte des éléments.
 		 */
-		inline size_t count()const
+		size_t count()const
 		{
 			return m_elements.size();
 		}
@@ -132,7 +125,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La taille en octets de la déclaration.
 		 */
-		inline uint32_t stride()const
+		uint32_t stride()const
 		{
 			return m_stride;
 		}
@@ -142,7 +135,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Un itérateur sur le début des éléments.
 		 */
-		inline iterator begin()
+		iterator begin()
 		{
 			return m_elements.begin();
 		}
@@ -152,7 +145,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Un itérateur sur le début des éléments.
 		 */
-		inline const_iterator begin()const
+		const_iterator begin()const
 		{
 			return m_elements.begin();
 		}
@@ -162,7 +155,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Un itérateur sur la fin des éléments.
 		 */
-		inline iterator end()
+		iterator end()
 		{
 			return m_elements.end();
 		}
@@ -172,7 +165,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Un itérateur sur la fin des éléments.
 		 */
-		inline const_iterator end()const
+		const_iterator end()const
 		{
 			return m_elements.end();
 		}
@@ -184,7 +177,7 @@ namespace castor3d
 		 *\brief		Ajoute un élément à la fin de la liste.
 		 *\param[in]	element	L'élément.
 		 */
-		inline void push_back( ParticleElementDeclaration const & element )
+		void push_back( ParticleElementDeclaration const & element )
 		{
 			m_elements.push_back( element );
 			m_stride += uint32_t( getSize( m_elements.back().m_dataType ) );
@@ -198,7 +191,7 @@ namespace castor3d
 		 *\param[in]	params	Les paramètres de construction de l'élément.
 		 */
 		template< typename ... Params >
-		inline void emplace_back( Params && ... params )
+		void emplace_back( Params && ... params )
 		{
 			m_elements.emplace_back( std::forward< Params >( params )... );
 			m_stride += uint32_t( getSize( m_elements.back().m_dataType ) );

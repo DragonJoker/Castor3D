@@ -33,7 +33,7 @@ namespace castor3d
 		, std::string debugName
 		, ashes::CommandBuffer const * commandBuffer )
 		: m_device{ device }
-		, m_debugName{ debugName }
+		, m_debugName{ std::move( debugName ) }
 		, m_commandBuffer{ commandBuffer }
 	{
 	}
@@ -80,7 +80,7 @@ namespace castor3d
 			return;
 		}
 
-		ImageDataRange upload{ srcData, srcSize, &dstImage, dstLayout, dstRange, dstImageLayout, dstPipelineFlags };
+		ImageDataRange upload{ srcData, srcSize, &dstImage, std::move( dstLayout ), dstRange, dstImageLayout, dstPipelineFlags };
 		auto it = std::lower_bound( m_pendingImages.begin()
 			, m_pendingImages.end()
 			, upload
@@ -143,7 +143,7 @@ namespace castor3d
 	bool UploadData::doCopyData( void const * data
 		, VkDeviceSize size
 		, ashes::BufferBase const & dstBuffer
-		, VkDeviceSize dstOffset )
+		, VkDeviceSize dstOffset )const
 	{
 		uint32_t const align = m_device.renderSystem.getValue( GpuMin::eBufferMapSize );
 
@@ -177,7 +177,7 @@ namespace castor3d
 			CU_Failure( "Invalid offsets for upload" );
 		}
 
-		uint32_t offsetDiff = uint32_t( std::max( int64_t( 0 ), int64_t( dstOffset ) - int64_t( mappedOffset ) ) );
+		auto offsetDiff = uint32_t( std::max( int64_t( 0 ), int64_t( dstOffset ) - int64_t( mappedOffset ) ) );
 		auto mappedSize = ( ( alignedSize == alignedOffset ) ? 0u : offsetAlignment ) // If offset and size are in the same aligned range, don't add the offset alignment
 			+ ( isFullSizeMap
 				? ashes::WholeSize
@@ -226,7 +226,7 @@ namespace castor3d
 
 	void UploadData::doUploadBuffer( BufferDataRange const & data
 		, ashes::BufferBase const * srcBuffer
-		, VkDeviceSize srcOffset )
+		, VkDeviceSize srcOffset )const
 	{
 		auto & dstBuffer = *data.dstBuffer;
 		auto dstCurFlags = dstBuffer.getCompatibleStageFlags();
@@ -296,7 +296,7 @@ namespace castor3d
 
 	void UploadData::doUploadImage( ImageDataRange & data
 		, ashes::BufferBase const & srcBuffer
-		, VkDeviceSize srcOffset )
+		, VkDeviceSize srcOffset )const
 	{
 		traceUpload( "    Registering image upload commands: [" << data.dstImage->getName()
 			<< "], Layout: [" << data.dstLayout

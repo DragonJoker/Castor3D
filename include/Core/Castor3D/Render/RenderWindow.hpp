@@ -245,7 +245,7 @@ namespace castor3d
 		 *\brief		Définit la caméra.
 		 *\param[in]	camera	La caméra.
 		 */
-		C3D_API void setCamera( Camera & camera );
+		C3D_API void setCamera( Camera & camera )const;
 		/**
 		 *\~english
 		 *\brief		Changes fullscreen status.
@@ -284,7 +284,7 @@ namespace castor3d
 		 *\brief		Définit le ViewportType.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		C3D_API void setViewportType( ViewportType value );
+		C3D_API void setViewportType( ViewportType value )const;
 		/**
 		 *\~english
 		 *\brief		Sets the Scene.
@@ -293,7 +293,7 @@ namespace castor3d
 		 *\brief		Définit la Scene.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		C3D_API void setScene( Scene & value );
+		C3D_API void setScene( Scene & value )const;
 		/**
 		 *\~english
 		 *\return		The window dimensions.
@@ -316,7 +316,7 @@ namespace castor3d
 		 *\brief		Définit le statut d'utilisation stéréo.
 		 *\param[in]	stereo	\p true si le rendu stéréo est à utiliser.
 		 */
-		C3D_API void setStereo( bool stereo );
+		C3D_API void setStereo( bool stereo )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the intra ocular distance
@@ -334,7 +334,7 @@ namespace castor3d
 		 *\brief		Définit la distance inter oculaire.
 		 *\param[in]	intraOcularDistance	La distance inter oculaire.
 		 */
-		C3D_API void setIntraOcularDistance( float intraOcularDistance );
+		C3D_API void setIntraOcularDistance( float intraOcularDistance )const;
 		/**
 		 *\~english
 		 *\return		The window pixel format.
@@ -483,33 +483,32 @@ namespace castor3d
 		void doDestroyLoadingScreen()noexcept;
 		void doCreatePickingPass( QueueData const & queueData );
 		void doDestroyPickingPass()noexcept;
-		void doCreateRenderQuad( QueueData const & queueData );
+		void doCreateRenderQuad();
 		void doDestroyRenderQuad()noexcept;
-		void doRecordCommandBuffer( QueueData const & queueData
-			, uint32_t index );
-		void doCreateCommandBuffers( QueueData const & queueData );
+		void doRecordCommandBuffer( uint32_t index );
+		void doCreateCommandBuffers();
 		void doDestroyCommandBuffers()noexcept;
 		void doCreateIntermediateViews( QueueData const & queueData );
 		void doDestroyIntermediateViews()noexcept;
-		void doCreateSaveData( QueueData const & queueData );
+		void doCreateSaveData();
 		void doDestroySaveData()noexcept;
 		void doResetSwapChain();
 		void doResetSwapChainAndCommands();
 		RenderingResources * doGetResources();
 		crg::SemaphoreWaitArray doSubmitLoadingFrame( QueueData const & queueData
-			, RenderingResources & resources
+			, RenderingResources const & resources
 			, LoadingScreen & loadingScreen
 			, crg::Fence *& fence
 			, crg::SemaphoreWaitArray toWait );
 		void doPresentLoadingFrame( QueueData const & queueData
 			, crg::Fence * fence
 			, RenderingResources & resources
-			, crg::SemaphoreWaitArray toWait );
+			, crg::SemaphoreWaitArray const & toWait );
 		void doWaitFrame( QueueData const & queueData
-			, crg::SemaphoreWaitArray toWait );
+			, crg::SemaphoreWaitArray const & toWait );
 		void doSubmitFrame( QueueData const & queueData
-			, RenderingResources * resources
-			, crg::SemaphoreWaitArray toWait );
+			, RenderingResources const * resources
+			, crg::SemaphoreWaitArray const & toWait );
 		void doPresentFrame( QueueData const & queueData
 			, RenderingResources * resources );
 		bool doCheckNeedReset( VkResult errCode

@@ -35,16 +35,13 @@ namespace castor3d
 		 *\brief		Constructor.
 		 *\param[in]	engine		The engine.
 		 *\param[in]	wantedFPS	The wanted FPS count.
-		 *\param[in]	isAsync		Tells if the render loop is asynchronous.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine		Le moteur.
 		 *\param[in]	wantedFPS	Le nombre voulu du FPS.
-		 *\param[in]	isAsync		Dit si la boucle de rendu est asynchrone.
 		 */
 		C3D_API RenderLoop( Engine & engine
-			, uint32_t wantedFPS
-			, bool isAsync );
+			, uint32_t wantedFPS );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -83,7 +80,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Vide tous les évènements de tous les frame listeners.
 		 */
-		C3D_API void flushEvents();
+		C3D_API void flushEvents()const;
 		/**
 		 *\~english
 		 *\brief		Registers a render pass timer.

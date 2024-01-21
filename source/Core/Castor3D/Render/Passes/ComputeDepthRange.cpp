@@ -45,17 +45,17 @@ namespace castor3d
 			auto input = pass.images.front();
 			auto output = pass.buffers.front();
 			ashes::WriteDescriptorSetArray writes;
-			writes.push_back( ashes::WriteDescriptorSet{ input.binding
+			writes.emplace_back( input.binding
 				, 0u
 				, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
-				, { VkDescriptorImageInfo{ VK_NULL_HANDLE
+				, ashes::VkDescriptorImageInfoArray{ VkDescriptorImageInfo{ VK_NULL_HANDLE
 					, graph.createImageView( input.view() )
-					, VK_IMAGE_LAYOUT_GENERAL } } } );
+					, VK_IMAGE_LAYOUT_GENERAL } } );
 			auto write = output.getBufferWrite();
-			writes.push_back( ashes::WriteDescriptorSet{ write->dstBinding
+			writes.emplace_back( write->dstBinding
 				, write->dstArrayElement
 				, write->descriptorCount
-				, write->descriptorType } );
+				, write->descriptorType );
 			writes.back().bufferInfo = write.bufferInfo;
 			auto descriptorSet = pool.createDescriptorSet( "ComputeDepthRange" );
 			descriptorSet->setBindings( writes );
@@ -99,7 +99,8 @@ namespace castor3d
 
 			shader::Utils utils{ writer };
 
-			writer.implementMainT< sdw::VoidT >( 32u, 32u, [&]( sdw::ComputeIn in )
+			writer.implementMainT< sdw::VoidT >( 32u, 32u
+				, [&]( sdw::ComputeIn const & in )
 				{
 					auto size = writer.declLocale( "size"
 						, uvec2( input.getSize() ) );
@@ -109,7 +110,7 @@ namespace castor3d
 					{
 						writer.returnStmt();
 					}
-					FI;
+					FI
 
 					auto fragColor = writer.declLocale( "fragColor"
 						, input.load( ivec2( in.globalInvocationID.xy() ) ).y() );
@@ -119,7 +120,7 @@ namespace castor3d
 						atomicMin( minmax[0], floatBitsToInt( fragColor ) );
 						atomicMax( minmax[1], floatBitsToInt( fragColor ) );
 					}
-					FI;
+					FI
 				} );
 			return writer.getBuilder().releaseShader();
 		}
@@ -131,16 +132,16 @@ namespace castor3d
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
-		, bool & enabled )
+		, bool const & enabled )
 		: crg::RunnablePass{ pass
 			, context
 			, graph
-			, { []( uint32_t index ){}
+			, { crg::defaultV< InitialiseCallback >
 				, GetPipelineStateCallback( [](){ return crg::getPipelineState( VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT ); } )
-				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i ); }
-				, GetPassIndexCallback( [this](){ return doGetPassIndex(); } )
+				, [this]( crg::RecordContext &, VkCommandBuffer cb, uint32_t ){ doRecordInto( cb ); }
+				, crg::defaultV< GetPassIndexCallback >
 				, IsEnabledCallback( [&enabled](){ return enabled; } )
-				, IsComputePassCallback( [this](){ return doIsComputePass(); } ) }
+				, IsComputePassCallback( [](){ return true; } ) }
 			, { 2u, false } }
 		, m_device{ device }
 		, m_descriptorSetLayout{ passcompdr::createDescriptorLayout( m_device ) }
@@ -157,9 +158,7 @@ namespace castor3d
 		visitor.visit( m_shader );
 	}
 
-	void ComputeDepthRange::doRecordInto( crg::RecordContext & context
-		, VkCommandBuffer commandBuffer
-		, uint32_t index )
+	void ComputeDepthRange::doRecordInto( VkCommandBuffer commandBuffer )const
 	{
 		VkDescriptorSet descriptorSet = *m_descriptorSet;
 		auto view = m_pass.images.front().view();
@@ -180,16 +179,6 @@ namespace castor3d
 			, extent.width / 32u + 1u
 			, extent.height / 32u + 1u
 			, 1u );
-	}
-
-	uint32_t ComputeDepthRange::doGetPassIndex()const
-	{
-		return 0u;
-	}
-
-	bool ComputeDepthRange::doIsComputePass()const
-	{
-		return true;
 	}
 
 	//*********************************************************************************************

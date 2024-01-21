@@ -316,8 +316,7 @@ namespace castor3d
 		, castor::Path const & relative );
 	C3D_API TextureLayoutUPtr createTextureLayout( Engine const & engine
 		, castor::Path const & relative
-		, castor::Path const & folder
-		, castor::ImageLoaderConfig config = { true, true, true } );
+		, castor::Path const & folder );
 	C3D_API TextureLayoutUPtr createTextureLayout( Engine const & engine
 		, castor::String const & name
 		, castor::PxBufferBaseUPtr buffer

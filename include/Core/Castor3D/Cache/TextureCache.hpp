@@ -137,7 +137,7 @@ namespace castor3d
 
 	private:
 		Texture const * doGetTexture( TextureData & data
-			, std::function< void( TextureData const & , Texture const *, bool ) > onEndCpuLoad );
+			, std::function< void( TextureData const & , Texture const *, bool ) > const & onEndCpuLoad );
 		void doInitTexture( ThreadData & data );
 		void doUpload( ThreadData & data );
 		void doAddWrite( TextureUnit & unit );

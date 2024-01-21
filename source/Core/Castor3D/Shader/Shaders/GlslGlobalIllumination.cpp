@@ -127,9 +127,9 @@ namespace castor3d
 							, lightSurface
 							, voxelData );
 					}
-					FI;
+					FI
 				}
-				FI;
+				FI
 			}
 
 			debugOutput.registerOutput( "Indirect", "Occlusion", indirectLighting.occlusion() );
@@ -261,7 +261,7 @@ namespace castor3d
 								, sdw::Float{ castor::Angle::fromRadians( castor::PiDiv2< float > / 3 ).tan() }
 								, voxelData );
 						}
-						ROF;
+						ROF
 
 						// final radiance is average of all the cones radiances
 						radiance *= voxelData.radianceNumConesInv;
@@ -319,7 +319,7 @@ namespace castor3d
 
 			// no normalization
 			m_evalSH = m_writer.implementFunction< sdw::Vec4 >( "evalSH"
-				, [this]( sdw::Vec3 direction )
+				, [this]( sdw::Vec3 const & direction )
 				{
 					auto SH_C0 = m_writer.getVariable< sdw::Float >( "SH_C0" );
 					auto SH_C1 = m_writer.getVariable< sdw::Float >( "SH_C1" );
@@ -334,7 +334,7 @@ namespace castor3d
 			m_computeLPVRadiance = m_writer.implementFunction< sdw::Vec4 >( "computeLPVRadiance"
 				, [this]( sdw::Vec3 const & wsNormal
 					, sdw::Vec3 const & wsPosition
-					, LpvGridData lpvGridData )
+					, LpvGridData const & lpvGridData )
 				{
 					auto c3d_lpvAccumulatorR = m_writer.getVariable< sdw::CombinedImage3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator" ) );
 					auto c3d_lpvAccumulatorG = m_writer.getVariable< sdw::CombinedImage3DRgba16 >( getTextureName( LpvTexture::eG, "Accumulator" ) );
@@ -381,7 +381,7 @@ namespace castor3d
 			if ( !m_evalSH )
 			{
 				m_evalSH = m_writer.implementFunction< sdw::Vec4 >( "evalSH"
-					, [this]( sdw::Vec3 direction )
+					, [this]( sdw::Vec3 const & direction )
 					{
 						auto SH_C0 = m_writer.getVariable< sdw::Float >( "SH_C0" );
 						auto SH_C1 = m_writer.getVariable< sdw::Float >( "SH_C1" );
@@ -397,7 +397,7 @@ namespace castor3d
 			m_computeLLPVRadiance = m_writer.implementFunction< sdw::Vec4 >( "computeLLPVRadiance"
 				, [this]( sdw::Vec3 const & wsNormal
 					, sdw::Vec3 const & wsPosition
-					, LayeredLpvGridData llpvGridData )
+					, LayeredLpvGridData const & llpvGridData )
 				{
 					auto c3d_lpvAccumulator1R = m_writer.getVariable< sdw::CombinedImage3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator1" ) );
 					auto c3d_lpvAccumulator1G = m_writer.getVariable< sdw::CombinedImage3DRgba16 >( getTextureName( LpvTexture::eG, "Accumulator1" ) );
@@ -459,7 +459,7 @@ namespace castor3d
 					, lightSurface
 					, voxelData );
 			}
-			FI;
+			FI
 
 			auto vxlPosition = m_writer.declLocale( "vxlPosition"
 				, clamp( abs( voxelData.worldToClip( lightSurface.worldPosition().xyz() ) ), vec3( -1.0_f ), vec3( 1.0_f ) ) );
@@ -495,7 +495,7 @@ namespace castor3d
 					, roughness
 					, voxelData );
 			}
-			FI;
+			FI
 
 			return mix( vec3( 0.0_f )
 					, vxlReflection.xyz()
@@ -565,7 +565,7 @@ namespace castor3d
 							{
 								m_writer.loopBreakStmt();
 							}
-							FI;
+							FI
 
 							auto sam = m_writer.declLocale( "sam"
 								, voxels.lod( tsCoord, mip ) );
@@ -579,7 +579,7 @@ namespace castor3d
 							// step along ray:
 							wsDist += wsDiameter * voxelData.rayStepSize;
 						}
-						ELIHW;
+						ELIHW
 
 						m_writer.returnStmt( vec4( color, occlusion ) );
 					}
@@ -685,7 +685,7 @@ namespace castor3d
 							{
 								m_writer.loopBreakStmt();
 							}
-							FI;
+							FI
 
 							auto sam = m_writer.declLocale( "sam"
 								, voxels.lod( tsCoord, mip ) );
@@ -698,7 +698,7 @@ namespace castor3d
 							// step along ray:
 							wsDist += wsDiameter * voxelData.rayStepSize;
 						}
-						ELIHW;
+						ELIHW
 
 						m_writer.returnStmt( occlusion );
 					}

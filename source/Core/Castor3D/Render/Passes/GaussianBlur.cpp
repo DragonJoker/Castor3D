@@ -76,14 +76,14 @@ namespace castor3d
 			// Shader outputs
 			auto outColour = writer.declOutput< sdw::Vec4 >( "outColour", sdw::EntryPoint::eFragment, 0u );
 
-			writer.implementEntryPointT< sdw::VoidT, TexcoordT >( [&]( sdw::VertexIn in
+			writer.implementEntryPointT< sdw::VoidT, TexcoordT >( [&]( sdw::VertexIn const & in
 				, sdw::VertexOutT< TexcoordT > out )
 				{
 					out.texcoord() = uv;
 					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
 				} );
 
-			writer.implementEntryPointT< TexcoordT, sdw::VoidT >( [&]( sdw::FragmentInT< TexcoordT > in
+			writer.implementEntryPointT< TexcoordT, sdw::VoidT >( [&]( sdw::FragmentInT< TexcoordT > const & in
 				, sdw::FragmentOut out )
 				{
 					auto base = writer.declLocale( "base", vec2( isVertical ? 0.0_f : 1.0_f, isVertical ? 1.0_f : 0.0_f ) / c3d_textureSize );
@@ -96,7 +96,7 @@ namespace castor3d
 						outColour += c3d_coefficients[i / 4_u][i % 4_u] * c3d_mapSource.sample( in.texcoord() - offset );
 						outColour += c3d_coefficients[i / 4_u][i % 4_u] * c3d_mapSource.sample( in.texcoord() + offset );
 					}
-					ROF;
+					ROF
 
 					if ( isDepth )
 					{
@@ -115,9 +115,8 @@ namespace castor3d
 
 			for ( uint32_t i = 0u; i <= max; ++i )
 			{
-				auto index = max - i;
-
-				if ( index < height )
+				if ( auto index = max - i;
+					index < height )
 				{
 					result[index] = x;
 				}
@@ -171,7 +170,7 @@ namespace castor3d
 			return result;
 		}
 
-		static crg::ImageViewId createIntermediate( crg::FramePassGroup & graph
+		static crg::ImageViewId createIntermediate( crg::FramePassGroup const & graph
 			, castor::String const & prefix
 			, VkFormat format
 			, VkExtent3D const & size
@@ -196,7 +195,7 @@ namespace castor3d
 				, { ashes::getAspectMask( format ), 0u, mipLevels, 0u, 1u } } );
 		}
 
-		static crg::ImageViewIdArray createViews( crg::FramePassGroup & graph
+		static crg::ImageViewIdArray createViews( crg::FramePassGroup const & graph
 			, crg::ImageViewId input )
 		{
 			crg::ImageViewIdArray result;
@@ -228,12 +227,11 @@ namespace castor3d
 	GaussianBlur::GaussianBlur( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
 		, RenderDevice const & device
-		, castor::String const & category
 		, castor::String const & prefix
 		, crg::ImageViewIdArray const & views
 		, crg::ImageViewId const & intermediateView
 		, uint32_t kernelSize
-		, crg::RunnablePass::IsEnabledCallback isEnabled )
+		, crg::RunnablePass::IsEnabledCallback const & isEnabled )
 		: OwnedBy< Engine >{ *device.renderSystem.getEngine() }
 		, m_sources{ views }
 		, m_device{ device }
@@ -259,7 +257,7 @@ namespace castor3d
 		data.textureSize[0] = float( m_size.width );
 		data.textureSize[1] = float( m_size.height );
 
-		for ( auto & input : m_sources )
+		for ( auto const & input : m_sources )
 		{
 			{
 				auto name = input.data->name + "BlurX";
@@ -317,7 +315,6 @@ namespace castor3d
 	GaussianBlur::GaussianBlur( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
 		, RenderDevice const & device
-		, castor::String const & category
 		, castor::String const & prefix
 		, crg::ImageViewIdArray const & views
 		, uint32_t kernelSize
@@ -325,7 +322,6 @@ namespace castor3d
 		: GaussianBlur{ graph
 			, previousPass
 			, device
-			, category
 			, prefix
 			, views
 			, passgauss::createIntermediate( graph, prefix, getFormat( views[0] ), getExtent( views[0] ), getMipLevels( views[0] ) )
@@ -337,7 +333,6 @@ namespace castor3d
 	GaussianBlur::GaussianBlur( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
 		, RenderDevice const & device
-		, castor::String const & category
 		, castor::String const & prefix
 		, crg::ImageViewId const & view
 		, uint32_t kernelSize
@@ -345,7 +340,6 @@ namespace castor3d
 		: GaussianBlur{ graph
 			, previousPass
 			, device
-			, category
 			, prefix
 			, passgauss::createViews( graph, view )
 			, passgauss::createIntermediate( graph, prefix, getFormat( view ), getExtent( view ), getMipLevels( view ) )
@@ -357,7 +351,6 @@ namespace castor3d
 	GaussianBlur::GaussianBlur( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
 		, RenderDevice const & device
-		, castor::String const & category
 		, castor::String const & prefix
 		, crg::ImageViewId const & view
 		, crg::ImageViewId const & intermediateView
@@ -366,7 +359,6 @@ namespace castor3d
 		: GaussianBlur{ graph
 			, previousPass
 			, device
-			, category
 			, prefix
 			, passgauss::createViews( graph, view )
 			, intermediateView

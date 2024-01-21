@@ -54,7 +54,7 @@ namespace castor3d
 			return result;
 		}
 
-		static castor::String getTextureName( TextureContext & texture )
+		static castor::String getTextureName( TextureContext const & texture )
 		{
 			TextureSourceInfoUPtr result;
 
@@ -158,9 +158,7 @@ namespace castor3d
 			{
 				bool value;
 				params[0]->get( value );
-				blockContext->configuration.needsYInversion = value
-					? 1u
-					: 0u;
+				blockContext->configuration.needsYInversion = value;
 			}
 		}
 		CU_EndAttribute()
@@ -215,7 +213,7 @@ namespace castor3d
 			if ( auto sourceInfo = getSourceInfo( context, blockContext->name, *blockContext ) )
 			{
 				getEngine( *blockContext )->getTextureUnitCache().getSourceData( *sourceInfo );
-				blockContext->root->sourceInfos.emplace( blockContext->name, std::move( sourceInfo ) );
+				blockContext->root->sourceInfos.try_emplace( blockContext->name, std::move( sourceInfo ) );
 			}
 		}
 		CU_EndAttributePop()
@@ -253,7 +251,7 @@ namespace castor3d
 			{
 				PassComponentTextureFlag textures;
 				params[0]->get( textures );
-				auto & engine = *getEngine( *blockContext );
+				auto const & engine = *getEngine( *blockContext );
 				engine.getPassComponentsRegister().fillChannels( textures, *blockContext );
 			}
 		}
@@ -330,6 +328,7 @@ namespace castor3d
 
 		static CU_ImplementAttributeParserBlock( parserTransform, TextureContext )
 		{
+			// Nothing else to do than push the block
 		}
 		CU_EndAttributePushBlock( CSCNSection::eTextureTransform, blockContext )
 
@@ -342,7 +341,7 @@ namespace castor3d
 					blockContext->sampler = getEngine( *blockContext )->getDefaultSampler();
 				}
 
-				TextureSourceInfo * sourceInfoPtr{};
+				TextureSourceInfo const * sourceInfoPtr{};
 				TextureSourceInfoUPtr ownSourceInfoPtr;
 
 				if ( !blockContext->name.empty() )
@@ -523,11 +522,11 @@ namespace castor3d
 		, m_transformations{ std::move( rhs.m_transformations ) }
 		, m_texture{ std::move( rhs.m_texture ) }
 		, m_descriptor{ std::move( rhs.m_descriptor ) }
-		, m_id{ std::move( rhs.m_id ) }
+		, m_id{ rhs.m_id }
 		, m_name{ std::move( rhs.m_name ) }
-		, m_initialised{ std::move( rhs.m_initialised ) }
-		, m_animated{ std::move( rhs.m_animated ) }
-		, m_setIndex{ std::move( rhs.m_setIndex ) }
+		, m_initialised{ rhs.m_initialised }
+		, m_animated{ rhs.m_animated }
+		, m_setIndex{ rhs.m_setIndex }
 	{
 		getOwner()->getMaterialCache().unregisterUnit( rhs );
 		rhs.m_id = 0u;

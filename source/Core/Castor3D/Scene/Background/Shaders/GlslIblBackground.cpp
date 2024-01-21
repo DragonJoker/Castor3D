@@ -31,24 +31,28 @@ namespace castor3d::shader
 		: BackgroundModel{ writer, utils, std::move( targetSize ) }
 	{
 		m_writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapBackground"
-			, binding++
+			, binding
 			, set );
+		++binding;
 		m_writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapIrradiance"
-			, binding++
+			, binding
 			, set );
+		++binding;
 		m_writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapPrefiltered"
-			, binding++
+			, binding
 			, set );
+		++binding;
 		m_writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapPrefilteredSheen"
-			, binding++
+			, binding
 			, set );
+		++binding;
 	}
 
-	BackgroundModelPtr IblBackgroundModel::create( Engine const & engine
+	BackgroundModelPtr IblBackgroundModel::create( Engine const & /*engine*/
 		, sdw::ShaderWriter & writer
 		, Utils & utils
 		, VkExtent2D targetSize
-		, bool needsForeground
+		, bool /*needsForeground*/
 		, uint32_t & binding
 		, uint32_t set )
 	{
@@ -67,7 +71,7 @@ namespace castor3d::shader
 		if ( !m_computeDiffuseReflections )
 		{
 			m_computeDiffuseReflections = m_writer.implementFunction< sdw::Vec3 >( "c3d_iblbg_computeReflections"
-				, [&]( sdw::Vec3 const & albedo
+				, [this]( sdw::Vec3 const & albedo
 					, sdw::Vec3 const & wsNormal
 					, sdw::Vec3 const & fresnel
 					, sdw::Float const & metalness
@@ -105,7 +109,7 @@ namespace castor3d::shader
 		if ( !m_computeSpecularReflections )
 		{
 			m_computeSpecularReflections = m_writer.implementFunction< sdw::Vec3 >( "c3d_iblbg_computeSpecularReflections"
-				, [&]( sdw::Vec3 const & F
+				, [this]( sdw::Vec3 const & F
 					, sdw::Vec3 const & N
 					, sdw::Vec3 const & V
 					, sdw::Float const & NdotV
@@ -152,7 +156,7 @@ namespace castor3d::shader
 		if ( !m_computeSheenReflections )
 		{
 			m_computeSheenReflections = m_writer.implementFunction< sdw::Vec3 >( "c3d_iblbg_computeSheenReflections"
-				, [&]( sdw::Vec3 const & sheenColour
+				, [this]( sdw::Vec3 const & sheenColour
 					, sdw::Vec3 const & N
 					, sdw::Vec3 const & V
 					, sdw::Float const & NdotV
@@ -200,7 +204,7 @@ namespace castor3d::shader
 		if ( !m_computeRefractions )
 		{
 			m_computeRefractions = m_writer.implementFunction< sdw::Vec3 >( "c3d_iblbg_computeRefractions"
-				, [&]( sdw::CombinedImageCubeRgba32 const & prefiltered
+				, [this]( sdw::CombinedImageCubeRgba32 const & prefiltered
 					, sdw::Float const & refractionRatio
 					, sdw::Vec3 const & albedo
 					, sdw::Vec3 const & N
@@ -244,7 +248,7 @@ namespace castor3d::shader
 		if ( !m_computeSpecularRefractions )
 		{
 			m_computeSpecularRefractions = m_writer.implementFunction< sdw::Vec3 >( "c3d_iblbg_computeSpecularRefractions"
-				, [&]( sdw::CombinedImageCubeRgba32 const & prefiltered
+				, [this]( sdw::CombinedImageCubeRgba32 const & prefiltered
 					, sdw::CombinedImage2DRgba32 const & brdfMap
 					, sdw::Float const & refractionRatio
 					, sdw::Vec3 const & albedo

@@ -95,7 +95,7 @@ namespace castor3d
 							gsAABBMin[groupIndex] = min( gsAABBMin[groupIndex], gsAABBMin[groupIndex + reduceIndex] );
 							gsAABBMax[groupIndex] = max( gsAABBMax[groupIndex], gsAABBMax[groupIndex + reduceIndex] );
 						}
-						FI;
+						FI
 
 						// Sync group shared memory writes.
 						shader::groupMemoryBarrierWithGroupSync( writer );
@@ -130,9 +130,9 @@ namespace castor3d
 						{
 							c3d_reducedLightsAABB[groupID] = shader::AABB{ gsAABBMin[groupIndex], gsAABBMax[groupIndex] };
 						}
-						FI;
+						FI
 					}
-					FI;
+					FI
 				}
 				else
 				{
@@ -143,7 +143,7 @@ namespace castor3d
 							gsAABBMin[groupIndex] = min( gsAABBMin[groupIndex], gsAABBMin[groupIndex + reduceIndex] );
 							gsAABBMax[groupIndex] = max( gsAABBMax[groupIndex], gsAABBMax[groupIndex + reduceIndex] );
 						}
-						FI;
+						FI
 
 						// Sync group shared memory writes.
 						shader::groupMemoryBarrierWithGroupSync( writer );
@@ -156,16 +156,16 @@ namespace castor3d
 					{
 						c3d_reducedLightsAABB[groupID] = shader::AABB{ gsAABBMin[groupIndex], gsAABBMax[groupIndex] };
 					}
-					FI;
+					FI
 				}
 			};
 
 			writer.implementMainT< sdw::VoidT >( NumThreads
-				, [&]( sdw::ComputeIn in )
+				, [&]( sdw::ComputeIn const & in )
 				{
-					auto groupIndex = in.localInvocationIndex;
-					auto groupID = in.workGroupID.x();
-					auto threadIndex = in.globalInvocationID.x();
+					auto const & groupIndex = in.localInvocationIndex;
+					auto const & groupID = in.workGroupID.x();
+					auto const & threadIndex = in.globalInvocationID.x();
 
 					auto aabbMin = writer.declLocale( "aabbMin"
 						, vec4( sdw::Float{ FltMax }, FltMax, FltMax, 1.0f ) );
@@ -179,9 +179,9 @@ namespace castor3d
 							gsAABBMin[n] = aabbMin;
 							gsAABBMax[n] = aabbMax;
 						}
-						ROF;
+						ROF
 					}
-					FI;
+					FI
 
 					shader::groupMemoryBarrierWithGroupSync( writer );
 
@@ -196,7 +196,7 @@ namespace castor3d
 							aabbMin = min( aabbMin, aabb.min() );
 							aabbMax = max( aabbMax, aabb.max() );
 						}
-						FI;
+						FI
 
 						// Next, expand AABB for spot lights.
 						IF( writer, threadIndex < c3d_clustersData.spotLightCount() )
@@ -206,7 +206,7 @@ namespace castor3d
 							aabbMin = min( aabbMin, aabb.min() );
 							aabbMax = max( aabbMax, aabb.max() );
 						}
-						FI;
+						FI
 
 						gsAABBMin[groupIndex] = aabbMin;
 						gsAABBMax[groupIndex] = aabbMax;
@@ -228,7 +228,7 @@ namespace castor3d
 							aabbMin = min( aabbMin, c3d_reducedLightsAABB[i].min() );
 							aabbMax = max( aabbMax, c3d_reducedLightsAABB[i].max() );
 						}
-						ROF;
+						ROF
 
 						gsAABBMin[groupIndex] = aabbMin;
 						gsAABBMax[groupIndex] = aabbMax;
@@ -259,7 +259,7 @@ namespace castor3d
 						c3d_clustersLightsData = clustersLightsData;
 						c3d_lightsAABBRange = lightsAABBRange;
 					}
-					FI;
+					FI
 				} );
 			return writer.getBuilder().releaseShader();
 		}
@@ -294,7 +294,7 @@ namespace castor3d
 						.isEnabled( IsEnabledCallback( [this](){ return doIsEnabled(); } ) )
 						.getPassIndex( GetPassIndexCallback( [this]() { return doGetPassIndex(); } ) )
 						.programCreator( { 4u, [this]( uint32_t passIndex ){ return doCreateProgram( passIndex ); } } )
-						.recordInto( RunnablePass::RecordCallback( [this]( crg::RecordContext & ctx, VkCommandBuffer cmd, uint32_t idx ){ doSubRecordInto( ctx, cmd, idx ); } ) )
+						.recordInto( RunnablePass::RecordCallback( [this]( crg::RecordContext &, VkCommandBuffer cmd, uint32_t ){ doSubRecordInto( cmd ); } ) )
 						.end( RecordCallback{ [this]( crg::RecordContext & ctx, VkCommandBuffer cb, uint32_t idx ) { doPostRecord( ctx, cb, idx ); } } )
 						.pushConstants( VkPushConstantRange{ VK_SHADER_STAGE_COMPUTE_BIT, 0u, 8u } )
 						.getGroupCountX( crg::cp::GetGroupCountCallback( [this]() { return doGetGroupsCountX(); } ) ) }
@@ -307,8 +307,9 @@ namespace castor3d
 		private:
 			struct ProgramData
 			{
-				ShaderModule module;
-				ashes::PipelineShaderStageCreateInfoArray stages;
+				ProgramData() = default;
+				ShaderModule shaderModule{};
+				ashes::PipelineShaderStageCreateInfoArray stages{};
 			};
 
 		private:
@@ -321,16 +322,16 @@ namespace castor3d
 		private:
 			crg::VkPipelineShaderStageCreateInfoArray doCreateProgram( uint32_t passIndex )
 			{
-				auto ires = m_programs.emplace( passIndex, ProgramData{} );
+				auto [it, res] = m_programs.try_emplace( passIndex );
 
-				if ( ires.second )
+				if ( res )
 				{
-					auto & program = ires.first->second;
-					program.module = ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, "ReduceLightsAABB/First", createShader( m_device, m_clusters.getConfig(), true ) };
-					program.stages = ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( m_device, program.module ) };
+					auto & program = it->second;
+					program.shaderModule = ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, "ReduceLightsAABB/First", createShader( m_device, m_clusters.getConfig(), true ) };
+					program.stages = ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( m_device, program.shaderModule ) };
 				}
 
-				return ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( ires.first->second.stages );
+				return ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( it->second.stages );
 			}
 
 			bool doIsEnabled()const
@@ -343,9 +344,9 @@ namespace castor3d
 			{
 				uint32_t result{ ( m_clusters.getConfig().limitClustersToLightsAABB ? 1u : 0u )
 					+ ( m_clusters.getConfig().enableReduceWarpOptimisation ? 2u : 0u ) };
-				uint32_t count{ computeThreadGroupsCount( m_lightCache ) };
 
-				if ( m_dispatchCount && count != m_dispatchCount )
+				if ( uint32_t count{ computeThreadGroupsCount( m_lightCache ) };
+					m_dispatchCount && count != m_dispatchCount )
 				{
 					setToReset( result );
 				}
@@ -353,9 +354,7 @@ namespace castor3d
 				return result;
 			}
 
-			void doSubRecordInto( crg::RecordContext & context
-				, VkCommandBuffer commandBuffer
-				, uint32_t index )
+			void doSubRecordInto( VkCommandBuffer commandBuffer )
 			{
 				struct
 				{
@@ -372,7 +371,7 @@ namespace castor3d
 
 			void doPostRecord( crg::RecordContext & context
 				, VkCommandBuffer commandBuffer
-				, uint32_t index )
+				, uint32_t index )const
 			{
 				if ( computeThreadGroupsCount( m_lightCache ) <= 1u )
 				{
@@ -414,7 +413,7 @@ namespace castor3d
 						.isEnabled( IsEnabledCallback( [this](){ return doIsEnabled(); } ) )
 						.getPassIndex( GetPassIndexCallback( [this]() { return doGetPassIndex(); } ) )
 						.programCreator( { 4u, [this]( uint32_t passIndex ){ return doCreateProgram( passIndex ); } } )
-						.recordInto( RunnablePass::RecordCallback( [this]( crg::RecordContext & ctx, VkCommandBuffer cmd, uint32_t idx ){ doSubRecordInto( ctx, cmd, idx ); } ) )
+						.recordInto( RunnablePass::RecordCallback( [this]( crg::RecordContext &, VkCommandBuffer cmd, uint32_t ){ doSubRecordInto( cmd ); } ) )
 						.end( RecordCallback{ [this]( crg::RecordContext & ctx, VkCommandBuffer cb, uint32_t idx ) { doPostRecord( ctx, cb, idx ); } } )
 						.pushConstants( VkPushConstantRange{ VK_SHADER_STAGE_COMPUTE_BIT, 0u, 8u } ) }
 				, m_device{ device }
@@ -426,8 +425,9 @@ namespace castor3d
 		private:
 			struct ProgramData
 			{
-				ShaderModule module;
-				ashes::PipelineShaderStageCreateInfoArray stages;
+				ProgramData() = default;
+				ShaderModule shaderModule{};
+				ashes::PipelineShaderStageCreateInfoArray stages{};
 			};
 
 		private:
@@ -439,19 +439,19 @@ namespace castor3d
 		private:
 			crg::VkPipelineShaderStageCreateInfoArray doCreateProgram( uint32_t passIndex )
 			{
-				auto ires = m_programs.emplace( passIndex, ProgramData{} );
+				auto [it, res] = m_programs.try_emplace( passIndex );
 
-				if ( ires.second )
+				if ( res )
 				{
-					auto & program = ires.first->second;
-					program.module = ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, "ReduceLightsAABB/Second", createShader( m_device, m_clusters.getConfig(), false ) };
-					program.stages = ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( m_device, program.module ) };
+					auto & program = it->second;
+					program.shaderModule = ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, "ReduceLightsAABB/Second", createShader( m_device, m_clusters.getConfig(), false ) };
+					program.stages = ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( m_device, program.shaderModule ) };
 				}
 
-				return ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( ires.first->second.stages );
+				return ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( it->second.stages );
 			}
 
-			uint32_t doGetPassIndex()
+			uint32_t doGetPassIndex()const
 			{
 				return ( m_clusters.getConfig().limitClustersToLightsAABB ? 1u : 0u )
 					+ ( m_clusters.getConfig().enableReduceWarpOptimisation ? 2u : 0u );
@@ -463,9 +463,7 @@ namespace castor3d
 					&& m_clusters.needsLightsUpdate();
 			}
 
-			void doSubRecordInto( crg::RecordContext & context
-				, VkCommandBuffer commandBuffer
-				, uint32_t index )
+			void doSubRecordInto( VkCommandBuffer commandBuffer )const
 			{
 				struct
 				{
@@ -483,7 +481,7 @@ namespace castor3d
 
 			void doPostRecord( crg::RecordContext & context
 				, VkCommandBuffer commandBuffer
-				, uint32_t index )
+				, uint32_t index )const
 			{
 				auto & attach = m_pass.buffers.back();
 				auto & buffer = attach.buffer;

@@ -117,10 +117,9 @@ namespace castor3d
 	void ColourBackground::doUpload( UploadData & uploader )
 	{
 		castor::Point4f colour{ m_colour->red().value(), m_colour->green().value(), m_colour->blue().value(), 1.0f };
-		auto view = castor::makeArrayView( reinterpret_cast< castor::Point4f * >( m_buffer->getPtr() )
-			, m_buffer->getSize() / sizeof( castor::Point4f ) );
 
-		for ( auto & c : view )
+		for ( auto & c : castor::makeArrayView( reinterpret_cast< castor::Point4f * >( m_buffer->getPtr() )
+			, m_buffer->getSize() / sizeof( castor::Point4f ) ) )
 		{
 			c = colour;
 		}
@@ -145,19 +144,21 @@ namespace castor3d
 		, uint32_t & index )const
 	{
 		pass.addSampledView( m_textureId.wholeViewId
-			, index++
+			, index
 			, crg::SamplerDesc{ VK_FILTER_LINEAR
 				, VK_FILTER_LINEAR
 				, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
+		++index;
 	}
 
 	void ColourBackground::doAddBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
 		, VkShaderStageFlags shaderStages
 		, uint32_t & index )const
 	{
-		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+		bindings.emplace_back( makeDescriptorSetLayoutBinding( index
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, shaderStages ) );	// c3d_mapBackground
+		++index;
 	}
 
 	void ColourBackground::doAddDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites

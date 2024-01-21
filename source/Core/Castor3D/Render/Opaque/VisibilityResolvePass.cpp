@@ -151,11 +151,10 @@ namespace castor3d
 				, sdw::UInt const & billboardNodeId
 				, ShadeFunc const & shade )
 			{
-				uint32_t idx = 0u;
-				auto c3d_imgOutResult = writer.declOutput< sdw::Vec4 >( "c3d_imgOutResult", sdw::EntryPoint::eFragment, idx ); ++idx;
-				auto c3d_imgOutScattering = writer.declOutput< sdw::Vec4 >( "c3d_imgOutScattering", sdw::EntryPoint::eFragment, idx, outputScattering ); ++idx;
+				auto c3d_imgOutResult = writer.declOutput< sdw::Vec4 >( "c3d_imgOutResult", sdw::EntryPoint::eFragment, 0u );
+				auto c3d_imgOutScattering = writer.declOutput< sdw::Vec4 >( "c3d_imgOutScattering", sdw::EntryPoint::eFragment, 1u, outputScattering );
 
-				writer.implementEntryPoint( [&]( sdw::VertexIn const & in
+				writer.implementEntryPoint( [&writer]( sdw::VertexIn const & in
 					, sdw::VertexOut out )
 					{
 						auto position = writer.declLocale( "position"
@@ -164,7 +163,7 @@ namespace castor3d
 					} );
 
 				writer.implementEntryPoint( [&]( sdw::FragmentIn const & in
-					, sdw::FragmentOut )
+					, sdw::FragmentOut const & )
 					{
 						auto pos = ivec2( in.fragCoord.xy() );
 						auto indata = writer.declLocale( "indata"
@@ -191,7 +190,7 @@ namespace castor3d
 						{
 							writer.demote();
 						}
-						FI;
+						FI
 
 						c3d_imgOutResult = result;
 						c3d_imgOutScattering = scattering;
@@ -282,9 +281,9 @@ namespace castor3d
 									c3d_imgDiffuse.store( ipixel, diffuse );
 								}
 							}
-							FI;
+							FI
 						}
-						FI;
+						FI
 					} );
 			}
 		};
@@ -549,13 +548,13 @@ namespace castor3d
 				if ( !m_loadVertices )
 				{
 					m_loadVertices = m_writer.implementFunction< sdw::Void >( "loadVertices"
-						, [&]( sdw::UInt const & nodeId
+						, [&]( sdw::UInt const & /*nodeId*/
 							, sdw::UInt const & primitiveId
 							, sdw::UInt const & meshletId
 							, shader::ModelData const & modelData
-							, shader::MeshVertex v0
-							, shader::MeshVertex v1
-							, shader::MeshVertex v2 )
+							, shader::MeshVertex const & v0
+							, shader::MeshVertex const & v1
+							, shader::MeshVertex const & v2 )
 						{
 							auto loadVertex = m_writer.implementFunction< sdw::Void >( "loadVertex"
 								, [&]( sdw::UInt const & vertexId
@@ -1147,7 +1146,7 @@ namespace castor3d
 							{
 								writer.returnStmt( 0_b );
 							}
-							FI;
+							FI
 						}
 
 						auto modelData = writer.declLocale( "modelData"
@@ -1457,7 +1456,6 @@ namespace castor3d
 		static ashes::DescriptorSetLayoutPtr createInDescriptorLayout( RenderDevice const & device
 			, std::string const & name
 			, MaterialCache const & matCache
-			, crg::ImageViewIdArray const & targetImage
 			, Scene const & scene
 			, RenderTechnique const & technique
 			, bool allowClusteredLighting
@@ -2116,7 +2114,7 @@ namespace castor3d
 		, m_ssao{ techniquePassDesc.m_ssao }
 		, m_deferredLightingFilter{ renderPassDesc.m_deferredLightingFilter }
 		, m_parallaxOcclusionFilter{ renderPassDesc.m_parallaxOcclusionFilter }
-		, m_onNodesPassSort( m_nodesPass.onSortNodes.connect( [this]( RenderNodesPass const & pass ){ m_commandsChanged = true; } ) )
+		, m_onNodesPassSort( m_nodesPass.onSortNodes.connect( [this]( RenderNodesPass const & ){ m_commandsChanged = true; } ) )
 		, m_renderPass{ ( useCompute()
 			? nullptr
 			: visres::createRenderPass( m_device, getName(), m_targetImage, m_outputScattering ? &parent->getScattering() : nullptr, true, m_deferredLightingFilter ) ) }
@@ -2124,7 +2122,6 @@ namespace castor3d
 			? nullptr
 			: visres::createFrameBuffer( *m_renderPass, getName(), graph, m_targetImage, m_outputScattering ? &parent->getScattering() : nullptr ) ) }
 		, m_clustersConfig{ techniquePassDesc.m_clustersConfig }
-		, m_maxPipelineId{}
 	{
 	}
 
@@ -2603,7 +2600,7 @@ namespace castor3d
 				? visres::createVtxDescriptorLayout( m_device, getName(), flags, m_nodesPass.isMeshShading() )
 				: visres::createVtxDescriptorLayout( m_device, getName() );
 			result->ioDescriptorLayout = visres::createInDescriptorLayout( m_device, getName(), getScene().getOwner()->getMaterialCache()
-				, m_targetImage, getScene(), *m_parent, getClustersConfig()->enabled, hasSsao() ? m_ssao : nullptr, &getIndirectLighting() );
+				, getScene(), *m_parent, getClustersConfig()->enabled, hasSsao() ? m_ssao : nullptr, &getIndirectLighting() );
 			result->pipelineLayout = m_device->createPipelineLayout( getName()
 				, { *result->ioDescriptorLayout, *result->vtxDescriptorLayout, *getScene().getBindlessTexDescriptorLayout() }
 				, { { stageFlags, 0u, sizeof( visres::PushData ) } } );

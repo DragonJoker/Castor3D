@@ -40,7 +40,7 @@ namespace castor3d
 			, OverlayT const & overlay
 			, OverlayDrawData & data
 			, bool secondary
-			, FontTexture const * fontTexture );
+			, FontTexture const * fontTexture )noexcept;
 		void upload( UploadData & uploader );
 
 		void clearDrawPipelineData( FontTexture const * fontTexture );

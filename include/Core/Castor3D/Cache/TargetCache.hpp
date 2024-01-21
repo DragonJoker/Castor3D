@@ -57,7 +57,7 @@ namespace castor3d
 		 *\brief		Enlève une cible de rendu de la boucle de rendu
 		 *\param[in]	target	La cible de rendu
 		 */
-		C3D_API void remove( RenderTargetRPtr target )noexcept;
+		C3D_API void remove( RenderTarget const * target )noexcept;
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, CPU wise.
@@ -128,7 +128,7 @@ namespace castor3d
 		 *\brief		Enregistre le nom affiché d'un tone mapping.
 		 */
 		C3D_API void registerToneMappingName( castor::String const & name
-			, castor::String const & fullName );
+			, castor::StringView fullName );
 		/**
 		*\~english
 		*name

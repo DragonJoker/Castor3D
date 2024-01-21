@@ -127,7 +127,7 @@ namespace castor3d
 	CU_DeclareSmartPtr( castor3d, FramePassTimer, C3D_API );
 	CU_DeclareSmartPtr( castor3d, ImporterFileFactory, C3D_API );
 
-	C3D_API castor::LoggerInstance & getLogger( Engine & engine );
+	C3D_API castor::LoggerInstance & getLogger( Engine const & engine );
 
 	C3D_API castor::Matrix4x4f convert( std::array< float, 16 > const & value );
 	C3D_API VkClearColorValue convert( castor::RgbaColour const & value );
@@ -153,6 +153,21 @@ namespace castor3d
 			stageFlags,
 			pImmutableSamplers,
 		};
+	}
+
+	inline void addDescriptorSetLayoutBinding( ashes::VkDescriptorSetLayoutBindingArray & bindings
+		, uint32_t & binding
+		, VkDescriptorType descriptorType
+		, VkShaderStageFlags stageFlags
+		, uint32_t descriptorCount = 1u
+		, VkSampler const * pImmutableSamplers = nullptr )
+	{
+		bindings.push_back( makeDescriptorSetLayoutBinding( binding
+			, descriptorType
+			, stageFlags
+			, descriptorCount
+			, pImmutableSamplers ) );
+		++binding;
 	}
 
 	inline castor::Size makeSize( VkExtent2D const & size )

@@ -32,7 +32,7 @@ namespace castor3d
 		 *\param[in]	size		Les dimensions du rendu.
 		 *\param[in]	dstTexture	La texture cube destination.
 		 */
-		C3D_API explicit BrdfPrefilter( Engine & engine
+		C3D_API explicit BrdfPrefilter( Engine const & engine
 			, RenderDevice const & device
 			, castor::Size const & size
 			, Texture const & dstTexture );
@@ -44,7 +44,7 @@ namespace castor3d
 		 *\brief		Calcule le BRDF circonvolu.
 		 *\param[in]	queueData	La queue recevant les commandes GPU.
 		 */
-		C3D_API void render( QueueData const & queueData );
+		C3D_API void render( QueueData const & queueData )const;
 
 	private:
 		ashes::PipelineShaderStageCreateInfoArray doCreateProgram();

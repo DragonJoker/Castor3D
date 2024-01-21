@@ -94,7 +94,7 @@ namespace castor3d::shader
 		if ( !m_getDirectionalLight )
 		{
 			m_getDirectionalLight = m_writer.implementFunction< DirectionalLight >( "c3d_getDirectionalLight"
-				, [this]( sdw::UInt baseOffset )
+				, [this]( sdw::UInt const & baseOffset )
 				{
 					auto lightData = m_writer.declLocale( "lightData"
 						, vec4( 0.0_f ) );
@@ -119,7 +119,7 @@ namespace castor3d::shader
 		if ( !m_getPointLight )
 		{
 			m_getPointLight = m_writer.implementFunction< PointLight >( "c3d_getPointLight"
-				, [this]( sdw::UInt baseOffset )
+				, [this]( sdw::UInt const & baseOffset )
 				{
 					auto lightData = m_writer.declLocale( "lightData"
 						, vec4( 0.0_f ) );
@@ -142,7 +142,7 @@ namespace castor3d::shader
 		if ( !m_getSpotLight )
 		{
 			m_getSpotLight = m_writer.implementFunction< SpotLight >( "c3d_getSpotLight"
-				, [this]( sdw::UInt baseOffset )
+				, [this]( sdw::UInt const & baseOffset )
 				{
 					auto lightData = m_writer.declLocale( "lightData"
 						, vec4( 0.0_f ) );
@@ -181,7 +181,7 @@ namespace castor3d::shader
 	}
 
 	void LightsBuffer::getBaseLight( sdw::Vec4 & lightData
-		, Light light
+		, Light const & light
 		, sdw::UInt & offset )
 	{
 		lightData = getLightData( offset );
@@ -332,7 +332,7 @@ namespace castor3d::shader
 						, parentOutput );
 					cur += castor3d::DirectionalLight::LightDataComponents;
 				}
-				ELIHW;
+				ELIHW
 
 				clusteredLights.computeCombinedDifSpec( *this
 					, *lightingModel
@@ -396,7 +396,7 @@ namespace castor3d::shader
 						, parentOutput );
 					cur += castor3d::DirectionalLight::LightDataComponents;
 				}
-				ELIHW;
+				ELIHW
 
 				clusteredLights.computeCombinedAllButDif( *this
 					, *lightingModel
@@ -458,7 +458,7 @@ namespace castor3d::shader
 						, receivesShadows );
 					cur += castor3d::DirectionalLight::LightDataComponents;
 				}
-				ELIHW;
+				ELIHW
 
 				clusteredLights.computeCombinedDif( *this
 					, *lightingModel
@@ -511,7 +511,7 @@ namespace castor3d::shader
 					, output );
 				cur += castor3d::DirectionalLight::LightDataComponents;
 			}
-			ELIHW;
+			ELIHW
 
 			end = m_lightsBuffer->getPointsEnd();
 
@@ -527,7 +527,7 @@ namespace castor3d::shader
 					, output );
 				cur += castor3d::PointLight::LightDataComponents;
 			}
-			ELIHW;
+			ELIHW
 
 			end = m_lightsBuffer->getSpotsEnd();
 
@@ -543,7 +543,7 @@ namespace castor3d::shader
 					, output );
 				cur += castor3d::SpotLight::LightDataComponents;
 			}
-			ELIHW;
+			ELIHW
 		}
 	}
 
@@ -576,7 +576,7 @@ namespace castor3d::shader
 					, output );
 				cur += castor3d::DirectionalLight::LightDataComponents;
 			}
-			ELIHW;
+			ELIHW
 
 			end = m_lightsBuffer->getPointsEnd();
 
@@ -592,7 +592,7 @@ namespace castor3d::shader
 					, output );
 				cur += castor3d::PointLight::LightDataComponents;
 			}
-			ELIHW;
+			ELIHW
 
 			end = m_lightsBuffer->getSpotsEnd();
 
@@ -608,7 +608,7 @@ namespace castor3d::shader
 					, output );
 				cur += castor3d::SpotLight::LightDataComponents;
 			}
-			ELIHW;
+			ELIHW
 		}
 	}
 
@@ -638,7 +638,7 @@ namespace castor3d::shader
 					, receivesShadows );
 				cur += castor3d::DirectionalLight::LightDataComponents;
 			}
-			ELIHW;
+			ELIHW
 
 			end = m_lightsBuffer->getPointsEnd();
 
@@ -653,7 +653,7 @@ namespace castor3d::shader
 					, receivesShadows );
 				cur += castor3d::PointLight::LightDataComponents;
 			}
-			ELIHW;
+			ELIHW
 
 			end = m_lightsBuffer->getSpotsEnd();
 
@@ -668,7 +668,7 @@ namespace castor3d::shader
 					, receivesShadows );
 				cur += castor3d::SpotLight::LightDataComponents;
 			}
-			ELIHW;
+			ELIHW
 		}
 	}
 
@@ -779,10 +779,10 @@ namespace castor3d::shader
 		if ( !m_getCascadeFactors )
 		{
 			m_getCascadeFactors = m_writer.implementFunction< sdw::Vec3 >( "c3d_getCascadeFactors"
-				, [this]( sdw::Vec3 viewVertex
-					, sdw::Vec4Array splitDepths
-					, sdw::UInt cascadeCount
-					, sdw::UInt maxCascadeCount )
+				, [this]( sdw::Vec3 const & viewVertex
+					, sdw::Vec4Array const & splitDepths
+					, sdw::UInt const & cascadeCount
+					, sdw::UInt const & maxCascadeCount )
 				{
 					auto cascadeFactors = m_writer.declLocale( "cascadeFactors"
 						, vec3( 0.0_f, 1.0_f, 0.0_f ) );
@@ -801,9 +801,9 @@ namespace castor3d::shader
 							{
 								cascadeFactors = factors;
 							}
-							FI;
+							FI
 						}
-						FI;
+						FI
 						//auto splitDiff = m_writer.declLocale( "splitDiff"
 						//	, ( splitDepths[index + 1u] - splitDepths[index] ) / 16.0f );
 						//auto splitMax = m_writer.declLocale( "splitMax"
@@ -818,7 +818,7 @@ namespace castor3d::shader
 						//		, 1.0_f
 						//		, 0.0_f ) );
 						//}
-						//FI;
+						//FI
 						//IF( m_writer, viewVertex.z() >= splitMin && viewVertex.z() < splitMax )
 						//{
 						//	auto factor = m_writer.declLocale( "factor"
@@ -827,9 +827,9 @@ namespace castor3d::shader
 						//		, factor
 						//		, 1.0_f - factor ) );
 						//}
-						//FI;
+						//FI
 					}
-					ROF;
+					ROF
 
 					m_writer.returnStmt( cascadeFactors );
 				}

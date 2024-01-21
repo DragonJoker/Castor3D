@@ -32,7 +32,7 @@ namespace castor
 		{
 		}
 
-		bool operator()( StringStream & file )
+		bool operator()( StringStream & file )const
 		{
 			return writeMask( file, cuT( "clearcoat_mask" ), m_mask );
 		}
@@ -78,7 +78,7 @@ namespace castor3d
 		static CU_ImplementAttributeParserBlock( parserTexRemapClearcoat, SceneImportContext )
 		{
 			auto & plugin = getEngine( *blockContext )->getPassComponentsRegister().getPlugin( ClearcoatMapComponent::TypeName );
-			blockContext->textureRemapIt = blockContext->textureRemaps.emplace( plugin.getTextureFlags(), TextureConfiguration{} ).first;
+			blockContext->textureRemapIt = blockContext->textureRemaps.try_emplace( plugin.getTextureFlags() ).first;
 			blockContext->textureRemapIt->second = TextureConfiguration{};
 		}
 		CU_EndAttributePushBlock( CSCNSection::eTextureRemapChannel, blockContext )
@@ -123,13 +123,14 @@ namespace castor3d
 	void ClearcoatMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		channelFillers.emplace( "clearcoat", ChannelFiller{ getTextureFlags()
+		channelFillers.try_emplace( "clearcoat"
+			, getTextureFlags()
 			, []( TextureContext & blockContext )
 			{
-				auto & component = getPassComponent< ClearcoatMapComponent >( blockContext );
+				auto const & component = getPassComponent< ClearcoatMapComponent >( blockContext );
 				component.fillChannel( blockContext.configuration
 					, 0x00FF0000u );
-			} } );
+			} );
 
 		castor::addParserT( parsers
 			, CSCNSection::eTexture

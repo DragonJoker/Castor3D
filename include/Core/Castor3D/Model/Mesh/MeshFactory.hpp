@@ -21,13 +21,6 @@ namespace castor3d
 		 *\brief		Constructeur
 		 */
 		C3D_API MeshFactory();
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		C3D_API ~MeshFactory();
 	};
 }
 

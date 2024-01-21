@@ -40,8 +40,7 @@ namespace castor3d
 			eResult,
 		};
 
-		static ashes::DescriptorSetLayoutPtr createDescriptorLayout( RenderDevice const & device
-			, uint32_t voxelGridSize )
+		static ashes::DescriptorSetLayoutPtr createDescriptorLayout( RenderDevice const & device )
 		{
 			ashes::VkDescriptorSetLayoutBindingArray bindings{ makeDescriptorSetLayoutBinding( eVoxelBuffer
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
@@ -62,8 +61,7 @@ namespace castor3d
 
 		static ashes::DescriptorSetPtr createDescriptorSet( crg::RunnableGraph & graph
 			, ashes::DescriptorSetPool const & pool
-			, crg::FramePass const & pass
-			, uint32_t voxelGridSize )
+			, crg::FramePass const & pass )
 		{
 			auto voxelsBuffer = pass.buffers.front();
 			auto voxelsUbo = pass.buffers.back();
@@ -154,7 +152,7 @@ namespace castor3d
 					IF( writer, color.a() > 0.0_f )
 					{
 						auto normal = writer.declLocale( "normal"
-							, utils.decodeNormal( voxels[in.globalInvocationID.x()].normalMask ) );
+							, utils.decodeNormal( voxels[in.globalInvocationID.x()].normalMask() ) );
 						// [0.5,gridSize.5] => [0,1]
 						// center of voxel, to apply normal on it.
 						auto position = writer.declLocale( "position"
@@ -180,7 +178,7 @@ namespace castor3d
 					}
 					FI;
 
-					voxels[in.globalInvocationID.x()].normalMask = 0_u;
+					voxels[in.globalInvocationID.x()].normalMask() = 0_u;
 				} );
 			return writer.getBuilder().releaseShader();
 		}
@@ -197,21 +195,21 @@ namespace castor3d
 		: crg::RunnablePass{ pass
 			, context
 			, graph
-			, { []( uint32_t index ){}
+			, { crg::defaultV< crg::RunnablePass::InitialiseCallback >
 				, GetPipelineStateCallback( [](){ return crg::getPipelineState( VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT ); } )
 				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i ); }
 				, crg::defaultV< crg::RunnablePass::GetPassIndexCallback >
-				, isEnabled
+				, std::move( isEnabled )
 				, IsComputePassCallback( [this](){ return doIsComputePass(); } ) }
 			, crg::ru::Config{ 1u, false }.implicitAction( pass.images.back().view()
 				, crg::RecordContext::clearAttachment( pass.images.back().view(), transparentBlackClearColor ) ) }
 		, m_vctConfig{ vctConfig }
 		, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, "VoxelSecondaryBounce", vxlscnd::createShader( m_vctConfig.gridSize.value(), device.renderSystem ) }
-		, m_descriptorSetLayout{ vxlscnd::createDescriptorLayout( device, m_vctConfig.gridSize.value() ) }
+		, m_descriptorSetLayout{ vxlscnd::createDescriptorLayout( device ) }
 		, m_pipelineLayout{ vxlscnd::createPipelineLayout( device, *m_descriptorSetLayout ) }
 		, m_pipeline{ vxlscnd::createPipeline( device, *m_pipelineLayout, m_shader ) }
 		, m_descriptorSetPool{ m_descriptorSetLayout->createPool( 1u ) }
-		, m_descriptorSet{ vxlscnd::createDescriptorSet( m_graph, *m_descriptorSetPool, m_pass, m_vctConfig.gridSize.value() ) }
+		, m_descriptorSet{ vxlscnd::createDescriptorSet( m_graph, *m_descriptorSetPool, m_pass ) }
 	{
 	}
 

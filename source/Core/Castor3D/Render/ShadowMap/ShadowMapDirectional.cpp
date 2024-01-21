@@ -261,7 +261,7 @@ namespace castor3d
 			passData.ownCuller = castor::makeUniqueDerived< SceneCuller, DummyCuller >( m_scene, &camera, isStatic );
 			passData.culler = passData.ownCuller.get();
 			auto & pass = group.createPass( "Nodes"
-				, [&passData, this, cascade, vsm, rsm, isStatic, &camera, &cameraUbo]( crg::FramePass const & framePass
+				, [&passData, this, vsm, rsm, isStatic, &camera, &cameraUbo]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & runnableGraph )
 				{
@@ -275,8 +275,7 @@ namespace castor3d
 						, *this
 						, vsm
 						, rsm
-						, isStatic
-						, cascade );
+						, isStatic );
 					passData.pass = res.get();
 					m_device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 						, res->getTimer() );
@@ -381,7 +380,6 @@ namespace castor3d
 						, *previousPass
 						, m_device
 						, cuT( "ShadowMapDirectional" )
-						, debugName
 						, variance.wholeViewId
 						, 5u ) );
 					resultPasses.push_back( &passes.blurs.back()->getLastPass() );
@@ -479,7 +477,6 @@ namespace castor3d
 						, *previousPass
 						, m_device
 						, cuT( "ShadowMapDirectional" )
-						, debugName
 						, variance.subViewsId[cascade]
 						, m_blurIntermediateView
 						, 5u
@@ -510,7 +507,8 @@ namespace castor3d
 	void ShadowMapDirectional::doSetUpToDate( uint32_t index
 		, ShadowMap::Passes & passes )
 	{
-		for ( auto & data : castor::makeArrayView( passes.passes.begin(), passes.passes.begin() + std::min( m_cascades, uint32_t( passes.passes.size() ) ) ) )
+		for ( auto const & data : castor::makeArrayView( passes.passes.begin()
+			, passes.passes.begin() + std::min( m_cascades, uint32_t( passes.passes.size() ) ) ) )
 		{
 			data->pass->setUpToDate();
 		}

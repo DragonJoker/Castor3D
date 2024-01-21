@@ -75,9 +75,10 @@ namespace castor3d
 			{
 				for ( uint32_t j = 0; j < nbVertexH; j++ )
 				{
-					points.push_back( InterleavedVertex{ .pos = castor::Point3f{ offsetW + ( float( i ) * gapW ), 0.0, offsetH + ( float( j ) * gapH ) }
-						, .nml = castor::Point3f{ 0.0, 1.0, 0.0 }
-						, .tex = castor::Point3f{ float( i ) * gapW / width, float( j ) * gapH / depth, 0.0f } } );
+					points.emplace_back()
+						.position( castor::Point3f{ offsetW + ( float( i ) * gapW ), 0.0, offsetH + ( float( j ) * gapH ) } )
+						.normal( castor::Point3f{ 0.0, 1.0, 0.0 } )
+						.texcoord( castor::Point3f{ float( i ) * gapW / width, float( j ) * gapH / depth, 0.0f } );
 				}
 			}
 
@@ -99,9 +100,10 @@ namespace castor3d
 			{
 				for ( uint32_t j = 0; j < nbVertexH; j++ )
 				{
-					points.push_back( InterleavedVertex{ .pos = castor::Point3f{ offsetW + ( float( i ) * gapW ), offsetH + ( float( j ) * gapH ), 0.0 }
-						, .nml = castor::Point3f{ 0.0, 0.0, 1.0 }
-						, .tex = castor::Point3f{ float( i ) * gapW / width, float( j ) * gapH / depth, 0.0f } } );
+					points.emplace_back()
+						.position( castor::Point3f{ offsetW + ( float( i ) * gapW ), offsetH + ( float( j ) * gapH ), 0.0 } )
+						.normal( castor::Point3f{ 0.0, 0.0, 1.0 } )
+						.texcoord( castor::Point3f{ float( i ) * gapW / width, float( j ) * gapH / depth, 0.0f } );
 				}
 			}
 

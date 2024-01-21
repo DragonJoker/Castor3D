@@ -144,10 +144,25 @@ namespace castor3d
 		return m_lightBuffer->createLayoutBinding( stages, index );
 	}
 
+	void ObjectCacheT< Light, castor::String, LightCacheTraits >::addLayoutBinding( ashes::VkDescriptorSetLayoutBindingArray & bindings
+			, VkShaderStageFlags stages
+			, uint32_t & index )const
+	{
+		bindings.emplace_back( createLayoutBinding( stages, index ) );
+		++index;
+	}
+
 	ashes::WriteDescriptorSet ObjectCacheT< Light, castor::String, LightCacheTraits >::getBinding( uint32_t binding )const
 	{
 		CU_Require( m_lightBuffer );
 		return m_lightBuffer->getBinding( binding );
+	}
+
+	void ObjectCacheT< Light, castor::String, LightCacheTraits >::addBinding( ashes::WriteDescriptorSetArray & writes
+		, uint32_t & binding )const
+	{
+		writes.emplace_back( getBinding( binding ) );
+		++binding;
 	}
 
 	ashes::WriteDescriptorSet ObjectCacheT< Light, castor::String, LightCacheTraits >::getBinding( uint32_t binding
@@ -168,7 +183,7 @@ namespace castor3d
 		return 0u;
 	}
 
-	bool ObjectCacheT< Light, castor::String, LightCacheTraits >::doCheckUniqueDirectionalLight( LightType toAdd )
+	bool ObjectCacheT< Light, castor::String, LightCacheTraits >::doCheckUniqueDirectionalLight( LightType toAdd )const noexcept
 	{
 		bool result = toAdd != LightType::eDirectional
 			|| getLightsBufferCount( LightType::eDirectional ) == 0u;

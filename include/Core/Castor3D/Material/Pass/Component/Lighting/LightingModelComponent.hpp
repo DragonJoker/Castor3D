@@ -80,7 +80,7 @@ namespace castor3d
 		void doFillBuffer( PassBuffer & buffer )const override;
 
 	private:
-		uint32_t m_zeroBasedValue;
+		uint32_t m_zeroBasedValue{};
 	};
 }
 

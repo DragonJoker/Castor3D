@@ -14,14 +14,14 @@
 
 #include <ShaderWriter/Source.hpp>
 
-#define C3D_UseWaveIntrinsics 0
-
 namespace castor3d::shader
 {
 	//*********************************************************************************************
 
 	namespace clusters
 	{
+		static bool constexpr C3D_UseWaveIntrinsics = false;
+
 		void printDebug( sdw::ShaderWriter & writer
 			, ClustersData const & clusterData
 			, DebugOutput & debugOutput
@@ -93,7 +93,7 @@ namespace castor3d::shader
 					, pointLightIndices[pointStartOffset + i] );
 				computePointLight( lights.retrievePointLight( lightIndex ) );
 			}
-			ROF;
+			ROF
 
 			auto spotClusterLights = writer.declLocale( "spotClusterLights"
 				, spotLightClusters[clusterIndex1D] );
@@ -108,7 +108,7 @@ namespace castor3d::shader
 					, spotLightIndices[spotStartOffset + i] );
 				computeSpotLight( lights.retrieveSpotLight( lightIndex ) );
 			}
-			ROF;
+			ROF
 
 			printDebug( writer, clusterData, debugOutput, clusterIndex3D, pointLightCount, spotLightCount );
 		}
@@ -155,11 +155,11 @@ namespace castor3d::shader
 						computePointLight( lights.retrievePointLight( minLightIndex ) );
 						lightIndex = pointLightIndices[pointStartOffset + lightOffset];
 					}
-					FI;
+					FI
 				}
-				ELIHW;
+				ELIHW
 			}
-			FI;
+			FI
 
 			auto spotClusterLights = writer.declLocale( "spotClusterLights"
 				, spotLightClusters[clusterIndex1D] );
@@ -186,11 +186,11 @@ namespace castor3d::shader
 						computeSpotLight( lights.retrieveSpotLight( minLightIndex ) );
 						lightIndex = spotLightIndices[spotStartOffset + lightOffset];
 					}
-					FI;
+					FI
 				}
-				ELIHW;
+				ELIHW
 			}
-			FI;
+			FI
 
 			printDebug( writer, clusterData, debugOutput, clusterIndex3D, pointLightCount, spotLightCount );
 		}
@@ -212,39 +212,61 @@ namespace castor3d::shader
 			, std::function< void( PointLight const & ) > computePointLight
 			, std::function< void( SpotLight const & ) > computeSpotLight )
 		{
-#if C3D_UseWaveIntrinsics
-			IF( writer, clusterData.enableWaveIntrinsics() != 0_u )
+			if constexpr ( C3D_UseWaveIntrinsics )
 			{
-				auto firstClusterIndex1D = writer.declLocale( "firstClusterIndex1D"
-					, sdw::readFirstInvocation( clusterIndex1D ) );
-				auto laneMask = writer.declLocale( "laneMask"
-					, sdw::subgroupBallot( clusterIndex1D == firstClusterIndex1D ) );
-				auto fastPath = writer.declLocale( "fastPath"
-					, all( laneMask == sdw::subgroupBallot( 1_b ) ) );
-
-				IF( writer, fastPath )
+				IF( writer, clusterData.enableWaveIntrinsics() != 0_u )
 				{
-					clusters::computeLightingFastPath( writer
+					auto firstClusterIndex1D = writer.declLocale( "firstClusterIndex1D"
+						, sdw::readFirstInvocation( clusterIndex1D ) );
+					auto laneMask = writer.declLocale( "laneMask"
+						, sdw::subgroupBallot( clusterIndex1D == firstClusterIndex1D ) );
+					auto fastPath = writer.declLocale( "fastPath"
+						, all( laneMask == sdw::subgroupBallot( 1_b ) ) );
+
+					IF( writer, fastPath )
+					{
+						clusters::computeLightingFastPath( writer
+							, clusterData
+							, firstClusterIndex1D
+							, clusterIndex3D
+							, pointLightIndices
+							, pointLightClusters
+							, spotLightIndices
+							, spotLightClusters
+							, lights
+							, lightingModel
+							, components
+							, lightSurface
+							, receivesShadows
+							, debugOutput
+							, computePointLight
+							, computeSpotLight );
+					}
+					ELSE
+					{
+						clusters::computeLightingMediumPath( writer
 						, clusterData
-						, firstClusterIndex1D
-						, clusterIndex3D
-						, pointLightIndices
-						, pointLightClusters
-						, spotLightIndices
-						, spotLightClusters
-						, lights
-						, lightingModel
-						, components
-						, lightSurface
-						, receivesShadows
-						, debugOutput
-						, computePointLight
-						, computeSpotLight );
+							, clusterIndex1D
+							, clusterIndex3D
+							, pointLightIndices
+							, pointLightClusters
+							, spotLightIndices
+							, spotLightClusters
+							, lights
+							, lightingModel
+							, components
+							, lightSurface
+							, receivesShadows
+							, debugOutput
+							, computePointLight
+							, computeSpotLight );
+					}
+					FI
 				}
 				ELSE
 				{
-					clusters::computeLightingMediumPath( writer
-						, clusterData
+					clusters::computeLightingFastPath( writer
+					, clusterData
 						, clusterIndex1D
 						, clusterIndex3D
 						, pointLightIndices
@@ -260,11 +282,10 @@ namespace castor3d::shader
 						, computePointLight
 						, computeSpotLight );
 				}
-				FI;
+				FI
 			}
-			ELSE
+			else
 			{
-#endif
 				clusters::computeLightingFastPath( writer
 					, clusterData
 					, clusterIndex1D
@@ -281,10 +302,7 @@ namespace castor3d::shader
 					, debugOutput
 					, computePointLight
 					, computeSpotLight );
-#if C3D_UseWaveIntrinsics
 			}
-			FI;
-#endif
 		}
 	}
 

@@ -122,9 +122,9 @@ namespace castor
 		auto lock( makeUniqueLock( m_mutexLoadedPlugins ) );
 		castor::StringMap< PluginRPtr > result;
 
-		for ( auto & [name, plugin] : m_loadedPlugins[size_t( type )] )
+		for ( auto const & [name, plugin] : m_loadedPlugins[size_t( type )] )
 		{
-			result.emplace( name, plugin.get() );
+			result.try_emplace( name, plugin.get() );
 		}
 
 		return result;
@@ -137,7 +137,7 @@ namespace castor
 
 		if ( !files.empty() )
 		{
-			for ( auto file : files )
+			for ( auto const & file : files )
 			{
 				if ( file.getExtension() == CU_SharedLibExt )
 				{
@@ -158,9 +158,9 @@ namespace castor
 	{
 		PluginRPtr result{};
 		auto lockTypes( makeUniqueLock( m_mutexLoadedPluginTypes ) );
-		auto it = m_loadedPluginTypes.find( pathFile );
 
-		if ( it == m_loadedPluginTypes.end() )
+		if ( auto it = m_loadedPluginTypes.find( pathFile );
+			it == m_loadedPluginTypes.end() )
 		{
 			if ( !File::fileExists( pathFile ) )
 			{
@@ -224,10 +224,10 @@ namespace castor
 
 			if ( toCheck <= version )
 			{
-				m_loadedPluginTypes.insert( std::make_pair( pathFile, type ) );
+				m_loadedPluginTypes.try_emplace( pathFile, type );
 				{
 					auto lockPlugins( makeUniqueLock( m_mutexLoadedPlugins ) );
-					result = m_loadedPlugins[size_t( type )].emplace( pathFile, std::move( plugin ) ).first->second.get();
+					result = m_loadedPlugins[size_t( type )].try_emplace( pathFile, std::move( plugin ) ).first->second.get();
 				}
 				log::info << cuT( "Plug-in [" ) << result->getName() << cuT( "] - Required engine version : " ) << toCheck << cuT( ", loaded" ) << std::endl;
 			}

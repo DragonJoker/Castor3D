@@ -38,7 +38,7 @@ namespace castor
 			return writeMask( file, cuT( "emissive_mask" ), m_mask );
 		}
 
-		bool operator()( StringStream & file )
+		bool operator()( StringStream & file )const
 		{
 			return writeMask( file, cuT( "emissive_mask" ), m_mask );
 		}
@@ -78,7 +78,7 @@ namespace castor3d
 		static CU_ImplementAttributeParserBlock( parserTexRemapEmissive, SceneImportContext )
 		{
 			auto & plugin = getEngine( *blockContext )->getPassComponentsRegister().getPlugin( EmissiveMapComponent::TypeName );
-			blockContext->textureRemapIt = blockContext->textureRemaps.emplace( plugin.getTextureFlags(), TextureConfiguration{} ).first;
+			blockContext->textureRemapIt = blockContext->textureRemaps.try_emplace( plugin.getTextureFlags() ).first;
 			blockContext->textureRemapIt->second = TextureConfiguration{};
 		}
 		CU_EndAttributePushBlock( CSCNSection::eTextureRemapChannel, blockContext )
@@ -123,13 +123,14 @@ namespace castor3d
 	void EmissiveMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		channelFillers.emplace( "emissive", ChannelFiller{ getTextureFlags()
+		channelFillers.try_emplace( "emissive"
+			, getTextureFlags()
 			, []( TextureContext & blockContext )
 			{
-				auto & component = getPassComponent< EmissiveMapComponent >( blockContext );
+				auto const & component = getPassComponent< EmissiveMapComponent >( blockContext );
 				component.fillChannel( blockContext.configuration
 					, 0x00FFFFFF );
-			} } );
+			} );
 
 		castor::addParserT( parsers
 			, CSCNSection::eTexture

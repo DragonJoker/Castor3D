@@ -69,7 +69,7 @@ namespace castor3d
 
 	void log::cleanup()
 	{
-		crg::Logger::setTraceCallback( []( std::string const & msg, bool newLine )
+		crg::Logger::setTraceCallback( []( std::string const &, bool )
 			{
 			} );
 		crg::Logger::setDebugCallback( []( std::string const & msg, bool newLine )
@@ -88,7 +88,7 @@ namespace castor3d
 			{
 				std::cerr << msg << ( newLine ? "\n" : "" );
 			} );
-		ashes::Logger::setTraceCallback( []( std::string const & msg, bool newLine )
+		ashes::Logger::setTraceCallback( []( std::string const &, bool )
 			{
 			} );
 		ashes::Logger::setDebugCallback( []( std::string const & msg, bool newLine )

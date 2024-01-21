@@ -37,7 +37,7 @@ namespace castor3d
 		 *\param[in]	looped		L'animation tourne-t-elle en boucle ou pas.
 		 */
 		C3D_API AnimationInstance( AnimatedObject & object
-			, Animation & animation
+			, Animation const & animation
 			, bool looped = false );
 		/**
 		 *\~english

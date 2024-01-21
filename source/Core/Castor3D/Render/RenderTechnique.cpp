@@ -122,7 +122,7 @@ namespace castor3d
 			{
 				int32_t index = 0;
 				auto lightIt = lights.begin();
-				activeShadowMaps[size_t( type )].push_back( { std::ref( shadowMap ), LightIdArray{} } );
+				activeShadowMaps[size_t( type )].emplace_back( std::ref( shadowMap ) );
 				auto & active = activeShadowMaps[size_t( type )].back();
 
 				for ( auto i = 0u; i < count; ++i )
@@ -182,8 +182,6 @@ namespace castor3d
 					++index;
 					++lightIt;
 				}
-
-				shadowBuffer.markDirty();
 			}
 		}
 
@@ -192,7 +190,7 @@ namespace castor3d
 			, castor::String const & prefix )
 		{
 			LightVolumePassResultArray result;
-			auto & engine = *device.renderSystem.getEngine();
+			auto const & engine = *device.renderSystem.getEngine();
 
 			for ( uint32_t i = 0u; i < LpvMaxCascadesCount; ++i )
 			{
@@ -205,8 +203,7 @@ namespace castor3d
 			return result;
 		}
 
-		static crg::FrameGraph doCreateClearLpvCommands( crg::ResourcesCache & resources
-			, RenderDevice const & device
+		static crg::FrameGraph doCreateClearLpvCommands( crg::ResourcesCache const & resources
 			, ProgressBar * progress
 			, castor::String const & name
 			, LightVolumePassResult  const & lpvResult
@@ -222,16 +219,14 @@ namespace castor3d
 					: crg::RunnablePass{ pass
 						, context
 						, graph
-						, { []( uint32_t index ){}
+						, { crg::defaultV< InitialiseCallback >
 							, GetPipelineStateCallback( [](){ return crg::getPipelineState( VK_PIPELINE_STAGE_TRANSFER_BIT ); } )
-							, [this]( crg::RecordContext & ctx, VkCommandBuffer cb, uint32_t i ){ doRecordInto( ctx, cb, i ); } } }
+							, [this]( crg::RecordContext &, VkCommandBuffer cb, uint32_t ){ doRecordInto( cb ); } } }
 				{
 				}
 
 			protected:
-				void doRecordInto( crg::RecordContext & context
-					, VkCommandBuffer commandBuffer
-					, uint32_t index )
+				void doRecordInto( VkCommandBuffer commandBuffer )const
 				{
 					auto clearValue = transparentBlackClearColor.color;
 
@@ -379,9 +374,7 @@ namespace castor3d
 		, m_graph{ m_renderTarget.getGraph().createPassGroup( "Technique" ) }
 #if !C3D_DebugDisableShadowMaps
 		, m_shadowBuffer{ ( ( m_renderTarget.isFullLoadingEnabled() || m_renderTarget.getScene()->hasShadows() )
-			? castor::makeUnique< ShadowBuffer >( *getOwner()
-				, device
-				, 1u )
+			? castor::makeUnique< ShadowBuffer >( device )
 			: nullptr ) }
 		, m_directionalShadowMap{ ( ( m_renderTarget.isFullLoadingEnabled() || m_renderTarget.getScene()->hasShadows() )
 			? castor::makeUniqueDerived< ShadowMap, ShadowMapDirectional >( m_renderTarget.getResources()
@@ -433,8 +426,7 @@ namespace castor3d
 			, ( m_voxelizer ? &m_voxelizer->getSecondaryBounce() : nullptr ) }
 		, m_prepass{ *this
 			, m_device
-			, queueData
-			, doCreateRenderPasses( progress, TechniquePassEvent::eBeforeDepth, &m_renderTarget.createVertexTransformPass( m_graph ), std::move( previousPasses ) )
+			, doCreateRenderPasses( TechniquePassEvent::eBeforeDepth, &m_renderTarget.createVertexTransformPass( m_graph ), std::move( previousPasses ) )
 			, progress
 			, visbuffer }
 		, m_lastDepthPass{ &m_prepass.getLastPass() }
@@ -449,24 +441,19 @@ namespace castor3d
 		, m_background{ doCreateBackgroundPass( progress ) }
 		, m_opaque{ *this
 			, m_device
-			, queueData
 			, m_prepass
-			, doCreateRenderPasses( progress , TechniquePassEvent::eBeforeOpaque, &m_background->getPass() )
-			, getSsaoConfig()
-			, progress
-			, &m_normal }
+			, doCreateRenderPasses(  TechniquePassEvent::eBeforeOpaque, &m_background->getPass() )
+			, progress }
 		, m_lastOpaquePass{ &m_opaque.getLastPass() }
 		, m_transparent{ *this
 			, m_device
-			, queueData
 			, m_opaque
-			, doCreateRenderPasses( progress , TechniquePassEvent::eBeforeTransparent, &m_opaque.getLastPass() )
-			, getSsaoConfig()
+			, doCreateRenderPasses(  TechniquePassEvent::eBeforeTransparent, &m_opaque.getLastPass() )
 			, progress
 			, weightedBlended }
 		, m_lastTransparentPass{ &m_transparent.getLastPass() }
 		, m_clearLpvGraph{ ( m_shadowBuffer
-			? rendtech::doCreateClearLpvCommands( m_renderTarget.getResources(), device, progress, getName(), *m_lpvResult, m_llpvResult )
+			? rendtech::doCreateClearLpvCommands( m_renderTarget.getResources(), progress, getName(), *m_lpvResult, m_llpvResult )
 			: crg::FrameGraph{ m_renderTarget.getResources().getHandler(), getName() + "/ClearLpv" } ) }
 		, m_clearLpvRunnable{ ( m_shadowBuffer
 			? m_clearLpvGraph.compile( m_device.makeContext() )
@@ -483,9 +470,7 @@ namespace castor3d
 			m_renderTarget.getGraph().addDependency( m_voxelizer->getGraph() );
 		}
 
-		doCreateRenderPasses( progress
-			, TechniquePassEvent::eBeforePostEffects
-			, &m_transparent.getLastPass() );
+		doCreateRenderPasses( TechniquePassEvent::eBeforePostEffects, &m_transparent.getLastPass() );
 
 		m_depth.create();
 		m_normal.create();
@@ -553,13 +538,13 @@ namespace castor3d
 		uint32_t result = 0u;
 		result += PrepassRendering::countInitialisationSteps();
 		result += Voxelizer::countInitialisationSteps();
-		result += 1;// m_backgroundRenderer;
-		++result;// m_directionalShadowMap;
-		++result;// m_pointShadowMap;
-		++result;// m_spotShadowMap;
+		result += 1;// m_backgroundRenderer
+		++result;// m_directionalShadowMap
+		++result;// m_pointShadowMap
+		++result;// m_spotShadowMap
 		result += OpaqueRendering::countInitialisationSteps();
 		result += TransparentRendering::countInitialisationSteps();
-		result += 2;// m_clearLpv;
+		result += 2;// m_clearLpv
 		result += LightPropagationVolumes::countInitialisationSteps();
 		result += LightPropagationVolumesG::countInitialisationSteps();
 		result += LayeredLightPropagationVolumes::countInitialisationSteps();
@@ -570,9 +555,9 @@ namespace castor3d
 	void RenderTechnique::update( CpuUpdater & updater )
 	{
 		auto & scene = *updater.scene;
-		auto & camera = *updater.camera;
+		auto const & camera = *updater.camera;
 		updater.voxelConeTracing = scene.getVoxelConeTracingConfig().enabled;
-		auto & debugConfig = getDebugConfig();
+		auto const & debugConfig = getDebugConfig();
 		updater.debugIndex = debugConfig.intermediateShaderValueIndex;
 
 		doUpdateShadowMaps( updater );
@@ -652,7 +637,6 @@ namespace castor3d
 
 		doInitialiseLpv();
 		doUpdateShadowMaps( updater );
-		doUpdateLpv( updater );
 
 		if ( m_renderTarget.getTargetType() == TargetType::eWindow )
 		{
@@ -673,11 +657,6 @@ namespace castor3d
 		result = doRenderEnvironmentMaps( result, queue );
 		result = doRenderVCT( result, queue );
 		return result;
-	}
-
-	bool RenderTechnique::writeInto( castor::TextFile & file )
-	{
-		return true;
 	}
 
 	void RenderTechnique::accept( RenderTechniqueVisitor & visitor )
@@ -745,7 +724,7 @@ namespace castor3d
 		}
 #endif
 
-		for ( auto & lpv : m_lightPropagationVolumes )
+		for ( auto const & lpv : m_lightPropagationVolumes )
 		{
 			if ( lpv )
 			{
@@ -753,7 +732,7 @@ namespace castor3d
 			}
 		}
 
-		for ( auto & lpv : m_lightPropagationVolumesG )
+		for ( auto const & lpv : m_lightPropagationVolumesG )
 		{
 			if ( lpv )
 			{
@@ -761,7 +740,7 @@ namespace castor3d
 			}
 		}
 
-		for ( auto & lpv : m_layeredLightPropagationVolumes )
+		for ( auto const & lpv : m_layeredLightPropagationVolumes )
 		{
 			if ( lpv )
 			{
@@ -769,7 +748,7 @@ namespace castor3d
 			}
 		}
 
-		for ( auto & lpv : m_layeredLightPropagationVolumesG )
+		for ( auto const & lpv : m_layeredLightPropagationVolumesG )
 		{
 			if ( lpv )
 			{
@@ -848,8 +827,7 @@ namespace castor3d
 		return m_renderTarget.areDebugTargetsEnabled();
 	}
 
-	crg::FramePassArray RenderTechnique::doCreateRenderPasses( ProgressBar * progress
-		, TechniquePassEvent event
+	crg::FramePassArray RenderTechnique::doCreateRenderPasses( TechniquePassEvent event
 		, crg::FramePass const * previousPass
 		, crg::FramePassArray previousPasses )
 	{
@@ -859,15 +837,10 @@ namespace castor3d
 
 		for ( auto renderPassInfo : getEngine()->getRenderPassInfos( event ) )
 		{
-			auto passes = renderPassInfo->create( m_device
+			result = renderPassInfo->create( m_device
 				, *this
 				, m_renderPasses
 				, std::move( result ) );
-
-			if ( !passes.empty() )
-			{
-				result = passes;
-			}
 		}
 
 		return result;
@@ -875,8 +848,7 @@ namespace castor3d
 
 	BackgroundRendererUPtr RenderTechnique::doCreateBackgroundPass( ProgressBar * progress )
 	{
-		auto previousPasses = doCreateRenderPasses( progress
-			, TechniquePassEvent::eBeforeBackground
+		auto previousPasses = doCreateRenderPasses( TechniquePassEvent::eBeforeBackground
 			, &m_prepass.getLastPass() );
 
 		if ( m_clustersLastPass )
@@ -891,7 +863,6 @@ namespace castor3d
 			, previousPasses
 			, m_device
 			, progress
-			, getName()
 			, *m_renderTarget.getScene()->getBackground()
 			, m_renderTarget.getHdrConfigUbo()
 			, m_sceneUbo
@@ -932,7 +903,7 @@ namespace castor3d
 
 			if ( needLLpv || needLLpvG )
 			{
-				for ( auto & lpvResult : m_llpvResult )
+				for ( auto const & lpvResult : m_llpvResult )
 				{
 					lpvResult->create();
 				}
@@ -1000,7 +971,7 @@ namespace castor3d
 				array.clear();
 			}
 
-			auto & cache = scene.getLightCache();
+			auto const & cache = scene.getLightCache();
 
 			if ( m_directionalShadowMap )
 			{
@@ -1047,16 +1018,16 @@ namespace castor3d
 #endif
 	}
 
-	void RenderTechnique::doUpdateShadowMaps( GpuUpdater & updater )
+	void RenderTechnique::doUpdateShadowMaps( GpuUpdater & updater )const
 	{
-		for ( auto & maps : m_activeShadowMaps )
+		for ( auto const & maps : m_activeShadowMaps )
 		{
-			for ( auto & map : maps )
+			for ( auto const & map : maps )
 			{
-				for ( auto & id : map.ids )
+				for ( auto const & [light, index] : map.ids )
 				{
-					updater.light = id.first;
-					updater.index = id.second;
+					updater.light = light;
+					updater.index = index;
 					map.shadowMap.get().update( updater );
 				}
 			}
@@ -1087,10 +1058,6 @@ namespace castor3d
 				m_layeredLightPropagationVolumesG[i]->update( updater );
 			}
 		}
-	}
-
-	void RenderTechnique::doUpdateLpv( GpuUpdater & updater )
-	{
 	}
 
 	crg::SemaphoreWaitArray RenderTechnique::doRenderLPV( crg::SemaphoreWaitArray const & semaphore
@@ -1134,17 +1101,17 @@ namespace castor3d
 		, ashes::Queue const & queue )const
 	{
 		crg::SemaphoreWaitArray result = semaphore;
-		auto & scene = *m_renderTarget.getScene();
 
-		if ( scene.hasShadows() )
+		if ( auto scene = m_renderTarget.getScene();
+			scene && scene->hasShadows() )
 		{
 			for ( auto & array : m_activeShadowMaps )
 			{
 				for ( auto & shadowMap : array )
 				{
-					for ( auto & index : shadowMap.ids )
+					for ( auto & [_, index] : shadowMap.ids )
 					{
-						result = shadowMap.shadowMap.get().render( result, queue, index.second );
+						result = shadowMap.shadowMap.get().render( result, queue, index );
 					}
 				}
 			}
@@ -1175,11 +1142,11 @@ namespace castor3d
 		, ashes::Queue const & queue )const
 	{
 		crg::SemaphoreWaitArray result = semaphore;
-		auto scene = m_renderTarget.getScene();
 
-		if ( scene
-			&& scene->getVoxelConeTracingConfig().enabled
-			&& m_voxelizer )
+		if ( auto scene = m_renderTarget.getScene();
+			scene
+				&& scene->getVoxelConeTracingConfig().enabled
+				&& m_voxelizer )
 		{
 			result = m_voxelizer->render( result, queue );
 		}

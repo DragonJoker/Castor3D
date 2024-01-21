@@ -21,15 +21,14 @@ namespace castor3d
 {
 	namespace renddvc
 	{
-		static QueueFamilies initialiseQueueFamilies( ashes::Instance const & instance
-			, ashes::PhysicalDevice const & gpu )
+		static QueueFamilies initialiseQueueFamilies( ashes::PhysicalDevice const & gpu )
 		{
 			QueueFamilies result;
 			auto queueProps = gpu.getQueueFamilyProperties();
 			bool hasGraphics = false;
 			uint32_t index{};
 
-			for ( auto & queueProp : queueProps )
+			for ( auto const & queueProp : queueProps )
 			{
 				if ( queueProp.queueCount > 0 )
 				{
@@ -75,9 +74,9 @@ namespace castor3d
 				std::vector< float > queuePriorities;
 				queuePriorities.resize( queueData.getQueueSize(), 1.0f );
 
-				queueCreateInfos.push_back( { 0u
+				queueCreateInfos.emplace_back( 0u
 					, queueData.familyIndex
-					, queuePriorities } );
+					, queuePriorities );
 			}
 
 			return queueCreateInfos;
@@ -87,7 +86,7 @@ namespace castor3d
 			, ashes::PhysicalDevice const & gpu
 			, ashes::DeviceQueueCreateInfoArray queueCreateInfos
 			, ashes::StringArray const & enabledExtensions
-			, VkPhysicalDeviceFeatures2 & features2 )
+			, VkPhysicalDeviceFeatures2 const & features2 )
 		{
 			log::debug << "Instance enabled layers count: " << uint32_t( instance.getEnabledLayerNames().size() ) << std::endl;
 			auto result = ashes::DeviceCreateInfo{ 0u
@@ -109,7 +108,7 @@ namespace castor3d
 				} ) );
 		}
 
-		static bool tryAddExtension( std::string name
+		static bool tryAddExtension( std::string const & name
 			, ashes::VkExtensionPropertiesArray const & available
 			, Extensions & enabled
 			, void * pFeature = nullptr )
@@ -120,12 +119,12 @@ namespace castor3d
 			{
 				if ( pFeature )
 				{
-					enabled.addExtension( std::move( name )
+					enabled.addExtension( name
 						, reinterpret_cast< VkStructure * >( pFeature ) );
 				}
 				else
 				{
-					enabled.addExtension( std::move( name ) );
+					enabled.addExtension( name );
 				}
 			}
 
@@ -222,9 +221,8 @@ namespace castor3d
 		}
 		else
 		{
-			auto it = m_busyQueues.find( std::this_thread::get_id() );
-
-			if ( it != m_busyQueues.end() )
+			if ( auto it = m_busyQueues.find( std::this_thread::get_id() );
+				it != m_busyQueues.end() )
 			{
 				if ( it->second.data )
 				{
@@ -241,11 +239,10 @@ namespace castor3d
 			}
 		}
 
-		auto ires = m_busyQueues.emplace( std::this_thread::get_id()
-			, QueueThreadData{} );
-		auto & result = ires.first->second;
+		auto [it, res] = m_busyQueues.try_emplace( std::this_thread::get_id() );
+		auto & result = it->second;
 
-		if ( ires.second )
+		if ( res )
 		{
 			result.data = m_remainingQueuesData.back();
 			m_remainingQueuesData.pop_back();
@@ -330,8 +327,7 @@ namespace castor3d
 		, memoryProperties{ gpu.getMemoryProperties() }
 		, features{ gpu.getFeatures() }
 		, properties{ gpu.getProperties() }
-		, queueFamilies{ renddvc::initialiseQueueFamilies( renderSystem.getInstance(), gpu ) }
-		, m_prefersMeshShaderEXT{ true }
+		, queueFamilies{ renddvc::initialiseQueueFamilies( gpu ) }
 		, m_deviceExtensions{ std::move( pdeviceExtensions ) }
 		, m_availableExtensions{ gpu.enumerateExtensionProperties( std::string{} ) }
 	{
@@ -371,17 +367,21 @@ namespace castor3d
 			m_deviceExtensions.addProperty( &m_properties12 );
 		}
 		else
+		{
 #endif
-		if ( apiVersion >= ashes::makeVersion( 1, 1, 0 ) )
-		{
-			hasFeatures2 = true;
-			hasVulkan1_1 = true;
-			m_deviceExtensions.addFeature( &m_drawParamsFeatures );
-		}
+			if ( apiVersion >= ashes::makeVersion( 1, 1, 0 ) )
+			{
+				hasFeatures2 = true;
+				hasVulkan1_1 = true;
+				m_deviceExtensions.addFeature( &m_drawParamsFeatures );
+			}
 #if VK_KHR_shader_draw_parameters
-		else
-		{
-			doTryAddExtension( VK_KHR_SHADER_DRAW_PARAMETERS_EXTENSION_NAME );
+			else
+			{
+				doTryAddExtension( VK_KHR_SHADER_DRAW_PARAMETERS_EXTENSION_NAME );
+			}
+#endif
+#if VK_VERSION_1_2
 		}
 #endif
 #if VK_KHR_get_physical_device_properties2
@@ -471,21 +471,17 @@ namespace castor3d
 #if VK_EXT_shader_subgroup_ballot
 			doTryAddExtension( VK_EXT_SHADER_SUBGROUP_BALLOT_EXTENSION_NAME );
 #endif
-			if ( hasDescriptorIndexing )
-			{
-				if ( hasDeviceAddress )
-				{
 #if VK_KHR_acceleration_structure
-					if ( doTryAddExtension( VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME, &m_accelFeatures, &m_accelProperties )
-						&& hasSpirv1_4 )
-					{
+			if ( hasDescriptorIndexing
+				&& hasDeviceAddress
+				&& doTryAddExtension( VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME, &m_accelFeatures, &m_accelProperties )
+				&& hasSpirv1_4 )
+			{
 #	if VK_KHR_ray_tracing_pipeline
-						doTryAddExtension( VK_KHR_RAY_TRACING_PIPELINE_EXTENSION_NAME, &m_rtPipelineFeatures, &m_rtPipelineProperties );
+				doTryAddExtension( VK_KHR_RAY_TRACING_PIPELINE_EXTENSION_NAME, &m_rtPipelineFeatures, &m_rtPipelineProperties );
 #	endif
-					}
-#endif
-				}
 			}
+#endif
 
 			if ( !hasFeatures11 )
 			{
@@ -497,21 +493,21 @@ namespace castor3d
 			doTryAddExtension( VK_KHR_SYNCHRONIZATION_2_EXTENSION_NAME );
 #endif
 			// use the features2 chain to append extensions
-			VkStructure * currentFeat = reinterpret_cast< VkStructure * >( &m_features2 );
+			auto currentFeat = reinterpret_cast< VkStructure * >( &m_features2 );
 
 			// build up chain of all used extension features
-			for ( size_t i = 0; i < m_deviceExtensions.getFeatures().size(); i++ )
+			for ( auto & feats : m_deviceExtensions.getFeatures() )
 			{
-				currentFeat->pNext = m_deviceExtensions.getFeatures()[i].extStruct;
+				currentFeat->pNext = feats.extStruct;
 				currentFeat = currentFeat->pNext;
 			}
 
-			VkStructure * currentProp = reinterpret_cast< VkStructure * >( &m_properties2 );
+			auto currentProp = reinterpret_cast< VkStructure * >( &m_properties2 );
 
 			// build up chain of all used extension properties
-			for ( size_t i = 0; i < m_deviceExtensions.getProperties().size(); i++ )
+			for ( auto & props : m_deviceExtensions.getProperties() )
 			{
-				currentProp->pNext = m_deviceExtensions.getProperties()[i].extStruct;
+				currentProp->pNext = props.extStruct;
 				currentProp = currentProp->pNext;
 			}
 
@@ -1020,7 +1016,7 @@ namespace castor3d
 #endif
 	}
 
-	bool RenderDevice::doTryAddExtension( std::string name
+	bool RenderDevice::doTryAddExtension( std::string const & name
 		, void * pFeature
 		, void * pProperty )
 	{

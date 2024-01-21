@@ -71,16 +71,16 @@ namespace castor3d
 	{
 		auto result = doWriteChunk( double( obj.getTimeIndex().count() ) / 1000.0, ChunkType::eMeshMorphTargetTime, m_chunk );
 
-		for ( auto & it : obj )
+		for ( auto const & [id, weights] : obj )
 		{
 			if ( result )
 			{
-				result = doWriteChunk( uint32_t( it.first ), ChunkType::eMeshMorphTargetSubmeshID, m_chunk );
+				result = doWriteChunk( id, ChunkType::eMeshMorphTargetSubmeshID, m_chunk );
 			}
 
 			if ( result )
 			{
-				result = doWriteChunk( it.second, ChunkType::eMeshMorphTargetWeights, m_chunk );
+				result = doWriteChunk( weights, ChunkType::eMeshMorphTargetWeights, m_chunk );
 			}
 		}
 
@@ -99,7 +99,6 @@ namespace castor3d
 		uint32_t id{ 0 };
 		double time{ 0.0 };
 		SubmeshRPtr submesh{};
-		std::vector< float > weights;
 
 		while ( result && doGetSubChunk( chunk ) )
 		{
@@ -125,13 +124,17 @@ namespace castor3d
 				}
 				break;
 			case ChunkType::eMeshMorphTargetWeights:
-				weights.resize( submesh->getMorphTargetsCount() );
-				result = doParseChunk( weights, chunk );
-				checkError( result, "Couldn't parse submesh morph targets weights." );
-				if ( result )
+				if ( submesh )
 				{
-					obj.setTargetsWeights( *submesh
-						, std::move( weights ) );
+					std::vector< float > weights;
+					weights.resize( submesh->getMorphTargetsCount() );
+					result = doParseChunk( weights, chunk );
+					checkError( result, "Couldn't parse submesh morph targets weights." );
+					if ( result )
+					{
+						obj.setTargetsWeights( *submesh
+							, std::move( weights ) );
+					}
 				}
 				break;
 			default:
@@ -155,15 +158,14 @@ namespace castor3d
 
 			while ( result && doGetSubChunk( chunk ) )
 			{
-				switch ( chunk.getChunkType() )
-				{
 #pragma warning( push )
 #pragma warning( disable: 4996 )
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-				case ChunkType::eMeshAnimationKeyFrameBufferData:
+				if ( chunk.getChunkType() == ChunkType::eMeshAnimationKeyFrameBufferData )
 #pragma GCC diagnostic pop
 #pragma warning( pop )
+				{
 					result = doParseChunk( pointsd, chunk );
 					checkError( result, "Couldn't parse buffer data." );
 
@@ -176,9 +178,6 @@ namespace castor3d
 							, buffer.normals
 							, buffer.texcoords0 );
 					}
-					break;
-				default:
-					break;
 				}
 			}
 		}
@@ -198,15 +197,14 @@ namespace castor3d
 
 			while ( result && doGetSubChunk( chunk ) )
 			{
-				switch ( chunk.getChunkType() )
-				{
 #pragma warning( push )
 #pragma warning( disable: 4996 )
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-				case ChunkType::eMeshAnimationKeyFrameBufferData:
+				if ( chunk.getChunkType() == ChunkType::eMeshAnimationKeyFrameBufferData )
 #pragma GCC diagnostic pop
 #pragma warning( pop )
+				{
 					result = doParseChunk( points, chunk );
 					checkError( result, "Couldn't parse buffer data." );
 
@@ -218,9 +216,6 @@ namespace castor3d
 							, buffer.normals
 							, buffer.texcoords0 );
 					}
-					break;
-				default:
-					break;
 				}
 			}
 		}

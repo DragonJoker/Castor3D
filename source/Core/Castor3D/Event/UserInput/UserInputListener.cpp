@@ -58,7 +58,7 @@ namespace castor3d
 
 		while ( it != m_handlers.end() )
 		{
-			auto & handler = **it;
+			auto const & handler = **it;
 			doRemoveHandlerNL( handler );
 			it = m_handlers.begin();
 		}
@@ -66,9 +66,7 @@ namespace castor3d
 
 	void UserInputListener::processEvents()
 	{
-		auto handlers = doGetHandlers();
-
-		for ( auto handler : handlers )
+		for ( auto const & handler : doGetHandlers() )
 		{
 			handler->processEvents();
 		}
@@ -91,7 +89,7 @@ namespace castor3d
 
 		if ( it == m_onMouseMoveActions.end() )
 		{
-			m_onMouseMoveActions.emplace( handler, function );
+			m_onMouseMoveActions.try_emplace( handler, std::move( function ) );
 		}
 	}
 
@@ -102,7 +100,7 @@ namespace castor3d
 
 		if ( it == m_onClickActions.end() )
 		{
-			m_onClickActions.emplace( handler, function );
+			m_onClickActions.try_emplace( handler, function );
 		}
 	}
 
@@ -113,7 +111,7 @@ namespace castor3d
 
 		if ( it == m_onSelectActions.end() )
 		{
-			m_onSelectActions.emplace( handler, function );
+			m_onSelectActions.try_emplace( handler, std::move( function ) );
 		}
 	}
 
@@ -124,7 +122,7 @@ namespace castor3d
 
 		if ( it == m_onTextActions.end() )
 		{
-			m_onTextActions.emplace( handler, function );
+			m_onTextActions.try_emplace( handler, std::move( function ) );
 		}
 	}
 
@@ -135,18 +133,18 @@ namespace castor3d
 
 		if ( it == m_onExpandActions.end() )
 		{
-			m_onExpandActions.emplace( handler, function );
+			m_onExpandActions.try_emplace( handler, std::move( function ) );
 		}
 	}
 
 	void UserInputListener::registerCursorAction( OnCursorActionFunction function )
 	{
-		m_onCursorAction = function;
+		m_onCursorAction = std::move( function );
 	}
 
 	void UserInputListener::registerClipboardTextAction( OnClipboardTextActionFunction function )
 	{
-		m_onClipboardTextAction = function;
+		m_onClipboardTextAction = std::move( function );
 	}
 
 	void UserInputListener::unregisterMouseMoveAction( castor::String const & handler )
@@ -318,24 +316,22 @@ namespace castor3d
 			auto current = doGetMouseTargetableHandler( position );
 			auto last = m_lastMouseTarget;
 
-			if ( current != last )
+			if ( current != last
+				&& last )
 			{
-				if ( last )
-				{
-					last->pushEvent( MouseEvent( MouseEventType::eLeave, position ) );
-					last = nullptr;
-					m_lastMouseTarget = nullptr;
-				}
+				last->pushEvent( MouseEvent{ MouseEventType::eLeave, position } );
+				last = nullptr;
+				m_lastMouseTarget = nullptr;
 			}
 
 			if ( current )
 			{
 				if ( current != last )
 				{
-					current->pushEvent( MouseEvent( MouseEventType::eEnter, position ) );
+					current->pushEvent( MouseEvent{ MouseEventType::eEnter, position } );
 				}
 
-				current->pushEvent( MouseEvent( MouseEventType::eMove, position ) );
+				current->pushEvent( MouseEvent{ MouseEventType::eMove, position } );
 				result = true;
 				m_lastMouseTarget = current;
 			}
@@ -357,19 +353,18 @@ namespace castor3d
 
 			if ( current )
 			{
-				auto active = m_activeHandler;
-
-				if ( current != active )
+				if ( auto active = m_activeHandler;
+					current != active )
 				{
 					if ( active )
 					{
-						active->pushEvent( HandlerEvent( HandlerEventType::eDeactivate, current ) );
+						active->pushEvent( HandlerEvent{ HandlerEventType::eDeactivate, current } );
 					}
 
-					current->pushEvent( HandlerEvent( HandlerEventType::eActivate, active ) );
+					current->pushEvent( HandlerEvent{ HandlerEventType::eActivate, active } );
 				}
 
-				current->pushEvent( MouseEvent( MouseEventType::ePushed, m_mouse.position, button ) );
+				current->pushEvent( MouseEvent{ MouseEventType::ePushed, m_mouse.position, button } );
 				result = true;
 				m_activeHandler = current;
 			}
@@ -391,17 +386,15 @@ namespace castor3d
 
 			if ( current )
 			{
-				current->pushEvent( MouseEvent( MouseEventType::eReleased, m_mouse.position, button ) );
+				current->pushEvent( MouseEvent{ MouseEventType::eReleased, m_mouse.position, button } );
 				result = true;
 				m_activeHandler = current;
 			}
 			else
 			{
-				auto active = m_activeHandler;
-
-				if ( active )
+				if ( auto active = m_activeHandler )
 				{
-					active->pushEvent( HandlerEvent( HandlerEventType::eDeactivate, current ) );
+					active->pushEvent( HandlerEvent{ HandlerEventType::eDeactivate, current } );
 				}
 
 				m_activeHandler = nullptr;
@@ -419,11 +412,10 @@ namespace castor3d
 		if ( doHasHandlers() )
 		{
 			m_mouse.wheel += offsets;
-			auto current = doGetMouseTargetableHandler( m_mouse.position );
 
-			if ( current )
+			if ( auto current = doGetMouseTargetableHandler( m_mouse.position ) )
 			{
-				current->pushEvent( MouseEvent( MouseEventType::eWheel, offsets ) );
+				current->pushEvent( MouseEvent{ MouseEventType::eWheel, offsets } );
 				result = true;
 			}
 		}
@@ -438,12 +430,10 @@ namespace castor3d
 
 		if ( doHasHandlers() )
 		{
-			auto active = m_activeHandler;
-
-			if ( active
-				&& active->isEnabled() )
+			if ( auto active = m_activeHandler;
+				active && active->isEnabled() )
 			{
-				active->pushEvent( KeyboardEvent( KeyboardEventType::ePushed, key, m_keyboard.ctrl, m_keyboard.alt, m_keyboard.shift ) );
+				active->pushEvent( KeyboardEvent{ KeyboardEventType::ePushed, key, m_keyboard.ctrl, m_keyboard.alt, m_keyboard.shift } );
 				result = true;
 			}
 		}
@@ -458,12 +448,10 @@ namespace castor3d
 
 		if ( doHasHandlers() )
 		{
-			auto active = m_activeHandler;
-
-			if ( active
-				&& active->isEnabled() )
+			if ( auto active = m_activeHandler;
+				active && active->isEnabled() )
 			{
-				active->pushEvent( KeyboardEvent( KeyboardEventType::eReleased, key, m_keyboard.ctrl, m_keyboard.alt, m_keyboard.shift ) );
+				active->pushEvent( KeyboardEvent{ KeyboardEventType::eReleased, key, m_keyboard.ctrl, m_keyboard.alt, m_keyboard.shift } );
 				result = true;
 			}
 		}
@@ -477,12 +465,10 @@ namespace castor3d
 
 		if ( doHasHandlers() )
 		{
-			auto active = m_activeHandler;
-
-			if ( active
-				&& active->isEnabled() )
+			if ( auto active = m_activeHandler;
+				active && active->isEnabled() )
 			{
-				active->pushEvent( KeyboardEvent( KeyboardEventType::eChar, key, value, m_keyboard.ctrl, m_keyboard.alt, m_keyboard.shift ) );
+				active->pushEvent( KeyboardEvent{ KeyboardEventType::eChar, key, value, m_keyboard.ctrl, m_keyboard.alt, m_keyboard.shift } );
 				result = true;
 			}
 		}

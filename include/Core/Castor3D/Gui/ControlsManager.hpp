@@ -182,7 +182,7 @@ namespace castor3d
 		*\param[in] control
 		*	The control
 		*/
-		C3D_API void unregisterControl( Control & control );
+		C3D_API void unregisterControl( Control const & control );
 
 		/** Creates the given control's overlays and binds its callbacks to appropriate events
 		*\param[in] control
@@ -231,7 +231,7 @@ namespace castor3d
 
 		//@}
 
-		C3D_API static castor::AttributeParsers createParsers( castor3d::Engine & engine );
+		C3D_API static castor::AttributeParsers createParsers();
 		C3D_API static castor::StrUInt32Map createSections();
 
 	private:
@@ -291,43 +291,43 @@ namespace castor3d
 		*\param[in] control
 		*	The control.
 		*/
-		void disconnectEvents( ButtonCtrl & control );
+		void disconnectEvents( ButtonCtrl const & control );
 
 		/** Disconnects the manager from given control's events.
 		*\param[in] control
 		*	The control.
 		*/
-		void disconnectEvents( ComboBoxCtrl & control );
+		void disconnectEvents( ComboBoxCtrl const & control );
 
 		/** Disconnects the manager from given control's events.
 		*\param[in] control
 		*	The control.
 		*/
-		void disconnectEvents( EditCtrl & control );
+		void disconnectEvents( EditCtrl const & control );
 
 		/** Disconnects the manager from given control's events.
 		*\param[in] control
 		*	The control.
 		*/
-		void disconnectEvents( ExpandablePanelCtrl & control );
+		void disconnectEvents( ExpandablePanelCtrl const & control );
 
 		/** Disconnects the manager from given control's events.
 		*\param[in] control
 		*	The control.
 		*/
-		void disconnectEvents( ListBoxCtrl & control );
+		void disconnectEvents( ListBoxCtrl const & control );
 
 		/** Disconnects the manager from given control's events.
 		*\param[in] control
 		*	The control.
 		*/
-		void disconnectEvents( ScrollBarCtrl & control );
+		void disconnectEvents( ScrollBarCtrl const & control );
 
 		/** Disconnects the manager from given control's events.
 		*\param[in] control
 		*	The control.
 		*/
-		void disconnectEvents( SliderCtrl & control );
+		void disconnectEvents( SliderCtrl const & control );
 
 	private:
 		/** \copydoc		UserInputListener::doInitialise

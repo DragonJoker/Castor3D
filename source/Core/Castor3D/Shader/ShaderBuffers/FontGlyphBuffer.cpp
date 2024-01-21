@@ -33,16 +33,11 @@ namespace castor3d
 		, FontTexture const & texture
 		, uint32_t count )
 		: m_texture{ texture }
-		, m_buffer{ engine
-			, device
+		, m_buffer{ device
 			, count * DataSize
 			, cuT( "FontGlyphBuffer-" ) + texture.getFontName()
 			, { VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT } }
 		, m_data{ ftglpbuf::doBindData( m_buffer.getPtr(), m_buffer.getSize(), count ) }
-	{
-	}
-
-	FontGlyphBuffer::~FontGlyphBuffer()noexcept
 	{
 	}
 

@@ -69,7 +69,8 @@ namespace castor3d
 	{
 		if ( index )
 		{
-			static_cast< sdw::type::IOStruct & >( type ).declMember( "passMasks", ast::type::Kind::eVec4U, ast::type::NotArray, ( *index )++ );
+			static_cast< sdw::type::IOStruct & >( type ).declMember( "passMasks", ast::type::Kind::eVec4U, ast::type::NotArray, ( *index ) );
+			++( *index );
 		}
 		else
 		{
@@ -105,7 +106,7 @@ namespace castor3d
 
 			if ( layoutIt == m_layouts.end() )
 			{
-				layoutIt = m_layouts.emplace( hash
+				layoutIt = m_layouts.try_emplace( hash
 					, passflags::createVertexLayout( currentBinding
 						, currentLocation ) ).first;
 			}

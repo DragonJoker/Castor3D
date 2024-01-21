@@ -40,6 +40,16 @@ namespace castor3d
 		std::array< std::unique_ptr< BoundsTransformPipeline >, 2u > m_boundsPipelines;
 		struct PendingNode
 		{
+			PendingNode( SubmeshRenderNode const * node
+				, GpuBufferOffsetT< castor::Point4f > const * morphTargets
+				, GpuBufferOffsetT< MorphingWeightsConfiguration > const * morphingWeights
+				, GpuBufferOffsetT< SkinningTransformsConfiguration > const * skinTransforms )
+				: node{ node }
+				, morphTargets{ morphTargets }
+				, morphingWeights{ morphingWeights }
+				, skinTransforms{ skinTransforms }
+			{
+			}
 			SubmeshRenderNode const * node;
 			GpuBufferOffsetT< castor::Point4f > const * morphTargets;
 			GpuBufferOffsetT< MorphingWeightsConfiguration > const * morphingWeights;

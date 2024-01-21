@@ -28,8 +28,4 @@ namespace castor3d
 		registerType( cuT( "sphere_section" ), SphereSection::create );
 		registerType( cuT( "torus" ), Torus::create );
 	}
-
-	MeshFactory::~MeshFactory()
-	{
-	}
 }

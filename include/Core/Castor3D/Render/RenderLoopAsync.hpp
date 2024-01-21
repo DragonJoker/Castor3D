@@ -114,12 +114,12 @@ namespace castor3d
 		C3D_API void doMainLoop();
 
 	private:
-		std::unique_ptr< std::thread > m_mainLoopThread;
-		std::atomic_bool m_ended;
-		std::atomic_bool m_rendering;
-		std::atomic_bool m_frameEnded;
-		std::atomic_bool m_paused;
-		std::atomic_bool m_interrupted;
+		std::unique_ptr< std::thread > m_mainLoopThread{};
+		std::atomic_bool m_ended{ false };
+		std::atomic_bool m_rendering{ false };
+		std::atomic_bool m_frameEnded{ false };
+		std::atomic_bool m_paused{ false };
+		std::atomic_bool m_interrupted{ false };
 		castor::Milliseconds m_savedTime{ 0 };
 	};
 }

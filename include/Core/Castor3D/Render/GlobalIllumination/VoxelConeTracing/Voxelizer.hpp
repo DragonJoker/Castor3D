@@ -50,7 +50,7 @@ namespace castor3d
 			, Camera & camera
 			, VoxelizerUbo & voxelizerUbo
 			, VctConfig const & voxelConfig
-			, crg::FramePassArray previousPasses );
+			, crg::FramePassArray const & previousPasses );
 		C3D_API ~Voxelizer()noexcept;
 		/**
 		 *\~english

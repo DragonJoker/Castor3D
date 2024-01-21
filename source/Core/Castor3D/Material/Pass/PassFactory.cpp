@@ -15,7 +15,7 @@ namespace castor3d
 	}
 
 	void PassFactory::registerType( LightingModelID lightingModelId
-		, PassRegisterInfo info )
+		, PassRegisterInfo const & info )
 	{
 		if ( !isTypeRegistered( lightingModelId ) )
 		{

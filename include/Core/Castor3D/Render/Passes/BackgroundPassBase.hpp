@@ -23,23 +23,17 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	pass			The parent frame pass.
-		 *\param[in]	context			The rendering context.
-		 *\param[in]	graph			The runnable graph.
 		 *\param[in]	device			The GPU device.
 		 *\param[in]	background		The scene background.
 		 *\param[in]	forceVisible	\p true to force display of background.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	pass			La frame pass parente.
-		 *\param[in]	context			Le contexte de rendu.
-		 *\param[in]	graph			Le runnable graph.
 		 *\param[in]	device			Le device GPU.
 		 *\param[in]	background		Le fond de la scène.
 		 *\param[in]	forceVisible	\p true pour forcer l'affichage du fond.
 		 */
 		C3D_API BackgroundPassBase( crg::FramePass const & pass
-			, crg::GraphContext & context
-			, crg::RunnableGraph & graph
 			, RenderDevice const & device
 			, SceneBackground & background
 			, bool forceVisible );

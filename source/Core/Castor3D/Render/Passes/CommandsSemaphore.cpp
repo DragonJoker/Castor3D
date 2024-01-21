@@ -61,7 +61,7 @@ namespace castor3d
 
 	void CommandsSemaphore::submit( ashes::Queue const & queue
 		, ashes::VkSemaphoreArray & semaphores
-		, ashes::VkPipelineStageFlagsArray & stages )
+		, ashes::VkPipelineStageFlagsArray & stages )const
 	{
 		queue.submit( *commandBuffer
 			, semaphores

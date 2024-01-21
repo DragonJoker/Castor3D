@@ -160,22 +160,19 @@ namespace castor3d
 		 *\param[in]	control	The thumb control
 		 *\param[in]	event	The mouse event
 		 */
-		void onThumbMouseMove( ControlRPtr control
-			, MouseEvent const & event );
+		void onThumbMouseMove( MouseEvent const & event );
 
 		/** Event when mouse left button is released over the thumb control
 		 *\param[in]	control	The thumb control
 		 *\param[in]	event	The mouse event
 		 */
-		void onThumbMouseButtonDown( ControlRPtr control
-			, MouseEvent const & event );
+		void onThumbMouseButtonDown( MouseEvent const & event );
 
 		/** Event when mouse left button is released over the thumb control
 		 *\param[in]	control	The thumb control
 		 *\param[in]	event	The mouse event
 		 */
-		void onThumbMouseButtonUp( ControlRPtr control
-			, MouseEvent const & event );
+		void onThumbMouseButtonUp( MouseEvent const & event );
 
 		/** Event when a keyboard key is pressed
 		 *\param[in]	event	The keyboard event
@@ -186,8 +183,7 @@ namespace castor3d
 		 *\param[in]	control	The control
 		 *\param[in]	event	The keyboard event
 		 */
-		void onNcKeyDown( ControlRPtr control
-			, KeyboardEvent const & event );
+		void onNcKeyDown( KeyboardEvent const & event );
 
 		/** Updates the mouse position
 		 *\param[in]	mouse		The new mouse position
@@ -209,14 +205,14 @@ namespace castor3d
 
 	private:
 		std::array< OnScrollBarEvent, size_t( ScrollBarEvent::eCount ) > m_signals;
-		ButtonCtrlRPtr m_begin;
-		PanelCtrlRPtr m_bar;
-		PanelCtrlRPtr m_thumb;
-		ButtonCtrlRPtr m_end;
+		ButtonCtrlRPtr m_begin{};
+		PanelCtrlRPtr m_bar{};
+		PanelCtrlRPtr m_thumb{};
+		ButtonCtrlRPtr m_end{};
 		castor::RangedValue< float > m_value;
-		castor::Range< uint32_t > m_totalRange;
-		bool m_scrolling;
-		castor::Point2i m_mouse;
+		castor::Range< uint32_t > m_totalRange{ 0u, 100u };
+		bool m_scrolling{};
+		castor::Point2i m_mouse{};
 		int32_t m_scrollPosition{};
 		OnButtonEventConnection m_onBeginClick;
 		OnButtonEventConnection m_onEndClick;

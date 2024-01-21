@@ -30,7 +30,7 @@ namespace castor3d
 		 *\param[in,out]	triFace		Le composant qui va recevoir les faces calculées.
 		 */
 		C3D_API static void computeFacesFromPolygonVertex( castor::Point3fArray & texcoords
-			, TriFaceMapping & triFace );
+			, TriFaceMapping const & triFace );
 		/**
 		 *\~english
 		 *\brief		Generates normals.

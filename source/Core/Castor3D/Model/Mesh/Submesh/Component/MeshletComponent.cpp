@@ -153,10 +153,8 @@ namespace castor3d
 	void MeshletComponent::ComponentData::instantiate( Geometry const & geometry
 		, Pass const & pass )
 	{
-		auto it = m_finalCullBuffers.emplace( geometry.getHash( pass, m_submesh ), GpuBufferOffsetT< MeshletCullData >{} ).first;
-
-		if ( m_submesh.isInitialised()
-			&& !it->second )
+		if ( auto it = m_finalCullBuffers.try_emplace( geometry.getHash( pass, m_submesh ) ).first;
+			m_submesh.isInitialised() && !it->second )
 		{
 			// Initialise only if the submesh itself is already initialised,
 			// because if it is not, the buffers will be initialised by the call to initialise().
@@ -176,9 +174,8 @@ namespace castor3d
 			return m_sourceCullBuffer;
 		}
 
-		auto it = m_finalCullBuffers.find( geometry.getHash( pass, m_submesh ) );
-
-		if ( it != m_finalCullBuffers.end() )
+		if ( auto it = m_finalCullBuffers.find( geometry.getHash( pass, m_submesh ) );
+			it != m_finalCullBuffers.end() )
 		{
 			return it->second;
 		}
@@ -193,12 +190,12 @@ namespace castor3d
 #if VK_EXT_mesh_shader || VK_NV_mesh_shader
 		if ( !m_meshlets.empty() )
 		{
-			for ( auto & finalCullBuffer : m_finalCullBuffers )
+			for ( auto & [_, finalCullBuffer] : m_finalCullBuffers )
 			{
-				if ( finalCullBuffer.second )
+				if ( finalCullBuffer )
 				{
-					device.bufferPool->putBuffer( finalCullBuffer.second );
-					finalCullBuffer.second = {};
+					device.bufferPool->putBuffer( finalCullBuffer );
+					finalCullBuffer = {};
 				}
 			}
 
@@ -211,9 +208,9 @@ namespace castor3d
 
 			if ( m_submesh.isDynamic() )
 			{
-				for ( auto & finalCullBuffer : m_finalCullBuffers )
+				for ( auto & [_, finalCullBuffer] : m_finalCullBuffers )
 				{
-					finalCullBuffer.second = device.bufferPool->getBuffer< MeshletCullData >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
+					finalCullBuffer = device.bufferPool->getBuffer< MeshletCullData >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 						, m_meshlets.size()
 						, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
 				}

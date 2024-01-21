@@ -41,7 +41,7 @@ namespace castor3d
 		C3D_API SubmeshComponentCombineID getSubmeshComponentCombineID( SubmeshComponentCombine const & combine )const;
 		C3D_API SubmeshComponentCombine getSubmeshComponentCombine( Submesh const & submesh )const;
 		C3D_API SubmeshComponentCombine getSubmeshComponentCombine( SubmeshComponentCombineID id )const;
-		C3D_API SubmeshData getSubmeshData( SubmeshComponentFlag value );
+		C3D_API SubmeshData getSubmeshData( SubmeshComponentFlag value )const;
 
 		SubmeshComponentCombine const & getDefaultComponentCombine()const noexcept
 		{
@@ -73,7 +73,7 @@ namespace castor3d
 		C3D_API void getSubmeshRenderShader( PipelineFlags const & flags
 			, ComponentModeFlags const & componentsMask
 			, ast::ShaderBuilder & builder )const;
-		C3D_API SubmeshRenderDataPtr createRenderData( SubmeshComponent & component );
+		C3D_API SubmeshRenderDataPtr createRenderData( SubmeshComponent const & component );
 		C3D_API uint16_t getRenderDataId( SubmeshRenderData const * value )const;
 		C3D_API SubmeshRenderData const * getRenderData( uint16_t value )const;
 		/**
@@ -208,6 +208,12 @@ namespace castor3d
 	private:
 		struct Component
 		{
+			Component()noexcept = default;
+			Component( SubmeshComponentID id )noexcept
+				: id{ id }
+			{
+			}
+
 			SubmeshComponentID id{};
 			std::string name{};
 			SubmeshComponentPluginUPtr plugin{};
@@ -220,7 +226,7 @@ namespace castor3d
 			, castor::String const & componentType
 			, SubmeshComponentPluginUPtr componentPlugin );
 		void unregisterComponent( SubmeshComponentID id );
-		void fillSubmeshComponentCombine( SubmeshComponentCombine & combine );
+		void fillSubmeshComponentCombine( SubmeshComponentCombine & combine )const;
 
 	private:
 		Components m_registered;

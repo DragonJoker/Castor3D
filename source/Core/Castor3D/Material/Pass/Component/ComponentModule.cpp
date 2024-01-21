@@ -53,9 +53,9 @@ namespace castor3d
 	void addFlags( PassComponentCombine & lhs
 		, PassComponentFlag rhs )noexcept
 	{
-		auto split = splitPassComponentFlag( rhs );
-		auto componentId = split.first;
-		auto rhsComponentFlag = split.second;
+		auto [id, flag] = splitPassComponentFlag( rhs );
+		auto componentId = id;
+		auto rhsComponentFlag = flag;
 		auto it = std::find_if( lhs.flags.begin()
 			, lhs.flags.end()
 			, [componentId]( PassComponentFlag lookup )
@@ -88,9 +88,9 @@ namespace castor3d
 	bool contains( PassComponentCombine const & cont
 		, PassComponentFlag test )noexcept
 	{
-		auto split = splitPassComponentFlag( test );
-		auto testComponentId = split.first;
-		auto testComponentFlag = split.second;
+		auto [id, flag] = splitPassComponentFlag( test );
+		auto testComponentId = id;
+		auto testComponentFlag = flag;
 		return std::any_of( cont.flags.begin()
 			, cont.flags.end()
 			, [testComponentId, testComponentFlag]( PassComponentFlag const & lookup )

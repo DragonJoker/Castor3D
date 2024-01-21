@@ -161,7 +161,7 @@ namespace castor3d
 
 		writer.implementMainT< shader::FragmentSurfaceT, shader::PrepassOutputT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer, submeshShaders, passShaders, flags }
 			, sdw::FragmentOutT< shader::PrepassOutputT >{ writer, flags }
-			, [&]( sdw::FragmentInT< shader::FragmentSurfaceT > in
+			, [&]( sdw::FragmentInT< shader::FragmentSurfaceT > const in
 				, sdw::FragmentOutT< shader::PrepassOutputT > out )
 			{
 				auto modelData = writer.declLocale( "modelData"
@@ -190,7 +190,7 @@ namespace castor3d
 					{
 						writer.demote();
 					}
-					FI;
+					FI
 				}
 
 				out.depthObj = vec4( in.fragCoord.z()
@@ -200,18 +200,18 @@ namespace castor3d
 
 				if ( flags.isBillboard() )
 				{
-					out.visibility = uvec2( ( in.nodeId << maxPipelinesSize ) | ( pipelineID )
+					out.visibility = uvec2( ( in.nodeId << maxPipelinesSize ) | pipelineID
 						, in.vertexId * 2_u + writer.cast< sdw::UInt >( in.primitiveID ) );
 				}
 				else if ( isMeshShading() )
 				{
 					auto constexpr maxPrimitiveIDSize = uint32_t( castor::getBitSize( MaxMeshletTriangleCount ) );
-					out.visibility = uvec2( ( in.nodeId << maxPipelinesSize ) | ( pipelineID )
+					out.visibility = uvec2( ( in.nodeId << maxPipelinesSize ) | pipelineID
 						, ( in.meshletId << maxPrimitiveIDSize ) | writer.cast< sdw::UInt >( in.primitiveID ) );
 				}
 				else
 				{
-					out.visibility = uvec2( ( in.nodeId << maxPipelinesSize ) | ( pipelineID )
+					out.visibility = uvec2( ( in.nodeId << maxPipelinesSize ) | pipelineID
 						, writer.cast< sdw::UInt >( in.primitiveID ) );
 				}
 

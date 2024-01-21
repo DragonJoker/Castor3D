@@ -127,7 +127,7 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph
 				, crg::rq::Config rqConfig
-				, crg::ru::Config ruConfig
+				, crg::ru::Config const & ruConfig
 				, SsaoConfig const & ssaoConfig );
 
 		protected:

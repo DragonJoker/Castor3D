@@ -50,13 +50,6 @@ namespace castor3d
 			, SceneNode const * ignored );
 		/**
 		 *\~english
-		 *\brief		Initialises the queue.
-		 *\~french
-		 *\brief		Initialise la file de rendu.
-		 */
-		C3D_API void initialise();
-		/**
-		 *\~english
 		 *\brief		Tells the queue its GPU data is not valid anymore.
 		 *\~french
 		 *\brief		Dit à la queue que ses données GPU sont invalides.
@@ -77,7 +70,7 @@ namespace castor3d
 		 *\brief			Met à jour les noeuds de rendu.
 		 *\param[in,out]	shadowMaps	Reçoit les shadow maps utilisées par la passe de rendu.
 		 */
-		C3D_API void update( ShadowMapLightTypeArray & shadowMaps
+		C3D_API void update( ShadowMapLightTypeArray const & shadowMaps
 			, ShadowBuffer const * shadowBuffer );
 		/**
 		 *\~english
@@ -197,8 +190,7 @@ namespace castor3d
 			}
 
 			~PassData()noexcept;
-			void initialise( RenderDevice const & device
-				, QueueData const & queueData
+			void initialise( QueueData const & queueData
 				, castor::String const & name
 				, VkRenderPass renderPass );
 
@@ -210,9 +202,6 @@ namespace castor3d
 		};
 
 	private:
-		void doInitialise( RenderDevice const & device
-			, QueueData const & queueData
-			, PassData & pass );
 		void doPrepareCommandBuffer();
 		void doOnCullerCompute( SceneCuller const & culler );
 

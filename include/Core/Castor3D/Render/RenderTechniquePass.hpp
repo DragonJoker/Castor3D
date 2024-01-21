@@ -395,23 +395,17 @@ namespace castor3d
 		C3D_API void doAccept( castor3d::RenderTechniqueVisitor & visitor )override;
 		C3D_API ProgramFlags doAdjustProgramFlags( ProgramFlags flags )const override;
 		C3D_API SceneFlags doAdjustSceneFlags( SceneFlags flags )const override;
-		C3D_API void doAddEnvBindings( PipelineFlags const & flags
-			, ashes::VkDescriptorSetLayoutBindingArray & bindings
+		C3D_API void doAddEnvBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
 			, uint32_t & index )const;
-		C3D_API void doAddGIBindings( PipelineFlags const & flags
-			, ashes::VkDescriptorSetLayoutBindingArray & bindings
+		C3D_API void doAddGIBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
 			, uint32_t & index )const;
-		C3D_API void doAddPassSpecificsBindings( PipelineFlags const & flags
-			, ashes::VkDescriptorSetLayoutBindingArray & bindings
+		C3D_API void doAddPassSpecificsBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
 			, uint32_t & index )const;
-		C3D_API void doAddEnvDescriptor( PipelineFlags const & flags
-			, ashes::WriteDescriptorSetArray & descriptorWrites
+		C3D_API void doAddEnvDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
 			, uint32_t & index )const;
-		C3D_API void doAddGIDescriptor( PipelineFlags const & flags
-			, ashes::WriteDescriptorSetArray & descriptorWrites
+		C3D_API void doAddGIDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
 			, uint32_t & index )const;
-		C3D_API void doAddPassSpecificsDescriptor( PipelineFlags const & flags
-			, ashes::WriteDescriptorSetArray & descriptorWrites
+		C3D_API void doAddPassSpecificsDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
 			, uint32_t & index )const;
 
 	private:

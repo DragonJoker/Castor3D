@@ -29,6 +29,7 @@
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneFileParserData.hpp"
 #include "Castor3D/Shader/Program.hpp"
+#include "Castor3D/Shader/Shaders/GlslBaseIO.hpp"
 
 #include <CastorUtils/Design/ResourceCache.hpp>
 #include <CastorUtils/Graphics/PixelBufferBase.hpp>
@@ -50,12 +51,12 @@
 
 CU_ImplementSmartPtr( castor3d, RenderWindow )
 
-#define C3D_PersistLoadingScreen 1
-
 namespace castor3d
 {
 	namespace rendwndw
 	{
+		static bool constexpr C3D_PersistLoadingScreen = true;
+
 		static QueuesData * getQueueFamily( ashes::Surface const & surface
 			, QueueFamilies & queues )
 		{
@@ -92,10 +93,10 @@ namespace castor3d
 		static VkSurfaceFormatKHR selectFormat( ashes::Surface const & surface
 			, bool allowHdr )
 		{
-			VkSurfaceFormatKHR result;
-			auto formats = surface.getFormats();
+			VkSurfaceFormatKHR result{};
 
-			if ( formats.size() == 1u && formats[0].format == VK_FORMAT_UNDEFINED )
+			if ( auto formats = surface.getFormats();
+				formats.size() == 1u && formats[0].format == VK_FORMAT_UNDEFINED )
 			{
 				result.format = VK_FORMAT_R8G8B8A8_UNORM;
 				result.colorSpace = VK_COLORSPACE_SRGB_NONLINEAR_KHR;
@@ -350,7 +351,7 @@ namespace castor3d
 				return "Instruction Pointer Fault";
 			default:
 				return "Unknown";
-			};
+			}
 		}
 #endif
 	}
@@ -407,9 +408,11 @@ namespace castor3d
 
 		if ( engine.isThreaded() )
 		{
-#if C3D_PersistLoadingScreen
-			doCreateLoadingScreen();
-#endif
+			if constexpr ( rendwndw::C3D_PersistLoadingScreen )
+			{
+				doCreateLoadingScreen();
+			}
+
 			getEngine()->registerWindow( *this );
 		}
 
@@ -427,12 +430,11 @@ namespace castor3d
 		auto & engine = *getEngine();
 		auto listener = engine.removeFrameListener( getName() + castor::string::toString( m_index ) );
 
-#if C3D_PersistLoadingScreen
-		if ( engine.isThreaded() )
+		if ( rendwndw::C3D_PersistLoadingScreen
+			&& engine.isThreaded() )
 		{
 			doDestroyLoadingScreen();
 		}
-#endif
 
 		doDestroySwapchain();
 		doDestroyRenderPass();
@@ -468,7 +470,7 @@ namespace castor3d
 					if ( m_renderTarget )
 					{
 						auto progress = m_progressBar.get();
-						m_renderTarget->initialise( [this]( RenderTarget const & rt, QueueData const & queue )
+						m_renderTarget->initialise( [this]( RenderTarget const &, QueueData const & queue )
 							{
 								auto progress = m_progressBar.get();
 								stepProgressBarGlobalStartLocal( progress
@@ -479,11 +481,11 @@ namespace castor3d
 								stepProgressBarLocal( progress, "Loading intermediate views" );
 								doCreateIntermediateViews( queue );
 								stepProgressBarLocal( progress, "Loading combine quad" );
-								doCreateRenderQuad( queue );
+								doCreateRenderQuad();
 								stepProgressBarLocal( progress, "Loading command buffers" );
-								doCreateCommandBuffers( queue );
+								doCreateCommandBuffers();
 								stepProgressBarLocal( progress, "Loading save data" );
-								doCreateSaveData( queue );
+								doCreateSaveData();
 								stepProgressBarLocal( progress, "Finalising..." );
 
 								getListener()->postEvent( makeCpuFunctorEvent( CpuEventType::ePostCpuStep
@@ -522,9 +524,9 @@ namespace castor3d
 			m_renderTarget->initialise( m_device, *queueData, nullptr );
 			doCreatePickingPass( *queueData );
 			doCreateIntermediateViews( *queueData );
-			doCreateRenderQuad( *queueData );
-			doCreateCommandBuffers( *queueData );
-			doCreateSaveData( *queueData );
+			doCreateRenderQuad();
+			doCreateCommandBuffers();
+			doCreateSaveData();
 
 			if ( m_loadingScreen )
 			{
@@ -597,12 +599,12 @@ namespace castor3d
 #if C3D_DebugPicking == 0 && C3D_DebugBackgroundPicking == 0
 				if ( getEngine()->areDebugTargetsEnabled() )
 				{
-					auto & intermediates = target->getIntermediateViews();
-					auto & targetDebugConfig = target->getDebugConfig();
-					auto & debugConfig = target->getScene()->getDebugConfig();
+					auto const & intermediates = target->getIntermediateViews();
+					auto const & targetDebugConfig = target->getDebugConfig();
+					auto const & debugConfig = target->getScene()->getDebugConfig();
 					updater.combineIndex = targetDebugConfig.intermediateImageIndex;
 					updater.debugIndex = debugConfig.intermediateShaderValueIndex;
-					auto & intermediate = intermediates[updater.combineIndex];
+					auto const & intermediate = intermediates[updater.combineIndex];
 
 					if ( intermediate.factors.grid )
 					{
@@ -691,15 +693,14 @@ namespace castor3d
 		}
 
 		auto target = getRenderTarget();
-		auto needLoadingScreen = ( !m_initialised
-			|| !target
-			|| target->isInitialising()
-			|| !target->isInitialised() );
-		auto useLoadingScreen = needLoadingScreen
-			&& m_loadingScreen
-			&& m_loadingScreen->isEnabled();
 
-		if ( useLoadingScreen )
+		if ( auto needLoadingScreen = ( !m_initialised
+				|| !target
+				|| target->isInitialising()
+				|| !target->isInitialised() );
+			needLoadingScreen
+				&& m_loadingScreen
+				&& m_loadingScreen->isEnabled() )
 		{
 			if ( auto resources = doGetResources() )
 			{
@@ -712,14 +713,12 @@ namespace castor3d
 				doPresentLoadingFrame( *queueData
 					, fence
 					, *resources
-					, std::move( toWait ) );
+					, toWait );
 			}
 		}
 		else if ( !needLoadingScreen )
 		{
-			auto toWait = target->render( m_device
-				, info
-				, *queueData->queue
+			auto toWait = target->render( *queueData->queue
 				, baseToWait );
 			baseToWait.clear();
 
@@ -778,7 +777,7 @@ namespace castor3d
 		doResetSwapChainAndCommands();
 	}
 
-	void RenderWindow::setCamera( Camera & camera )
+	void RenderWindow::setCamera( Camera & camera )const
 	{
 		if ( auto target = getRenderTarget() )
 		{
@@ -827,7 +826,7 @@ namespace castor3d
 		return result;
 	}
 
-	void RenderWindow::setViewportType( ViewportType value )
+	void RenderWindow::setViewportType( ViewportType value )const
 	{
 		if ( auto target = getRenderTarget() )
 		{
@@ -847,7 +846,7 @@ namespace castor3d
 		return result;
 	}
 
-	void RenderWindow::setScene( Scene & value )
+	void RenderWindow::setScene( Scene & value )const
 	{
 		if ( auto target = getRenderTarget() )
 		{
@@ -867,7 +866,7 @@ namespace castor3d
 		return result;
 	}
 
-	void RenderWindow::setStereo( bool value )
+	void RenderWindow::setStereo( bool value )const
 	{
 		if ( auto target = getRenderTarget() )
 		{
@@ -887,7 +886,7 @@ namespace castor3d
 		return result;
 	}
 
-	void RenderWindow::setIntraOcularDistance( float value )
+	void RenderWindow::setIntraOcularDistance( float value )const
 	{
 		if ( auto target = getRenderTarget() )
 		{
@@ -908,13 +907,11 @@ namespace castor3d
 
 #else
 		PickNodeType result = PickNodeType::eNone;
-		auto camera = getCamera();
 
-		if ( camera && !m_picking->isPicking() )
+		if ( auto camera = getCamera();
+			camera && !m_picking->isPicking() )
 		{
-			result = m_picking->pick( m_device
-				, position
-				, *camera );
+			result = m_picking->pick( position );
 		}
 
 		return result;
@@ -1062,41 +1059,37 @@ namespace castor3d
 			c3d_config.end();
 
 			// Shader inputs
-			auto inPosition = writer.declInput< sdw::Vec2 >( "inPosition", sdw::EntryPoint::eVertex, 0u );
 			auto inUv = writer.declInput< sdw::Vec2 >( "inUv", sdw::EntryPoint::eVertex, 1u );
-			auto inTexture = writer.declInput< sdw::Vec2 >( "inTexture", sdw::EntryPoint::eFragment, 0u );
 
 			// Shader outputs
-			auto outTexture = writer.declOutput< sdw::Vec2 >( "outTexture", sdw::EntryPoint::eVertex, 0u );
 			auto outColour = writer.declOutput< sdw::Vec4 >( "outColour", sdw::EntryPoint::eFragment, 0 );
 
-			writer.implementEntryPoint( [&]( sdw::VertexIn in
-				, sdw::VertexOut out )
+			writer.implementEntryPointT< shader::PosUv2FT, shader::Uv2FT >( []( sdw::VertexInT< shader::PosUv2FT > const & in
+				, sdw::VertexOutT< shader::Uv2FT > out )
 				{
-					outTexture = inUv;
-					out.vtx.position = vec4( inPosition, 0.0_f, 1.0_f );
+					out.uv() = in.uv();
+					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
 				} );
 
-			writer.implementEntryPoint( [&]( sdw::FragmentIn in
-				, sdw::FragmentOut out )
+			writer.implementEntryPointT< shader::Uv2FT, shader::Colour4FT >( [&writer, &c3d_mapResult, &c3d_data, &c3d_multiply, &c3d_add]( sdw::FragmentInT< shader::Uv2FT > const & in
+				, sdw::FragmentOutT< shader::Colour4FT > const & out )
 				{
-#if C3D_DebugPicking || C3D_DebugBackgroundPicking
-					outColour = vec4( vec3( c3d_mapResult.sample( vtx_texture ).xyz() ), 1.0_f );
-#else
 					auto sampled = writer.declLocale( "sampled"
-						, c3d_mapResult.sample( inTexture ) );
-
+						, c3d_mapResult.sample( in.uv() ) );
+#if C3D_DebugPicking || C3D_DebugBackgroundPicking
+					out.colour() = vec4( vec3( sampled.xyz() ), 1.0_f );
+#else
 					IF( writer, c3d_data.x() == 1.0_f )
 					{
-						outColour = vec4( fma( sampled.xxx(), c3d_multiply.xyz(), c3d_add.xyz() )
+						out.colour() = vec4( fma( sampled.xxx(), c3d_multiply.xyz(), c3d_add.xyz() )
 							, 1.0_f );
 					}
 					ELSE
 					{
-						outColour = vec4( fma( sampled.xyz(), c3d_multiply.xyz(), c3d_add.xyz() )
+						out.colour() = vec4( fma( sampled.xyz(), c3d_multiply.xyz(), c3d_add.xyz() )
 							, 1.0_f );
 					}
-					FI;
+					FI
 #endif
 				} );
 			programModule.shader = writer.getBuilder().releaseShader();
@@ -1131,22 +1124,18 @@ namespace castor3d
 		doCreateRenderingResources();
 		doCreateFrameBuffers();
 
-#if !C3D_PersistLoadingScreen
-		if ( getEngine()->isThreaded() )
+		if constexpr ( !rendwndw::C3D_PersistLoadingScreen )
 		{
 			doCreateLoadingScreen();
 		}
-#endif
 	}
 
 	void RenderWindow::doDestroySwapchain()noexcept
 	{
-#if !C3D_PersistLoadingScreen
-		if ( getEngine()->isThreaded() )
+		if constexpr ( !rendwndw::C3D_PersistLoadingScreen  )
 		{
 			doDestroyLoadingScreen();
 		}
-#endif
 
 		doDestroyFrameBuffers();
 		doDestroyRenderingResources();
@@ -1176,7 +1165,7 @@ namespace castor3d
 		ashes::ImageViewCRefArray attaches;
 		auto & image = *m_swapChain->getImages()[index];
 
-		for ( size_t i = 0u; i < m_renderPass->getAttachments().size(); ++i )
+		for ( auto it = m_renderPass->getAttachments().begin(); it != m_renderPass->getAttachments().end(); ++it )
 		{
 			m_swapchainViews[index].push_back( image.createView( makeVkStruct< VkImageViewCreateInfo >( 0u
 				, image
@@ -1240,16 +1229,25 @@ namespace castor3d
 				, static_cast< ProgressCtrl * >( local ) );
 		}
 
-		m_loadingScreen = castor::makeUnique< LoadingScreen >( *m_progressBar
-			, m_device
-			, m_resources
-			, scene
-			, *m_renderPass
-#if C3D_PersistLoadingScreen
-			, rendwndw::getScreenSize() );
-#else
-			, m_size );
-#endif
+		if ( rendwndw::C3D_PersistLoadingScreen
+			&& getEngine()->isThreaded() )
+		{
+			m_loadingScreen = castor::makeUnique< LoadingScreen >( *m_progressBar
+				, m_device
+				, m_resources
+				, scene
+				, *m_renderPass
+				, rendwndw::getScreenSize() );
+		}
+		else
+		{
+			m_loadingScreen = castor::makeUnique< LoadingScreen >( *m_progressBar
+				, m_device
+				, m_resources
+				, scene
+				, *m_renderPass
+				, m_size );
+		}
 
 		if ( m_loading && m_loadingScreen )
 		{
@@ -1290,7 +1288,7 @@ namespace castor3d
 		m_picking.reset();
 	}
 
-	void RenderWindow::doCreateRenderQuad( QueueData const & queueData )
+	void RenderWindow::doCreateRenderQuad()
 	{
 		auto target = getRenderTarget();
 
@@ -1344,8 +1342,7 @@ namespace castor3d
 		m_renderQuad.reset();
 	}
 
-	void RenderWindow::doRecordCommandBuffer( QueueData const & queueData
-		, uint32_t passIndex )
+	void RenderWindow::doRecordCommandBuffer( uint32_t passIndex )
 	{
 #if C3D_DebugPicking || C3D_DebugBackgroundPicking
 		passIndex = 0u;
@@ -1426,7 +1423,7 @@ namespace castor3d
 		}
 	}
 
-	void RenderWindow::doCreateCommandBuffers( QueueData const & queueData )
+	void RenderWindow::doCreateCommandBuffers()
 	{
 		auto target = getRenderTarget();
 
@@ -1494,7 +1491,7 @@ namespace castor3d
 #endif
 	}
 
-	void RenderWindow::doCreateSaveData( QueueData const & queueData )
+	void RenderWindow::doCreateSaveData()
 	{
 		auto target = getRenderTarget();
 		m_saveBuffer = castor::PxBufferBase::create( target->getSize(), convert( target->getPixelFormat() ) );
@@ -1536,8 +1533,10 @@ namespace castor3d
 
 	void RenderWindow::doResetSwapChain()
 	{
-#if C3D_PersistLoadingScreen
-		if ( m_progressBar && m_loadingScreen )
+		if ( rendwndw::C3D_PersistLoadingScreen
+			&& getEngine()->isThreaded()
+			&& m_progressBar
+			&& m_loadingScreen )
 		{
 			m_progressBar->lock();
 			doDestroySwapchain();
@@ -1546,7 +1545,6 @@ namespace castor3d
 			m_progressBar->unlock();
 		}
 		else
-#endif
 		{
 			doDestroySwapchain();
 			doCreateSwapchain();
@@ -1558,7 +1556,7 @@ namespace castor3d
 		if ( !m_skip.exchange( true ) )
 		{
 			getListener()->postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
-				, [this]( RenderDevice const & device
+				, [this]( RenderDevice const &
 					, QueueData const & queueData )
 				{
 					doWaitFrame( queueData, {} );
@@ -1571,11 +1569,11 @@ namespace castor3d
 						if ( m_loading )
 						{
 							getListener()->postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
-								, [this]( RenderDevice const & pdevice
-									, QueueData const & pqueueData )
+								, [this]( RenderDevice const &
+									, QueueData const & )
 								{
 									doDestroyCommandBuffers();
-									doCreateCommandBuffers( pqueueData );
+									doCreateCommandBuffers();
 								} ) );
 						}
 					}
@@ -1586,8 +1584,8 @@ namespace castor3d
 						doDestroyIntermediateViews();
 						doResetSwapChain();
 						doCreateIntermediateViews( queueData );
-						doCreateRenderQuad( queueData );
-						doCreateCommandBuffers( queueData );
+						doCreateRenderQuad();
+						doCreateCommandBuffers();
 					}
 
 					m_skip = false;
@@ -1599,13 +1597,13 @@ namespace castor3d
 	{
 		auto & resources = *m_renderingResources[m_resourceIndex];
 		uint32_t imageIndex{ 0u };
-		auto res = m_swapChain->acquireNextImage( ashes::MaxTimeout
-			, *resources.imageAvailableSemaphore
-			, imageIndex );
 
-		if ( doCheckNeedReset( res
-			, true
-			, "Swap chain image acquisition" ) )
+		if ( auto res = m_swapChain->acquireNextImage( ashes::MaxTimeout
+				, *resources.imageAvailableSemaphore
+				, imageIndex );
+			doCheckNeedReset( res
+				, true
+				, "Swap chain image acquisition" ) )
 		{
 			m_resourceIndex = ( m_resourceIndex + 1 ) % m_renderingResources.size();
 			resources.imageIndex = imageIndex;
@@ -1616,7 +1614,7 @@ namespace castor3d
 	}
 
 	crg::SemaphoreWaitArray RenderWindow::doSubmitLoadingFrame( QueueData const & queue
-		, RenderingResources & resources
+		, RenderingResources const & resources
 		, LoadingScreen & loadingScreen
 		, crg::Fence *& fence
 		, crg::SemaphoreWaitArray toWait )
@@ -1632,7 +1630,7 @@ namespace castor3d
 	void RenderWindow::doPresentLoadingFrame( QueueData const & queueData
 		, crg::Fence * fence
 		, RenderingResources & resources
-		, crg::SemaphoreWaitArray toWait )
+		, crg::SemaphoreWaitArray const & toWait )
 	{
 		try
 		{
@@ -1682,11 +1680,11 @@ namespace castor3d
 		auto target = getRenderTarget();
 		CU_Require( target );
 		auto intermediates = target->getIntermediateViews();
-		auto & intermediate = intermediates[index];
-		auto & intermediateBarrierView = m_intermediateBarrierViews[index];
-		auto & intermediateSampledView = m_intermediateSampledViews[index];
+		auto const & intermediate = intermediates[index];
+		auto const & intermediateBarrierView = m_intermediateBarrierViews[index];
+		auto const & intermediateSampledView = m_intermediateSampledViews[index];
 #endif
-		auto & commands = *transferCommands.commandBuffer;
+		auto const & commands = *transferCommands.commandBuffer;
 		commands.begin();
 		commands.beginDebugBlock( { "Staging Texture Download"
 			, makeFloatArray( getEngine()->getNextRainbowColour() ) } );
@@ -1794,7 +1792,7 @@ namespace castor3d
 	}
 
 	void RenderWindow::doWaitFrame( QueueData const & queueData
-		, crg::SemaphoreWaitArray toWait )
+		, crg::SemaphoreWaitArray const & toWait )
 	{
 		auto target = getRenderTarget();
 
@@ -1809,8 +1807,8 @@ namespace castor3d
 #if C3D_DebugPicking || C3D_DebugBackgroundPicking
 				m_savedFormat = m_picking->getImageView().data->info.format;
 #else
-				auto intermediates = target->getIntermediateViews();
-				auto & debugConfig = target->getDebugConfig();
+				auto const & intermediates = target->getIntermediateViews();
+				auto const & debugConfig = target->getDebugConfig();
 				m_savedFormat = intermediates[debugConfig.intermediateImageIndex].viewId.data->info.format;
 #endif
 				auto & transferCommands = m_transferCommands[debugConfig.intermediateImageIndex];
@@ -1831,17 +1829,17 @@ namespace castor3d
 	}
 
 	void RenderWindow::doSubmitFrame( QueueData const & queueData
-		, RenderingResources * resources
-		, crg::SemaphoreWaitArray toWait )
+		, RenderingResources const * resources
+		, crg::SemaphoreWaitArray const & toWait )
 	{
 		ashes::VkSemaphoreArray semaphores;
 		ashes::VkPipelineStageFlagsArray stages;
 		crg::convert( toWait, semaphores, stages );
 		auto target = getRenderTarget();
 		CU_Require( target );
-		auto & debugConfig = target->getDebugConfig();
+		auto const & debugConfig = target->getDebugConfig();
 		auto passIndex = debugConfig.intermediateImageIndex;
-		doRecordCommandBuffer( queueData, passIndex );
+		doRecordCommandBuffer( passIndex );
 
 #if !C3D_DebugPicking && !C3D_DebugBackgroundPicking
 		if ( getEngine()->areDebugTargetsEnabled() )
@@ -1892,8 +1890,8 @@ namespace castor3d
 			{
 				auto target = getRenderTarget();
 				CU_Require( target );
-				auto & debugConfig = target->getDebugConfig();
-				auto & intermediate = m_intermediateBarrierViews[debugConfig.intermediateImageIndex];
+				auto const & debugConfig = target->getDebugConfig();
+				auto const & intermediate = m_intermediateBarrierViews[debugConfig.intermediateImageIndex];
 				auto srcExtent = getExtent( intermediate.viewId );
 				auto dstExtent = makeExtent2D( target->getSize() );
 				dstExtent.width = std::min( dstExtent.width, srcExtent.width );
@@ -1968,7 +1966,7 @@ namespace castor3d
 
 			for ( uint32_t i = 0u; i < faultCounts.addressInfoCount; ++i )
 			{
-				auto & info = faultInfo.pAddressInfos[i];
+				auto const & info = faultInfo.pAddressInfos[i];
 				log::error << "    From 0x" << std::hex << std::setw( 8u ) << std::setfill( '0' ) << ( info.reportedAddress & ~( info.addressPrecision - 1 ) )
 					<< " to 0x" << std::hex << std::setw( 8u ) << ( info.reportedAddress | ( info.addressPrecision - 1 ) )
 					<< ": " << rendwndw::getAddressTypeName( info.addressType ) << "\n";
@@ -1981,7 +1979,7 @@ namespace castor3d
 
 			for ( uint32_t i = 0u; i < faultCounts.vendorInfoCount; ++i )
 			{
-				auto & info = faultInfo.pVendorInfos[i];
+				auto const & info = faultInfo.pVendorInfos[i];
 				log::error << "    " << std::setw( 8u ) << std::setfill( '0' ) << info.vendorFaultCode
 					<< ": " << info.description << "\n";
 			}

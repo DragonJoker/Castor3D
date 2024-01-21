@@ -13,10 +13,9 @@ namespace castor3d
 	{
 	public:
 		C3D_API BackgroundRenderer( crg::FramePassGroup & graph
-			, crg::FramePassArray previousPasses
+			, crg::FramePassArray const & previousPasses
 			, RenderDevice const & device
 			, ProgressBar * progress
-			, castor::String const & name
 			, SceneBackground & background
 			, HdrConfigUbo const & hdrConfigUbo
 			, SceneUbo const & sceneUbo
@@ -31,7 +30,6 @@ namespace castor3d
 			, crg::FramePass const * previousPass
 			, RenderDevice const & device
 			, ProgressBar * progress
-			, castor::String const & name
 			, SceneBackground & background
 			, HdrConfigUbo const & hdrConfigUbo
 			, SceneUbo const & sceneUbo
@@ -44,7 +42,6 @@ namespace castor3d
 					: crg::FramePassArray{} )
 				, device
 				, progress
-				, name
 				, background
 				, hdrConfigUbo
 				, sceneUbo
@@ -61,7 +58,6 @@ namespace castor3d
 			, crg::FramePass const * previousPass
 			, RenderDevice const & device
 			, ProgressBar * progress
-			, castor::String const & name
 			, SceneBackground & background
 			, HdrConfigUbo const & hdrConfigUbo
 			, SceneUbo const & sceneUbo
@@ -77,7 +73,6 @@ namespace castor3d
 					: crg::FramePassArray{} )
 				, device
 				, progress
-				, name
 				, background
 				, hdrConfigUbo
 				, sceneUbo
@@ -91,10 +86,9 @@ namespace castor3d
 		}
 
 		BackgroundRenderer( crg::FramePassGroup & graph
-			, crg::FramePassArray previousPasses
+			, crg::FramePassArray const & previousPasses
 			, RenderDevice const & device
 			, ProgressBar * progress
-			, castor::String const & name
 			, SceneBackground & background
 			, HdrConfigUbo const & hdrConfigUbo
 			, SceneUbo const & sceneUbo
@@ -105,10 +99,9 @@ namespace castor3d
 			, crg::ImageViewId const & depth
 			, crg::ImageViewId const * depthObj )
 			: BackgroundRenderer{ graph
-				, std::move( previousPasses )
+				, previousPasses
 				, device
 				, progress
-				, name
 				, background
 				, hdrConfigUbo
 				, sceneUbo
@@ -121,7 +114,7 @@ namespace castor3d
 		{
 		}
 
-		C3D_API ~BackgroundRenderer();
+		C3D_API ~BackgroundRenderer()noexcept;
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, CPU wise.
@@ -148,8 +141,7 @@ namespace castor3d
 
 	private:
 		crg::FramePass const & doCreatePass( crg::FramePassGroup & graph
-			, crg::FramePassArray previousPasses
-			, castor::String const & name
+			, crg::FramePassArray const & previousPasses
 			, SceneBackground & background
 			, HdrConfigUbo const & hdrConfigUbo
 			, SceneUbo const & sceneUbo

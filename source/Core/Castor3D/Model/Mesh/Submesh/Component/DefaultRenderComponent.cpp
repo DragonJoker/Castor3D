@@ -88,7 +88,7 @@ namespace castor3d
 
 		writer.implementMainT< shader::BillboardSurfaceT, shader::FragmentSurfaceT >( sdw::VertexInT< shader::BillboardSurfaceT >{ writer, flags }
 			, sdw::VertexOutT< shader::FragmentSurfaceT >{ writer, submeshShaders, passShaders, flags }
-			, [&]( sdw::VertexInT< shader::BillboardSurfaceT > in
+			, [&writer, &pipelineID, &c3d_billboardData, &c3d_cameraData, &c3d_modelsData, &c3d_objectIdsData, flags]( sdw::VertexInT< shader::BillboardSurfaceT > const & in
 				, sdw::VertexOutT< shader::FragmentSurfaceT > out )
 			{
 				auto nodeId = writer.declLocale( "nodeId"
@@ -189,7 +189,7 @@ namespace castor3d
 
 		writer.implementMainT< shader::MeshVertexT, shader::FragmentSurfaceT >( sdw::VertexInT< shader::MeshVertexT >{ writer, submeshShaders }
 			, sdw::VertexOutT< shader::FragmentSurfaceT >{ writer, submeshShaders, passShaders, flags }
-			, [&]( sdw::VertexInT< shader::MeshVertexT > in
+			, [&writer, &materials, &c3d_cameraData, &c3d_modelsData, &c3d_objectIdsData, &pipelineID, &flags]( sdw::VertexInT< shader::MeshVertexT > const & in
 				, sdw::VertexOutT< shader::FragmentSurfaceT > out )
 			{
 				auto nodeId = writer.declLocale( "nodeId"
@@ -314,7 +314,7 @@ namespace castor3d
 
 		auto meshShader = [&]( sdw::UInt const & meshletIndex
 			, sdw::MeshSubgroupInEXT const & in
-			, sdw::MeshVertexListOutT< shader::FragmentSurfaceT > & vtxOut
+			, sdw::MeshVertexListOutT< shader::FragmentSurfaceT > const & vtxOut
 			, sdw::TrianglesMeshEXTPrimitiveListOutT< sdw::VoidT > & primOut )
 		{
 			auto laneId = writer.declLocale( "laneId"
@@ -345,7 +345,7 @@ namespace castor3d
 					, meshlet.indices()[i * 3u + 1u]
 					, meshlet.indices()[i * 3u + 2u] );
 			}
-			ROF;
+			ROF
 
 			FOR( writer, sdw::UInt, i, laneId, i < vertexCount, i += 32u )
 			{
@@ -431,7 +431,7 @@ namespace castor3d
 					, prvPosition );
 				vtxOut[i].position = curPosition;
 			}
-			ROF;
+			ROF
 		};
 
 		if ( flags.usesTask() )
@@ -441,8 +441,8 @@ namespace castor3d
 				&& !flags.hasWorldPosInputs();
 
 			auto checkVisible = writer.implementFunction< sdw::Boolean >( "checkVisible"
-				, [&]( sdw::UInt nodeId
-					, sdw::UInt meshletId )
+				, [&writer, &c3d_cullData, &c3d_cameraData, &c3d_modelsData, &checkCones, &flags]( sdw::UInt const & nodeId
+					, sdw::UInt const & meshletId )
 				{
 					auto modelData = writer.declLocale( "modelData"
 						, c3d_modelsData[nodeId - 1u] );
@@ -451,7 +451,7 @@ namespace castor3d
 					{
 						writer.returnStmt( sdw::Boolean{ false } );
 					}
-					FI;
+					FI
 
 					auto cullData = writer.declLocale( "cullData"
 						, c3d_cullData[meshletId] );
@@ -498,9 +498,9 @@ namespace castor3d
 						{
 							writer.returnStmt( sdw::Boolean{ false } );
 						}
-						FI;
+						FI
 					}
-					ROF;
+					ROF
 
 					if ( checkCones )
 					{
@@ -511,7 +511,7 @@ namespace castor3d
 						{
 							writer.returnStmt( sdw::Boolean{ true } );
 						}
-						FI;
+						FI
 
 						auto posToCamera = writer.declLocale( "posToCamera"
 							, c3d_cameraData.position() - sphereCenter );
@@ -520,7 +520,7 @@ namespace castor3d
 						{
 							writer.returnStmt( sdw::Boolean{ false } );
 						}
-						FI;
+						FI
 					}
 
 					writer.returnStmt( sdw::Boolean{ true } );
@@ -530,8 +530,8 @@ namespace castor3d
 
 			writer.implementEntryPointT< shader::PayloadT >( 32u, 1u, 1u
 				, sdw::TaskPayloadOutEXTT< shader::PayloadT >{ writer }
-				, [&]( sdw::TaskSubgroupInEXT in
-					, sdw::TaskPayloadOutEXTT< shader::PayloadT > payload )
+				, [&writer, &drawOffset, &meshlets, &pipelineID, &c3d_objectIdsData, &checkVisible, &flags]( sdw::TaskSubgroupInEXT const & in
+					, sdw::TaskPayloadOutEXTT< shader::PayloadT > const & payload )
 				{
 					auto laneId = in.localInvocationID.x();
 					auto baseId = in.workGroupID.x();
@@ -556,7 +556,7 @@ namespace castor3d
 							, subgroupBallotExclusiveBitCount( vote ) );
 						payload.meshletIndices()[idxOffset] = meshletId;
 					}
-					FI;
+					FI
 
 					IF( writer, laneId == 0u )
 					{
@@ -564,15 +564,15 @@ namespace castor3d
 							, subgroupBallotBitCount( vote ) );
 						payload.dispatchMesh( tasks, 1_u, 1_u );
 					}
-					FI;
+					FI
 				} );
 			writer.implementEntryPointT< shader::PayloadT, shader::FragmentSurfaceT, sdw::VoidT >( 32u, 1u, 1u
 				, sdw::TaskPayloadInEXTT< shader::PayloadT >{ writer }
 				, sdw::MeshVertexListOutT< shader::FragmentSurfaceT >{ writer, MaxMeshletVertexCount, submeshShaders, passShaders, flags }
 				, sdw::TrianglesMeshEXTPrimitiveListOutT< sdw::VoidT >{ writer, MaxMeshletTriangleCount }
-				, [&]( sdw::MeshSubgroupInEXT in
-					, sdw::TaskPayloadInEXTT< shader::PayloadT > payload
-					, sdw::MeshVertexListOutT< shader::FragmentSurfaceT > vtxOut
+				, [&writer, &meshShader]( sdw::MeshSubgroupInEXT const & in
+					, sdw::TaskPayloadInEXTT< shader::PayloadT > const & payload
+					, sdw::MeshVertexListOutT< shader::FragmentSurfaceT > const & vtxOut
 					, sdw::TrianglesMeshEXTPrimitiveListOutT< sdw::VoidT > primOut )
 				{
 					auto baseId = writer.declLocale( "baseId"
@@ -586,9 +586,9 @@ namespace castor3d
 				, sdw::TaskPayloadInEXT{ writer }
 				, sdw::MeshVertexListOutT< shader::FragmentSurfaceT >{ writer, MaxMeshletVertexCount, submeshShaders, passShaders, flags }
 				, sdw::TrianglesMeshEXTPrimitiveListOutT< sdw::VoidT >{ writer, MaxMeshletTriangleCount }
-				, [&]( sdw::MeshSubgroupInEXT in
-					, sdw::TaskPayloadInEXT payload
-					, sdw::MeshVertexListOutT< shader::FragmentSurfaceT > vtxOut
+				, [&writer, &meshShader]( sdw::MeshSubgroupInEXT const & in
+					, sdw::TaskPayloadInEXT const &
+					, sdw::MeshVertexListOutT< shader::FragmentSurfaceT > const & vtxOut
 					, sdw::TrianglesMeshEXTPrimitiveListOutT< sdw::VoidT > primOut )
 				{
 					auto baseId = writer.declLocale( "baseId"
@@ -645,7 +645,7 @@ namespace castor3d
 
 		auto meshShader = [&]( sdw::UInt const & meshletIndex
 			, sdw::MeshSubgroupInNV const & in
-			, sdw::MeshVertexListOutT< shader::FragmentSurfaceT > & vtxOut
+			, sdw::MeshVertexListOutT< shader::FragmentSurfaceT > const & vtxOut
 			, sdw::TrianglesMeshNVPrimitiveListOutT< sdw::VoidT > & primOut )
 		{
 			auto laneId = writer.declLocale( "laneId"
@@ -676,7 +676,7 @@ namespace castor3d
 					, meshlet.indices()[i * 3u + 1u]
 					, meshlet.indices()[i * 3u + 2u] );
 			}
-			ROF;
+			ROF
 
 			FOR( writer, sdw::UInt, i, laneId, i < vertexCount, i += 32u )
 			{
@@ -762,7 +762,7 @@ namespace castor3d
 					, prvPosition );
 				vtxOut[i].position = curPosition;
 			}
-			ROF;
+			ROF
 		};
 
 		if ( flags.usesTask() )
@@ -772,8 +772,8 @@ namespace castor3d
 				&& !flags.hasWorldPosInputs();
 
 			auto checkVisible = writer.implementFunction< sdw::Boolean >( "checkVisible"
-				, [&]( sdw::UInt nodeId
-					, sdw::UInt meshletId )
+				, [&writer, &c3d_cameraData, &c3d_cullData, &c3d_modelsData, &checkCones, &flags]( sdw::UInt const & nodeId
+					, sdw::UInt const & meshletId )
 				{
 					auto modelData = writer.declLocale( "modelData"
 						, c3d_modelsData[nodeId - 1u] );
@@ -782,7 +782,7 @@ namespace castor3d
 					{
 						writer.returnStmt( sdw::Boolean{ false } );
 					}
-					FI;
+					FI
 
 					auto cullData = writer.declLocale( "cullData"
 						, c3d_cullData[meshletId] );
@@ -829,9 +829,9 @@ namespace castor3d
 						{
 							writer.returnStmt( sdw::Boolean{ false } );
 						}
-						FI;
+						FI
 					}
-					ROF;
+					ROF
 
 					if ( checkCones )
 					{
@@ -842,7 +842,7 @@ namespace castor3d
 						{
 							writer.returnStmt( sdw::Boolean{ true } );
 						}
-						FI;
+						FI
 
 						auto posToCamera = writer.declLocale( "posToCamera"
 							, c3d_cameraData.position() - sphereCenter );
@@ -851,7 +851,7 @@ namespace castor3d
 						{
 							writer.returnStmt( sdw::Boolean{ false } );
 						}
-						FI;
+						FI
 					}
 
 					writer.returnStmt( sdw::Boolean{ true } );
@@ -861,11 +861,11 @@ namespace castor3d
 
 			writer.implementEntryPointT< shader::PayloadT >( 32u
 				, sdw::TaskPayloadOutNVT< shader::PayloadT >{ writer }
-				, [&]( sdw::TaskSubgroupInNV in
-					, sdw::TaskPayloadOutNVT< shader::PayloadT > payload )
+				, [&writer, &meshlets, &drawOffset, &c3d_objectIdsData, &pipelineID, &flags, &checkVisible]( sdw::TaskSubgroupInNV const & in
+					, sdw::TaskPayloadOutNVT< shader::PayloadT > const & payload )
 				{
-					auto laneId = in.localInvocationID;
-					auto baseId = in.workGroupID;
+					auto const & laneId = in.localInvocationID;
+					auto const & baseId = in.workGroupID;
 					auto meshletId = writer.declLocale( "meshletId"
 						, ( baseId * 32u + laneId ) );
 					auto drawId = writer.declLocale( "drawId"
@@ -887,7 +887,7 @@ namespace castor3d
 							, subgroupBallotExclusiveBitCount( vote ) );
 						payload.meshletIndices()[idxOffset] = meshletId;
 					}
-					FI;
+					FI
 
 					IF( writer, laneId == 0u )
 					{
@@ -895,15 +895,15 @@ namespace castor3d
 							, subgroupBallotBitCount( vote ) );
 						payload.dispatchMesh( tasks );
 					}
-					FI;
+					FI
 				} );
 			writer.implementEntryPointT< shader::PayloadT, shader::FragmentSurfaceT, sdw::VoidT >( 32u
 				, sdw::TaskPayloadInNVT< shader::PayloadT >{ writer }
 				, sdw::MeshVertexListOutT< shader::FragmentSurfaceT >{ writer, MaxMeshletVertexCount, submeshShaders, passShaders, flags }
 				, sdw::TrianglesMeshNVPrimitiveListOutT< sdw::VoidT >{ writer, MaxMeshletTriangleCount }
-				, [&]( sdw::MeshSubgroupInNV in
-					, sdw::TaskPayloadInNVT< shader::PayloadT > payload
-					, sdw::MeshVertexListOutT< shader::FragmentSurfaceT > vtxOut
+				, [&writer, &meshShader]( sdw::MeshSubgroupInNV const & in
+					, sdw::TaskPayloadInNVT< shader::PayloadT > const & payload
+					, sdw::MeshVertexListOutT< shader::FragmentSurfaceT > const & vtxOut
 					, sdw::TrianglesMeshNVPrimitiveListOutT< sdw::VoidT > primOut )
 				{
 					auto baseId = writer.declLocale( "baseId"
@@ -917,9 +917,9 @@ namespace castor3d
 				, sdw::TaskPayloadInNV{ writer }
 				, sdw::MeshVertexListOutT< shader::FragmentSurfaceT >{ writer, MaxMeshletVertexCount, submeshShaders, passShaders, flags }
 				, sdw::TrianglesMeshNVPrimitiveListOutT< sdw::VoidT >{ writer, MaxMeshletTriangleCount }
-				, [&]( sdw::MeshSubgroupInNV in
-					, sdw::TaskPayloadInNV payload
-					, sdw::MeshVertexListOutT< shader::FragmentSurfaceT > vtxOut
+				, [&writer, &meshShader]( sdw::MeshSubgroupInNV const & in
+					, sdw::TaskPayloadInNV const &
+					, sdw::MeshVertexListOutT< shader::FragmentSurfaceT > const & vtxOut
 					, sdw::TrianglesMeshNVPrimitiveListOutT< sdw::VoidT > primOut )
 				{
 					auto baseId = writer.declLocale( "baseId"

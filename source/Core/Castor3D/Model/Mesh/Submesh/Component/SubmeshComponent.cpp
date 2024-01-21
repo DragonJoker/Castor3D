@@ -150,6 +150,7 @@ namespace castor3d
 		: castor::OwnedBy< Submesh >{ submesh }
 		, m_data{ std::move( data ) }
 		, m_type{ type }
+		, m_dependencies{ std::move( deps ) }
 		, m_id{ submesh.getComponentId( m_type ) }
 		, m_plugin{ submesh.getComponentPlugin( m_id ) }
 	{

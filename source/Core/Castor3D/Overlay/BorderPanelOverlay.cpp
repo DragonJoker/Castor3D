@@ -104,7 +104,7 @@ namespace castor3d
 				, true );
 
 			writer.implementMain( 1u
-				, [&]( sdw::ComputeIn in )
+				, [&]( sdw::ComputeIn const & in )
 				{
 					auto overlay = writer.declLocale( "overlay"
 					, c3d_overlaysData[in.globalInvocationID.x()] );
@@ -139,7 +139,7 @@ namespace castor3d
 					{
 						ssOuter -= ssBorderExtent;
 					}
-					FI;
+					FI
 
 					auto innerUv = writer.declLocale( "innerUv"
 						, overlay.borderInnerUV() );

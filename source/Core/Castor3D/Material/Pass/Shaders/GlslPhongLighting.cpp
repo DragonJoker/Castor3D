@@ -39,7 +39,7 @@ namespace castor3d::shader
 	{
 	}
 
-	castor::String PhongLightingModel::getName()
+	castor::StringView PhongLightingModel::getName()
 	{
 		return cuT( "c3d.phong" );
 	}

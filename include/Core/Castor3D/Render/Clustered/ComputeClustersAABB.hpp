@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_ComputeClustersAABB_H___
@@ -12,7 +12,7 @@ namespace castor3d
 		, crg::FramePass const * previousPass
 		, RenderDevice const & device
 		, CameraUbo const & cameraUbo
-		, FrustumClusters & clusters );
+		, FrustumClusters const & clusters );
 }
 
 #endif

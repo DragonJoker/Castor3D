@@ -36,7 +36,7 @@ namespace castor3d
 		return result;
 	}
 
-	void GpuBufferLinearAllocator::deallocate( VkDeviceSize pointer )
+	void GpuBufferLinearAllocator::deallocate( VkDeviceSize pointer )noexcept
 	{
 		CU_Require( pointer < m_allocatedSize );
 		m_free.push_back( pointer );

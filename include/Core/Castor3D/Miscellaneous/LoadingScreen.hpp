@@ -186,7 +186,6 @@ namespace castor3d
 			}
 
 		private:
-			void doInitialise();
 			void doRecordInto( crg::RecordContext & context
 				, VkCommandBuffer commandBuffer
 				, uint32_t index );
@@ -214,7 +213,7 @@ namespace castor3d
 		castor::Size m_renderSize;
 		CameraRPtr m_camera;
 		SceneCullerUPtr m_culler;
-		VkFormat m_swapchainFormat;
+		VkFormat m_swapchainFormat{ VK_FORMAT_R8G8B8A8_UNORM };
 		Texture m_colour;
 		Texture m_depth;
 		CameraUbo m_cameraUbo;

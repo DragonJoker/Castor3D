@@ -55,19 +55,19 @@ namespace castor3d
 	void StagedUploadData::doPreprocess( std::vector< BufferDataRange > *& pendingBuffers
 		, std::vector< ImageDataRange > *& pendingImages )
 	{
-		auto & engine = *m_device.renderSystem.getEngine();
+		auto const & engine = *m_device.renderSystem.getEngine();
 		m_commandBuffer->beginDebugBlock( { "Buffers Upload"
 			, makeFloatArray( engine.getNextRainbowColour() ) } );
 		m_timer->beginPass( *m_commandBuffer );
 
-		for ( auto & offset : m_cpuBuffers->bufferOffsets )
+		for ( auto const & [range, offset] : m_cpuBuffers->bufferOffsets )
 		{
-			doPutBuffer( m_cpuBuffers->pool, offset.second );
+			doPutBuffer( m_cpuBuffers->pool, offset );
 		}
 
-		for ( auto & offset : m_cpuBuffers->imageOffsets )
+		for ( auto const & [range, offset] : m_cpuBuffers->imageOffsets )
 		{
-			doPutBuffer( m_cpuBuffers->pool, offset.second );
+			doPutBuffer( m_cpuBuffers->pool, offset );
 		}
 
 		m_cpuBuffers->buffers.clear();
@@ -77,9 +77,9 @@ namespace castor3d
 		m_cpuBuffers->pendingImages = m_pendingImages;
 		m_cpuBuffers->currentSize = 0u;
 
-		for ( auto & pending : m_cpuBuffers->pendingBuffers )
+		for ( auto const & pending : m_cpuBuffers->pendingBuffers )
 		{
-			auto & offset = m_cpuBuffers->bufferOffsets.emplace( &pending
+			auto const & offset = m_cpuBuffers->bufferOffsets.try_emplace( &pending
 				, doGetBuffer( m_cpuBuffers->pool, pending.srcSize ) ).first->second;
 
 			if ( offset.getAllocSize() != ashes::getAlignedSize( offset.getAllocSize(), m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) ) )
@@ -98,7 +98,7 @@ namespace castor3d
 				CU_Failure( "Chunk offset should be aligned" );
 			}
 
-			auto & res = m_cpuBuffers->buffers.emplace( offset.buffer, BufferRange{} ).first->second;
+			auto & res = m_cpuBuffers->buffers.try_emplace( offset.buffer ).first->second;
 			res.offset = std::min( res.offset, offset.getOffset() );
 
 			if ( res.offset != ashes::getAlignedSize( res.offset, m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) ) )
@@ -122,19 +122,19 @@ namespace castor3d
 			}
 
 			m_cpuBuffers->currentSize += pending.srcSize;
-			auto ires = m_wholeBuffers.emplace( offset.buffer, nullptr );
+			auto [it, inserted] = m_wholeBuffers.try_emplace( offset.buffer );
 
-			if ( ires.second )
+			if ( inserted )
 			{
-				ires.first->second = offset.buffer->lock( 0u, ashes::WholeSize, 0u );
+				it->second = offset.buffer->lock( 0u, ashes::WholeSize, 0u );
 			}
 
-			res.mapped = ires.first->second;
+			res.mapped = it->second;
 		}
 
 		for ( auto & pending : m_cpuBuffers->pendingImages )
 		{
-			auto & offset = m_cpuBuffers->imageOffsets.emplace( &pending
+			auto const & offset = m_cpuBuffers->imageOffsets.try_emplace( &pending
 				, doGetBuffer( m_cpuBuffers->pool, pending.srcSize ) ).first->second;
 
 			if ( offset.getAllocSize() != ashes::getAlignedSize( offset.getAllocSize(), m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) ) )
@@ -153,7 +153,7 @@ namespace castor3d
 				CU_Failure( "Chunk offset should be aligned" );
 			}
 
-			auto & res = m_cpuBuffers->buffers.emplace( offset.buffer, BufferRange{} ).first->second;
+			auto & res = m_cpuBuffers->buffers.try_emplace( offset.buffer ).first->second;
 			res.offset = std::min( res.offset, offset.getOffset() );
 
 			if ( res.offset != ashes::getAlignedSize( res.offset, m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) ) )
@@ -177,14 +177,14 @@ namespace castor3d
 			}
 
 			m_cpuBuffers->currentSize += pending.srcSize;
-			auto ires = m_wholeBuffers.emplace( offset.buffer, nullptr );
+			auto [it, inserted] = m_wholeBuffers.try_emplace( offset.buffer );
 
-			if ( ires.second )
+			if ( inserted )
 			{
-				ires.first->second = offset.buffer->lock( 0u, ashes::WholeSize, 0u );
+				it->second = offset.buffer->lock( 0u, ashes::WholeSize, 0u );
 			}
 
-			res.mapped = ires.first->second;
+			res.mapped = it->second;
 		}
 
 		m_cpuBuffers->buffersCount = m_cpuBuffers->buffers.size();
@@ -203,7 +203,7 @@ namespace castor3d
 			return 0u;
 		}
 
-		auto & offset = offsetIt->second;
+		auto const & offset = offsetIt->second;
 		auto bufferIt = m_cpuBuffers->buffers.find( offset.buffer );
 
 		if ( offset.getOffset() + data.srcSize > offset.buffer->getSize() )
@@ -244,7 +244,7 @@ namespace castor3d
 			return 0u;
 		}
 
-		auto & offset = offsetIt->second;
+		auto const & offset = offsetIt->second;
 		auto bufferIt = m_cpuBuffers->buffers.find( offset.buffer );
 
 		if ( offset.getOffset() + data.srcSize > offset.buffer->getSize() )
@@ -255,9 +255,8 @@ namespace castor3d
 			CU_Failure( "Trying to copy more than there can be in staging buffer" );
 		}
 
-		auto imgSize = data.dstImage->getMemoryRequirements().size;
-
-		if ( data.srcSize > imgSize )
+		if ( auto imgSize = data.dstImage->getMemoryRequirements().size;
+			data.srcSize > imgSize )
 		{
 			log::error << "StagedUploadImage: Trying to copy more than there can be in image [" << data.dstImage->getName()
 				<< "] device memory: size = " << data.srcSize << std::endl;
@@ -303,7 +302,7 @@ namespace castor3d
 		if ( !m_gpuBuffers->pendingBuffers.empty()
 			|| !m_gpuBuffers->pendingImages.empty() )
 		{
-			for ( auto [buffer, bounds] : m_gpuBuffers->buffers )
+			for ( auto const & [buffer, bounds] : m_gpuBuffers->buffers )
 			{
 				buffer->flush( bounds.offset, bounds.range - bounds.offset );
 				m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_HOST_BIT
@@ -311,22 +310,22 @@ namespace castor3d
 					, buffer->makeTransferSource() );
 			}
 
-			for ( auto & [upload, offset] : m_gpuBuffers->bufferOffsets )
+			for ( auto const & [upload, offset] : m_gpuBuffers->bufferOffsets )
 			{
-				auto & srcBuffer = *offset.buffer;
+				auto const & srcBuffer = *offset.buffer;
 				doUploadBuffer( *upload
 					, &srcBuffer
 					, offset.getOffset() );
 			}
 
-			for ( auto & [upload, offset] : m_gpuBuffers->imageOffsets )
+			for ( auto const & [upload, offset] : m_gpuBuffers->imageOffsets )
 			{
 				doUploadImage( *upload
 					, *offset.buffer
 					, offset.getOffset() );
 			}
 
-			for ( auto & [buffer, bounds] : m_gpuBuffers->buffers )
+			for ( auto const & [buffer, bounds] : m_gpuBuffers->buffers )
 			{
 				m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
 					, VK_PIPELINE_STAGE_HOST_BIT
@@ -377,9 +376,8 @@ namespace castor3d
 
 			if ( it->lifetime == 0u )
 			{
-				auto wit = m_wholeBuffers.find( &it->buffer->getBuffer() );
-
-				if ( wit != m_wholeBuffers.end() )
+				if ( auto wit = m_wholeBuffers.find( &it->buffer->getBuffer() );
+					wit != m_wholeBuffers.end() )
 				{
 					wit->first->unlock();
 					m_wholeBuffers.erase( wit );
@@ -451,7 +449,7 @@ namespace castor3d
 	}
 
 	void StagedUploadData::doPutBuffer( BufferArray & pool
-		, GpuBufferOffset const & bufferOffset )
+		, GpuBufferOffset const & bufferOffset )const noexcept
 	{
 		auto it = std::find_if( pool.begin()
 			, pool.end()

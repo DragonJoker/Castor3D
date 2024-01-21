@@ -42,7 +42,7 @@ namespace castor
 		}
 
 		bool operator()( StringStream & file
-			, uint32_t mask )
+			, uint32_t mask )const
 		{
 			return writeMask( file, cuT( "height_mask" ), mask )
 				&& writeOpt( file, cuT( "height_factor" ), m_configuration.heightFactor, 1.0f );
@@ -96,7 +96,7 @@ namespace castor3d
 		static CU_ImplementAttributeParserBlock( parserTexRemapHeight, SceneImportContext )
 		{
 			auto & plugin = getEngine( *blockContext )->getPassComponentsRegister().getPlugin( HeightMapComponent::TypeName );
-			blockContext->textureRemapIt = blockContext->textureRemaps.emplace( plugin.getTextureFlags(), TextureConfiguration{} ).first;
+			blockContext->textureRemapIt = blockContext->textureRemaps.try_emplace( plugin.getTextureFlags() ).first;
 			blockContext->textureRemapIt->second = TextureConfiguration{};
 		}
 		CU_EndAttributePushBlock( CSCNSection::eTextureRemapChannel, blockContext )
@@ -117,7 +117,7 @@ namespace castor3d
 		CU_EndAttribute()
 
 		static bool enableParallaxOcclusionMapping( PassComponentRegister const & passComponents
-			, PassComponentCombine pass )
+			, PassComponentCombine const & pass )
 		{
 			auto & plugin = passComponents.getPlugin< HeightComponent >();
 			return ( hasAny( pass, makePassComponentFlag( plugin.getId(), HeightComponent::eParallaxOcclusionMappingRepeat ) )
@@ -125,7 +125,7 @@ namespace castor3d
 		}
 
 		static bool enableParallaxOcclusionMappingOne( PassComponentRegister const & passComponents
-			, PassComponentCombine pass )
+			, PassComponentCombine const & pass )
 		{
 			auto & plugin = passComponents.getPlugin< HeightComponent >();
 			return hasAny( pass, makePassComponentFlag( plugin.getId(), HeightComponent::eParallaxOcclusionMappingOne ) );
@@ -200,7 +200,7 @@ namespace castor3d
 		}
 	}
 
-	void HeightMapComponent::ComponentsShader::doComputeTexcoord( PassComponentCombine pass
+	void HeightMapComponent::ComponentsShader::doComputeTexcoord( PassComponentCombine const & pass
 		, shader::TextureConfigData const & config
 		, sdw::CombinedImage2DRgba32 const & map
 		, sdw::Vec2 & texCoords
@@ -227,7 +227,7 @@ namespace castor3d
 				{
 					writer.demote();
 				}
-				FI;
+				FI
 			}
 
 			auto texCoords0 = components.getMember< sdw::Vec2 >( "texture0" );
@@ -243,7 +243,7 @@ namespace castor3d
 		}
 	}
 
-	void HeightMapComponent::ComponentsShader::doComputeTexcoord( PassComponentCombine pass
+	void HeightMapComponent::ComponentsShader::doComputeTexcoord( PassComponentCombine const & pass
 		, shader::TextureConfigData const & config
 		, sdw::CombinedImage2DRgba32 const & map
 		, sdw::Vec3 & texCoords
@@ -270,7 +270,7 @@ namespace castor3d
 				{
 					writer.demote();
 				}
-				FI;
+				FI
 			}
 
 			auto texCoords0 = components.getMember< sdw::Vec3 >( "texture0" );
@@ -286,7 +286,7 @@ namespace castor3d
 		}
 	}
 
-	void HeightMapComponent::ComponentsShader::doComputeTexcoord( PassComponentCombine pass
+	void HeightMapComponent::ComponentsShader::doComputeTexcoord( PassComponentCombine const & pass
 		, shader::TextureConfigData const & config
 		, sdw::CombinedImage2DRgba32 const & map
 		, shader::DerivTex & texCoords
@@ -313,7 +313,7 @@ namespace castor3d
 				{
 					writer.demote();
 				}
-				FI;
+				FI
 			}
 
 			auto texCoords0 = components.getMember< shader::DerivTex >( "texture0" );
@@ -329,7 +329,7 @@ namespace castor3d
 		}
 	}
 
-	void HeightMapComponent::ComponentsShader::parallaxMapping( sdw::Vec2 & texCoords
+	void HeightMapComponent::ComponentsShader::parallaxMapping( sdw::Vec2 const & texCoords
 		, sdw::Vec3 const & viewDir
 		, sdw::CombinedImage2DRgba32 const & heightMap
 		, shader::TextureConfigData const & textureConfig
@@ -344,7 +344,7 @@ namespace castor3d
 			, mask );
 	}
 
-	void HeightMapComponent::ComponentsShader::parallaxMapping( sdw::Vec3 & texCoords
+	void HeightMapComponent::ComponentsShader::parallaxMapping( sdw::Vec3 const & texCoords
 		, sdw::Vec3 const & viewDir
 		, sdw::CombinedImage2DRgba32 const & heightMap
 		, shader::TextureConfigData const & textureConfig
@@ -359,7 +359,7 @@ namespace castor3d
 			, mask );
 	}
 
-	void HeightMapComponent::ComponentsShader::parallaxMapping( shader::DerivTex & texCoords
+	void HeightMapComponent::ComponentsShader::parallaxMapping( shader::DerivTex const & texCoords
 		, sdw::Vec3 const & viewDir
 		, sdw::CombinedImage2DRgba32 const & heightMap
 		, shader::TextureConfigData const & textureConfig
@@ -392,7 +392,7 @@ namespace castor3d
 				, ptextureConfig
 				, pmask );
 			m_parallaxMapping = writer.implementFunction< sdw::Vec2 >( "c3d_parallaxMapping",
-				[&]( sdw::Vec2 const & texCoords
+				[&writer]( sdw::Vec2 const & texCoords
 					, sdw::Vec2 const & dx
 					, sdw::Vec2 const & dy
 					, sdw::Vec3 const & viewDir
@@ -440,7 +440,7 @@ namespace castor3d
 						// get depth of next layer
 						currentLayerDepth += layerDepth;
 					}
-					ELIHW;
+					ELIHW
 
 					// get texture coordinates before collision (reverse operations)
 					auto prevTexCoords = writer.declLocale( "prevTexCoords"
@@ -497,7 +497,7 @@ namespace castor3d
 				, ptextureConfig
 				, pmask );
 			m_parallaxShadow = writer.implementFunction< sdw::Float >( "c3d_parallaxSoftShadowMultiplier"
-				, [&]( sdw::Vec3 const & lightDir
+				, [&writer]( sdw::Vec3 const & lightDir
 					, sdw::Vec2 const & initialTexCoord
 					, sdw::Float const & initialHeight
 					, sdw::CombinedImage2DRgba32 const & heightMap
@@ -554,7 +554,7 @@ namespace castor3d
 									* ( 1.0_f - writer.cast< sdw::Float >( stepIndex ) / numLayers ) );
 								shadowMultiplier = max( shadowMultiplier, newShadowMultiplier );
 							}
-							FI;
+							FI
 
 							// offset to the next layer
 							stepIndex += 1_i;
@@ -563,7 +563,7 @@ namespace castor3d
 							sampled = heightMap.sample( currentTextureCoords );
 							heightFromTexture = sampled[heightIndex];
 						}
-						ELIHW;
+						ELIHW
 
 						// Shadowing factor should be 1 if there were no points under the surface
 						IF( writer, numSamplesUnderSurface < 1.0_f )
@@ -574,9 +574,9 @@ namespace castor3d
 						{
 							shadowMultiplier = 1.0_f - shadowMultiplier;
 						}
-						FI;
+						FI
 					}
-					FI;
+					FI
 
 					writer.returnStmt( shadowMultiplier );
 				}
@@ -603,13 +603,14 @@ namespace castor3d
 	{
 		static UInt32StrMap const parallaxOcclusionModes{ getEnumMapT< ParallaxOcclusionMode >() };
 
-		channelFillers.emplace( "height", ChannelFiller{ getTextureFlags()
+		channelFillers.try_emplace( "height"
+			, getTextureFlags()
 			, []( TextureContext & blockContext )
 			{
-				auto & component = getPassComponent< HeightMapComponent >( blockContext );
+				auto const & component = getPassComponent< HeightMapComponent >( blockContext );
 				component.fillChannel( blockContext.configuration
 					, 0x00FF0000 );
-			} } );
+			} );
 
 		castor::addParserT( parsers
 			, CSCNSection::eTexture

@@ -45,8 +45,7 @@ namespace castor3d
 			return result;
 		}
 
-		static SamplerObs doCreateSampler( Engine & engine
-			, RenderDevice const & device )
+		static SamplerObs doCreateSampler( Engine & engine )
 		{
 			auto name = cuT( "IblTexturesRadiance" );
 			auto result = engine.tryFindSampler( name );
@@ -78,7 +77,7 @@ namespace castor3d
 
 		static ashes::PipelineShaderStageCreateInfoArray doCreateProgram( RenderDevice const & device )
 		{
-			ProgramModule module{ "RadianceCompute" };
+			ProgramModule programModule{ "RadianceCompute" };
 			{
 				sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
@@ -95,15 +94,15 @@ namespace castor3d
 				auto outWorldPosition = writer.declOutput< sdw::Vec3 >( "outWorldPosition", sdw::EntryPoint::eVertex, 0u );
 				auto outColour = writer.declOutput< sdw::Vec4 >( "outColour", sdw::EntryPoint::eFragment, 0u );
 
-				writer.implementEntryPointT< sdw::VoidT, sdw::VoidT >( [&]( sdw::VertexIn in
+				writer.implementEntryPointT< sdw::VoidT, sdw::VoidT >( [&]( sdw::VertexIn const & in
 					, sdw::VertexOut out )
 					{
 						outWorldPosition = inPosition;
 						out.vtx.position = ( c3d_viewProjection * vec4( inPosition, 1.0_f ) ).xyww();
 					} );
 
-				writer.implementEntryPointT< sdw::VoidT, sdw::VoidT >( [&]( sdw::FragmentIn in
-					, sdw::FragmentOut out )
+				writer.implementEntryPointT< sdw::VoidT, sdw::VoidT >( [&]( sdw::FragmentIn const & in
+					, sdw::FragmentOut const & )
 					{
 						// From https://learnopengl.com/#!PBR/Lighting
 						// the sample direction equals the hemisphere's orientation 
@@ -138,18 +137,18 @@ namespace castor3d
 								irradiance += c3d_mapEnvironment.lod( sampleVec, 0.0_f ).rgb() * cos( theta ) * sin( theta );
 								nrSamples = nrSamples + 1;
 							}
-							ROF;
+							ROF
 						}
-						ROF;
+						ROF
 
 						irradiance = irradiance * sdw::Float{ castor::Pi< float > } * ( 1.0_f / writer.cast< sdw::Float >( nrSamples ) );
 						outColour = vec4( irradiance, 1.0_f );
 					} );
 
-				module.shader = writer.getBuilder().releaseShader();
+				programModule.shader = writer.getBuilder().releaseShader();
 			}
 
-			return makeProgramStates( device, module );
+			return makeProgramStates( device, programModule );
 		}
 
 		static ashes::RenderPassPtr doCreateRenderPass( RenderDevice const & device
@@ -213,7 +212,7 @@ namespace castor3d
 		, Texture const & srcTexture )
 		: RenderCube{ device, false }
 		, m_result{ radcomp::doCreateRadianceTexture( m_device, *srcTexture.resources, size ) }
-		, m_sampler{ radcomp::doCreateSampler( engine, m_device ) }
+		, m_sampler{ radcomp::doCreateSampler( engine ) }
 		, m_srcView{ srcTexture }
 		, m_srcImage{ m_srcView.image.get() }
 		, m_srcImageView{ radcomp::doCreateSrcView( *m_srcImage ) }
@@ -243,20 +242,19 @@ namespace castor3d
 
 		auto program = radcomp::doCreateProgram( m_device );
 		createPipelines( { size.getWidth(), size.getHeight() }
-			, castor::Position{}
 			, program
 			, m_srcImageView
 			, *m_renderPass
 			, {} );
 
-		auto & cmd = *m_commands.commandBuffer;
+		auto const & cmd = *m_commands.commandBuffer;
 		cmd.begin();
 		cmd.beginDebugBlock( { "Generating irradiance map"
 			, makeFloatArray( m_device.renderSystem.getEngine()->getNextRainbowColour() ) } );
 
 		for ( auto face = 0u; face < 6u; ++face )
 		{
-			auto & facePass = m_renderPasses[face];
+			auto const & facePass = m_renderPasses[face];
 			cmd.beginRenderPass( *m_renderPass
 				, *facePass.frameBuffer
 				, { transparentBlackClearColor }
@@ -282,12 +280,12 @@ namespace castor3d
 		m_result.destroy();
 	}
 
-	void RadianceComputer::render( QueueData const & queueData )
+	void RadianceComputer::render( QueueData const & queueData )const
 	{
 		m_commands.submit( *queueData.queue );
 	}
 
-	crg::SemaphoreWaitArray RadianceComputer::render( crg::SemaphoreWaitArray signalsToWait
+	crg::SemaphoreWaitArray RadianceComputer::render( crg::SemaphoreWaitArray const & signalsToWait
 		, ashes::Queue const & queue )const
 	{
 		return { 1u, { m_commands.submit( queue, signalsToWait )

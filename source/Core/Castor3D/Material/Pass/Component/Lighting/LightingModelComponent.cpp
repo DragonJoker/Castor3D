@@ -73,7 +73,7 @@ namespace castor3d
 			else
 			{
 				auto name = LightingModelFactory::normaliseName( params[0]->get< castor::String >() );
-				auto & engine = *getEngine( *blockContext );
+				auto const & engine = *getEngine( *blockContext );
 				auto & component = getPassComponent< LightingModelComponent >( *blockContext );
 				component.setLightingModelId( engine.getLightingModelFactory().getNameId( name ) );
 			}
@@ -141,10 +141,10 @@ namespace castor3d
 
 	void LightingModelComponent::accept( ConfigurationVisitorBase & vis )
 	{
-		auto types = getOwner()->getOwner()->getEngine()->getPassFactory().listRegisteredTypes();
+		auto & types = getOwner()->getOwner()->getEngine()->getPassFactory().listRegisteredTypes();
 		castor::StringArray values;
 
-		for ( auto & entry : types )
+		for ( auto const & entry : types )
 		{
 			values.push_back( entry.name );
 		}
@@ -152,7 +152,7 @@ namespace castor3d
 		vis.visit( cuT( "Lighting Model" )
 			, m_zeroBasedValue
 			, values
-			, [this]( uint32_t oldV, uint32_t newV )
+			, [this]( uint32_t, uint32_t newV )
 			{
 				m_zeroBasedValue = newV;
 				m_value = newV + 1u;

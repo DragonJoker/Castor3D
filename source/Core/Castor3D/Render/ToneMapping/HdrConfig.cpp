@@ -14,6 +14,7 @@ namespace castor3d
 	{
 		static CU_ImplementAttributeParserBlock( parserHdrConfig, CameraContext )
 		{
+			// Nothing else to do than to push the block
 		}
 		CU_EndAttributePushBlock( CSCNSection::eHdrConfig, blockContext )
 

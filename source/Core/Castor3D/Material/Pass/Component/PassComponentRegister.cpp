@@ -76,8 +76,8 @@ namespace castor3d
 				} );
 		}
 
-		static bool isValidComponent( TextureCombine const & flags
-			, PassComponentID componentId )
+		static bool isValidComponent( TextureCombine const &
+			, PassComponentID )
 		{
 			return true;
 		}
@@ -207,13 +207,14 @@ namespace castor3d
 		registerPassComponentCombine( dummy );
 	}
 
-	PassComponentRegister::~PassComponentRegister()
+	PassComponentRegister::~PassComponentRegister()noexcept
 	{
+		m_pauseOrder = true;
+
 		while ( !m_registered.empty() )
 		{
-			auto & componentDesc = m_registered.back();
-
-			if ( componentDesc.plugin )
+			if ( auto const & componentDesc = m_registered.back();
+				componentDesc.plugin )
 			{
 				unregisterComponent( componentDesc.name );
 			}
@@ -226,9 +227,9 @@ namespace castor3d
 	{
 		PassComponentCombine result{};
 
-		for ( auto & component : pass.getComponents() )
+		for ( auto const & [id, component] : pass.getComponents() )
 		{
-			addFlags( result, component.second->getPassFlags() );
+			addFlags( result, component->getPassFlags() );
 		}
 
 		registerPassComponentCombine( result );
@@ -305,7 +306,7 @@ namespace castor3d
 			return PassComponentCombine{};
 		}
 
-		return m_componentCombines[id - 1u];
+		return m_componentCombines[id - 1ULL];
 	}
 
 	TextureCombine PassComponentRegister::getTextureCombine( Pass const & pass )const
@@ -323,7 +324,7 @@ namespace castor3d
 	{
 		for ( auto & id : m_bufferOrder )
 		{
-			auto & componentDesc = m_registered[id - 1u];
+			auto & componentDesc = m_registered[id - 1ULL];
 			CU_Require( id == componentDesc.id );
 
 			if ( auto component = pass.getComponent( componentDesc.name ) )
@@ -461,18 +462,16 @@ namespace castor3d
 		{
 			for ( auto & componentDesc : m_registered )
 			{
-				if ( componentDesc.plugin->isMapComponent() )
+				if ( componentDesc.plugin->isMapComponent()
+					&& hasIntersect( texConfig.flag, componentDesc.plugin->getTextureFlags() ) )
 				{
-					if ( hasIntersect( texConfig.flag, componentDesc.plugin->getTextureFlags() ) )
-					{
-						needed.emplace( componentDesc.id, &componentDesc );
-					}
+					needed.emplace( componentDesc.id, &componentDesc );
 				}
 			}
 		}
 
 		// Then update the pass map components given the needed ones list.
-		for ( auto & componentDesc : m_registered )
+		for ( auto const & componentDesc : m_registered )
 		{
 			if ( componentDesc.plugin->isMapComponent() )
 			{
@@ -515,13 +514,13 @@ namespace castor3d
 	}
 
 	void PassComponentRegister::fillChannels( PassComponentTextureFlag const & flags
-		, TextureContext & parsingContext )
+		, TextureContext & parsingContext )const
 	{
-		for ( auto & channelFiller : m_channelsFillers )
+		for ( auto & [_, channelFiller] : m_channelsFillers )
 		{
-			if ( flags == channelFiller.second.first )
+			if ( flags == channelFiller.first )
 			{
-				channelFiller.second.second( parsingContext );
+				channelFiller.second( parsingContext );
 			}
 		}
 	}
@@ -679,9 +678,8 @@ namespace castor3d
 	PassComponentID PassComponentRegister::registerComponent( castor::String const & componentType
 		, PassComponentPluginUPtr componentPlugin )
 	{
-		auto id = getNameId( componentType );
-
-		if ( id != passcompreg::InvalidId )
+		if ( auto id = getNameId( componentType );
+			id != passcompreg::InvalidId )
 		{
 			log::error << "Pass component type [" << componentType << "] is already registered." << std::endl;
 			CU_Failure( "Pass component type is already registered" );
@@ -695,7 +693,7 @@ namespace castor3d
 		return componentDesc.id;
 	}
 
-	void PassComponentRegister::unregisterComponent( castor::String const & componentType )
+	void PassComponentRegister::unregisterComponent( castor::String const & componentType )noexcept
 	{
 		auto id = getNameId( componentType );
 
@@ -726,13 +724,13 @@ namespace castor3d
 	{
 		if ( componentId > m_registered.size()
 			|| componentId == 0u
-			|| !m_registered[componentId - 1u].plugin )
+			|| !m_registered[componentId - 1ULL].plugin )
 		{
 			CU_Failure( "Component ID was not found." );
 			CU_Exception( "Component ID was not found." );
 		}
 
-		return *m_registered[componentId - 1u].plugin;
+		return *m_registered[componentId - 1ULL].plugin;
 	}
 
 	PassComponentRegister::Component & PassComponentRegister::getNextId()
@@ -747,9 +745,9 @@ namespace castor3d
 		if ( it == m_registered.end() )
 		{
 			auto id = PassComponentID( m_registered.size() + 1u );
-			m_registered.push_back( { id } );
+			m_registered.emplace_back( id );
 			it = std::next( m_registered.begin()
-				, ptrdiff_t( id - 1u ) );
+				, ptrdiff_t( id - 1ULL ) );
 		}
 
 		return *it;
@@ -807,10 +805,10 @@ namespace castor3d
 		ChannelFillers fillers;
 		componentDesc.plugin->createParsers( parsers, fillers );
 
-		for ( auto & channelFiller : fillers )
+		for ( auto const & [name, channelFiller] : fillers )
 		{
-			auto it = m_channelsFillers.emplace( channelFiller ).first;
-			m_channels.emplace( it->first, it->second.first );
+			auto it = m_channelsFillers.try_emplace( name, channelFiller ).first;
+			m_channels.try_emplace( it->first, it->second.first );
 		}
 
 		castor::StrUInt32Map sections;
@@ -823,23 +821,21 @@ namespace castor3d
 		log::debug << "Registered component ID " << componentDesc.id << " for [" << componentType << "]" << std::endl;
 	}
 
-	void PassComponentRegister::unregisterComponent( PassComponentID id )
+	void PassComponentRegister::unregisterComponent( PassComponentID id )noexcept
 	{
 		if ( id > 0 && id <= m_registered.size() )
 		{
-			auto & componentDesc = m_registered[id - 1u];
+			auto & componentDesc = m_registered[id - 1ULL];
 			getEngine()->unregisterParsers( componentDesc.name );
 
-			auto ordIt = std::find( m_bufferOrder.begin(), m_bufferOrder.end(), id );
-
-			if ( ordIt != m_bufferOrder.end() )
+			if ( auto ordIt = std::find( m_bufferOrder.begin(), m_bufferOrder.end(), id );
+				ordIt != m_bufferOrder.end() )
 			{
 				m_bufferOrder.erase( ordIt );
 			}
 
-			auto matIt = m_materialShaders.find( id );
-
-			if ( matIt != m_materialShaders.end() )
+			if ( auto matIt = m_materialShaders.find( id );
+				matIt != m_materialShaders.end() )
 			{
 				m_materialShaders.erase( matIt );
 
@@ -875,13 +871,15 @@ namespace castor3d
 		m_bufferOrder.clear();
 		m_bufferShaders.clear();
 		m_fillMaterial.clear();
-		using Chunks = std::map< PassComponentID, std::pair< std::string, MemChunk > >;
+		using NamedChunk = std::pair< std::string, MemChunk >;
+		using IdNamedChunk = std::pair< PassComponentID, std::pair< std::string, MemChunk > >;
+		using Chunks = castor::Map< PassComponentID, NamedChunk >;
 		Chunks chunks;
 
-		for ( auto & shader : m_materialShaders )
+		for ( auto const & [id, shader] : m_materialShaders )
 		{
-			auto chunk = shader.second->getMaterialChunk();
-			chunks.emplace( shader.first, std::make_pair( m_registered[shader.first - 1u].name, chunk ) );
+			auto & chunk = shader->getMaterialChunk();
+			chunks.try_emplace( id, m_registered[id - 1ULL].name, chunk );
 		}
 
 		// float is base unit size.
@@ -890,20 +888,20 @@ namespace castor3d
 		auto constexpr baseOffset = 0u;
 
 		// First put vec4s and 16 bit aligned structs
-		std::vector< std::pair< PassComponentID, std::pair< std::string, MemChunk > > > ordered;
+		castor::Vector< IdNamedChunk > ordered;
 		auto it = chunks.begin();
 		VkDeviceSize offset = baseOffset;
 
 		while ( it != chunks.end() )
 		{
-			auto chunk = *it;
+			auto & chunk = *it;
 
 			if ( chunk.second.second.askedSize >= 16u
 				&& ( ( chunk.second.second.askedSize % 16u ) == 0u ) )
 			{
 				chunk.second.second.offset = offset;
 				offset += chunk.second.second.askedSize;
-				ordered.push_back( std::move( chunk ) );
+				ordered.emplace_back( std::move( chunk ) );
 				it = chunks.erase( it );
 			}
 			else
@@ -922,13 +920,13 @@ namespace castor3d
 
 		while ( it != chunks.end() )
 		{
-			auto chunk = *it;
+			auto & chunk = *it;
 
 			if ( chunk.second.second.askedSize == 12u )
 			{
 				chunk.second.second.offset = offset;
 				offset += alignment;
-				ordered.push_back( std::move( chunk ) );
+				ordered.emplace_back( std::move( chunk ) );
 				it = chunks.erase( it );
 			}
 			else
@@ -945,14 +943,14 @@ namespace castor3d
 		while ( it != chunks.end()
 			&& oit != ordered.end() )
 		{
-			auto chunk = *it;
+			auto & chunk = *it;
 
 			if ( chunk.second.second.askedSize == 4u )
 			{
 				chunk.second.second.offset = offset;
 				offset += alignment;
 				++oit;
-				oit = ordered.insert( oit, std::move( chunk ) );
+				oit = ordered.emplace( oit, std::move( chunk ) );
 				it = chunks.erase( it );
 				++oit;
 			}
@@ -971,7 +969,7 @@ namespace castor3d
 			chunk.second.second.offset = offset;
 			offset += 4u;
 			++oit;
-			oit = ordered.insert( oit, std::move( chunk ) );
+			oit = ordered.emplace( oit, std::move( chunk ) );
 			++oit;
 		}
 
@@ -984,13 +982,13 @@ namespace castor3d
 
 		while ( it != chunks.end() )
 		{
-			auto chunk = *it;
+			auto & chunk = *it;
 
 			if ( chunk.second.second.askedSize == 8u )
 			{
 				chunk.second.second.offset = offset;
 				offset += 8u;
-				ordered.push_back( std::move( chunk ) );
+				ordered.emplace_back( std::move( chunk ) );
 				it = chunks.erase( it );
 			}
 			else
@@ -1005,13 +1003,13 @@ namespace castor3d
 
 		while ( it != chunks.end() )
 		{
-			auto chunk = *it;
+			auto & chunk = *it;
 
 			if ( chunk.second.second.askedSize == 4u )
 			{
 				chunk.second.second.offset = offset;
 				offset += 4u;
-				ordered.push_back( std::move( chunk ) );
+				ordered.emplace_back( std::move( chunk ) );
 				it = chunks.erase( it );
 			}
 			else
@@ -1028,7 +1026,7 @@ namespace castor3d
 			chunk.second.second.askedSize = 4u;
 			chunk.second.second.size = 4u;
 			chunk.second.second.offset = offset;
-			ordered.push_back( std::move( chunk ) );
+			ordered.emplace_back( std::move( chunk ) );
 			offset += 4u;
 		}
 
@@ -1041,50 +1039,51 @@ namespace castor3d
 
 		while ( it != chunks.end() )
 		{
-			auto chunk = *it;
+			auto & chunk = *it;
 			chunk.second.second.offset = offset;
 			offset += ashes::getAlignedSize( chunk.second.second.askedSize, alignment );
-			ordered.push_back( std::move( chunk ) );
+			ordered.emplace_back( std::move( chunk ) );
 			it = chunks.erase( it );
 		}
 
 		if ( !ordered.empty() )
 		{
-			auto & chunk = ordered.back().second.second;
+			auto const & chunk = ordered.back().second.second;
 			m_bufferStride = ashes::getAlignedSize( chunk.offset + chunk.askedSize, alignment );
 		}
 
-		for ( auto & chunkit : ordered )
+		for ( auto const & [id, pair] : ordered )
 		{
-			auto matit = m_materialShaders.find( chunkit.first );
+			auto matit = m_materialShaders.find( id );
 
 			if ( matit != m_materialShaders.end() )
 			{
-				m_bufferOrder.push_back( chunkit.first );
+				m_bufferOrder.push_back( id );
 				m_bufferShaders.push_back( matit->second.get() );
 				auto shader = m_bufferShaders.back();
-				shader->setMaterialChunk( chunkit.second.second );
-				m_fillMaterial.push_back( [shader]( sdw::type::BaseStruct & type
+				shader->setMaterialChunk( pair.second );
+				m_fillMaterial.emplace_back( [shader]( sdw::type::BaseStruct & type
 					, sdw::expr::ExprList & inits
-					, uint32_t & padIndex )
+					, uint32_t & )
 					{
 						shader->fillMaterialType( type, inits );
 					} );
 			}
 			else
 			{
-				m_fillMaterial.push_back( []( sdw::type::BaseStruct & type
+				m_fillMaterial.emplace_back( []( sdw::type::BaseStruct & type
 					, sdw::expr::ExprList & inits
 					, uint32_t & padIndex )
 					{
-						type.declMember( "pad" + std::to_string( ++padIndex ), ast::type::Kind::eFloat );
+						++padIndex;
+						type.declMember( "pad" + std::to_string( padIndex ), ast::type::Kind::eFloat );
 						inits.push_back( makeExpr( 0.0_f ) );
 					} );
 			}
 		}
 	}
 
-	void PassComponentRegister::fillPassComponentCombine( PassComponentCombine & combine )
+	void PassComponentRegister::fillPassComponentCombine( PassComponentCombine & combine )const
 	{
 		combine.hasTransmissionFlag = hasAny( combine, m_transmissionFlag );
 		combine.hasAlphaTestFlag = hasAny( combine, m_alphaTestFlag );

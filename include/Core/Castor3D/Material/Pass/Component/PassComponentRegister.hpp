@@ -25,7 +25,7 @@ namespace castor3d
 		 */
 		/**@{*/
 		C3D_API explicit PassComponentRegister( Engine & engine );
-		C3D_API ~PassComponentRegister();
+		C3D_API ~PassComponentRegister()noexcept;
 		/**@}*/
 		/**
 		 *\~english
@@ -187,7 +187,7 @@ namespace castor3d
 			, castor::String const & tabs
 			, castor::StringStream & file )const;
 		C3D_API void fillChannels( PassComponentTextureFlag const & flags
-			, TextureContext & parsingContext );
+			, TextureContext & parsingContext )const;
 		C3D_API TextureCombine filterTextureFlags( ComponentModeFlags filter
 			, TextureCombine const & combine )const;
 		C3D_API PassComponentTextureFlag getColourMapFlags()const;
@@ -218,7 +218,7 @@ namespace castor3d
 		/**@{*/
 		C3D_API PassComponentID registerComponent( castor::String const & componentType
 			, PassComponentPluginUPtr componentPlugin );
-		C3D_API void unregisterComponent( castor::String const & componentType );
+		C3D_API void unregisterComponent( castor::String const & componentType )noexcept;
 		C3D_API PassComponentID getNameId( castor::String const & componentType )const;
 		C3D_API PassComponentPlugin const & getPlugin( PassComponentID componentId )const;
 
@@ -254,6 +254,12 @@ namespace castor3d
 	private:
 		struct Component
 		{
+			Component() = default;
+			Component( PassComponentID id )
+				: id{ id }
+			{
+			}
+
 			PassComponentID id{};
 			std::string name{};
 			PassComponentPluginUPtr plugin{};
@@ -265,9 +271,9 @@ namespace castor3d
 		void registerComponent( Component & componentDesc
 			, castor::String const & componentType
 			, PassComponentPluginUPtr componentPlugin );
-		void unregisterComponent( PassComponentID id );
+		void unregisterComponent( PassComponentID id )noexcept;
 		void reorderBuffer();
-		void fillPassComponentCombine( PassComponentCombine & combine );
+		void fillPassComponentCombine( PassComponentCombine & combine )const;
 
 		using FillMaterialType = std::function< void ( sdw::type::BaseStruct & type
 			, sdw::expr::ExprList & inits

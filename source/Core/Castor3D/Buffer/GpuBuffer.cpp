@@ -83,10 +83,9 @@ namespace castor3d
 	GpuBufferBase::GpuBufferBase( RenderSystem const & renderSystem
 		, VkBufferUsageFlags usage
 		, VkMemoryPropertyFlags memoryFlags
-		, castor::String debugName
+		, castor::String const & debugName
 		, ashes::QueueShare sharingMode
-		, VkDeviceSize allocatedSize
-		, bool smallData )
+		, VkDeviceSize allocatedSize )
 		: m_renderSystem{ renderSystem }
 		, m_usage{ usage }
 		, m_memoryFlags{ memoryFlags }
@@ -106,24 +105,18 @@ namespace castor3d
 
 	void GpuBufferBase::upload( UploadData & uploader )
 	{
-		std::unordered_map< size_t, MemoryRangeArray > ranges;
-		std::swap( m_ranges, ranges );
+		std::unordered_map< size_t, MemoryRangeArray > allRanges;
+		std::swap( m_ranges, allRanges );
 
-		if ( !ranges.empty() )
+		for ( auto const & [id, ranges] : allRanges )
 		{
-			for ( auto & rangesIt : ranges )
+			for ( auto const & range : ranges )
 			{
-				if ( !rangesIt.second.empty() )
-				{
-					for ( auto & range : rangesIt.second )
-					{
-						upload( uploader
-							, range.offset
-							, range.size
-							, range.dstAccessFlags
-							, range.dstPipelineFlags );
-					}
-				}
+				upload( uploader
+					, range.offset
+					, range.size
+					, range.dstAccessFlags
+					, range.dstPipelineFlags );
 			}
 		}
 	}
@@ -152,7 +145,7 @@ namespace castor3d
 	{
 		auto hash = std::hash< int32_t >{}( int32_t( dstAccessFlags ) );
 		hash = castor::hashCombine( hash, int32_t( dstPipelineFlags ) );
-		auto & ranges = m_ranges.emplace( hash, MemoryRangeArray{} ).first->second;
+		auto & ranges = m_ranges.try_emplace( hash ).first->second;
 		auto it = std::find_if( ranges.begin()
 			, ranges.end()
 			, [offset]( MemoryRange const & lookup )
@@ -162,7 +155,7 @@ namespace castor3d
 
 		if ( it == ranges.end() )
 		{
-			ranges.push_back( MemoryRange{ offset, size, dstAccessFlags, dstPipelineFlags } );
+			ranges.emplace_back( offset, size, dstAccessFlags, dstPipelineFlags );
 		}
 	}
 

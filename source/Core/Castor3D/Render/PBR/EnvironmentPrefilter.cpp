@@ -56,9 +56,9 @@ namespace castor3d
 			SamplerObs result{};
 			auto stream = castor::makeStringStream();
 			stream << prefix << cuT( "IblTexturesPrefiltered_" ) << maxLod;
-			auto name = stream.str();
 
-			if ( engine.hasSampler( name ) )
+			if ( auto name = stream.str();
+				engine.hasSampler( name ) )
 			{
 				result = engine.findSampler( name );
 			}
@@ -123,15 +123,15 @@ namespace castor3d
 				auto c3d_sampleCount = writer.declConstant( "sampleCount"
 					, 1024_u );
 
-				writer.implementEntryPointT< PosColT, PosColT >( [&]( sdw::VertexInT< PosColT > in
+				writer.implementEntryPointT< PosColT, PosColT >( [&]( sdw::VertexInT< PosColT > const & in
 					, sdw::VertexOutT< PosColT > out )
 					{
 						out.position() = in.position();
 						out.vtx.position = ( c3d_viewProjection * vec4( in.position().xyz(), 1.0_f ) ).xyww();
 					} );
 
-				writer.implementEntryPointT< PosColT, PosColT >( [&]( sdw::FragmentInT< PosColT > in
-					, sdw::FragmentOutT< PosColT > out )
+				writer.implementEntryPointT< PosColT, PosColT >( [&]( sdw::FragmentInT< PosColT > const & in
+					, sdw::FragmentOutT< PosColT > const & out )
 					{
 						// From https://learnopengl.com/#!PBR/Lighting
 						auto N = writer.declLocale( "N"
@@ -178,9 +178,9 @@ namespace castor3d
 								prefilteredColor += c3d_mapEnvironment.lod( L, lod ).rgb() * NdotL;
 								totalWeight += NdotL;
 							}
-							FI;
+							FI
 						}
-						ROF;
+						ROF
 
 						IF( writer, totalWeight != 0.0f )
 						{
@@ -190,7 +190,7 @@ namespace castor3d
 						{
 							prefilteredColor /= writer.cast< sdw::Float >( c3d_sampleCount );
 						}
-						FI;
+						FI
 
 						out.colour() = vec4( prefilteredColor, 1.0_f );
 					} );
@@ -303,7 +303,6 @@ namespace castor3d
 		}
 
 		createPipelines( size
-			, castor::Position{}
 			, envpref::doCreateProgram( m_device, originalSize, mipLevel, isCharlie )
 			, srcView
 			, renderPass
@@ -312,14 +311,14 @@ namespace castor3d
 
 	void EnvironmentPrefilter::MipRenderCube::registerFrames()
 	{
-		auto & cmd = *m_commands.commandBuffer;
+		auto const & cmd = *m_commands.commandBuffer;
 		cmd.begin();
 		cmd.beginDebugBlock( { "Prefiltering " + m_prefix + " Environment map"
 			, makeFloatArray( m_device.renderSystem.getEngine()->getNextRainbowColour() ) } );
 
 		for ( uint32_t face = 0u; face < 6u; ++face )
 		{
-			auto & frameBuffer = m_frameBuffers[face];
+			auto const & frameBuffer = m_frameBuffers[face];
 			cmd.beginRenderPass( m_renderPass
 				, *frameBuffer.frameBuffer
 				, { transparentBlackClearColor }
@@ -332,12 +331,12 @@ namespace castor3d
 		cmd.end();
 	}
 
-	void EnvironmentPrefilter::MipRenderCube::render( QueueData const & queueData )
+	void EnvironmentPrefilter::MipRenderCube::render( QueueData const & queueData )const
 	{
 		m_commands.submit( *queueData.queue );
 	}
 
-	crg::SemaphoreWaitArray EnvironmentPrefilter::MipRenderCube::render( crg::SemaphoreWaitArray signalsToWait
+	crg::SemaphoreWaitArray EnvironmentPrefilter::MipRenderCube::render( crg::SemaphoreWaitArray const & signalsToWait
 		, ashes::Queue const & queue )const
 	{
 		return { 1u
@@ -382,7 +381,7 @@ namespace castor3d
 				, isCharlie ) );
 		}
 
-		for ( auto & cubePass : m_renderPasses )
+		for ( auto const & cubePass : m_renderPasses )
 		{
 			cubePass->registerFrames();
 		}
@@ -393,7 +392,7 @@ namespace castor3d
 		m_result.destroy();
 	}
 
-	void EnvironmentPrefilter::render( QueueData const & queueData )
+	void EnvironmentPrefilter::render( QueueData const & queueData )const
 	{
 		for ( auto & cubePass : m_renderPasses )
 		{

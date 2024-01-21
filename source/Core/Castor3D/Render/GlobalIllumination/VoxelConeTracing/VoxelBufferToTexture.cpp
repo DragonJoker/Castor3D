@@ -54,17 +54,17 @@ namespace castor3d
 			auto result = pass.images.front();
 			ashes::WriteDescriptorSetArray writes;
 			auto write = voxels.getBufferWrite();
-			writes.push_back( ashes::WriteDescriptorSet{ write->dstBinding
+			writes.emplace_back( write->dstBinding
 				, write->dstArrayElement
 				, write->descriptorCount
-				, write->descriptorType } );
+				, write->descriptorType );
 			writes.back().bufferInfo = write.bufferInfo;
-			writes.push_back( ashes::WriteDescriptorSet{ result.binding
+			writes.emplace_back( result.binding
 				, 0u
 				, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
-				, { VkDescriptorImageInfo{ VK_NULL_HANDLE
+				, ashes::VkDescriptorImageInfoArray{ VkDescriptorImageInfo{ VK_NULL_HANDLE
 					, graph.createImageView( result.view() )
-					, VK_IMAGE_LAYOUT_GENERAL } } } );
+					, VK_IMAGE_LAYOUT_GENERAL } } );
 			auto descriptorSet = pool.createDescriptorSet( "VoxelBufferToTexture" );
 			descriptorSet->setBindings( writes );
 			descriptorSet->update();
@@ -108,10 +108,10 @@ namespace castor3d
 			shader::Utils utils{ writer };
 
 			writer.implementMainT< sdw::VoidT >( 256u
-				, [&]( sdw::ComputeIn in )
+				, [&]( sdw::ComputeIn const & in )
 				{
 					auto color = writer.declLocale( "color"
-						, utils.decodeColor( voxels[in.globalInvocationID.x()].colorMask ) );
+						, utils.decodeColor( voxels[in.globalInvocationID.x()].colorMask() ) );
 
 					IF( writer, color.a() > 0.0_f )
 					{
@@ -129,10 +129,10 @@ namespace castor3d
 							output.store( coord, vec4( color.rgb(), 1.0_f ) );
 						}
 					}
-					FI;
+					FI
 
 					// delete emission data, but keep normals (no need to delete, we will only read normal values of filled voxels)
-					voxels[in.globalInvocationID.x()].colorMask = 0_u;
+					voxels[in.globalInvocationID.x()].colorMask() = 0_u;
 				} );
 			return writer.getBuilder().releaseShader();
 		}
@@ -172,11 +172,11 @@ namespace castor3d
 		: crg::RunnablePass{ pass
 			, context
 			, graph
-			, { []( uint32_t index ){}
+			, { crg::defaultV< InitialiseCallback >
 				, GetPipelineStateCallback( [](){ return crg::getPipelineState( VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT ); } )
 				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i ); }
 				, GetPassIndexCallback( [this](){ return doGetPassIndex(); } )
-				, isEnabled
+				, std::move( isEnabled )
 				, IsComputePassCallback( [this](){ return doIsComputePass(); } ) }
 			, crg::ru::Config{ 2u, false }.implicitAction( pass.images.front().view()
 				, crg::RecordContext::clearAttachment( pass.images.front().view(), transparentBlackClearColor ) ) }

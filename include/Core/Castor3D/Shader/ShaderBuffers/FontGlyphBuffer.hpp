@@ -37,7 +37,6 @@ namespace castor3d
 			, RenderDevice const & device
 			, FontTexture const & texture
 			, uint32_t count );
-		C3D_API ~FontGlyphBuffer()noexcept;
 		/**
 		 *\~english
 		 *\brief		Adds a glyph to the buffer.

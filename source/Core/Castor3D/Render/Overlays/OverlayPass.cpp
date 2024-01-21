@@ -16,8 +16,8 @@ namespace castor3d
 {
 	namespace passovy
 	{
-		static OverlaysCounts doParseOverlays( OverlayCache const & cache
-			, OverlayRenderer & renderer
+		static OverlaysCounts parseOverlays( OverlayCache const & cache
+			, OverlayRenderer const & renderer
 			, OverlayPreparer & preparer )
 		{
 			OverlaysCounts result{};
@@ -73,9 +73,9 @@ namespace castor3d
 		: crg::RunnablePass{ pass
 			, context
 			, graph
-			, crg::RunnablePass::Callbacks{ []( uint32_t index ){}
+			, crg::RunnablePass::Callbacks{ []( uint32_t ){}
 				, crg::defaultV< crg::RunnablePass::GetPipelineStateCallback >
-				, [this]( crg::RecordContext & ctx, VkCommandBuffer cb, uint32_t i ){ doRecordInto( ctx, cb, i ); } }
+				, [this]( crg::RecordContext & ctx, VkCommandBuffer cb, uint32_t ){ doRecordInto( ctx, cb ); } }
 			, { 1u, true } }
 		, m_device{ device }
 		, m_scene{ scene }
@@ -102,14 +102,14 @@ namespace castor3d
 
 			if ( m_drawGlobal )
 			{
-				auto counts = passovy::doParseOverlays( m_scene.getEngine()->getOverlayCache()
+				auto counts = passovy::parseOverlays( m_scene.getEngine()->getOverlayCache()
 					, *m_renderer
 					, preparer );
 				m_counts.overlays += counts.overlays;
 				m_counts.quads += counts.quads;
 			}
 
-			auto counts = passovy::doParseOverlays( m_scene.getOverlayCache()
+			auto counts = passovy::parseOverlays( m_scene.getOverlayCache()
 				, *m_renderer
 				, preparer );
 			m_counts.overlays += counts.overlays;
@@ -132,8 +132,7 @@ namespace castor3d
 	}
 
 	void OverlayPass::doRecordInto( crg::RecordContext & context
-		, VkCommandBuffer commandBuffer
-		, uint32_t index )
+		, VkCommandBuffer commandBuffer )
 	{
 		if ( m_renderPass.initialise( context, *this, 0u ) )
 		{

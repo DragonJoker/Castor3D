@@ -453,14 +453,12 @@ namespace castor3d
 
 	private:
 		void doGatherDirty( CpuUpdater::DirtyObjects & sceneObjs );
-		void doUpdateSceneNodes( CpuUpdater & updater
-			, CpuUpdater::DirtyObjects & sceneObjs );
+		void doUpdateSceneNodes( CpuUpdater::DirtyObjects const & sceneObjs );
 		void doUpdateMovables( CpuUpdater & updater
 			, CpuUpdater::DirtyObjects & sceneObjs );
 		void doUpdateLights( CpuUpdater & updater
-			, CpuUpdater::DirtyObjects & sceneObjs );
-		void doUpdateParticles( CpuUpdater & updater
-			, CpuUpdater::DirtyObjects & sceneObjs );
+		, CpuUpdater::DirtyObjects const & sceneObjs );
+		void doUpdateParticles( CpuUpdater & updater );
 		void doUpdateParticles( GpuUpdater & updater );
 		void doUpdateMaterials();
 		bool doUpdateLightDependent( LightType lightType

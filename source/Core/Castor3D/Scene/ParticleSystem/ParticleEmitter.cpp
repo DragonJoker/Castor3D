@@ -11,13 +11,13 @@ namespace castor3d
 	{
 	}
 
-	castor3d::Particle ParticleEmitter::emit( ParticleValues const & value )
+	castor3d::Particle ParticleEmitter::emit( ParticleValues const & value )const
 	{
 		assert( m_decl.count() == value.size() );
 		castor3d::Particle particle{ m_decl };
 		uint32_t index = 0;
 
-		for ( auto decl : m_decl )
+		for ( auto const & decl : m_decl )
 		{
 			switch ( decl.m_dataType )
 			{

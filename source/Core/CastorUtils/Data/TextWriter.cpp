@@ -9,16 +9,16 @@ namespace castor
 	namespace txtwrite
 	{
 		static String getFullName( String const & type
-			, String const & name )
+			, StringView name )
 		{
 			if ( !type.empty() && !name.empty() )
 			{
-				return type + cuT( " \"" ) + name + cuT( "\"" );
+				return type + cuT( " \"" ) + String{ name } + cuT( "\"" );
 			}
 
 			if ( !name.empty() )
 			{
-				return name;
+				return String{ name };
 			}
 
 			return cuEmptyString;
@@ -46,7 +46,7 @@ namespace castor
 
 	TextWriterBase::WriterBlock::WriterBlock( TextWriterBase * writer
 		, String const & type
-		, String const & name
+		, StringView name
 		, StringStream & file )
 		: m_writer{ writer }
 		, m_name{ txtwrite::getFullName( type, name ) }
@@ -58,7 +58,7 @@ namespace castor
 	}
 
 	TextWriterBase::WriterBlock::WriterBlock( TextWriterBase * writer
-		, String const & name
+		, StringView name
 		, StringStream & file )
 		: WriterBlock{ writer, {}, name, file }
 	{
@@ -120,9 +120,9 @@ namespace castor
 	//*********************************************************************************************
 
 	TextWriterBase::TextWriterBase( String tabs
-		, String const & name )
+		, StringView name )
 		: m_tabs{ std::move( tabs ) }
-		, m_name{ name.empty() ? name : name + " - " }
+		, m_name{ name.empty() ? String{ name } : String{ name } + " - " }
 	{
 	}
 
@@ -139,7 +139,7 @@ namespace castor
 		return relative;
 	}
 
-	void TextWriterBase::checkError( bool error, char const * const action )const
+	void TextWriterBase::checkError( bool error, xchar const * const action )const
 	{
 		if ( !error )
 		{
@@ -147,7 +147,15 @@ namespace castor
 		}
 	}
 
-	void TextWriterBase::checkError( bool error, std::string const & action )const
+	void TextWriterBase::checkError( bool error, String const & action )const
+	{
+		if ( !error )
+		{
+			Logger::logError( makeStringStream() << m_name << action << " writing failed." );
+		}
+	}
+
+	void TextWriterBase::checkError( bool error, StringView const & action )const
 	{
 		if ( !error )
 		{
@@ -161,7 +169,7 @@ namespace castor
 			, file };
 	}
 
-	TextWriterBase::WriterBlock TextWriterBase::beginBlock( StringStream & file, String const & name )
+	TextWriterBase::WriterBlock TextWriterBase::beginBlock( StringStream & file, StringView name )
 	{
 		return WriterBlock{ this
 			, name
@@ -169,7 +177,7 @@ namespace castor
 	}
 
 	TextWriterBase::WriterBlock TextWriterBase::beginBlock( StringStream & file, String const & type
-		, String const & name )
+		, StringView name )
 	{
 		return WriterBlock{ this
 			, type
@@ -177,124 +185,124 @@ namespace castor
 			, file };
 	}
 
-	bool TextWriterBase::writeMask( StringStream & file, String const & name, uint32_t mask )const
+	bool TextWriterBase::writeMask( StringStream & file, StringView name, uint32_t mask )const
 	{
 		auto stream = makeStringStream();
 		stream << cuT( "0x" ) << std::hex << std::setw( 8u ) << std::setfill( cuT( '0' ) ) << mask;
-		auto result = txtwrite::writeRawText( file, tabs() + name + cuT( " " ) + stream.str() + cuT( "\n" ) );
-		checkError( result, name.c_str() );
+		auto result = txtwrite::writeRawText( file, tabs() + String{ name } + cuT( " " ) + stream.str() + cuT( "\n" ) );
+		checkError( result, name );
 		return result;
 	}
 
-	bool TextWriterBase::writeMask( StringStream & file, String const & name, uint64_t mask )const
+	bool TextWriterBase::writeMask( StringStream & file, StringView name, uint64_t mask )const
 	{
 		auto stream = makeStringStream();
 		stream << cuT( "0x" ) << std::hex << std::setw( 16u ) << std::setfill( cuT( '0' ) ) << mask;
-		auto result = txtwrite::writeRawText( file, tabs() + name + cuT( " " ) + stream.str() + cuT( "\n" ) );
-		checkError( result, name.c_str() );
+		auto result = txtwrite::writeRawText( file, tabs() + String{ name } + cuT( " " ) + stream.str() + cuT( "\n" ) );
+		checkError( result, name );
 		return result;
 	}
 
 	bool TextWriterBase::writeComment( StringStream & file, String const & comment )const
 	{
 		auto result = txtwrite::writeRawText( file, tabs() + cuT( "// " ) + comment + cuT( "\n" ) );
-		checkError( result, comment.c_str() );
+		checkError( result, comment );
 		return result;
 	}
 
-	bool TextWriterBase::write( StringStream & file, String const & name )const
+	bool TextWriterBase::write( StringStream & file, String const & value )const
 	{
-		auto result = txtwrite::writeRawText( file, tabs() + name + cuT( "\n" ) );
-		checkError( result, name.c_str() );
+		auto result = txtwrite::writeRawText( file, tabs() + value + cuT( "\n" ) );
+		checkError( result, value );
 		return result;
 	}
 
-	bool TextWriterBase::write( StringStream & file, String const & name, float value )const
-	{
-		auto stream = makeStringStream();
-		stream << std::showpoint << value;
-		auto result = txtwrite::writeRawText( file, tabs() + name + cuT( " " ) + stream.str() + cuT( "\n" ) );
-		checkError( result, name.c_str() );
-		return result;
-	}
-
-	bool TextWriterBase::write( StringStream & file, String const & name, double value )const
+	bool TextWriterBase::write( StringStream & file, StringView name, float value )const
 	{
 		auto stream = makeStringStream();
 		stream << std::showpoint << value;
-		auto result = txtwrite::writeRawText( file, tabs() + name + cuT( " " ) + stream.str() + cuT( "\n" ) );
-		checkError( result, name.c_str() );
+		auto result = txtwrite::writeRawText( file, tabs() + String{ name } + cuT( " " ) + stream.str() + cuT( "\n" ) );
+		checkError( result, name );
 		return result;
 	}
 
-	bool TextWriterBase::write( StringStream & file, String const & name, uint16_t value )const
+	bool TextWriterBase::write( StringStream & file, StringView name, double value )const
+	{
+		auto stream = makeStringStream();
+		stream << std::showpoint << value;
+		auto result = txtwrite::writeRawText( file, tabs() + String{ name } + cuT( " " ) + stream.str() + cuT( "\n" ) );
+		checkError( result, name );
+		return result;
+	}
+
+	bool TextWriterBase::write( StringStream & file, StringView name, uint16_t value )const
 	{
 		auto stream = makeStringStream();
 		stream << value;
-		auto result = txtwrite::writeRawText( file, tabs() + name + cuT( " " ) + stream.str() + cuT( "\n" ) );
-		checkError( result, name.c_str() );
+		auto result = txtwrite::writeRawText( file, tabs() + String{ name } + cuT( " " ) + stream.str() + cuT( "\n" ) );
+		checkError( result, name );
 		return result;
 	}
 
-	bool TextWriterBase::write( StringStream & file, String const & name, int16_t value )const
+	bool TextWriterBase::write( StringStream & file, StringView name, int16_t value )const
 	{
 		auto stream = makeStringStream();
 		stream << value;
-		auto result = txtwrite::writeRawText( file, tabs() + name + cuT( " " ) + stream.str() + cuT( "\n" ) );
-		checkError( result, name.c_str() );
+		auto result = txtwrite::writeRawText( file, tabs() + String{ name } + cuT( " " ) + stream.str() + cuT( "\n" ) );
+		checkError( result, name );
 		return result;
 	}
 
-	bool TextWriterBase::write( StringStream & file, String const & name, uint32_t value )const
+	bool TextWriterBase::write( StringStream & file, StringView name, uint32_t value )const
 	{
 		auto stream = makeStringStream();
 		stream << value;
-		auto result = txtwrite::writeRawText( file, tabs() + name + cuT( " " ) + stream.str() + cuT( "\n" ) );
-		checkError( result, name.c_str() );
+		auto result = txtwrite::writeRawText( file, tabs() + String{ name } + cuT( " " ) + stream.str() + cuT( "\n" ) );
+		checkError( result, name );
 		return result;
 	}
 
-	bool TextWriterBase::write( StringStream & file, String const & name, int32_t value )const
+	bool TextWriterBase::write( StringStream & file, StringView name, int32_t value )const
 	{
 		auto stream = makeStringStream();
 		stream << value;
-		auto result = txtwrite::writeRawText( file, tabs() + name + cuT( " " ) + stream.str() + cuT( "\n" ) );
-		checkError( result, name.c_str() );
+		auto result = txtwrite::writeRawText( file, tabs() + String{ name } + cuT( " " ) + stream.str() + cuT( "\n" ) );
+		checkError( result, name );
 		return result;
 	}
 
-	bool TextWriterBase::write( StringStream & file, String const & name, uint64_t value )const
+	bool TextWriterBase::write( StringStream & file, StringView name, uint64_t value )const
 	{
 		auto stream = makeStringStream();
 		stream << value;
-		auto result = txtwrite::writeRawText( file, tabs() + name + cuT( " " ) + stream.str() + cuT( "\n" ) );
-		checkError( result, name.c_str() );
+		auto result = txtwrite::writeRawText( file, tabs() + String{ name } + cuT( " " ) + stream.str() + cuT( "\n" ) );
+		checkError( result, name );
 		return result;
 	}
 
-	bool TextWriterBase::write( StringStream & file, String const & name, int64_t value )const
+	bool TextWriterBase::write( StringStream & file, StringView name, int64_t value )const
 	{
 		auto stream = makeStringStream();
 		stream << value;
-		auto result = txtwrite::writeRawText( file, tabs() + name + cuT( " " ) + stream.str() + cuT( "\n" ) );
-		checkError( result, name.c_str() );
+		auto result = txtwrite::writeRawText( file, tabs() + String{ name } + cuT( " " ) + stream.str() + cuT( "\n" ) );
+		checkError( result, name );
 		return result;
 	}
 
-	bool TextWriterBase::write( StringStream & file, String const & name, bool value )const
+	bool TextWriterBase::write( StringStream & file, StringView name, bool value )const
 	{
 		auto stream = makeStringStream();
 		stream.setf( std::ios::boolalpha );
 		stream << value;
-		auto result = txtwrite::writeRawText( file, tabs() + name + cuT( " " ) + stream.str() + cuT( "\n" ) );
-		checkError( result, name.c_str() );
+		auto result = txtwrite::writeRawText( file, tabs() + String{ name } + cuT( " " ) + stream.str() + cuT( "\n" ) );
+		checkError( result, name );
 		return result;
 	}
 
-	bool TextWriterBase::write( StringStream & file, String const & name, String const & value )const
+	bool TextWriterBase::write( StringStream & file, StringView name, String const & value )const
 	{
-		auto result = txtwrite::writeRawText( file, tabs() + name + cuT( " " ) + value + cuT( "\n" ) );
-		checkError( result, name.c_str() );
+		auto result = txtwrite::writeRawText( file, tabs() + String{ name } + cuT( " " ) + value + cuT( "\n" ) );
+		checkError( result, name );
 		return result;
 	}
 
@@ -303,19 +311,19 @@ namespace castor
 		return txtwrite::writeRawText( file, value );
 	}
 
-	bool TextWriterBase::writeOpt( StringStream & file, String const & name, bool value )const
+	bool TextWriterBase::writeOpt( StringStream & file, StringView name, bool value )const
 	{
 		return writeOpt( file, name, value, false );
 	}
 
-	bool TextWriterBase::writeName( StringStream & file, String const & name, String const & value )const
+	bool TextWriterBase::writeName( StringStream & file, StringView name, String const & value )const
 	{
-		auto result = txtwrite::writeRawText( file, tabs() + name + cuT( " \"" ) + value + cuT( "\"\n" ) );
-		checkError( result, name.c_str() );
+		auto result = txtwrite::writeRawText( file, tabs() + String{ name } + cuT( " \"" ) + value + cuT( "\"\n" ) );
+		checkError( result, name );
 		return result;
 	}
 
-	bool TextWriterBase::writeNameOpt( StringStream & file, String const & name, String const & value, String const & comp )const
+	bool TextWriterBase::writeNameOpt( StringStream & file, StringView name, String const & value, String const & comp )const
 	{
 		if ( value != comp )
 		{
@@ -325,14 +333,14 @@ namespace castor
 		return true;
 	}
 
-	bool TextWriterBase::writePath( StringStream & file, String const & name, Path const & value )const
+	bool TextWriterBase::writePath( StringStream & file, StringView name, Path const & value )const
 	{
-		auto result = txtwrite::writeRawText( file, tabs() + name + cuT( " \"" ) + value.toGeneric() + cuT( "\"\n" ) );
-		checkError( result, name.c_str() );
+		auto result = txtwrite::writeRawText( file, tabs() + String{ name } + cuT( " \"" ) + value.toGeneric() + cuT( "\"\n" ) );
+		checkError( result, name );
 		return result;
 	}
 
-	bool TextWriterBase::writeFile( StringStream & file, String const & name, Path const & source, Path const & folder, String const & subfolder )const
+	bool TextWriterBase::writeFile( StringStream & file, StringView name, Path const & source, Path const & folder, String const & subfolder )const
 	{
 		Path relative{ copyFile( source, folder, Path{ subfolder } ) };
 		return writePath( file, name, relative );

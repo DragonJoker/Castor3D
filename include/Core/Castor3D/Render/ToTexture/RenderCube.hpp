@@ -54,8 +54,6 @@ namespace castor3d
 		*	Creates the rendering pipelines.
 		*\param[in] size
 		*	The render size.
-		*\param[in] position
-		*	The render position.
 		*\param[in] program
 		*	The shader program.
 		*\param[in] view
@@ -69,8 +67,6 @@ namespace castor3d
 		*	Crée les pipelines de rendu.
 		*\param[in] size
 		*	Les dimensions de rendu.
-		*\param[in] position
-		*	La position du rendu.
 		*\param[in] program
 		*	Le programme shader.
 		*\param[in] view
@@ -81,7 +77,6 @@ namespace castor3d
 		*	Les intervalles de push constants.
 		*/
 		C3D_API void createPipelines( VkExtent2D const & size
-			, castor::Position const & position
 			, ashes::PipelineShaderStageCreateInfoArray const & program
 			, ashes::ImageView const & view
 			, ashes::RenderPass const & renderPass
@@ -92,8 +87,6 @@ namespace castor3d
 		*	Creates the rendering pipelines.
 		*\param[in] size
 		*	The render size.
-		*\param[in] position
-		*	The render position.
 		*\param[in] program
 		*	The shader program.
 		*\param[in] view
@@ -109,8 +102,6 @@ namespace castor3d
 		*	Crée les pipelines de rendu.
 		*\param[in] size
 		*	Les dimensions de rendu.
-		*\param[in] position
-		*	La position du rendu.
 		*\param[in] program
 		*	Le programme shader.
 		*\param[in] view
@@ -123,7 +114,6 @@ namespace castor3d
 		*	L'état de profondeur et stencil à utiliser.
 		*/
 		C3D_API void createPipelines( VkExtent2D const & size
-			, castor::Position const & position
 			, ashes::PipelineShaderStageCreateInfoArray const & program
 			, ashes::ImageView const & view
 			, ashes::RenderPass const & renderPass
@@ -137,7 +127,7 @@ namespace castor3d
 		*\brief
 		*	Nettoie les objets GPU.
 		*/
-		C3D_API void cleanup();
+		C3D_API void cleanup()noexcept;
 		/**
 		*\~english
 		*\brief

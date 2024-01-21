@@ -115,7 +115,7 @@ namespace castor3d
 
 			auto i = 0u;
 
-			for ( auto & node : nodes )
+			for ( auto const & node : nodes )
 			{
 				node->setSerialisable( false );
 				node->setOrientation( orients[i] );
@@ -130,10 +130,10 @@ namespace castor3d
 				, castor::makeUnique< EnvironmentMapPass >( device, map, std::move( nodes[5] ), index, CubeMapFace::eNegativeZ, background ) };
 		}
 
-		static std::vector< ashes::ImageView > createViews( Texture const & envMap
+		static castor::Vector< ashes::ImageView > createViews( Texture const & envMap
 			, ashes::Image *& image )
 		{
-			std::vector< ashes::ImageView > result;
+			castor::Vector< ashes::ImageView > result;
 			VkImageViewCreateInfo createInfo{ envMap.wholeViewId.data->info };
 			createInfo.image = *envMap.image;
 			createInfo.viewType = VK_IMAGE_VIEW_TYPE_CUBE;
@@ -150,12 +150,12 @@ namespace castor3d
 			return result;
 		}
 
-		static std::multimap< double, SceneNode * > sortNodes( std::set< SceneNode * > nodes
+		static castor::MultiMap< double, SceneNode * > sortNodes( castor::Set< SceneNode * > const & nodes
 			, Camera const & camera )
 		{
-			std::multimap< double, SceneNode * > result;
+			castor::MultiMap< double, SceneNode * > result;
 
-			for ( auto & node : nodes )
+			for ( auto const & node : nodes )
 			{
 				result.emplace( castor::point::distanceSquared( camera.getParent()->getDerivedPosition()
 					, node->getDerivedPosition() )
@@ -177,8 +177,7 @@ namespace castor3d
 		, m_depthBuffer{ envmap::createDepthBuffer( device, resources, "Env" + scene.getName(), envmap::MapSize ) }
 		, m_tmpImage{ envmap::createTmpTexture( device, resources, "Env" + scene.getName(), envmap::MapSize, m_environmentMap.getFormat() ) }
 		, m_extent{ getExtent( m_environmentMap.imageId ) }
-		, m_render{ 0u }
-		, m_onSetBackground{ scene.onSetBackground.connect( [this]( SceneBackground const & background )
+		, m_onSetBackground{ scene.onSetBackground.connect( [this]( SceneBackground const & )
 			{
 				for ( uint32_t index = 0; index < m_passes.size(); ++index )
 				{
@@ -187,12 +186,12 @@ namespace castor3d
 						, *this
 						, index
 						, *m_scene.getBackground() );
-					auto & passes = m_passes[index];
+					auto const & passes = m_passes[index];
 					m_device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
 						, [&passes]( RenderDevice const &
 							, QueueData const & )
 						{
-							for ( auto & pass : passes )
+							for ( auto const & pass : passes )
 							{
 								pass->record();
 							}
@@ -207,7 +206,7 @@ namespace castor3d
 		auto commandBuffer = queueData.commandPool->createCommandBuffer( "Env" + scene.getName() + "InitialiseViews" );
 		commandBuffer->begin();
 
-		for ( auto & view : m_environmentMapViews )
+		for ( auto const & view : m_environmentMapViews )
 		{
 			commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
 				, VK_PIPELINE_STAGE_TRANSFER_BIT
@@ -308,11 +307,11 @@ namespace castor3d
 		{
 			uint32_t index = 0u;
 
-			for ( auto & passes : m_passes )
+			for ( auto const & passes : m_passes )
 			{
 				if ( index < m_count )
 				{
-					for ( auto & pass : passes )
+					for ( auto const & pass : passes )
 					{
 						pass->update( updater );
 					}
@@ -323,9 +322,7 @@ namespace castor3d
 		}
 		else
 		{
-			auto & passes = m_passes[m_render];
-
-			for ( auto & pass : passes )
+			for ( auto const & pass : m_passes[m_render] )
 			{
 				pass->update( updater );
 			}
@@ -346,11 +343,11 @@ namespace castor3d
 		{
 			uint32_t index = 0u;
 			// On first run, render all env maps.
-			for ( auto & passes : m_passes )
+			for ( auto const & passes : m_passes )
 			{	
 				if ( index < m_count )
 				{
-					for ( auto & pass : passes )
+					for ( auto const & pass : passes )
 					{
 						result = pass->render( result, queue );
 					}
@@ -362,7 +359,7 @@ namespace castor3d
 		else
 		{
 			// Else render only one (rolling)
-			for ( auto & pass : m_passes[m_render] )
+			for ( auto const & pass : m_passes[m_render] )
 			{
 				result = pass->render( result, queue );
 			}
@@ -381,10 +378,9 @@ namespace castor3d
 
 	void EnvironmentMap::addNode( SceneNode & node )
 	{
-		auto ires = m_reflectionNodes.insert( &node );
+		auto res = m_reflectionNodes.emplace( &node ).second;
 
-		if ( ires.second
-			&& m_reflectionNodes.size() < MaxEnvironmentMapCount )
+		if ( res && m_reflectionNodes.size() < MaxEnvironmentMapCount )
 		{
 			doAddPass();
 		}
@@ -392,9 +388,8 @@ namespace castor3d
 
 	void EnvironmentMap::removeNode( SceneNode & node )
 	{
-		auto it = m_reflectionNodes.find( &node );
-
-		if ( it != m_reflectionNodes.end() )
+		if ( auto it = m_reflectionNodes.find( &node );
+			it != m_reflectionNodes.end() )
 		{
 			m_reflectionNodes.erase( it );
 		}
@@ -407,14 +402,13 @@ namespace castor3d
 
 	uint32_t EnvironmentMap::getIndex( SceneNode const & node )const
 	{
-		auto it = m_sortedNodes.find( &node );
-
-		if ( it != m_sortedNodes.end() )
+		if ( auto it = m_sortedNodes.find( &node );
+			it != m_sortedNodes.end() )
 		{
 			return it->second;
 		}
 
-		return ~( 0u );
+		return ~0u;
 	}
 
 	void EnvironmentMap::doAddPass()
@@ -425,7 +419,7 @@ namespace castor3d
 			, index
 			, *m_scene.getBackground() ) );
 
-		for ( auto & pass : m_passes.back() )
+		for ( auto const & pass : m_passes.back() )
 		{
 			pass->record();
 		}

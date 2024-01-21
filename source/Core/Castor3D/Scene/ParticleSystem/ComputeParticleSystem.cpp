@@ -117,9 +117,9 @@ namespace castor3d
 		auto particlesCount = std::max( 1u, m_particlesCount );
 		data.currentParticleCount = particlesCount;
 		data.emitterPosition = m_parent.getParent()->getDerivedPosition();
-		auto dispatch = compptcl::doDispatch( particlesCount, m_worgGroupSizes );
 
-		if ( dispatch->x )
+		if ( auto dispatch = compptcl::doDispatch( particlesCount, m_worgGroupSizes );
+			dispatch->x )
 		{
 			auto align = device.renderSystem.getValue( GpuMin::eBufferMapSize );
 			auto size = ashes::getAlignedSize( m_parent.getMaxParticlesCount() * m_inputs.stride(), align );

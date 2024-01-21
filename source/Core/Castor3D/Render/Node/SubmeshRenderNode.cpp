@@ -30,7 +30,7 @@ namespace castor3d
 
 	uint32_t SubmeshRenderNode::getInstanceCount()const
 	{
-		auto & instantiation = data.getInstantiation();
+		auto const & instantiation = data.getInstantiation();
 		return instantiation.getData().getRefCount( *pass );
 	}
 

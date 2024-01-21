@@ -237,7 +237,7 @@ namespace castor3d
 		*\param[in] control
 		*	The control.
 		*/
-		C3D_API void removeControl( Control & control );
+		C3D_API void removeControl( Control const & control );
 
 		/** Adds a space.
 		*\param[in] size

@@ -20,10 +20,9 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	ShaderBuffer::ShaderBuffer( Engine & engine
-		, RenderDevice const & device
+	ShaderBuffer::ShaderBuffer( RenderDevice const & device
 		, VkDeviceSize size
-		, castor::String name
+		, castor::String const & name
 		, crg::AccessState wantedState )
 		: m_device{ device }
 		, m_size{ ashes::getAlignedSize( size + shdbuf::HeaderSize

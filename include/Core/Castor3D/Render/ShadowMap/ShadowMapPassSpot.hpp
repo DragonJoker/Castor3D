@@ -21,7 +21,6 @@ namespace castor3d
 		 *\param[in]	context		The rendering context.
 		 *\param[in]	graph		The runnable graph.
 		 *\param[in]	device		The GPU device.
-		 *\param[in]	index		The pass index.
 		 *\param[in]	cameraUbo	The scene matrices UBO.
 		 *\param[in]	culler		The culler for this pass.
 		 *\param[in]	shadowMap	The parent shadow map.
@@ -34,7 +33,6 @@ namespace castor3d
 		 *\param[in]	context		Le contexte de rendu.
 		 *\param[in]	graph		Le runnable graph.
 		 *\param[in]	device		Le device GPU.
-		 *\param[in]	index		L'indice de la passe.
 		 *\param[in]	cameraUbo	L'UBO de matrices de la scène.
 		 *\param[in]	culler		Le culler pour cette passe.
 		 *\param[in]	shadowMap	La shadow map parente.
@@ -46,7 +44,6 @@ namespace castor3d
 			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
-			, uint32_t index
 			, CameraUbo const & cameraUbo
 			, SceneCuller & culler
 			, ShadowMap const & shadowMap

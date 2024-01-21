@@ -28,6 +28,8 @@ namespace castor3d
 			castor::Coords3f m_position;
 			uint32_t m_stride;
 
+			~Element()noexcept = default;
+
 			Element( uint8_t * buffer
 				, uint32_t offset
 				, uint32_t stride )
@@ -64,7 +66,7 @@ namespace castor3d
 				{
 					m_buffer = rhs.m_buffer;
 					m_position = std::move( rhs.m_position );
-					m_stride = std::move( rhs.m_stride );
+					m_stride = rhs.m_stride;
 					rhs.m_buffer = nullptr;
 				}
 				return *this;
@@ -101,10 +103,6 @@ namespace castor3d
 	{
 	}
 
-	BillboardBase::~BillboardBase()
-	{
-	}
-
 	bool BillboardBase::initialise( RenderDevice const & device
 		, uint32_t count )
 	{
@@ -119,7 +117,7 @@ namespace castor3d
 				BillboardVertex{ castor::Point3f{ +0.5f, +0.5f, 1.0f }, castor::Point2f{ 1.0f, 1.0f } },
 			};
 			m_bufferOffsets = device.vertexPools->getBuffer< Quad >( 1u );
-			auto & vb = m_bufferOffsets.getBufferChunk( SubmeshData::ePositions );
+			auto const & vb = m_bufferOffsets.getBufferChunk( SubmeshData::ePositions );
 			{
 				auto queueData = device.graphicsData();
 				InstantDirectUploadData uploader{ *queueData->queue
@@ -197,7 +195,7 @@ namespace castor3d
 							> castor::point::lengthSquared( b.m_position - m_cameraPosition );
 					} );
 
-				for ( auto & element : elements )
+				for ( auto const & element : elements )
 				{
 					std::memcpy( gpuBuffer, element.m_buffer, m_vertexStride );
 					gpuBuffer += m_vertexStride;
@@ -257,16 +255,19 @@ namespace castor3d
 		{
 			if ( oldMaterial )
 			{
-				getParentScene().getRenderNodes().reportPassChange( *this
-					, *oldMaterial
-					, *value );
+				if ( value )
+				{
+					getParentScene().getRenderNodes().reportPassChange( *this
+						, *oldMaterial
+						, *value );
+				}
+
 				m_material = value;
 
-				for ( auto & pass : *oldMaterial )
+				for ( auto const & pass : *oldMaterial )
 				{
-					auto itPass = m_ids.find( pass.get() );
-
-					if ( itPass != m_ids.end() )
+					if ( auto itPass = m_ids.find( pass.get() );
+						itPass != m_ids.end() )
 					{
 						m_ids.erase( itPass );
 					}

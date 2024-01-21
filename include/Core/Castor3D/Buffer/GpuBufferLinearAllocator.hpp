@@ -43,7 +43,7 @@ namespace castor3d
 		 *\brief		Désalloue de la mémoire.
 		 *\param[in]	pointer	La zone mémoire.
 		 */
-		C3D_API void deallocate( VkDeviceSize pointer );
+		C3D_API void deallocate( VkDeviceSize pointer )noexcept;
 		/**
 		 *\~english
 		 *\return		The allocator size.

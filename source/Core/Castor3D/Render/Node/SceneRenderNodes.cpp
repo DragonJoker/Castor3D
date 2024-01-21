@@ -193,33 +193,34 @@ namespace castor3d
 		, AnimatedSkeleton * skeleton )
 	{
 		auto lock( castor::makeUniqueLock( m_nodesMutex ) );
-		auto it = m_submeshNodes.emplace( scnrendnd::makeNodeHash( pass, data, instance ), nullptr );
+		auto [it, res] = m_submeshNodes.try_emplace( scnrendnd::makeNodeHash( pass, data, instance ) );
 
-		if ( it.second )
+		if ( res )
 		{
-			it.first->second = castor::makeUnique< SubmeshRenderNode >( pass
+			it->second = castor::makeUnique< SubmeshRenderNode >( pass
 				, data
 				, instance
 				, m_modelsBuffer[m_nodeId] );
-			auto & node = *it.first->second;
+			auto & node = *it->second;
 			node.mesh = mesh;
 			node.skeleton = skeleton;
-			m_nodesData.push_back( { &pass, instance.getParent(), &instance } );
+			++m_nodeId;
+			m_nodesData.emplace_back( &pass, instance.getParent(), &instance );
 			instance.setId( pass
 				, data
 				, &node
-				, ++m_nodeId );
+				, m_nodeId );
 			instance.fillEntry( m_nodeId
 				, pass
 				, *instance.getParent()
 				, data.getMeshletsCount()
 				, node.modelData );
 			scnrendnd::add( pass.getLightingModelId(), m_lightingModels );
-			auto ires = m_onPassChanged.emplace( &pass, OnPassChangedConnection{} );
+			auto [pit, pres] = m_onPassChanged.try_emplace( &pass );
 
-			if ( ires.second )
+			if ( pres )
 			{
-				ires.first->second = pass.onChanged.connect( [this]( Pass const & updatedPass
+				pit->second = pass.onChanged.connect( [this]( Pass const & updatedPass
 					, PassComponentCombineID oldComponents
 					, PassComponentCombineID newComponents )
 					{
@@ -260,37 +261,38 @@ namespace castor3d
 			m_dirty = true;
 		}
 
-		return *it.first->second;
+		return *it->second;
 	}
 
 	BillboardRenderNode & SceneRenderNodes::createNode( Pass & pass
 		, BillboardBase & instance )
 	{
 		auto lock( castor::makeUniqueLock( m_nodesMutex ) );
-		auto it = m_billboardNodes.emplace( scnrendnd::makeNodeHash( pass, instance ), nullptr );
+		auto [it, res] = m_billboardNodes.try_emplace( scnrendnd::makeNodeHash( pass, instance ) );
 
-		if ( it.second )
+		if ( res )
 		{
-			it.first->second = castor::makeUnique< BillboardRenderNode >( pass
+			it->second = castor::makeUnique< BillboardRenderNode >( pass
 				, instance
 				, m_modelsBuffer[m_nodeId]
 				, m_billboardsBuffer[m_nodeId] );
-			m_nodesData.push_back( { &pass, instance.getNode(), &instance } );
+			m_nodesData.emplace_back( &pass, instance.getNode(), &instance );
+			++m_nodeId;
 			instance.setId( pass
-				, it.first->second.get()
-				, ++m_nodeId );
+				, it->second.get()
+				, m_nodeId );
 			instance.fillEntry( m_nodeId
 				, pass
 				, *instance.getNode()
 				, 0u
-				, it.first->second->modelData );
+				, it->second->modelData );
 			scnrendnd::add( pass.getLightingModelId(), m_lightingModels );
 			m_dirty = true;
-			auto ires = m_onPassChanged.emplace( &pass, OnPassChangedConnection{} );
+			auto [pit, pres] = m_onPassChanged.try_emplace( &pass );
 
-			if ( ires.second )
+			if ( pres )
 			{
-				ires.first->second = pass.onChanged.connect( [this]( Pass const & updatedPass
+				pit->second = pass.onChanged.connect( [this]( Pass const & updatedPass
 					, PassComponentCombineID oldComponents
 					, PassComponentCombineID newComponents )
 					{
@@ -299,16 +301,16 @@ namespace castor3d
 			}
 		}
 
-		return *it.first->second;
+		return *it->second;
 	}
 
 	SubmeshRenderNode const * SceneRenderNodes::getSubmeshNode( uint32_t nodeId )
 	{
-		for ( auto & nodeIt : m_submeshNodes )
+		for ( auto const & [_, node] : m_submeshNodes )
 		{
-			if ( nodeIt.second->getId() == nodeId )
+			if ( node->getId() == nodeId )
 			{
-				return nodeIt.second.get();
+				return node.get();
 			}
 		}
 
@@ -317,11 +319,11 @@ namespace castor3d
 
 	BillboardRenderNode const * SceneRenderNodes::getBillboardNode( uint32_t nodeId )
 	{
-		for ( auto & nodeIt : m_billboardNodes )
+		for ( auto const & [_, node] : m_billboardNodes )
 		{
-			if ( nodeIt.second->getId() == nodeId )
+			if ( node->getId() == nodeId )
 			{
-				return nodeIt.second.get();
+				return node.get();
 			}
 		}
 
@@ -528,10 +530,9 @@ namespace castor3d
 #endif
 		std::map< Submesh const *, std::map< uint32_t, uint32_t > > indices;
 		
-		for ( auto & nodeIt : m_submeshNodes )
+		for ( auto const & [_, node] : m_submeshNodes )
 		{
-			auto & node = nodeIt.second;
-			auto & instantiation = node->data.getInstantiation();
+			auto const & instantiation = node->data.getInstantiation();
 			node->mesh = node->data.hasMorphComponent()
 				? static_cast< AnimatedMesh * >( findAnimatedObject( *getOwner(), node->instance.getName() + cuT( "_Mesh" ) ) )
 				: nullptr;
@@ -542,7 +543,7 @@ namespace castor3d
 			if ( instantiation.isInstanced()
 				&& node->instance.getParent()->isVisible() )
 			{
-				auto & passes = indices.emplace( &node->data, std::map< uint32_t, uint32_t >{} ).first->second;
+				auto & passes = indices.try_emplace( &node->data ).first->second;
 				auto & index = passes.emplace( node->pass->getHash(), 0u ).first->second;
 				auto & data = instantiation.getData();
 				auto it = data.find( *node->pass );
@@ -551,7 +552,8 @@ namespace castor3d
 
 				if ( it->second.data.size() > index )
 				{
-					auto & buffer = it->second.data[index++];
+					auto & buffer = it->second.data[index];
+					++index;
 					buffer.objectIDs.nodeId = node->getId();
 
 					if ( node->mesh )

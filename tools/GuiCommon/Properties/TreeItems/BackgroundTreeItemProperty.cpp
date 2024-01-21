@@ -89,27 +89,27 @@ namespace GuiCommon
 					doCreateTextureImageProperty( background
 						, PROPERTY_BACKGROUND_SKYBOX_RIGHT_IMAGE
 						, background.getTexture()
-						, castor3d::CubeMapFace::ePositiveX );
+						, castor3d::SkyboxFace::eLeft );
 					doCreateTextureImageProperty( background
 						, PROPERTY_BACKGROUND_SKYBOX_LEFT_IMAGE
 						, background.getTexture()
-						, castor3d::CubeMapFace::eNegativeX );
+						, castor3d::SkyboxFace::eRight );
 					doCreateTextureImageProperty( background
 						, PROPERTY_BACKGROUND_SKYBOX_BOTTOM_IMAGE
 						, background.getTexture()
-						, castor3d::CubeMapFace::ePositiveY );
+						, castor3d::SkyboxFace::eTop );
 					doCreateTextureImageProperty( background
 						, PROPERTY_BACKGROUND_SKYBOX_TOP_IMAGE
 						, background.getTexture()
-						, castor3d::CubeMapFace::eNegativeY );
+						, castor3d::SkyboxFace::eBottom );
 					doCreateTextureImageProperty( background
 						, PROPERTY_BACKGROUND_SKYBOX_BACK_IMAGE
 						, background.getTexture()
-						, castor3d::CubeMapFace::ePositiveZ );
+						, castor3d::SkyboxFace::eFront );
 					doCreateTextureImageProperty( background
 						, PROPERTY_BACKGROUND_SKYBOX_FRONT_IMAGE
 						, background.getTexture()
-						, castor3d::CubeMapFace::eNegativeZ );
+						, castor3d::SkyboxFace::eBack );
 				}
 			}
 
@@ -279,10 +279,11 @@ namespace GuiCommon
 			void doCreateTextureImageProperty( castor3d::SkyboxBackground & background
 				, wxString const & name
 				, castor3d::TextureLayout const & texture
-				, castor3d::CubeMapFace face )
+				, castor3d::SkyboxFace face )
 			{
 				CU_Require( texture.isStatic() );
-				auto source = castor::Path{ texture.getLayerCubeFaceSourceString( 0u, face ) };
+				auto source = castor::Path{ texture.getLayerCubeFaceSourceString( 0u
+					, castor3d::CubeMapFace( uint32_t( face ) ) ) };
 				m_properties.addProperty( &m_grid, name, source
 					, [&background, face]( wxVariant const & var )
 					{

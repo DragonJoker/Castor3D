@@ -33,8 +33,7 @@ namespace castor3d
 		}
 	}
 
-	void RenderQueue::PassData::initialise( RenderDevice const & device
-		, QueueData const & queueData
+	void RenderQueue::PassData::initialise( QueueData const & queueData
 		, castor::String const & name
 		, VkRenderPass renderPass )
 	{
@@ -76,10 +75,6 @@ namespace castor3d
 	{
 	}
 
-	void RenderQueue::initialise()
-	{
-	}
-
 	void RenderQueue::invalidate()
 	{
 		m_toDelete = std::move( m_pass );
@@ -95,7 +90,7 @@ namespace castor3d
 		m_toDelete = std::move( m_pass );
 	}
 
-	void RenderQueue::update( ShadowMapLightTypeArray & shadowMaps
+	void RenderQueue::update( ShadowMapLightTypeArray const & shadowMaps
 		, ShadowBuffer const * shadowBuffer )
 	{
 		if ( hasCommandBuffer() )
@@ -198,10 +193,9 @@ namespace castor3d
 			m_currentPass = m_pass.get();
 		}
 
-		auto & device = *getOwner()->getEngine()->getRenderDevice();
+		auto const & device = *getOwner()->getEngine()->getRenderDevice();
 		auto queueData = device.graphicsData();
-		m_currentPass->initialise( device
-			, *queueData
+		m_currentPass->initialise( *queueData
 			, getOwner()->getName(), getOwner()->getRenderPass( 0u ) );
 		return getCommandBuffer();
 	}
@@ -209,13 +203,6 @@ namespace castor3d
 	RenderCounts const & RenderQueue::getVisibleCounts()const
 	{
 		return m_renderNodes->getVisibleCounts();
-	}
-
-	void RenderQueue::doInitialise( RenderDevice const & device
-		, QueueData const & queueData
-		, PassData & pass )
-	{
-		invalidate();
 	}
 
 	void RenderQueue::doPrepareCommandBuffer()
@@ -233,7 +220,7 @@ namespace castor3d
 		}
 		else
 		{
-			auto & pass = *m_currentPass;
+			auto const & pass = *m_currentPass;
 			CU_Require( pass.commandBuffer );
 			CU_Require( m_renderNodes );
 			pass.commandBuffer->reset();

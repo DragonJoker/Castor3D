@@ -436,7 +436,7 @@ namespace castor3d
 		}
 
 	private:
-		C3D_API void binaryError( std::string_view view );
+		C3D_API void binaryError( std::string_view view )const;
 
 	private:
 		template< typename T >
@@ -471,9 +471,9 @@ namespace castor3d
 		}
 
 	private:
-		ChunkType m_type;
+		ChunkType m_type{};
 		castor::ByteArray m_data;
-		uint32_t m_index;
+		uint32_t m_index{};
 		std::list< castor::ByteArray > m_addedData;
 		bool m_isLittleEndian{ true };
 	};

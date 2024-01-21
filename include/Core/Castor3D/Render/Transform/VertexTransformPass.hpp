@@ -58,8 +58,7 @@ namespace castor3d
 			, GpuBufferOffsetT< SkinningTransformsConfiguration > const & skinTransforms );
 
 		void recordInto( crg::RecordContext & context
-			, VkCommandBuffer commandBuffer
-			, uint32_t index );
+			, VkCommandBuffer commandBuffer )const;
 
 	private:
 		RenderDevice const & m_device;

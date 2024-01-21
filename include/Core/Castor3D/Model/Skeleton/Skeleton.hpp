@@ -139,7 +139,7 @@ namespace castor3d
 			m_globalInverse = transform;
 		}
 
-		std::vector< BoneNode * > const & getBones()const
+		castor::Vector< BoneNode * > const & getBones()const
 		{
 			return m_bones;
 		}
@@ -159,7 +159,7 @@ namespace castor3d
 			return m_bones.size();
 		}
 
-		std::vector< castor::BoundingBox > const & getContainers( Mesh & mesh )const
+		castor::Vector< castor::BoundingBox > const & getContainers( Mesh & mesh )const
 		{
 			if ( auto it = m_boxes.find( &mesh );
 				it != m_boxes.end() )
@@ -167,7 +167,7 @@ namespace castor3d
 				return it->second;
 			}
 
-			static std::vector< castor::BoundingBox > const dummy;
+			static castor::Vector< castor::BoundingBox > const dummy;
 			return dummy;
 		}
 
@@ -177,11 +177,11 @@ namespace castor3d
 		}
 
 	private:
-		SceneRPtr m_scene;
+		SceneRPtr m_scene{};
 		SkeletonNodePtrArray m_nodes;
-		std::vector< BoneNode * > m_bones;
-		castor::Matrix4x4f m_globalInverse;
-		std::map< Mesh *, std::vector< castor::BoundingBox > > m_boxes;
+		castor::Vector< BoneNode * > m_bones;
+		castor::Matrix4x4f m_globalInverse{ 1.0f };
+		castor::Map< Mesh *, castor::Vector< castor::BoundingBox > > m_boxes;
 
 		friend class BinaryWriter< Skeleton >;
 		friend class BinaryParser< Skeleton >;

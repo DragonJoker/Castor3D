@@ -33,9 +33,7 @@ namespace castor
 	{
 		static void doInitialiseBuffer( GpuBufferOffsetT< castor3d::SkinningTransformsConfiguration > & transforms )
 		{
-			auto buffer = transforms.getData();
-
-			for ( auto & dst : buffer )
+			for ( auto & dst : transforms.getData() )
 			{
 				std::fill_n( dst.bonesMatrix.begin()
 					, dst.bonesMatrix.size()
@@ -100,7 +98,7 @@ namespace castor
 		}
 	}
 
-	void ResourceCacheT< AnimatedObjectGroup, castor::String, AnimatedObjectGroupCacheTraits >::initialise( RenderDevice const & device )
+	void ResourceCacheT< AnimatedObjectGroup, castor::String, AnimatedObjectGroupCacheTraits >::initialise( RenderDevice const & )
 	{
 		if ( !m_morphingWeights )
 		{
@@ -138,19 +136,16 @@ namespace castor
 #endif
 		auto lock( castor::makeUniqueLock( *this ) );
 
-		for ( auto & group : *this )
+		for ( auto const & [name, group] : *this )
 		{
-			group.second->update( updater );
+			group->update( updater );
 		}
 
 		auto skinningTransformsBuffer = m_skinningTransformsData.getData();
 
-		for ( auto & pair : m_skeletonEntries )
+		for ( auto const & [skeleton, entry] : m_skeletonEntries )
 		{
-			auto & entry = pair.second;
-			auto id = entry.skeleton.getId();
-
-			if ( id )
+			if ( auto id = entry.skeleton.getId() )
 			{
 				if ( auto max = entry.skeleton.fillBuffer( &skinningTransformsBuffer[id - 1u] );
 					max > 0 )
@@ -165,16 +160,12 @@ namespace castor
 
 		auto morphingBuffer = m_morphingWeights.getData();
 
-		for ( auto & pair : m_meshEntries )
+		for ( auto const & [mesh, entry] : m_meshEntries )
 		{
-			auto & entry = pair.second;
-			auto id = entry.mesh.getId( entry.submesh );
-
-			if ( id && entry.submesh.getMorphTargetsCount() )
+			if ( auto id = entry.mesh.getId( entry.submesh );
+				id && entry.submesh.getMorphTargetsCount() )
 			{
-				auto max = entry.mesh.fillBuffer( entry.submesh, &morphingBuffer[id - 1u] );
-
-				if ( max )
+				if ( auto max = entry.mesh.fillBuffer( entry.submesh, &morphingBuffer[id - 1u] ) )
 				{
 					auto offset = m_morphingWeights.getOffset() + ( id - 1u ) * sizeof( MorphingWeightsConfiguration );
 					m_morphingWeights.buffer->markDirty( offset
@@ -198,7 +189,7 @@ namespace castor
 		}
 	}
 
-	void ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::clear( RenderDevice const & device )
+	void ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::clear( RenderDevice const & )
 	{
 		auto lock( castor::makeUniqueLock( *this ) );
 		doClearNoLock();
@@ -211,9 +202,9 @@ namespace castor
 		std::vector< AnimatedObject * > result;
 		auto lock( castor::makeUniqueLock( *this ) );
 
-		for ( auto & it : *this )
+		for ( auto const & [_, group] : *this )
 		{
-			if ( auto animObject = it.second->findObject( name ) )
+			if ( auto animObject = group->findObject( name ) )
 			{
 				result.push_back( animObject );
 			}
@@ -222,7 +213,7 @@ namespace castor
 		return result;
 	}
 
-	ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::MeshPoolsEntry ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::doCreateEntry( RenderDevice const & device
+	ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::MeshPoolsEntry ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::doCreateEntry( RenderDevice const &
 		, AnimatedObjectGroup const & group
 		, AnimatedMesh const & mesh
 		, castor3d::Submesh const & submesh )
@@ -235,7 +226,7 @@ namespace castor
 		};
 	}
 
-	ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::SkeletonPoolsEntry ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::doCreateEntry( RenderDevice const & device
+	ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::SkeletonPoolsEntry ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::doCreateEntry( RenderDevice const &
 		, AnimatedObjectGroup const & group
 		, AnimatedSkeleton const & skeleton )
 	{
@@ -246,20 +237,20 @@ namespace castor
 		};
 	}
 
-	void ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::doRemoveEntry( RenderDevice const & device
+	void ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::doRemoveEntry( RenderDevice const &
 		, AnimatedMesh const & mesh
 		, castor3d::Submesh const & submesh )
 	{
 		m_meshEntries.erase( cacheanmgrp::makeHash( mesh, submesh ) );
 	}
 
-	void ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::doRemoveEntry( RenderDevice const & device
+	void ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::doRemoveEntry( RenderDevice const &
 		, AnimatedSkeleton const & skeleton )
 	{
 		m_skeletonEntries.erase( &skeleton );
 	}
 
-	void ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::doRemoveEntry( castor3d::RenderDevice const & device
+	void ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::doRemoveEntry( castor3d::RenderDevice const &
 		, castor3d::AnimatedTexture const & texture )
 	{
 		getOwner()->getEngine()->getMaterialCache().unregisterTexture( texture );
@@ -267,19 +258,19 @@ namespace castor
 
 	void ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::doRegister( AnimatedObjectGroup & group )
 	{
-		m_meshAddedConnections.emplace( &group
+		m_meshAddedConnections.try_emplace( &group
 			, group.onMeshAdded.connect( [this]( AnimatedObjectGroup const & pgroup
 				, AnimatedMesh & mesh )
 				{
 					m_engine.sendEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
 						, [this, &pgroup, &mesh]( RenderDevice const & device
-							, QueueData const & queueData )
+							, QueueData const & )
 						{
 							for ( auto & submesh : mesh.getMesh() )
 							{
 								if ( submesh->getMorphTargetsCount() )
 								{
-									m_meshEntries.emplace( cacheanmgrp::makeHash( mesh, *submesh )
+									m_meshEntries.try_emplace( cacheanmgrp::makeHash( mesh, *submesh )
 										, doCreateEntry( device, pgroup, mesh, *submesh ) );
 									mesh.setId( *submesh
 										, uint32_t( m_meshEntries.size() ) );
@@ -287,13 +278,13 @@ namespace castor
 							}
 						} ) );
 				} ) );
-		m_meshRemovedConnections.emplace( &group
-			, group.onMeshRemoved.connect( [this]( AnimatedObjectGroup const & pgroup
+		m_meshRemovedConnections.try_emplace( &group
+			, group.onMeshRemoved.connect( [this]( AnimatedObjectGroup const &
 				, AnimatedMesh & mesh )
 				{
 					m_engine.sendEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
 						, [this, &mesh]( RenderDevice const & device
-							, QueueData const & queueData )
+							, QueueData const & )
 						{
 							for ( auto & submesh : mesh.getMesh() )
 							{
@@ -305,38 +296,38 @@ namespace castor
 							}
 						} ) );
 				} ) );
-		m_skeletonAddedConnections.emplace( &group
+		m_skeletonAddedConnections.try_emplace( &group
 			, group.onSkeletonAdded.connect( [this]( AnimatedObjectGroup const & pgroup
 				, AnimatedSkeleton & skeleton )
 				{
 					m_engine.sendEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
 						, [this, &pgroup, &skeleton]( RenderDevice const & device
-							, QueueData const & queueData )
+							, QueueData const & )
 						{
-							m_skeletonEntries.emplace( &skeleton
+							m_skeletonEntries.try_emplace( &skeleton
 								, doCreateEntry( device, pgroup, skeleton ) );
 							skeleton.setId( uint32_t( m_skeletonEntries.size() ) );
 						} ) );
 				} ) );
-		m_skeletonRemovedConnections.emplace( &group
-			, group.onSkeletonRemoved.connect( [this]( AnimatedObjectGroup const & pgroup
+		m_skeletonRemovedConnections.try_emplace( &group
+			, group.onSkeletonRemoved.connect( [this]( AnimatedObjectGroup const &
 				, AnimatedSkeleton & skeleton )
 				{
 					m_engine.sendEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
 						, [this, &skeleton]( RenderDevice const & device
-							, QueueData const & queueData )
+							, QueueData const & )
 						{
 							skeleton.setId( 0u );
 							doRemoveEntry( device, skeleton );
 						} ) );
 				} ) );
-		m_textureRemovedConnections.emplace( &group
-			, group.onTextureRemoved.connect( [this]( AnimatedObjectGroup const & pgroup
+		m_textureRemovedConnections.try_emplace( &group
+			, group.onTextureRemoved.connect( [this]( AnimatedObjectGroup const &
 				, AnimatedTexture & texture )
 				{
 					m_engine.sendEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
 						, [this, &texture]( RenderDevice const & device
-							, QueueData const & queueData )
+							, QueueData const & )
 						{
 							doRemoveEntry( device, texture );
 						} ) );
@@ -355,25 +346,25 @@ namespace castor
 				m_skeletonRemovedConnections.erase( &group );
 				m_textureRemovedConnections.erase( &group );
 
-				for ( auto & pair : group.getObjects() )
+				for ( auto & [name, object] : group.getObjects() )
 				{
-					switch ( pair.second->getKind() )
+					switch ( object->getKind() )
 					{
 					case AnimationType::eMesh:
-						for ( auto & submesh : static_cast< AnimatedMesh const & >( *pair.second ).getMesh() )
+						for ( auto & submesh : static_cast< AnimatedMesh const & >( *object ).getMesh() )
 						{
 							doRemoveEntry( device
-								, static_cast< AnimatedMesh const & >( *pair.second )
+								, static_cast< AnimatedMesh const & >( *object )
 								, *submesh );
 						}
 						break;
 					case AnimationType::eSkeleton:
 						doRemoveEntry( device
-							, static_cast< AnimatedSkeleton const & >( *pair.second ) );
+							, static_cast< AnimatedSkeleton const & >( *object ) );
 						break;
 					case AnimationType::eTexture:
 						doRemoveEntry( device
-							, static_cast< AnimatedTexture const & >( *pair.second ) );
+							, static_cast< AnimatedTexture const & >( *object ) );
 						break;
 					default:
 						break;

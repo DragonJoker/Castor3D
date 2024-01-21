@@ -8,9 +8,7 @@ CU_ImplementSmartPtr( castor3d, ShadowBuffer )
 
 namespace castor3d
 {
-	ShadowBuffer::ShadowBuffer( Engine & engine
-		, RenderDevice const & device
-		, uint32_t count )
+	ShadowBuffer::ShadowBuffer( RenderDevice const & device )
 		: m_device{ device }
 		, m_buffer{ m_device.uboPool->getBuffer< AllShadowData >( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT ) }
 	{
@@ -19,10 +17,6 @@ namespace castor3d
 	ShadowBuffer::~ShadowBuffer()noexcept
 	{
 		m_device.uboPool->putBuffer( m_buffer );
-	}
-
-	void ShadowBuffer::markDirty()
-	{
 	}
 
 	VkDescriptorSetLayoutBinding ShadowBuffer::createLayoutBinding( uint32_t binding
@@ -41,6 +35,13 @@ namespace castor3d
 	ashes::WriteDescriptorSet ShadowBuffer::getBinding( uint32_t binding )const
 	{
 		return m_buffer.getDescriptorWrite( binding, 0u );
+	}
+
+	void ShadowBuffer::addBinding( ashes::WriteDescriptorSetArray & descriptorWrites
+		, uint32_t & binding )const
+	{
+		descriptorWrites.emplace_back( getBinding( binding ) );
+		++binding;
 	}
 
 	void ShadowBuffer::createBinding( ashes::DescriptorSet & descriptorSet

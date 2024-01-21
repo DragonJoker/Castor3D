@@ -17,9 +17,7 @@ namespace castor3d
 
 	void SkeletonAnimationInstanceBone::doApply()
 	{
-		auto bone = m_animationBone.getBone();
-
-		if ( bone )
+		if ( auto bone = m_animationBone.getBone() )
 		{
 			m_finalTransform = m_cumulativeTransform * bone->getInverseTransform();
 		}

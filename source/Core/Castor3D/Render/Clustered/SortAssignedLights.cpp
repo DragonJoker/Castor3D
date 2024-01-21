@@ -68,7 +68,8 @@ namespace castor3d
 			auto gsKeys = writer.declSharedVariable< sdw::UInt >( "gsKeys", BlockSize );
 
 			auto bitInsert0 = writer.implementFunction< sdw::UInt >( "bitInsert0"
-				, [&]( sdw::UInt value, sdw::UInt bit )
+				, [&]( sdw::UInt const & value
+					, sdw::UInt const & bit )
 				{
 					writer.returnStmt( ( ( ( gMaxUInt << bit ) & value ) << 1u ) | ( ~( gMaxUInt << bit ) & value ) );
 				}
@@ -76,9 +77,9 @@ namespace castor3d
 				, sdw::InUInt{ writer, "bit" } );
 
 			auto sortLights = writer.implementFunction< sdw::Void >( "c3d_sortLights"
-				, [&]( sdw::UInt groupIndex
-					, sdw::UInt offset
-					, sdw::UInt numElements )
+				, [&]( sdw::UInt const & groupIndex
+					, sdw::UInt const & offset
+					, sdw::UInt const & numElements )
 				{
 					// start with simple version, do everything in group shared memory
 	
@@ -96,7 +97,7 @@ namespace castor3d
 						gsKeys[i1] = writer.ternary( i1 < numElements, c3d_lightClusterIndex[offset + i1], gMaxUInt );
 						gsKeys[i2] = writer.ternary( i2 < numElements, c3d_lightClusterIndex[offset + i2], gMaxUInt );
 					}
-					ROF;
+					ROF
 
 					shader::groupMemoryBarrierWithGroupSync( writer );
 	
@@ -122,15 +123,15 @@ namespace castor3d
 									gsKeys[indexFirst] = valSecond;
 									gsKeys[indexSecond] = valFirst;
 								}
-								FI;
+								FI
 
 								shader::groupMemoryBarrierWithGroupSync( writer );
 							}
-							ROF;
+							ROF
 						}
-						ROF;
+						ROF
 					}
-					ROF;
+					ROF
 
 					// Now commit the results to global memory.
 					FOR( writer, sdw::UInt, batch, 0_u, batch < batchCount, ++batch )
@@ -142,21 +143,21 @@ namespace castor3d
 						{
 							c3d_lightClusterIndex[offset + i1] = gsKeys[i1];
 						}
-						FI;
+						FI
 						IF( writer, i2 < numElements )
 						{
 							c3d_lightClusterIndex[offset + i2] = gsKeys[i2];
 						}
-						FI;
+						FI
 					}
-					ROF;
+					ROF
 				}
 				, sdw::InUInt{ writer, "groupIndex" }
 				, sdw::InUInt{ writer, "offset" }
 				, sdw::InUInt{ writer, "numElements" } );
 
 			writer.implementMainT< sdw::VoidT >( NumThreads
-				, [&]( sdw::ComputeIn in )
+				, [&]( sdw::ComputeIn const & in )
 				{
 					auto clusterIndex3D = writer.declLocale( "clusterIndex3D"
 						, in.workGroupID );
@@ -173,7 +174,7 @@ namespace castor3d
 					{
 						sortLights( in.localInvocationIndex, startOffset, lightCount );
 					}
-					FI;
+					FI
 				} );
 			return writer.getBuilder().releaseShader();
 		}
@@ -192,7 +193,7 @@ namespace castor3d
 				, crg::RunnableGraph & graph
 				, RenderDevice const & device
 				, crg::cp::Config config
-				, FrustumClusters & clusters
+				, FrustumClusters const & clusters
 				, LightType lightType )
 				: ShaderHolder{ ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, std::string{ "SortAssigned/" } + getName( lightType ), createShader( device, clusters.getConfig() ) } }
 				, CreateInfoHolder{ ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, ShaderHolder::getData() ) } }
@@ -212,7 +213,7 @@ namespace castor3d
 	crg::FramePass const & createSortAssignedLightsPass( crg::FramePassGroup & graph
 		, crg::FramePassArray previousPasses
 		, RenderDevice const & device
-		, FrustumClusters & clusters )
+		, FrustumClusters const & clusters )
 	{
 		// Point lights
 		auto & point = graph.createPass( "SortAssigned/Point"

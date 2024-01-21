@@ -55,7 +55,7 @@ namespace castor3d
 	}
 
 	OverlayTextBufferIndex OverlayTextBuffer::fill( uint32_t overlayIndex
-		, TextOverlay const & overlay )
+		, TextOverlay const & overlay )noexcept
 	{
 		auto chars = overlay.getCharCount();
 		auto words = overlay.getWordCount();
@@ -97,7 +97,7 @@ namespace castor3d
 	}
 
 	void OverlayTextBuffer::fillDescriptorSet( ashes::DescriptorSetLayout const & descriptorLayout
-		, ashes::DescriptorSet & descriptorSet )
+		, ashes::DescriptorSet & descriptorSet )const
 	{
 		descriptorSet.createBinding( descriptorLayout.getBinding( uint32_t( TextOverlay::ComputeBindingIdx::eChars ) )
 			, *charsBuffer.buffer
@@ -144,18 +144,30 @@ namespace castor3d
 
 	OverlayTextBufferIndex OverlayTextBufferPool::fill( uint32_t overlayIndex
 		, FontTexture const * fontTexture
-		, TextOverlay const & overlay )
+		, TextOverlay const & overlay )noexcept
 	{
-		auto it = m_buffers.emplace( fontTexture, nullptr ).first;
+		OverlayTextBufferIndex result{};
 
-		if ( !it->second )
+		try
 		{
-			it->second = std::make_unique< OverlayTextBuffer >( m_engine
-				, m_name + ( fontTexture ? "-" + fontTexture->getFontName() : std::string{} )
-				, m_device );
+			auto it = m_buffers.emplace( fontTexture, nullptr ).first;
+
+			if ( !it->second )
+			{
+				it->second = std::make_unique< OverlayTextBuffer >( m_engine
+					, m_name + ( fontTexture ? "-" + fontTexture->getFontName() : std::string{} )
+					, m_device );
+			}
+
+			result = it->second->fill( overlayIndex, overlay );
+		}
+		catch ( std::exception & exc )
+		{
+			CU_Failure( "Couldn't create an OverlayTextBuffer" );
+			fprintf( stderr, "Couldn't create an OverlayTextBuffer: %s", exc.what() );
 		}
 
-		return it->second->fill( overlayIndex, overlay );
+		return result;
 	}
 
 	void OverlayTextBufferPool::upload( UploadData & uploader )

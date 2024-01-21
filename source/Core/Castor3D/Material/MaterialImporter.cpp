@@ -29,7 +29,7 @@ namespace castor3d
 			{
 				auto fullPath = filePath / path;
 				folder = fullPath.getPath();
-				relative = fullPath.getFileName( true );;
+				relative = fullPath.getFileName( true );
 			}
 			else
 			{
@@ -161,9 +161,9 @@ namespace castor3d
 	{
 		castor::ImageRPtr result{};
 		castor::Path relative;
-		castor::Path folder;
 
-		if ( matimp::findImage( path, m_file->getFilePath(), folder, relative ) )
+		if ( castor::Path folder;
+			matimp::findImage( path, m_file->getFilePath(), folder, relative ) )
 		{
 			result = loadImage( relative.getFileName()
 				, castor::ImageCreateParams{ folder / relative
@@ -173,13 +173,13 @@ namespace castor3d
 		return result;
 	}
 
-	castor::ImageRPtr MaterialImporter::loadImage( castor::String name
+	castor::ImageRPtr MaterialImporter::loadImage( castor::String const & name
 		, castor::String type
 		, castor::ByteArray data )const
 	{
 		return loadImage( name
-			, castor::ImageCreateParams{ type
-				, data
+			, castor::ImageCreateParams{ std::move( type )
+				, std::move( data )
 				, { false, false, false } } );
 	}
 
@@ -206,9 +206,8 @@ namespace castor3d
 		, castor::ByteArray data
 		, TextureConfiguration const & config )const
 	{
-		auto image = loadImage( name, type, data );
-
-		if ( !image )
+		if ( auto image = loadImage( name, type, data );
+			!image )
 		{
 			CU_Exception( "Couldn't load image [" + name + "]" );
 		}

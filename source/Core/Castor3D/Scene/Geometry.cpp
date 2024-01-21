@@ -160,9 +160,9 @@ namespace castor3d
 	{
 		auto lock( castor::makeUniqueLock( m_mutex ) );
 		MaterialObs result{};
-		auto it = m_submeshesMaterials.find( &submesh );
 
-		if ( it != m_submeshesMaterials.end() )
+		if ( auto it = m_submeshesMaterials.find( &submesh );
+			it != m_submeshesMaterials.end() )
 		{
 			result = it->second;
 		}
@@ -182,13 +182,13 @@ namespace castor3d
 
 		if ( !boxes.empty() )
 		{
-			m_submeshesBoxes.emplace( boxes[0].first, boxes[0].second );
-			m_submeshesSpheres.emplace( boxes[0].first, castor::BoundingSphere{ boxes[0].second } );
+			m_submeshesBoxes.try_emplace( boxes[0].first, boxes[0].second );
+			m_submeshesSpheres.try_emplace( boxes[0].first, boxes[0].second );
 
 			for ( auto i = 1u; i < boxes.size(); ++i )
 			{
-				m_submeshesBoxes.emplace( boxes[i].first, boxes[i].second );
-				m_submeshesSpheres.emplace( boxes[i].first, castor::BoundingSphere{ boxes[i].second } );
+				m_submeshesBoxes.try_emplace( boxes[i].first, boxes[i].second );
+				m_submeshesSpheres.try_emplace( boxes[i].first, boxes[i].second );
 			}
 
 			doUpdateContainers();
@@ -199,9 +199,9 @@ namespace castor3d
 	{
 		static castor::BoundingBox const dummy;
 		auto lock( castor::makeUniqueLock( m_mutex ) );
-		auto it = m_submeshesBoxes.find( &submesh );
 
-		if ( it != m_submeshesBoxes.end() )
+		if ( auto it = m_submeshesBoxes.find( &submesh );
+			it != m_submeshesBoxes.end() )
 		{
 			return it->second;
 		}
@@ -213,9 +213,9 @@ namespace castor3d
 	{
 		static castor::BoundingSphere const dummy;
 		auto lock( castor::makeUniqueLock( m_mutex ) );
-		auto it = m_submeshesSpheres.find( &submesh );
 
-		if ( it != m_submeshesSpheres.end() )
+		if ( auto it = m_submeshesSpheres.find( &submesh );
+			it != m_submeshesSpheres.end() )
 		{
 			return it->second;
 		}
@@ -235,9 +235,8 @@ namespace castor3d
 	uint32_t Geometry::getId( Pass const & pass
 		, Submesh const & submesh )const
 	{
-		auto itPass = m_ids.find( &pass );
-
-		if ( itPass != m_ids.end() )
+		if ( auto itPass = m_ids.find( &pass );
+			itPass != m_ids.end() )
 		{
 			auto it = itPass->second.find( submesh.getId() );
 			return it == itPass->second.end() ? 0u : it->second.first;
@@ -249,9 +248,8 @@ namespace castor3d
 	SubmeshRenderNode * Geometry::getRenderNode( Pass const & pass
 		, Submesh const & submesh )const
 	{
-		auto itPass = m_ids.find( &pass );
-
-		if ( itPass != m_ids.end() )
+		if ( auto itPass = m_ids.find( &pass );
+			itPass != m_ids.end() )
 		{
 			auto it = itPass->second.find( submesh.getId() );
 			return it == itPass->second.end() ? nullptr : it->second.second;

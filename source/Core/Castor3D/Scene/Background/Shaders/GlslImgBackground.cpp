@@ -20,15 +20,16 @@ namespace castor3d::shader
 		: BackgroundModel{ writer, utils, std::move( targetSize ) }
 	{
 		m_writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapBackground"
-			, binding++
+			, binding
 			, set );
+		++binding;
 	}
 
-	BackgroundModelPtr ImgBackgroundModel::create( Engine const & engine
+	BackgroundModelPtr ImgBackgroundModel::create( Engine const & /*engine*/
 		, sdw::ShaderWriter & writer
 		, Utils & utils
 		, VkExtent2D targetSize
-		, bool needsForeground
+		, bool /*needsForeground*/
 		, uint32_t & binding
 		, uint32_t set )
 	{

@@ -74,8 +74,6 @@ namespace atmosphere_scattering
 		, crg::ImageViewIdArray const & colour
 		, bool forceVisible )
 		: castor3d::BackgroundPassBase{ pass
-			, context
-			, graph
 			, device
 			, background
 			, forceVisible }

@@ -236,7 +236,7 @@ namespace castor3d
 				, uint32_t index );
 			PassOverlays( PassOverlays && rhs )noexcept;
 			~PassOverlays()noexcept;
-			void retrieveGpuTime();
+			void retrieveGpuTime()const;
 			void compute();
 			bool update( uint32_t & top );
 			void addTimer( FramePassTimer & timer );
@@ -307,7 +307,7 @@ namespace castor3d
 			bool removeTimer( castor::String const & name
 				, castor::StringArray & categories
 				, FramePassTimer & timer );
-			void retrieveGpuTime();
+			void retrieveGpuTime()const;
 			void compute();
 			bool update( uint32_t & top );
 			void setVisible( bool visible );

@@ -54,7 +54,7 @@ namespace castor3d
 	private:
 		crg::FramePass & doCreateClearInjectionPass();
 		crg::FramePass & doCreateDownsamplePass();
-		crg::FramePass & doCreatePropagationPass( std::vector< crg::FramePass const * > previousPasses
+		crg::FramePass & doCreatePropagationPass( crg::FramePassArray const & previousPasses
 			, std::string const & name
 			, LightVolumePassResult const & injection
 			, LightVolumePassResult const & lpvResult

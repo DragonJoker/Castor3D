@@ -117,8 +117,7 @@ namespace castor3d
 			return result;
 		}
 
-		static SceneUbo createSceneUbo( RenderDevice const & device
-			, castor::Size const & size )
+		static SceneUbo createSceneUbo( RenderDevice const & device )
 		{
 			return SceneUbo{ device };
 		}
@@ -132,14 +131,14 @@ namespace castor3d
 			auto position = writer.declInput< sdw::Vec2 >( "position", sdw::EntryPoint::eVertex, 0u );
 			auto fragColor = writer.declOutput< sdw::Vec4 >( "fragColor", sdw::EntryPoint::eFragment, 0 );
 
-			writer.implementEntryPointT< sdw::VoidT, sdw::VoidT >( [&]( sdw::VertexIn in
+			writer.implementEntryPointT< sdw::VoidT, sdw::VoidT >( [&position]( sdw::VertexIn const & 
 					, sdw::VertexOut out )
 				{
 					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
 				} );
 
-			writer.implementEntryPointT< sdw::VoidT, sdw::VoidT >( [&]( sdw::FragmentIn in
-				, sdw::FragmentOut out )
+			writer.implementEntryPointT< sdw::VoidT, sdw::VoidT >( [&c3d_source, &fragColor]( sdw::FragmentIn const & in
+				, sdw::FragmentOut const & )
 				{
 					fragColor = c3d_source.fetch( ivec2( in.fragCoord.xy() ), 0_i );
 				} );
@@ -174,7 +173,7 @@ namespace castor3d
 		: crg::RunnablePass{ pass
 			, context
 			, graph
-			, { [this]( uint32_t index ) { doInitialise(); }
+			, { crg::getDefaultV< crg::RunnablePass::InitialiseCallback >()
 				, crg::getDefaultV< crg::RunnablePass::GetPipelineStateCallback >()
 				, [this]( crg::RecordContext & context, VkCommandBuffer cmd, uint32_t i ){ doRecordInto( context, cmd, i ); } }
 			, { 1u, true } }
@@ -214,10 +213,6 @@ namespace castor3d
 		m_framebuffer = framebuffer;
 		m_renderSize = framebuffer.getDimensions();
 		m_clearValues = std::move( clearValues );
-	}
-
-	void LoadingScreen::WindowPass::doInitialise()
-	{
 	}
 
 	void LoadingScreen::WindowPass::doRecordInto( crg::RecordContext & context
@@ -267,17 +262,15 @@ namespace castor3d
 		, m_renderSize{ size }
 		, m_camera{ loadscreen::createCamera( *m_scene, m_renderSize ) }
 		, m_culler{ castor::makeUniqueDerived< SceneCuller, FrustumCuller >( *m_camera ) }
-		, m_swapchainFormat{ VK_FORMAT_R8G8B8A8_UNORM }
 		, m_colour{ loadscreen::createColour( m_device, resources, SceneName, m_initialRenderSize, m_swapchainFormat ) }
 		, m_depth{ loadscreen::createDepth( m_device, resources, SceneName, m_initialRenderSize ) }
 		, m_cameraUbo{ m_device }
 		, m_hdrConfigUbo{ m_device }
-		, m_sceneUbo{ loadscreen::createSceneUbo( m_device, m_renderSize ) }
+		, m_sceneUbo{ loadscreen::createSceneUbo( m_device ) }
 		, m_backgroundRenderer{ castor::makeUnique< BackgroundRenderer >( m_graph->getDefaultGroup()
 			, nullptr
 			, m_device
 			, nullptr
-			, SceneName
 			, *m_scene->getBackground()
 			, m_hdrConfigUbo
 			, m_sceneUbo
@@ -412,7 +405,6 @@ namespace castor3d
 					, nullptr
 					, m_device
 					, nullptr
-					, SceneName
 					, *m_scene->getBackground()
 					, m_hdrConfigUbo
 					, m_sceneUbo

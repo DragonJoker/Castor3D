@@ -39,7 +39,7 @@ namespace castor3d
 		C3D_API explicit PassFactory( Engine & engine );
 
 		C3D_API void registerType( LightingModelID lightingModelId
-			, PassRegisterInfo info );
+			, PassRegisterInfo const & info );
 		C3D_API PassUPtr create( Material & parent
 			, LightingModelID lightingModelId )const;
 		C3D_API PassUPtr create( Material & parent

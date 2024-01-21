@@ -51,17 +51,17 @@ namespace castor3d
 		m_buffers.clear();
 	}
 
-	void UniformBufferPool::upload( UploadData & uploader )const
+	void UniformBufferPool::upload( UploadData const & uploader )const
 	{
 		auto & commandBuffer = uploader.getCommandBuffer();
 
-		for ( auto & bufferIt : m_buffers )
+		for ( auto & [id, buffers] : m_buffers )
 		{
-			for ( auto & buffer : bufferIt.second )
+			for ( auto & buffer : buffers )
 			{
 				if ( buffer.buffer->hasAllocated() )
 				{
-					auto & vkBuffer = buffer.buffer->getBuffer().getBuffer();
+					auto const & vkBuffer = buffer.buffer->getBuffer().getBuffer();
 					auto curFlags = vkBuffer.getCompatibleStageFlags();
 					auto barrier = vkBuffer.makeHostWrite();
 
@@ -95,16 +95,16 @@ namespace castor3d
 	{
 		uint32_t result = 0u;
 
-		for ( auto & bufferIt : m_buffers )
+		for ( auto & [id, buffers] : m_buffers )
 		{
-			result += uint32_t( bufferIt.second.size() );
+			result += uint32_t( buffers.size() );
 		}
 
 		return result;
 	}
 
 	UniformBufferPool::BufferArray::iterator UniformBufferPool::doFindBuffer( UniformBufferPool::BufferArray & array
-		, VkDeviceSize alignedSize )
+		, VkDeviceSize alignedSize )const
 	{
 		auto it = array.begin();
 
@@ -119,8 +119,8 @@ namespace castor3d
 	UniformBufferPool::BufferArray::iterator UniformBufferPool::doCreatePoolBuffer( VkMemoryPropertyFlags flags
 		, UniformBufferPool::BufferArray & buffers )
 	{
-		auto & renderSystem = *getRenderSystem();
-		auto & device = renderSystem.getRenderDevice();
+		auto const & renderSystem = *getRenderSystem();
+		auto const & device = renderSystem.getRenderDevice();
 		ashes::QueueShare sharingMode
 		{
 			{

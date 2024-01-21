@@ -50,10 +50,10 @@ namespace castor3d
 		auto containerSize = m_container
 			? m_container->getSize()
 			: m_manager->getSize();
-		int32_t advance = int32_t( borders[advanceComp] );
+		auto advance = int32_t( borders[advanceComp] );
 		uint32_t containerFixedCompLimit = containerSize[fixedComp] - boxlayt::getBorderDim( borders, fixedComp );
 
-		for ( auto & item : m_items )
+		for ( auto const & item : m_items )
 		{
 			if ( item.isSpacer() )
 			{
@@ -98,7 +98,7 @@ namespace castor3d
 		}
 	}
 
-	uint32_t LayoutBox::doComputeSeparator( uint32_t component )
+	uint32_t LayoutBox::doComputeSeparator( uint32_t component )const
 	{
 		auto borders = m_container
 			? m_container->getBorderSize()
@@ -143,7 +143,7 @@ namespace castor3d
 
 	std::pair< int32_t, uint32_t > LayoutBox::doGetFixedPosSize( Item const & item
 		, uint32_t limit
-		, uint32_t component )
+		, uint32_t component )const
 	{
 		limit -= item.paddingSize( component );
 		auto control = item.control();

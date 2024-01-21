@@ -161,7 +161,7 @@ namespace castor3d
 		 *\return		\p false si un paramètre avec le nom donné existe déjà
 		 */
 		bool add( KeyT const & name
-			, castor::StringView value )
+			, castor::String const & value )
 		{
 			bool result = false;
 

@@ -8,7 +8,7 @@ namespace castor3d
 
 	bool BinaryWriter< SkinComponent >::doWrite( SkinComponent const & obj )
 	{
-		uint32_t count = uint32_t( obj.getData().m_bones.size() );
+		auto count = uint32_t( obj.getData().m_bones.size() );
 		bool result = doWriteChunk( count, ChunkType::eSubmeshBoneCount, m_chunk );
 
 		if ( result )

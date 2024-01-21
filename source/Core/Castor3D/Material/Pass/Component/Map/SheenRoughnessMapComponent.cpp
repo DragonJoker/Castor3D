@@ -32,7 +32,7 @@ namespace castor
 		{
 		}
 
-		bool operator()( StringStream & file )
+		bool operator()( StringStream & file )const
 		{
 			return writeMask( file, cuT( "sheen_roughness_mask" ), m_mask );
 		}
@@ -78,7 +78,7 @@ namespace castor3d
 		static CU_ImplementAttributeParserBlock( parserTexRemapSheenRoughness, SceneImportContext )
 		{
 			auto & plugin = getEngine( *blockContext )->getPassComponentsRegister().getPlugin( SheenRoughnessMapComponent::TypeName );
-			blockContext->textureRemapIt = blockContext->textureRemaps.emplace( plugin.getTextureFlags(), TextureConfiguration{} ).first;
+			blockContext->textureRemapIt = blockContext->textureRemaps.try_emplace( plugin.getTextureFlags() ).first;
 			blockContext->textureRemapIt->second = TextureConfiguration{};
 		}
 		CU_EndAttributePushBlock( CSCNSection::eTextureRemapChannel, blockContext )
@@ -123,13 +123,14 @@ namespace castor3d
 	void SheenRoughnessMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		channelFillers.emplace( "sheen_roughness", ChannelFiller{ getTextureFlags()
+		channelFillers.try_emplace( "sheen_roughness"
+			, getTextureFlags()
 			, []( TextureContext & blockContext )
 			{
-				auto & component = getPassComponent< SheenRoughnessMapComponent >( blockContext );
+				auto const & component = getPassComponent< SheenRoughnessMapComponent >( blockContext );
 				component.fillChannel( blockContext.configuration
 					, 0xFF000000u );
-			} } );
+			} );
 
 		castor::addParserT( parsers
 			, CSCNSection::eTexture

@@ -93,13 +93,13 @@ namespace castor3d
 				}
 
 				scene.getListener().postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
-					, [&element, this]( RenderDevice const & device
-						, QueueData const & queueData )
+					, [&element, this]( RenderDevice const &
+						, QueueData const & )
 					{
 						element.prepare( m_faceCount, m_vertexCount );
 					} ) );
 			}
-			, []( ElementT & element )
+			, []( ElementT & )
 			{
 			}
 			, MovableMergerT< GeometryCache >{ scene.getName() }

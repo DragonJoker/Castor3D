@@ -50,16 +50,6 @@ namespace castor
 			, castor::StringStream & file )override
 		{
 			log::info << tabs() << cuT( "Writing SkyboxBackground" ) << std::endl;
-			static String const faces[]
-			{
-				cuT( "right" ),
-				cuT( "left" ),
-				cuT( "bottom" ),
-				cuT( "top" ),
-				cuT( "back" ),
-				cuT( "front" ),
-			};
-
 			auto result = true;
 			file << ( cuT( "\n" ) + tabs() + cuT( "//Skybox\n" ) );
 
@@ -100,7 +90,7 @@ namespace castor
 					for ( uint32_t i = 0; i < 6 && result; ++i )
 					{
 						result = writeFile( file
-							, faces[i]
+							, getName( SkyboxFace( i ) )
 							, background.getLayerTexturePath()[i]
 							, m_folder
 							, cuT( "Textures" ) );
@@ -176,46 +166,46 @@ namespace castor3d
 	void SkyboxBackground::setLeftImage( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		setFaceTexture( folder, relative, CubeMapFace::eNegativeX );
+		setFaceTexture( folder, relative, SkyboxFace::eLeft );
 	}
 
 	void SkyboxBackground::setRightImage( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		setFaceTexture( folder, relative, CubeMapFace::ePositiveX );
+		setFaceTexture( folder, relative, SkyboxFace::eRight );
 	}
 
 	void SkyboxBackground::setTopImage( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		setFaceTexture( folder, relative, CubeMapFace::eNegativeY );
+		setFaceTexture( folder, relative, SkyboxFace::eTop );
 	}
 
 	void SkyboxBackground::setBottomImage( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		setFaceTexture( folder, relative, CubeMapFace::ePositiveY );
+		setFaceTexture( folder, relative, SkyboxFace::eBottom );
 	}
 
 	void SkyboxBackground::setFrontImage( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		setFaceTexture( folder, relative, CubeMapFace::eNegativeZ );
+		setFaceTexture( folder, relative, SkyboxFace::eFront );
 	}
 
 	void SkyboxBackground::setBackImage( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		setFaceTexture( folder, relative, CubeMapFace::ePositiveZ );
+		setFaceTexture( folder, relative, SkyboxFace::eBack );
 	}
 
 	void SkyboxBackground::setFaceTexture( castor::Path const & folder
 		, castor::Path const & relative
-		, CubeMapFace face )
+		, SkyboxFace face )
 	{
 		m_layerTexturePath[size_t( face )] = folder / relative;
 		m_layerTexture[size_t( face )] = SceneBackground::loadImage( *getScene().getEngine()
-			, cuT( "SkyboxBackground" ) + castor3d::getName( face )
+			, cuT( "SkyboxBackground" ) + castor::String{ castor3d::getName( face ) }
 			, folder
 			, relative
 			, true );
@@ -240,7 +230,7 @@ namespace castor3d
 			, std::move( image )
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, cuT( "SkyboxBackgroundEquirectangular" ) );
-		m_equiTexture->setSource( folder, relative, { false, false, false } );
+		m_equiTexture->setSource( folder, relative );
 
 		m_equiTexturePath = folder / relative;
 		m_equiSize.set( size, size );
@@ -298,7 +288,7 @@ namespace castor3d
 	{
 		VkImageSubresourceRange dstSubresource{ VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u };
 
-		for ( auto & layer : m_layerTexture )
+		for ( auto const & layer : m_layerTexture )
 		{
 			dstSubresource.levelCount = layer->getLevels();
 			uploader.pushUpload( layer->getPxBuffer().getConstPtr()
@@ -317,19 +307,21 @@ namespace castor3d
 		, uint32_t & index )const
 	{
 		pass.addSampledView( m_textureId.wholeViewId
-			, index++
+			, index
 			, crg::SamplerDesc{ VK_FILTER_LINEAR
 				, VK_FILTER_LINEAR
 				, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
+		++index;
 	}
 
 	void SkyboxBackground::doAddBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
 		, VkShaderStageFlags shaderStages
 		, uint32_t & index )const
 	{
-		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+		bindings.emplace_back( makeDescriptorSetLayoutBinding( index
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, shaderStages ) );	// c3d_mapBackground
+		++index;
 	}
 
 	void SkyboxBackground::doAddDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
@@ -369,7 +361,7 @@ namespace castor3d
 	{
 		uint32_t maxDim{};
 
-		for ( auto & layer : m_layerTexture )
+		for ( auto const & layer : m_layerTexture )
 		{
 			auto dim = layer->getDimensions();
 			maxDim = std::max( maxDim
@@ -472,8 +464,7 @@ namespace castor3d
 			dstData += sectionSize;
 		}
 
-		buffer = adaptBuffer( engine
-			, *buffer
+		buffer = adaptBuffer( *buffer
 			, name
 			, true );
 		castor::ImageLayout layout{ lines.getLayout().type, *buffer };
@@ -493,7 +484,7 @@ namespace castor3d
 
 		// First, split vertically, since it's the most straightforward.
 		auto linesStride = height * cross.getPxBuffer().getSize() / cross.getHeight();
-		std::array< castor::ImageUPtr, 3u > lines{
+		castor::Array< castor::ImageUPtr, 3u > lines{
 			castor::makeUnique< castor::Image >( cross.getName(), cross.getPath(), castor::Size{ cross.getWidth(), height }, cross.getPixelFormat(), buffer + ptrdiff_t( linesStride * 0 ), cross.getPixelFormat() ),
 			castor::makeUnique< castor::Image >( cross.getName(), cross.getPath(), castor::Size{ cross.getWidth(), height }, cross.getPixelFormat(), buffer + ptrdiff_t( linesStride * 1 ), cross.getPixelFormat() ),
 			castor::makeUnique< castor::Image >( cross.getName(), cross.getPath(), castor::Size{ cross.getWidth(), height }, cross.getPixelFormat(), buffer + ptrdiff_t( linesStride * 2 ), cross.getPixelFormat() ) };

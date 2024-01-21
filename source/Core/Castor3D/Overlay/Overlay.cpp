@@ -80,31 +80,34 @@ namespace castor3d
 		return result;
 	}
 
-	PanelOverlayRPtr Overlay::getPanelOverlay()const
+	PanelOverlayRPtr Overlay::getPanelOverlay()const noexcept
 	{
 		if ( m_category->getType() != OverlayType::ePanel )
 		{
-			CU_Exception( "This overlay is not a panel." );
+			CU_Failure( "This overlay is not a panel." );
+			return nullptr;
 		}
 
 		return &static_cast< PanelOverlay & >( *m_category );
 	}
 
-	BorderPanelOverlayRPtr Overlay::getBorderPanelOverlay()const
+	BorderPanelOverlayRPtr Overlay::getBorderPanelOverlay()const noexcept
 	{
 		if ( m_category->getType() != OverlayType::eBorderPanel )
 		{
-			CU_Exception( "This overlay is not a border panel." );
+			CU_Failure( "This overlay is not a border panel." );
+			return nullptr;
 		}
 
 		return &static_cast< BorderPanelOverlay & >( *m_category );
 	}
 
-	TextOverlayRPtr Overlay::getTextOverlay()const
+	TextOverlayRPtr Overlay::getTextOverlay()const noexcept
 	{
 		if ( m_category->getType() != OverlayType::eText )
 		{
-			CU_Exception( "This overlay is not a text." );
+			CU_Failure( "This overlay is not a text." );
+			return nullptr;
 		}
 
 		return &static_cast< TextOverlay & >( *m_category );
@@ -152,11 +155,10 @@ namespace castor3d
 
 	void Overlay::removeChild( OverlayRPtr overlay )
 	{
-		auto it = std::find( m_children.begin()
-			, m_children.end()
-			, overlay );
-
-		if ( it != m_children.end() )
+		if ( auto it = std::find( m_children.begin()
+				, m_children.end()
+				, overlay );
+			it != m_children.end() )
 		{
 			( *it )->m_parent = nullptr;
 			m_children.erase( it );

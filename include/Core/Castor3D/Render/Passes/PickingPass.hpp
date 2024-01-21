@@ -52,25 +52,13 @@ namespace castor3d
 			, SceneCuller & culler );
 		/**
 		 *\~english
-		 *\brief		Adds a scene rendered through this technique.
-		 *\param[in]	scene	The scene.
-		 *\param[in]	camera	The camera through which the scene is viewed.
-		 *\~french
-		 *\brief		Ajoute une scène dessinée via cette technique.
-		 *\param[in]	scene	La scène.
-		 *\param[in]	camera	La caméra à travers laquelle la scène est vue.
-		 */
-		C3D_API void addScene( Scene & scene
-			, Camera & camera );
-		/**
-		 *\~english
 		 *\brief		Updates the final render area.
 		 *\param[in]	scissor		The scissor reducing the render area.
 		 *\~french
 		 *\brief		Met ç jour la zone de rendu finale.
 		 *\param[in]	scissor		Le scissor réduisant la zone de rendu.
 		 */
-		C3D_API void updateArea( VkRect2D const & scissor );
+		C3D_API void updateArea( VkRect2D const & scissor )const;
 		/**
 		*\~english
 		*name

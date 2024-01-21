@@ -87,7 +87,7 @@ namespace castor3d
 
 			// Produce a 3k-bit morton code from a quantized coordinate.
 			auto getMortonCode = writer.implementFunction< sdw::UInt >( "getMortonCode"
-				, [&]( sdw::UVec3 quantizedCoord )
+				, [&]( sdw::UVec3 const & quantizedCoord )
 				{
 					auto mortonCode = writer.declLocale( "mortonCode", 0_u );
 					auto bitMask = 1u;
@@ -110,16 +110,16 @@ namespace castor3d
 				, sdw::InUVec3{ writer, "quantizedCoord" } );
 
 			writer.implementMainT< sdw::VoidT >( NumThreads
-				, [&]( sdw::ComputeIn in )
+				, [&]( sdw::ComputeIn const & in )
 				{
-					auto groupIndex = in.localInvocationIndex;
+					auto const & groupIndex = in.localInvocationIndex;
 
 					IF( writer, groupIndex == 0_u )
 					{
 						gsAABB = c3d_reducedLightsAABB[0_u];
 						gsAABBRange = c3d_lightsAABBRange.xyz();
 					}
-					FI;
+					FI
 
 					shader::groupMemoryBarrierWithGroupSync( writer );
 					auto coordScale = vec3( sdw::Float{ coordinateScale } );
@@ -139,7 +139,7 @@ namespace castor3d
 						c3d_pointLightMortonCodes[threadIndex] = getMortonCode( quantized );
 						c3d_pointLightIndices[threadIndex] = threadIndex;
 					}
-					FI;
+					FI
 
 					IF( writer, threadIndex < c3d_clustersData.spotLightCount() )
 					{
@@ -154,7 +154,7 @@ namespace castor3d
 						c3d_spotLightMortonCodes[threadIndex] = getMortonCode( quantized );
 						c3d_spotLightIndices[threadIndex] = threadIndex;
 					}
-					FI;
+					FI
 				} );
 			return writer.getBuilder().releaseShader();
 		}
@@ -198,7 +198,7 @@ namespace castor3d
 
 			void doPostRecord( crg::RecordContext & context
 				, VkCommandBuffer commandBuffer
-				, uint32_t index )
+				, uint32_t index )const
 			{
 				for ( auto & attach : m_pass.buffers )
 				{

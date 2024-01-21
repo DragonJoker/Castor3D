@@ -176,7 +176,7 @@ namespace castor3d
 		visitor.visit( *this );
 	}
 
-	uint32_t TextOverlay::getCount( bool secondary )const
+	uint32_t TextOverlay::getCount( bool )const
 	{
 		return m_charsCount * 6u;
 	}
@@ -184,7 +184,7 @@ namespace castor3d
 	float TextOverlay::fillBuffer( uint32_t overlayIndex
 		, castor::ArrayView< TextChar > texts
 		, castor::ArrayView< TextWord > words
-		, castor::ArrayView< TextLine > lines )const
+		, castor::ArrayView< TextLine > lines )const noexcept
 	{
 		std::copy( m_text.begin()
 			, m_text.begin() + m_charsCount
@@ -241,8 +241,7 @@ namespace castor3d
 			auto processChar = [&]( shader::OverlayData & overlay
 				, ovrltxt::TextChar const & character
 				, sdw::Vec2 const & texDim
-				, std::function< sdw::Vec4( sdw::Vec2 const
-					, sdw::Vec4 const ) > generateUvs )
+				, auto generateUvs )
 			{
 				auto offset = writer.declLocale( "offset"
 					, overlay.vertexOffset() + ( character.index() * 6u ) );
@@ -307,7 +306,7 @@ namespace castor3d
 					ssRelBounds.z() = ssRelBounds.x();
 					ssRelBounds.w() = ssRelBounds.y();
 				}
-				FI;
+				FI
 				//
 				// Fill buffer
 				//
@@ -321,7 +320,7 @@ namespace castor3d
 			};
 
 			writer.implementMain( 1u, 1u
-				, [&]( sdw::ComputeIn in )
+				, [&]( sdw::ComputeIn const & in )
 				{
 					auto charIndex = writer.declLocale( "charIndex"
 						, c3d_batchOffset + in.globalInvocationID.x() * 16u + in.globalInvocationID.y() );
@@ -341,8 +340,8 @@ namespace castor3d
 							processChar( overlay
 								, character
 								, texDim
-								, []( sdw::Vec2 const ratio
-									, sdw::Vec4 const absolute )
+								, []( sdw::Vec2 const &
+									, sdw::Vec4 const & )
 								{
 									return vec4( 0.0_f, 0.0_f, 1.0_f, 1.0_f );
 								} );
@@ -352,15 +351,15 @@ namespace castor3d
 							processChar( overlay
 								, character
 								, texDim
-								, []( sdw::Vec2 const ratio
-									, sdw::Vec4 const absolute )
+								, []( sdw::Vec2 const & ratio
+									, sdw::Vec4 const & absolute )
 								{
 									return vec4( absolute ) / vec4( ratio, ratio );
 								} );
 						}
-						FI;
+						FI
 					}
-					FI;
+					FI
 				} );
 
 			comp.shader = writer.getBuilder().releaseShader();
@@ -368,11 +367,11 @@ namespace castor3d
 		return makeShaderState( device, comp );
 	}
 
-	void TextOverlay::setFont( castor::String name )
+	void TextOverlay::setFont( castor::String const & name )
 	{
 		// Récupération / Création de la police
 		Engine * engine = m_overlay->getEngine();
-		auto & fontCache = engine->getFontCache();
+		auto const & fontCache = engine->getFontCache();
 
 		if ( auto font = fontCache.find( name ) )
 		{
