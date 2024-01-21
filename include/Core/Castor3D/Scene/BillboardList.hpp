@@ -57,7 +57,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API ~BillboardBase();
+		C3D_API virtual ~BillboardBase()noexcept = default;
 		/**
 		 *\~english
 		 *\brief		Initialises GPU side elements.

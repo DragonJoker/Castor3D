@@ -19,14 +19,14 @@ namespace castor3d
 		, Creator create )
 	{
 		LightingModelID lightingModelId{};
-		auto it = std::find_if( m_registered.begin()
+
+		if ( auto it = std::find_if( m_registered.begin()
 			, m_registered.end()
 			, [&key]( Entry const & lookup )
 			{
 				return key == lookup.name;
 			} );
-
-		if ( it == m_registered.end() )
+			it == m_registered.end() )
 		{
 			if ( m_currentId > MaxLightingModels )
 			{
@@ -42,7 +42,7 @@ namespace castor3d
 
 		auto & entry = m_registered.emplace_back();
 		entry.name = key;
-		entry.create = create;
+		entry.create = std::move( create );
 		entry.lightingModelId = lightingModelId;
 		entry.backgroundModelId = backgroundModelId;
 		return lightingModelId;

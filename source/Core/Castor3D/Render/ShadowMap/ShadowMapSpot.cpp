@@ -131,7 +131,7 @@ namespace castor3d
 		passData.ownCuller = castor::makeUniqueDerived< SceneCuller, FrustumCuller >( m_scene, camera, isStatic );
 		passData.culler = passData.ownCuller.get();
 		auto & pass = group.createPass( "Nodes"
-			, [index, &passData, this, vsm, rsm, isStatic, &cameraUbo]( crg::FramePass const & framePass
+			, [&passData, this, vsm, rsm, isStatic, &cameraUbo]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
@@ -139,7 +139,6 @@ namespace castor3d
 					, context
 					, runnableGraph
 					, m_device
-					, index
 					, cameraUbo
 					, *passData.culler
 					, *this
@@ -247,7 +246,6 @@ namespace castor3d
 				, *previousPass
 				, m_device
 				, cuT( "ShadowMapSpot" )
-				, debugName
 				, variance.subViewsId[index]
 				, m_blurIntermediateView
 				, 5u
@@ -288,7 +286,7 @@ namespace castor3d
 		auto & pass = *passes.passes[updater.index];
 		pass.pass->update( updater );
 
-		auto & myCamera = pass.pass->getCuller().getCamera();
+		auto const & myCamera = pass.pass->getCuller().getCamera();
 		m_passes[m_passesIndex].cameraUbos[updater.index]->cpuUpdate( myCamera
 			, updater.debugIndex
 			, false );
@@ -297,8 +295,8 @@ namespace castor3d
 	void ShadowMapSpot::doUpdate( GpuUpdater & updater
 		, ShadowMap::Passes & passes )
 	{
-		auto & light = *updater.light;
-		auto & pass = *passes.passes[updater.index]->pass;
+		auto const & light = *updater.light;
+		auto const & pass = *passes.passes[updater.index]->pass;
 		auto & myCamera = pass.getCuller().getCamera();
 		light.getSpotLight()->updateShadow( myCamera
 			, int32_t( updater.index ) );

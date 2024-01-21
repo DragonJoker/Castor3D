@@ -6,8 +6,8 @@ namespace castor3d::shader
 {
 	//*********************************************************************************************
 
-	Plane::Plane( sdw::Vec3 const normal
-		, sdw::Float const distance
+	Plane::Plane( sdw::Vec3 const & normal
+		, sdw::Float const & distance
 		, bool enabled )
 		: Plane{ sdw::findWriterMandat( normal, distance )
 			, sdw::makeAggrInit( makeType( sdw::findTypesCache( normal, distance ) )
@@ -18,12 +18,12 @@ namespace castor3d::shader
 
 	//*********************************************************************************************
 
-	Cone::Cone( sdw::Vec3 const apex
-		, sdw::Vec3 const direction
-		, sdw::Float const range
-		, sdw::Float const apertureCos
-		, sdw::Float const apertureSin
-		, sdw::Float const apertureTan
+	Cone::Cone( sdw::Vec3 const & apex
+		, sdw::Vec3 const & direction
+		, sdw::Float const & range
+		, sdw::Float const & apertureCos
+		, sdw::Float const & apertureSin
+		, sdw::Float const & apertureTan
 		, bool enabled )
 		: Cone{ sdw::findWriterMandat( apex, range, direction, apertureCos, apertureSin, apertureTan )
 			, sdw::makeAggrInit( makeType( sdw::findTypesCache( apex, range, direction, apertureCos, apertureSin, apertureTan ) )
@@ -35,8 +35,8 @@ namespace castor3d::shader
 
 	//*********************************************************************************************
 
-	AABB::AABB( sdw::Vec4 const min
-		, sdw::Vec4 const max
+	AABB::AABB( sdw::Vec4 const & min
+		, sdw::Vec4 const & max
 		, bool enabled )
 		: AABB{ sdw::findWriterMandat( min, max )
 			, sdw::makeAggrInit( makeType( sdw::findTypesCache( min, max ) )
@@ -45,8 +45,8 @@ namespace castor3d::shader
 	{
 	}
 
-	AABB::AABB( sdw::Vec3 const position
-		, sdw::Float range
+	AABB::AABB( sdw::Vec3 const & position
+		, sdw::Float const & range
 		, bool enabled )
 		: AABB{ sdw::findWriterMandat( position, range )
 			, sdw::makeAggrInit( makeType( sdw::findTypesCache( position, range ) )

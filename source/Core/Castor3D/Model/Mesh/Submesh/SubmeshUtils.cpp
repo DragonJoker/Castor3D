@@ -25,7 +25,7 @@ namespace castor3d
 			return int( data->faces->size() );
 		}
 
-		static int getNumVerticesOfFace( SMikkTSpaceContext const * pContext, int const iFace )
+		static int getNumVerticesOfFace( SMikkTSpaceContext const *, int const  )
 		{
 			return 3;
 		}
@@ -85,7 +85,7 @@ namespace castor3d
 	}
 
 	void SubmeshUtils::computeFacesFromPolygonVertex( castor::Point3fArray & texcoords
-		, TriFaceMapping & triFace )
+		, TriFaceMapping const & triFace )
 	{
 		if ( !texcoords.empty() )
 		{

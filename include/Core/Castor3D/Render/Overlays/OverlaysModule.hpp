@@ -142,6 +142,13 @@ namespace castor3d
 
 	struct OverlayDrawNode
 	{
+		OverlayDrawNode( OverlayDrawPipeline & pipeline
+			, Pass const & pass )
+			: pipeline{ pipeline }
+			, pass{ pass }
+		{
+		}
+
 		OverlayDrawPipeline & pipeline;
 		Pass const & pass;
 	};
@@ -156,6 +163,26 @@ namespace castor3d
 
 	struct OverlayDrawData
 	{
+		OverlayDrawData() = default;
+		OverlayDrawData( Overlay const * overlay
+			, OverlayDrawNode const * node
+			, OverlayPipelineData const * pipelineData
+			, VkDrawIndirectCommand * indirectData = {}
+			, uint32_t overlayIndex = {}
+			, uint32_t pipelineIndex = {}
+			, OverlayTextBufferIndex textBuffer = {}
+			, bool secondary = {} )
+			: overlay{ overlay }
+			, node{ node }
+			, pipelineData{ pipelineData }
+			, indirectData{ indirectData }
+			, overlayIndex{ overlayIndex }
+			, pipelineIndex{ pipelineIndex }
+			, textBuffer{ std::move( textBuffer ) }
+			, secondary{ secondary }
+		{
+		}
+
 		Overlay const * overlay{};
 		OverlayDrawNode const * node{};
 		OverlayPipelineData const * pipelineData{};

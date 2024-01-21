@@ -148,7 +148,7 @@ namespace castor3d
 		, ashes::PipelineShaderStageCreateInfoArray shader )
 	{
 		auto hash = dbgdrw::hash( buffer, offset, size, shader );
-		auto ires = m_pipelines.emplace( hash, nullptr );
+		auto ires = m_pipelines.try_emplace( hash );
 
 		if ( ires.second )
 		{
@@ -217,7 +217,7 @@ namespace castor3d
 			return toWait;
 		}
 
-		auto & commands = m_commandBuffers[m_index];
+		auto const & commands = m_commandBuffers[m_index];
 		commands.commandBuffer->begin();
 		commands.commandBuffer->beginDebugBlock( { "Staging Texture Upload"
 			, makeFloatArray( getOwner()->getEngine()->getNextRainbowColour() ) } );
@@ -226,7 +226,7 @@ namespace castor3d
 			, { defaultClearDepthStencil, transparentBlackClearColor }
 			, VK_SUBPASS_CONTENTS_INLINE);
 
-		for ( auto & aabb : m_aabbs )
+		for ( auto const & aabb : m_aabbs )
 		{
 			commands.commandBuffer->bindPipeline( *aabb.pipeline->pipeline );
 			commands.commandBuffer->bindDescriptorSet( *aabb.pipeline->descriptorSet, *aabb.pipeline->pipelineLayout );

@@ -26,7 +26,7 @@ namespace castor3d
 		return Values[size_t( texture )];
 	}
 	
-	VkFormat getFormat( RenderDevice const & device, PpTexture texture )
+	VkFormat getFormat( RenderDevice const &, PpTexture texture )
 	{
 		static std::array< VkFormat, size_t( PpTexture::eCount ) > Values
 		{

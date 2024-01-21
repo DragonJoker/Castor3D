@@ -32,7 +32,7 @@ namespace castor
 		{
 		}
 
-		bool operator()( StringStream & file )
+		bool operator()( StringStream & file )const
 		{
 			return writeMask( file, cuT( "iridescence_thickness_mask" ), m_mask );
 		}
@@ -78,7 +78,7 @@ namespace castor3d
 		static CU_ImplementAttributeParserBlock( parserTexRemapIridescenceThickness, SceneImportContext )
 		{
 			auto & plugin = getEngine( *blockContext )->getPassComponentsRegister().getPlugin( IridescenceThicknessMapComponent::TypeName );
-			blockContext->textureRemapIt = blockContext->textureRemaps.emplace( plugin.getTextureFlags(), TextureConfiguration{} ).first;
+			blockContext->textureRemapIt = blockContext->textureRemaps.try_emplace( plugin.getTextureFlags() ).first;
 			blockContext->textureRemapIt->second = TextureConfiguration{};
 		}
 		CU_EndAttributePushBlock( CSCNSection::eTextureRemapChannel, blockContext )
@@ -148,13 +148,14 @@ namespace castor3d
 	void IridescenceThicknessMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		channelFillers.emplace( "iridescence_thickness", ChannelFiller{ getTextureFlags()
+		channelFillers.try_emplace( "iridescence_thickness"
+			, getTextureFlags()
 			, []( TextureContext & blockContext )
 			{
-				auto & component = getPassComponent< IridescenceThicknessMapComponent >( blockContext );
+				auto const & component = getPassComponent< IridescenceThicknessMapComponent >( blockContext );
 				component.fillChannel( blockContext.configuration
 					, 0x0000FF00u );
-			} } );
+			} );
 
 		castor::addParserT( parsers
 			, CSCNSection::eTexture

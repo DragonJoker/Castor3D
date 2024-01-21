@@ -159,9 +159,8 @@ namespace castor3d
 	{
 		if ( auto materialImporter = m_file->createMaterialImporter() )
 		{
-			auto toImport = m_file->listMaterials();
-
-			if ( !toImport.empty() )
+			if ( auto toImport = m_file->listMaterials();
+				!toImport.empty() )
 			{
 				auto total = uint32_t( toImport.size() );
 				castor3d::stepProgressBarGlobalStartLocal( m_file->getProgressBar()
@@ -200,9 +199,8 @@ namespace castor3d
 
 		if ( auto skeletonImporter = m_file->createSkeletonImporter() )
 		{
-			auto toImport = m_file->listSkeletons();
-
-			if ( !toImport.empty() )
+			if ( auto toImport = m_file->listSkeletons();
+				!toImport.empty() )
 			{
 				auto total = uint32_t( toImport.size() );
 				castor3d::stepProgressBarGlobalStartLocal( m_file->getProgressBar()
@@ -239,9 +237,8 @@ namespace castor3d
 
 		if ( auto meshImporter = m_file->createMeshImporter() )
 		{
-			auto toImport = m_file->listMeshes();
-
-			if ( !toImport.empty() )
+			if ( auto toImport = m_file->listMeshes();
+				!toImport.empty() )
 			{
 				auto total = uint32_t( toImport.size() );
 				castor3d::stepProgressBarGlobalStartLocal( m_file->getProgressBar()
@@ -285,9 +282,8 @@ namespace castor3d
 
 		if ( auto nodeImporter = m_file->createSceneNodeImporter() )
 		{
-			auto toImport = m_file->listSceneNodes();
-
-			if ( !toImport.empty() )
+			if ( auto toImport = m_file->listSceneNodes();
+				!toImport.empty() )
 			{
 				auto total = uint32_t( toImport.size() );
 				castor3d::stepProgressBarGlobalStartLocal( m_file->getProgressBar()
@@ -338,9 +334,8 @@ namespace castor3d
 
 		if ( auto lightImporter = m_file->createLightImporter() )
 		{
-			auto toImport = m_file->listLights();
-
-			if ( !toImport.empty() )
+			if ( auto toImport = m_file->listLights();
+				!toImport.empty() )
 			{
 				auto total = uint32_t( toImport.size() );
 				castor3d::stepProgressBarGlobalStartLocal( m_file->getProgressBar()
@@ -376,9 +371,8 @@ namespace castor3d
 
 		if ( auto cameraImporter = m_file->createCameraImporter() )
 		{
-			auto toImport = m_file->listCameras();
-
-			if ( !toImport.empty() )
+			if ( auto toImport = m_file->listCameras();
+				!toImport.empty() )
 			{
 				auto total = uint32_t( toImport.size() );
 				castor3d::stepProgressBarGlobalStartLocal( m_file->getProgressBar()

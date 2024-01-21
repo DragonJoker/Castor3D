@@ -69,24 +69,24 @@ namespace castor3d
 			{
 				if ( i < nbFaces )
 				{
-					baseVertex.push_back( InterleavedVertex{}
+					baseVertex.emplace_back()
 						.position( castor::Point3f{ radius * rCos, -height / 2, radius * rSin } )
 						.normal( castor::Point3f{ 0.0, -1.0, 0.0 } )
-						.texcoord( castor::Point2f{ ( 1 + rCos ) / 2, ( 1 + rSin ) / 2 } ) );
-					topVertex.push_back( InterleavedVertex{}
+						.texcoord( castor::Point2f{ ( 1 + rCos ) / 2, ( 1 + rSin ) / 2 } );
+					topVertex.emplace_back()
 						.position( castor::Point3f{ radius * rCos, height / 2, radius * rSinT } )
 						.normal( castor::Point3f{ 0.0, 1.0, 0.0 } )
-						.texcoord( castor::Point2f{ ( 1 + rCos ) / 2, ( 1 + rSinT ) / 2 } ) );
+						.texcoord( castor::Point2f{ ( 1 + rCos ) / 2, ( 1 + rSinT ) / 2 } );
 				}
 
-				sideVertex.push_back( InterleavedVertex{}
+				sideVertex.emplace_back()
 					.position( castor::Point3f{ radius * rCos, -height / 2, radius * rSin } )
 					.normal( castor::Point3f{ -rCos, -rSin, 0.0 } )
-					.texcoord( castor::Point2f{ float( 1.0 ) - float( i ) / float( nbFaces ), float( 0.0 ) } ) );
-				sideVertex.push_back( InterleavedVertex{}
+					.texcoord( castor::Point2f{ float( 1.0 ) - float( i ) / float( nbFaces ), float( 0.0 ) } );
+				sideVertex.emplace_back()
 					.position( castor::Point3f{ radius * rCos, height / 2, radius * rSin } )
 					.normal( castor::Point3f{ -rCos, -rSin, 0.0 } )
-					.texcoord( castor::Point2f{ float( 1.0 ) - float( i ) / float( nbFaces ), float( 1.0 ) } ) );
+					.texcoord( castor::Point2f{ float( 1.0 ) - float( i ) / float( nbFaces ), float( 1.0 ) } );
 
 				const float newCos = rCosRot * rCos - rSinRot * rSin;
 				const float newSin = rSinRot * rCos + rCosRot * rSin;
@@ -97,14 +97,14 @@ namespace castor3d
 
 			auto topCenterIndex = uint32_t( topVertex.size() );
 			auto bottomCenterIndex = uint32_t( baseVertex.size() );
-			topVertex.push_back( InterleavedVertex{}
+			topVertex.emplace_back()
 				.position( castor::Point3f{ 0.0, height / 2, 0.0 } )
 				.normal( castor::Point3f{ 0.0, 1.0, 0.0 } )
-				.texcoord( castor::Point2f{ 0.5, 0.5 } ) );
-			baseVertex.push_back( InterleavedVertex{}
+				.texcoord( castor::Point2f{ 0.5, 0.5 } );
+			baseVertex.emplace_back()
 				.position( castor::Point3f{ 0.0, -height / 2, 0.0 } )
 				.normal( castor::Point3f{ 0.0, -1.0, 0.0 } )
-				.texcoord( castor::Point2f{ 0.5, 0.5 } ) );
+				.texcoord( castor::Point2f{ 0.5, 0.5 } );
 
 			submeshTop.addPoints( topVertex );
 			submeshBase.addPoints( baseVertex );

@@ -34,19 +34,8 @@ namespace castor3d
 		 *\param[in]	device	Le device GPU.
 		 *\param[in]	count	Le nombre maximal de passes.
 		 */
-		C3D_API ShadowBuffer( Engine & engine
-			, RenderDevice const & device
-			, uint32_t count );
+		C3D_API ShadowBuffer( RenderDevice const & device );
 		C3D_API ~ShadowBuffer()noexcept;
-		/**
-		 *\~english
-		 *\brief		Uploads the buffer to VRAM.
-		 *\param[in]	commandBuffer	Receives the upload commands.
-		 *\~french
-		 *\brief		Uploade le tampon en VRAM.
-		 *\param[in]	commandBuffer	Reçoit les commandes d'upload.
-		 */
-		C3D_API void markDirty();
 		/**
 		 *\~english
 		 *\brief		Creates the descriptor set layout binding.
@@ -73,6 +62,14 @@ namespace castor3d
 		 *\brief		Crée le descriptor write pour ce tampon.
 		 */
 		C3D_API ashes::WriteDescriptorSet getBinding( uint32_t binding )const;
+		/**
+		 *\~english
+		 *\brief		Creates the descriptor write for this buffer.
+		 *\~french
+		 *\brief		Crée le descriptor write pour ce tampon.
+		 */
+		C3D_API void addBinding( ashes::WriteDescriptorSetArray & descriptorWrites
+			, uint32_t & binding )const;
 		/**
 		 *\~english
 		 *\brief		Creates the descriptor set binding at given point.

@@ -50,12 +50,13 @@ namespace castor3d
 		, uint32_t & index )
 	{
 		CU_Require( view != VkImageView{} );
-		writes.push_back( { index++
+		writes.emplace_back( index
 			, 0u
 			, VkDescriptorType{ VK_DESCRIPTOR_TYPE_STORAGE_IMAGE }
 			, ashes::VkDescriptorImageInfoArray{ VkDescriptorImageInfo{ VK_NULL_HANDLE
 				, view
-				, VK_IMAGE_LAYOUT_GENERAL } } } );
+				, VK_IMAGE_LAYOUT_GENERAL } } );
+		++index;
 	}
 
 	void bindImage( ashes::ImageView const & view
@@ -84,12 +85,13 @@ namespace castor3d
 	{
 		CU_Require( view != VkImageView{} );
 		CU_Require( sampler != VkSampler{} );
-		writes.push_back( { index++
+		writes.emplace_back( index
 			, 0u
 			, VkDescriptorType{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER }
 			, ashes::VkDescriptorImageInfoArray{ VkDescriptorImageInfo{ sampler
 				, view
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } } );
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } );
+		++index;
 	}
 
 	void bindTexture( ashes::ImageView const & view
@@ -121,12 +123,13 @@ namespace castor3d
 		, ashes::WriteDescriptorSetArray & writes
 		, uint32_t & index )
 	{
-		writes.push_back( { index++
+		writes.emplace_back( index
 			, 0u
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 			, ashes::VkDescriptorBufferInfoArray{ VkDescriptorBufferInfo{ buffer
 				, offset
-				, range } } } );
+				, range } } );
+		++index;
 	}
 
 	void bindBuffer( ashes::BufferBase const & buffer
@@ -281,17 +284,16 @@ namespace castor3d
 		return flags;
 	}
 
-	void RenderTechniqueNodesPass::doAddEnvBindings( PipelineFlags const & flags
-		, ashes::VkDescriptorSetLayoutBindingArray & bindings
+	void RenderTechniqueNodesPass::doAddEnvBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
 		, uint32_t & index )const
 	{
-		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++ // c3d_mapEnvironment
+		bindings.emplace_back( makeDescriptorSetLayoutBinding( index // c3d_mapEnvironment
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+		++index;
 	}
 
-	void RenderTechniqueNodesPass::doAddGIBindings( PipelineFlags const & flags
-		, ashes::VkDescriptorSetLayoutBindingArray & bindings
+	void RenderTechniqueNodesPass::doAddGIBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
 		, uint32_t & index )const
 	{
 		addGIBindings( doAdjustSceneFlags( m_scene.getFlags() )
@@ -301,8 +303,7 @@ namespace castor3d
 			, index );
 	}
 
-	void RenderTechniqueNodesPass::doAddPassSpecificsBindings( PipelineFlags const & flags
-		, ashes::VkDescriptorSetLayoutBindingArray & bindings
+	void RenderTechniqueNodesPass::doAddPassSpecificsBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
 		, uint32_t & index )const
 	{
 		getEngine()->addSpecificsBuffersBindings( bindings
@@ -310,8 +311,7 @@ namespace castor3d
 			, index );
 	}
 
-	void RenderTechniqueNodesPass::doAddEnvDescriptor( PipelineFlags const & flags
-		, ashes::WriteDescriptorSetArray & descriptorWrites
+	void RenderTechniqueNodesPass::doAddEnvDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
 		, uint32_t & index )const
 	{
 		bindTexture( m_scene.getEnvironmentMap().getColourId().sampledView
@@ -320,8 +320,7 @@ namespace castor3d
 			, index );
 	}
 
-	void RenderTechniqueNodesPass::doAddGIDescriptor( PipelineFlags const & flags
-		, ashes::WriteDescriptorSetArray & descriptorWrites
+	void RenderTechniqueNodesPass::doAddGIDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
 		, uint32_t & index )const
 	{
 		addGIDescriptor( doAdjustSceneFlags( m_scene.getFlags() )
@@ -330,8 +329,7 @@ namespace castor3d
 			, index );
 	}
 
-	void RenderTechniqueNodesPass::doAddPassSpecificsDescriptor( PipelineFlags const & flags
-		, ashes::WriteDescriptorSetArray & descriptorWrites
+	void RenderTechniqueNodesPass::doAddPassSpecificsDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
 		, uint32_t & index )const
 	{
 		getEngine()->addSpecificsBuffersDescriptors( descriptorWrites, index );
@@ -341,29 +339,32 @@ namespace castor3d
 		, ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
 		auto index = uint32_t( GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
-		doAddPassSpecificsBindings( flags, bindings, index );
+		doAddPassSpecificsBindings( bindings, index );
 		bindings.emplace_back( m_scene.getLightCache().createLayoutBinding( VK_SHADER_STAGE_FRAGMENT_BIT
-			, index++ ) );
+			, index ) );
+		++index;
 
 		if ( hasSsao() )
 		{
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( index
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ) ); // c3d_mapOcclusion
+			++index;
 		}
 
-		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+		bindings.emplace_back( makeDescriptorSetLayoutBinding( index
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapBrdf
+		++index;
 
-		doAddShadowBindings( m_scene, flags, bindings, index );
-		doAddEnvBindings( flags, bindings, index );
+		doAddShadowBindings( m_scene, bindings, index );
+		doAddEnvBindings( bindings, index );
 		doAddBackgroundBindings( m_scene, bindings, index );
-		doAddGIBindings( flags, bindings, index );
+		doAddGIBindings( bindings, index );
 
 		if ( m_parent )
 		{
-			doAddClusteredLightingBindings( m_parent->getRenderTarget(), flags, bindings, index );
+			doAddClusteredLightingBindings( m_parent->getRenderTarget(), bindings, index );
 		}
 	}
 
@@ -373,8 +374,9 @@ namespace castor3d
 		, ShadowBuffer const * shadowBuffer )
 	{
 		auto index = uint32_t( GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
-		doAddPassSpecificsDescriptor( flags, descriptorWrites, index );
-		descriptorWrites.push_back( m_scene.getLightCache().getBinding( index++ ) );
+		doAddPassSpecificsDescriptor( descriptorWrites, index );
+		descriptorWrites.push_back( m_scene.getLightCache().getBinding( index ) );
+		++index;
 
 		if ( hasSsao() )
 		{
@@ -388,14 +390,14 @@ namespace castor3d
 			, *getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().sampler
 			, descriptorWrites
 			, index );
-		doAddShadowDescriptor( m_scene, flags, descriptorWrites, shadowMaps, shadowBuffer, index );
-		doAddEnvDescriptor( flags, descriptorWrites, index );
+		doAddShadowDescriptor( m_scene, descriptorWrites, shadowMaps, shadowBuffer, index );
+		doAddEnvDescriptor( descriptorWrites, index );
 		doAddBackgroundDescriptor( m_scene, descriptorWrites, m_targetImage, index );
-		doAddGIDescriptor( flags, descriptorWrites, index );
+		doAddGIDescriptor( descriptorWrites, index );
 
 		if ( m_parent )
 		{
-			doAddClusteredLightingDescriptor( m_parent->getRenderTarget(), flags, descriptorWrites, index );
+			doAddClusteredLightingDescriptor( m_parent->getRenderTarget(), descriptorWrites, index );
 		}
 	}
 

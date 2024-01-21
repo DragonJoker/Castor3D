@@ -102,7 +102,6 @@ namespace castor3d
 
 	castor::Grid const & LpvGridConfigUbo::cpuUpdate( castor::BoundingBox const & aabb
 		, castor::Point3f const & cameraPos
-		, castor::Point3f const & cameraDir
 		, uint32_t gridDim
 		, float indirectAttenuation )
 	{
@@ -112,7 +111,6 @@ namespace castor3d
 			, aabb.getDimensions()->y )
 			, aabb.getDimensions()->z ) / float( gridDim );
 		m_grid = { gridDim, cellSize, aabb.getMax(), aabb.getMin(), 1.0f };
-		//m_grid.transform( cameraPos, cameraDir );
 
 		auto minVolumeCorner = m_grid.getMin();
 		auto gridSize = m_grid.getDimensions();
@@ -125,10 +123,8 @@ namespace castor3d
 		return m_grid;
 	}
 
-	castor::Grid const & LpvGridConfigUbo::cpuUpdate( uint32_t gridLevel
-		, float gridLevelScale
+	castor::Grid const & LpvGridConfigUbo::cpuUpdate( float gridLevelScale
 		, castor::Grid const & grid
-		, castor::BoundingBox const & aabb
 		, castor::Point3f const & cameraPos
 		, castor::Point3f const & cameraDir
 		, float indirectAttenuation )

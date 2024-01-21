@@ -63,7 +63,7 @@ namespace castor3d
 		, PanelCtrl & parent
 		, std::function< castor::String() > value )
 		: m_engine{ engine }
-		, m_v{ value }
+		, m_v{ std::move( value ) }
 	{
 		auto & manager = *parent.getControlsManager();
 		auto panelStyle = parent.getStyle().getStyle< PanelStyle >( "Entry" );
@@ -330,7 +330,7 @@ namespace castor3d
 		, PanelCtrl & parent
 		, castor::String const & name
 		, uint32_t leftOffset
-		, uint32_t index )
+		, uint32_t )
 		: m_parent{ &parent }
 		, m_name{ name }
 	{
@@ -412,7 +412,7 @@ namespace castor3d
 	DebugOverlays::PassOverlays::PassOverlays( PassOverlays && rhs )noexcept
 		: m_parent{ std::move( rhs.m_parent ) }
 		, m_name{ std::move( rhs.m_name ) }
-		, m_visible{ std::move( rhs.m_visible ) }
+		, m_visible{ rhs.m_visible }
 		, m_timers{ std::move( rhs.m_timers ) }
 		, m_panel{ std::move( rhs.m_panel ) }
 		, m_passName{ std::move( rhs.m_passName ) }
@@ -471,15 +471,15 @@ namespace castor3d
 		m_cpu.time = 0_ns;
 		m_gpu.time = 0_ns;
 
-		for ( auto & timer : m_timers )
+		for ( auto const & [timer, _] : m_timers )
 		{
-			if ( timer.first->getScope() != crg::TimerScope::eGraph )
+			if ( timer->getScope() != crg::TimerScope::eGraph )
 			{
-				m_cpu.time += timer.first->getCpuTime();
-				m_gpu.time += timer.first->getGpuTime();
+				m_cpu.time += timer->getCpuTime();
+				m_gpu.time += timer->getGpuTime();
 			}
 
-			timer.first->reset();
+			timer->reset();
 		}
 	}
 
@@ -512,17 +512,17 @@ namespace castor3d
 		return m_visible;
 	}
 
-	void DebugOverlays::PassOverlays::retrieveGpuTime()
+	void DebugOverlays::PassOverlays::retrieveGpuTime()const
 	{
-		for ( auto & timer : m_timers )
+		for ( auto const & [timer, _] : m_timers )
 		{
-			timer.first->retrieveGpuTime();
+			timer->retrieveGpuTime();
 		}
 	}
 
 	void DebugOverlays::PassOverlays::addTimer( FramePassTimer & timer )
 	{
-		m_timers.emplace( &timer
+		m_timers.try_emplace( &timer
 			, timer.onDestroy.connect( [this]( FramePassTimer & obj )
 				{
 					removeTimer( obj );
@@ -531,9 +531,8 @@ namespace castor3d
 
 	bool DebugOverlays::PassOverlays::removeTimer( FramePassTimer & timer )
 	{
-		auto it = m_timers.find( &timer );
-
-		if ( it != m_timers.end() )
+		if ( auto it = m_timers.find( &timer );
+			it != m_timers.end() )
 		{
 			m_timers.erase( it );
 		}
@@ -864,7 +863,7 @@ namespace castor3d
 		m_cpu.time = 0_ns;
 		m_gpu.time = 0_ns;
 
-		for ( auto & pass : m_passes )
+		for ( auto const & pass : m_passes )
 		{
 			if ( pass )
 			{
@@ -874,11 +873,11 @@ namespace castor3d
 			}
 		}
 
-		for ( auto & catIt : m_categories )
+		for ( auto const & cat : m_categories )
 		{
-			catIt->compute();
-			m_cpu.time += catIt->getCpuTime();
-			m_gpu.time += catIt->getGpuTime();
+			cat->compute();
+			m_cpu.time += cat->getCpuTime();
+			m_gpu.time += cat->getGpuTime();
 		}
 	}
 
@@ -896,7 +895,7 @@ namespace castor3d
 		{
 			uint32_t height = PanelHeight;
 
-			for ( auto & pass : m_passes )
+			for ( auto const & pass : m_passes )
 			{
 				if ( pass )
 				{
@@ -904,9 +903,9 @@ namespace castor3d
 				}
 			}
 
-			for ( auto & catIt : m_categories )
+			for ( auto const & cat : m_categories )
 			{
-				hasVisibleChildren = catIt->update( height ) || hasVisibleChildren;
+				hasVisibleChildren = cat->update( height ) || hasVisibleChildren;
 			}
 
 			top += height;
@@ -937,9 +936,9 @@ namespace castor3d
 		return m_visible;
 	}
 
-	void DebugOverlays::CategoryOverlays::retrieveGpuTime()
+	void DebugOverlays::CategoryOverlays::retrieveGpuTime()const
 	{
-		for ( auto & pass : m_passes )
+		for ( auto const & pass : m_passes )
 		{
 			if ( pass )
 			{
@@ -947,9 +946,9 @@ namespace castor3d
 			}
 		}
 
-		for ( auto & catIt : m_categories )
+		for ( auto const & cat : m_categories )
 		{
-			catIt->retrieveGpuTime();
+			cat->retrieveGpuTime();
 		}
 	}
 

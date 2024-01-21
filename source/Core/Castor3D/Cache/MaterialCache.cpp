@@ -34,17 +34,17 @@ namespace castor
 
 	void ResourceCacheT< Material, String, MaterialCacheTraits >::PassDataBuffers::initialise( RenderDevice const & device )
 	{
-		for ( auto & buffer : m_buffers )
+		for ( auto & [name, buffer] : m_buffers )
 		{
-			buffer.second.second = buffer.second.first.create( device );
+			buffer.second = buffer.first.create( device );
 		}
 	}
 	
 	void ResourceCacheT< Material, String, MaterialCacheTraits >::PassDataBuffers::cleanup()
 	{
-		for ( auto & buffer : m_buffers )
+		for ( auto & [name, buffer] : m_buffers )
 		{
-			buffer.second.second.reset();
+			buffer.second.reset();
 		}
 	}
 
@@ -57,22 +57,19 @@ namespace castor
 	void ResourceCacheT< Material, String, MaterialCacheTraits >::PassDataBuffers::registerBuffer( std::string const & name
 		, SpecificsBuffer buffer )
 	{
-		auto it = m_buffers.find( name );
-
-		if ( it != m_buffers.end() )
+		if ( auto it = m_buffers.find( name );
+			it != m_buffers.end() )
 		{
 			CU_Exception( "Buffer with given name already registered." );
 		}
 
-		m_buffers.emplace( name
-			, std::make_pair( std::move( buffer ), nullptr ) );
+		m_buffers.try_emplace( name, std::move( buffer ), nullptr );
 	}
 
 	void ResourceCacheT< Material, String, MaterialCacheTraits >::PassDataBuffers::unregisterBuffer( std::string const & name )
 	{
-		auto it = m_buffers.find( name );
-
-		if ( it != m_buffers.end() )
+		if ( auto it = m_buffers.find( name );
+			it != m_buffers.end() )
 		{
 			m_buffers.erase( it );
 		}
@@ -82,9 +79,9 @@ namespace castor
 		, VkShaderStageFlags shaderStages
 		, uint32_t & index )const
 	{
-		for ( auto & buffer : m_buffers )
+		for ( auto & [name, buffer] : m_buffers )
 		{
-			bindings.push_back( buffer.second.second->createLayoutBinding( index, shaderStages ) );
+			bindings.push_back( buffer.second->createLayoutBinding( index, shaderStages ) );
 			++index;
 		}
 	}
@@ -92,9 +89,9 @@ namespace castor
 	void ResourceCacheT< Material, String, MaterialCacheTraits >::PassDataBuffers::addDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
 		, uint32_t & index )const
 	{
-		for ( auto & buffer : m_buffers )
+		for ( auto & [name, buffer] : m_buffers )
 		{
-			descriptorWrites.push_back( buffer.second.second->getBinding( index ) );
+			descriptorWrites.push_back( buffer.second->getBinding( index ) );
 			++index;
 		}
 	}
@@ -102,9 +99,9 @@ namespace castor
 	void ResourceCacheT< Material, String, MaterialCacheTraits >::PassDataBuffers::createPassBindings( crg::FramePass & pass
 		, uint32_t & index )const
 	{
-		for ( auto & buffer : m_buffers )
+		for ( auto & [name, buffer] : m_buffers )
 		{
-			buffer.second.second->createPassBinding( pass, buffer.first, index );
+			buffer.second->createPassBinding( pass, name, index );
 			++index;
 		}
 	}
@@ -114,10 +111,10 @@ namespace castor
 		, uint32_t & binding
 		, uint32_t set )const
 	{
-		for ( auto & buffer : m_buffers )
+		for ( auto & [name, buffer] : m_buffers )
 		{
-			buffers.emplace( buffer.first
-				, buffer.second.first.declare( writer, binding, set ) );
+			buffers.try_emplace( name
+				, buffer.first.declare( writer, binding, set ) );
 			++binding;
 		}
 	}
@@ -177,11 +174,11 @@ namespace castor
 					? device.getMaxBindlessSampled()
 					: MaxTextureAnimationCount ) );
 
-			for ( auto & it : *this )
+			for ( auto const & [name, mat] : *this )
 			{
-				if ( !it.second->isInitialised() )
+				if ( !mat->isInitialised() )
 				{
-					it.second->initialise();
+					mat->initialise();
 				}
 			}
 
@@ -228,9 +225,9 @@ namespace castor
 		auto lock( makeUniqueLock( *this ) );
 		doUpdatePending();
 
-		for ( auto & it : *this )
+		for ( auto const & [name, material] : *this )
 		{
-			for ( auto & pass : *it.second )
+			for ( auto const & pass : *material )
 			{
 				pass->update();
 			}
@@ -255,7 +252,7 @@ namespace castor
 	void ResourceCacheT< Material, String, MaterialCacheTraits >::registerSpecificsBuffer( std::string const & name
 		, SpecificsBuffer buffer )
 	{
-		m_specificsBuffers.registerBuffer( name, buffer );
+		m_specificsBuffers.registerBuffer( name, std::move( buffer ) );
 	}
 
 	void ResourceCacheT< Material, String, MaterialCacheTraits >::unregisterSpecificsBuffer( std::string const & name )noexcept

@@ -58,7 +58,7 @@ namespace castor3d
 		 *\brief		Nettoie le tampon GPU.
 		 *\param[in]	device	Le device GPU.
 		 */
-		C3D_API void cleanup( RenderDevice const & device );
+		C3D_API void cleanup( RenderDevice const & device )noexcept;
 		/**
 		 *\~english
 		 *\brief		Makes current local modifications available in VRAM.
@@ -74,14 +74,14 @@ namespace castor3d
 		 *\param		size	La taille voulue.
 		 *\return		\p true s'il y a assez de mémoire restante pour un nouvel élément.
 		 */
-		C3D_API bool hasAvailable( VkDeviceSize size )const;
+		C3D_API bool hasAvailable( VkDeviceSize size )const noexcept;
 		/**
 		 *\~english
 		 *\return		\p true if at least one element has been allocated.
 		 *\~french
 		 *\return		\p true si au moins un élément a été alloué.
 		 */
-		C3D_API bool hasAllocated()const;
+		C3D_API bool hasAllocated()const noexcept;
 		/**
 		 *\~english
 		 *\brief		Allocates a memory chunk for a CPU buffer.
@@ -101,7 +101,7 @@ namespace castor3d
 		 *\brief		Désalloue de la mémoire.
 		 *\param[in]	offset	L'offset de la zone mémoire.
 		 */
-		C3D_API void deallocate( VkDeviceSize offset );
+		C3D_API void deallocate( VkDeviceSize offset )noexcept;
 		/**
 		*\~english
 		*\return
@@ -115,7 +115,7 @@ namespace castor3d
 		*	L'offset de la zone mémoire.
 		*/
 		template< typename DataT >
-		DataT const & getData( VkDeviceSize offset )const
+		DataT const & getData( VkDeviceSize offset )const noexcept
 		{
 			using DataCPtr = DataT const *;
 			return *DataCPtr( m_data.data() + offset );
@@ -133,7 +133,7 @@ namespace castor3d
 		*	L'offset de la zone mémoire.
 		*/
 		template< typename DataT >
-		DataT & getData( VkDeviceSize offset )
+		DataT & getData( VkDeviceSize offset )noexcept
 		{
 			using DataPtr = DataT *;
 			return *DataPtr( m_data.data() + offset );
@@ -146,7 +146,7 @@ namespace castor3d
 		*\return
 		*	Les données.
 		*/
-		castor::ByteArrayView const & getDatas()const
+		castor::ByteArrayView const & getDatas()const noexcept
 		{
 			return m_data;
 		}
@@ -158,7 +158,7 @@ namespace castor3d
 		*\return
 		*	Les données.
 		*/
-		castor::ByteArrayView & getDatas()
+		castor::ByteArrayView & getDatas()noexcept
 		{
 			return m_data;
 		}
@@ -170,7 +170,7 @@ namespace castor3d
 		*\return
 		*	\p false si le tampon interne n'existe pas.
 		*/
-		bool hasBuffer()const
+		bool hasBuffer()const noexcept
 		{
 			return m_buffer != nullptr;
 		}
@@ -182,7 +182,7 @@ namespace castor3d
 		*\return
 		*	Le tampon interne.
 		*/
-		ashes::UniformBuffer const & getBuffer()const
+		ashes::UniformBuffer const & getBuffer()const noexcept
 		{
 			return *m_buffer;
 		}
@@ -194,7 +194,7 @@ namespace castor3d
 		*\return
 		*	Le tampon interne.
 		*/
-		ashes::UniformBuffer & getBuffer()
+		ashes::UniformBuffer & getBuffer()noexcept
 		{
 			return *m_buffer;
 		}
@@ -206,7 +206,7 @@ namespace castor3d
 		*\return
 		*	La taille d'un élément du tampon.
 		*/
-		uint32_t getElementSize()const
+		uint32_t getElementSize()const noexcept
 		{
 			return uint32_t( getBuffer().getElementSize() );
 		}
@@ -226,7 +226,7 @@ namespace castor3d
 		*\return
 		*	La taille alignée.
 		*/
-		uint32_t getAlignedSize( uint32_t size )const
+		uint32_t getAlignedSize( uint32_t size )const noexcept
 		{
 			return uint32_t( getBuffer().getAlignedSize( size ) );
 		}
@@ -238,7 +238,7 @@ namespace castor3d
 		*\return
 		*	La taille alignée d'un élément.
 		*/
-		uint32_t getAlignedSize()const
+		uint32_t getAlignedSize()const noexcept
 		{
 			return getAlignedSize( getElementSize() );
 		}

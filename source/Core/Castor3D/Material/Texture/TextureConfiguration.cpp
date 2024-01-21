@@ -238,9 +238,9 @@ namespace castor3d
 	bool hasAny( TextureFlagConfigurations const & lhs
 		, PassComponentTextureFlag rhs )
 	{
-		auto split = splitTextureFlag( rhs );
-		auto rhsPassIndex = split.first;
-		auto rhsTextureFlag = split.second;
+		auto [id, flags] = splitTextureFlag( rhs );
+		auto rhsPassIndex = id;
+		auto rhsTextureFlag = flags;
 		auto it = std::find_if( lhs.begin()
 			, lhs.end()
 			, [rhsPassIndex, rhsTextureFlag]( TextureFlagConfiguration const & lookup )
@@ -256,9 +256,9 @@ namespace castor3d
 		, PassComponentTextureFlag rhs )
 	{
 		bool found{};
-		auto it = checkFlag( config.components, rhs );
 
-		if ( it != config.components.end() )
+		if ( auto it = checkFlag( config.components, rhs );
+			it != config.components.end() )
 		{
 			found = true;
 			auto nxt = std::next( it );

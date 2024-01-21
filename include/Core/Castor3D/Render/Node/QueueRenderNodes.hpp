@@ -37,13 +37,13 @@ namespace castor3d
 		C3D_API void fillConfig( crg::ru::Config & config )const;
 		C3D_API void clear()noexcept;
 		C3D_API void checkEmpty();
-		C3D_API bool sortNodes( ShadowMapLightTypeArray & shadowMaps
+		C3D_API bool sortNodes( ShadowMapLightTypeArray const & shadowMaps
 			, ShadowBuffer const * shadowBuffer );
-		C3D_API bool updateNodes( ShadowMapLightTypeArray & shadowMaps
+		C3D_API bool updateNodes( ShadowMapLightTypeArray const & shadowMaps
 			, ShadowBuffer const * shadowBuffer );
 		C3D_API uint32_t prepareCommandBuffers( ashes::Optional< VkViewport > const & viewport
 			, ashes::Optional< VkRect2D > const & scissors
-			, ashes::CommandBuffer & commandBuffer );
+			, ashes::CommandBuffer const & commandBuffer );
 
 		C3D_API SubmeshRenderNode & createNode( Pass & pass
 			, Submesh & data
@@ -98,24 +98,24 @@ namespace castor3d
 		}
 
 	private:
-		PipelineAndID doGetPipeline( ShadowMapLightTypeArray & shadowMaps
-			, ShadowBuffer const * shadowBuffer
+		PipelineAndID doGetPipeline( ShadowMapLightTypeArray const & shadowMaps
+		, ShadowBuffer const * shadowBuffer
 			, SubmeshRenderNode const & node
 			, bool frontCulled );
-		PipelineAndID doGetPipeline( ShadowMapLightTypeArray & shadowMaps
+		PipelineAndID doGetPipeline( ShadowMapLightTypeArray const & shadowMaps
 			, ShadowBuffer const * shadowBuffer
 			, BillboardRenderNode const & node );
-		void doAddSubmesh( ShadowMapLightTypeArray & shadowMaps
+		void doAddSubmesh( ShadowMapLightTypeArray const & shadowMaps
 			, ShadowBuffer const * shadowBuffer
 			, CulledNodeT< SubmeshRenderNode > const & counted );
-		void doAddBillboard( ShadowMapLightTypeArray & shadowMaps
+		void doAddBillboard( ShadowMapLightTypeArray const & shadowMaps
 			, ShadowBuffer const * shadowBuffer
 			, CulledNodeT< BillboardRenderNode > const & counted );
-		void doAddSingleSubmesh( ShadowMapLightTypeArray & shadowMaps
+		void doAddSingleSubmesh( ShadowMapLightTypeArray const & shadowMaps
 			, ShadowBuffer const * shadowBuffer
 			, CulledNodeT< SubmeshRenderNode > const & node
 			, bool frontCulled );
-		void doAddInstancedSubmesh( ShadowMapLightTypeArray & shadowMaps
+		void doAddInstancedSubmesh( ShadowMapLightTypeArray const & shadowMaps
 			, ShadowBuffer const * shadowBuffer
 			, CulledNodeT< SubmeshRenderNode > const & node
 			, bool frontCulled );

@@ -52,7 +52,7 @@ namespace castor3d
 				, true );
 
 			writer.implementMain( 1u
-				, [&]( sdw::ComputeIn in )
+				, [&]( sdw::ComputeIn const & in )
 				{
 					auto overlay = writer.declLocale( "overlay"
 						, c3d_overlaysData[in.globalInvocationID.x()] );
@@ -79,7 +79,7 @@ namespace castor3d
 					{
 						ssRelBounds += ssBorderExtent / 2.0_f;
 					}
-					FI;
+					FI
 
 					auto ssRelOvPosition = writer.declLocale( "ssRelOvPosition"
 						, overlay.relativePosition() * ssAbsParentSize );

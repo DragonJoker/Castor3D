@@ -44,7 +44,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API ~Mesh()override;
+		C3D_API ~Mesh()noexcept override;
 		/**
 		 *\~english
 		 *\brief		Move constructor.
@@ -179,7 +179,7 @@ namespace castor3d
 		 *\brief		Supprime le submesh s'il est dans les submesh du mesh
 		 *\param[in]	submesh	Le submesh à supprimer
 		 */
-		C3D_API void deleteSubmesh( SubmeshRPtr submesh );
+		C3D_API void deleteSubmesh( Submesh const * submesh );
 		/**
 		 *\~english
 		 *\brief		Generates normals and tangents
@@ -308,11 +308,11 @@ namespace castor3d
 	private:
 		friend class MeshGenerator;
 
-		Scene * m_scene;
-		bool m_modified;
+		Scene * m_scene{};
+		bool m_modified{};
 		castor::BoundingBox m_box;
 		castor::BoundingSphere m_sphere;
-		SubmeshPtrArray m_submeshes;
+		SubmeshPtrArray m_submeshes{};
 		SkeletonRPtr m_skeleton{};
 		bool m_serialisable{ true };
 

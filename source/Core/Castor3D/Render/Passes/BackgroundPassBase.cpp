@@ -15,8 +15,6 @@ namespace castor3d
 	//*********************************************************************************************
 
 	BackgroundPassBase::BackgroundPassBase( crg::FramePass const & pass
-		, crg::GraphContext & context
-		, crg::RunnableGraph & graph
 		, RenderDevice const & device
 		, SceneBackground & background
 		, bool forceVisible )

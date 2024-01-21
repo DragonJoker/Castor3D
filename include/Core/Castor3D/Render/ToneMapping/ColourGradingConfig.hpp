@@ -15,7 +15,7 @@ namespace castor3d
 {
 	struct ColourGradingConfig
 	{
-		C3D_API ColourGradingConfig();
+		C3D_API ColourGradingConfig() = default;
 
 		C3D_API void accept( ConfigurationVisitorBase & visitor );
 

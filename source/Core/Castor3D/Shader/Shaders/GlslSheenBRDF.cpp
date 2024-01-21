@@ -41,7 +41,7 @@ namespace castor3d::shader
 				, [this]( sdw::Float const & NdotH
 					, sdw::Float const & NdotV
 					, sdw::Float const & NdotL
-					, sdw::Float roughness )
+					, sdw::Float const & roughness )
 				{
 					auto albedoSheenScalingLUT = m_writer.declLocaleArray( "albedoSheenScalingLUT"
 						, 256u

@@ -28,7 +28,7 @@ namespace castor3d
 		return ret;
 	}
 
-	void RenderTargetCache::remove( RenderTargetRPtr target )noexcept
+	void RenderTargetCache::remove( RenderTarget const * target )noexcept
 	{
 		cachetgt::LockType lock{ castor::makeUniqueLock( *this ) };
 		auto v = std::next( m_renderTargets.begin()
@@ -50,7 +50,7 @@ namespace castor3d
 	{
 		cachetgt::LockType lock{ castor::makeUniqueLock( *this ) };
 
-		for ( auto & target : m_renderTargets[size_t( TargetType::eTexture )] )
+		for ( auto const & target : m_renderTargets[size_t( TargetType::eTexture )] )
 		{
 			target->update( updater );
 		}
@@ -60,7 +60,7 @@ namespace castor3d
 	{
 		cachetgt::LockType lock{ castor::makeUniqueLock( *this ) };
 
-		for ( auto & target : m_renderTargets[size_t( TargetType::eTexture )] )
+		for ( auto const & target : m_renderTargets[size_t( TargetType::eTexture )] )
 		{
 			target->update( updater );
 		}
@@ -70,7 +70,7 @@ namespace castor3d
 	{
 		cachetgt::LockType lock{ castor::makeUniqueLock( *this ) };
 
-		for ( auto & target : m_renderTargets[size_t( TargetType::eTexture )] )
+		for ( auto const & target : m_renderTargets[size_t( TargetType::eTexture )] )
 		{
 			target->upload( uploader );
 		}
@@ -84,9 +84,9 @@ namespace castor3d
 		cachetgt::LockType lock{ castor::makeUniqueLock( *this ) };
 		crg::SemaphoreWaitArray result;
 
-		for ( auto & target : m_renderTargets[size_t( TargetType::eTexture )] )
+		for ( auto const & target : m_renderTargets[size_t( TargetType::eTexture )] )
 		{
-			auto toWait = target->render( device, info, queue, signalsToWait );
+			auto toWait = target->render( queue, signalsToWait );
 			result.insert( result.end()
 				, toWait.begin()
 				, toWait.end() );
@@ -103,9 +103,9 @@ namespace castor3d
 	{
 		cachetgt::LockType lock{ castor::makeUniqueLock( *this ) };
 
-		for ( auto & array : m_renderTargets )
+		for ( auto const & array : m_renderTargets )
 		{
-			for ( auto & target : array )
+			for ( auto const & target : array )
 			{
 				target->cleanup( device );
 			}
@@ -123,7 +123,7 @@ namespace castor3d
 	}
 
 	void RenderTargetCache::registerToneMappingName( castor::String const & name
-		, castor::String const & fullName )
+		, castor::StringView fullName )
 	{
 		m_toneMappings[name] = fullName;
 	}

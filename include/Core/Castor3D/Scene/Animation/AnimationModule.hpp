@@ -98,6 +98,28 @@ namespace castor3d
 
 	struct GroupAnimation
 	{
+		explicit GroupAnimation( castor::String name )
+			: name{ std::move( name ) }
+		{
+		}
+
+		GroupAnimation( castor::String name
+			, AnimationState state
+			, bool looped = {}
+			, float scale = {}
+			, castor::Milliseconds startingPoint = {}
+			, castor::Milliseconds stoppingPoint = {}
+			, InterpolatorType interpolation = { InterpolatorType::eLinear } )
+			: name{ std::move( name ) }
+			, state{ state }
+			, looped{ looped }
+			, scale{ scale }
+			, startingPoint{ startingPoint }
+			, stoppingPoint{ stoppingPoint }
+			, interpolation{ interpolation }
+		{
+		}
+
 		castor::String name;
 		AnimationState state{};
 		bool looped{};

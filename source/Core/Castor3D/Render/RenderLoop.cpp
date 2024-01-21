@@ -29,12 +29,11 @@ CU_ImplementSmartPtr( castor3d, RenderLoop )
 namespace castor3d
 {
 	RenderLoop::RenderLoop( Engine & engine
-		, uint32_t wantedFPS
-		, bool isAsync )
+		, uint32_t wantedFPS )
 		: castor::OwnedBy< Engine >( engine )
 		, m_renderSystem{ *engine.getRenderSystem() }
 		, m_wantedFPS{ wantedFPS }
-		, m_frameTime{ 1000ull / wantedFPS }
+		, m_frameTime{ 1000ULL / wantedFPS }
 		, m_debugOverlays{ std::make_unique< DebugOverlays >( engine ) }
 		, m_timerCpuEvents{ castor::makeUnique< crg::FramePassTimer >( m_renderSystem.getRenderDevice().makeContext(), "Events/CPU/PreRender", crg::TimerScope::eUpdate )
 			, castor::makeUnique< crg::FramePassTimer >( m_renderSystem.getRenderDevice().makeContext(), "Events/CPU/QueueRender", crg::TimerScope::eUpdate )
@@ -129,7 +128,7 @@ namespace castor3d
 	{
 	}
 
-	void RenderLoop::flushEvents()
+	void RenderLoop::flushEvents()const
 	{
 		getEngine()->getFrameListenerCache().forEach( []( FrameListener & listener )
 			{
@@ -282,14 +281,14 @@ namespace castor3d
 		device.uboPool->upload( uploadData );
 		getEngine()->upload( uploadData );
 
-		for ( auto & buffer : m_shaderBuffers )
+		for ( auto const & buffer : m_shaderBuffers )
 		{
 			buffer->upload( uploadData );
 		}
 
-		for ( auto & window : windows )
+		for ( auto const & [_, window] : windows )
 		{
-			window.second->upload( uploadData );
+			window->upload( uploadData );
 		}
 
 		getEngine()->getRenderTargetCache().upload( uploadData );
@@ -306,9 +305,9 @@ namespace castor3d
 			, { { *used.semaphore
 				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT } } );
 
-		for ( auto & window : windows )
+		for ( auto const & [_, window] : windows )
 		{
-			window.second->render( info
+			window->render( info
 				, m_ignored > 0
 				, toWait );
 		}
@@ -334,9 +333,9 @@ namespace castor3d
 		updater.tslf = tslf;
 		getEngine()->update( updater );
 
-		for ( auto & techniqueQueues : updater.techniquesQueues )
+		for ( auto const & techniqueQueues : updater.techniquesQueues )
 		{
-			for ( auto & queue : techniqueQueues.queues )
+			for ( auto const & queue : techniqueQueues.queues )
 			{
 				queue.get().update( techniqueQueues.shadowMaps, techniqueQueues.shadowBuffer );
 			}

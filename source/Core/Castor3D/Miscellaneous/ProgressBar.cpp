@@ -37,7 +37,7 @@ namespace castor3d
 		}
 	}
 
-	void ProgressBar::ProgressLabel::setTitle( castor::String const & newTitle )
+	void ProgressBar::ProgressLabel::setTitle( castor::StringView newTitle )
 	{
 		data.title = newTitle;
 
@@ -47,7 +47,7 @@ namespace castor3d
 		}
 	}
 
-	void ProgressBar::ProgressLabel::setLabel( castor::String const & newLabel )
+	void ProgressBar::ProgressLabel::setLabel( castor::StringView newLabel )
 	{
 		data.label = newLabel;
 
@@ -57,7 +57,7 @@ namespace castor3d
 		}
 	}
 
-	void ProgressBar::ProgressLabel::step( castor::String const & newLabel )
+	void ProgressBar::ProgressLabel::step( castor::StringView newLabel )
 	{
 		data.label = newLabel;
 		++data.value;
@@ -78,7 +78,7 @@ namespace castor3d
 		}
 	}
 
-	void ProgressBar::ProgressLabel::setStep( castor::String const & newLabel, int32_t newValue )
+	void ProgressBar::ProgressLabel::setStep( castor::StringView newLabel, int32_t newValue )
 	{
 		data.label = newLabel;
 		setStep( newValue );
@@ -121,7 +121,7 @@ namespace castor3d
 		return data.value;
 	}
 
-	void ProgressBar::ProgressLabel::set( castor::String const & newLabel
+	void ProgressBar::ProgressLabel::set( castor::StringView newLabel
 		, int32_t newRangeMax
 		, int32_t newValue )
 	{

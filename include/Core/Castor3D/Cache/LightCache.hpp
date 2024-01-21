@@ -121,11 +121,30 @@ namespace castor3d
 			, uint32_t index )const;
 		/**
 		 *\~english
+		 *\brief		Creates the descriptor set layout binding at given point.
+		 *\param[in]	index	The binding point index.
+		 *\~french
+		 *\brief		Crée une attache de layout de set de descripteurs au point donné.
+		 *\param[in]	index	L'indice du point d'attache.
+		 */
+		C3D_API void addLayoutBinding( ashes::VkDescriptorSetLayoutBindingArray & bindings
+			, VkShaderStageFlags stages
+			, uint32_t & index )const;
+		/**
+		 *\~english
 		 *\brief		Creates the descriptor write for the lights buffer.
 		 *\~french
 		 *\brief		Crée le descriptor write pour le buffer de sources lumineuses.
 		 */
 		C3D_API ashes::WriteDescriptorSet getBinding( uint32_t binding )const;
+		/**
+		 *\~english
+		 *\brief		Creates the descriptor write for the lights buffer.
+		 *\~french
+		 *\brief		Crée le descriptor write pour le buffer de sources lumineuses.
+		 */
+		C3D_API void addBinding( ashes::WriteDescriptorSetArray & writes
+			, uint32_t & binding )const;
 		/**
 		 *\~english
 		 *\brief		Creates the descriptor write for the lights buffer.
@@ -163,7 +182,7 @@ namespace castor3d
 		}
 
 	private:
-		bool doCheckUniqueDirectionalLight( LightType toAdd );
+		bool doCheckUniqueDirectionalLight( LightType toAdd )const noexcept;
 		bool doRegisterLight( Light & light );
 		void doUnregisterLight( Light & light );
 

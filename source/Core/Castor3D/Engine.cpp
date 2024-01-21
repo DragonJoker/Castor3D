@@ -57,19 +57,19 @@
 
 CU_ImplementSmartPtr( castor3d, Engine )
 
-#define C3D_GenerateBRDFIntegration 0
-
 namespace castor3d
 {
 	//*********************************************************************************************
 
 	namespace eng
 	{
-		static constexpr bool C3D_EnableAPITrace = false;
-		static const char * C3D_NO_RENDERSYSTEM = "No RenderSystem loaded, call castor3d::Engine::loadRenderer before castor3d::Engine::Initialise";
+		static bool constexpr C3D_GenerateBRDFIntegration = false;
 
-		static castor::String const defaultName = cuT( "C3D_Default" );
-		static castor::String const samplerName = cuT( "C3D_Lights" );
+		static constexpr bool C3D_EnableAPITrace = false;
+		static castor::StringView constexpr noRenderSystem{ cuT( "No RenderSystem loaded, call castor3d::Engine::loadRenderer before castor3d::Engine::Initialise" ) };
+		static castor::StringView constexpr defaultName{ cuT( "C3D_Default" ) };
+		static castor::StringView constexpr samplerName{ cuT( "C3D_Lights" ) };
+		static std::locale const globalLocale{ "C" };
 
 		static castor::LoggerInstancePtr createLogger( castor::LogType type
 			, castor::Path const & filePath
@@ -89,60 +89,64 @@ namespace castor3d
 			, crg::ResourcesCache & resources
 			, castor::Size const & size )
 		{
-#if !C3D_GenerateBRDFIntegration
-			Texture result{ device
-				, resources
-				, "BrdfLUT"
-				, 0u
-				, { size[0], size[1], 1u }
-				, 1u
-				, 1u
-				, VK_FORMAT_R8G8B8A8_UNORM
-				, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-					| VK_IMAGE_USAGE_TRANSFER_DST_BIT
-					| VK_IMAGE_USAGE_SAMPLED_BIT ) };
-			result.create();
-			auto image = result.image.get();
-			auto imagePath = Engine::getEngineDirectory() / cuT( "Core" ) / cuT( "brdf.png" );
-			castor::ImageResPtr created;
-			auto img = engine.tryAddImage( cuT( "BRDF" )
-				, true
-				, created
-				, castor::ImageCreateParams{ imagePath, { false, false, false } } );
-			auto buffer = castor::PxBufferBase::create( img->getPixels()->getDimensions()
-				, castor::PixelFormat::eR8G8B8A8_UNORM
-				, img->getPixels()->getConstPtr()
-				, img->getPixels()->getFormat() );
-			auto view = image->createView( VK_IMAGE_VIEW_TYPE_2D, result.getFormat() );
-			auto staging = device->createStagingTexture( VK_FORMAT_R8G8B8A8_UNORM
-				, makeExtent2D( buffer->getDimensions() ) );
-			auto data = device.graphicsData();;
-			staging->uploadTextureData( *data->queue
-				, *data->commandPool
-				, VK_FORMAT_R8G8B8A8_UNORM
-				, buffer->getConstPtr()
-				, view );
-#else
-			Texture result{ device
-				, handler
-				, "BrdfLUT"
-				, 0u
-				, { size[0], size[1], 1u }
-				, 1u
-				, 1u
-				, VK_FORMAT_R16G16B16A16_SFLOAT
-				, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-					| VK_IMAGE_USAGE_SAMPLED_BIT ) };
-			result.create();
-			BrdfPrefilter filter{ engine
-				, device
-				, size
-				, result };
-			auto queueData = device.graphicsData();
-			filter.render( *queueData );
-			device->waitIdle();
-#endif
-			return result;
+			if constexpr ( !C3D_GenerateBRDFIntegration )
+			{
+				Texture result{ device
+					, resources
+					, "BrdfLUT"
+					, 0u
+					, { size[0], size[1], 1u }
+					, 1u
+					, 1u
+					, VK_FORMAT_R8G8B8A8_UNORM
+					, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+						| VK_IMAGE_USAGE_TRANSFER_DST_BIT
+						| VK_IMAGE_USAGE_SAMPLED_BIT ) };
+				result.create();
+				auto image = result.image.get();
+				auto imagePath = Engine::getEngineDirectory() / cuT( "Core" ) / cuT( "brdf.png" );
+				castor::ImageResPtr created;
+				auto img = engine.tryAddImage( cuT( "BRDF" )
+					, true
+					, created
+					, castor::ImageCreateParams{ imagePath, { false, false, false } } );
+				auto buffer = castor::PxBufferBase::create( img->getPixels()->getDimensions()
+					, castor::PixelFormat::eR8G8B8A8_UNORM
+					, img->getPixels()->getConstPtr()
+					, img->getPixels()->getFormat() );
+				auto view = image->createView( VK_IMAGE_VIEW_TYPE_2D, result.getFormat() );
+				auto staging = device->createStagingTexture( VK_FORMAT_R8G8B8A8_UNORM
+					, makeExtent2D( buffer->getDimensions() ) );
+				auto data = device.graphicsData();
+				staging->uploadTextureData( *data->queue
+					, *data->commandPool
+					, VK_FORMAT_R8G8B8A8_UNORM
+					, buffer->getConstPtr()
+					, view );
+				return result;
+			}
+			else
+			{
+				Texture result{ device
+					, resources
+					, "BrdfLUT"
+					, 0u
+					, { size[0], size[1], 1u }
+					, 1u
+					, 1u
+					, VK_FORMAT_R16G16B16A16_SFLOAT
+					, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+						| VK_IMAGE_USAGE_SAMPLED_BIT ) };
+				result.create();
+				BrdfPrefilter filter{ engine
+					, device
+					, size
+					, result };
+				auto queueData = device.graphicsData();
+				filter.render( *queueData );
+				device->waitIdle();
+				return result;
+			}
 		}
 	}
 
@@ -185,7 +189,7 @@ namespace castor3d
 		m_listenerCache = castor::makeCache< FrameListener, castor::String, FrameListenerCacheTraits >( getLogger()
 			, castor::DummyFunctorT< FrameListenerCache >{}
 			, listenerClean );
-		m_defaultListener = m_listenerCache->add( eng::defaultName );
+		m_defaultListener = m_listenerCache->add( castor::String{ eng::defaultName } );
 
 		m_shaderCache = makeCache( *this );
 		m_samplerCache = castor::makeCache< Sampler, castor::String, SamplerCacheTraits >( getLogger()
@@ -214,19 +218,19 @@ namespace castor3d
 		registerBackgroundModel( shader::IblBackgroundModel::Name
 			, shader::IblBackgroundModel::create );
 
-		registerPassModels( { PhongPass::LightingModel
+		registerPassModels( { castor::String{ PhongPass::LightingModel }
 				, PhongPass::create
 				, &shader::PhongLightingModel::create
 				, false } );
-		registerPassModels( { PbrPass::LightingModel
+		registerPassModels( { castor::String{ PbrPass::LightingModel }
 				, PbrPass::create
 				, &shader::PbrLightingModel::create
 				, true } );
 		m_lightingModelId = getPassFactory().listRegisteredTypes().begin()->key;
 
 		registerParsers( ControlsManager::Name
-			, std::move( ControlsManager::createParsers( *this ) )
-			, std::move( ControlsManager::createSections() )
+			, ControlsManager::createParsers()
+			, ControlsManager::createSections()
 			, nullptr );
 		setUserInputListenerT( castor::makeUnique< ControlsManager >( *this ) );
 
@@ -301,7 +305,7 @@ namespace castor3d
 
 		if ( !m_renderSystem )
 		{
-			CU_Exception( eng::C3D_NO_RENDERSYSTEM );
+			CU_Exception( castor::String{ eng::noRenderSystem } );
 		}
 
 		if ( auto created = m_samplerCache->create( cuT( "Default" ), *this ) )
@@ -314,7 +318,7 @@ namespace castor3d
 			m_defaultSampler = m_samplerCache->add( created->getName(), created, true );
 		}
 
-		if ( auto created = m_samplerCache->create( eng::samplerName, *this ) )
+		if ( auto created = m_samplerCache->create( castor::String{ eng::samplerName }, *this ) )
 		{
 			created->setMinFilter( VK_FILTER_NEAREST );
 			created->setMagFilter( VK_FILTER_NEAREST );
@@ -424,9 +428,8 @@ namespace castor3d
 
 	bool Engine::loadRenderer( castor::String const & type )
 	{
-		auto it = m_rendererList.find( type );
-
-		if ( it != m_rendererList.end() )
+		if ( auto it = m_rendererList.find( type );
+			it != m_rendererList.end() )
 		{
 			m_renderSystem = castor::makeUnique< RenderSystem >( *this, *it );
 		}
@@ -440,7 +443,7 @@ namespace castor3d
 			, std::move( renderer ) );
 	}
 
-	CpuFrameEvent * Engine::postEvent( CpuFrameEventUPtr event )
+	CpuFrameEvent * Engine::postEvent( CpuFrameEventUPtr event )const
 	{
 		CpuFrameEvent * result = nullptr;
 
@@ -453,14 +456,14 @@ namespace castor3d
 		return result;
 	}
 
-	void Engine::sendEvent( GpuFrameEventUPtr event )
+	void Engine::sendEvent( GpuFrameEventUPtr event )const
 	{
-		auto & device = m_renderSystem->getRenderDevice();
+		auto const & device = m_renderSystem->getRenderDevice();
 		auto data = device.graphicsData();
 		event->apply( device, *data );
 	}
 
-	GpuFrameEvent * Engine::postEvent( GpuFrameEventUPtr event )
+	GpuFrameEvent * Engine::postEvent( GpuFrameEventUPtr event )const
 	{
 		GpuFrameEvent * result = nullptr;
 
@@ -478,9 +481,9 @@ namespace castor3d
 		, bool alt
 		, bool shift )
 	{
-		for ( auto & listener : m_windowInputListeners )
+		for ( auto const & [_, listener] : m_windowInputListeners )
 		{
-			listener.second->fireMouseMove( position, ctrl, alt, shift );
+			listener->fireMouseMove( position, ctrl, alt, shift );
 		}
 
 		auto inputListener = getUserInputListener();
@@ -511,16 +514,16 @@ namespace castor3d
 				}
 			} );
 
-		for ( auto & window : m_renderWindows )
+		for ( auto const & [_, window] : m_renderWindows )
 		{
 			TechniqueQueues techniqueQueues;
 			updater.queues = &techniqueQueues.queues;
-			window.second->update( updater );
+			window->update( updater );
 
 			if ( !techniqueQueues.queues.empty() )
 			{
-				techniqueQueues.shadowMaps = window.second->getShadowMaps();
-				techniqueQueues.shadowBuffer = window.second->getShadowBuffer();
+				techniqueQueues.shadowMaps = window->getShadowMaps();
+				techniqueQueues.shadowBuffer = window->getShadowBuffer();
 				updater.techniquesQueues.push_back( techniqueQueues );
 			}
 		}
@@ -536,9 +539,9 @@ namespace castor3d
 		getRenderTargetCache().update( updater );
 		m_textureCache->update( updater );
 
-		for ( auto & window : m_renderWindows )
+		for ( auto const & [_, window] : m_renderWindows )
 		{
-			window.second->update( updater );
+			window->update( updater );
 		}
 	}
 
@@ -598,8 +601,7 @@ namespace castor3d
 
 	std::locale const & Engine::getLocale()
 	{
-		static std::locale const loc{ "C" };
-		return loc;
+		return eng::globalLocale;
 	}
 
 	castor::String Engine::getDefaultLightingModelName()const
@@ -669,14 +671,14 @@ namespace castor3d
 	ast::ShaderAllocator & Engine::getShaderAllocator()
 	{
 		auto lock = castor::makeUniqueLock( m_allocMutex );
-		auto ires = m_shaderAllocators.emplace( std::this_thread::get_id(), nullptr );
+		auto [it, res] = m_shaderAllocators.try_emplace( std::this_thread::get_id() );
 
-		if ( ires.second )
+		if ( res )
 		{
-			ires.first->second = std::make_unique< ast::ShaderAllocator >( ast::AllocationMode::eFragmented );
+			it->second = std::make_unique< ast::ShaderAllocator >( ast::AllocationMode::eFragmented );
 		}
 
-		return *ires.first->second;
+		return *it->second;
 	}
 
 	castor::RgbaColour Engine::getNextRainbowColour()const
@@ -712,19 +714,19 @@ namespace castor3d
 
 	LightingModelID Engine::registerLightingModel( castor::String const & name
 		, shader::LightingModelCreator creator
-		, BackgroundModelID backgroundModelId )
+		, BackgroundModelID backgroundModelId )const
 	{
-		return getLightingModelFactory().registerType( name, backgroundModelId, creator );
+		return getLightingModelFactory().registerType( name, backgroundModelId, std::move( creator ) );
 	}
 
 	void Engine::unregisterLightingModel( castor::String const & name
-		, BackgroundModelID backgroundModelId )
+		, BackgroundModelID backgroundModelId )const
 	{
 		getLightingModelFactory().unregisterType( name, backgroundModelId );
 	}
 
 	void Engine::unregisterLightingModel( LightingModelID lightingModelId
-		, BackgroundModelID backgroundModelId )
+		, BackgroundModelID backgroundModelId )const
 	{
 		getLightingModelFactory().unregisterType( lightingModelId, backgroundModelId );
 	}
@@ -732,7 +734,7 @@ namespace castor3d
 	BackgroundModelID Engine::registerBackgroundModel( castor::String const & name
 		, shader::BackgroundModelCreator creator )
 	{
-		return BackgroundModelID( getBackgroundModelFactory().registerType( name, creator ).id );
+		return BackgroundModelID( getBackgroundModelFactory().registerType( name, std::move( creator ) ).id );
 	}
 
 	BackgroundModelID Engine::unregisterBackgroundModel( castor::String const & name )
@@ -759,20 +761,20 @@ namespace castor3d
 	}
 
 	void Engine::registerPassModel( BackgroundModelID backgroundModelId
-		, PassRegisterInfo info )
+		, PassRegisterInfo const & info )const
 	{
 		auto lightingModelId = registerLightingModel( info.lightingModel
 			, info.lightingModelCreator
 			, backgroundModelId );
 		getPassFactory().registerType( lightingModelId
-			, std::move( info ) );
+			, info );
 	}
 
-	void Engine::registerPassModels( PassRegisterInfo info )
+	void Engine::registerPassModels( PassRegisterInfo const & info )const
 	{
 		std::set< LightingModelID > lightingModels;
 
-		for ( auto entry : getBackgroundModelFactory().listRegisteredTypes() )
+		for ( auto const & entry : getBackgroundModelFactory().listRegisteredTypes() )
 		{
 			lightingModels.emplace( registerLightingModel( info.lightingModel
 				, info.lightingModelCreator
@@ -786,19 +788,19 @@ namespace castor3d
 	}
 
 	void Engine::unregisterPassModel( BackgroundModelID backgroundModelId
-		, LightingModelID lightingModelId )
+		, LightingModelID lightingModelId )const
 	{
 		getPassFactory().unregisterType( lightingModelId );
 		unregisterLightingModel( lightingModelId
 			, backgroundModelId );
 	}
 
-	void Engine::unregisterPassModels( castor::String const & type ) try
+	void Engine::unregisterPassModels( castor::String const & type )const try
 	{
 		auto lightingModelId = getPassFactory().getNameId( type );
 		getPassFactory().unregisterType( lightingModelId );
 
-		for ( auto entry : getBackgroundModelFactory().listRegisteredTypes() )
+		for ( auto const & entry : getBackgroundModelFactory().listRegisteredTypes() )
 		{
 			unregisterLightingModel( lightingModelId
 				, entry.id );
@@ -810,12 +812,12 @@ namespace castor3d
 	}
 
 	void Engine::registerSpecificsBuffer( std::string const & name
-		, SpecificsBuffer buffer )
+		, SpecificsBuffer buffer )const
 	{
-		m_materialCache->registerSpecificsBuffer( name, buffer );
+		m_materialCache->registerSpecificsBuffer( name, std::move( buffer ) );
 	}
 
-	void Engine::unregisterSpecificsBuffer( std::string const & name )
+	void Engine::unregisterSpecificsBuffer( std::string const & name )const
 	{
 		m_materialCache->unregisterSpecificsBuffer( name );
 	}
@@ -848,25 +850,25 @@ namespace castor3d
 	}
 
 	PassComponentID Engine::registerPassComponent( castor::String const & type
-		, PassComponentPluginUPtr componentPlugin )
+		, PassComponentPluginUPtr componentPlugin )const
 	{
 		return m_passComponents->registerComponent( type
 			, std::move( componentPlugin ) );
 	}
 
-	void Engine::unregisterPassComponent( castor::String const & type )
+	void Engine::unregisterPassComponent( castor::String const & type )const
 	{
 		m_passComponents->unregisterComponent( type );
 	}
 
 	SubmeshComponentID Engine::registerSubmeshComponent( castor::String const & type
-		, SubmeshComponentPluginUPtr componentPlugin )
+		, SubmeshComponentPluginUPtr componentPlugin )const
 	{
 		return m_submeshComponents->registerComponent( type
 			, std::move( componentPlugin ) );
 	}
 
-	void Engine::unregisterSubmeshComponent( castor::String const & type )
+	void Engine::unregisterSubmeshComponent( castor::String const & type )const
 	{
 		m_submeshComponents->unregisterComponent( type );
 	}
@@ -876,15 +878,15 @@ namespace castor3d
 	{
 		if ( info )
 		{
-			auto & ninfo = *m_passRenderPassTypes.emplace( renderPassType, std::move( info ) ).first->second;
-			auto ires = m_renderPassTypes.emplace( renderPassType, std::make_pair( RenderPassTypeID{}, Parameters{} ) );
+			auto & ninfo = *m_passRenderPassTypes.try_emplace( renderPassType, std::move( info ) ).first->second;
+			auto [it, res] = m_renderPassTypes.try_emplace( renderPassType );
 
-			if ( ires.second )
+			if ( res )
 			{
-				ires.first->second.first = RenderPassTypeID( m_renderPassTypes.size() );
+				it->second.first = RenderPassTypeID( m_renderPassTypes.size() );
 			}
 
-			ninfo.id = ires.first->second.first;
+			ninfo.id = it->second.first;
 		}
 	}
 
@@ -913,9 +915,8 @@ namespace castor3d
 
 	Parameters Engine::getRenderPassTypeConfiguration( castor::String const & renderPassType )const
 	{
-		auto it = m_renderPassTypes.find( renderPassType );
-
-		if ( it != m_renderPassTypes.end() )
+		if ( auto it = m_renderPassTypes.find( renderPassType );
+			it != m_renderPassTypes.end() )
 		{
 			return it->second.second;
 		}
@@ -936,21 +937,17 @@ namespace castor3d
 		return it->second.get();
 	}
 
-	std::vector< RenderPassRegisterInfo * > Engine::getRenderPassInfos( TechniquePassEvent event )const
+	castor::Vector< RenderPassRegisterInfo * > Engine::getRenderPassInfos( TechniquePassEvent event )const
 	{
-		std::vector< RenderPassRegisterInfo * > result;
-		std::set< castor::String > inserted;
+		castor::Vector< RenderPassRegisterInfo * > result;
+		castor::Set< castor::String > inserted;
 
-		for ( auto & renderPass : m_passRenderPassTypes )
+		for ( auto const & [_, renderPass] : m_passRenderPassTypes )
 		{
-			if ( renderPass.second->event == event )
+			if ( renderPass->event == event
+				&& inserted.insert( renderPass->name ).second )
 			{
-				auto ires = inserted.insert( renderPass.second->name );
-
-				if ( ires.second )
-				{
-					result.push_back( renderPass.second.get() );
-				}
+				result.push_back( renderPass.get() );
 			}
 		}
 
@@ -968,12 +965,12 @@ namespace castor3d
 		}
 	}
 
-	bool Engine::isCleaned()
+	bool Engine::isCleaned()const noexcept
 	{
 		return m_cleaned;
 	}
 
-	void Engine::setCleaned()
+	void Engine::setCleaned()noexcept
 	{
 		m_cleaned = true;
 	}
@@ -981,12 +978,12 @@ namespace castor3d
 	void Engine::registerWindow( RenderWindow & window )
 	{
 #if !defined( NDEBUG )
-		auto result = m_renderWindows.emplace( window.getName(), &window ).second;
+		auto result = m_renderWindows.try_emplace( window.getName(), &window ).second;
 		CU_Assert( result, "Duplicate window." );
 #else
 		m_renderWindows.emplace( window.getName(), &window );
 #endif
-		m_windowInputListeners.emplace( &window
+		m_windowInputListeners.try_emplace( &window
 			, castor::makeUniqueDerived< UserInputListener, RenderWindow::InputListener >( *this, window ) );
 		auto listener = m_windowInputListeners.find( &window )->second.get();
 		log::trace << "Created InputListener [0x" << std::hex << listener << "] - " << window.getName() << std::endl;
@@ -994,9 +991,8 @@ namespace castor3d
 
 	void Engine::unregisterWindow( RenderWindow const & window )
 	{
-		auto it = m_windowInputListeners.find( &window );
-
-		if ( it != m_windowInputListeners.end() )
+		if ( auto it = m_windowInputListeners.find( &window );
+			it != m_windowInputListeners.end() )
 		{
 			auto listener = m_windowInputListeners.find( &window )->second.get();
 			listener->cleanup();
@@ -1013,31 +1009,31 @@ namespace castor3d
 		m_renderWindows.erase( window.getName() );
 	}
 
-	void Engine::registerParsers( castor::String const & name
-		, castor::AttributeParsers const & parsers
-		, castor::StrUInt32Map const & sections
+	void Engine::registerParsers( castor::String name
+		, castor::AttributeParsers parsers
+		, castor::StrUInt32Map sections
 		, castor::UserContextCreator contextCreator )
 	{
-		auto && it = m_additionalParsers.find( name );
-
-		if ( it != m_additionalParsers.end() )
+		if ( auto it = m_additionalParsers.find( name );
+			it != m_additionalParsers.end() )
 		{
 			CU_Exception( "registerParsers - Duplicate entry for " + name );
 		}
 
-		m_additionalParsers.emplace( name
-			, castor::AdditionalParsers{ std::move( parsers )
-				, std::move( sections )
-				, std::move( contextCreator ) } );
+		m_additionalParsers.try_emplace( std::move( name )
+			, std::move( parsers )
+			, std::move( sections )
+			, std::move( contextCreator ) );
 	}
 
-	void Engine::unregisterParsers( castor::String const & name )
+	void Engine::unregisterParsers( castor::String const & name )noexcept
 	{
 		auto && it = m_additionalParsers.find( name );
 
 		if ( it == m_additionalParsers.end() )
 		{
-			CU_Exception( "unregisterParsers - Unregistered entry " + name );
+			CU_Failure( "unregisterParsers - Unregistered entry " + name );
+			return;
 		}
 
 		m_additionalParsers.erase( it );
@@ -1045,7 +1041,7 @@ namespace castor3d
 
 	void Engine::pushCpuJob( castor::AsyncJobQueue::Job job )
 	{
-		m_cpuJobs.pushJob( job );
+		m_cpuJobs.pushJob( std::move( job ) );
 	}
 
 	void Engine::setLoadingScene( SceneUPtr scene )
@@ -1054,9 +1050,9 @@ namespace castor3d
 
 		if ( m_loadingScene )
 		{
-			for ( auto & windowIt : m_renderWindows )
+			for ( auto const & [_, window] : m_renderWindows )
 			{
-				windowIt.second->destroyLoadingScreen();
+				window->destroyLoadingScreen();
 			}
 
 			m_loadingScene->cleanup();
@@ -1074,22 +1070,20 @@ namespace castor3d
 
 		if ( hadLoadingScene )
 		{
-			for ( auto & windowIt : m_renderWindows )
+			for ( auto const & [_, window] : m_renderWindows )
 			{
-				windowIt.second->createLoadingScreen();
+				window->createLoadingScreen();
 			}
 		}
 	}
 
 	void Engine::doLoadCoreData()
 	{
-		castor::Path path = Engine::getDataDirectory() / cuT( "Castor3D" );
-
-		if ( castor::File::fileExists( path / cuT( "Core.zip" ) ) )
+		if ( castor::Path path = Engine::getDataDirectory() / cuT( "Castor3D" );
+			castor::File::fileExists( path / cuT( "Core.zip" ) ) )
 		{
-			SceneFileParser parser( *this );
-
-			if ( !parser.parseFile( "Castor3D", path / cuT( "Core.zip" ) ) )
+			if ( SceneFileParser parser( *this );
+				!parser.parseFile( "Castor3D", path / cuT( "Core.zip" ) ) )
 			{
 				log::error << cuT( "Can't read Core.zip data file" ) << std::endl;
 			}
@@ -1097,28 +1091,28 @@ namespace castor3d
 			{
 				auto lock( castor::makeUniqueLock( getMaterialCache() ) );
 
-				for ( auto & materialIt : getMaterialCache() )
+				for ( auto const & [_, material] : getMaterialCache() )
 				{
-					materialIt.second->setSerialisable( false );
+					material->setSerialisable( false );
 				}
 
-				for ( auto & textureIt : getTextureUnitCache() )
+				for ( auto const & [_, texture] : getTextureUnitCache() )
 				{
-					textureIt.second->sourceInfo.setSerialisable( false );
+					texture->sourceInfo.setSerialisable( false );
 				}
 			}
 
 			{
 				auto lock( castor::makeUniqueLock( getFontCache() ) );
 
-				for ( auto & fontIt : getFontCache() )
+				for ( auto const & [_, font] : getFontCache() )
 				{
-					fontIt.second->setSerialisable( false );
+					font->setSerialisable( false );
 				}
 			}
 		}
 		
-		auto & device = m_renderSystem->getRenderDevice();
+		auto const & device = m_renderSystem->getRenderDevice();
 		m_brdf = eng::doCreatePrefilteredBrdf( *this
 			, device
 			, m_resources

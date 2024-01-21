@@ -40,8 +40,7 @@ namespace water::shader
 
 	castor3d::ShaderBufferUPtr WaterProfiles::create( castor3d::RenderDevice const & device )
 	{
-		return castor::makeUnique< castor3d::ShaderBuffer >( *device.renderSystem.getEngine()
-			, device
+		return castor::makeUnique< castor3d::ShaderBuffer >( device
 			, castor3d::MaxMaterialsCount * sizeof( WaterProfileData )
 			, cuT( "WaterProfilesBuffer" ) );
 	}

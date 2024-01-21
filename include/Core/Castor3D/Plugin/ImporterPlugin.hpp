@@ -43,7 +43,7 @@ namespace castor3d
 		 *\brief		Récupère le tableau des extensions supportées
 		 *\return		Le tableau d'extensions supportées
 		 */
-		C3D_API ExtensionArray const & getExtensions();
+		C3D_API ExtensionArray const & getExtensions()const;
 		/**
 		 *\~english
 		 *\brief		adds a supported extension.

@@ -33,7 +33,7 @@ namespace castor3d::shader
 				auto value = writer.declLocale( "debugValue", m_values[m_index] );
 				m_output.xyz() = value;
 			}
-			FI;
+			FI
 		}
 	}
 

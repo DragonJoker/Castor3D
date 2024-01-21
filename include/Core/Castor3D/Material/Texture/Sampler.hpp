@@ -58,7 +58,7 @@ namespace castor3d
 		 */
 		C3D_API Sampler( castor::String const & name
 			, Engine & engine
-			, ashes::SamplerCreateInfo createInfo );
+			, ashes::SamplerCreateInfo const & createInfo );
 		/**
 		 *\~english
 		 *\brief		Initialises the GPU sampler.

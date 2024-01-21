@@ -73,7 +73,7 @@ namespace castor3d
 	template<>
 	inline void CacheViewT< OverlayCache, EventType( CpuEventType::ePreGpuStep ) >::clear()
 	{
-		for ( auto name : m_createdElements )
+		for ( auto const & name : m_createdElements )
 		{
 			auto resource = m_cache.tryRemove( name );
 		}
@@ -84,7 +84,7 @@ namespace castor3d
 	template<>
 	inline void CacheViewT< castor::FontCache, EventType( CpuEventType::ePreGpuStep ) >::clear()
 	{
-		for ( auto name : m_createdElements )
+		for ( auto const & name : m_createdElements )
 		{
 			auto resource = m_cache.tryRemove( name );
 		}
@@ -145,12 +145,12 @@ namespace castor3d
 
 				getListener().postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
 					, [&element, &nodes]( RenderDevice const & device
-						, QueueData const & queueData )
+						, QueueData const & )
 					{
 						element.initialise( device );
 						auto material = element.getMaterial();
 
-						for ( auto & pass : *material )
+						for ( auto const & pass : *material )
 						{
 							nodes.createNode( *pass
 								, *element.getBillboards() );
@@ -176,7 +176,7 @@ namespace castor3d
 			, [this]( MaterialCache::ElementT & element )
 			{
 				getListener().postEvent( makeCpuInitialiseEvent( element ) );
-				m_materialsListeners.emplace( &element
+				m_materialsListeners.try_emplace( &element
 					, element.onChanged.connect( [this]( Material const & material )
 						{
 							onMaterialChanged( material );
@@ -323,11 +323,10 @@ namespace castor3d
 			castor::Point3f min{ fmin, fmin, fmin };
 			castor::Point3f max{ fmax, fmax, fmax };
 
-			for ( auto & geomIt : cache )
+			for ( auto const & [_, geometry] : cache )
 			{
-				auto & geometry = *geomIt.second;
-				auto node = geometry.getParent();
-				auto mesh = geometry.getMesh();
+				auto node = geometry->getParent();
+				auto mesh = geometry->getMesh();
 
 				if ( node && mesh )
 				{
@@ -433,9 +432,9 @@ namespace castor3d
 		{
 			onUpdate( *this );
 			updater.scene = this;
-			auto & sceneObjs = updater.dirtyScenes.emplace( this, CpuUpdater::DirtyObjects{} ).first->second;
+			auto & sceneObjs = updater.dirtyScenes.try_emplace( this ).first->second;
 			doGatherDirty( sceneObjs );
-			doUpdateSceneNodes( updater, sceneObjs );
+			doUpdateSceneNodes( sceneObjs );
 			m_animatedObjectGroupCache->update( updater );
 			doUpdateMovables( updater, sceneObjs );
 
@@ -448,7 +447,7 @@ namespace castor3d
 			doUpdateMaterials();
 			doUpdateLights( updater, sceneObjs );
 			m_renderNodes->update( updater );
-			doUpdateParticles( updater, sceneObjs );
+			doUpdateParticles( updater );
 			doUpdateLightsDependent();
 			m_changed = false;
 		}
@@ -506,9 +505,9 @@ namespace castor3d
 		using LockType = std::unique_lock< GeometryCache >;
 		LockType lock{ castor::makeUniqueLock( *m_geometryCache ) };
 
-		for ( auto & pair : *m_geometryCache )
+		for ( auto const & [_, geometry] : *m_geometryCache )
 		{
-			if ( auto mesh = pair.second->getMesh() )
+			if ( auto mesh = geometry->getMesh() )
 			{
 				result += mesh->getVertexCount();
 			}
@@ -523,9 +522,9 @@ namespace castor3d
 		using LockType = std::unique_lock< GeometryCache >;
 		LockType lock{ castor::makeUniqueLock( *m_geometryCache ) };
 
-		for ( auto & pair : *m_geometryCache )
+		for ( auto const & [_, geometry] : *m_geometryCache )
 		{
-			if ( auto mesh = pair.second->getMesh() )
+			if ( auto mesh = geometry->getMesh() )
 			{
 				result += mesh->getFaceCount();
 			}
@@ -659,7 +658,7 @@ namespace castor3d
 		, TextureConfiguration const & config
 		, Pass & pass )
 	{
-		auto & cache = getAnimatedObjectGroupCache();
+		auto const & cache = getAnimatedObjectGroupCache();
 		auto group = cache.find( cuT( "C3D_Textures" ) );
 		return group->addObject( sourceInfo, config, pass );
 	}
@@ -671,7 +670,7 @@ namespace castor3d
 			return;
 		}
 
-		std::vector< SceneNode * > work;
+		castor::Vector< SceneNode * > work;
 		work.push_back( &node );
 
 		while ( !work.empty() )
@@ -722,9 +721,9 @@ namespace castor3d
 				markDirty( object.get() );
 			}
 
-			for ( auto child : curNode.getChildren() )
+			for ( auto const & [_, nd] : curNode.getChildren() )
 			{
-				if ( auto nd = child.second )
+				if ( nd )
 				{
 					work.push_back( nd );
 				}
@@ -913,11 +912,11 @@ namespace castor3d
 
 		if ( !sceneObjs.dirtyCameras.empty() )
 		{
-			for ( auto & light : getLightCache() )
+			for ( auto const & [_, light] : getLightCache() )
 			{
-				if ( light.second->getLightType() == LightType::eDirectional )
+				if ( light->getLightType() == LightType::eDirectional )
 				{
-					sceneObjs.dirtyLights.push_back( light.second.get() );
+					sceneObjs.dirtyLights.push_back( light.get() );
 				}
 			}
 		}
@@ -930,8 +929,7 @@ namespace castor3d
 		m_dirtyNodes.clear();
 	}
 
-	void Scene::doUpdateSceneNodes( CpuUpdater & updater
-		, CpuUpdater::DirtyObjects & sceneObjs )
+	void Scene::doUpdateSceneNodes( CpuUpdater::DirtyObjects const & sceneObjs )
 	{
 #if C3D_DebugTimers
 		auto block( m_timerSceneNodes->start() );
@@ -960,21 +958,21 @@ namespace castor3d
 			bool dirty = false;
 			auto & geometry = *object;
 
-			for ( auto & passIt : geometry.getIds() )
+			for ( auto const & [pass, submeshes] : geometry.getIds() )
 			{
-				for ( auto & submeshIt : passIt.second )
+				for ( auto & [_, rendered] : submeshes )
 				{
-					auto & submesh = submeshIt.second.second->data;
+					auto & submesh = rendered.second->data;
 
 					if ( submesh.isInitialised() )
 					{
-						geometry.fillEntry( submeshIt.second.first
-							, *passIt.first
+						geometry.fillEntry( rendered.first
+							, *pass
 							, *geometry.getParent()
 							, submesh.getMeshletsCount()
-							, submeshIt.second.second->modelData );
-						geometry.fillEntryOffsets( submeshIt.second.first
-							, submesh.getVertexOffset( geometry, *passIt.first )
+							, rendered.second->modelData );
+						geometry.fillEntryOffsets( rendered.first
+							, submesh.getVertexOffset( geometry, *pass )
 							, submesh.getIndexOffset()
 							, submesh.getMeshletOffset() );
 					}
@@ -984,7 +982,7 @@ namespace castor3d
 					}
 				}
 
-				dirty = dirty || passIt.first->getId() == 0;
+				dirty = dirty || pass->getId() == 0;
 			}
 
 			if ( dirty )
@@ -997,19 +995,19 @@ namespace castor3d
 		{
 			bool dirty = false;
 
-			for ( auto & billboardIt : object->getIds() )
+			for ( auto & [pass, billboard] : object->getIds() )
 			{
-				object->fillEntry( billboardIt.second.first
-					, *billboardIt.first
+				object->fillEntry( billboard.first
+					, *pass
 					, *object->getNode()
 					, 0u
-					, billboardIt.second.second->modelData );
-				object->fillEntryOffsets( billboardIt.second.first
+					, billboard.second->modelData );
+				object->fillEntryOffsets( billboard.first
 					, 0u
 					, 0u
 					, 0u );
-				object->fillData( billboardIt.second.second->billboardData );
-				dirty = dirty || billboardIt.first->getId() == 0;
+				object->fillData( billboard.second->billboardData );
+				dirty = dirty || pass->getId() == 0;
 			}
 
 			if ( dirty )
@@ -1020,13 +1018,13 @@ namespace castor3d
 	}
 
 	void Scene::doUpdateLights( CpuUpdater & updater
-		, CpuUpdater::DirtyObjects & sceneObjs )
+		, CpuUpdater::DirtyObjects const & sceneObjs )
 	{
 #if C3D_DebugTimers
 		auto block( m_timerLights->start() );
 #endif
 
-		for ( auto light : sceneObjs.dirtyLights )
+		for ( auto const & light : sceneObjs.dirtyLights )
 		{
 			doUpdateLightDependent( light->getLightType()
 				, light->isShadowProducer()
@@ -1036,8 +1034,7 @@ namespace castor3d
 		m_lightCache->update( updater );
 	}
 
-	void Scene::doUpdateParticles( CpuUpdater & updater
-		, CpuUpdater::DirtyObjects & sceneObjs )
+	void Scene::doUpdateParticles( CpuUpdater & updater )
 	{
 #if C3D_DebugTimers
 		auto block( m_timerParticlesCpu->start() );
@@ -1046,9 +1043,9 @@ namespace castor3d
 		auto lock( castor::makeUniqueLock( cache ) );
 		updater.index = 0u;
 
-		for ( auto & particleSystem : cache )
+		for ( auto const & [_, particleSystem] : cache )
 		{
-			particleSystem.second->update( updater );
+			particleSystem->update( updater );
 		}
 	}
 
@@ -1066,9 +1063,9 @@ namespace castor3d
 		updater.index = 0u;
 		updater.timer = m_timerParticlesGpu.get();
 
-		for ( auto & particleSystem : cache )
+		for ( auto const & [_, particleSystem] : cache )
 		{
-			particleSystem.second->update( updater );
+			particleSystem->update( updater );
 		}
 	}
 
@@ -1080,7 +1077,7 @@ namespace castor3d
 
 		if ( m_dirtyMaterials )
 		{
-			auto & cache = getEngine()->getMaterialCache();
+			auto const & cache = getEngine()->getMaterialCache();
 			cache.lock();
 			m_needsSubsurfaceScattering = false;
 			m_hasTransparentObjects = false;
@@ -1094,7 +1091,7 @@ namespace castor3d
 					{
 						m_needsSubsurfaceScattering |= material->hasSubsurfaceScattering();
 
-						for ( auto & pass : *material )
+						for ( auto const & pass : *material )
 						{
 							m_hasTransparentObjects |= pass->hasAlphaBlending();
 							m_hasOpaqueObjects |= !pass->hasOnlyAlphaBlending();
@@ -1181,7 +1178,7 @@ namespace castor3d
 		return changed;
 	}
 
-	void Scene::onMaterialChanged( Material const & material )
+	void Scene::onMaterialChanged( Material const & )
 	{
 		m_dirtyMaterials = true;
 	}

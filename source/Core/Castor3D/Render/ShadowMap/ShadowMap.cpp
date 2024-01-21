@@ -22,6 +22,21 @@ namespace castor3d
 {
 	namespace shdmap
 	{
+		static inline ashes::VkClearValueArray const ClearValues
+		{
+			[]()
+			{
+				ashes::VkClearValueArray tmp;
+
+				for ( uint32_t i = 0u; i < uint32_t( SmTexture::eCount ); ++i )
+				{
+					tmp.push_back( getClearValue( SmTexture( i ) ) );
+				}
+
+				return tmp;
+			}()
+		};
+
 		static uint32_t getPassesIndex( bool needsVsm
 			, bool needsRsm )
 		{
@@ -44,9 +59,7 @@ namespace castor3d
 		}
 
 		static void doInitialiseImage( RenderDevice const & device
-			, crg::ResourcesCache & resources
-			, crg::GraphContext & context
-			, ashes::CommandBuffer & commandBuffer
+			, ashes::CommandBuffer const & commandBuffer
 			, Texture const & texture
 			, VkImageLayout finalLayout
 			, VkClearValue clearValue )
@@ -140,7 +153,6 @@ namespace castor3d
 	{
 		m_staticsResult.create();
 		m_result.create();
-		auto & context = m_device.makeContext();
 		auto queueData = m_device.graphicsData();
 		auto commandBuffer = queueData->commandPool->createCommandBuffer();
 		commandBuffer->begin();
@@ -151,15 +163,11 @@ namespace castor3d
 		while ( it != m_result.end() )
 		{
 			shdmap::doInitialiseImage( device
-				, resources
-				, context
 				, *commandBuffer
 				, **sit
 				, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
 				, getClearValue( SmTexture( index ) ) );
 			shdmap::doInitialiseImage( device
-				, resources
-				, context
 				, *commandBuffer
 				, **it
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
@@ -225,7 +233,7 @@ namespace castor3d
 			for ( auto & view : result.subViewsId )
 			{
 				auto smTexture = SmTexture( i );
-				visitor.visit( m_name + "/" + getTexName( smTexture ) + cuT( "L" ) + castor::string::toString( index++ )
+				visitor.visit( m_name + "/" + getTexName( smTexture ) + cuT( "L" ) + castor::string::toString( index )
 					, view
 					, ( ashes::isDepthOrStencilFormat( view.data->info.format )
 						? VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL
@@ -233,6 +241,7 @@ namespace castor3d
 					, TextureFactors::tex2D( { 25.0, 25.0, 25.0 }, { -24.0, -24.0, -24.0 } )
 						.invert( true )
 						.depth( smTexture == SmTexture::eLinearDepth ) );
+				++index;
 			}
 		}
 	}
@@ -270,37 +279,23 @@ namespace castor3d
 
 	ashes::VkClearValueArray const & ShadowMap::getClearValues()const
 	{
-		static ashes::VkClearValueArray const result
-		{
-			[]()
-			{
-				ashes::VkClearValueArray tmp;
-
-				for ( uint32_t i = 0u; i < uint32_t( SmTexture::eCount ); ++i )
-				{
-					tmp.push_back( getClearValue( SmTexture( i ) ) );
-				}
-
-				return tmp;
-			}()
-		};
-		return result;
+		return shdmap::ClearValues;
 	}
 
 	ashes::Sampler const & ShadowMap::getSampler( SmTexture texture
-		, uint32_t index )const
+		, uint32_t )const
 	{
 		return *m_result[texture].sampler;
 	}
 
 	crg::ImageViewId ShadowMap::getView( SmTexture texture
-		, uint32_t index )const
+		, uint32_t )const
 	{
 		return m_result[texture].wholeViewId;
 	}
 
 	crg::ImageViewIdArray ShadowMap::getViews( SmTexture texture
-		, uint32_t index )const
+		, uint32_t )const
 	{
 		return m_result[texture].subViewsId;
 	}

@@ -29,7 +29,7 @@ namespace castor3d
 		: crg::RunnablePass{ pass
 			, context
 			, graph
-			, { []( uint32_t index ){}
+			, { crg::defaultV< crg::RunnablePass::InitialiseCallback >
 				, GetPipelineStateCallback( [](){ return crg::getPipelineState( VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT ); } )
 				, [this]( crg::RecordContext & ctx, VkCommandBuffer cb, uint32_t i ){ doRecordInto( ctx, cb, i ); }
 				, crg::defaultV< crg::RunnablePass::GetPassIndexCallback >
@@ -75,7 +75,7 @@ namespace castor3d
 	{
 		for ( auto const& [_, pass] : m_transformPasses )
 		{
-			pass->recordInto( context, commandBuffer, index );
+			pass->recordInto( context, commandBuffer );
 		}
 	}
 

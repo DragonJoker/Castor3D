@@ -95,7 +95,7 @@ namespace castor3d::shader
 				+ ( components.colour * directLighting.sheen().x() )
 				+ combineResult * directLighting.sheen().y() * max( max( components.colour.r(), components.colour.g() ), components.colour.b() );
 		}
-		FI;
+		FI
 
 		IF( m_writer, components.clearcoatFactor != 0.0_f )
 		{
@@ -106,7 +106,7 @@ namespace castor3d::shader
 			combineResult = combineResult * ( 1.0_f - vec3( components.clearcoatFactor * clearcoatFresnel ) )
 				+ ( coatReflected * ambientOcclusion ) + directLighting.coatingSpecular();
 		}
-		FI;
+		FI
 
 		return combineResult + directLighting.scattering();
 	}
@@ -153,7 +153,7 @@ namespace castor3d::shader
 					, vec3( 0.0_f )
 					, vec3( fresnelFactor ) );
 			}
-			FI;
+			FI
 		}
 
 		adjustDirectLighting( components, directLighting );
@@ -194,7 +194,7 @@ namespace castor3d::shader
 			debugOutput.registerOutput( "Combine", "Transmission BRDF", 0.0_f );
 			debugOutput.registerOutput( "Combine", "Transmission", 0.0_f );
 		}
-		FI;
+		FI
 
 		if ( components.hasMember( "specularFactor" ) )
 		{
@@ -223,11 +223,11 @@ namespace castor3d::shader
 		{
 			doInitialiseBackground( background );
 			m_computeDirectional = m_writer.implementFunction< sdw::Void >( m_prefix + "computeDirectionalLight"
-				, [this, &debugOutput]( DirectionalLight light
+				, [this, &debugOutput]( DirectionalLight const & light
 					, BlendComponents const & components
-					, LightSurface lightSurface
+					, LightSurface const & lightSurface
 					, sdw::UInt const & receivesShadows
-					, DirectLighting parentOutput )
+					, DirectLighting const & parentOutput )
 				{
 					auto output = m_writer.declLocale( "output"
 						, DirectLighting{ m_writer } );
@@ -265,7 +265,7 @@ namespace castor3d::shader
 										, shadows
 										, lightSurface );
 							}
-							FI;
+							FI
 						}
 
 						doApplyShadows( shadows
@@ -314,11 +314,11 @@ namespace castor3d::shader
 		if ( !m_computePoint )
 		{
 			m_computePoint = m_writer.implementFunction< sdw::Void >( m_prefix + "computePointLight"
-				, [this, &debugOutput]( PointLight light
+				, [this, &debugOutput]( PointLight const & light
 					, BlendComponents const & components
-					, LightSurface lightSurface
+					, LightSurface const & lightSurface
 					, sdw::UInt const & receivesShadows
-					, DirectLighting parentOutput )
+					, DirectLighting const & parentOutput )
 				{
 					auto output = m_writer.declLocale( "output"
 						, DirectLighting{ m_writer } );
@@ -359,7 +359,7 @@ namespace castor3d::shader
 										, shadows
 										, lightSurface );
 							}
-							FI;
+							FI
 						}
 
 						doApplyShadows( shadows
@@ -402,11 +402,11 @@ namespace castor3d::shader
 		if ( !m_computeSpot )
 		{
 			m_computeSpot = m_writer.implementFunction< sdw::Void >( m_prefix + "computeSpotLight"
-				, [this, &debugOutput]( SpotLight light
+				, [this, &debugOutput]( SpotLight const & light
 					, BlendComponents const & components
-					, LightSurface lightSurface
+					, LightSurface const & lightSurface
 					, sdw::UInt const & receivesShadows
-					, DirectLighting parentOutput )
+					, DirectLighting const & parentOutput )
 				{
 					lightSurface.updateL( m_utils
 						, light.position() - lightSurface.worldPosition().xyz()
@@ -458,7 +458,7 @@ namespace castor3d::shader
 											, shadows
 											, lightSurface );
 								}
-								FI;
+								FI
 							}
 
 							doApplyShadows( shadows
@@ -477,7 +477,7 @@ namespace castor3d::shader
 						parentOutput.coatingSpecular() += max( vec3( 0.0_f ), output.coatingSpecular() );
 						parentOutput.sheen() += max( vec2( 0.0_f ), output.sheen() );
 					}
-					FI;
+					FI
 				}
 				, PSpotLight( m_writer, "light" )
 				, InBlendComponents{ m_writer, "components", m_materials }
@@ -506,7 +506,7 @@ namespace castor3d::shader
 			m_computeDirectionalDiffuse = m_writer.implementFunction< sdw::Vec3 >( m_prefix + "computeDirectionalLightDiffuse"
 				, [this, &debugOutput]( DirectionalLight const & light
 					, BlendComponents const & components
-					, LightSurface lightSurface
+					, LightSurface const & lightSurface
 					, sdw::UInt const & receivesShadows )
 				{
 					lightSurface.updateL( -light.direction() );
@@ -540,7 +540,7 @@ namespace castor3d::shader
 										, shadows
 										, lightSurface );
 							}
-							FI;
+							FI
 						}
 
 						doApplyShadowsDiffuse( shadows
@@ -574,9 +574,9 @@ namespace castor3d::shader
 		if ( !m_computePointDiffuse )
 		{
 			m_computePointDiffuse = m_writer.implementFunction< sdw::Vec3 >( m_prefix + "computePointLightDiffuse"
-				, [this, &debugOutput]( PointLight light
+				, [this, &debugOutput]( PointLight const & light
 					, BlendComponents const & components
-					, LightSurface lightSurface
+					, LightSurface const & lightSurface
 					, sdw::UInt const & receivesShadows )
 				{
 					lightSurface.updateL( light.position() - lightSurface.worldPosition().xyz() );
@@ -612,7 +612,7 @@ namespace castor3d::shader
 										, shadows
 										, lightSurface );
 							}
-							FI;
+							FI
 						}
 
 						doApplyShadowsDiffuse( shadows
@@ -648,9 +648,9 @@ namespace castor3d::shader
 		if ( !m_computeSpotDiffuse )
 		{
 			m_computeSpotDiffuse = m_writer.implementFunction< sdw::Vec3 >( m_prefix + "computeSpotLightDiffuse"
-				, [this, &debugOutput]( SpotLight light
+				, [this, &debugOutput]( SpotLight const & light
 					, BlendComponents const & components
-					, LightSurface lightSurface
+					, LightSurface const & lightSurface
 					, sdw::UInt const & receivesShadows )
 				{
 					lightSurface.updateL( light.position() - lightSurface.worldPosition().xyz() );
@@ -695,7 +695,7 @@ namespace castor3d::shader
 											, shadows
 											, lightSurface );
 								}
-								FI;
+								FI
 							}
 
 							doApplyShadowsDiffuse( shadows
@@ -738,11 +738,11 @@ namespace castor3d::shader
 		{
 			doInitialiseBackground( background );
 			m_computeDirectionalAllButDiffuse = m_writer.implementFunction< sdw::Void >( m_prefix + "computeDirectionalLightAllButDiffuse"
-				, [this, &debugOutput]( DirectionalLight light
+				, [this, &debugOutput]( DirectionalLight const & light
 					, BlendComponents const & components
-					, LightSurface lightSurface
+					, LightSurface const & lightSurface
 					, sdw::UInt const & receivesShadows
-					, DirectLighting parentOutput )
+					, DirectLighting const & parentOutput )
 				{
 					auto output = m_writer.declLocale< DirectLighting >( "output"
 						, DirectLighting{ m_writer } );
@@ -779,7 +779,7 @@ namespace castor3d::shader
 									, shadows
 									, lightSurface );
 							}
-							FI;
+							FI
 						}
 
 						doApplyShadows( shadows
@@ -828,11 +828,11 @@ namespace castor3d::shader
 		if ( !m_computePointAllButDiffuse )
 		{
 			m_computePointAllButDiffuse = m_writer.implementFunction< sdw::Void >( m_prefix + "computePointLightLightAllButDiffuse"
-				, [this, &debugOutput]( PointLight light
+				, [this, &debugOutput]( PointLight const & light
 					, BlendComponents const & components
-					, LightSurface lightSurface
+					, LightSurface const & lightSurface
 					, sdw::UInt const & receivesShadows
-					, DirectLighting parentOutput )
+					, DirectLighting const & parentOutput )
 				{
 					auto output = m_writer.declLocale< DirectLighting >( "output"
 						, DirectLighting{ m_writer } );
@@ -873,7 +873,7 @@ namespace castor3d::shader
 										, shadows
 										, lightSurface );
 							}
-							FI;
+							FI
 						}
 
 						doApplyShadows( shadows
@@ -916,11 +916,11 @@ namespace castor3d::shader
 		if ( !m_computeSpotAllButDiffuse )
 		{
 			m_computeSpotAllButDiffuse = m_writer.implementFunction< sdw::Void >( m_prefix + "computeSpotLightLightAllButDiffuse"
-				, [this, &debugOutput]( SpotLight light
+				, [this, &debugOutput]( SpotLight const & light
 					, BlendComponents const & components
-					, LightSurface lightSurface
+					, LightSurface const & lightSurface
 					, sdw::UInt const & receivesShadows
-					, DirectLighting parentOutput )
+					, DirectLighting const & parentOutput )
 				{
 					lightSurface.updateL( m_utils
 						, light.position() - lightSurface.worldPosition().xyz()
@@ -971,7 +971,7 @@ namespace castor3d::shader
 											, shadows
 											, lightSurface );
 								}
-								FI;
+								FI
 							}
 
 							doApplyShadows( shadows
@@ -990,7 +990,7 @@ namespace castor3d::shader
 						parentOutput.coatingSpecular() += max( vec3( 0.0_f ), output.coatingSpecular() );
 						parentOutput.sheen() += max( vec2( 0.0_f ), output.sheen() );
 					}
-					FI;
+					FI
 				}
 				, PSpotLight( m_writer, "light" )
 				, InBlendComponents{ m_writer, "components", m_materials }
@@ -1084,7 +1084,7 @@ namespace castor3d::shader
 							, *m_directionalCascadeIndex - 1u
 							, shadows.cascadeCount() );
 				}
-				FI;
+				FI
 
 				if ( withDiffuse )
 				{
@@ -1095,7 +1095,7 @@ namespace castor3d::shader
 				output.coatingSpecular() *= shadowFactor;
 				output.sheen().x() *= shadowFactor;
 			}
-			FI;
+			FI
 
 #if C3D_DebugCascades
 			IF( m_writer, cascadeIndex == 0_u )
@@ -1122,10 +1122,10 @@ namespace castor3d::shader
 				output.specular().rgb() *= vec3( 1.0_f, 1.0f, 0.25f );
 				output.coatingSpecular().rgb() *= vec3( 1.0_f, 1.0f, 0.25f );
 			}
-			FI;
+			FI
 #endif
 		}
-		FI;
+		FI
 	}
 
 	void LightingModel::doApplyShadows( PointShadowData const & shadows
@@ -1160,7 +1160,7 @@ namespace castor3d::shader
 			output.coatingSpecular() *= shadowFactor;
 			output.sheen().x() *= shadowFactor;
 		}
-		FI;
+		FI
 	}
 
 	void LightingModel::doApplyShadows( SpotShadowData const & shadows
@@ -1196,7 +1196,7 @@ namespace castor3d::shader
 			output.coatingSpecular() *= shadowFactor;
 			output.sheen().x() *= shadowFactor;
 		}
-		FI;
+		FI
 	}
 
 	void LightingModel::doApplyShadowsDiffuse( DirectionalShadowData const & shadows
@@ -1232,9 +1232,9 @@ namespace castor3d::shader
 						, shadows.cascadeCount() ) );
 				output *= shadowFactor;
 			}
-			FI;
+			FI
 		}
-		FI;
+		FI
 	}
 
 	void LightingModel::doApplyShadowsDiffuse( PointShadowData const & shadows
@@ -1260,7 +1260,7 @@ namespace castor3d::shader
 					, 1.0_f - ( length( -lightSurface.vertexToLight() ) / lightRange ) ) );
 			output *= shadowFactor;
 		}
-		FI;
+		FI
 	}
 
 	void LightingModel::doApplyShadowsDiffuse( SpotShadowData const & shadows
@@ -1287,7 +1287,7 @@ namespace castor3d::shader
 					, length( -lightSurface.vertexToLight() ) / lightRange ) );
 			output *= shadowFactor;
 		}
-		FI;
+		FI
 	}
 
 	void LightingModel::doApplyVolumetric( ShadowData const & shadows
@@ -1321,7 +1321,7 @@ namespace castor3d::shader
 					output = vec3( volumetric * lightIntensity.x() );
 				}
 			}
-			FI;
+			FI
 		}
 	}
 

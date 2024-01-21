@@ -89,7 +89,7 @@ namespace castor3d::shader
 		{
 			m_computeCookTorranceDiffuse = m_writer.implementFunction< sdw::Vec3 >( "c3d_computeCookTorranceDiffuse"
 				, [this]( sdw::Vec3 radiance
-					, sdw::Float const intensity
+					, sdw::Float const & intensity
 					, sdw::Vec3 const & F )
 				{
 					// Lambertian BRDF

@@ -154,22 +154,19 @@ namespace castor3d
 		 *\param[in]	control	The tick control
 		 *\param[in]	event		The mouse event
 		 */
-		void onTickMouseMove( ControlRPtr control
-			, MouseEvent const & event );
+		void onTickMouseMove( MouseEvent const & event );
 
 		/** Event when mouse left button is released over the tick control
 		 *\param[in]	control	The tick control
 		 *\param[in]	event		The mouse event
 		 */
-		void onTickMouseButtonDown( ControlRPtr control
-			, MouseEvent const & event );
+		void onTickMouseButtonDown( MouseEvent const & event );
 
 		/** Event when mouse left button is released over the tick control
 		 *\param[in]	control	The tick control
 		 *\param[in]	event	The mouse event
 		 */
-		void onTickMouseButtonUp( ControlRPtr control
-			, MouseEvent const & event );
+		void onTickMouseButtonUp( MouseEvent const & event );
 
 		/** Event when a keyboard key is pressed
 		 *\param[in]	event		The keyboard event
@@ -180,8 +177,7 @@ namespace castor3d
 		 *\param[in]	control	The control raising the eevent
 		 *\param[in]	event	The keyboard event
 		 */
-		void onNcKeyDown( ControlRPtr control
-			, KeyboardEvent const & event );
+		void onNcKeyDown( KeyboardEvent const & event );
 
 		/** Updates the tick position
 		 *\param[in]	delta		The position delta

@@ -33,7 +33,6 @@ namespace castor3d
 		 *\param[in]	graph				The render graph.
 		 *\param[in]	previousPass		The previous frame pass.
 		 *\param[in]	device				The GPU device.
-		 *\param[in]	category			The pass category name.
 		 *\param[in]	prefix				The pass name's prefix.
 		 *\param[in]	views				The source and destination textures.
 		 *\param[in]	intermediateView	The view receiving the intermediate blur.
@@ -44,7 +43,6 @@ namespace castor3d
 		 *\param[in]	graph				Le render graph.
 		 *\param[in]	previousPass		La frame pass précédente.
 		 *\param[in]	device				Le device GPU.
-		 *\param[in]	category			Le nom de la catégorie de la passe.
 		 *\param[in]	prefix				Le préfixe du nom de la passe.
 		 *\param[in]	views				Les textures source et destination.
 		 *\param[in]	intermediateView	La texture recevant le blur intermédiaire.
@@ -54,19 +52,17 @@ namespace castor3d
 		C3D_API GaussianBlur( crg::FramePassGroup & graph
 			, crg::FramePass const & previousPass
 			, RenderDevice const & device
-			, castor::String const & category
 			, castor::String const & prefix
 			, crg::ImageViewIdArray const & views
 			, crg::ImageViewId const & intermediateView
 			, uint32_t kernelSize
-			, crg::RunnablePass::IsEnabledCallback isEnabled = crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
+			, crg::RunnablePass::IsEnabledCallback const & isEnabled = crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
 		/**
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	graph			The render graph.
 		 *\param[in]	previousPass	The previous frame pass.
 		 *\param[in]	device			The GPU device.
-		 *\param[in]	category		The pass category name.
 		 *\param[in]	prefix			The pass name's prefix.
 		 *\param[in]	views			The source and destination textures.
 		 *\param[in]	kernelSize		The kernel coefficients count.
@@ -76,7 +72,6 @@ namespace castor3d
 		 *\param[in]	graph			Le render graph.
 		 *\param[in]	previousPass	La frame pass précédente.
 		 *\param[in]	device			Le device GPU.
-		 *\param[in]	category		Le nom de la catégorie de la passe.
 		 *\param[in]	prefix			Le préfixe du nom de la passe.
 		 *\param[in]	views			Les textures source et destination.
 		 *\param[in]	kernelSize		Le nombre de coefficients du kernel.
@@ -85,7 +80,6 @@ namespace castor3d
 		C3D_API GaussianBlur( crg::FramePassGroup & graph
 			, crg::FramePass const & previousPass
 			, RenderDevice const & device
-			, castor::String const & category
 			, castor::String const & prefix
 			, crg::ImageViewIdArray const & views
 			, uint32_t kernelSize
@@ -96,7 +90,6 @@ namespace castor3d
 		 *\param[in]	graph			The render graph.
 		 *\param[in]	previousPass	The previous frame pass.
 		 *\param[in]	device			The GPU device.
-		 *\param[in]	category		The pass category name.
 		 *\param[in]	prefix			The pass name's prefix.
 		 *\param[in]	view			The source and destination texture.
 		 *\param[in]	kernelSize		The kernel coefficients count.
@@ -106,7 +99,6 @@ namespace castor3d
 		 *\param[in]	graph			Le render graph.
 		 *\param[in]	previousPass	La frame pass précédente.
 		 *\param[in]	device			Le device GPU.
-		 *\param[in]	category		Le nom de la catégorie de la passe.
 		 *\param[in]	prefix			Le préfixe du nom de la passe.
 		 *\param[in]	view			La texture source et destination.
 		 *\param[in]	kernelSize		Le nombre de coefficients du kernel.
@@ -115,7 +107,6 @@ namespace castor3d
 		C3D_API GaussianBlur( crg::FramePassGroup & graph
 			, crg::FramePass const & previousPass
 			, RenderDevice const & device
-			, castor::String const & category
 			, castor::String const & prefix
 			, crg::ImageViewId const & view
 			, uint32_t kernelSize
@@ -126,7 +117,6 @@ namespace castor3d
 		 *\param[in]	graph				The render graph.
 		 *\param[in]	previousPass		The previous frame pass.
 		 *\param[in]	device				The GPU device.
-		 *\param[in]	category			The pass category name.
 		 *\param[in]	prefix				The pass name's prefix.
 		 *\param[in]	view				The source and destination texture.
 		 *\param[in]	intermediateView	The view receiving the intermediate blur.
@@ -137,7 +127,6 @@ namespace castor3d
 		 *\param[in]	graph				Le render graph.
 		 *\param[in]	previousPass		La frame pass précédente.
 		 *\param[in]	device				Le device GPU.
-		 *\param[in]	category			Le nom de la catégorie de la passe.
 		 *\param[in]	prefix				Le préfixe du nom de la passe.
 		 *\param[in]	view				La texture source et destination.
 		 *\param[in]	intermediateView	La texture recevant le blur intermédiaire.
@@ -147,7 +136,6 @@ namespace castor3d
 		C3D_API GaussianBlur( crg::FramePassGroup & graph
 			, crg::FramePass const & previousPass
 			, RenderDevice const & device
-			, castor::String const & category
 			, castor::String const & prefix
 			, crg::ImageViewId const & view
 			, crg::ImageViewId const & intermediateView

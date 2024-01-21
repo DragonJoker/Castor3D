@@ -335,8 +335,8 @@ namespace castor3d
 		castor::GroupChangeTracked< ViewportType > m_type;
 		castor::GroupChangeTracked< castor::Size > m_size;
 		castor::GroupChangeTracked< castor::Position > m_position;
-		VkViewport m_viewport;
-		VkRect2D m_scissor;
+		VkViewport m_viewport{ 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f };
+		VkRect2D m_scissor{ { 0, 0 }, { 1u, 1u } };
 		castor::Matrix4x4f m_projection;
 		castor::Matrix4x4f m_safeBandedProjection;
 	};

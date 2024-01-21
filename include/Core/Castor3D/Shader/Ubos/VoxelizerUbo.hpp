@@ -131,6 +131,14 @@ namespace castor3d
 			return m_ubo.getDescriptorWrite( dstBinding, dstArrayElement );
 		}
 
+		void addDescriptorWrite( ashes::WriteDescriptorSetArray & descriptorWrites
+			, uint32_t & dstBinding
+			, uint32_t dstArrayElement = 0u )const
+		{
+			descriptorWrites.emplace_back( getDescriptorWrite( dstBinding, dstArrayElement ) );
+			++dstBinding;
+		}
+
 		UniformBufferOffsetT< Configuration > const & getUbo()const
 		{
 			return m_ubo;

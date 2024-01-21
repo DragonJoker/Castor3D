@@ -207,7 +207,7 @@ namespace castor3d
 		*\param[in]	control		The control raising the event
 		*\param[in]	event		The keyboard event
 		*/
-		void onNcKeyDown( ControlRPtr control, KeyboardEvent const & event );
+		void onNcKeyDown( KeyboardEvent const & event );
 
 		/** Switch the combobox list
 		*/

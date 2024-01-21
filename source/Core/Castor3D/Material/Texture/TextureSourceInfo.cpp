@@ -12,15 +12,15 @@ namespace castor3d
 
 	TextureSourceInfo::TextureSourceInfo( TextureSourceInfo const & rhs
 		, TextureConfiguration textureConfig )
-		: m_name{ std::move( rhs.m_name ) }
+		: m_name{ rhs.m_name }
 		, m_textureConfig{ std::move( textureConfig ) }
-		, m_renderTarget{ std::move( rhs.m_renderTarget ) }
-		, m_folder{ std::move( rhs.m_folder ) }
-		, m_relative{ std::move( rhs.m_relative ) }
-		, m_loadConfig{ std::move( rhs.m_loadConfig ) }
-		, m_type{ std::move( rhs.m_type ) }
-		, m_data{ std::move( rhs.m_data ) }
-		, m_createInfo{ std::move( rhs.m_createInfo ) }
+		, m_renderTarget{ rhs.m_renderTarget }
+		, m_folder{ rhs.m_folder }
+		, m_relative{ rhs.m_relative }
+		, m_loadConfig{ rhs.m_loadConfig }
+		, m_type{ rhs.m_type }
+		, m_data{ rhs.m_data }
+		, m_createInfo{ rhs.m_createInfo }
 	{
 	}
 

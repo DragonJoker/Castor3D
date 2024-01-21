@@ -72,7 +72,7 @@ namespace castor3d
 			{
 				CU_Require( faceIndex < 6u );
 				auto lightFov = 90.0_degrees;
-				auto & pointLight = *light.getPointLight();
+				auto const & pointLight = *light.getPointLight();
 				configuration.lightView = lpvlubo::snapMatrix( lpvCellSize
 					, pointLight.getViewMatrix( CubeMapFace( faceIndex ) ) );
 				configuration.tanFovXHalf = ( lightFov * 0.5 ).tan();
@@ -83,7 +83,7 @@ namespace castor3d
 		case LightType::eSpot:
 			{
 				CU_Require( faceIndex == 0u );
-				auto & spotLight = *light.getSpotLight();
+				auto const & spotLight = *light.getSpotLight();
 				configuration.lightView = lpvlubo::snapMatrix( lpvCellSize
 					, spotLight.getViewMatrix() );
 				auto lightFov = spotLight.getOuterCutOff();

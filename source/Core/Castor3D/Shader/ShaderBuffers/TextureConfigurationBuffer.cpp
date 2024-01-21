@@ -33,7 +33,7 @@ namespace castor3d
 	TextureConfigurationBuffer::TextureConfigurationBuffer( Engine & engine
 		, RenderDevice const & device
 		, uint32_t count )
-		: m_buffer{ engine, device, count * VkDeviceSize( DataSize ), cuT( "TextureConfigurationBuffer" ) }
+		: m_buffer{ device, count * VkDeviceSize( DataSize ), cuT( "TextureConfigurationBuffer" ) }
 		, m_data{ texcfgbuf::doBindData( m_buffer.getPtr(), m_buffer.getSize(), count ) }
 	{
 	}

@@ -282,13 +282,13 @@ namespace castor3d
 		{
 			components.iridescenceFactor = 0.0_f;
 		}
-		FI;
+		FI
 
 		IF( writer, components.iridescenceFactor != 0.0_f )
 		{
 			auto incident = writer.declLocale( "incident"
 				, normalize( surface.worldPosition.xyz() - worldEye ) );
-			auto normal = components.hasMember( "normal" )
+			sdw::Vec3 normal = components.hasMember( "normal" )
 				? components.normal
 				: surface.normal;
 			auto NdotV = writer.declLocale( "NdotV"
@@ -300,7 +300,7 @@ namespace castor3d
 				, components.f0 );
 			components.iridescenceF0 = utils.fresnelToF0( components.iridescenceFresnel, NdotV );
 		}
-		FI;
+		FI
 	}
 
 	//*********************************************************************************************

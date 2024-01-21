@@ -12,7 +12,7 @@ namespace castor3d
 		load();
 	}
 
-	GeneratorPlugin::~GeneratorPlugin()
+	GeneratorPlugin::~GeneratorPlugin()noexcept
 	{
 		unload();
 	}

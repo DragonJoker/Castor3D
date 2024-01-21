@@ -85,13 +85,13 @@ namespace castor3d
 			auto highlightsStart()const { return getMember< "highlightsStart" >(); }
 			auto highlightsEnd()const { return getMember< "highlightsEnd" >(); }
 
-			sdw::Float getLuminance( sdw::Vec3 const & colour );
-			sdw::Vec3 linearToLogC( sdw::Vec3 const & colour );
-			sdw::Vec3 logCToLinear( sdw::Vec3 const & colour );
-			sdw::Float rotateHue( sdw::Float const & value, sdw::Float const & low, sdw::Float const & hi );
-			sdw::Vec3 linearToLms( sdw::Vec3 const & colour );
-			sdw::Vec3 lmsToLinear( sdw::Vec3 const & colour );
-			sdw::Vec3 softLight( sdw::Vec3 const & base, sdw::Vec3 const & blend );
+			sdw::Float getLuminance( sdw::Vec3 const & colour )const;
+			sdw::Vec3 linearToLogC( sdw::Vec3 const & colour )const;
+			sdw::Vec3 logCToLinear( sdw::Vec3 const & colour )const;
+			sdw::Float rotateHue( sdw::Float const & value, sdw::Float const & low, sdw::Float const & hi )const;
+			sdw::Vec3 linearToLms( sdw::Vec3 const & colour )const;
+			sdw::Vec3 lmsToLinear( sdw::Vec3 const & colour )const;
+			sdw::Vec3 softLight( sdw::Vec3 const & base, sdw::Vec3 const & blend )const;
 
 		private:
 			sdw::FloatArray m_paramsLogC;

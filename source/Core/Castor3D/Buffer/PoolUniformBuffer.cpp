@@ -42,7 +42,7 @@ namespace castor3d
 		return uint32_t( m_buffer->getBuffer().getSize() );
 	}
 
-	void PoolUniformBuffer::cleanup( RenderDevice const & device )
+	void PoolUniformBuffer::cleanup( RenderDevice const & )noexcept
 	{
 		m_data = {};
 
@@ -62,13 +62,13 @@ namespace castor3d
 		}
 	}
 
-	bool PoolUniformBuffer::hasAvailable( VkDeviceSize size )const
+	bool PoolUniformBuffer::hasAvailable( VkDeviceSize size )const noexcept
 	{
 		return !hasAllocated()
 			|| m_buffer->getBuffer().getSize() > ( m_allocated.rbegin()->offset + m_allocated.rbegin()->size + getAlignedSize( uint32_t( size ) ) );
 	}
 
-	bool PoolUniformBuffer::hasAllocated()const
+	bool PoolUniformBuffer::hasAllocated()const noexcept
 	{
 		return !m_allocated.empty();
 	}
@@ -81,16 +81,16 @@ namespace castor3d
 			? 0u
 			: m_allocated.rbegin()->offset + m_allocated.rbegin()->size;
 		auto realSize = getAlignedSize( uint32_t( size ) );
-		m_allocated.insert( { offset, realSize, size } );
+		m_allocated.emplace( offset, realSize, size );
 		return { offset / elemSize, realSize / elemSize, size };
 	}
 
-	void PoolUniformBuffer::deallocate( VkDeviceSize offset )
+	void PoolUniformBuffer::deallocate( VkDeviceSize offset )noexcept
 	{
 		auto elemSize = m_renderSystem.getValue( GpuMin::eUniformBufferOffsetAlignment );
-		auto it = m_allocated.find( { offset * elemSize, 0u, 0u } );
 
-		if ( it != m_allocated.end() )
+		if ( auto it = m_allocated.find( { offset * elemSize, 0u, 0u } );
+			it != m_allocated.end() )
 		{
 			m_allocated.erase( it );
 		}

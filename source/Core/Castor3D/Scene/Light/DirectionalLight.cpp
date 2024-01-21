@@ -28,8 +28,8 @@ namespace castor3d
 			, DirectionalLight const & light
 			, uint32_t cascades )
 		{
-			auto & scene = *light.getLight().getScene();
-			auto & renderSystem = *scene.getEngine()->getRenderSystem();
+			auto const & scene = *light.getLight().getScene();
+			auto const & renderSystem = *scene.getEngine()->getRenderSystem();
 			std::vector< DirectionalLight::Cascade > result( cascades );
 			castor::Point3f lightDirection = light.getDirection();
 
@@ -111,7 +111,7 @@ namespace castor3d
 				float radius = 0.0f;
 				for ( auto frustumCorner : cascadeFrustum )
 				{
-					float distance = float( castor::point::length( frustumCorner - frustumCenter ) );
+					auto distance = float( castor::point::length( frustumCorner - frustumCenter ) );
 					radius = std::max( radius, distance );
 				}
 				radius = std::ceil( radius * 16.0f ) / 16.0f;

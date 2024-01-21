@@ -33,7 +33,7 @@ namespace castor
 		{
 		}
 
-		bool operator()( StringStream & file )
+		bool operator()( StringStream & file )const
 		{
 			return writeMask( file, cuT( "clearcoat_normal_mask" ), m_mask );
 		}
@@ -79,7 +79,7 @@ namespace castor3d
 		static CU_ImplementAttributeParserBlock( parserTexRemapClearcoatNormal, SceneImportContext )
 		{
 			auto & plugin = getEngine( *blockContext )->getPassComponentsRegister().getPlugin( ClearcoatNormalMapComponent::TypeName );
-			blockContext->textureRemapIt = blockContext->textureRemaps.emplace( plugin.getTextureFlags(), TextureConfiguration{} ).first;
+			blockContext->textureRemapIt = blockContext->textureRemaps.try_emplace( plugin.getTextureFlags() ).first;
 			blockContext->textureRemapIt->second = TextureConfiguration{};
 		}
 		CU_EndAttributePushBlock( CSCNSection::eTextureRemapChannel, blockContext )
@@ -125,7 +125,6 @@ namespace castor3d
 			, material.getMember< sdw::UInt >( textureName ) >> 16u );
 		auto mask = writer.declLocale( mapName + "Mask"
 			, material.getMember< sdw::UInt >( textureName ) & 0xFFFFu );
-		auto value = components.getMember< sdw::Vec3 >( valueName );
 
 		auto config = writer.declLocale( valueName + "Config"
 			, textureConfigs.getTextureConfiguration( map ) );
@@ -137,7 +136,7 @@ namespace castor3d
 			, components );
 		auto sampled = writer.declLocale( valueName + "Sampled"
 			, sampleTexture( map, config, components ) );
-		NormalMapComponent::ComponentsShader::computeMikktNormal( config.nmlGMul(), config.nml2Chan(), mask, components, sampled, value );
+		NormalMapComponent::ComponentsShader::computeMikktNormal( config.nmlGMul(), config.nml2Chan(), mask, components, sampled );
 	}
 
 	//*********************************************************************************************
@@ -145,13 +144,14 @@ namespace castor3d
 	void ClearcoatNormalMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		channelFillers.emplace( "clearcoat_normal", ChannelFiller{ getTextureFlags()
+		channelFillers.try_emplace( "clearcoat_normal"
+			, getTextureFlags()
 			, []( TextureContext & blockContext )
 			{
-				auto & component = getPassComponent< ClearcoatNormalMapComponent >( blockContext );
+				auto const & component = getPassComponent< ClearcoatNormalMapComponent >( blockContext );
 				component.fillChannel( blockContext.configuration
 					, 0x00FFFFFFu );
-			} } );
+			} );
 
 		castor::addParserT( parsers
 			, CSCNSection::eTexture

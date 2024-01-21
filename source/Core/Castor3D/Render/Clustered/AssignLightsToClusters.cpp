@@ -150,7 +150,7 @@ namespace castor3d
 			if ( config.useLightsBVH )
 			{
 				pushNode = writer.implementFunction< sdw::Void >( "pushNode"
-					, [&]( sdw::UInt const & nodeIndex )
+					, [&writer, &gsStackPtr, &gsNodeStack]( sdw::UInt const & nodeIndex )
 					{
 						auto stackPtr = writer.declLocale( "stackPtr"
 							, sdw::atomicAdd( gsStackPtr, 1_i ) );
@@ -159,12 +159,12 @@ namespace castor3d
 						{
 							gsNodeStack[stackPtr] = nodeIndex;
 						}
-						FI;
+						FI
 					}
 					, sdw::InUInt{ writer, "nodeIndex" } );
 
 				popNode = writer.implementFunction< sdw::UInt >( "popNode"
-					, [&]()
+					, [&writer, &gsStackPtr, &gsNodeStack]()
 					{
 						auto nodeIndex = writer.declLocale( "nodeIndex"
 							, 0_u );
@@ -175,14 +175,14 @@ namespace castor3d
 						{
 							nodeIndex = gsNodeStack[stackPtr - 1];
 						}
-						FI;
+						FI
 
 						writer.returnStmt( nodeIndex );
 					} );
 
 				// Get the index of the the first child node in the BVH.
-				getFirstChild = [&]( sdw::UInt const parentIndex
-					, sdw::UInt const numLevels )
+				getFirstChild = [&writer]( sdw::UInt const & parentIndex
+					, sdw::UInt const & numLevels )
 				{
 					return writer.ternary( numLevels > 0_u
 						, parentIndex * 32_u + 1_u
@@ -190,8 +190,8 @@ namespace castor3d
 				};
 
 				// Check to see if an index of the BVH is a leaf.
-				isLeafNode = [&]( sdw::UInt const childIndex
-					, sdw::UInt const numLevels )
+				isLeafNode = [&writer, &c3d_numChildNodes]( sdw::UInt const & childIndex
+					, sdw::UInt const & numLevels )
 				{
 					return writer.ternary( numLevels > 0_u
 						, childIndex > ( c3d_numChildNodes[numLevels - 1_u] - 1_u )
@@ -199,8 +199,8 @@ namespace castor3d
 				};
 
 				// Get the index of a leaf node given the node ID in the BVH.
-				getLeafIndex = [&]( sdw::UInt const nodeIndex
-					, sdw::UInt const numLevels )
+				getLeafIndex = [&writer, &c3d_numChildNodes]( sdw::UInt const & nodeIndex
+					, sdw::UInt const & numLevels )
 				{
 					return writer.ternary( numLevels > 0_u
 						, nodeIndex - c3d_numChildNodes[numLevels - 1_u]
@@ -211,7 +211,7 @@ namespace castor3d
 			// Check to see if on AABB intersects another AABB.
 			// Source: Real-time collision detection, Christer Ericson (2005)
 			auto aabbIntersectAABB = writer.implementFunction< sdw::Boolean >( "aabbIntersectAABB"
-				, [&]( shader::AABB const & a
+				, [&writer]( shader::AABB const & a
 					, shader::AABB const & b )
 				{
 					auto result = writer.declLocale( "result"
@@ -230,7 +230,7 @@ namespace castor3d
 				, shader::InAABB{ writer, "b" } );
 
 			auto sphereInsideAABB = writer.implementFunction< sdw::Boolean >( "sphereInsideAABB"
-				, [&]( sdw::Vec4 const & sphere
+				, [&writer]( sdw::Vec4 const & sphere
 					, shader::AABB const & aabb )
 				{
 					auto sqDistance = writer.declLocale( "sqDistance"
@@ -246,12 +246,12 @@ namespace castor3d
 						{
 							sqDistance += pow( aabb.min()[i] - v, 2.0_f );
 						}
-						FI;
+						FI
 						IF( writer, v > aabb.max()[i] )
 						{
 							sqDistance += pow( v - aabb.max()[i], 2.0_f );
 						}
-						FI;
+						FI
 					}
 
 					writer.returnStmt( sqDistance <= sphere.w() * sphere.w() );
@@ -260,7 +260,7 @@ namespace castor3d
 				, shader::InAABB{ writer, "aabb" } );
 
 			auto coneInsideSphere = writer.implementFunction< sdw::Boolean >( "coneInsideSphere"
-				, [&]( shader::Cone const cone
+				, [&writer]( shader::Cone const & cone
 					, sdw::Vec4 const & sphere )
 				{
 					auto V = writer.declLocale( "V"
@@ -282,11 +282,11 @@ namespace castor3d
 				, sdw::InVec4{ writer, "sphere" } );
 
 			writer.implementMainT< sdw::VoidT >( NumThreads
-				, [&]( sdw::ComputeIn in )
+				, [&]( sdw::ComputeIn const & in )
 				{
-					auto groupIndex = in.localInvocationIndex;
+					auto const & groupIndex = in.localInvocationIndex;
 
-					auto processPointLightAABB = [&]( sdw::UInt const leafIndex )
+					auto processPointLightAABB = [&]( sdw::UInt const & leafIndex )
 					{
 						auto lightIndex = config.sortLights ? c3d_pointLightIndices[leafIndex] : leafIndex;
 						auto aabb = writer.declLocale( "aabb"
@@ -298,10 +298,10 @@ namespace castor3d
 						{
 							gsPointLights.appendData( lightIndex, MaxLightsPerCluster );
 						}
-						FI;
+						FI
 					};
 
-					auto processSpotLightAABB = [&]( sdw::UInt const leafIndex )
+					auto processSpotLightAABB = [&]( sdw::UInt const & leafIndex )
 					{
 						auto lightIndex = config.sortLights ? c3d_spotLightIndices[leafIndex] : leafIndex;
 						auto aabb = writer.declLocale( "aabb"
@@ -325,14 +325,14 @@ namespace castor3d
 								{
 									gsSpotLights.appendData( lightIndex, MaxLightsPerCluster );
 								}
-								FI;
+								FI
 							}
 							else
 							{
 								gsSpotLights.appendData( lightIndex, MaxLightsPerCluster );
 							}
 						}
-						FI;
+						FI
 					};
 
 					IF( writer, groupIndex == 0_u )
@@ -355,7 +355,7 @@ namespace castor3d
 							pushNode( 0_u );
 						}
 					}
-					FI;
+					FI
 
 					shader::groupMemoryBarrierWithGroupSync( writer );
 
@@ -378,13 +378,13 @@ namespace castor3d
 								{
 									processPointLightAABB( leafIndex );
 								}
-								FI;
+								FI
 							}
 							ELSEIF( aabbIntersectAABB( gsClusterAABB, c3d_pointLightBVH[childIndex] ) )
 							{
 								pushNode( childIndex );
 							}
-							FI;
+							FI
 
 							shader::groupMemoryBarrierWithGroupSync( writer );
 
@@ -392,11 +392,11 @@ namespace castor3d
 							{
 								gsParentIndex = popNode();
 							}
-							FI;
+							FI
 
 							shader::groupMemoryBarrierWithGroupSync( writer );
 						}
-						ELIHWOD;
+						ELIHWOD
 
 						shader::groupMemoryBarrierWithGroupSync( writer );
 
@@ -409,7 +409,7 @@ namespace castor3d
 							// Push the root node (at index 0) on the node stack.
 							pushNode( 0_u );
 						}
-						FI;
+						FI
 
 						shader::groupMemoryBarrierWithGroupSync( writer );
 
@@ -428,13 +428,13 @@ namespace castor3d
 								{
 									processSpotLightAABB( leafIndex );
 								}
-								FI;
+								FI
 							}
 							ELSEIF( aabbIntersectAABB( gsClusterAABB, c3d_spotLightBVH[childIndex] ) )
 							{
 								pushNode( childIndex );
 							}
-							FI;
+							FI
 
 							shader::groupMemoryBarrierWithGroupSync( writer );
 
@@ -442,11 +442,11 @@ namespace castor3d
 							{
 								gsParentIndex = popNode();
 							}
-							FI;
+							FI
 
 							shader::groupMemoryBarrierWithGroupSync( writer );
 						}
-						ELIHWOD;
+						ELIHWOD
 
 						shader::groupMemoryBarrierWithGroupSync( writer );
 					}
@@ -457,14 +457,14 @@ namespace castor3d
 						{
 							processPointLightAABB( i );
 						}
-						ROF;
+						ROF
 
 						// Intersect spot lights against AABB.
 						FOR( writer, sdw::UInt, i, groupIndex, i < c3d_clustersData.spotLightCount(), i += NumThreads )
 						{
 							processSpotLightAABB( i );
 						}
-						ROF;
+						ROF
 
 						shader::groupMemoryBarrierWithGroupSync( writer );
 					}
@@ -478,7 +478,7 @@ namespace castor3d
 							gsPointLightStartOffset = sdw::atomicAdd( c3d_pointLightClusterListCount, gsPointLights.getCount() );
 							c3d_pointLightClusterGrid[gsClusterIndex1D] = sdw::uvec2( gsPointLightStartOffset, gsPointLights.getCount() );
 						}
-						FI;
+						FI
 
 						IF( writer, gsSpotLights.getCount() > 0_u )
 						{
@@ -486,9 +486,9 @@ namespace castor3d
 							gsSpotLightStartOffset = sdw::atomicAdd( c3d_spotLightClusterListCount, gsSpotLights.getCount() );
 							c3d_spotLightClusterGrid[gsClusterIndex1D] = sdw::uvec2( gsSpotLightStartOffset, gsSpotLights.getCount() );
 						}
-						FI;
+						FI
 					}
-					FI;
+					FI
 
 					shader::groupMemoryBarrierWithGroupSync( writer );
 
@@ -497,13 +497,13 @@ namespace castor3d
 					{
 						c3d_pointLightClusterIndex[gsPointLightStartOffset + i] = gsPointLights[i];
 					}
-					ROF;
+					ROF
 
 					FOR( writer, sdw::UInt, i, groupIndex, i < gsSpotLights.getCount(), i += NumThreads )
 					{
 						c3d_spotLightClusterIndex[gsSpotLightStartOffset + i] = gsSpotLights[i];
 					}
-					ROF;
+					ROF
 				} );
 			return writer.getBuilder().releaseShader();
 		}
@@ -535,12 +535,13 @@ namespace castor3d
 		private:
 			struct ProgramData
 			{
-				ShaderModule module;
-				ashes::PipelineShaderStageCreateInfoArray stages;
+				ProgramData() = default;
+				ShaderModule shaderModule{};
+				ashes::PipelineShaderStageCreateInfoArray stages{};
 			};
 
 		private:
-			uint32_t doGetPassIndex( FrustumClusters const & clusters )
+			uint32_t doGetPassIndex( FrustumClusters const & clusters )const
 			{
 				u32 result = {};
 
@@ -556,14 +557,14 @@ namespace castor3d
 
 				if ( m_config.sortLights )
 				{
-					auto & lightCache = clusters.getCamera().getScene()->getLightCache();
+					auto const & lightCache = clusters.getCamera().getScene()->getLightCache();
 
 					auto pointLightsCount = lightCache.getLightsBufferCount( LightType::ePoint );
 					auto spoLightsCount = lightCache.getLightsBufferCount( LightType::eSpot );
 					auto totalValues = std::max( pointLightsCount, spoLightsCount );
-					auto numChunks = getLightsMortonCodeChunkCount( totalValues );
 
-					if ( numChunks > 1u )
+					if ( auto numChunks = getLightsMortonCodeChunkCount( totalValues );
+						numChunks > 1u )
 					{
 						result += ( ( numChunks - 1u ) % 2u );
 					}
@@ -576,19 +577,19 @@ namespace castor3d
 
 			crg::VkPipelineShaderStageCreateInfoArray doCreateProgram( uint32_t passIndex )
 			{
-				auto ires = m_programs.emplace( passIndex, ProgramData{} );
+				auto [it, res] = m_programs.try_emplace( passIndex );
 
-				if ( ires.second )
+				if ( res )
 				{
-					auto & program = ires.first->second;
-					program.module = ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, "AssignLightsToClusters", dspclst::createShader( m_device, m_config ) };
-					program.stages = ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( m_device, program.module ) };
+					auto & program = it->second;
+					program.shaderModule = ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, "AssignLightsToClusters", dspclst::createShader( m_device, m_config ) };
+					program.stages = ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( m_device, program.shaderModule ) };
 				}
 
-				return ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( ires.first->second.stages );
+				return ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( it->second.stages );
 			}
 
-			bool doIsEnabled( FrustumClusters const & clusters )
+			bool doIsEnabled( FrustumClusters const & clusters )const
 			{
 				return !m_config.parseDepthBuffer
 					&& clusters.getCamera().getScene()->getLightCache().hasClusteredLights();
@@ -596,7 +597,7 @@ namespace castor3d
 
 			void doPostRecord( crg::RecordContext & context
 				, VkCommandBuffer commandBuffer
-				, uint32_t index )
+				, uint32_t index )const
 			{
 				for ( auto & attach : m_pass.buffers )
 				{
@@ -642,7 +643,7 @@ namespace castor3d
 						.isEnabled( IsEnabledCallback( [this, &clusters]() { return doIsEnabled( clusters ); } ) )
 						.getPassIndex( RunnablePass::GetPassIndexCallback( [this, &clusters](){ return doGetPassIndex( clusters ); } ) )
 						.programCreator( { 12u, [this]( uint32_t passIndex ){ return doCreateProgram( passIndex ); } } )
-						.recordInto( RunnablePass::RecordCallback( [this, &clusters]( crg::RecordContext & ctx, VkCommandBuffer cmd, uint32_t idx ){ doSubRecordInto( ctx, cmd, idx, clusters ); } ) )
+						.recordInto( RunnablePass::RecordCallback( [this, &clusters]( crg::RecordContext & ctx, VkCommandBuffer cmd, uint32_t ){ doSubRecordInto( ctx, cmd, clusters ); } ) )
 						.end( RecordCallback{ [this]( crg::RecordContext & ctx, VkCommandBuffer cb, uint32_t idx ) { doPostRecord( ctx, cb, idx ); } } ) }
 				, m_device{ device }
 				, m_config{ clusters.getConfig() }
@@ -652,12 +653,13 @@ namespace castor3d
 		private:
 			struct ProgramData
 			{
-				ShaderModule module;
+				ProgramData() = default;
+				ShaderModule shaderModule;
 				ashes::PipelineShaderStageCreateInfoArray stages;
 			};
 
 		private:
-			uint32_t doGetPassIndex( FrustumClusters const & clusters )
+			uint32_t doGetPassIndex( FrustumClusters const & clusters )const
 			{
 				u32 result = {};
 
@@ -673,14 +675,14 @@ namespace castor3d
 
 				if ( m_config.sortLights )
 				{
-					auto & lightCache = clusters.getCamera().getScene()->getLightCache();
+					auto const & lightCache = clusters.getCamera().getScene()->getLightCache();
 
 					auto pointLightsCount = lightCache.getLightsBufferCount( LightType::ePoint );
 					auto spoLightsCount = lightCache.getLightsBufferCount( LightType::eSpot );
 					auto totalValues = std::max( pointLightsCount, spoLightsCount );
-					auto numChunks = getLightsMortonCodeChunkCount( totalValues );
 
-					if ( numChunks > 1u )
+					if ( auto numChunks = getLightsMortonCodeChunkCount( totalValues );
+						numChunks > 1u )
 					{
 						result += ( ( numChunks - 1u ) % 2u );
 					}
@@ -693,19 +695,19 @@ namespace castor3d
 
 			crg::VkPipelineShaderStageCreateInfoArray doCreateProgram( uint32_t passIndex )
 			{
-				auto ires = m_programs.emplace( passIndex, ProgramData{} );
+				auto [it, res] = m_programs.try_emplace( passIndex );
 
-				if ( ires.second )
+				if ( res )
 				{
-					auto & program = ires.first->second;
-					program.module = ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, "AssignLightsToClusters", dspclst::createShader( m_device, m_config ) };
-					program.stages = ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( m_device, program.module ) };
+					auto & program = it->second;
+					program.shaderModule = ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, "AssignLightsToClusters", dspclst::createShader( m_device, m_config ) };
+					program.stages = ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( m_device, program.shaderModule ) };
 				}
 
-				return ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( ires.first->second.stages );
+				return ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( it->second.stages );
 			}
 
-			bool doIsEnabled( FrustumClusters const & clusters )
+			bool doIsEnabled( FrustumClusters const & clusters )const
 			{
 				return m_config.parseDepthBuffer
 					&& ( clusters.getCamera().getScene()->getLightCache().hasClusteredLights()
@@ -714,10 +716,9 @@ namespace castor3d
 
 			void doSubRecordInto( crg::RecordContext & context
 				, VkCommandBuffer commandBuffer
-				, uint32_t index
-				, FrustumClusters const & clusters )
+				, FrustumClusters const & clusters )const
 			{
-				auto & buffer = clusters.getClustersIndirectBuffer();
+				auto const & buffer = clusters.getClustersIndirectBuffer();
 				context.memoryBarrier( commandBuffer
 					, VkBuffer( buffer )
 					, crg::BufferSubresourceRange{ 0u, ashes::WholeSize }
@@ -728,9 +729,9 @@ namespace castor3d
 
 			void doPostRecord( crg::RecordContext & context
 				, VkCommandBuffer commandBuffer
-				, uint32_t index )
+				, uint32_t index )const
 			{
-				for ( auto & attach : m_pass.buffers )
+				for ( auto const & attach : m_pass.buffers )
 				{
 					auto buffer = attach.buffer;
 
@@ -760,12 +761,12 @@ namespace castor3d
 	//*********************************************************************************************
 
 	crg::FramePass const & createAssignLightsToClustersPass( crg::FramePassGroup & graph
-		, crg::FramePassArray previousPasses
+		, crg::FramePassArray const & previousPasses
 		, RenderDevice const & device
 		, CameraUbo const & cameraUbo
 		, FrustumClusters & clusters )
 	{
-		auto & lights = clusters.getCamera().getScene()->getLightCache();
+		auto const & lights = clusters.getCamera().getScene()->getLightCache();
 
 		auto & passNoDepth = graph.createPass( "AssignLightsToClustersNoDepth"
 			, [&clusters, &device]( crg::FramePass const & framePass

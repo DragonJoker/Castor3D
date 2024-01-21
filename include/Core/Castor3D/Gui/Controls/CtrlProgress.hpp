@@ -156,7 +156,7 @@ namespace castor3d
 		PanelCtrlRPtr m_container{};
 		PanelCtrlRPtr m_progress{};
 		StaticCtrlRPtr m_text{};
-		castor::RangedValue< int32_t > m_value;
+		castor::RangedValue< int32_t > m_value{ castor::makeRangedValue( 0, 0, 100 ) };
 	};
 }
 

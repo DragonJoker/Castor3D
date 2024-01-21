@@ -25,7 +25,7 @@ namespace castor3d
 	{
 		if ( m_children.end() == m_children.find( node.getName() ) )
 		{
-			m_children.emplace( node.getName(), &node );
+			m_children.try_emplace( node.getName(), &node );
 		}
 	}
 

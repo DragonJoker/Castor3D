@@ -51,12 +51,12 @@ extern "C"
 		auto backgroundModelId = engine->registerBackgroundModel( atmosphere_scattering::AtmosphereBackgroundModel::Name
 			, atmosphere_scattering::AtmosphereBackgroundModel::create );
 		engine->registerPassModel( backgroundModelId
-			, { atmosphere_scattering::AtmospherePhongLightingModel::getName()
+			, { castor::String{ atmosphere_scattering::AtmospherePhongLightingModel::getName() }
 				, castor3d::PhongPass::create
 				, &atmosphere_scattering::AtmospherePhongLightingModel::create
 				, false } );
 		engine->registerPassModel( backgroundModelId
-			, { atmosphere_scattering::AtmospherePbrLightingModel::getName()
+			, { castor::String{ atmosphere_scattering::AtmospherePbrLightingModel::getName() }
 				, castor3d::PbrPass::create
 				, &atmosphere_scattering::AtmospherePbrLightingModel::create
 				, true } );
@@ -71,8 +71,8 @@ extern "C"
 		auto backgroundModelId = engine->unregisterBackgroundModel( atmosphere_scattering::AtmosphereBackgroundModel::Name );
 		engine->unregisterParsers( atmosphere_scattering::AtmosphereBackgroundModel::PluginType );
 		engine->unregisterPassModel( backgroundModelId
-			, engine->getPassFactory().getNameId( atmosphere_scattering::AtmospherePhongLightingModel::getName() ) );
+			, engine->getPassFactory().getNameId( castor::String{ atmosphere_scattering::AtmospherePhongLightingModel::getName() } ) );
 		engine->unregisterPassModel( backgroundModelId
-			, engine->getPassFactory().getNameId( atmosphere_scattering::AtmospherePbrLightingModel::getName() ) );
+			, engine->getPassFactory().getNameId( castor::String{ atmosphere_scattering::AtmospherePbrLightingModel::getName() } ) );
 	}
 }

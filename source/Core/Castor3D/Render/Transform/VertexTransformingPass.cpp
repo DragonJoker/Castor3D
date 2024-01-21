@@ -37,9 +37,9 @@ namespace castor3d
 		: crg::RunnablePass{ pass
 			, context
 			, graph
-			, { []( uint32_t index ){}
+			, { crg::defaultV< crg::RunnablePass::InitialiseCallback >
 				, GetPipelineStateCallback( [](){ return crg::getPipelineState( VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT ); } )
-				, [this]( crg::RecordContext & ctx, VkCommandBuffer cb, uint32_t i ){ doRecordInto( ctx, cb, i ); }
+				, [this]( crg::RecordContext & ctx, VkCommandBuffer cb, uint32_t ){ doRecordInto( ctx, cb ); }
 				, crg::defaultV< crg::RunnablePass::GetPassIndexCallback >
 				, crg::RunnablePass::IsEnabledCallback( [this](){ return !m_transformPasses.empty(); } )
 				, IsComputePassCallback( [this](){ return doIsComputePass(); } ) }
@@ -89,8 +89,7 @@ namespace castor3d
 	}
 
 	void VertexTransformingPass::doRecordInto( crg::RecordContext & context
-		, VkCommandBuffer commandBuffer
-		, uint32_t index )const
+		, VkCommandBuffer commandBuffer )const
 	{
 		context.memoryBarrier( commandBuffer
 			, m_modelsBuffer.getBuffer()
@@ -102,7 +101,7 @@ namespace castor3d
 
 		for ( auto const & [_, pass] : m_transformPasses )
 		{
-			pass->recordInto( context, commandBuffer, index );
+			pass->recordInto( context, commandBuffer );
 		}
 		
 		context.memoryBarrier( commandBuffer

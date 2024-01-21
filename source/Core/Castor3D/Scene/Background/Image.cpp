@@ -126,7 +126,7 @@ namespace castor3d
 				, std::move( image )
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, cuT( "SkyboxBackground2D" ) );
-			m_2dTexture->setSource( folder, relative, { false, false, false } );
+			m_2dTexture->setSource( folder, relative );
 
 			m_2dTexturePath = folder / relative;
 			notifyChanged();
@@ -200,19 +200,21 @@ namespace castor3d
 		, uint32_t & index )const
 	{
 		pass.addSampledView( m_textureId.wholeViewId
-			, index++
+			, index
 			, crg::SamplerDesc{ VK_FILTER_LINEAR
 				, VK_FILTER_LINEAR
 				, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
+		++index;
 	}
 
 	void ImageBackground::doAddBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
 		, VkShaderStageFlags shaderStages
 		, uint32_t & index )const
 	{
-		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+		bindings.emplace_back( makeDescriptorSetLayoutBinding( index
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, shaderStages ) );	// c3d_mapBackground
+		++index;
 	}
 
 	void ImageBackground::doAddDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
@@ -278,7 +280,7 @@ namespace castor3d
 		VkImageSubresourceLayers srcSubresource{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 0, 1 };
 		VkImageSubresourceLayers dstSubresource{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 0, 1 };
 
-		VkImageCopy copyInfos[6];
+		castor::Array< VkImageCopy, 6u > copyInfos;
 		copyInfos[uint32_t( CubeMapFace::ePositiveX )].extent = extent;
 		copyInfos[uint32_t( CubeMapFace::ePositiveX )].srcSubresource = srcSubresource;
 		copyInfos[uint32_t( CubeMapFace::ePositiveX )].srcOffset = srcOffset;
@@ -325,7 +327,7 @@ namespace castor3d
 		commandBuffer->begin();
 		uint32_t index{ 0u };
 
-		for ( auto & copyInfo : copyInfos )
+		for ( auto const & copyInfo : copyInfos )
 		{
 			commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
 				, VK_PIPELINE_STAGE_TRANSFER_BIT

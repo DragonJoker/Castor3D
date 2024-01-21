@@ -130,7 +130,7 @@ namespace castor3d
 		, ast::EntryPointConfig const & entryPoint );
 	C3D_API ashes::PipelineShaderStageCreateInfoArray makeProgramStates( RenderDevice const & device
 		, ProgramModule & programModule
-		, ashes::Optional< ashes::SpecializationInfo > specialization = ashes::nullopt );
+		, ashes::Optional< ashes::SpecializationInfo > const & specialization = ashes::nullopt );
 	C3D_API ast::ShaderStage getShaderStage( RenderDevice const & device
 		, VkShaderStageFlagBits value );
 	C3D_API VkShaderStageFlagBits getVkShaderStage( ast::ShaderStage value );

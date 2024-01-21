@@ -133,6 +133,16 @@ namespace castor3d
 				, stages );
 		}
 
+		void addLayoutBinding( ashes::VkDescriptorSetLayoutBindingArray & bindings
+			, uint32_t & index
+			, VkShaderStageFlags stages )const
+		{
+			castor3d::addDescriptorSetLayoutBinding( bindings
+				, index
+				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+				, stages );
+		}
+
 		void createSizedBinding( ashes::DescriptorSet & descriptorSet
 			, VkDescriptorSetLayoutBinding const & layoutBinding )const
 		{
@@ -143,6 +153,14 @@ namespace castor3d
 			, uint32_t dstArrayElement = 0u )const
 		{
 			return m_ubo.getDescriptorWrite( dstBinding, dstArrayElement );
+		}
+
+		void addDescriptorWrite( ashes::WriteDescriptorSetArray & descriptorWrites
+			, uint32_t & dstBinding
+			, uint32_t dstArrayElement = 0u )const
+		{
+			descriptorWrites.emplace_back( getDescriptorWrite( dstBinding, dstArrayElement ) );
+			++dstBinding;
 		}
 
 		UniformBufferOffsetT< Configuration > const & getUbo()const

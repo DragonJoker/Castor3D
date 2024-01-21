@@ -110,7 +110,7 @@ namespace castor3d
 		C3D_API TextureLayout( RenderSystem & renderSystem
 			, ashes::ImageCreateInfo info
 			, VkMemoryPropertyFlags memoryProperties
-			, castor::String debugName
+			, castor::String const & debugName
 			, bool isStatic = false );
 		/**
 		 *\~english
@@ -209,7 +209,7 @@ namespace castor3d
 		 *\param[in]	cmd			Le command buffer recevant les commandes.
 		 *\param[in]	srcLayout	Le layout actuel de l'image.
 		 */
-		C3D_API void generateMipmaps( ashes::CommandBuffer & cmd
+		C3D_API void generateMipmaps( ashes::CommandBuffer const & cmd
 			, VkImageLayout srcLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL )const;
 		/**
 		 *\name Texture source setup.
@@ -227,8 +227,7 @@ namespace castor3d
 		C3D_API void setSource( castor::PxBufferBaseUPtr buffer
 			, bool isStatic = false );
 		C3D_API void setSource( castor::Path const & folder
-			, castor::Path const & relative
-			, castor::ImageLoaderConfig config = { true, true, true } );
+			, castor::Path const & relative );
 		C3D_API void setSource( VkExtent3D const & extent
 			, VkFormat format );
 

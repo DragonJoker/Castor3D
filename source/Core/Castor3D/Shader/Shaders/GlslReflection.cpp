@@ -23,7 +23,8 @@ namespace castor3d::shader
 		, m_hasIblSupport{ hasIblSupport }
 		, m_hasEnvMap{ hasEnvMap }
 	{
-		m_writer.declCombinedImg< FImgCubeArrayRgba32 >( "c3d_mapEnvironment", envMapBinding++, envMapSet, m_hasEnvMap );
+		m_writer.declCombinedImg< FImgCubeArrayRgba32 >( "c3d_mapEnvironment", envMapBinding, envMapSet, m_hasEnvMap );
+		++envMapBinding;
 	}
 
 	void ReflectionModel::computeCombined( BlendComponents & components
@@ -154,7 +155,7 @@ namespace castor3d::shader
 							, components
 							, refracted );
 					}
-					FI;
+					FI
 
 					doComputeClearcoatReflections( brdf
 						, envMap
@@ -326,7 +327,7 @@ namespace castor3d::shader
 							, components
 							, refracted );
 					}
-					FI;
+					FI
 
 					doComputeClearcoatReflections( brdf
 						, envMap
@@ -453,7 +454,7 @@ namespace castor3d::shader
 		, LightSurface const & lightSurface
 		, BackgroundModel & background
 		, sdw::UInt envMapIndex
-		, sdw::UInt const & refraction
+		, sdw::UInt const &
 		, sdw::Float const & refractionRatio
 		, DebugOutputCategory & debugOutput )
 	{
@@ -512,7 +513,7 @@ namespace castor3d::shader
 		if ( !m_computeScreenSpace )
 		{
 			m_computeScreenSpace = m_writer.implementFunction< sdw::Vec4 >( "c3d_computeScreenSpace"
-				, [&]( sdw::Vec3 const & viewPosition
+				, [this, &cameraData]( sdw::Vec3 const & viewPosition
 					, sdw::Vec3 const & worldNormal
 					, sdw::Vec2 const & texcoord
 					, sdw::Vec4 const & ssrSettings
@@ -558,9 +559,9 @@ namespace castor3d::shader
 						{
 							stepCount += 1.0_f;
 						}
-						FI;
+						FI
 					}
-					ELIHW;
+					ELIHW
 
 					IF( m_writer, forwardStepCount < ssrForwardMaxStepCount )
 					{
@@ -582,11 +583,11 @@ namespace castor3d::shader
 							{
 								stepCount += 1.0_f;
 							}
-							FI;
+							FI
 						}
-						ELIHW;
+						ELIHW
 					}
-					FI;
+					FI
 
 					auto nDotV = m_writer.declLocale( "nDotV"
 						, abs( dot( worldNormal, viewDir ) ) + epsilon );
@@ -636,7 +637,7 @@ namespace castor3d::shader
 		, sdw::CombinedImage2DRgba32 const & pdepthObjMap
 		, sdw::CombinedImage2DRgba32 const & pnormalMap
 		, sdw::CombinedImage2DRgba32 const & pcolourMap
-		, DebugOutputCategory & debugOutput )
+		, DebugOutputCategory & )
 	{
 		if ( !m_computeScreenSpace2 )
 		{
@@ -687,9 +688,9 @@ namespace castor3d::shader
 						{
 							stepCount += 1.0_f;
 						}
-						FI;
+						FI
 					}
-					ELIHW;
+					ELIHW
 
 					IF( m_writer, forwardStepCount < ssrForwardMaxStepCount )
 					{
@@ -711,11 +712,11 @@ namespace castor3d::shader
 							{
 								stepCount += 1.0_f;
 							}
-							FI;
+							FI
 						}
-						ELIHW;
+						ELIHW
 					}
-					FI;
+					FI
 
 					auto nDotV = m_writer.declLocale( "nDotV"
 						, abs( dot( worldNormal, viewDir ) ) + epsilon );
@@ -776,7 +777,7 @@ namespace castor3d::shader
 					, sdw::Vec3 const & csDirection
 					, sdw::Mat4 const & projectToPixelMatrix
 					, sdw::CombinedImage2DR32 const & csZBuffer
-					, sdw::Vec2 const & csZBufferSize
+					, sdw::Vec2 const &
 					, sdw::Float const & csZThickness
 					, sdw::Boolean const & csZBufferIsHyperbolic
 					, sdw::Vec3 const & clipInfo
@@ -853,7 +854,7 @@ namespace castor3d::shader
 					P1 = P1.yx();
 					P0 = P0.yx();
 				}
-				FI;
+				FI
 
 				// From now on, "x" is the primary iteration direction and "y" is the secondary one
 
@@ -932,7 +933,7 @@ namespace castor3d::shader
 					{
 						m_utils.swap( rayZMin, rayZMax );
 					}
-					FI;
+					FI
 
 					// Camera-space z of the background
 					sceneZMax = csZBuffer.fetch( ivec2( hitPixel ), 0_i );
@@ -942,9 +943,9 @@ namespace castor3d::shader
 					{
 						sceneZMax = m_utils.reconstructCSZ( sceneZMax, clipInfo );
 					}
-					FI;
+					FI
 				} // pixel on ray
-				ROF;
+				ROF
 
 				Q.xy() += dQ.xy() * stepCount;
 				csHitPoint = Q * ( 1.0f / k );
@@ -1200,7 +1201,7 @@ namespace castor3d::shader
 							m_writer.returnStmt( transmitted * attenuatedColor * alb );
 						}
 					}
-					FI;
+					FI
 
 					m_writer.returnStmt( sceneMap.lod( sceneUv, roughness * sdw::Float( float( EnvironmentMipLevels ) ) ).rgb() * alb );
 				}
@@ -1295,7 +1296,7 @@ namespace castor3d::shader
 					, reflectedSpecular );
 			}
 		}
-		FI;
+		FI
 	}
 
 	void ReflectionModel::doComputeRefractions( sdw::CombinedImageCubeArrayRgba32 const & envMap
@@ -1333,7 +1334,7 @@ namespace castor3d::shader
 							, components );
 					}
 				}
-				FI;
+				FI
 			}
 			else if ( m_hasIblSupport )
 			{
@@ -1343,7 +1344,7 @@ namespace castor3d::shader
 					, components );
 			}
 		}
-		FI;
+		FI
 	}
 
 	void ReflectionModel::doComputeClearcoatReflections( sdw::CombinedImage2DRgba32 const & brdf
@@ -1389,7 +1390,7 @@ namespace castor3d::shader
 							, brdf );
 					}
 				}
-				FI;
+				FI
 			}
 			else if ( m_hasIblSupport )
 			{
@@ -1403,7 +1404,7 @@ namespace castor3d::shader
 					, brdf );
 			}
 		}
-		FI;
+		FI
 	}
 
 	void ReflectionModel::doComputeSheenReflections( sdw::CombinedImage2DRgba32 const & brdf
@@ -1441,7 +1442,7 @@ namespace castor3d::shader
 							, brdf );
 					}
 				}
-				FI;
+				FI
 			}
 			else if ( m_hasIblSupport )
 			{
@@ -1452,6 +1453,6 @@ namespace castor3d::shader
 					, brdf );
 			}
 		}
-		FI;
+		FI
 	}
 }

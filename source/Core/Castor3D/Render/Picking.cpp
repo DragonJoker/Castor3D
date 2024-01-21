@@ -100,7 +100,7 @@ namespace castor3d
 
 	uint32_t const Picking::UboBindingPoint = 7u;
 
-	Picking::Picking( crg::ResourcesCache & resources
+	Picking::Picking( crg::ResourcesCache const & resources
 		, RenderDevice const & device
 		, QueueData const & queueData
 		, castor::Size const & size
@@ -181,9 +181,7 @@ namespace castor3d
 		m_colourTexture.reset();
 	}
 
-	PickNodeType Picking::pick( RenderDevice const & device
-		, castor::Position position
-		, Camera const & camera )
+	PickNodeType Picking::pick( castor::Position position )
 	{
 		if ( !m_picking.exchange( true ) )
 		{

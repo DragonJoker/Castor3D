@@ -138,15 +138,6 @@ namespace castor3d
 		C3D_API crg::SemaphoreWaitArray preRender( crg::SemaphoreWaitArray const & toWait
 			, ashes::Queue const & queue );
 		/**
-		 *\~english
-		 *\brief		Writes the technique into a text file.
-		 *\param[in]	file	The file.
-		 *\~french
-		 *\brief		Ecrit la technique dans un fichier texte.
-		 *\param[in]	file	Le fichier.
-		 */
-		C3D_API bool writeInto( castor::TextFile & file );
-		/**
 		*\~english
 		*\brief
 		*	Visitor acceptance function.
@@ -396,16 +387,14 @@ namespace castor3d
 		using ShadowMapArray = std::vector< ShadowMapUPtr >;
 
 	private:
-		crg::FramePassArray doCreateRenderPasses( ProgressBar * progress
-			, TechniquePassEvent event
+		crg::FramePassArray doCreateRenderPasses( TechniquePassEvent event
 			, crg::FramePass const * previousPass
 			, crg::FramePassArray previousPasses = {} );
 		BackgroundRendererUPtr doCreateBackgroundPass( ProgressBar * progress );
 		void doInitialiseLpv();
 		void doUpdateShadowMaps( CpuUpdater & updater );
-		void doUpdateShadowMaps( GpuUpdater & updater );
+		void doUpdateShadowMaps( GpuUpdater & updater )const;
 		void doUpdateLpv( CpuUpdater & updater );
-		void doUpdateLpv( GpuUpdater & updater );
 
 		crg::SemaphoreWaitArray doRenderShadowMaps( crg::SemaphoreWaitArray const & semaphore
 			, ashes::Queue const & queue )const;

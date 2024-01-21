@@ -14,7 +14,6 @@ namespace castor3d
 		: AnimationT< Engine >{ engine
 			, AnimationType::eTexture
 			, name }
-		, m_translate{}
 	{
 		m_length = castor::Milliseconds{ std::numeric_limits< int64_t >::max() };
 	}

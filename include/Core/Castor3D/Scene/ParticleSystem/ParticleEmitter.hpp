@@ -26,7 +26,7 @@ namespace castor3d
 		 *\brief		Emet une particle ayant les valeurs données.
 		 *\param[in]	value	Les valeurs de la particule.
 		 */
-		C3D_API castor3d::Particle emit( ParticleValues const & value );
+		C3D_API castor3d::Particle emit( ParticleValues const & value )const;
 
 		using OnEmitFunction = std::function< void( Particle const & particle ) >;
 		using OnEmitSignal = castor::SignalT< OnEmitFunction >;

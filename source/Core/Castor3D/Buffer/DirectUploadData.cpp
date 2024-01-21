@@ -34,7 +34,7 @@ namespace castor3d
 		, std::string debugName
 		, ashes::CommandPool const & commandPool )
 		: CommandBufferHolder{ commandPool.createCommandBuffer( debugName ) }
-		, UploadData{ device, debugName, CommandBufferHolder::getData().get() }
+		, UploadData{ device, std::move( debugName ), CommandBufferHolder::getData().get() }
 	{
 	}
 
@@ -58,13 +58,13 @@ namespace castor3d
 			<< std::endl );
 		auto mappedSize = ashes::getAlignedSize( data.srcSize
 			, m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) );
-		auto & buffer = *m_buffers.emplace_back( makeBufferBase( m_device
-			, mappedSize
-			, VK_BUFFER_USAGE_TRANSFER_SRC_BIT
-			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-			, m_debugName + "/StagingBuffer" ) );
 
-		if ( doCopyData( data.srcData, data.srcSize, buffer, 0u ) )
+		if ( auto const & buffer = *m_buffers.emplace_back( makeBufferBase( m_device
+				, mappedSize
+				, VK_BUFFER_USAGE_TRANSFER_SRC_BIT
+				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+				, m_debugName + "/StagingBuffer" ) );
+			doCopyData( data.srcData, data.srcSize, buffer, 0u ) )
 		{
 			m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_HOST_BIT
 				, VK_PIPELINE_STAGE_TRANSFER_BIT

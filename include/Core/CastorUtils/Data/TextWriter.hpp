@@ -37,10 +37,10 @@ namespace castor
 
 			CU_API WriterBlock( TextWriterBase * writer
 				, String const & type
-				, String const & name
+				, StringView name
 				, StringStream & rfile );
 			CU_API WriterBlock( TextWriterBase * writer
-				, String const & name
+				, StringView name
 				, StringStream & file );
 			CU_API WriterBlock( TextWriterBase * writer
 				, StringStream & file );
@@ -71,7 +71,7 @@ namespace castor
 		 *\brief		Constructeur
 		 */
 		CU_API explicit TextWriterBase( String tabs = cuEmptyString
-			, String const & name = cuEmptyString );
+			, StringView name = cuEmptyString );
 		/**
 		 *\~english
 		 *\brief		Copies the file with given path to output folder.
@@ -93,64 +93,71 @@ namespace castor
 		 *\~french
 		 *\brief		Rapporte une erreur éventuelle.
 		 */
-		CU_API void checkError( bool error, char const * const action )const;
+		CU_API void checkError( bool error, xchar const * const action )const;
 		/**
 		 *\~english
 		 *\brief		Reports eventual error.
 		 *\~french
 		 *\brief		Rapporte une erreur éventuelle.
 		 */
-		CU_API void checkError( bool error, std::string const & action )const;
+		CU_API void checkError( bool error, String const & action )const;
+		/**
+		 *\~english
+		 *\brief		Reports eventual error.
+		 *\~french
+		 *\brief		Rapporte une erreur éventuelle.
+		 */
+		CU_API void checkError( bool error, StringView const & action )const;
 
 		CU_API WriterBlock beginBlock( StringStream & file );
-		CU_API WriterBlock beginBlock( StringStream & file, String const & name );
-		CU_API WriterBlock beginBlock( StringStream & file, String const & type, String const & name );
-		CU_API bool writeMask( StringStream & file, String const & name, uint32_t mask )const;
-		CU_API bool writeMask( StringStream & file, String const & name, uint64_t mask )const;
+		CU_API WriterBlock beginBlock( StringStream & file, StringView name );
+		CU_API WriterBlock beginBlock( StringStream & file, String const & type, StringView name );
+		CU_API bool writeMask( StringStream & file, StringView name, uint32_t mask )const;
+		CU_API bool writeMask( StringStream & file, StringView name, uint64_t mask )const;
 		CU_API bool writeComment( StringStream & file, String const & comment )const;
 		CU_API bool write( StringStream & file, String const & value )const;
-		CU_API bool write( StringStream & file, String const & name, float value )const;
-		CU_API bool write( StringStream & file, String const & name, double value )const;
-		CU_API bool write( StringStream & file, String const & name, uint16_t value )const;
-		CU_API bool write( StringStream & file, String const & name, int16_t value )const;
-		CU_API bool write( StringStream & file, String const & name, uint32_t value )const;
-		CU_API bool write( StringStream & file, String const & name, int32_t value )const;
-		CU_API bool write( StringStream & file, String const & name, uint64_t value )const;
-		CU_API bool write( StringStream & file, String const & name, int64_t value )const;
-		CU_API bool write( StringStream & file, String const & name, bool value )const;
-		CU_API bool write( StringStream & file, String const & name, String const & value )const;
+		CU_API bool write( StringStream & file, StringView name, float value )const;
+		CU_API bool write( StringStream & file, StringView name, double value )const;
+		CU_API bool write( StringStream & file, StringView name, uint16_t value )const;
+		CU_API bool write( StringStream & file, StringView name, int16_t value )const;
+		CU_API bool write( StringStream & file, StringView name, uint32_t value )const;
+		CU_API bool write( StringStream & file, StringView name, int32_t value )const;
+		CU_API bool write( StringStream & file, StringView name, uint64_t value )const;
+		CU_API bool write( StringStream & file, StringView name, int64_t value )const;
+		CU_API bool write( StringStream & file, StringView name, bool value )const;
+		CU_API bool write( StringStream & file, StringView name, String const & value )const;
 
-		CU_API bool writeOpt( StringStream & file, String const & name, bool value )const;
+		CU_API bool writeOpt( StringStream & file, StringView name, bool value )const;
 		CU_API bool writeText( StringStream & file, String const & value )const;
-		CU_API bool writeName( StringStream & file, String const & name, String const & value )const;
-		CU_API bool writeNameOpt( StringStream & file, String const & name, String const & value, String const & comp )const;
-		CU_API bool writePath( StringStream & file, String const & name, Path const & value )const;
-		CU_API bool writeFile( StringStream & file, String const & name, Path const & source, Path const & folder, String const & subfolder )const;
+		CU_API bool writeName( StringStream & file, StringView name, String const & value )const;
+		CU_API bool writeNameOpt( StringStream & file, StringView name, String const & value, String const & comp )const;
+		CU_API bool writePath( StringStream & file, StringView name, Path const & value )const;
+		CU_API bool writeFile( StringStream & file, StringView name, Path const & source, Path const & folder, String const & subfolder )const;
 
 		CU_API String tabs()const;
 
 		template< typename Value1T, typename Value2T >
-		bool write( StringStream & file, String const & name, Value1T const & value1, Value2T const & value2 )const;
+		bool write( StringStream & file, StringView name, Value1T const & value1, Value2T const & value2 )const;
 		template< typename ValueT >
-		bool write( StringStream & file, String const & name, castor::RangedValue< ValueT > const & value )const;
+		bool write( StringStream & file, StringView name, castor::RangedValue< ValueT > const & value )const;
 		template< typename ValueT >
-		bool write( StringStream & file, String const & name, castor::ChangeTracked< ValueT > const & value )const;
+		bool write( StringStream & file, StringView name, castor::ChangeTracked< ValueT > const & value )const;
 		template< typename ValueT >
-		bool write( StringStream & file, String const & name, castor::Point2< ValueT > const & value )const;
+		bool write( StringStream & file, StringView name, castor::Point2< ValueT > const & value )const;
 		template< typename ValueT >
-		bool write( StringStream & file, String const & name, castor::Point3< ValueT > const & value )const;
+		bool write( StringStream & file, StringView name, castor::Point3< ValueT > const & value )const;
 		template< typename ValueT >
-		bool write( StringStream & file, String const & name, castor::Point4< ValueT > const & value )const;
+		bool write( StringStream & file, StringView name, castor::Point4< ValueT > const & value )const;
 		template< typename ValueT >
-		bool writeOpt( StringStream & file, String const & name, ValueT const & value, ValueT const & comp )const;
+		bool writeOpt( StringStream & file, StringView name, ValueT const & value, ValueT const & comp )const;
 		template< typename ValueT, typename ... ParamsT >
 		bool writeSub( StringStream & file, ValueT const & value, ParamsT const & ... params )const;
 		template< typename ValueT, typename ... ParamsT >
-		bool writeNamedSub( StringStream & file, String const & name, ValueT const & value, ParamsT const & ... params )const;
+		bool writeNamedSub( StringStream & file, StringView name, ValueT const & value, ParamsT const & ... params )const;
 		template< typename ValueT, typename ... ParamsT >
 		bool writeSubOpt( StringStream & file, ValueT const & value, ValueT const & comp, ParamsT const & ... params )const;
 		template< typename ValueT, typename ... ParamsT >
-		bool writeNamedSubOpt( StringStream & file, String const & name, ValueT const & value, ValueT const & comp, ParamsT const & ... params )const;
+		bool writeNamedSubOpt( StringStream & file, StringView name, ValueT const & value, ValueT const & comp, ParamsT const & ... params )const;
 
 	private:
 		String m_tabs;
@@ -168,7 +175,7 @@ namespace castor
 
 	public:
 		explicit TextWriterT( String tabs
-			, String const & name = String{} )
+			, StringView name = String{} )
 			: TextWriterBase{ std::move( tabs ), name }
 		{
 		}

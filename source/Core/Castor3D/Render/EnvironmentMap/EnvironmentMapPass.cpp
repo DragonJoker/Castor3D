@@ -73,7 +73,6 @@ namespace castor3d
 			, nullptr
 			, m_device
 			, nullptr
-			, getName()
 			, m_background
 			, m_hdrConfigUbo
 			, m_sceneUbo

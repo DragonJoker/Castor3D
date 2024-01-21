@@ -39,19 +39,10 @@ namespace castor3d
 			result |= VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT;
 		}
 
-		if ( ashes::checkFlag( flags, VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT ) )
-		{
-		}
-
 #ifdef VK_ENABLE_BETA_EXTENSIONS
 		if ( ashes::checkFlag( flags, VK_IMAGE_USAGE_VIDEO_DECODE_DST_BIT_KHR ) )
 		{
 			result |= VK_FORMAT_FEATURE_VIDEO_DECODE_OUTPUT_BIT_KHR;
-		}
-#endif
-#ifdef VK_ENABLE_BETA_EXTENSIONS
-		if ( ashes::checkFlag( flags, VK_IMAGE_USAGE_VIDEO_DECODE_SRC_BIT_KHR ) )
-		{
 		}
 #endif
 #ifdef VK_ENABLE_BETA_EXTENSIONS
@@ -69,12 +60,6 @@ namespace castor3d
 		{
 			result |= VK_FORMAT_FEATURE_FRAGMENT_SHADING_RATE_ATTACHMENT_BIT_KHR;
 		}
-
-#ifdef VK_ENABLE_BETA_EXTENSIONS
-		if ( ashes::checkFlag( flags, VK_IMAGE_USAGE_VIDEO_ENCODE_DST_BIT_KHR ) )
-		{
-		}
-#endif
 #ifdef VK_ENABLE_BETA_EXTENSIONS
 		if ( ashes::checkFlag( flags, VK_IMAGE_USAGE_VIDEO_ENCODE_SRC_BIT_KHR ) )
 		{
@@ -87,21 +72,6 @@ namespace castor3d
 			result |= VK_FORMAT_FEATURE_VIDEO_ENCODE_DPB_BIT_KHR;
 		}
 #endif
-		if ( ashes::checkFlag( flags, VK_IMAGE_USAGE_ATTACHMENT_FEEDBACK_LOOP_BIT_EXT ) )
-		{
-		}
-
-		if ( ashes::checkFlag( flags, VK_IMAGE_USAGE_INVOCATION_MASK_BIT_HUAWEI ) )
-		{
-		}
-
-		if ( ashes::checkFlag( flags, VK_IMAGE_USAGE_SAMPLE_WEIGHT_BIT_QCOM ) )
-		{
-		}
-
-		if ( ashes::checkFlag( flags, VK_IMAGE_USAGE_SAMPLE_BLOCK_MATCH_BIT_QCOM ) )
-		{
-		}
 
 		return result;
 	}

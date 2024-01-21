@@ -25,10 +25,8 @@ namespace castor3d
 {
 	TransparentRendering::TransparentRendering( RenderTechnique & parent
 		, RenderDevice const & device
-		, QueueData const & queueData
 		, OpaqueRendering const & previous
 		, crg::FramePassArray const & previousPasses
-		, SsaoConfig const & ssaoConfig
 		, ProgressBar * progress
 		, bool weightedBlended )
 		: castor::OwnedBy< RenderTechnique >{ parent }
@@ -52,7 +50,7 @@ namespace castor3d
 			: nullptr ) }
 		, m_mipgenPassDesc{ &doCreateMipGenPass( progress
 			, previous.getLastPass()
-			, std::move( previousPasses ) ) }
+			, previousPasses ) }
 		, m_transparentPassDesc{ ( weightedBlended
 			? &doCreateWBTransparentPass( progress
 				, *m_mipgenPassDesc )
@@ -89,9 +87,9 @@ namespace castor3d
 	uint32_t TransparentRendering::countInitialisationSteps()noexcept
 	{
 		uint32_t result = 0u;
-		result += 1;// colour copy pass;
-		result += 1;// mips generation pass;
-		result += 1;// accuumulation pass;
+		result += 1;// colour copy pass
+		result += 1;// mips generation pass
+		result += 1;// accuumulation pass
 		result += WeightedBlendRendering::countInitialisationSteps();
 		return result;
 	}
@@ -322,7 +320,7 @@ namespace castor3d
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 		result.addImplicitColourView( getOwner()->getSsaoResult().wholeViewId
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-		auto & transparentPassResult = *m_transparentPassResult;
+		auto const & transparentPassResult = *m_transparentPassResult;
 		result.addOutputColourView( transparentPassResult[WbTexture::eAccumulation].targetViewId
 			, getClearValue( WbTexture::eAccumulation ) );
 		result.addOutputColourView( transparentPassResult[WbTexture::eRevealage].targetViewId

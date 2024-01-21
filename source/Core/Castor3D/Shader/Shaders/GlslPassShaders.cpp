@@ -30,7 +30,7 @@ namespace castor3d::shader
 		, m_frontCulled{ false }
 		, m_forceLod0{ forceLod0 }
 	{
-		for ( auto & shader : m_shaders )
+		for ( auto const & shader : m_shaders )
 		{
 			if ( shader->getPlugin().isMapComponent() )
 			{
@@ -57,7 +57,7 @@ namespace castor3d::shader
 		, m_frontCulled{ flags.isFrontCulled() }
 		, m_forceLod0{ forceLod0 }
 	{
-		for ( auto & shader : m_shaders )
+		for ( auto const & shader : m_shaders )
 		{
 			if ( shader->getPlugin().isMapComponent() )
 			{

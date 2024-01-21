@@ -20,7 +20,7 @@ namespace castor3d::shader
 			, sdw::Vec4 const & colour
 			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & wsCamera
-			, SceneData const & sceneData );
+			, SceneData const & sceneData )const;
 
 	protected:
 		sdw::Function< sdw::Vec4

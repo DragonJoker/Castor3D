@@ -33,7 +33,7 @@ namespace castor3d
 			{
 				uint32_t index{};
 
-				for ( auto & weight : animSubmesh->getWeights() )
+				for ( auto const & weight : animSubmesh->getWeights() )
 				{
 					if ( weight != 0.0f )
 					{
@@ -87,9 +87,8 @@ namespace castor3d
 
 	void AnimatedMesh::doAddAnimation( castor::String const & name )
 	{
-		auto it = m_animations.find( name );
-
-		if ( it == m_animations.end() )
+		if ( auto it = m_animations.find( name );
+			it == m_animations.end() )
 		{
 			if ( m_mesh.hasAnimation( name ) )
 			{

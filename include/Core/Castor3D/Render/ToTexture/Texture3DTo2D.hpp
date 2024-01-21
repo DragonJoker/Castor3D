@@ -88,7 +88,7 @@ namespace castor3d
 				, ashes::FrameBuffer const & frameBuffer
 				, ashes::PipelineLayout const & pipelineLayout
 				, ashes::GraphicsPipeline const & pipeline
-				, SamplerRPtr sampler );
+				, Sampler const * sampler );
 
 			ashes::DescriptorSetPtr descriptorSet;
 			CommandsSemaphore commands;

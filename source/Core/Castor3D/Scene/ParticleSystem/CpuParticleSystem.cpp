@@ -79,7 +79,8 @@ namespace castor3d
 	{
 		if ( m_firstUnused < m_particles.size() )
 		{
-			m_particles[m_firstUnused++] = particle;
+			m_particles[m_firstUnused] = particle;
+			++m_firstUnused;
 			doOnEmit( particle );
 		}
 	}

@@ -151,13 +151,13 @@ namespace castor3d
 		C3D_API bool doCopyData( void const * srcData
 			, VkDeviceSize size
 			, ashes::BufferBase const & dstBuffer
-			, VkDeviceSize dstOffset );
+			, VkDeviceSize dstOffset )const;
 		C3D_API void doUploadBuffer( BufferDataRange const & data
 			, ashes::BufferBase const * srcBuffer
-			, VkDeviceSize srcOffset );
+			, VkDeviceSize srcOffset )const;
 		C3D_API void doUploadImage( ImageDataRange & data
 			, ashes::BufferBase const & srcBuffer
-			, VkDeviceSize srcOffset );
+			, VkDeviceSize srcOffset )const;
 
 		RenderDevice const & m_device;
 		std::string m_debugName;

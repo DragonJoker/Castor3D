@@ -28,9 +28,8 @@ namespace castor3d
 
 	void AnimatedSceneNode::doAddAnimation( castor::String const & name )
 	{
-		auto it = m_animations.find( name );
-
-		if ( it == m_animations.end() )
+		if ( auto it = m_animations.find( name );
+			it == m_animations.end() )
 		{
 			if ( m_node.hasAnimation( name ) )
 			{

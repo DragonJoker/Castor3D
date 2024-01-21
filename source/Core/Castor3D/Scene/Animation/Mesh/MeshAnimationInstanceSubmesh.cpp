@@ -27,8 +27,8 @@ namespace castor3d
 		{
 			return castor::BoundingBox
 			{
-				interpolator.interpolate( prv.getMin(), prv.getMin(), factor ),
-				interpolator.interpolate( prv.getMax(), prv.getMax(), factor ),
+				interpolator.interpolate( prv.getMin(), cur.getMin(), factor ),
+				interpolator.interpolate( prv.getMax(), cur.getMax(), factor ),
 			};
 		}
 	}

@@ -208,7 +208,7 @@ namespace castor3d
 		SubmeshPipelinesMap m_activePipelines;
 		BillboardPipelinesMap m_activeBillboardPipelines;
 		ClustersConfig const * m_clustersConfig{};
-		castor::ChangeTracked< uint32_t > m_maxPipelineId;
+		castor::ChangeTracked< uint32_t > m_maxPipelineId{};
 	};
 }
 

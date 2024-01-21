@@ -15,7 +15,7 @@ namespace castor3d
 	public:
 		DebugCallbacks( ashes::Instance const & instance
 			, void * userData );
-		~DebugCallbacks();
+		~DebugCallbacks()noexcept;
 
 	private:
 		ashes::Instance const & m_instance;

@@ -17,6 +17,28 @@ namespace castor3d
 
 	namespace shader
 	{
+		namespace ssao
+		{
+			static uint32_t constexpr numPrecomputed = 100u;
+
+			static castor::Array< int, numPrecomputed > constexpr minDiscrepancyArray
+			{
+			//   0   1   2   3   4   5   6   7   8   9
+				 1,  1,  1,  2,  3,  2,  5,  2,  3,  2,  // 0
+				 3,  3,  5,  5,  3,  4,  7,  5,  5,  7,  // 1
+				 9,  8,  5,  5,  7,  7,  7,  8,  5,  8,  // 2
+				11, 12,  7, 10, 13,  8, 11,  8,  7, 14,  // 3
+				11, 11, 13, 12, 13, 19, 17, 13, 11, 18,  // 4
+				19, 11, 11, 14, 17, 21, 15, 16, 17, 18,  // 5
+				13, 17, 11, 17, 19, 18, 25, 18, 19, 19,  // 6
+				29, 21, 19, 27, 31, 29, 21, 18, 17, 29,  // 7
+				31, 31, 23, 18, 25, 26, 25, 23, 19, 34,  // 8
+				19, 27, 21, 25, 39, 29, 17, 21, 27, 29   // 9
+			};
+		}
+
+		//*****************************************************************************************
+
 		SsaoConfigData::SsaoConfigData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
@@ -108,26 +130,9 @@ namespace castor3d
 		auto & viewport = camera.getViewport();
 		int numSpiralTurns = 0;
 
-		static constexpr uint32_t numPrecomputed = 100u;
-
-		static int const minDiscrepancyArray[numPrecomputed]
+		if ( config.numSamples < shader::ssao::numPrecomputed )
 		{
-		//   0   1   2   3   4   5   6   7   8   9
-			 1,  1,  1,  2,  3,  2,  5,  2,  3,  2,  // 0
-			 3,  3,  5,  5,  3,  4,  7,  5,  5,  7,  // 1
-			 9,  8,  5,  5,  7,  7,  7,  8,  5,  8,  // 2
-			11, 12,  7, 10, 13,  8, 11,  8,  7, 14,  // 3
-			11, 11, 13, 12, 13, 19, 17, 13, 11, 18,  // 4
-			19, 11, 11, 14, 17, 21, 15, 16, 17, 18,  // 5
-			13, 17, 11, 17, 19, 18, 25, 18, 19, 19,  // 6
-			29, 21, 19, 27, 31, 29, 21, 18, 17, 29,  // 7
-			31, 31, 23, 18, 25, 26, 25, 23, 19, 34,  // 8
-			19, 27, 21, 25, 39, 29, 17, 21, 27, 29   // 9
-		};
-
-		if ( config.numSamples < numPrecomputed )
-		{
-			numSpiralTurns =  minDiscrepancyArray[config.numSamples];
+			numSpiralTurns = shader::ssao::minDiscrepancyArray[config.numSamples];
 		}
 		else
 		{

@@ -158,37 +158,30 @@ namespace castor3d
 		return ashes::Image{ device, image, ashes::ImageCreateInfo{ data.data->info } };
 	}
 
-	ashes::ImageView makeImageView( ashes::Device const & device
-		, ashes::Image const & image
+	ashes::ImageView makeImageView( ashes::Image const & image
 		, VkImageView view
 		, crg::ImageViewId data )
 	{
 		return ashes::ImageView{ data.data->info, view, &image };
 	}
 
-	ashes::ImageView makeTargetImageView( ashes::Device const & device
-		, Texture const & texture )
+	ashes::ImageView makeTargetImageView( Texture const & texture )
 	{
-		return makeImageView( device
-			, *texture.image
+		return makeImageView( *texture.image
 			, texture.targetView
 			, texture.targetViewId );
 	}
 
-	ashes::ImageView makeSampledImageView( ashes::Device const & device
-		, Texture const & texture )
+	ashes::ImageView makeSampledImageView( Texture const & texture )
 	{
-		return makeImageView( device
-			, *texture.image
+		return makeImageView( *texture.image
 			, texture.sampledView
 			, texture.sampledViewId );
 	}
 
-	ashes::ImageView makeWholeImageView( ashes::Device const & device
-		, Texture const & texture )
+	ashes::ImageView makeWholeImageView( Texture const & texture )
 	{
-		return makeImageView( device
-			, *texture.image
+		return makeImageView( *texture.image
 			, texture.wholeView
 			, texture.wholeViewId );
 	}
@@ -345,12 +338,12 @@ namespace castor3d
 			{
 				auto streams = crg::dot::displayTransitions( graph, { true, true, true, true } );
 
-				for ( auto & it : streams )
+				for ( auto const & [str, strm] : streams )
 				{
-					if ( !it.first.empty() )
+					if ( !str.empty() )
 					{
-						std::ofstream file{ path / ( name + "_" + it.first + ".dot" ) };
-						file << it.second.str();
+						std::ofstream file{ path / ( name + "_" + str + ".dot" ) };
+						file << strm.str();
 					}
 				}
 			}
@@ -376,12 +369,12 @@ namespace castor3d
 			{
 				auto streams = crg::dot::displayPasses( graph, { true, true, true, true } );
 
-				for ( auto & it : streams )
+				for ( auto const & [str, strm] : streams )
 				{
-					if ( !it.first.empty() )
+					if ( !str.empty() )
 					{
-						std::ofstream file{ path / ( name + "_" + it.first + ".dot" ) };
-						file << it.second.str();
+						std::ofstream file{ path / ( name + "_" + str + ".dot" ) };
+						file << strm.str();
 					}
 				}
 			}

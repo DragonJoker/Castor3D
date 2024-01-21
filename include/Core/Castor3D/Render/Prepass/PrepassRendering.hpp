@@ -40,17 +40,9 @@ namespace castor3d
 		 */
 		C3D_API PrepassRendering( RenderTechnique & parent
 			, RenderDevice const & device
-			, QueueData const & queueData
 			, crg::FramePassArray const & previousPasses
 			, ProgressBar * progress
 			, bool visbuffer );
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		C3D_API ~PrepassRendering()noexcept;
 		/**
 		 *\~english
 		 *\return		The number of steps needed for initialisation, to show progression.

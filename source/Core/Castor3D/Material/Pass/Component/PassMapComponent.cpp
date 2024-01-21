@@ -37,9 +37,9 @@ namespace castor3d
 		, castor::StringStream & file )const
 	{
 		bool result = true;
-		auto it = checkFlag( configuration.components, getTextureFlags() );
 
-		if ( it != configuration.components.end() )
+		if ( auto it = checkFlag( configuration.components, getTextureFlags() );
+			it != configuration.components.end() )
 		{
 			result = doWriteTextureConfig( configuration, it->componentsMask, tabs, file );
 		}
@@ -84,14 +84,14 @@ namespace castor3d
 		if ( tit != getOwner()->end() )
 		{
 			auto data = buffer.getData( getOwner()->getId() );
-			auto cit = std::find_if( ( *tit )->getConfiguration().components.begin()
+
+			if ( auto cit = std::find_if( ( *tit )->getConfiguration().components.begin()
 				, ( *tit )->getConfiguration().components.end()
 				, [this]( TextureFlagConfiguration const & lookup )
 				{
 					return lookup.flag == getPlugin().getTextureFlags();
 				} );
-
-			if ( cit != ( *tit )->getConfiguration().components.end() )
+				cit != ( *tit )->getConfiguration().components.end() )
 			{
 				data.write( m_materialShader->getMaterialChunk()
 					, uint32_t( ( ( *tit )->getId() << 16u ) | cit->startIndex )

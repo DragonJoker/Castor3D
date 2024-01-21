@@ -230,7 +230,7 @@ namespace castor3d
 			, m_device, cameraUbo, *this
 			, technique, nodesPass ) };
 		lastPasses = { &createFindUniqueClustersPass( graph, *lastPasses.front()
-			, m_device, cameraUbo, *this ) };
+			, m_device, *this ) };
 		lastPasses = { &createComputeLightsMortonCodePass( graph, lastPasses.front()
 			, m_device, *this ) };
 		lastPasses = createRadixSortLightsPass( graph, lastPasses.front()

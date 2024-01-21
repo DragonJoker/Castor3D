@@ -24,8 +24,8 @@ namespace castor3d::shader
 		{
 		}
 
-		C3D_API Plane( sdw::Vec3 const normal
-			, sdw::Float const distance
+		C3D_API Plane( sdw::Vec3 const & normal
+			, sdw::Float const & distance
 			, bool enabled = true );
 
 		auto normal()const { return getMember< "normal" >(); }
@@ -49,12 +49,12 @@ namespace castor3d::shader
 		{
 		}
 
-		C3D_API Cone( sdw::Vec3 const apex
-			, sdw::Vec3 const direction
-			, sdw::Float const range
-			, sdw::Float const apertureCos
-			, sdw::Float const apertureSin
-			, sdw::Float const apertureTan
+		C3D_API Cone( sdw::Vec3 const & apex
+			, sdw::Vec3 const & direction
+			, sdw::Float const & range
+			, sdw::Float const & apertureCos
+			, sdw::Float const & apertureSin
+			, sdw::Float const & apertureTan
 			, bool enabled = true );
 
 		auto apex()const { return getMember< "apex" >(); }
@@ -78,11 +78,11 @@ namespace castor3d::shader
 		{
 		}
 
-		C3D_API AABB(sdw::Vec4 const min
-			, sdw::Vec4 const max
+		C3D_API AABB(sdw::Vec4 const & min
+			, sdw::Vec4 const & max
 			, bool enabled = true );
-		C3D_API AABB( sdw::Vec3 const position
-			, sdw::Float range
+		C3D_API AABB( sdw::Vec3 const & position
+			, sdw::Float const & range
 			, bool enabled = true );
 
 		auto min()const { return getMember< "bmin" >(); }

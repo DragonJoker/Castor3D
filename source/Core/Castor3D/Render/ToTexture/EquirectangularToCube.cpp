@@ -33,11 +33,10 @@ namespace castor3d
 
 	namespace equitocube
 	{
-		static ashes::PipelineShaderStageCreateInfoArray doCreateProgram( RenderDevice const & device
-			, VkFormat format )
+		static ashes::PipelineShaderStageCreateInfoArray doCreateProgram( RenderDevice const & device )
 		{
 			auto & engine = *device.renderSystem.getEngine();
-			ProgramModule module{ "EquirectangularToCube" };
+			ProgramModule programModule{ "EquirectangularToCube" };
 			{
 				sdw::TraditionalGraphicsWriter writer{ &engine.getShaderAllocator() };
 
@@ -48,35 +47,34 @@ namespace castor3d
 				matrixUbo.end();
 				auto mapColour = writer.declCombinedImg< FImg2DRgba32 >( "mapColour", 1u, 0u );
 
-				auto sampleSphericalMap = writer.implementFunction< sdw::Vec2 >( "sampleSphericalMap"
-					, [&]( sdw::Vec3 const & v )
-					{
-						auto uv = writer.declLocale( "uv"
-							, vec2( atan2( v.z(), v.x() ), asin( v.y() ) ) );
-						uv *= vec2( 0.1591_f, 0.3183_f );
-						uv += 0.5_f;
-						writer.returnStmt( uv );
-					}
-				, sdw::InVec3{ writer, "v" } );
+				auto sampleSphericalMap = [&writer]( sdw::Vec3 const & v )
+				{
+					auto uv = writer.declLocale( "uv"
+						, vec2( atan2( v.z(), v.x() ), asin( v.y() ) ) );
+					uv *= vec2( 0.1591_f, 0.3183_f );
+					uv += 0.5_f;
+					return uv;
+				};
 
-				writer.implementEntryPointT< shader::Position4FT, shader::Position3FT>( [&]( sdw::VertexInT< shader::Position4FT > in
+				writer.implementEntryPointT< shader::Position4FT, shader::Position3FT>( [&mtxViewProjection]( sdw::VertexInT< shader::Position4FT > const & in
 					, sdw::VertexOutT< shader::Position3FT > out )
 					{
 						out.position() = in.position().xyz();
 						out.vtx.position = mtxViewProjection * in.position();
 					} );
 
-				writer.implementEntryPointT< shader::Position3FT, shader::Colour4FT >( [&]( sdw::FragmentInT< shader::Position3FT > in
-					, sdw::FragmentOutT< shader::Colour4FT > out )
+				writer.implementEntryPointT< shader::Position3FT, shader::Colour4FT >( [&]( sdw::FragmentInT< shader::Position3FT > const & in
+					, sdw::FragmentOutT< shader::Colour4FT > const & out )
 					{
-						auto uv = writer.declLocale( "uv"
-							, sampleSphericalMap( normalize( in.position() ) ) );
+						auto normPos = writer.declLocale( "normPos"
+							, normalize( in.position() ) );
+						auto uv = sampleSphericalMap( normPos );
 						out.colour() = vec4( mapColour.sample( utils.topDownToBottomUp( uv ) ).rgb(), 1.0_f );
 					} );
-				module.shader = writer.getBuilder().releaseShader();
+				programModule.shader = writer.getBuilder().releaseShader();
 			}
 
-			return makeProgramStates( device, module );
+			return makeProgramStates( device, programModule );
 		}
 
 		static ashes::RenderPassPtr doCreateRenderPass( RenderDevice const & device
@@ -151,7 +149,7 @@ namespace castor3d
 		, m_renderPass{ equitocube::doCreateRenderPass( m_device, target.getPixelFormat() ) }
 	{
 		auto size = VkExtent2D{ target.getWidth(), target.getHeight() };
-		auto program = equitocube::doCreateProgram( device, equiRectangular.getPixelFormat() );
+		auto program = equitocube::doCreateProgram( device );
 		uint32_t face = 0u;
 
 		for ( auto & facePipeline : m_frameBuffers )
@@ -172,7 +170,6 @@ namespace castor3d
 		}
 
 		createPipelines( size
-			, castor::Position{}
 			, program
 			, m_view
 			, *m_renderPass
@@ -190,9 +187,8 @@ namespace castor3d
 				makeFloatArray( m_device.renderSystem.getEngine()->getNextRainbowColour() ),
 			} );
 
-		for ( auto & frameBuffer : m_frameBuffers )
+		for ( auto const & frameBuffer : m_frameBuffers )
 		{
-
 			m_commandBuffer->beginRenderPass( *m_renderPass
 				, *frameBuffer.frameBuffer
 				, { transparentBlackClearColor }

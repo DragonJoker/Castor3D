@@ -250,9 +250,7 @@ namespace castor3d
 	}
 
 	ClustersConfig::ClustersConfig()
-		: enabled{ true }
-		, dirty{ true }
-		, useLightsBVH{ dirty, true }
+		: useLightsBVH{ dirty, true }
 		, sortLights{ dirty, true }
 		, parseDepthBuffer{ dirty, false }
 		, limitClustersToLightsAABB{ dirty, true }
@@ -288,7 +286,7 @@ namespace castor3d
 			visitor.visit( cuT( "Split Scheme" )
 				, splitScheme
 				, names
-				, ConfigurationVisitorBase::OnEnumValueChangeT< ClusterSplitScheme >( [this]( ClusterSplitScheme oldV, ClusterSplitScheme newV )
+				, ConfigurationVisitorBase::OnEnumValueChangeT< ClusterSplitScheme >( [this]( ClusterSplitScheme, ClusterSplitScheme newV )
 					{
 						splitScheme = newV;
 					} ) );

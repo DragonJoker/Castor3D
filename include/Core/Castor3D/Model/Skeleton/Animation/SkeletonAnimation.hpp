@@ -68,7 +68,7 @@ namespace castor3d
 		 *\param[in]	parent	Le parent de l'objet déplaçable.
 		 */
 		C3D_API SkeletonAnimationObjectRPtr addObject( SkeletonNode & node
-			, SkeletonAnimationObjectRPtr parent );
+			, SkeletonAnimationObject const * parent );
 		/**
 		 *\~english
 		 *\brief		Creates and adds a moving bone.
@@ -80,7 +80,7 @@ namespace castor3d
 		 *\param[in]	parent	Le parent de l'objet déplaçable.
 		 */
 		C3D_API SkeletonAnimationObjectRPtr addObject( BoneNode & bone
-			, SkeletonAnimationObjectRPtr parent );
+			, SkeletonAnimationObject const * parent );
 		/**
 		 *\~english
 		 *\brief		adds an animated object.
@@ -92,7 +92,7 @@ namespace castor3d
 		 *\param[in]	parent	Le parent de l'objet déplaçable.
 		 */
 		C3D_API SkeletonAnimationObjectRPtr addObject( SkeletonAnimationObjectUPtr object
-			, SkeletonAnimationObjectRPtr parent );
+			, SkeletonAnimationObject const * parent );
 		/**
 		 *\~english
 		 *\brief		Tells if the animation has the animated object.

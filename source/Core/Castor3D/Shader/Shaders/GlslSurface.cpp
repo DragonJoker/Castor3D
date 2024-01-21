@@ -424,7 +424,8 @@ namespace castor3d::shader
 		SurfaceBase::fillIOType( type, flags, index );
 		type.declMember( "nodeId", ast::type::Kind::eUInt
 			, ast::type::NotArray
-			, index++ );
+			, index );
+		++index;
 		type.declMember( "vertexId", ast::type::Kind::eUInt
 			, ast::type::NotArray
 			, ( flags.enableVertexID() ? index++ : 0 )

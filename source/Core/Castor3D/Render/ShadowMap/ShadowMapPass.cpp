@@ -142,7 +142,7 @@ namespace castor3d
 	{
 		if ( !m_needsRsm )
 		{
-			auto & components = getEngine()->getSubmeshComponentsRegister();
+			auto const & components = getEngine()->getSubmeshComponentsRegister();
 			remFlags( submeshCombine, components.getNormalFlag() );
 			remFlags( submeshCombine, components.getTangentFlag() );
 			remFlags( submeshCombine, components.getBitangentFlag() );
@@ -160,11 +160,13 @@ namespace castor3d
 		, ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
 		auto index = uint32_t( GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
-		bindings.emplace_back( m_shadowMap.getScene().getLightCache().createLayoutBinding( VK_SHADER_STAGE_FRAGMENT_BIT
-			, index++ ) );
-		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+		m_shadowMap.getScene().getLightCache().addLayoutBinding( bindings
+			, VK_SHADER_STAGE_FRAGMENT_BIT
+			, index );
+		addDescriptorSetLayoutBinding( bindings
+			, index
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT ) );	// ShadowMapUbo
+			, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT );	// ShadowMapUbo
 		m_initialised = true;
 	}
 
@@ -174,7 +176,7 @@ namespace castor3d
 		, ShadowBuffer const * shadowBuffer )
 	{
 		auto index = uint32_t( GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
-		descriptorWrites.push_back( getCuller().getScene().getLightCache().getBinding( index++ ) );
-		descriptorWrites.push_back( m_shadowMapUbo.getDescriptorWrite( index++ ) );
+		getCuller().getScene().getLightCache().addBinding( descriptorWrites, index );
+		m_shadowMapUbo.addDescriptorWrite( descriptorWrites, index );
 	}
 }

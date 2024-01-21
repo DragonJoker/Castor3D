@@ -78,8 +78,7 @@ namespace castor3d
 
 	private:
 		void doRecordInto( crg::RecordContext & context, 
-			VkCommandBuffer commandBuffer
-			, uint32_t index );
+			VkCommandBuffer commandBuffer );
 
 	private:
 		RenderDevice const & m_device;

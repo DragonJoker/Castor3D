@@ -129,7 +129,7 @@ namespace castor3d
 		uint32_t stride{ 0u };
 		ashes::VkVertexInputAttributeDescriptionArray attributes;
 
-		for ( auto & attribute : m_inputs )
+		for ( auto const & attribute : m_inputs )
 		{
 			auto fmt = ptclsys::getVkFormat( attribute.m_dataType );
 			auto compSize = uint32_t( ptclsys::getComponentSize( attribute.m_dataType ) );
@@ -260,10 +260,10 @@ namespace castor3d
 
 	void ParticleSystem::setParticleType( castor::String const & value )
 	{
-		auto & factory = getScene()->getEngine()->getParticleFactory();
 		m_particleType = value;
 
-		if ( factory.isTypeRegistered( value ) )
+		if ( auto const & factory = getScene()->getEngine()->getParticleFactory();
+			factory.isTypeRegistered( value ) )
 		{
 			m_cpuImpl = factory.create( value, *this );
 		}

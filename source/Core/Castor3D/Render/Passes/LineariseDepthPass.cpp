@@ -56,13 +56,12 @@ namespace castor3d
 		static uint32_t constexpr ClipInfoUboIdx = 1u;
 		static uint32_t constexpr PrevLvlUboIdx = 1u;
 
-		static void getVertexProgram( Engine & engine
-			, sdw::TraditionalGraphicsWriter & writer )
+		static void getVertexProgram( sdw::TraditionalGraphicsWriter & writer )
 		{
 			// Shader inputs
 			auto position = writer.declInput< sdw::Vec2 >( "position", sdw::EntryPoint::eVertex, 0u );
 
-			writer.implementEntryPointT< sdw::VoidT, sdw::VoidT >( [&]( sdw::VertexIn in
+			writer.implementEntryPointT< sdw::VoidT, sdw::VoidT >( [&]( sdw::VertexIn const & in
 				, sdw::VertexOut out )
 				{
 					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
@@ -72,7 +71,7 @@ namespace castor3d
 		static ShaderPtr getLineariseProgram( Engine & engine )
 		{
 			sdw::TraditionalGraphicsWriter writer{ &engine.getShaderAllocator() };
-			getVertexProgram( engine, writer );
+			getVertexProgram( writer );
 
 			shader::Utils utils{ writer };
 
@@ -85,8 +84,8 @@ namespace castor3d
 			// Shader outputs
 			auto outColour = writer.declOutput< sdw::Float >( "outColour", sdw::EntryPoint::eFragment, 0u );
 
-			writer.implementEntryPointT< sdw::VoidT, sdw::VoidT >( [&]( sdw::FragmentIn in
-				, sdw::FragmentOut out )
+			writer.implementEntryPointT< sdw::VoidT, sdw::VoidT >( [&]( sdw::FragmentIn const & in
+				, sdw::FragmentOut const & )
 				{
 					auto ssPosition = writer.declLocale( "ssPosition"
 						, ivec2( in.fragCoord.xy() ) );
@@ -100,7 +99,7 @@ namespace castor3d
 		static ShaderPtr getMinifyProgram( Engine & engine )
 		{
 			sdw::TraditionalGraphicsWriter writer{ &engine.getShaderAllocator() };
-			getVertexProgram( engine, writer );
+			getVertexProgram( writer );
 
 			// Shader inputs
 			auto previousLevel = writer.declUniformBuffer( "PreviousLevel", PrevLvlUboIdx, 0u, ast::type::MemoryLayout::eStd140 );
@@ -111,8 +110,8 @@ namespace castor3d
 			// Shader outputs
 			auto outColour = writer.declOutput< sdw::Float >( "outColour", sdw::EntryPoint::eFragment, 0u );
 
-			writer.implementEntryPointT< sdw::VoidT, sdw::VoidT >( [&]( sdw::FragmentIn in
-				, sdw::FragmentOut out )
+			writer.implementEntryPointT< sdw::VoidT, sdw::VoidT >( [&]( sdw::FragmentIn const & in
+				, sdw::FragmentOut const & )
 				{
 					auto ssPosition = writer.declLocale( "ssPosition"
 						, ivec2( in.fragCoord.xy() ) );
@@ -176,7 +175,7 @@ namespace castor3d
 
 	LineariseDepthPass::~LineariseDepthPass()noexcept
 	{
-		for ( auto & level : m_previousLevel )
+		for ( auto const & level : m_previousLevel )
 		{
 			m_device.uboPool->putBuffer( level );
 		}
@@ -191,7 +190,7 @@ namespace castor3d
 
 	void LineariseDepthPass::update( CpuUpdater & updater )
 	{
-		auto & viewport = updater.camera->getViewport();
+		auto const & viewport = updater.camera->getViewport();
 		auto z_f = viewport.getFar();
 		auto z_n = viewport.getNear();
 		auto clipInfo = ( std::isinf( z_f )
@@ -215,10 +214,11 @@ namespace castor3d
 
 		for ( auto & layer : getResult() )
 		{
-			visitor.visit( "Linearised Depth " + castor::string::toString( index++ )
+			visitor.visit( "Linearised Depth " + castor::string::toString( index )
 				, layer
 				, m_graph.getFinalLayoutState( layer ).layout
 				, TextureFactors{}.invert( true ) );
+			++index;
 		}
 
 		visitor.visit( m_extractShader );

@@ -100,44 +100,49 @@ namespace castor3d
 		, ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
 		auto index = uint32_t( GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
-		doAddPassSpecificsBindings( flags, bindings, index );
+		doAddPassSpecificsBindings( bindings, index );
 		bindings.emplace_back( m_scene.getLightCache().createLayoutBinding( VK_SHADER_STAGE_FRAGMENT_BIT
-			, index++ ) );
+			, index ) );
+		++index;
 
 		if ( hasSsao() )
 		{
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( index
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, VK_SHADER_STAGE_ALL_GRAPHICS ) ); // c3d_mapOcclusion
+			++index;
 		}
 
-		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+		bindings.emplace_back( makeDescriptorSetLayoutBinding( index
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapBrdf
+		++index;
 
-		doAddShadowBindings( m_scene, flags, bindings, index );
-		doAddEnvBindings( flags, bindings, index );
+		doAddShadowBindings( m_scene, bindings, index );
+		doAddEnvBindings( bindings, index );
 		doAddBackgroundBindings( m_scene, bindings, index );
-		doAddGIBindings( flags, bindings, index );
+		doAddGIBindings( bindings, index );
 
 		if ( m_parent )
 		{
-			doAddClusteredLightingBindings( m_parent->getRenderTarget(), flags, bindings, index );
+			doAddClusteredLightingBindings( m_parent->getRenderTarget(), bindings, index );
 		}
 
 		if ( m_mippedColour )
 		{
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( index
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapScene
+			++index;
 		}
 
 		if ( flags.pass.hasDeferredDiffuseLightingFlag
 			&& m_deferredLightingFilter == DeferredLightingFilter::eDeferredOnly )
 		{
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( index
 				, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
 				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_imgDiffuse
+			++index;
 		}
 	}
 
@@ -147,8 +152,9 @@ namespace castor3d
 		, ShadowBuffer const * shadowBuffer )
 	{
 		auto index = uint32_t( GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
-		doAddPassSpecificsDescriptor( flags, descriptorWrites, index );
-		descriptorWrites.push_back( m_scene.getLightCache().getBinding( index++ ) );
+		doAddPassSpecificsDescriptor( descriptorWrites, index );
+		descriptorWrites.push_back( m_scene.getLightCache().getBinding( index ) );
+		++index;
 
 		if ( hasSsao() )
 		{
@@ -162,14 +168,14 @@ namespace castor3d
 			, *getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().sampler
 			, descriptorWrites
 			, index );
-		doAddShadowDescriptor( m_scene, flags, descriptorWrites, shadowMaps, shadowBuffer, index );
-		doAddEnvDescriptor( flags, descriptorWrites, index );
+		doAddShadowDescriptor( m_scene, descriptorWrites, shadowMaps, shadowBuffer, index );
+		doAddEnvDescriptor( descriptorWrites, index );
 		doAddBackgroundDescriptor( m_scene, descriptorWrites, m_targetImage, index );
-		doAddGIDescriptor( flags, descriptorWrites, index );
+		doAddGIDescriptor( descriptorWrites, index );
 
 		if ( m_parent )
 		{
-			doAddClusteredLightingDescriptor( m_parent->getRenderTarget(), flags, descriptorWrites, index );
+			doAddClusteredLightingDescriptor( m_parent->getRenderTarget(), descriptorWrites, index );
 		}
 
 		if ( m_mippedColour )
@@ -234,14 +240,16 @@ namespace castor3d
 			, uint32_t( GlobalBuffersIdx::eTexAnims )
 			, RenderPipeline::eBuffers
 			, enableTextures };
-		auto lightsIndex = index++;
+		auto lightsIndex = index;
+		++index;
 		auto c3d_mapOcclusion = writer.declCombinedImg< FImg2DR32 >( "c3d_mapOcclusion"
 			, ( hasSsao() ? index++ : 0u )
 			, RenderPipeline::eBuffers
 			, hasSsao() );
 		auto c3d_mapBrdf = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapBrdf"
-			, index++
+			, index
 			, RenderPipeline::eBuffers );
+		++index;
 		shader::Lights lights{ *getEngine()
 			, flags.lightingModelId
 			, flags.backgroundModelId
@@ -301,7 +309,8 @@ namespace castor3d
 
 		// Fragment Outputs
 		uint32_t outIndex{};
-		auto outColour( writer.declOutput< sdw::Vec4 >( "outColour", outIndex++ ) );
+		auto outColour( writer.declOutput< sdw::Vec4 >( "outColour", outIndex ) );
+		++outIndex;
 		auto outVelocity( writer.declOutput< sdw::Vec4 >( "outVelocity", ( flags.writeVelocity() ? outIndex++ : 0u ), flags.writeVelocity() ) );
 		auto outScattering( writer.declOutput< sdw::Vec4 >( "outScattering", ( m_outputScattering ? outIndex++ : 0u ), m_outputScattering ) );
 		auto outDiffuse( writer.declOutput< sdw::Vec4 >( "outDiffuse", ( m_deferredLightingFilter == DeferredLightingFilter::eDeferLighting ? outIndex++ : 0u ), m_deferredLightingFilter == DeferredLightingFilter::eDeferLighting ) );
@@ -311,8 +320,8 @@ namespace castor3d
 				, passShaders
 				, flags }
 			, sdw::FragmentOut{ writer }
-			, [&]( sdw::FragmentInT< shader::FragmentSurfaceT > in
-				, sdw::FragmentOut out )
+			, [&]( sdw::FragmentInT< shader::FragmentSurfaceT > const & in
+				, sdw::FragmentOut const & out )
 			{
 				shader::DebugOutput output{ getDebugConfig()
 					, m_groupName
@@ -363,7 +372,7 @@ namespace castor3d
 						{
 							writer.demote();
 						}
-						FI;
+						FI
 					}
 				}
 
@@ -538,7 +547,7 @@ namespace castor3d
 							outDiffuse = vec4( 0.0_f );
 						}
 					}
-					FI;
+					FI
 				}
 				else
 				{

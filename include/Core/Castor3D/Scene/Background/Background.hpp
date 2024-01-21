@@ -462,8 +462,7 @@ namespace castor3d
 		uint32_t m_passIndex{ 0u };
 		bool m_needsUpload{};
 
-		C3D_API static castor::PxBufferBaseUPtr adaptBuffer( Engine & engine
-			, castor::PxBufferBase & buffer
+		C3D_API static castor::PxBufferBaseUPtr adaptBuffer( castor::PxBufferBase const & buffer
 			, castor::String const & name
 			, bool generateMips );
 		C3D_API static castor::ImageUPtr loadImage( Engine & engine

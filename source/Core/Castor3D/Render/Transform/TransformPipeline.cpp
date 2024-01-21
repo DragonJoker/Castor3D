@@ -73,7 +73,7 @@ namespace castor3d
 			result += "Meshlet";
 		}
 
-		if ( meshletsBounds )
+		if ( hasMorphingWeights )
 		{
 			result += "MorphWeights";
 		}

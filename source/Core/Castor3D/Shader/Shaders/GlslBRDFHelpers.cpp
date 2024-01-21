@@ -27,7 +27,7 @@ namespace castor3d::shader
 		if ( !m_hammersley )
 		{
 			m_hammersley = m_writer.implementFunction< sdw::Vec2 >( "c3d_hammersley"
-				, [&]( sdw::UInt const & i
+				, [this]( sdw::UInt const & i
 					, sdw::UInt const & n )
 				{
 					m_writer.returnStmt( vec2( m_writer.cast< sdw::Float >( i ) / m_writer.cast< sdw::Float >( n )
@@ -47,7 +47,7 @@ namespace castor3d::shader
 		if ( !m_visibilitySmithGGXCorrelated )
 		{
 			m_visibilitySmithGGXCorrelated = m_writer.implementFunction< sdw::Float >( "c3d_visibilitySmithGGXCorrelated"
-				, [&]( sdw::Float const & NdotV
+				, [this]( sdw::Float const & NdotV
 					, sdw::Float const & NdotL
 					, sdw::Float const & roughness )
 				{
@@ -73,7 +73,7 @@ namespace castor3d::shader
 		if ( !m_visibilityAshikhmin )
 		{
 			m_visibilityAshikhmin = m_writer.implementFunction< sdw::Float >( "c3d_visibilityAshikhmin"
-				, [&]( sdw::Float const & NdotL
+				, [this]( sdw::Float const & NdotL
 					, sdw::Float const & NdotV )
 				{
 					m_writer.returnStmt( clamp( 1.0_f / ( 4.0_f * ( NdotL + NdotV - NdotL * NdotV ) )
@@ -94,7 +94,7 @@ namespace castor3d::shader
 		if ( !m_visibilitySheen )
 		{
 			m_visibilitySheen = m_writer.implementFunction< sdw::Float >( "c3d_visibilitySheen"
-				, [&]( sdw::Float const & NdotV
+				, [this]( sdw::Float const & NdotV
 					, sdw::Float const & NdotL
 					, sdw::Float roughness )
 				{
@@ -119,8 +119,8 @@ namespace castor3d::shader
 		if ( !m_distributionGGX )
 		{
 			m_distributionGGX = m_writer.implementFunction< sdw::Float >( "c3d_distributionGGX"
-				, [&]( sdw::Float const & NdotH
-					, sdw::Float alpha )
+				, [this]( sdw::Float const & NdotH
+					, sdw::Float const & alpha )
 				{
 					auto f = m_writer.declLocale( "f"
 						, ( NdotH * NdotH ) * ( alpha - 1.0_f ) + 1.0_f );
@@ -139,7 +139,7 @@ namespace castor3d::shader
 		if ( !m_distributionCharlie )
 		{
 			m_distributionCharlie = m_writer.implementFunction< sdw::Float >( "c3d_distributionCharlie"
-				, [&]( sdw::Float const & NdotH
+				, [this]( sdw::Float const & NdotH
 					, sdw::Float alpha )
 				{
 					alpha = max( alpha, 0.000001_f );
@@ -164,7 +164,7 @@ namespace castor3d::shader
 		if ( !m_importanceSampleGGX )
 		{
 			m_importanceSampleGGX = m_writer.implementFunction< MicrofacetDistributionSample >( "c3d_importanceSampleGGX"
-				, [&]( sdw::Vec2 const & xi
+				, [this]( sdw::Vec2 const & xi
 					, sdw::Float const & roughness )
 				{
 					auto result = m_writer.declLocale< MicrofacetDistributionSample >( "result" );
@@ -204,7 +204,7 @@ namespace castor3d::shader
 		if ( !m_importanceSampleCharlie )
 		{
 			m_importanceSampleCharlie = m_writer.implementFunction< MicrofacetDistributionSample >( "c3d_importanceSampleCharlie"
-				, [&]( sdw::Vec2 const & xi
+				, [this]( sdw::Vec2 const & xi
 					, sdw::Float const & roughness )
 				{
 					auto result = m_writer.declLocale< shader::MicrofacetDistributionSample >( "result" );
@@ -244,7 +244,7 @@ namespace castor3d::shader
 		if ( !m_getImportanceSample )
 		{
 			m_getImportanceSample = m_writer.implementFunction< sdw::Vec4 >( "c3d_getImportanceSample"
-				, [&]( MicrofacetDistributionSample const & is
+				, [this]( MicrofacetDistributionSample const & is
 					, sdw::Vec3 const & n )
 				{
 					// from spherical coordinates to cartesian coordinates
@@ -282,7 +282,7 @@ namespace castor3d::shader
 		if ( !m_radicalInverse )
 		{
 			m_radicalInverse = m_writer.implementFunction< sdw::Float >( "c3d_radicalInverse"
-				, [&]( sdw::UInt const & inBits )
+				, [this]( sdw::UInt const & inBits )
 				{
 					auto bits = m_writer.declLocale( "bits"
 						, inBits );
@@ -305,7 +305,7 @@ namespace castor3d::shader
 		if ( !m_lambdaSheenNumericHelper )
 		{
 			m_lambdaSheenNumericHelper = m_writer.implementFunction< sdw::Float >( "c3d_sheenLambdaNumericHelper"
-				, [&]( sdw::Float const & x
+				, [this]( sdw::Float const & x
 					, sdw::Float const & alphaG )
 				{
 					auto oneMinusAlphaSq = m_writer.declLocale( "oneMinusAlphaSq"
@@ -335,14 +335,14 @@ namespace castor3d::shader
 		if ( !m_lambdaSheen )
 		{
 			m_lambdaSheen = m_writer.implementFunction< sdw::Float >( "c3d_sheenLambda"
-				, [&]( sdw::Float const & cosTheta
+				, [this]( sdw::Float const & cosTheta
 					, sdw::Float const & alphaG )
 				{
 					IF( m_writer, abs( cosTheta ) < 0.5_f )
 					{
 						m_writer.returnStmt( exp( lambdaSheenNumericHelper( cosTheta, alphaG ) ) );
 					}
-					FI;
+					FI
 
 					m_writer.returnStmt( exp( 2.0_f * lambdaSheenNumericHelper( 0.5_f, alphaG )
 						- lambdaSheenNumericHelper( 1.0_f - cosTheta, alphaG ) ) );

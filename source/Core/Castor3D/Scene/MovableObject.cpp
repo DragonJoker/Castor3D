@@ -14,7 +14,6 @@ namespace castor3d
 		: castor::OwnedBy< Scene >{ scene }
 		, castor::Named( name )
 		, m_type{ type }
-		, m_sceneNode{ nullptr }
 	{
 		node.attachObject( *this );
 	}

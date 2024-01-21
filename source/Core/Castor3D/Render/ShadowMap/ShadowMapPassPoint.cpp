@@ -50,7 +50,6 @@ namespace castor3d
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
-		, uint32_t index
 		, CameraUbo const & cameraUbo
 		, SceneCuller & culler
 		, ShadowMap const & shadowMap
@@ -87,14 +86,14 @@ namespace castor3d
 		RenderNodesPass::update( updater );
 	}
 
-	void ShadowMapPassPoint::updateFrustum( castor::Matrix4x4f const & viewMatrix )
+	void ShadowMapPassPoint::updateFrustum( castor::Matrix4x4f const & viewMatrix )const
 	{
 		static_cast< FrustumCuller & >( getCuller() ).updateFrustum( m_projection, viewMatrix );
 	}
 
 	void ShadowMapPassPoint::doUpdateUbos( CpuUpdater & updater )
 	{
-		auto & light = *updater.light;
+		auto const & light = *updater.light;
 		auto farPlane = light.getFarPlane();
 		m_shadowMapUbo.update( light, updater.index );
 		m_projection = m_device.renderSystem.getPerspective( 90.0_degrees
@@ -168,7 +167,7 @@ namespace castor3d
 
 		writer.implementMainT< shader::MeshVertexT, shader::FragmentSurfaceT >( sdw::VertexInT< shader::MeshVertexT >{ writer, submeshShaders }
 			, sdw::VertexOutT< shader::FragmentSurfaceT >{ writer, submeshShaders, passShaders, flags }
-			, [&]( sdw::VertexInT< shader::MeshVertexT > in
+			, [&]( sdw::VertexInT< shader::MeshVertexT > const & in
 				, sdw::VertexOutT< shader::FragmentSurfaceT > out )
 			{
 				auto nodeId = writer.declLocale( "nodeId"
@@ -268,10 +267,12 @@ namespace castor3d
 			, RenderPipeline::eBuffers
 			, enableTextures };
 		auto index = uint32_t( castor3d::GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
-		auto lightsIndex = index++;
+		auto lightsIndex = index;
+		++index;
 		C3D_ShadowMap( writer
 			, index++
 			, RenderPipeline::eBuffers );
+		++index;
 		shader::Lights lights{ *getEngine()
 			, flags.lightingModelId
 			, flags.backgroundModelId
@@ -298,7 +299,7 @@ namespace castor3d
 		
 		writer.implementMainT< shader::FragmentSurfaceT, shader::ShadowsOutputT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer, submeshShaders, passShaders, flags }
 			, sdw::FragmentOutT< shader::ShadowsOutputT >{ writer, needsVsm, needsRsm }
-			, [&]( sdw::FragmentInT< shader::FragmentSurfaceT > in
+			, [&]( sdw::FragmentInT< shader::FragmentSurfaceT > const & in
 				, sdw::FragmentOutT< shader::ShadowsOutputT > out )
 			{
 				auto modelData = writer.declLocale( "modelData"

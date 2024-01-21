@@ -153,7 +153,7 @@ namespace castor3d
 		vis.visit( cuT( "Mode" )
 			, m_value
 			, names
-			, ConfigurationVisitorBase::OnEnumValueChangeT< ParallaxOcclusionMode >( [this]( ParallaxOcclusionMode oldV, ParallaxOcclusionMode newV )
+			, ConfigurationVisitorBase::OnEnumValueChangeT< ParallaxOcclusionMode >( [this]( ParallaxOcclusionMode, ParallaxOcclusionMode newV )
 			{
 				m_value = newV;
 			} ) );

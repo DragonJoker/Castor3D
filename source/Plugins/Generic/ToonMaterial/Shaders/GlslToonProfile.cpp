@@ -40,8 +40,7 @@ namespace toon::shader
 
 	castor3d::ShaderBufferUPtr ToonProfiles::create( castor3d::RenderDevice const & device )
 	{
-		return castor::makeUnique< castor3d::ShaderBuffer >( *device.renderSystem.getEngine()
-			, device
+		return castor::makeUnique< castor3d::ShaderBuffer >( device
 			, castor3d::MaxMaterialsCount * sizeof( ToonProfileData )
 			, cuT( "ToonProfilesBuffer" ) );
 	}

@@ -44,9 +44,8 @@ namespace castor3d
 			, [&scene]( ElementT & element )
 			{
 				auto & nodes = scene.getRenderNodes();
-				auto material = element.getMaterial();
 
-				for ( auto & pass : *material )
+				for ( auto const & pass : *element.getMaterial() )
 				{
 					nodes.createNode( *pass
 						, element );

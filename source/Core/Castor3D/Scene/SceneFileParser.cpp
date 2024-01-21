@@ -4,8 +4,6 @@
 #include "Castor3D/Gui/ControlsManager.hpp"
 #include "Castor3D/Scene/SceneFileParser_Parsers.hpp"
 
-#define C3D_PrintParsers 0
-
 CU_ImplementSmartPtr( castor3d, SceneFileParser )
 
 namespace castor3d
@@ -14,6 +12,8 @@ namespace castor3d
 
 	namespace scnfile
 	{
+		static bool constexpr C3D_PrintParsers = false;
+
 		static RootContext createContext( Engine & engine )
 		{
 			RootContext result{};
@@ -31,6 +31,7 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserDefaultEnd )
 	{
+		// Nothing else to do than push the block
 	}
 	CU_EndAttributePop()
 
@@ -46,84 +47,85 @@ namespace castor3d
 		getData().gui->root = &getData();
 		getData().progress = progress;
 
-		for ( auto const & it : getEngine()->getAdditionalParsers() )
+		for ( auto const & [name, parsers] : getEngine()->getAdditionalParsers() )
 		{
-			registerParsers( it.first, it.second );
+			registerParsers( name, parsers );
 		}
 
 		registerParsers( "c3d.scene", createSceneFileParsers( engine ) );
 
-#if C3D_PrintParsers
-		std::set< castor::String > sections;
-		std::set< castor::String > parsers;
-		std::set< castor::String > keywords;
-		keywords.insert( "true" );
-		keywords.insert( "false" );
-		keywords.insert( "screen_size" );
-
-		for ( uint32_t i = 0u; i < uint32_t( castor::PixelFormat::eCount ); ++i )
+		if constexpr ( scnfile::C3D_PrintParsers )
 		{
-			keywords.insert( castor::getFormatName( castor::PixelFormat( i ) ) );
-		}
+			castor::Set< castor::String > sections;
+			castor::Set< castor::String > parsers;
+			castor::Set< castor::String > keywords;
+			keywords.emplace( "true" );
+			keywords.emplace( "false" );
+			keywords.emplace( "screen_size" );
 
-		for ( auto & addParserIt : getAdditionalParsers() )
-		{
-			for ( auto & [_, section] : addParserIt.second.sections )
+			for ( uint32_t i = 0u; i < uint32_t( castor::PixelFormat::eCount ); ++i )
 			{
-				sections.insert( section );
+				keywords.insert( castor::getFormatName( castor::PixelFormat( i ) ) );
 			}
 
-			for ( auto & [name, sectionsParsers] : addParserIt.second.parsers )
+			for ( auto & [_, addParsers] : getAdditionalParsers() )
 			{
-				parsers.insert( name );
-
-				for ( auto & [_, parser] : sectionsParsers )
+				for ( auto & [a, section] : addParsers.sections )
 				{
-					for ( auto & param : parser.params )
+					sections.insert( section );
+				}
+
+				for ( auto & [name, sectionsParsers] : addParsers.parsers )
+				{
+					parsers.insert( name );
+
+					for ( auto & [b, parser] : sectionsParsers )
 					{
-						if ( param->getType() == castor::ParameterType::eCheckedText )
+						for ( auto & param : parser.params )
 						{
-							for ( auto & [keyword, id] : static_cast< castor::ParserParameter< castor::ParameterType::eCheckedText > const & >( *param ).m_values )
+							if ( param->getType() == castor::ParameterType::eCheckedText )
 							{
-								keywords.insert( keyword );
+								for ( auto & [keyword, id] : static_cast< castor::ParserParameter< castor::ParameterType::eCheckedText > const & >( *param ).m_values )
+								{
+									keywords.insert( keyword );
+								}
 							}
-						}
-						else if ( param->getType() == castor::ParameterType::eBitwiseOred32BitsCheckedText )
-						{
-							for ( auto & [keyword, id] : static_cast< castor::ParserParameter< castor::ParameterType::eBitwiseOred32BitsCheckedText > const & >( *param ).m_values )
+							else if ( param->getType() == castor::ParameterType::eBitwiseOred32BitsCheckedText )
 							{
-								keywords.insert( keyword );
+								for ( auto & [keyword, id] : static_cast< castor::ParserParameter< castor::ParameterType::eBitwiseOred32BitsCheckedText > const & >( *param ).m_values )
+								{
+									keywords.insert( keyword );
+								}
 							}
-						}
-						else if ( param->getType() == castor::ParameterType::eBitwiseOred64BitsCheckedText )
-						{
-							for ( auto & [keyword, id] : static_cast< castor::ParserParameter< castor::ParameterType::eBitwiseOred64BitsCheckedText > const & >( *param ).m_values )
+							else if ( param->getType() == castor::ParameterType::eBitwiseOred64BitsCheckedText )
 							{
-								keywords.insert( keyword );
+								for ( auto & [keyword, id] : static_cast< castor::ParserParameter< castor::ParameterType::eBitwiseOred64BitsCheckedText > const & >( *param ).m_values )
+								{
+									keywords.insert( keyword );
+								}
 							}
 						}
 					}
 				}
 			}
-		}
 
-		log::debug << "Registered sections\n   ";
-		for ( auto & section : sections )
-		{
-			log::debug << " " << section;
+			log::debug << "Registered sections\n   ";
+			for ( auto & section : sections )
+			{
+				log::debug << " " << section;
+			}
+			log::debug << std::endl << "Registered parsers\n   ";
+			for ( auto & parser : parsers )
+			{
+				log::debug << " " << parser;
+			}
+			log::debug << std::endl << "Registered keywords\n   ";
+			for ( auto & keyword : keywords )
+			{
+				log::debug << " " << keyword;
+			}
+			log::debug << std::endl;
 		}
-		log::debug << std::endl << "Registered parsers\n   ";
-		for ( auto & parser : parsers )
-		{
-			log::debug << " " << parser;
-		}
-		log::debug << std::endl << "Registered keywords\n   ";
-		for ( auto & keyword : keywords )
-		{
-			log::debug << " " << keyword;
-		}
-		log::debug << std::endl;
-#endif
 	}
 
 	castor::FileParserContextUPtr SceneFileParser::initialiseParser( castor::Path const & path )
@@ -137,7 +139,7 @@ namespace castor3d
 		auto & context = getData();
 		castor::File::listDirectoryFiles( path.getPath(), context.files, true );
 
-		for ( auto fileName : context.files )
+		for ( auto const & fileName : context.files )
 		{
 			if ( fileName.getExtension() == "csna" )
 			{
@@ -165,18 +167,18 @@ namespace castor3d
 	{
 		castor::String result;
 		static const castor::Map< uint32_t, castor::String > baseSections{ registerSceneFileSections() };
-		auto it = baseSections.find( section );
 
-		if ( it != baseSections.end() )
+		if ( auto it = baseSections.find( section );
+			it != baseSections.end() )
 		{
 			return it->second;
 		}
 
-		for ( auto const & parsers : getEngine()->getAdditionalParsers() )
+		for ( auto const & [_, parsers] : getEngine()->getAdditionalParsers() )
 		{
-			auto sectionIt = parsers.second.sections.find( section );
+			auto sectionIt = parsers.sections.find( section );
 
-			if ( sectionIt != parsers.second.sections.end() )
+			if ( sectionIt != parsers.sections.end() )
 			{
 				return sectionIt->second;
 			}

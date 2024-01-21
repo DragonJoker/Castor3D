@@ -44,13 +44,12 @@ namespace castor3d
 		using LockType = std::unique_lock< AnimatedObjectGroupCache const >;
 		LockType lock{ castor::makeUniqueLock( cache ) };
 
-		for ( auto & group : cache )
+		for ( auto const & [_, group] : cache )
 		{
 			if ( !result )
 			{
-				auto it = group.second->getObjects().find( name );
-
-				if ( it != group.second->getObjects().end() )
+				if ( auto it = group->getObjects().find( name );
+					it != group->getObjects().end() )
 				{
 					result = it->second.get();
 				}
@@ -101,7 +100,7 @@ namespace castor3d
 		return isVisible( camera.getFrustum(), node );
 	}
 
-	bool isVisible( Frustum const & frustum
+	bool isVisible( Frustum const &
 		, BillboardRenderNode const & node )
 	{
 		auto sceneNode = node.instance.getNode();
@@ -219,33 +218,30 @@ namespace castor3d
 #endif
 		m_anyChanged = true;
 		m_culledChanged = true;
-		auto & submeshNodes = getScene().getRenderNodes().getSubmeshNodes();
 
-		for ( auto & nodeIt : submeshNodes )
+		for ( auto const & [_, node] : getScene().getRenderNodes().getSubmeshNodes() )
 		{
 			if ( m_isStatic == std::nullopt
-				|| nodeIt.second->instance.getParent()->isStatic() == m_isStatic )
+				|| node->instance.getParent()->isStatic() == m_isStatic )
 			{
-				m_culledSubmeshes.emplace_back( std::make_unique< CulledNodeT< SubmeshRenderNode > >( nodeIt.second.get()
-					, nodeIt.second->getInstanceCount()
-					, isSubmeshVisible( *nodeIt.second ) ) );
+				m_culledSubmeshes.emplace_back( std::make_unique< CulledNodeT< SubmeshRenderNode > >( node.get()
+					, node->getInstanceCount()
+					, isSubmeshVisible( *node ) ) );
 			}
 
 			++m_total.objectCount;
-			m_total.faceCount += nodeIt.second->data.getFaceCount();
-			m_total.vertexCount += nodeIt.second->data.getPointsCount();
+			m_total.faceCount += node->data.getFaceCount();
+			m_total.vertexCount += node->data.getPointsCount();
 		}
 
-		auto & billboardNodes = getScene().getRenderNodes().getBillboardNodes();
-
-		for ( auto & nodeIt : billboardNodes )
+		for ( auto & [_, node] : getScene().getRenderNodes().getBillboardNodes() )
 		{
 			if ( m_isStatic == std::nullopt
-				|| nodeIt.second->instance.getNode()->isStatic() == m_isStatic )
+				|| node->instance.getNode()->isStatic() == m_isStatic )
 			{
-				m_culledBillboards.emplace_back( std::make_unique< CulledNodeT< BillboardRenderNode > >( nodeIt.second.get()
-					, nodeIt.second->getInstanceCount()
-					, isBillboardVisible( *nodeIt.second ) ) );
+				m_culledBillboards.emplace_back( std::make_unique< CulledNodeT< BillboardRenderNode > >( node.get()
+					, node->getInstanceCount()
+					, isBillboardVisible( *node ) ) );
 			}
 
 			++m_total.billboardCount;
@@ -267,7 +263,7 @@ namespace castor3d
 #if C3D_DebugTimers
 			auto blockCompute( m_timerCompute->start() );
 #endif
-			for ( auto & node : m_culledSubmeshes )
+			for ( auto const & node : m_culledSubmeshes )
 			{
 				auto visible = isSubmeshVisible( *node->node );
 				auto count = node->node->getInstanceCount();
@@ -282,7 +278,7 @@ namespace castor3d
 				}
 			}
 
-			for ( auto & node : m_culledBillboards )
+			for ( auto const & node : m_culledBillboards )
 			{
 				auto visible = isBillboardVisible( *node->node );
 				auto count = node->node->getInstanceCount();
@@ -299,7 +295,7 @@ namespace castor3d
 		}
 	}
 
-	void SceneCuller::doUpdateCulled( CpuUpdater::DirtyObjects & sceneObjs )
+	void SceneCuller::doUpdateCulled( CpuUpdater::DirtyObjects const & sceneObjs )
 	{
 		std::vector< SubmeshRenderNode const * > dirtySubmeshes;
 		std::vector< BillboardRenderNode const * > dirtyBillboards;
@@ -317,9 +313,9 @@ namespace castor3d
 		}
 	}
 
-	void SceneCuller::doMarkDirty( CpuUpdater::DirtyObjects & sceneObjs
+	void SceneCuller::doMarkDirty( CpuUpdater::DirtyObjects const & sceneObjs
 		, std::vector< SubmeshRenderNode const * > & dirtySubmeshes
-		, std::vector< BillboardRenderNode const * > & dirtyBillboards )
+		, std::vector< BillboardRenderNode const * > & dirtyBillboards )const
 	{
 #if C3D_DebugTimers
 		auto blockDirty( m_timerDirty->start() );
@@ -350,7 +346,7 @@ namespace castor3d
 
 			if ( it != m_culledSubmeshes.end() )
 			{
-				auto & culled = *it;
+				auto const & culled = *it;
 
 				if ( culled->visible != visible
 					|| culled->instanceCount != count )
@@ -385,7 +381,7 @@ namespace castor3d
 
 			if ( it != m_culledBillboards.end() )
 			{
-				auto & culled = *it;
+				auto const & culled = *it;
 
 				if ( culled->visible != visible
 					|| culled->instanceCount != count )
@@ -439,7 +435,7 @@ namespace castor3d
 		{
 			if ( auto material = object.getMaterial() )
 			{
-				for ( auto & pass : *material )
+				for ( auto const & pass : *material )
 				{
 					if ( auto node = object.getRenderNode( *pass ) )
 					{

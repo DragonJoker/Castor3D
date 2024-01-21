@@ -60,11 +60,10 @@ namespace castor3d
 
 				if ( result->empty() )
 				{
-					uint32_t index = 0u;
 					result->declMember( "cellIndex"
 						, sdw::type::Kind::eVec3I
 						, sdw::type::NotArray
-						, index++ );
+						, 0u );
 				}
 
 				return result;
@@ -153,7 +152,7 @@ namespace castor3d
 
 			// no normalization
 			auto evalSH_direct = writer.implementFunction< sdw::Vec4 >( "evalSH_direct"
-				, [&]( sdw::Vec3 direction )
+				, [&]( sdw::Vec3 const & direction )
 				{
 					writer.returnStmt( vec4( SH_C0
 						, -SH_C1 * direction.y()
@@ -164,7 +163,7 @@ namespace castor3d
 
 			// no normalization
 			auto evalCosineLobeToDir_direct = writer.implementFunction< sdw::Vec4 >( "evalCosineLobeToDir_direct"
-				, [&]( sdw::Vec3 direction )
+				, [&]( sdw::Vec3 const & direction )
 				{
 					writer.returnStmt( vec4( SH_cosLobe_C0
 						, -SH_cosLobe_C1 * direction.y()
@@ -175,8 +174,8 @@ namespace castor3d
 
 			//Get side direction
 			auto getEvalSideDirection = writer.implementFunction< sdw::Vec3 >( "getEvalSideDirection"
-				, [&]( sdw::Int index
-					, sdw::IVec3 orientation )
+				, [&]( sdw::Int const & index
+					, sdw::IVec3 const & orientation )
 				{
 					const float smallComponent = float( 1.0f / sqrt( 5.0f ) );
 					const float bigComponent = float( 2.0f / sqrt( 5.0f ) );
@@ -191,8 +190,8 @@ namespace castor3d
 				, sdw::InIVec3{ writer, "orientation" } );
 
 			auto getReprojSideDirection = writer.implementFunction< sdw::Vec3 >( "getReprojSideDirection"
-				, [&]( sdw::Int index
-					, sdw::IVec3 orientation )
+				, [&]( sdw::Int const & index
+					, sdw::IVec3 const & orientation )
 				{
 					writer.returnStmt( vec3( orientation.x() * cellSides[index].x()
 						, orientation.y() * cellSides[index].y()
@@ -204,7 +203,7 @@ namespace castor3d
 			float occlusionAmplifier = 1.0f;
 
 			auto propagate = writer.implementFunction< sdw::Void >( "propagate"
-				, [&]( sdw::IVec3 cellIndex
+				, [&]( sdw::IVec3 const & cellIndex
 					, sdw::Vec4 shR
 					, sdw::Vec4 shG
 					, sdw::Vec4 shB )
@@ -302,8 +301,8 @@ namespace castor3d
 					out.vtx.position = vec4( screenPos, 0.0, 1.0 );
 				} );
 
-			writer.implementEntryPointT< 1u, sdw::PointListT< lpvprop::SurfaceT >, sdw::PointStreamT< lpvprop::SurfaceT > >( [&]( sdw::GeometryIn in
-				, sdw::PointListT< lpvprop::SurfaceT > list
+			writer.implementEntryPointT< 1u, sdw::PointListT< lpvprop::SurfaceT >, sdw::PointStreamT< lpvprop::SurfaceT > >( [&]( sdw::GeometryIn const & in
+				, sdw::PointListT< lpvprop::SurfaceT > const & list
 				, sdw::PointStreamT< lpvprop::SurfaceT > out )
 				{
 					out.vtx.position = list[0].vtx.position;
@@ -316,8 +315,8 @@ namespace castor3d
 					out.restartStrip();
 				} );
 
-			writer.implementEntryPointT< lpvprop::SurfaceT, sdw::VoidT >( [&]( sdw::FragmentInT< lpvprop::SurfaceT > in
-				, sdw::FragmentOut out )
+			writer.implementEntryPointT< lpvprop::SurfaceT, sdw::VoidT >( [&]( sdw::FragmentInT< lpvprop::SurfaceT > const & in
+				, sdw::FragmentOut const & out )
 				{
 					auto shR = writer.declLocale( "shR"
 						, vec4( 0.0_f ) );
@@ -341,7 +340,6 @@ namespace castor3d
 		}
 
 		static GpuBufferOffsetT< castor::Point3f > createVertexBuffer( RenderDevice const & device
-			, castor::String const & name
 			, uint32_t gridSize )
 		{
 			auto bufferSize = gridSize * gridSize * gridSize;
@@ -491,7 +489,7 @@ namespace castor3d
 				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doSubRecordInto( context, cb, i ); } }
 			, { gridSize, gridSize } }
 		, m_gridSize{ gridSize }
-		, m_vertexBuffer{ lpvprop::createVertexBuffer( device, getName(), m_gridSize ) }
+		, m_vertexBuffer{ lpvprop::createVertexBuffer( device, m_gridSize ) }
 		, m_shader{ getName(), lpvprop::getProgram( device.renderSystem, occlusion ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
 		, m_holder{ pass

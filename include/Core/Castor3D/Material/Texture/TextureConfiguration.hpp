@@ -101,6 +101,7 @@ namespace castor3d
 	/**@}*/
 	struct TextureConfiguration
 	{
+		TextureConfiguration() = default;
 		/**
 		*\~english
 		*\brief
@@ -109,7 +110,7 @@ namespace castor3d
 		*\brief
 		*	Les configurations par composante RGBA.
 		*/
-		TextureFlagConfigurations components;
+		TextureFlagConfigurations components{};
 		/**
 		*\~english
 		*name
@@ -134,8 +135,8 @@ namespace castor3d
 		bool normalDirectX{};
 		bool normal2Channels{};
 		bool needsYInversion{};
-		TextureTransform transform;
-		castor::Point4ui tileSet;
+		TextureTransform transform{};
+		castor::Point4ui tileSet{};
 		uint32_t tiles{ 1u };
 		TextureSpaces textureSpace{};
 		/**@}*/

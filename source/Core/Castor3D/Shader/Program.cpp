@@ -12,11 +12,10 @@ namespace castor3d
 	{
 		template< typename CharType, typename PrefixType >
 		inline std::basic_ostream< CharType > & operator<<( std::basic_ostream< CharType > & stream
-			, castor::format::BasePrefixer< CharType, PrefixType > const & prefix )
+			, castor::format::BasePrefixer< CharType, PrefixType > const & )
 		{
-			auto * sbuf = dynamic_cast< castor::format::BasicPrefixBuffer< castor::format::BasePrefixer< CharType, PrefixType >, CharType > * >( stream.rdbuf() );
-
-			if ( !sbuf )
+			if ( auto * sbuf = dynamic_cast< castor::format::BasicPrefixBuffer< castor::format::BasePrefixer< CharType, PrefixType >, CharType > * >( stream.rdbuf() );
+				!sbuf )
 			{
 				castor::format::installPrefixBuffer< PrefixType >( stream );
 				stream.register_callback( castor::format::callback< PrefixType, CharType >, 0 );
@@ -127,7 +126,7 @@ namespace castor3d
 		shdprog::eraseStage( target, m_states );
 		auto & renderSystem = *getRenderSystem();
 		auto & device = renderSystem.getRenderDevice();
-		auto & spirvShader = m_module.compiled.emplace( getShaderStage( getOwner()->getRenderDevice(), target )
+		auto const & spirvShader = m_module.compiled.try_emplace( getShaderStage( getOwner()->getRenderDevice(), target )
 			, renderSystem.compileShader( target, getName(), source ) ).first->second;
 		m_states.push_back( makeShaderState( *device, target, spirvShader, getName() + shdprog::getName( target ) ) );
 	}
@@ -139,7 +138,7 @@ namespace castor3d
 		auto & renderSystem = *getRenderSystem();
 		auto & device = renderSystem.getRenderDevice();
 		ast::EntryPointConfig entryPoint{ getShaderStage( getOwner()->getRenderDevice(), target ), "main" };
-		auto & spirvShader = m_module.compiled.emplace( getShaderStage( getOwner()->getRenderDevice(), target )
+		auto const & spirvShader = m_module.compiled.try_emplace( getShaderStage( getOwner()->getRenderDevice(), target )
 			, renderSystem.compileShader( target, getName(), *shader, entryPoint ) ).first->second;
 		m_states.push_back( makeShaderState( *device, target, spirvShader, getName() + shdprog::getName( target ) ) );
 	}
@@ -188,20 +187,20 @@ namespace castor3d
 
 	ashes::PipelineShaderStageCreateInfoArray makeProgramStates( RenderDevice const & device
 		, ProgramModule & programModule
-		, ashes::Optional< ashes::SpecializationInfo > specialization )
+		, ashes::Optional< ashes::SpecializationInfo > const & specialization )
 	{
 		ashes::PipelineShaderStageCreateInfoArray result;
 		{
 			auto entryPoints = ast::listEntryPoints( *programModule.shader->getStatements() );
 
-			for ( auto entryPoint : entryPoints )
+			for ( auto const & entryPoint : entryPoints )
 			{
 				result.push_back( makeShaderState( *device
 					, getVkShaderStage( entryPoint.stage )
 					, compileShader( device, programModule, entryPoint )
 					, programModule.name
 					, "main"
-					, std::move( specialization ) ) );
+					, specialization ) );
 			}
 		}
 

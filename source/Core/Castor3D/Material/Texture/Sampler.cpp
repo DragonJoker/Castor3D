@@ -172,7 +172,7 @@ namespace castor3d
 	
 	Sampler::Sampler( castor::String const & name
 		, Engine & engine
-		, ashes::SamplerCreateInfo createInfo )
+		, ashes::SamplerCreateInfo const & createInfo )
 		: castor::Named{ name }
 		, castor::OwnedBy< Engine >{ engine }
 		, m_info{ static_cast< VkSamplerCreateInfo const & >( createInfo ) }

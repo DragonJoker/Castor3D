@@ -21,11 +21,10 @@ namespace castor3d
 		: castor::Named{ name }
 		, Animable{ *scene.getEngine() }
 		, m_scene{ &scene }
-		, m_modified{ false }
 	{
 	}
 
-	Mesh::~Mesh()
+	Mesh::~Mesh()noexcept
 	{
 		CU_Assert( m_submeshes.empty(), "Did you forget to call Mesh::cleanup ?" );
 	}
@@ -86,7 +85,7 @@ namespace castor3d
 
 	void Mesh::update( CpuUpdater & updater )
 	{
-		for ( auto & submesh : m_submeshes )
+		for ( auto const & submesh : m_submeshes )
 		{
 			submesh->update( updater );
 		}
@@ -109,7 +108,7 @@ namespace castor3d
 
 	void Mesh::computeContainers()
 	{
-		for ( auto & submesh : m_submeshes )
+		for ( auto const & submesh : m_submeshes )
 		{
 			submesh->computeContainers();
 		}
@@ -121,7 +120,7 @@ namespace castor3d
 	{
 		uint32_t nbFaces = 0;
 
-		for ( auto & submesh : m_submeshes )
+		for ( auto const & submesh : m_submeshes )
 		{
 			nbFaces += submesh->getFaceCount();
 		}
@@ -133,7 +132,7 @@ namespace castor3d
 	{
 		uint32_t nbFaces = 0;
 
-		for ( auto & submesh : m_submeshes )
+		for ( auto const & submesh : m_submeshes )
 		{
 			nbFaces += submesh->getPointsCount();
 		}
@@ -170,11 +169,11 @@ namespace castor3d
 		return result;
 	}
 
-	void Mesh::deleteSubmesh( SubmeshRPtr submesh )
+	void Mesh::deleteSubmesh( Submesh const * submesh )
 	{
 		auto it = std::find_if( m_submeshes.begin()
 			, m_submeshes.end()
-			, [&submesh]( SubmeshUPtr & lookup )
+			, [&submesh]( SubmeshUPtr const & lookup )
 			{
 				return submesh == lookup.get();
 			} );
@@ -187,7 +186,7 @@ namespace castor3d
 
 	void Mesh::computeNormals( bool reverted )
 	{
-		for ( auto & submesh : m_submeshes )
+		for ( auto const & submesh : m_submeshes )
 		{
 			submesh->computeNormals( reverted );
 		}

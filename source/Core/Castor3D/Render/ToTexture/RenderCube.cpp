@@ -34,7 +34,7 @@ namespace castor3d
 		static uint32_t constexpr MtxUboIdx = 0u;
 		static uint32_t constexpr InputImgIdx = 1u;
 
-		static SamplerObs doCreateSampler( RenderSystem & renderSystem
+		static SamplerObs doCreateSampler( RenderSystem const & renderSystem
 			, bool nearest )
 		{
 			castor::String const name = nearest
@@ -63,10 +63,7 @@ namespace castor3d
 			return result;
 		}
 
-		static UniformBufferUPtrT< castor::Matrix4x4f > doCreateMatrixUbo( RenderDevice const & device
-			, ashes::Queue const & queue
-			, ashes::CommandPool const & pool
-			, bool srcIsCube )
+		static UniformBufferUPtrT< castor::Matrix4x4f > doCreateMatrixUbo( RenderDevice const & device )
 		{
 			static castor::Matrix4x4f const projection = device.renderSystem.getPerspective( 90.0_degrees, 1.0f, 0.1f, 10.0f );
 
@@ -164,14 +161,12 @@ namespace castor3d
 	}
 
 	void RenderCube::createPipelines( VkExtent2D const & size
-		, castor::Position const & position
 		, ashes::PipelineShaderStageCreateInfoArray const & program
 		, ashes::ImageView const & view
 		, ashes::RenderPass const & renderPass
 		, ashes::VkPushConstantRangeArray const & pushRanges )
 	{
 		createPipelines( size
-			, position
 			, program
 			, view
 			, renderPass
@@ -180,7 +175,6 @@ namespace castor3d
 	}
 
 	void RenderCube::createPipelines( VkExtent2D const & size
-		, castor::Position const & position
 		, ashes::PipelineShaderStageCreateInfoArray const & program
 		, ashes::ImageView const & view
 		, ashes::RenderPass const & renderPass
@@ -189,10 +183,7 @@ namespace castor3d
 	{
 		auto queueData = m_device.graphicsData();
 		m_sampler->initialise( m_device );
-		m_matrixUbo = rendcube::doCreateMatrixUbo( m_device
-			, *queueData->queue
-			, *queueData->commandPool
-			, view->viewType == VK_IMAGE_VIEW_TYPE_CUBE );
+		m_matrixUbo = rendcube::doCreateMatrixUbo( m_device );
 		m_vertexBuffer = rendcube::doCreateVertexBuffer( m_device
 			, *queueData->queue
 			, *queueData->commandPool );
@@ -229,7 +220,7 @@ namespace castor3d
 					ashes::PipelineViewportStateCreateInfo{ 0u, 1u, { VkViewport{ 0.0f, 0.0f, float( size.width ), float( size.height ), 0.0f, 1.0f } }, 1u, { VkRect2D{ 0, 0, size.width, size.height } } },
 					ashes::PipelineRasterizationStateCreateInfo{ 0u, false, false, VK_POLYGON_MODE_FILL, VK_CULL_MODE_NONE },
 					ashes::PipelineMultisampleStateCreateInfo{},
-					ashes::PipelineDepthStencilStateCreateInfo{ 0u, false, false },
+					dsState,
 					ashes::PipelineColorBlendStateCreateInfo{},
 					ashes::nullopt,
 					*m_pipelineLayout,
@@ -249,7 +240,7 @@ namespace castor3d
 		}
 	}
 
-	void RenderCube::cleanup()
+	void RenderCube::cleanup()noexcept
 	{
 		m_commandBuffer.reset();
 

@@ -47,10 +47,9 @@ namespace castor3d
 		C3D_API GpuBufferBase( RenderSystem const & renderSystem
 			, VkBufferUsageFlags usage
 			, VkMemoryPropertyFlags memoryFlags
-			, castor::String debugName
+			, castor::String const & debugName
 			, ashes::QueueShare sharingMode
-			, VkDeviceSize allocatedSize
-			, bool smallData = false );
+			, VkDeviceSize allocatedSize );
 		/**
 		 *\~english
 		 *\brief		Uploads all ready memory ranges to VRAM.
@@ -105,7 +104,7 @@ namespace castor3d
 		*\return
 		*	Le tampon interne.
 		*/
-		bool hasBuffer()const
+		bool hasBuffer()const noexcept
 		{
 			return m_buffer != nullptr;
 		}
@@ -117,7 +116,7 @@ namespace castor3d
 		*\return
 		*	Le tampon interne.
 		*/
-		ashes::Buffer< uint8_t > const & getBuffer()const
+		ashes::Buffer< uint8_t > const & getBuffer()const noexcept
 		{
 			return *m_buffer;
 		}
@@ -129,7 +128,7 @@ namespace castor3d
 		*\return
 		*	Le tampon interne.
 		*/
-		ashes::Buffer< uint8_t > & getBuffer()
+		ashes::Buffer< uint8_t > & getBuffer()noexcept
 		{
 			return *m_buffer;
 		}
@@ -146,7 +145,7 @@ namespace castor3d
 		*	L'offset de la zone mémoire.
 		*/
 		template< typename DataT >
-		DataT const & getData( VkDeviceSize offset )const
+		DataT const & getData( VkDeviceSize offset )const noexcept
 		{
 			using DataCPtr = DataT const *;
 			return *DataCPtr( m_data.data() + offset );
@@ -164,7 +163,7 @@ namespace castor3d
 		*	L'offset de la zone mémoire.
 		*/
 		template< typename DataT >
-		DataT & getData( VkDeviceSize offset )
+		DataT & getData( VkDeviceSize offset )noexcept
 		{
 			using DataPtr = DataT *;
 			return *DataPtr( m_data.data() + offset );
@@ -177,7 +176,7 @@ namespace castor3d
 		*\return
 		*	Les données.
 		*/
-		castor::ByteArrayView const & getDatas()const
+		castor::ByteArrayView const & getDatas()const noexcept
 		{
 			return m_data;
 		}
@@ -189,7 +188,7 @@ namespace castor3d
 		*\return
 		*	Les données.
 		*/
-		castor::ByteArrayView & getDatas()
+		castor::ByteArrayView & getDatas()noexcept
 		{
 			return m_data;
 		}
@@ -205,10 +204,22 @@ namespace castor3d
 		castor::ByteArrayView m_data;
 		struct MemoryRange
 		{
-			VkDeviceSize offset;
-			VkDeviceSize size;
-			VkAccessFlags dstAccessFlags;
-			VkPipelineStageFlags dstPipelineFlags;
+			MemoryRange() = default;
+			MemoryRange( VkDeviceSize offset
+				, VkDeviceSize size
+				, VkAccessFlags dstAccessFlags
+				, VkPipelineStageFlags dstPipelineFlags )
+				: offset{ offset }
+				, size{ size }
+				, dstAccessFlags{ dstAccessFlags }
+				, dstPipelineFlags{ dstPipelineFlags }
+			{
+			}
+
+			VkDeviceSize offset{};
+			VkDeviceSize size{};
+			VkAccessFlags dstAccessFlags{};
+			VkPipelineStageFlags dstPipelineFlags{};
 		};
 		using MemoryRangeArray = std::vector< MemoryRange >;
 		std::unordered_map< size_t, MemoryRangeArray > m_ranges;
@@ -244,10 +255,9 @@ namespace castor3d
 		GpuBufferT( RenderSystem const & renderSystem
 			, VkBufferUsageFlags usage
 			, VkMemoryPropertyFlags memoryFlags
-			, castor::String debugName
+			, castor::String const & debugName
 			, ashes::QueueShare sharingMode
-			, AllocatorT allocator
-			, bool smallData = false );
+			, AllocatorT allocator );
 		/**
 		 *\~english
 		 *\param[in]	size	The requested memory size.
@@ -256,7 +266,7 @@ namespace castor3d
 		 *\param[in]	size	La taille requise pour la mémoire.
 		 *\return		\p true s'il y a assez de mémoire restante pour la taille donnée.
 		 */
-		bool hasAvailable( VkDeviceSize size )const;
+		bool hasAvailable( VkDeviceSize size )const noexcept;
 		/**
 		 *\~english
 		 *\brief		Allocates a memory chunk for a CPU buffer.
@@ -276,14 +286,14 @@ namespace castor3d
 		 *\brief		Désalloue de la mémoire.
 		 *\param[in]	mem	La zone mémoire.
 		 */
-		void deallocate( MemChunk const & mem );
+		void deallocate( MemChunk const & mem )noexcept;
 		/**
 		 *\~english
 		 *\return		The element aligned size.
 		 *\~french
 		 *\return		La taille  alignée d'un élément.
 		 */
-		size_t getMinAlignment()const;
+		size_t getMinAlignment()const noexcept;
 
 	private:
 		AllocatorT m_allocator;
@@ -316,7 +326,7 @@ namespace castor3d
 		GpuBaseBufferT( RenderDevice const & device
 			, VkBufferUsageFlags usage
 			, VkMemoryPropertyFlags memoryFlags
-			, castor::String debugName
+			, castor::String const & debugName
 			, ashes::QueueShare sharingMode
 			, AllocatorT allocator );
 		/**
@@ -327,7 +337,7 @@ namespace castor3d
 		 *\param[in]	size	La taille requise pour la mémoire.
 		 *\return		\p true s'il y a assez de mémoire restante pour la taille donnée.
 		 */
-		bool hasAvailable( VkDeviceSize size )const;
+		bool hasAvailable( VkDeviceSize size )const noexcept;
 		/**
 		 *\~english
 		 *\brief		Allocates a memory chunk for a CPU buffer.
@@ -338,7 +348,7 @@ namespace castor3d
 		 *\param[in]	size	La taille requise pour la mémoire.
 		 *\return		L'offset de la zone mémoire.
 		 */
-		MemChunk allocate( VkDeviceSize size );
+		MemChunk allocate( VkDeviceSize size )noexcept;
 		/**
 		 *\~english
 		 *\brief		Deallocates memory.
@@ -347,14 +357,14 @@ namespace castor3d
 		 *\brief		Désalloue de la mémoire.
 		 *\param[in]	mem	La zone mémoire.
 		 */
-		void deallocate( MemChunk const & mem );
+		void deallocate( MemChunk const & mem )noexcept;
 		/**
 		 *\~english
 		 *\return		The element aligned size.
 		 *\~french
 		 *\return		La taille  alignée d'un élément.
 		 */
-		size_t getMinAlignment()const;
+		size_t getMinAlignment()const noexcept;
 		/**
 		*\~english
 		*\return
@@ -363,7 +373,7 @@ namespace castor3d
 		*\return
 		*	Le tampon interne.
 		*/
-		ashes::BufferBase const & getBuffer()const
+		ashes::BufferBase const & getBuffer()const noexcept
 		{
 			return *m_buffer;
 		}
@@ -375,7 +385,7 @@ namespace castor3d
 		*\return
 		*	Le tampon interne.
 		*/
-		ashes::BufferBase & getBuffer()
+		ashes::BufferBase & getBuffer()noexcept
 		{
 			return *m_buffer;
 		}

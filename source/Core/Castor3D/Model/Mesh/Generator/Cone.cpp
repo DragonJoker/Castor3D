@@ -89,17 +89,17 @@ namespace castor3d
 
 				if ( i < nbFaces )
 				{
-					baseVertex.push_back( InterleavedVertex{}
+					baseVertex.emplace_back()
 						.position( castor::Point3f{ radius * rCos, 0.0, radius * rSin } )
-						.texcoord( castor::Point2f{ ( 1 + rCos ) / 2, ( 1 + rSin ) / 2 } ) );
+						.texcoord( castor::Point2f{ ( 1 + rCos ) / 2, ( 1 + rSin ) / 2 } );
 				}
 
-				sideVertex.push_back( InterleavedVertex{}
+				sideVertex.emplace_back()
 					.position( castor::Point3f{ radius * rCos, 0.0, radius * rSin } )
-					.texcoord( castor::Point2f{ float( i ) / float( nbFaces ), float( 1.0 ) } ) );
-				sideVertex.push_back( InterleavedVertex{}
+					.texcoord( castor::Point2f{ float( i ) / float( nbFaces ), float( 1.0 ) } );
+				sideVertex.emplace_back()
 					.position( castor::Point3f{ float( 0 ), height, float( 0 ) } )
-					.texcoord( castor::Point2f{ float( i ) / float( nbFaces ), float( 0.0 ) } ) );
+					.texcoord( castor::Point2f{ float( i ) / float( nbFaces ), float( 0.0 ) } );
 				i++;
 			}
 
@@ -109,9 +109,9 @@ namespace castor3d
 				cone::swapComponents( axis, 1u, sideVertex );
 			}
 			
-			baseVertex.push_back( InterleavedVertex{}
+			baseVertex.emplace_back()
 				.position( castor::Point3f{ 0.0, 0.0, 0.0 } )
-				.texcoord( castor::Point2f{ 0.5, 0.5 } ) );
+				.texcoord( castor::Point2f{ 0.5, 0.5 } );
 			auto bottomCenterIndex = uint32_t( baseVertex.size() - 1u );
 			submeshBase.addPoints( baseVertex );
 			submeshSide.addPoints( sideVertex );

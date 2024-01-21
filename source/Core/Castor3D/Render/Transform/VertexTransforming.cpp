@@ -113,7 +113,7 @@ namespace castor3d
 			, TransformPipeline const & pipeline )
 		{
 			ashes::VkDescriptorSetLayoutBindingArray bindings;
-			auto & engine = *device.renderSystem.getEngine();
+			auto const & engine = *device.renderSystem.getEngine();
 			auto combine = engine.getSubmeshComponentsRegister().getSubmeshComponentCombine( pipeline.combineID );
 
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( VertexTransformPass::eModelsData
@@ -270,7 +270,7 @@ namespace castor3d
 		static ashes::PipelineLayoutPtr createPipelineLayout( RenderDevice const & device
 			, TransformPipeline const & pipeline )
 		{
-			auto & engine = *device.renderSystem.getEngine();
+			auto const & engine = *device.renderSystem.getEngine();
 			return device->createPipelineLayout( pipeline.getName( engine ) + "/PipelineLayout"
 				, *pipeline.descriptorSetLayout
 				, VkPushConstantRange{ VK_SHADER_STAGE_COMPUTE_BIT, 0u, sizeof( castor::Point4ui ) } );
@@ -288,7 +288,7 @@ namespace castor3d
 			, TransformPipeline & pipeline )
 		{
 			// Initialise the pipeline.
-			auto & engine = *device.renderSystem.getEngine();
+			auto const & engine = *device.renderSystem.getEngine();
 			return device->createPipeline( pipeline.getName( engine ) + "/Pipeline"
 				, ashes::ComputePipelineCreateInfo( 0u
 					, makeShaderState( device, pipeline.shader )
@@ -421,7 +421,7 @@ namespace castor3d
 
 			auto size = uint32_t( device.properties.limits.nonCoherentAtomSize );
 			writer.implementMainT< sdw::VoidT >( sdw::ComputeInT< sdw::VoidT >{ writer, size, 1u, 1u }
-			, [&]( sdw::ComputeInT< sdw::VoidT > in )
+			, [&]( sdw::ComputeInT< sdw::VoidT > const & in )
 			{
 				auto index = writer.declLocale( "index"
 					, in.globalInvocationID.x() );
@@ -556,7 +556,7 @@ namespace castor3d
 							pmax[axis] = writer.ternary( p[axis] > points[pmax[axis]][axis], i, pmax[axis] );
 						}
 					}
-					ROF;
+					ROF
 
 					// find the pair of points with largest distance
 					auto paxisd2 = writer.declLocale( "paxisd2"
@@ -580,7 +580,7 @@ namespace castor3d
 							paxisd2 = d2;
 							paxis = axis;
 						}
-						FI;
+						FI
 					}
 
 					// use the longest segment as the initial sphere diameter
@@ -611,9 +611,9 @@ namespace castor3d
 							center = center * k + p * ( vec3( 1.0_f ) - k );
 							radius = ( radius + d ) / 2.0f;
 						}
-						FI;
+						FI
 					}
-					ROF;
+					ROF
 
 					writer.returnStmt( vec4( center, radius ) );
 				}
@@ -622,7 +622,7 @@ namespace castor3d
 
 			auto size = uint32_t( device.properties.limits.nonCoherentAtomSize );
 			writer.implementMainT< sdw::VoidT >( sdw::ComputeInT< sdw::VoidT >{ writer, size, 1u, 1u }
-				, [&]( sdw::ComputeInT< sdw::VoidT > in )
+				, [&]( sdw::ComputeInT< sdw::VoidT > const & in )
 				{
 					auto meshletId = writer.declLocale( "meshletId"
 						, in.globalInvocationID.x() );
@@ -645,7 +645,7 @@ namespace castor3d
 						maxPos = max( maxPos, point );
 						normals[i] = c3d_normals[meshlet.vertices()[i]].xyz();
 					}
-					ROF;
+					ROF
 
 					auto center = writer.declLocale( "center"
 						, minPos + ( ( maxPos - minPos ) / vec3( 2.0_f ) ) );
@@ -669,7 +669,7 @@ namespace castor3d
 								, dot( normals[i], axis ) );
 							mindp = min( dp, mindp );
 						}
-						ROF;
+						ROF
 
 						IF( writer, mindp <= 0.1_f )
 						{
@@ -685,7 +685,7 @@ namespace castor3d
 							c3d_outCullData[meshletId].cone = vec4( axis
 								, sqrt( 1.0_f - mindp * mindp ) );
 						}
-						FI;
+						FI
 					}
 				} );
 
@@ -760,10 +760,10 @@ namespace castor3d
 	{
 		if ( !m_pass || !node.data.isInitialised() )
 		{
-			m_pending.push_back( { &node
+			m_pending.emplace_back( &node
 				, &morphTargets
 				, &morphingWeights
-				, &skinTransforms } );
+				, &skinTransforms );
 		}
 		else
 		{
@@ -791,13 +791,13 @@ namespace castor3d
 
 	TransformPipeline const & VertexTransforming::doGetPipeline( uint32_t index )
 	{
-		auto ires = m_pipelines.emplace( index, TransformPipeline{ index } );
-		auto & engine = *m_device.renderSystem.getEngine();
-		auto combine = engine.getSubmeshComponentsRegister().getSubmeshComponentCombine( ires.first->second.combineID );
+		auto [it, res] = m_pipelines.try_emplace( index, index );
+		auto const & engine = *m_device.renderSystem.getEngine();
+		auto combine = engine.getSubmeshComponentsRegister().getSubmeshComponentCombine( it->second.combineID );
 
-		if ( ires.second )
+		if ( res )
 		{
-			auto & pipeline = ires.first->second;
+			auto & pipeline = it->second;
 			pipeline.shader = { VK_SHADER_STAGE_COMPUTE_BIT
 				, pipeline.getName( engine )
 				, vtxtrsg::getShaderSource( m_device, pipeline ) };
@@ -807,7 +807,7 @@ namespace castor3d
 			pipeline.descriptorSetPool = pipeline.descriptorSetLayout->createPool( MaxMorphingDataCount );
 		}
 
-		if ( ires.first->second.meshletsBounds
+		if ( it->second.meshletsBounds
 			&& !m_boundsPipelines[combine.hasNormalFlag ? 1u : 0u] )
 		{
 			m_boundsPipelines[combine.hasNormalFlag ? 1u : 0u] = std::make_unique< BoundsTransformPipeline >( combine.hasNormalFlag );
@@ -821,14 +821,14 @@ namespace castor3d
 			pipeline.descriptorSetPool = pipeline.descriptorSetLayout->createPool( MaxMorphingDataCount );
 		}
 
-		return ires.first->second;
+		return it->second;
 	}
 
 	void VertexTransforming::doProcessPending()
 	{
 		auto work = std::move( m_pending );
 
-		for ( auto & pending : work )
+		for ( auto const & pending : work )
 		{
 			registerNode( *pending.node
 				, *pending.morphTargets

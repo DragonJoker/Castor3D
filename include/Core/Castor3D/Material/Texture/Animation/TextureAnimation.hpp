@@ -109,11 +109,11 @@ namespace castor3d
 		}
 
 	protected:
-		TextureTranslateSpeed m_translate;
-		TextureRotateSpeed m_rotate;
-		TextureScaleSpeed m_scale;
+		TextureTranslateSpeed m_translate{};
+		TextureRotateSpeed m_rotate{};
+		TextureScaleSpeed m_scale{};
 		bool m_tileAnim{};
-		std::set< AnimatedObject * > m_pending;
+		castor::Set< AnimatedObject * > m_pending;
 
 		friend class BinaryWriter< TextureAnimation >;
 		friend class BinaryParser< TextureAnimation >;

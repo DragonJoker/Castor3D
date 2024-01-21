@@ -57,7 +57,7 @@ namespace castor3d
 				, 0u );
 
 			writer.implementMainT< sdw::VoidT >(NumThreads
-				, [&](sdw::ComputeIn in)
+				, [&](sdw::ComputeIn const & in)
 				{
 					auto clusterID = writer.declLocale( "clusterID"
 						, in.globalInvocationID.x() );
@@ -67,7 +67,7 @@ namespace castor3d
 						c3d_clustersCountY = 1_u;
 						c3d_clustersCountZ = 1_u;
 					}
-					FI;
+					FI
 
 					IF( writer, c3d_clusterFlags[clusterID] != 0_u )
 					{
@@ -75,7 +75,7 @@ namespace castor3d
 							, atomicAdd( c3d_clustersCountX, 1_u ) );
 						c3d_uniqueClusters[i] = clusterID;
 					}
-					FI;
+					FI
 				} );
 			return writer.getBuilder().releaseShader();
 		}
@@ -117,7 +117,6 @@ namespace castor3d
 	crg::FramePass const & createFindUniqueClustersPass( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
 		, RenderDevice const & device
-		, CameraUbo const & cameraUbo
 		, FrustumClusters & clusters )
 	{
 		auto & pass = graph.createPass( "FindUniqueClusters"

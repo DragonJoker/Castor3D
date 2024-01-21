@@ -148,7 +148,7 @@ namespace castor3d
 		createComponent< InstantiationComponent >( 2u );
 	}
 
-	Submesh::~Submesh()
+	Submesh::~Submesh()noexcept
 	{
 		CU_Assert( !m_initialised, "Did you forget to call Submesh::cleanup ?" );
 	}
@@ -160,12 +160,12 @@ namespace castor3d
 			if ( !m_sourceBufferOffset
 				|| getPointsCount() != m_sourceBufferOffset.getCount< castor::Point4f >( SubmeshData::ePositions ) )
 			{
-				for ( auto & finalBufferOffset : m_finalBufferOffsets )
+				for ( auto & [_, finalBufferOffset] : m_finalBufferOffsets )
 				{
-					if ( finalBufferOffset.second )
+					if ( finalBufferOffset )
 					{
-						device.geometryPools->putBuffer( finalBufferOffset.second );
-						finalBufferOffset.second = {};
+						device.geometryPools->putBuffer( finalBufferOffset );
+						finalBufferOffset = {};
 					}
 				}
 
@@ -221,14 +221,14 @@ namespace castor3d
 					combine.hasSkinFlag = false;
 					components.registerSubmeshComponentCombine( combine );
 
-					for ( auto & finalBufferOffset : m_finalBufferOffsets )
+					for ( auto & [_, finalBufferOffset] : m_finalBufferOffsets )
 					{
-						finalBufferOffset.second = device.geometryPools->getBuffer( getPointsCount()
+						finalBufferOffset = device.geometryPools->getBuffer( getPointsCount()
 							, indexBuffer
 							, combine );
 
-						if ( !finalBufferOffset.second.hasData( SubmeshData::ePositions )
-							|| !finalBufferOffset.second.getBufferChunk( SubmeshData::ePositions ).buffer )
+						if ( !finalBufferOffset.hasData( SubmeshData::ePositions )
+							|| !finalBufferOffset.getBufferChunk( SubmeshData::ePositions ).buffer )
 						{
 							CU_Failure( "No final data available for submesh" );
 							CU_Exception( "No final data available for submesh" );
@@ -244,11 +244,11 @@ namespace castor3d
 		{
 			m_initialised = true;
 
-			for ( auto & component : m_components )
+			for ( auto const & [_, component] : m_components )
 			{
 				if ( m_initialised )
 				{
-					if ( auto data = component.second->getBaseData() )
+					if ( auto data = component->getBaseData() )
 					{
 						m_initialised = data->initialise( device );
 					}
@@ -256,7 +256,7 @@ namespace castor3d
 
 				if ( m_initialised )
 				{
-					if ( auto data = component.second->getRenderData() )
+					if ( auto data = component->getRenderData() )
 					{
 						m_initialised = data->initialise( device );
 					}
@@ -271,23 +271,23 @@ namespace castor3d
 	{
 		m_initialised = false;
 
-		for ( auto & component : m_components )
+		for ( auto const & [_, component] : m_components )
 		{
-			if ( auto data = component.second->getRenderData() )
+			if ( auto data = component->getRenderData() )
 			{
 				data->cleanup( device );
 			}
 
-			if ( auto data = component.second->getBaseData() )
+			if ( auto data = component->getBaseData() )
 			{
 				data->cleanup( device );
 			}
 		}
 
-		for ( auto & finalBufferOffset : m_finalBufferOffsets )
+		for ( auto & [_, finalBufferOffset] : m_finalBufferOffsets )
 		{
-			device.geometryPools->putBuffer( finalBufferOffset.second );
-			finalBufferOffset.second = {};
+			device.geometryPools->putBuffer( finalBufferOffset );
+			finalBufferOffset = {};
 		}
 
 		if ( m_sourceBufferOffset )
@@ -300,9 +300,9 @@ namespace castor3d
 	{
 		m_dirty = false;
 
-		for ( auto & component : m_components )
+		for ( auto const & [_, component] : m_components )
 		{
-			if ( auto data = component.second->getBaseData() )
+			if ( auto data = component->getBaseData() )
 			{
 				data->upload( uploader );
 			}
@@ -311,9 +311,9 @@ namespace castor3d
 
 	void Submesh::update( CpuUpdater & updater )
 	{
-		for ( auto & component : m_components )
+		for ( auto const & [_, component] : m_components )
 		{
-			if ( auto data = component.second->getRenderData() )
+			if ( auto data = component->getRenderData() )
 			{
 				data->update( updater );
 			}
@@ -326,9 +326,9 @@ namespace castor3d
 	{
 		auto & device = *getParent().getOwner()->getRenderDevice();
 
-		for ( auto & component : m_components )
+		for ( auto const & [_, component] : m_components )
 		{
-			if( auto data = component.second->getRenderData() )
+			if( auto data = component->getRenderData() )
 			{
 				previousPasses = data->record( device, resources, graph, std::move( previousPasses ) );
 			}
@@ -339,9 +339,9 @@ namespace castor3d
 
 	void Submesh::registerDependencies( crg::FramePass & pass )const
 	{
-		for ( auto & component : m_components )
+		for ( auto const & [_, component] : m_components )
 		{
-			if ( auto data = component.second->getRenderData() )
+			if ( auto data = component->getRenderData() )
 			{
 				data->registerDependencies( pass );
 			}
@@ -351,26 +351,26 @@ namespace castor3d
 	void Submesh::accept( ConfigurationVisitorBase & vis )
 	{
 		castor::StringArray topologies;
-		topologies.push_back( cuT( "Point List" ) );
-		topologies.push_back( cuT( "Line List" ) );
-		topologies.push_back( cuT( "Line Strip" ) );
-		topologies.push_back( cuT( "Triangle List" ) );
-		topologies.push_back( cuT( "Triangle Strip" ) );
-		topologies.push_back( cuT( "Triangle Fan" ) );
-		topologies.push_back( cuT( "Line List With Adjacency" ) );
-		topologies.push_back( cuT( "Line Strip With Adjacency" ) );
-		topologies.push_back( cuT( "Triangle List With Adjacency" ) );
-		topologies.push_back( cuT( "Triangle Strip With Adjacency" ) );
-		topologies.push_back( cuT( "Patch List" ) );
+		topologies.emplace_back( cuT( "Point List" ) );
+		topologies.emplace_back( cuT( "Line List" ) );
+		topologies.emplace_back( cuT( "Line Strip" ) );
+		topologies.emplace_back( cuT( "Triangle List" ) );
+		topologies.emplace_back( cuT( "Triangle Strip" ) );
+		topologies.emplace_back( cuT( "Triangle Fan" ) );
+		topologies.emplace_back( cuT( "Line List With Adjacency" ) );
+		topologies.emplace_back( cuT( "Line Strip With Adjacency" ) );
+		topologies.emplace_back( cuT( "Triangle List With Adjacency" ) );
+		topologies.emplace_back( cuT( "Triangle Strip With Adjacency" ) );
+		topologies.emplace_back( cuT( "Patch List" ) );
 		vis.visit< VkPrimitiveTopology >( cuT( "Topology" ), m_topology, topologies
-			, [this]( int oldV, int newV )
+			, [this]( int, int newV )
 			{
 				m_topology = VkPrimitiveTopology( newV );
 			} );
 
-		for ( auto & component : m_components )
+		for ( auto const & [_, component] : m_components )
 		{
-			component.second->accept( vis );
+			component->accept( vis );
 		}
 	}
 
@@ -477,9 +477,8 @@ namespace castor3d
 		, double precision )
 	{
 		int result = -1;
-		auto positions = getComponent< PositionsComponent >();
 
-		if ( positions )
+		if ( auto positions = getComponent< PositionsComponent >() )
 		{
 			int index = 0;
 			auto & points = positions->getData().getData();
@@ -511,7 +510,7 @@ namespace castor3d
 		return addPoint( value[0], value[1], value[2] );
 	}
 
-	InterleavedVertex Submesh::addPoint( float * value )
+	InterleavedVertex Submesh::addPoint( float const * value )
 	{
 		return addPoint( value[0], value[1], value[2] );
 	}
@@ -557,9 +556,9 @@ namespace castor3d
 	{
 		ProgramFlags result{};
 
-		for ( auto & component : m_components )
+		for ( auto const & [_, component] : m_components )
 		{
-			result |= component.second->getProgramFlags( pass );
+			result |= component->getProgramFlags( pass );
 		}
 
 		return result;
@@ -582,10 +581,10 @@ namespace castor3d
 		, PipelineFlags const & flags )const
 	{
 		auto key = smsh::hash( *this, geometry, pass, flags );
-		auto ires = m_geometryBuffers.emplace( key, GeometryBuffers{} );
+		auto [it, res] = m_geometryBuffers.try_emplace( key );
 		auto & bufferOffsets = getFinalBufferOffsets( geometry, pass );
 
-		if ( ires.second )
+		if ( res )
 		{
 			ashes::BufferCRefArray buffers;
 			ashes::UInt64Array offsets;
@@ -593,9 +592,9 @@ namespace castor3d
 			uint32_t currentBinding = 0u;
 			uint32_t currentLocation = 0u;
 
-			for ( auto & component : m_components )
+			for ( auto const & [_, component] : m_components )
 			{
-				if ( auto data = component.second->getBaseData() )
+				if ( auto data = component->getBaseData() )
 				{
 					data->gather( flags
 						, pass
@@ -610,17 +609,17 @@ namespace castor3d
 				}
 			}
 
-			auto & result = ires.first->second;
+			auto & result = it->second;
 			result.indexOffset = getSourceBufferOffsets().getBufferChunk( SubmeshData::eIndex );
 			result.layouts = layouts;
 			result.buffers = buffers;
 			result.offsets = offsets;
 		}
 
-		return ires.first->second;
+		return it->second;
 	}
 
-	void Submesh::enableSceneUpdate( bool updateScene )
+	void Submesh::enableSceneUpdate( bool )
 	{
 		m_disableSceneUpdate = false;
 	}
@@ -1234,7 +1233,7 @@ namespace castor3d
 		if ( m_render == nullptr )
 		{
 			CU_Failure( "Submesh doesn't contain any render shader component" );
-			throw std::logic_error{ "Submesh doesn't contain any render shader component" };
+			CU_Exception( "Submesh doesn't contain any render shader component" );
 		}
 
 		return m_render->getRenderData();
@@ -1265,7 +1264,7 @@ namespace castor3d
 			}
 		}
 
-		if ( geometry && isDynamic() )
+		if ( newMaterial && geometry && isDynamic() )
 		{
 			for ( auto & pass : *newMaterial )
 			{
@@ -1274,10 +1273,8 @@ namespace castor3d
 					meshletComponent->getData().instantiate( *geometry, *pass );
 				}
 
-				auto it = m_finalBufferOffsets.emplace( geometry->getHash( *pass, *this ), ObjectBufferOffset{} ).first;
-
-				if ( m_initialised
-					&& !it->second )
+				if ( auto it = m_finalBufferOffsets.try_emplace( geometry->getHash( *pass, *this ) ).first;
+					m_initialised && !it->second )
 				{
 					// Initialise only if the submesh itself is already initialised,
 					// because if it is not, the buffers will be initialised by the call to initialise().

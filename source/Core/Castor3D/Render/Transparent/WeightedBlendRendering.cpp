@@ -52,21 +52,21 @@ namespace castor3d
 			auto c3d_mapAccumulation = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( WbTexture::eAccumulation ), uint32_t( AccumTexIndex ), 0u );
 			auto c3d_mapRevealage = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( WbTexture::eRevealage ), uint32_t( RevealTexIndex ), 0u );
 
-			writer.implementEntryPointT< shader::PosUv2FT, sdw::VoidT >( [&]( sdw::VertexInT< shader::PosUv2FT > in
+			writer.implementEntryPointT< shader::PosUv2FT, sdw::VoidT >( [&]( sdw::VertexInT< shader::PosUv2FT > const & in
 				, sdw::VertexOut out )
 				{
 					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
 				} );
 
 			auto maxComponent = writer.implementFunction< sdw::Float >( "maxComponent"
-				, [&]( sdw::Vec3 const & v )
+				, [&writer]( sdw::Vec3 const & v )
 				{
 					writer.returnStmt( max( max( v.x(), v.y() ), v.z() ) );
 				}
 				, sdw::InVec3{ writer, "v" } );
 
-			writer.implementEntryPointT< sdw::VoidT, shader::Colour4FT >( [&]( sdw::FragmentIn in
-				, sdw::FragmentOutT< shader::Colour4FT > out )
+			writer.implementEntryPointT< sdw::VoidT, shader::Colour4FT >( [&]( sdw::FragmentIn const & in
+				, sdw::FragmentOutT< shader::Colour4FT > const & out )
 				{
 					auto coord = writer.declLocale( "coord"
 						, ivec2( in.fragCoord.xy() ) );
@@ -78,7 +78,7 @@ namespace castor3d
 						// Save the blending and color texture fetch cost
 						writer.demote();
 					}
-					FI;
+					FI
 
 					auto accum = writer.declLocale( "accum"
 						, c3d_mapAccumulation.fetch( coord, 0_i ) );
@@ -88,7 +88,7 @@ namespace castor3d
 					{
 						accum.rgb() = vec3( accum.a() );
 					}
-					FI;
+					FI
 
 					auto averageColor = writer.declLocale( "averageColor"
 						, accum.rgb() / max( accum.a(), 0.00001_f ) );
@@ -109,7 +109,7 @@ namespace castor3d
 							, c3d_cameraData.position()
 							, c3d_sceneData );
 					}
-					FI;
+					FI
 				} );
 			return writer.getBuilder().releaseShader();
 		}

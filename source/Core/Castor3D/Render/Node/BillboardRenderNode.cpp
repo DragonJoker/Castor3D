@@ -59,7 +59,7 @@ namespace castor3d
 		return VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP;
 	}
 
-	GeometryBuffers const & BillboardRenderNode::getGeometryBuffers( PipelineFlags const & flags )const
+	GeometryBuffers const & BillboardRenderNode::getGeometryBuffers( PipelineFlags const & )const
 	{
 		return data.getGeometryBuffers();
 	}

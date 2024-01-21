@@ -187,7 +187,7 @@ namespace castor3d
 		*/
 		C3D_API void setFaceTexture( castor::Path const & folder
 			, castor::Path const & relative
-			, CubeMapFace face );
+			, SkyboxFace face );
 		/**
 		*\~english
 		*\brief

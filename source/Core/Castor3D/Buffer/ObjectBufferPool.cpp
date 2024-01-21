@@ -111,7 +111,7 @@ namespace castor3d
 		m_buffers.clear();
 	}
 
-	void VertexBufferPool::putBuffer( ObjectBufferOffset const & bufferOffset )
+	void VertexBufferPool::putBuffer( ObjectBufferOffset const & bufferOffset )noexcept
 	{
 		auto it = std::find_if( m_buffers.begin()
 			, m_buffers.end()
@@ -124,7 +124,7 @@ namespace castor3d
 	}
 
 	VertexBufferPool::BufferArray::iterator VertexBufferPool::doFindBuffer( VkDeviceSize size
-		, VertexBufferPool::BufferArray & array )
+		, VertexBufferPool::BufferArray & array )const
 	{
 		CU_Require( size <= 65536u );
 		auto it = array.begin();
@@ -153,7 +153,7 @@ namespace castor3d
 		m_buffers.clear();
 	}
 
-	void IndexBufferPool::putBuffer( ObjectBufferOffset const & bufferOffset )
+	void IndexBufferPool::putBuffer( ObjectBufferOffset const & bufferOffset )noexcept
 	{
 		auto it = std::find_if( m_buffers.begin()
 			, m_buffers.end()
@@ -166,7 +166,7 @@ namespace castor3d
 	}
 
 	IndexBufferPool::BufferArray::iterator IndexBufferPool::doFindBuffer( VkDeviceSize size
-		, IndexBufferPool::BufferArray & array )
+		, IndexBufferPool::BufferArray & array )const
 	{
 		CU_Require( size <= 65536u );
 		auto it = array.begin();
@@ -229,27 +229,26 @@ namespace castor3d
 	ObjectBufferPool::ModelBuffers const & ObjectBufferPool::getBuffers( ashes::BufferBase const & buffer )
 	{
 		ObjectBufferPool::ModelBuffers const * result{};
-		auto mit = std::find_if( m_buffers.begin()
+
+		if ( auto mit = std::find_if( m_buffers.begin()
 			, m_buffers.end()
 			, [&buffer, &result]( std::unordered_map< size_t, BufferArray >::value_type const & mapLookup )
 			{
-				auto bit = std::find_if( mapLookup.second.begin()
+				if ( auto bit = std::find_if( mapLookup.second.begin()
 					, mapLookup.second.end()
 					, [&buffer]( ModelBuffers const & lookup )
 					{
 						return lookup.buffers[size_t( SubmeshData::ePositions )]
 							&& &lookup.buffers[size_t( SubmeshData::ePositions )]->getBuffer() == &buffer;
 					} );
-
-				if ( bit != mapLookup.second.end() )
+					bit != mapLookup.second.end() )
 				{
 					result = &( *bit );
 				}
 
 				return result != nullptr;
 			} );
-
-		if ( mit == m_buffers.end() )
+			mit == m_buffers.end() )
 		{
 			CU_Exception( "Couldn't find buffer in pool" );
 		}
@@ -269,7 +268,7 @@ namespace castor3d
 		return *it->second;
 	}
 
-	void ObjectBufferPool::putBuffer( ObjectBufferOffset const & bufferOffset )
+	void ObjectBufferPool::putBuffer( ObjectBufferOffset const & bufferOffset )noexcept
 	{
 		auto buffersIt = m_buffers.find( bufferOffset.hash );
 		CU_Require( buffersIt  != m_buffers.end() );
@@ -313,7 +312,7 @@ namespace castor3d
 		hash = castor::hashCombine( hash, vertexCount != 0u );
 		hash = castor::hashCombine( hash, isGpuComputed );
 		ObjectBufferOffset result{ hash };
-		auto & buffers = m_buffers.emplace( hash, BufferArray{} ).first->second;
+		auto & buffers = m_buffers.try_emplace( hash ).first->second;
 		auto it = doFindBuffer( vertexCount
 			, indexCount
 			, meshletCount
@@ -425,7 +424,7 @@ namespace castor3d
 	ObjectBufferPool::BufferArray::iterator ObjectBufferPool::doFindBuffer( VkDeviceSize vertexCount
 		, VkDeviceSize indexCount
 		, VkDeviceSize meshletCount
-		, ObjectBufferPool::BufferArray & array )
+		, ObjectBufferPool::BufferArray & array )const
 	{
 		return std::find_if( array.begin()
 			, array.end()

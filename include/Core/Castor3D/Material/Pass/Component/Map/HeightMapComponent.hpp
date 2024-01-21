@@ -38,17 +38,17 @@ namespace castor3d
 				, shader::BlendComponents & components
 				, shader::SampleTexture const & sampleTexture )const override;
 
-			C3D_API void parallaxMapping( sdw::Vec2 & texCoords
+			C3D_API void parallaxMapping( sdw::Vec2 const & texCoords
 				, sdw::Vec3 const & viewDir
 				, sdw::CombinedImage2DRgba32 const & heightMap
 				, shader::TextureConfigData const & textureConfig
 				, sdw::UInt const & mask )const;
-			C3D_API void parallaxMapping( sdw::Vec3 & texCoords
+			C3D_API void parallaxMapping( sdw::Vec3 const & texCoords
 				, sdw::Vec3 const & viewDir
 				, sdw::CombinedImage2DRgba32 const & heightMap
 				, shader::TextureConfigData const & textureConfig
 				, sdw::UInt const & mask )const;
-			C3D_API void parallaxMapping( shader::DerivTex & texCoords
+			C3D_API void parallaxMapping( shader::DerivTex const & texCoords
 				, sdw::Vec3 const & viewDir
 				, sdw::CombinedImage2DRgba32 const & heightMap
 				, shader::TextureConfigData const & textureConfig
@@ -73,19 +73,19 @@ namespace castor3d
 			}
 
 		private:
-			void doComputeTexcoord( PassComponentCombine pass
+			void doComputeTexcoord( PassComponentCombine const & pass
 				, shader::TextureConfigData const & config
 				, sdw::CombinedImage2DRgba32 const & map
 				, sdw::Vec2 & texCoords
 				, sdw::UInt const & mask
 				, shader::BlendComponents & components )const;
-			void doComputeTexcoord( PassComponentCombine pass
+			void doComputeTexcoord( PassComponentCombine const & pass
 				, shader::TextureConfigData const & config
 				, sdw::CombinedImage2DRgba32 const & map
 				, sdw::Vec3 & texCoords
 				, sdw::UInt const & mask
 				, shader::BlendComponents & components )const;
-			void doComputeTexcoord( PassComponentCombine pass
+			void doComputeTexcoord( PassComponentCombine const & pass
 				, shader::TextureConfigData const & config
 				, sdw::CombinedImage2DRgba32 const & map
 				, shader::DerivTex & texCoords

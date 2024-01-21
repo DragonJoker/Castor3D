@@ -83,14 +83,14 @@ namespace castor3d
 			auto gsTotalFalses = writer.declSharedVariable< sdw::UInt >( "gsTotalFalses" );		// The result of e[NUM_THREADS - 1] + f[NUM_THREADS - 1];                               (4 Bytes)
 
 			writer.implementMainT< sdw::VoidT >( NumThreads
-				, [&]( sdw::ComputeIn in )
+				, [&]( sdw::ComputeIn const & in )
 				{
 					// The number of bits to consider sorting.
 					// In this case, the input keys are 30-bit morton codes.
 					const u32 NumBits = 30u;
 
-					auto groupIndex = in.localInvocationIndex;
-					auto threadIndex = in.globalInvocationID.x();
+					auto const & groupIndex = in.localInvocationIndex;
+					auto const & threadIndex = in.globalInvocationID.x();
 
 					// Store the input key and values into shared memory.
 					gsKeys[groupIndex] = writer.ternary( threadIndex < c3d_numElements, c3d_inputKeys[threadIndex], sdw::UInt{ UINT_MAX } );
@@ -116,7 +116,7 @@ namespace castor3d
 						{
 							gsF[groupIndex] = gsE[groupIndex - 1_u];
 						}
-						FI;
+						FI
 
 						// Sync group shared memory writes.
 						shader::groupMemoryBarrierWithGroupSync( writer );
@@ -134,7 +134,7 @@ namespace castor3d
 							{
 								temp += gsF[groupIndex - i];
 							}
-							FI;
+							FI
 
 							// Sync group shared memory reads before writes.
 							shader::groupMemoryBarrierWithGroupSync( writer );
@@ -152,7 +152,7 @@ namespace castor3d
 						{
 							gsTotalFalses = gsE[NumThreads - 1u] + gsF[NumThreads - 1u];
 						}
-						FI;
+						FI
 
 						// Sync group shared memory writes.
 						shader::groupMemoryBarrierWithGroupSync( writer );
@@ -180,7 +180,7 @@ namespace castor3d
 						// Sync group shared memory writes.
 						shader::groupMemoryBarrierWithGroupSync( writer );
 					}
-					ROF;
+					ROF
 
 					// Now commit the results to global memory.
 					c3d_outputKeys[threadIndex] = gsKeys[groupIndex];
@@ -216,8 +216,7 @@ namespace castor3d
 			{
 			}
 
-			CRG_API void resetPipeline( crg::VkPipelineShaderStageCreateInfoArray config
-				, uint32_t index )
+			void resetPipeline( uint32_t index )
 			{
 				resetCommandBuffer( index );
 				m_pipeline.pipeline.resetPipeline( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_pipeline.createInfo ), index );
@@ -237,7 +236,7 @@ namespace castor3d
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph
 					, RenderDevice const & device
-					, FramePass * parent
+					, FramePass const * parent
 					, LightType lightType )
 					: shader{ VK_SHADER_STAGE_COMPUTE_BIT, "RadixSort/" + getName( lightType ), createShader( device ) }
 					, createInfo{ ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, shader ) } }
@@ -302,7 +301,7 @@ namespace castor3d
 			}
 
 			void doCreatePipeline( uint32_t index
-				, Pipeline & pipeline )
+				, Pipeline & pipeline )const
 			{
 				auto & program = pipeline.pipeline.getProgram( index );
 				VkComputePipelineCreateInfo createInfo{ VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO

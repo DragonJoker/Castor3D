@@ -21,7 +21,7 @@ namespace castor3d
 		C3D_API Texture( Texture && rhs )noexcept;
 		C3D_API Texture & operator=( Texture && rhs )noexcept;
 
-		C3D_API Texture();
+		C3D_API Texture() = default;
 		C3D_API Texture( RenderDevice const & device
 			, crg::ResourcesCache & resources
 			, castor::String const & name

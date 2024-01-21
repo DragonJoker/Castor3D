@@ -113,7 +113,7 @@ namespace castor3d
 			if ( getName().find( meshName ) == 0u )
 			{
 				animName = cmshimp::cleanName( animName.substr( meshName.size() ) );
-				result.push_back( animName );
+				result.emplace_back( animName );
 			}
 		}
 
@@ -132,7 +132,7 @@ namespace castor3d
 			if ( getName().find( skeletonName ) == 0u )
 			{
 				animName = cmshimp::cleanName( animName.substr( skeletonName.size() ) );
-				result.push_back( animName );
+				result.emplace_back( animName );
 			}
 		}
 
@@ -151,7 +151,7 @@ namespace castor3d
 			if ( getName().find( nodeName ) == 0u )
 			{
 				animName = cmshimp::cleanName( animName.substr( nodeName.size() ) );
-				result.push_back( animName );
+				result.emplace_back( animName );
 			}
 		}
 
@@ -164,7 +164,7 @@ namespace castor3d
 
 		if ( getExtension() == CmshAnimationImporter::MeshAnimType )
 		{
-			result.push_back( getName() );
+			result.emplace_back( getName() );
 		}
 
 		return result;
@@ -176,7 +176,7 @@ namespace castor3d
 
 		if ( getExtension() == CmshAnimationImporter::SkeletonAnimType )
 		{
-			result.push_back( getName() );
+			result.emplace_back( getName() );
 		}
 
 		return result;
@@ -188,7 +188,7 @@ namespace castor3d
 
 		if ( getExtension() == CmshAnimationImporter::NodeAnimType )
 		{
-			result.push_back( getName() );
+			result.emplace_back( getName() );
 		}
 
 		return result;

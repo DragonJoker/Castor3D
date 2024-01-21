@@ -136,6 +136,13 @@ namespace castor3d
 			}
 		};
 
+		ObjectBufferOffset() = default;
+
+		ObjectBufferOffset( size_t hash )
+			: hash{ hash }
+		{
+		}
+
 		size_t hash{};
 		std::array< GpuBufferChunk, size_t( SubmeshData::eCount ) > buffers{};
 		uint16_t id{};

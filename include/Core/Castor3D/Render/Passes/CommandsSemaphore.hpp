@@ -33,7 +33,7 @@ namespace castor3d
 			, crg::SemaphoreWaitArray const & toWait )const;
 		C3D_API void submit( ashes::Queue const & queue
 			, ashes::VkSemaphoreArray & semaphores
-			, ashes::VkPipelineStageFlagsArray & stages );
+			, ashes::VkPipelineStageFlagsArray & stages )const;
 
 		ashes::CommandBufferPtr commandBuffer;
 		ashes::SemaphorePtr semaphore;

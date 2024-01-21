@@ -171,8 +171,7 @@ namespace castor3d
 
 	TextureLayoutUPtr createTextureLayout( Engine const & engine
 		, castor::Path const & relative
-		, castor::Path const & folder
-		, castor::ImageLoaderConfig config )
+		, castor::Path const & folder )
 	{
 		ashes::ImageCreateInfo createInfo
 		{
@@ -190,13 +189,11 @@ namespace castor3d
 			, createInfo
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, relative );
-		texture->setSource( folder
-			, relative
-			, std::move( config ) );
+		texture->setSource( folder, relative );
 		return texture;
 	}
 
-	TextureLayoutUPtr  createTextureLayout( Engine const & engine
+	TextureLayoutUPtr createTextureLayout( Engine const & engine
 		, castor::String const & name
 		, castor::PxBufferBaseUPtr buffer
 		, bool isStatic )

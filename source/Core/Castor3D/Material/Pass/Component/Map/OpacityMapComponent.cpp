@@ -40,7 +40,7 @@ namespace castor
 			return writeMask( file, cuT( "opacity_mask" ), m_mask );
 		}
 
-		bool operator()( StringStream & file )
+		bool operator()( StringStream & file )const
 		{
 			return writeMask( file, cuT( "opacity_mask" ), m_mask );
 		}
@@ -80,7 +80,7 @@ namespace castor3d
 		static CU_ImplementAttributeParserBlock( parserTexRemapOpacity, SceneImportContext )
 		{
 			auto & plugin = getEngine( *blockContext )->getPassComponentsRegister().getPlugin( OpacityMapComponent::TypeName );
-			blockContext->textureRemapIt = blockContext->textureRemaps.emplace( plugin.getTextureFlags(), TextureConfiguration{} ).first;
+			blockContext->textureRemapIt = blockContext->textureRemaps.try_emplace( plugin.getTextureFlags() ).first;
 			blockContext->textureRemapIt->second = TextureConfiguration{};
 		}
 		CU_EndAttributePushBlock( CSCNSection::eTextureRemapChannel, blockContext )
@@ -125,13 +125,14 @@ namespace castor3d
 	void OpacityMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		channelFillers.emplace( "opacity", ChannelFiller{ getTextureFlags()
+		channelFillers.try_emplace( "opacity"
+			, getTextureFlags()
 			, []( TextureContext & blockContext )
 			{
-				auto & component = getPassComponent< OpacityMapComponent >( blockContext );
+				auto const & component = getPassComponent< OpacityMapComponent >( blockContext );
 				component.fillChannel( blockContext.configuration
 					, 0xFF000000 );
-			} } );
+			} );
 
 		castor::addParserT( parsers
 			, CSCNSection::eTexture

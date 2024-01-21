@@ -23,7 +23,7 @@ namespace castor3d
 		static void checkScrollBar( ScrollBarFlag flag
 			, Control & control
 			, castor::String const & prefix
-			, ScrollableStyleRPtr style
+			, ScrollableStyle const * style
 			, bool ( ScrollableStyle::* has )()const noexcept
 			, ScrollBarStyle & ( ScrollableStyle::* get )()const noexcept
 			, uint32_t rangeMax
@@ -130,12 +130,12 @@ namespace castor3d
 		{
 			m_target.getControlsManager()->create( m_verticalScrollBar );
 			m_onVerticalThumbRelease = m_verticalScrollBar->connect( ScrollBarEvent::eThumbRelease
-				, [this]( int32_t position )
+				, [this]( int32_t )
 				{
 					doScrollContent();
 				} );
 			m_onVerticalThumbTrack = m_verticalScrollBar->connect( ScrollBarEvent::eThumbTrack
-				, [this]( int32_t position )
+				, [this]( int32_t )
 				{
 					doScrollContent();
 				} );
@@ -145,12 +145,12 @@ namespace castor3d
 		{
 			m_target.getControlsManager()->create( m_horizontalScrollBar );
 			m_onHorizontalThumbRelease = m_horizontalScrollBar->connect( ScrollBarEvent::eThumbRelease
-				, [this]( int32_t position )
+				, [this]( int32_t )
 				{
 					doScrollContent();
 				} );
 			m_onHorizontalThumbTrack = m_horizontalScrollBar->connect( ScrollBarEvent::eThumbTrack
-				, [this]( int32_t position )
+				, [this]( int32_t )
 				{
 					doScrollContent();
 				} );
@@ -278,7 +278,7 @@ namespace castor3d
 		}
 	}
 
-	castor::Point4ui ScrollableCtrl::updateScrollableClientRect( castor::Point4ui const & clientRect )
+	castor::Point4ui ScrollableCtrl::updateScrollableClientRect( castor::Point4ui const & clientRect )const
 	{
 		castor::Point4ui result{ clientRect };
 
@@ -341,8 +341,8 @@ namespace castor3d
 		if ( &control != m_verticalScrollBar
 			&& &control != m_horizontalScrollBar )
 		{
-			m_controls.emplace( &control
-				, ScrolledControl{ control.onChanged.connect( [this, &control]( Control const & ctrl )
+			m_controls.try_emplace( &control
+				, control.onChanged.connect( [this, &control]( Control const & )
 					{
 						if ( !m_updating )
 						{
@@ -350,7 +350,7 @@ namespace castor3d
 							doUpdateScrollableContent();
 						}
 					} )
-					, control.getPosition() } );
+				, control.getPosition() );
 			doUpdateControlPosition( control );
 			doUpdateScrollableContent();
 		}
@@ -367,9 +367,8 @@ namespace castor3d
 		if ( &control != m_verticalScrollBar
 			&& &control != m_horizontalScrollBar )
 		{
-			auto it = m_controls.find( &control );
-
-			if ( it != m_controls.end() )
+			if ( auto it = m_controls.find( &control );
+				it != m_controls.end() )
 			{
 				m_controls.erase( it );
 				doUpdateScrollableContent();
@@ -398,7 +397,8 @@ namespace castor3d
 	{
 		if ( auto corner = m_corner )
 		{
-			corner->setOrder( index++, 0u );
+			corner->setOrder( index, 0u );
+			++index;
 		}
 	}
 
@@ -431,9 +431,8 @@ namespace castor3d
 		int32_t maxX{ -minX };
 		int32_t maxY{ -maxX };
 
-		for ( auto & it : m_controls )
+		for ( auto const & [control, _] : m_controls )
 		{
-			auto control = it.first;
 			minX = std::min( minX
 				, control->getPosition().x() );
 			minY = std::min( minY
@@ -461,10 +460,10 @@ namespace castor3d
 		m_updating = true;
 		auto pos{ getScrollPosition() };
 
-		for ( auto & it : m_controls )
+		for ( auto const & [control, _] : m_controls )
 		{
-			auto position = pos + it.first->getPosition();
-			it.first->setPosition( { position->x, position->y } );
+			auto position = pos + control->getPosition();
+			control->setPosition( { position->x, position->y } );
 		}
 
 		onScrollContent( pos );

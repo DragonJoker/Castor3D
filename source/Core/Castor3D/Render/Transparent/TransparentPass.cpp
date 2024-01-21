@@ -129,36 +129,42 @@ namespace castor3d
 		, ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
 		auto index = uint32_t( GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
-		doAddPassSpecificsBindings( flags, bindings, index );
+		doAddPassSpecificsBindings( bindings, index );
 		bindings.emplace_back( m_scene.getLightCache().createLayoutBinding( VK_SHADER_STAGE_FRAGMENT_BIT
-			, index++ ) );
+			, index ) );
+		++index;
 
 		if ( hasSsao() )
 		{
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( index
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ) ); // c3d_mapOcclusion
+			++index;
 		}
 
-		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+		bindings.emplace_back( makeDescriptorSetLayoutBinding( index
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapBrdf
+		++index;
 
-		doAddShadowBindings( m_scene, flags, bindings, index );
-		doAddEnvBindings( flags, bindings, index );
+		doAddShadowBindings( m_scene, bindings, index );
+		doAddEnvBindings( bindings, index );
 		doAddBackgroundBindings( m_scene, bindings, index );
-		doAddGIBindings( flags, bindings, index );
-		doAddClusteredLightingBindings( m_parent->getRenderTarget(), flags, bindings, index );
+		doAddGIBindings( bindings, index );
+		doAddClusteredLightingBindings( m_parent->getRenderTarget(), bindings, index );
 
-		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+		bindings.emplace_back( makeDescriptorSetLayoutBinding( index
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapScene
-		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+		++index;
+		bindings.emplace_back( makeDescriptorSetLayoutBinding( index
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapDepthObj
-		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+		++index;
+		bindings.emplace_back( makeDescriptorSetLayoutBinding( index
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapNormals
+		++index;
 	}
 
 	void TransparentPass::doFillAdditionalDescriptor( PipelineFlags const & flags
@@ -167,8 +173,9 @@ namespace castor3d
 		, ShadowBuffer const * shadowBuffer )
 	{
 		auto index = uint32_t( GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
-		doAddPassSpecificsDescriptor( flags, descriptorWrites, index );
-		descriptorWrites.push_back( m_scene.getLightCache().getBinding( index++ ) );
+		doAddPassSpecificsDescriptor( descriptorWrites, index );
+		descriptorWrites.push_back( m_scene.getLightCache().getBinding( index ) );
+		++index;
 
 		if ( hasSsao() )
 		{
@@ -182,11 +189,11 @@ namespace castor3d
 			, *getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().sampler
 			, descriptorWrites
 			, index );
-		doAddShadowDescriptor( m_scene, flags, descriptorWrites, shadowMaps, shadowBuffer, index );
-		doAddEnvDescriptor( flags, descriptorWrites, index );
+		doAddShadowDescriptor( m_scene, descriptorWrites, shadowMaps, shadowBuffer, index );
+		doAddEnvDescriptor( descriptorWrites, index );
 		doAddBackgroundDescriptor( m_scene, descriptorWrites, m_targetImage, index );
-		doAddGIDescriptor( flags, descriptorWrites, index );
-		doAddClusteredLightingDescriptor( m_parent->getRenderTarget(), flags, descriptorWrites, index );
+		doAddGIDescriptor( descriptorWrites, index );
+		doAddClusteredLightingDescriptor( m_parent->getRenderTarget(), descriptorWrites, index );
 
 		bindTexture( m_sceneImage.wholeView
 			, *m_sceneImage.sampler
@@ -247,14 +254,16 @@ namespace castor3d
 			, uint32_t( GlobalBuffersIdx::eTexAnims )
 			, RenderPipeline::eBuffers
 			, enableTextures };
-		auto lightsIndex = index++;
+		auto lightsIndex = index;
+		++index;
 		auto c3d_mapOcclusion = writer.declCombinedImg< FImg2DR32 >( "c3d_mapOcclusion"
 			, ( hasSsao() ? index++ : 0u )
 			, RenderPipeline::eBuffers
 			, hasSsao() );
 		auto c3d_mapBrdf = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapBrdf"
-			, index++
+			, index
 			, RenderPipeline::eBuffers );
+		++index;
 		shader::Lights lights{ *getEngine()
 			, flags.lightingModelId
 			, flags.backgroundModelId
@@ -292,14 +301,17 @@ namespace castor3d
 			, getClustersConfig()
 			, m_allowClusteredLighting };
 		auto c3d_mapScene = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapScene"
-			, index++
+			, index
 			, RenderPipeline::eBuffers );
+		++index;
 		auto c3d_mapDepthObj = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapDepthObj"
-			, index++
+			, index
 			, RenderPipeline::eBuffers );
+		++index;
 		auto c3d_mapNormals = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapNormals"
-			, index++
+			, index
 			, RenderPipeline::eBuffers );
+		++index;
 
 		auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
 			, 0u
@@ -319,8 +331,8 @@ namespace castor3d
 				, passShaders
 				, flags }
 			, sdw::FragmentOut{ writer }
-			, [&]( sdw::FragmentInT< shader::FragmentSurfaceT > in
-				, sdw::FragmentOut out )
+			, [&]( sdw::FragmentInT< shader::FragmentSurfaceT > const & in
+				, sdw::FragmentOut const & )
 			{
 				shader::DebugOutput output{ getDebugConfig()
 					, cuT( "Default" )
@@ -488,7 +500,7 @@ namespace castor3d
 					{
 						colour = components.colour;
 					}
-					FI;
+					FI
 				}
 				else
 				{

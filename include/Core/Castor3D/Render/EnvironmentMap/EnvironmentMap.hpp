@@ -185,16 +185,16 @@ namespace castor3d
 		Texture m_depthBuffer;
 		Texture m_tmpImage;
 		VkExtent3D m_extent;
-		std::set< SceneNode * > m_reflectionNodes;
-		std::set< SceneNode * > m_savedReflectionNodes;
-		std::map< SceneNode const *, uint32_t > m_sortedNodes;
-		std::vector< EnvironmentMapPasses > m_passes;
+		castor::Set< SceneNode * > m_reflectionNodes;
+		castor::Set< SceneNode * > m_savedReflectionNodes;
+		castor::Map< SceneNode const *, uint32_t > m_sortedNodes;
+		castor::Vector< EnvironmentMapPasses > m_passes;
 		bool m_first{ true };
 		uint32_t m_render{ 0u };
 		uint32_t m_count{ 0u };
 		OnSceneNodeChangedConnection m_onNodeChanged;
 		ashes::Image * m_image;
-		std::vector< ashes::ImageView > m_environmentMapViews;
+		castor::Vector< ashes::ImageView > m_environmentMapViews;
 		OnBackgroundChangedConnection m_onSetBackground;
 	};
 }

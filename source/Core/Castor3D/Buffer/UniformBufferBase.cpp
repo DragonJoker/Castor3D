@@ -76,8 +76,7 @@ namespace castor3d
 			, VkDeviceSize count
 			, VkDeviceSize offset
 			, VkPipelineStageFlags flags
-			, FramePassTimer & timer
-			, uint32_t index )
+			, FramePassTimer & timer )
 		{
 			commandBuffer.begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
 			timer.beginPass( commandBuffer );
@@ -140,7 +139,7 @@ namespace castor3d
 	uint32_t UniformBufferBase::initialise( RenderDevice const & device
 		, ashes::QueueShare sharingMode )
 	{
-		m_sharingMode = sharingMode;
+		m_sharingMode = std::move( sharingMode );
 		return initialise( device );
 	}
 
@@ -158,17 +157,17 @@ namespace castor3d
 		return uint32_t( m_buffer->getBuffer().getSize() );
 	}
 
-	void UniformBufferBase::cleanup()
+	void UniformBufferBase::cleanup()noexcept
 	{
 		m_buffer.reset();
 	}
 
-	bool UniformBufferBase::hasAvailable()const
+	bool UniformBufferBase::hasAvailable()const noexcept
 	{
 		return !m_available.empty();
 	}
 
-	uint32_t UniformBufferBase::allocate()
+	uint32_t UniformBufferBase::allocate()noexcept
 	{
 		CU_Require( hasAvailable() );
 		uint32_t result = *m_available.begin();
@@ -250,8 +249,7 @@ namespace castor3d
 		, size_t size
 		, uint32_t offset
 		, VkPipelineStageFlags flags
-		, FramePassTimer & timer
-		, uint32_t index )const
+		, FramePassTimer & timer )const
 	{
 		auto commandBuffer = commandPool.createCommandBuffer( "UniformBufferUpload"
 			, VK_COMMAND_BUFFER_LEVEL_PRIMARY );
@@ -261,8 +259,7 @@ namespace castor3d
 			, size
 			, offset
 			, flags
-			, timer
-			, index );
+			, timer );
 		queue.submit( *commandBuffer
 			, m_transferFence.get() );
 		m_transferFence->wait( ashes::MaxTimeout );
@@ -275,8 +272,7 @@ namespace castor3d
 		, size_t size
 		, uint32_t offset
 		, VkPipelineStageFlags flags
-		, FramePassTimer & timer
-		, uint32_t index )const
+		, FramePassTimer & timer )const
 	{
 		auto elemAlignedSize = getBuffer().getAlignedSize( m_elemSize );
 		auto src = reinterpret_cast< const uint8_t * >( data );
@@ -309,8 +305,7 @@ namespace castor3d
 			, count
 			, offset
 			, flags
-			, timer
-			, index );
+			, timer );
 	}
 
 	void UniformBufferBase::download( ashes::BufferBase const & stagingBuffer
@@ -320,8 +315,7 @@ namespace castor3d
 		, size_t size
 		, uint32_t offset
 		, VkPipelineStageFlags flags
-		, FramePassTimer & timer
-		, uint32_t index )const
+		, FramePassTimer & timer )const
 	{
 		CU_Require( size >= size_t( m_elemCount ) * m_elemSize
 			&& "Need a large enough buffer" );
@@ -336,8 +330,7 @@ namespace castor3d
 			, m_elemCount
 			, offset
 			, flags
-			, timer
-			, index );
+			, timer );
 		queue.submit( *commandBuffer
 			, m_transferFence.get() );
 		m_transferFence->wait( ashes::MaxTimeout );

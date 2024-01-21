@@ -176,13 +176,6 @@ namespace castor3d
 			, castor::FontResPtr font );
 		/**
 		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API ~FontTexture()noexcept override;
-		/**
-		 *\~english
 		 *\brief		Initialises the texture.
 		 *\param[in]	device		The GPU device.
 		 *\param[in]	queueData	The queue receiving the GPU commands.

@@ -109,7 +109,7 @@ namespace castor3d
 		MovableType m_type;
 		//!\~english	The parent scene node.
 		//!\~french		Le noeud parent.
-		SceneNode * m_sceneNode;
+		SceneNode * m_sceneNode{};
 		//!\~english	The node change notification index.
 		//!\~french		L'indice de notifcation des changements du noeud.
 		OnSceneNodeChangedConnection m_notifyIndex;

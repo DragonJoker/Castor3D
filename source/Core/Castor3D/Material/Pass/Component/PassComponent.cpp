@@ -154,7 +154,7 @@ namespace castor3d
 	}
 
 	void PassComponent::fillChannel( TextureConfiguration & configuration
-		, uint32_t mask )
+		, uint32_t mask )const
 	{
 		getPlugin().fillTextureConfiguration( configuration, mask );
 	}

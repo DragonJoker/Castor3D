@@ -69,11 +69,11 @@ namespace castor3d
 		 *\brief		Libère un tampon GPU.
 		 *\param[in]	bufferOffset	Le tampon à libérer.
 		 */
-		C3D_API void putBuffer( ObjectBufferOffset const & bufferOffset );
+		C3D_API void putBuffer( ObjectBufferOffset const & bufferOffset )noexcept;
 
 	private:
 		C3D_API BufferArray::iterator doFindBuffer( VkDeviceSize size
-			, BufferArray & array );
+			, BufferArray & array )const;
 
 	private:
 		RenderDevice const & m_device;
@@ -136,11 +136,11 @@ namespace castor3d
 		 *\brief		Libère un tampon GPU.
 		 *\param[in]	bufferOffset	Le tampon à libérer.
 		 */
-		C3D_API void putBuffer( ObjectBufferOffset const & bufferOffset );
+		C3D_API void putBuffer( ObjectBufferOffset const & bufferOffset )noexcept;
 
 	private:
 		C3D_API BufferArray::iterator doFindBuffer( VkDeviceSize size
-			, BufferArray & array );
+			, BufferArray & array )const;
 
 	private:
 		RenderDevice const & m_device;
@@ -246,7 +246,7 @@ namespace castor3d
 		 *\brief		Libère un tampon GPU.
 		 *\param[in]	bufferOffset	Le tampon à libérer.
 		 */
-		C3D_API void putBuffer( ObjectBufferOffset const & bufferOffset );
+		C3D_API void putBuffer( ObjectBufferOffset const & bufferOffset )noexcept;
 
 	private:
 		C3D_API ObjectBufferOffset doGetBuffer( VkDeviceSize vertexCount
@@ -257,7 +257,7 @@ namespace castor3d
 		C3D_API BufferArray::iterator doFindBuffer( VkDeviceSize vertexCount
 			, VkDeviceSize indexCount
 			, VkDeviceSize meshletCount
-			, BufferArray & array );
+			, BufferArray & array )const;
 
 	private:
 		RenderDevice const & m_device;

@@ -55,7 +55,7 @@ namespace castor3d
 		, m_caption{ caption }
 		, m_onEnable{ EventHandler::onEnable.connect( [this]( bool v )
 			{
-				auto & mystyle = getStyle();
+				auto const & mystyle = getStyle();
 
 				if ( v )
 				{
@@ -189,7 +189,7 @@ namespace castor3d
 
 	void ButtonCtrl::doUpdateStyle()
 	{
-		auto & style = getStyle();
+		auto const & style = getStyle();
 
 		if ( auto text = m_text )
 		{
@@ -203,7 +203,7 @@ namespace castor3d
 
 		if ( auto text = m_text )
 		{
-			auto & style = getStyle();
+			auto const & style = getStyle();
 			text->setMaterial( style.getTextMaterial() );
 
 			if ( !text->getFontTexture() || !text->getFontTexture()->getFont() )
@@ -274,7 +274,7 @@ namespace castor3d
 
 	void ButtonCtrl::doOnMouseEnter( MouseEvent const & event )
 	{
-		auto & style = getStyle();
+		auto const & style = getStyle();
 		m_text->setMaterial( style.getHighlightedTextMaterial() );
 		setBackgroundMaterial( style.getHighlightedBackgroundMaterial() );
 		setBackgroundBorderMaterial( style.getHighlightedForegroundMaterial() );
@@ -284,7 +284,7 @@ namespace castor3d
 	{
 		if ( event.getButton() == MouseButton::eLeft )
 		{
-			auto & style = getStyle();
+			auto const & style = getStyle();
 			m_text->setMaterial( style.getPushedTextMaterial() );
 			setBackgroundMaterial( style.getPushedBackgroundMaterial() );
 			setBackgroundBorderMaterial( style.getPushedForegroundMaterial() );
@@ -295,7 +295,7 @@ namespace castor3d
 	{
 		if ( event.getButton() == MouseButton::eLeft )
 		{
-			auto & style = getStyle();
+			auto const & style = getStyle();
 			m_text->setMaterial( style.getHighlightedTextMaterial() );
 			setBackgroundMaterial( style.getHighlightedBackgroundMaterial() );
 			setBackgroundBorderMaterial( style.getHighlightedForegroundMaterial() );
@@ -306,7 +306,7 @@ namespace castor3d
 
 	void ButtonCtrl::doOnMouseLeave( MouseEvent const & event )
 	{
-		auto & style = getStyle();
+		auto const & style = getStyle();
 		m_text->setMaterial( style.getTextMaterial() );
 		setBackgroundMaterial( style.getBackgroundMaterial() );
 		setBackgroundBorderMaterial( style.getForegroundMaterial() );

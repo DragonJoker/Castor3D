@@ -46,9 +46,8 @@ namespace castor3d
 			C3D_API static void computeMikktNormal( sdw::Float const & nmlGMul
 				, sdw::UInt const & nml2Chan
 				, sdw::UInt const & mask
-				, shader::BlendComponents & components
-				, sdw::Vec4 const & sampled
-				, sdw::Vec3 normal );
+				, shader::BlendComponents const & components
+				, sdw::Vec4 const & sampled );
 		};
 
 		class Plugin

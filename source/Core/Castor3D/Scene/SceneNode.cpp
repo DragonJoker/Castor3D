@@ -25,7 +25,6 @@ namespace castor3d
 		: Animable{ *scene.getEngine() }
 		, castor::Named{ name }
 		, m_scene{ scene }
-		, m_id{ CurrentId++ }
 		, m_static{ isStatic }
 		, m_displayable{ name == Scene::RootNode }
 		, m_orientation{ std::move( orientation ) }
@@ -39,12 +38,14 @@ namespace castor3d
 		}
 
 		m_scene.markDirty( *this );
-		Count++;
 
 		if ( parent )
 		{
 			doAttachTo( *parent );
 		}
+
+		++CurrentId;
+		++Count;
 	}
 
 	SceneNode::SceneNode( castor::String const & name
@@ -507,10 +508,8 @@ namespace castor3d
 		SceneNodeMap flush;
 		std::swap( flush, m_children );
 
-		for ( auto it : flush )
+		for ( auto const & [_, current] : flush )
 		{
-			auto current = it.second;
-
 			if ( current )
 			{
 				current->detach( cleanup );

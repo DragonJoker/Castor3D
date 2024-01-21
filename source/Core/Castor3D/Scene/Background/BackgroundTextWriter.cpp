@@ -2,8 +2,8 @@
 
 namespace castor3d
 {
-	BackgroundTextWriter::BackgroundTextWriter( castor::TextFile & file
-		, castor::String const & tabs )
+	BackgroundTextWriter::BackgroundTextWriter( castor::TextFile &
+		, castor::String const & )
 	{
 	}
 

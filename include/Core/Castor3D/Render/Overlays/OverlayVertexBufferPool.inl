@@ -142,7 +142,7 @@ namespace castor3d
 		, OverlayT const & overlay
 		, OverlayDrawData & data
 		, bool secondary
-		, FontTexture const * fontTexture )
+		, FontTexture const * fontTexture )noexcept
 	{
 		auto & pipelines = m_pipelines.emplace( fontTexture, PipelineDataMap{} ).first->second;
 		auto it = pipelines.find( &data.node->pipeline );

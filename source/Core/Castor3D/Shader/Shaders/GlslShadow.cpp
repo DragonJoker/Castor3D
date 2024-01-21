@@ -20,7 +20,7 @@ namespace castor3d::shader
 {
 	//*********************************************************************************************
 
-	void ShadowData::updateShadowType( ShadowType type )
+	void ShadowData::updateShadowType( ShadowType type )const
 	{
 		shadowType() = uint32_t( type );
 	}
@@ -43,17 +43,17 @@ namespace castor3d::shader
 		buffer.end();
 	}
 
-	DirectionalShadowData ShadowsBuffer::getDirectionalShadows()
+	DirectionalShadowData ShadowsBuffer::getDirectionalShadows()const
 	{
 		return m_data->directional();
 	}
 
-	PointShadowData ShadowsBuffer::getPointShadows( sdw::Int const & index )
+	PointShadowData ShadowsBuffer::getPointShadows( sdw::Int const & index )const
 	{
 		return m_data->point()[index];
 	}
 
-	SpotShadowData ShadowsBuffer::getSpotShadows( sdw::Int const & index )
+	SpotShadowData ShadowsBuffer::getSpotShadows( sdw::Int const & index )const
 	{
 		return m_data->spot()[index];
 	}
@@ -209,11 +209,13 @@ namespace castor3d::shader
 				, spotEnabled );
 
 			m_shadowsBuffer = castor::makeUnique< ShadowsBuffer >( m_writer
-				, index++
+				, index
 				, set );
+			++index;
 			auto randomSsbo = m_writer.declStorageBuffer( RandomBuffer
-				, index++
+				, index
 				, set );
+			++index;
 			m_randomData = std::make_unique< sdw::Vec4Array >( randomSsbo.declMember< sdw::Vec4 >( "c3d_randomData", RandomDataCount ) );
 			randomSsbo.end();
 		}
@@ -240,21 +242,26 @@ namespace castor3d::shader
 					, vec4( 0.9375_f, 0.4375_f, 0.8125_f, 0.3125_f ) } );
 
 			m_writer.declCombinedImg< FImg2DArrayR32 >( MapDepthDirectional
-				, index++
+				, index
 				, set );
+			++index;
 			m_writer.declCombinedImg< FImg2DArrayR32 >( MapDepthCmpDirectional
-				, index++
+				, index
 				, set );
+			++index;
 			m_writer.declCombinedImg< FImg2DArrayRg32 >( MapVarianceDirectional
-				, index++
+				, index
 				, set );
+			++index;
 
 			m_shadowsBuffer = castor::makeUnique< ShadowsBuffer >( m_writer
-				, index++
+				, index
 				, set );
+			++index;
 			auto randomSsbo = m_writer.declStorageBuffer( RandomBuffer
-				, index++
+				, index
 				, set );
+			++index;
 			m_randomData = std::make_unique< sdw::Vec4Array >( randomSsbo.declMember< sdw::Vec4 >( "c3d_randomData", RandomDataCount ) );
 			randomSsbo.end();
 		}
@@ -271,21 +278,26 @@ namespace castor3d::shader
 		if ( checkFlag( m_shadowOptions.type, SceneFlag::eShadowPoint ) )
 		{
 			m_writer.declCombinedImg< FImgCubeArrayR32 >( MapDepthPoint
-				, index++
+				, index
 				, set );
+			++index;
 			m_writer.declCombinedImg< FImgCubeArrayR32 >( MapDepthCmpPoint
-				, index++
+				, index
 				, set );
+			++index;
 			m_writer.declCombinedImg< FImgCubeArrayRg32 >( MapVariancePoint
-				, index++
+				, index
 				, set );
+			++index;
 
 			m_shadowsBuffer = castor::makeUnique< ShadowsBuffer >( m_writer
-				, index++
+				, index
 				, set );
+			++index;
 			auto randomSsbo = m_writer.declStorageBuffer( RandomBuffer
-				, index++
+				, index
 				, set );
+			++index;
 			m_randomData = std::make_unique< sdw::Vec4Array >( randomSsbo.declMember< sdw::Vec4 >( "c3d_randomData", RandomDataCount ) );
 			randomSsbo.end();
 		}
@@ -302,21 +314,26 @@ namespace castor3d::shader
 		if ( checkFlag( m_shadowOptions.type, SceneFlag::eShadowSpot ) )
 		{
 			m_writer.declCombinedImg< FImg2DArrayR32 >( MapDepthSpot
-				, index++
+				, index
 				, set );
+			++index;
 			m_writer.declCombinedImg< FImg2DArrayR32 >( MapDepthCmpSpot
-				, index++
+				, index
 				, set );
+			++index;
 			m_writer.declCombinedImg< FImg2DArrayRg32 >( MapVarianceSpot
-				, index++
+				, index
 				, set );
+			++index;
 
 			m_shadowsBuffer = castor::makeUnique< ShadowsBuffer >( m_writer
-				, index++
+				, index
 				, set );
+			++index;
 			auto randomSsbo = m_writer.declStorageBuffer( RandomBuffer
-				, index++
+				, index
 				, set );
+			++index;
 			m_randomData = std::make_unique< sdw::Vec4Array >( randomSsbo.declMember< sdw::Vec4 >( "c3d_randomData", RandomDataCount ) );
 			randomSsbo.end();
 		}
@@ -373,8 +390,8 @@ namespace castor3d::shader
 					, sdw::Vec3 const & wsNormal
 					, sdw::Vec3 const & wsPosition
 					, sdw::Mat4 const & lightMatrix
-					, sdw::UInt cascadeIndex
-					, sdw::UInt const & maxCascade )
+					, sdw::UInt const & cascadeIndex
+					, sdw::UInt const & )
 				{
 					if ( checkFlag( m_shadowOptions.type, SceneFlag::eShadowDirectional ) )
 					{
@@ -423,7 +440,7 @@ namespace castor3d::shader
 								, c3d_mapNormalDepthDirectional.lod( vec3( lightSpacePosition.xy(), m_writer.cast< sdw::Float >( cascadeIndex ) ), 0.0_f ) );
 							result = step( 1.0_f - ( lightSpacePosition.z() - depthBias ), 1.0_f - shadowMapDepth );
 						}
-						FI;
+						FI
 
 						m_writer.returnStmt( result );
 					}
@@ -476,7 +493,7 @@ namespace castor3d::shader
 			m_computeSpot = m_writer.implementFunction< sdw::Float >( "c3d_shdComputeSpot"
 				, [this]( shader::ShadowData const & shadows
 					, sdw::Int const & shadowMapIndex
-					, sdw::Float const & depth
+					, sdw::Float const &
 					, sdw::Vec3 const & wsVertexToLight
 					, sdw::Vec3 const & wsNormal
 					, sdw::Vec3 const & wsPosition
@@ -533,9 +550,9 @@ namespace castor3d::shader
 									, c3d_mapNormalDepthSpot.lod( vec3( lightSpacePosition.xy(), shadowMapIndex ), 0.0_f ) );
 								result = step( 1.0_f - ( lightSpacePosition.z() - depthBias ), 1.0_f - shadowMapDepth );
 							}
-							FI;
+							FI
 						}
-						FI;
+						FI
 
 						m_writer.returnStmt( result );
 					}
@@ -575,7 +592,7 @@ namespace castor3d::shader
 					, sdw::Float const & depth
 					, sdw::Vec3 const & wsVertexToLight
 					, sdw::Vec3 const & wsNormal
-					, sdw::Vec3 const & wsPosition )
+					, sdw::Vec3 const & )
 				{
 					if ( checkFlag( m_shadowOptions.type, SceneFlag::eShadowPoint ) )
 					{
@@ -627,9 +644,9 @@ namespace castor3d::shader
 									, c3d_mapDepthPoint.lod( vec4( lightToVertex, shadowMapIndex ), 0.0_f ) );
 								result = step( 1.0_f - ( depth - depthBias ), 1.0_f - shadowMapDepth );
 							}
-							FI;
+							FI
 						}
-						FI;
+						FI
 
 						m_writer.returnStmt( result );
 					}
@@ -785,11 +802,11 @@ namespace castor3d::shader
 							{
 								volumetric += scattering;
 							}
-							FI;
+							FI
 
 							t += stepLength;
 						}
-						ROF;
+						ROF
 
 						volumetric /= m_writer.cast< sdw::Float >( shadows.volumetricSteps() );
 						m_writer.returnStmt( volumetric );
@@ -921,7 +938,7 @@ namespace castor3d::shader
 						shadowMapDepth = shadowMap.lod( vec3( lightSpacePosition.xy() + sampleOffset, m_writer.cast< sdw::Float >( arrayIndex ) ), 0.0_f );
 						shadowFactor += step( 1.0_f - ( lightSpacePosition.z() - depthBias ), 1.0_f - shadowMapDepth );
 					}
-					ROF;
+					ROF
 
 					m_writer.returnStmt( shadowFactor / m_writer.cast< sdw::Float >( sampleCount ) );
 				}
@@ -957,11 +974,11 @@ namespace castor3d::shader
 			m_filterPCFCube = m_writer.implementFunction< sdw::Float >( "c3d_shdFilterPCFCube"
 				, [this]( sdw::Vec3 const & lightToVertex
 					, sdw::CombinedImageCubeArrayR32 const & shadowMap
-					, sdw::Vec2 const & invTexDim
+					, sdw::Vec2 const &
 					, sdw::UInt const & cubeIndex
 					, sdw::Float const & depth
 					, sdw::Float const & depthBias
-					, sdw::UInt const & sampleCount
+					, sdw::UInt const &
 					, sdw::Float const & filterSize )
 				{
 					int count = 0;

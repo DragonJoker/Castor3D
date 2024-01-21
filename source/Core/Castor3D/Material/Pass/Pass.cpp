@@ -225,66 +225,64 @@ namespace castor3d
 
 	void Pass::initialise()
 	{
-		if ( !m_initialised )
+		if ( !m_initialised
+			&& !m_initialising.exchange( true ) )
 		{
-			if ( !m_initialising.exchange( true ) )
+			UnitArray failed;
+
+			for ( auto & unit : m_textureUnits )
 			{
-				UnitArray failed;
+				if ( unit->failed() )
+				{
+					failed.push_back( unit );
+				}
+			}
+
+			if ( !failed.empty() )
+			{
+				for ( auto & unit : failed )
+				{
+					auto it = std::find( m_textureUnits.begin()
+						, m_textureUnits.end()
+						, unit );
+					m_textureUnits.erase( it );
+				}
+
+				std::vector< TextureFlagConfiguration > textureConfigs;
 
 				for ( auto & unit : m_textureUnits )
 				{
-					if ( unit->failed() )
+					for ( auto & component : unit->getConfiguration().components )
 					{
-						failed.push_back( unit );
-					}
-				}
-
-				if ( !failed.empty() )
-				{
-					for ( auto & unit : failed )
-					{
-						auto it = std::find( m_textureUnits.begin()
-							, m_textureUnits.end()
-							, unit );
-						m_textureUnits.erase( it );
-					}
-
-					std::vector< TextureFlagConfiguration > textureConfigs;
-
-					for ( auto & unit : m_textureUnits )
-					{
-						for ( auto & component : unit->getConfiguration().components )
+						if ( component.componentsMask )
 						{
-							if ( component.componentsMask )
-							{
-								textureConfigs.push_back( component );
-							}
+							textureConfigs.push_back( component );
 						}
 					}
-
-					getPassComponentsRegister().updateMapComponents( textureConfigs, *this );
 				}
 
-				if ( m_reflRefrFlag == 0 )
-				{
-					createComponent< DefaultReflRefrComponent >();
-				}
-
-				m_componentCombine = getOwner()->getOwner()->getPassComponentsRegister().registerPassComponentCombine( *this );
-				m_textureCombine = getOwner()->getOwner()->getTextureUnitCache().registerTextureCombine( *this );
-
-				for ( auto & unit : m_textureUnits )
-				{
-					while ( !unit->isInitialised() && !unit->failed() )
-					{
-						std::this_thread::sleep_for( 1_ms );
-					}
-				}
-
-				getOwner()->getOwner()->getMaterialCache().registerPass( *this );
-				m_initialising = false;
-				m_initialised = true;
+				getPassComponentsRegister().updateMapComponents( textureConfigs, *this );
 			}
+
+			if ( m_reflRefrFlag == 0 )
+			{
+				createComponent< DefaultReflRefrComponent >();
+			}
+
+			m_componentCombine = getOwner()->getOwner()->getPassComponentsRegister().registerPassComponentCombine( *this );
+			m_textureCombine = getOwner()->getOwner()->getTextureUnitCache().registerTextureCombine( *this );
+
+			for ( auto & unit : m_textureUnits )
+			{
+				while ( !unit->isInitialised() && !unit->failed() )
+				{
+					std::this_thread::sleep_for( 1_ms );
+				}
+			}
+
+			getOwner()->getOwner()->getMaterialCache().registerPass( *this );
+			m_initialising = false;
+			m_initialised = true;
 		}
 	}
 
@@ -998,7 +996,7 @@ namespace castor3d
 			auto & compDeps = component->getDependencies();
 			auto compIt = std::find_if( compDeps.begin()
 				, compDeps.end()
-				, [&name]( castor::String const & lookup )
+				, [&name]( castor::StringView lookup )
 				{
 					return lookup == name;
 				} );

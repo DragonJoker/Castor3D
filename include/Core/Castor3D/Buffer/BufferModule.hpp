@@ -264,13 +264,23 @@ namespace castor3d
 	*/
 	struct MemChunk
 	{
+		MemChunk() = default;
+		MemChunk( VkDeviceSize offset
+			, VkDeviceSize size
+			, VkDeviceSize askedSize )
+			: offset{ offset }
+			, size{ size }
+			, askedSize{ askedSize }
+		{
+		}
+
 		VkDeviceSize offset;
 		VkDeviceSize size;
 		VkDeviceSize askedSize;
 	};
 
 	inline bool operator<( MemChunk const & lhs
-		, MemChunk const & rhs )
+		, MemChunk const & rhs )noexcept
 	{
 		return lhs.offset < rhs.offset;
 	}

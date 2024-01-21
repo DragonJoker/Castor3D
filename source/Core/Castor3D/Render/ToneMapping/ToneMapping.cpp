@@ -29,23 +29,18 @@ namespace castor3d
 	}
 
 	ToneMapping::ToneMapping( Engine & engine
-		, RenderDevice const & device
-		, castor::Size const & size
 		, crg::FrameGraph & graph
 		, crg::ImageViewIdArray const & source
 		, crg::ImageViewId const & target
 		, crg::FramePass const & previousPass
 		, HdrConfigUbo & hdrConfigUbo
 		, ColourGradingUbo & colourGradingUbo
-		, Parameters const & parameters
 		, ProgressBar * progress )
 		: OwnedBy< Engine >{ engine }
-		, m_name{ cuT( "linear" ) }
 		, m_hdrConfigUbo{ hdrConfigUbo }
 		, m_colourGradingUbo{ colourGradingUbo }
-		, m_shader{ "ToneMapping" }
 		, m_source{ source.front() }
-		, m_pass{ &doCreatePass( size, graph, source, target, previousPass, progress ) }
+		, m_pass{ &doCreatePass( graph, source, target, previousPass, progress ) }
 	{
 	}
 
@@ -83,8 +78,7 @@ namespace castor3d
 		visitor.visit( m_shader );
 	}
 
-	crg::FramePass & ToneMapping::doCreatePass( castor::Size const & size
-		, crg::FrameGraph & graph
+	crg::FramePass & ToneMapping::doCreatePass( crg::FrameGraph & graph
 		, crg::ImageViewIdArray const & source
 		, crg::ImageViewId const & target
 		, crg::FramePass const & previousPass
@@ -122,7 +116,7 @@ namespace castor3d
 	void ToneMapping::getVertexProgram( ast::ShaderBuilder & builder )
 	{
 		sdw::VertexWriter writer{ builder };
-		writer.implementMainT< shader::PosUv2FT, shader::Uv2FT >( [&]( sdw::VertexInT< shader::PosUv2FT > in
+		writer.implementMainT< shader::PosUv2FT, shader::Uv2FT >( []( sdw::VertexInT< shader::PosUv2FT > const & in
 			, sdw::VertexOutT< shader::Uv2FT > out )
 			{
 				out.uv() = in.uv();
@@ -138,7 +132,7 @@ namespace castor3d
 		castor3d::ToneMapping::getVertexProgram( builder );
 		getEngine()->getToneMappingFactory().create( name, builder );
 		m_shader.shader = builder.releaseShader();
-		auto & device = getEngine()->getRenderSystem()->getRenderDevice();
+		auto const & device = getEngine()->getRenderSystem()->getRenderDevice();
 		m_program = makeProgramStates( device, m_shader );
 	}
 

@@ -21,10 +21,6 @@ namespace castor3d
 		}
 	}
 
-	ParticleDeclaration::~ParticleDeclaration()
-	{
-	}
-
 	bool operator==( ParticleDeclaration const & lhs, ParticleDeclaration const & rhs )
 	{
 		bool result = lhs.stride() == rhs.stride() && lhs.count() == rhs.count();

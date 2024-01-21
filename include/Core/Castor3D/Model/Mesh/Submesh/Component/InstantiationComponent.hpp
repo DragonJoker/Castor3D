@@ -90,7 +90,7 @@ namespace castor3d
 			 *\param[in]	material	Le matériau pour lequel le compte est incrémenté.
 			 *\return		\p true Si le buffer d'instances a changé.
 			 */
-			C3D_API bool ref( MaterialObs material );
+			C3D_API bool ref( Material const * material );
 			/**
 			 *\~english
 			 *\brief		Decrements instance count.
@@ -99,7 +99,7 @@ namespace castor3d
 			 *\brief		Décrémente le compte d'instances.
 			 *\param[in]	material	Le matériau pour lequel le compte est décrémenté.
 			 */
-			C3D_API void unref( MaterialObs material );
+			C3D_API void unref( Material const * material );
 			/**
 			 *\~english
 			 *\brief		Retrieves the instances count

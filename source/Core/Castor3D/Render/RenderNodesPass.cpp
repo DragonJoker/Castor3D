@@ -136,8 +136,8 @@ namespace castor3d
 		}
 
 		static crg::ru::Config buildRuConfig( crg::ru::Config const & config
-			, crg::ImageViewIdArray targetImage
-			, crg::ImageViewIdArray targetDepth
+			, crg::ImageViewIdArray const & targetImage
+			, crg::ImageViewIdArray const & targetDepth
 			, RenderQueue const & queue )
 		{
 			crg::ru::Config result{ std::max( 1u, uint32_t( std::max( targetImage.size(), targetDepth.size() ) ) )
@@ -167,8 +167,8 @@ namespace castor3d
 		, crg::RenderPass{ pass
 			, context
 			, graph
-			, { [this]( uint32_t index ){ doSubInitialise(); }
-				, [this]( crg::RecordContext & ctx, VkCommandBuffer cb, uint32_t i ){ doSubRecordInto( ctx, cb, i ); }
+			, { [this]( uint32_t ){ doSubInitialise(); }
+				, [this]( crg::RecordContext &, VkCommandBuffer cb, uint32_t ){ doSubRecordInto( cb ); }
 				, GetSubpassContentsCallback( [](){ return VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS; } )
 				, GetPassIndexCallback( [](){ return 0u; } )
 				, IsEnabledCallback( [this](){ return isPassEnabled(); } ) }
@@ -251,17 +251,17 @@ namespace castor3d
 		flags.isStatic = filtersNonStatic();
 	}
 
-	SubmeshComponentCombine RenderNodesPass::adjustFlags( SubmeshComponentCombine submeshCombine )const
+	SubmeshComponentCombine RenderNodesPass::adjustFlags( SubmeshComponentCombine const & submeshCombine )const
 	{
 		auto combine = doAdjustSubmeshComponents( submeshCombine );
 		getEngine()->getSubmeshComponentsRegister().registerSubmeshComponentCombine( combine );
 		return combine;
 	}
 
-	PassComponentCombine RenderNodesPass::adjustFlags( PassComponentCombine combine )const
+	PassComponentCombine RenderNodesPass::adjustFlags( PassComponentCombine const & passCombine )const
 	{
 		return getEngine()->getPassComponentsRegister().filterComponentFlags( getComponentsMask()
-			, combine );
+			, passCombine );
 	}
 
 	ProgramFlags RenderNodesPass::adjustFlags( ProgramFlags flags )const
@@ -279,14 +279,14 @@ namespace castor3d
 		return doAdjustSceneFlags( flags );
 	}
 
-	TextureCombine RenderNodesPass::adjustFlags( TextureCombine combine )const
+	TextureCombine RenderNodesPass::adjustFlags( TextureCombine const & textureCombine )const
 	{
 		return getEngine()->getPassComponentsRegister().filterTextureFlags( getComponentsMask()
-			, combine );
+			, textureCombine );
 	}
 
-	PipelineFlags RenderNodesPass::createPipelineFlags( PassComponentCombine components
-		, SubmeshComponentCombine submeshComponents
+	PipelineFlags RenderNodesPass::createPipelineFlags( PassComponentCombine const & components
+		, SubmeshComponentCombine const & submeshComponents
 		, BlendMode colourBlendMode
 		, BlendMode alphaBlendMode
 		, RenderPassTypeID renderPassTypeId
@@ -301,7 +301,7 @@ namespace castor3d
 		, bool isFrontCulled
 		, uint32_t passLayerIndex
 		, GpuBufferOffsetT< castor::Point4f > const & morphTargets
-		, SubmeshRenderData * submeshData )const noexcept
+		, SubmeshRenderData const * submeshData )const noexcept
 	{
 		auto result = PipelineFlags{ adjustFlags( components )
 			, adjustFlags( submeshComponents )
@@ -339,13 +339,13 @@ namespace castor3d
 
 	PipelineFlags RenderNodesPass::createPipelineFlags( Pass const & pass
 		, TextureCombine const & textures
-		, SubmeshComponentCombine submeshComponents
+		, SubmeshComponentCombine const & submeshComponents
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, VkPrimitiveTopology topology
 		, bool isFrontCulled
 		, GpuBufferOffsetT< castor::Point4f > const & morphTargets
-		, SubmeshRenderData * submeshData )const noexcept
+		, SubmeshRenderData const * submeshData )const noexcept
 	{
 		return createPipelineFlags( pass.getPassFlags()
 			, submeshComponents
@@ -390,12 +390,12 @@ namespace castor3d
 
 	void RenderNodesPass::cleanupPipelines()
 	{
-		for ( auto & pipeline : m_backPipelines )
+		for ( auto const & pipeline : m_backPipelines )
 		{
 			pipeline->cleanup();
 		}
 
-		for ( auto & pipeline : m_frontPipelines )
+		for ( auto const & pipeline : m_frontPipelines )
 		{
 			pipeline->cleanup();
 		}
@@ -435,14 +435,6 @@ namespace castor3d
 			attach.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
 			break;
 
-		case BlendMode::eInterpolative:
-			attach.blendEnable = VK_TRUE;
-			attach.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_COLOR;
-			attach.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_COLOR;
-			attach.srcAlphaBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
-			attach.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-			break;
-
 		default:
 			attach.blendEnable = VK_TRUE;
 			attach.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_COLOR;
@@ -478,15 +470,6 @@ namespace castor3d
 				attach.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
 				break;
 
-			case BlendMode::eInterpolative:
-				attach.blendEnable = VK_TRUE;
-				attach.alphaBlendOp = VK_BLEND_OP_ADD;
-				attach.srcAlphaBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
-				attach.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-				attach.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
-				attach.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-				break;
-
 			default:
 				attach.blendEnable = VK_TRUE;
 				attach.alphaBlendOp = VK_BLEND_OP_ADD;
@@ -516,27 +499,27 @@ namespace castor3d
 		for ( uint32_t j = 0u; j < uint32_t( LightType::eCount ); ++j )
 		{
 			// Depth
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+			addDescriptorSetLayoutBinding( bindings, index
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, shaderStages ) );
+				, shaderStages );
 			// Depth Compare
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+			addDescriptorSetLayoutBinding( bindings, index
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, shaderStages ) );
+				, shaderStages );
 			// Variance
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+			addDescriptorSetLayoutBinding( bindings, index
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, shaderStages ) );
+				, shaderStages );
 		}
 
 		// Shadow Buffer
-		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+		addDescriptorSetLayoutBinding( bindings, index
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, shaderStages ) );
+			, shaderStages );
 		// Random Storage
-		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+		addDescriptorSetLayoutBinding( bindings, index
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-			, shaderStages ) );
+			, shaderStages );
 	}
 
 	void RenderNodesPass::addShadowBindings( SceneFlags const & sceneFlags
@@ -551,17 +534,17 @@ namespace castor3d
 			if ( checkFlag( sceneFlags, SceneFlag( uint8_t( SceneFlag::eShadowBegin ) << j ) ) )
 			{
 				// Depth
-				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				addDescriptorSetLayoutBinding( bindings, index
 					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-					, shaderStages ) );
+					, shaderStages );
 				// Depth Compare
-				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				addDescriptorSetLayoutBinding( bindings, index
 					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-					, shaderStages ) );
+					, shaderStages );
 				// Variance
-				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				addDescriptorSetLayoutBinding( bindings, index
 					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-					, shaderStages ) );
+					, shaderStages );
 				hasShadows = true;
 			}
 		}
@@ -569,13 +552,13 @@ namespace castor3d
 		if ( hasShadows )
 		{
 			// Shadow Buffer
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+			addDescriptorSetLayoutBinding( bindings, index
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, shaderStages ) );
+				, shaderStages );
 			// Random Storage
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+			addDescriptorSetLayoutBinding( bindings, index
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-				, shaderStages ) );
+				, shaderStages );
 		}
 	}
 
@@ -597,15 +580,15 @@ namespace castor3d
 
 		if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )
 		{
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+			addDescriptorSetLayoutBinding( bindings, index
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, shaderStages ) );
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				, shaderStages );
+			addDescriptorSetLayoutBinding( bindings, index
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, shaderStages ) );	// c3d_mapVoxelsFirstBounce
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				, shaderStages );	// c3d_mapVoxelsFirstBounce
+			addDescriptorSetLayoutBinding( bindings, index
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, shaderStages ) );	// c3d_mapVoxelsSecondaryBounce
+				, shaderStages );	// c3d_mapVoxelsSecondaryBounce
 		}
 		else
 		{
@@ -616,18 +599,18 @@ namespace castor3d
 
 			if ( checkFlag( sceneFlags, SceneFlag::eLpvGI ) )
 			{
-				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				addDescriptorSetLayoutBinding( bindings, index
 					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-					, shaderStages ) );
-				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+					, shaderStages );
+				addDescriptorSetLayoutBinding( bindings, index
 					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-					, shaderStages ) );	// c3d_lpvAccumulationR
-				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+					, shaderStages );	// c3d_lpvAccumulationR
+				addDescriptorSetLayoutBinding( bindings, index
 					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-					, shaderStages ) );	// c3d_lpvAccumulationG
-				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+					, shaderStages );	// c3d_lpvAccumulationG
+				addDescriptorSetLayoutBinding( bindings, index
 					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-					, shaderStages ) );	// c3d_lpvAccumulationB
+					, shaderStages );	// c3d_lpvAccumulationB
 			}
 			else if ( indirectLighting.lpvConfigUbo )
 			{
@@ -637,21 +620,21 @@ namespace castor3d
 			if ( checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI ) )
 			{
 				CU_Require( indirectLighting.llpvResult );
-				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				addDescriptorSetLayoutBinding( bindings, index
 					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-					, shaderStages ) );
+					, shaderStages );
 
 				for ( size_t i = 0u; i < indirectLighting.llpvResult->size(); ++i )
 				{
-					bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+					addDescriptorSetLayoutBinding( bindings, index
 						, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-						, shaderStages ) );	// c3d_lpvAccumulationRn
-					bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+						, shaderStages );	// c3d_lpvAccumulationRn
+					addDescriptorSetLayoutBinding( bindings, index
 						, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-						, shaderStages ) );	// c3d_lpvAccumulationGn
-					bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+						, shaderStages );	// c3d_lpvAccumulationGn
+					addDescriptorSetLayoutBinding( bindings, index
 						, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-						, shaderStages ) );	// c3d_lpvAccumulationBn
+						, shaderStages );	// c3d_lpvAccumulationBn
 				}
 			}
 			else if ( indirectLighting.llpvConfigUbo )
@@ -669,23 +652,23 @@ namespace castor3d
 		, VkShaderStageFlags shaderStages
 		, uint32_t & index )
 	{
-		bindings.push_back( frustumClusters.getClustersUbo().createLayoutBinding( index++
-			, shaderStages ) );
-		bindings.push_back( makeDescriptorSetLayoutBinding( index++ // ReducedLightsAABBBuffer
+		frustumClusters.getClustersUbo().addLayoutBinding( bindings, index
+			, shaderStages );
+		addDescriptorSetLayoutBinding( bindings, index // ReducedLightsAABBBuffer
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-			, shaderStages ) );
-		bindings.push_back( makeDescriptorSetLayoutBinding( index++ // PointLightIndexBuffer
+			, shaderStages );
+		addDescriptorSetLayoutBinding( bindings, index // PointLightIndexBuffer
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-			, shaderStages ) );
-		bindings.push_back( makeDescriptorSetLayoutBinding( index++ // PointLightClusterBuffer
+			, shaderStages );
+		addDescriptorSetLayoutBinding( bindings, index // PointLightClusterBuffer
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-			, shaderStages ) );
-		bindings.push_back( makeDescriptorSetLayoutBinding( index++ // SpotLightIndexBuffer
+			, shaderStages );
+		addDescriptorSetLayoutBinding( bindings, index // SpotLightIndexBuffer
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-			, shaderStages ) );
-		bindings.push_back( makeDescriptorSetLayoutBinding( index++ // SpotLightClusterBuffer
+			, shaderStages );
+		addDescriptorSetLayoutBinding( bindings, index // SpotLightClusterBuffer
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-			, shaderStages ) );
+			, shaderStages );
 	}
 
 	void RenderNodesPass::addShadowDescriptor( RenderSystem const & renderSystem
@@ -698,9 +681,9 @@ namespace castor3d
 #if !C3D_DebugDisableShadowMaps
 		for ( auto i = 0u; i < uint32_t( LightType::eCount ); ++i )
 		{
-			for ( auto & shadowMapRef : shadowMaps[i] )
+			for ( auto const & [shadowMapRef, _] : shadowMaps[i] )
 			{
-				auto & result = shadowMapRef.first.get().getShadowPassResult( false );
+				auto const & result = shadowMapRef.get().getShadowPassResult( false );
 				bindTexture( graph
 					, result[SmTexture::eLinearDepth].sampledViewId
 					, *result[SmTexture::eVariance].sampler
@@ -719,7 +702,8 @@ namespace castor3d
 			}
 		}
 
-		descriptorWrites.push_back( shadowBuffer.getBinding( index++ ) );
+		shadowBuffer.addBinding( descriptorWrites
+			, index );
 		bindBuffer( renderSystem.getRandomStorage().getBuffer()
 			, descriptorWrites
 			, index );
@@ -741,9 +725,9 @@ namespace castor3d
 		{
 			if ( checkFlag( sceneFlags, SceneFlag( uint8_t( SceneFlag::eShadowBegin ) << i ) ) )
 			{
-				for ( auto & shadowMapRef : shadowMaps[i] )
+				for ( auto const & [shadowMapRef, _] : shadowMaps[i] )
 				{
-					auto & result = shadowMapRef.first.get().getShadowPassResult( false );
+					auto const & result = shadowMapRef.get().getShadowPassResult( false );
 					bindTexture( graph
 						, result[SmTexture::eLinearDepth].sampledViewId
 						, *result[SmTexture::eVariance].sampler
@@ -766,7 +750,8 @@ namespace castor3d
 
 		if ( hasShadows )
 		{
-			descriptorWrites.push_back( shadowBuffer.getBinding( index++ ) );
+			shadowBuffer.addBinding( descriptorWrites
+				, index );
 			bindBuffer( renderSystem.getRandomStorage().getBuffer()
 				, descriptorWrites
 				, index );
@@ -796,7 +781,8 @@ namespace castor3d
 			CU_Require( indirectLighting.vctConfigUbo );
 			CU_Require( indirectLighting.vctFirstBounce );
 			CU_Require( indirectLighting.vctSecondaryBounce );
-			descriptorWrites.push_back( indirectLighting.vctConfigUbo->getDescriptorWrite( index++ ) );
+			indirectLighting.vctConfigUbo->addDescriptorWrite( descriptorWrites
+				, index );
 			bindTexture( indirectLighting.vctFirstBounce->wholeView
 				, *indirectLighting.vctFirstBounce->sampler
 				, descriptorWrites
@@ -817,8 +803,9 @@ namespace castor3d
 			{
 				CU_Require( indirectLighting.lpvConfigUbo );
 				CU_Require( indirectLighting.lpvResult );
-				descriptorWrites.push_back( indirectLighting.lpvConfigUbo->getDescriptorWrite( index++ ) );
-				auto & lpv = *indirectLighting.lpvResult;
+				indirectLighting.lpvConfigUbo->addDescriptorWrite( descriptorWrites
+					, index );
+				auto const & lpv = *indirectLighting.lpvResult;
 				bindTexture( lpv[LpvTexture::eR].wholeView
 					, *lpv[LpvTexture::eR].sampler
 					, descriptorWrites
@@ -841,11 +828,12 @@ namespace castor3d
 			{
 				CU_Require( indirectLighting.llpvConfigUbo );
 				CU_Require( indirectLighting.llpvResult );
-				descriptorWrites.push_back( indirectLighting.llpvConfigUbo->getDescriptorWrite( index++ ) );
+				indirectLighting.llpvConfigUbo->addDescriptorWrite( descriptorWrites
+					, index );
 
-				for ( auto & plpv : *indirectLighting.llpvResult )
+				for ( auto const & plpv : *indirectLighting.llpvResult )
 				{
-					auto & lpv = *plpv;
+					auto const & lpv = *plpv;
 					bindTexture( lpv[LpvTexture::eR].wholeView
 						, *lpv[LpvTexture::eR].sampler
 						, descriptorWrites
@@ -874,7 +862,7 @@ namespace castor3d
 		, ashes::WriteDescriptorSetArray & descriptorWrites
 		, uint32_t & index )
 	{
-		descriptorWrites.push_back( frustumClusters.getClustersUbo().getDescriptorWrite( index++ ) );
+		frustumClusters.getClustersUbo().addDescriptorWrite( descriptorWrites, index );
 		bindBuffer( frustumClusters.getReducedLightsAABBBuffer(), descriptorWrites, index );
 		bindBuffer( frustumClusters.getPointLightClusterIndexBuffer(), descriptorWrites, index );
 		bindBuffer( frustumClusters.getPointLightClusterGridBuffer(), descriptorWrites, index );
@@ -1029,13 +1017,12 @@ namespace castor3d
 		, ShadowMapLightTypeArray const & shadowMaps
 		, ShadowBuffer const * shadowBuffer )
 	{
-		auto descLayoutIt = m_additionalDescriptors.emplace( rendndpass::makeHash( pipeline.getFlags() )
-			, PassDescriptors{} ).first;
+		auto descLayoutIt = m_additionalDescriptors.try_emplace( rendndpass::makeHash( pipeline.getFlags() ) ).first;
 		auto & descriptors = descLayoutIt->second;
 
 		if ( !descriptors.set )
 		{
-			auto & scene = getCuller().getScene();
+			auto const & scene = getCuller().getScene();
 			descriptors.set = descriptors.pool->createDescriptorSet( getName() + rendndpass::Suffix
 				, RenderPipeline::eBuffers );
 			auto & descriptorSet = *descriptors.set;
@@ -1066,7 +1053,7 @@ namespace castor3d
 				, 0u
 				, modelBuffer.getBuffer().getSize() } );
 			descriptorWrites.push_back( modelDataWrite );
-			auto & matCache = getOwner()->getMaterialCache();
+			auto const & matCache = getOwner()->getMaterialCache();
 			descriptorWrites.push_back( matCache.getPassBuffer().getBinding( uint32_t( GlobalBuffersIdx::eMaterials ) ) );
 			descriptorWrites.push_back( matCache.getSssProfileBuffer().getBinding( uint32_t( GlobalBuffersIdx::eSssProfiles ) ) );
 			descriptorWrites.push_back( matCache.getTexConfigBuffer().getBinding( uint32_t( GlobalBuffersIdx::eTexConfigs ) ) );
@@ -1108,9 +1095,7 @@ namespace castor3d
 		getRenderQueue().invalidate();
 	}
 
-	void RenderNodesPass::doSubRecordInto( crg::RecordContext & context
-		, VkCommandBuffer commandBuffer
-		, uint32_t index )
+	void RenderNodesPass::doSubRecordInto( VkCommandBuffer commandBuffer )
 	{
 		VkCommandBuffer secondary = getRenderQueue().initCommandBuffer();
 		m_context.vkCmdExecuteCommands( commandBuffer
@@ -1123,7 +1108,6 @@ namespace castor3d
 	}
 
 	void RenderNodesPass::doAddShadowBindings( Scene const & scene
-		, PipelineFlags const & flags
 		, ashes::VkDescriptorSetLayoutBindingArray & bindings
 		, uint32_t & index )const
 	{
@@ -1150,7 +1134,6 @@ namespace castor3d
 	}
 
 	void RenderNodesPass::doAddClusteredLightingBindings( RenderTarget const & target
-		, PipelineFlags const & flags
 		, ashes::VkDescriptorSetLayoutBindingArray & bindings
 		, uint32_t & index )const
 	{
@@ -1165,7 +1148,6 @@ namespace castor3d
 	}
 
 	void RenderNodesPass::doAddShadowDescriptor( Scene const & scene
-		, PipelineFlags const & flags
 		, ashes::WriteDescriptorSetArray & descriptorWrites
 		, ShadowMapLightTypeArray const & shadowMaps
 		, ShadowBuffer const * shadowBuffer
@@ -1198,7 +1180,6 @@ namespace castor3d
 	}
 
 	void RenderNodesPass::doAddClusteredLightingDescriptor( RenderTarget const & target
-		, PipelineFlags const & flags
 		, ashes::WriteDescriptorSetArray & descriptorWrites
 		, uint32_t & index )const
 	{
@@ -1243,8 +1224,7 @@ namespace castor3d
 		return flags;
 	}
 
-	ShaderProgramRPtr RenderNodesPass::doGetProgram( PipelineFlags const & flags
-		, VkCullModeFlags cullMode )
+	ShaderProgramRPtr RenderNodesPass::doGetProgram( PipelineFlags const & flags )
 	{
 		return getEngine()->getShaderProgramCache().getAutomaticProgram( *this, flags );
 	}
@@ -1349,7 +1329,7 @@ namespace castor3d
 		addBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( GlobalBuffersIdx::eModelsData )
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 			, stageFlags ) );
-		auto & matCache = getOwner()->getMaterialCache();
+		auto const & matCache = getOwner()->getMaterialCache();
 		addBindings.emplace_back( matCache.getPassBuffer().createLayoutBinding( uint32_t( GlobalBuffersIdx::eMaterials )
 			, stageFlags ) );
 		addBindings.emplace_back( matCache.getSssProfileBuffer().createLayoutBinding( uint32_t( GlobalBuffersIdx::eSssProfiles )
@@ -1424,7 +1404,7 @@ namespace castor3d
 					, doCreateRasterizationState( flags, cullMode )
 					, doCreateBlendState( flags )
 					, doCreateMultisampleState( flags )
-					, doGetProgram( flags, cullMode )
+					, doGetProgram( flags )
 					, flags );
 				pipeline->setViewport( makeViewport( m_size ) );
 
@@ -1433,8 +1413,7 @@ namespace castor3d
 					pipeline->setScissor( makeScissor( m_size ) );
 				}
 
-				auto addDescLayoutIt = m_additionalDescriptors.emplace( rendndpass::makeHash( flags )
-					, PassDescriptors{} ).first;
+				auto addDescLayoutIt = m_additionalDescriptors.try_emplace( rendndpass::makeHash( flags ) ).first;
 				auto & addDescriptors = addDescLayoutIt->second;
 
 				if ( !addDescriptors.layout )

@@ -101,21 +101,21 @@ namespace castor3d
 		 *\~french
 		 *\return		L'incrustation panneau.
 		 */
-		C3D_API PanelOverlayRPtr getPanelOverlay()const;
+		C3D_API PanelOverlayRPtr getPanelOverlay()const noexcept;
 		/**
 		 *\~english
 		 *\return		The border panel overlay.
 		 *\~french
 		 *\return		L'incrustation panneau borduré.
 		 */
-		C3D_API BorderPanelOverlayRPtr getBorderPanelOverlay()const;
+		C3D_API BorderPanelOverlayRPtr getBorderPanelOverlay()const noexcept;
 		/**
 		 *\~english
 		 *\return		The text overlay.
 		 *\~french
 		 *\return		L'incrustation texte.
 		 */
-		C3D_API TextOverlayRPtr getTextOverlay()const;
+		C3D_API TextOverlayRPtr getTextOverlay()const noexcept;
 		/**
 		 *\~english
 		 *\return		The visibility status.

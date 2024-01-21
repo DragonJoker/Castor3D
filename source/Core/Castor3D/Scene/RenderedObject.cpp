@@ -39,8 +39,8 @@ namespace castor3d
 		auto scale = sceneNode.getDerivedScale();
 		modelData.scale = scale;
 		modelData.meshletCount = meshletCount;
-		auto ires = m_modelsDataOffsets.emplace( nodeId, std::make_pair( &modelData, Offsets{} ) );
-		auto & offsets = ires.first->second.second;
+		auto it = m_modelsDataOffsets.try_emplace( nodeId, &modelData, Offsets{} ).first;
+		auto & offsets = it->second.second;
 
 		if ( offsets.vertexOffset || offsets.indexOffset )
 		{
@@ -55,17 +55,16 @@ namespace castor3d
 		, VkDeviceSize indexOffset
 		, VkDeviceSize meshletOffset )
 	{
-		auto ires = m_modelsDataOffsets.emplace( nodeId, std::make_pair( nullptr, Offsets{} ) );
-		auto & dataOffsets = ires.first->second;
-		dataOffsets.second.indexOffset = indexOffset;
-		dataOffsets.second.vertexOffset = vertexOffset;
-		dataOffsets.second.meshletOffset = meshletOffset;
+		auto & [data, offsets] = m_modelsDataOffsets.try_emplace( nodeId ).first->second;
+		offsets.indexOffset = indexOffset;
+		offsets.vertexOffset = vertexOffset;
+		offsets.meshletOffset = meshletOffset;
 
-		if ( dataOffsets.first )
+		if ( data )
 		{
-			dataOffsets.first->indexOffset = uint32_t( indexOffset );
-			dataOffsets.first->vertexOffset = uint32_t( vertexOffset );
-			dataOffsets.first->meshletOffset = uint32_t( meshletOffset );
+			data->indexOffset = uint32_t( indexOffset );
+			data->vertexOffset = uint32_t( vertexOffset );
+			data->meshletOffset = uint32_t( meshletOffset );
 		}
 	}
 }

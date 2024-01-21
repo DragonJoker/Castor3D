@@ -11,10 +11,21 @@ namespace castor3d
 {
 	struct GeometryBuffers
 	{
-		ObjectBufferOffset::GpuBufferChunk indexOffset;
-		ashes::BufferCRefArray buffers;
-		ashes::UInt64Array offsets;
-		ashes::PipelineVertexInputStateCreateInfoCRefArray layouts;
+		GeometryBuffers() = default;
+		GeometryBuffers( ObjectBufferOffset::GpuBufferChunk indexOffset
+			, ashes::BufferCRefArray buffers
+			, ashes::UInt64Array offsets
+			, ashes::PipelineVertexInputStateCreateInfoCRefArray layouts )noexcept
+			: indexOffset{ std::move( indexOffset ) }
+			, buffers{ std::move( buffers ) }
+			, offsets{ std::move( offsets ) }
+			, layouts{ std::move( layouts ) }
+		{
+		}
+		ObjectBufferOffset::GpuBufferChunk indexOffset{};
+		ashes::BufferCRefArray buffers{};
+		ashes::UInt64Array offsets{};
+		ashes::PipelineVertexInputStateCreateInfoCRefArray layouts{};
 	};
 }
 

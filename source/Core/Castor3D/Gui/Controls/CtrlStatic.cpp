@@ -164,7 +164,7 @@ namespace castor3d
 
 	void StaticCtrl::doUpdateStyle()
 	{
-		auto & style = getStyle();
+		auto const & style = getStyle();
 
 		if ( auto text = m_text )
 		{
@@ -237,7 +237,8 @@ namespace castor3d
 	{
 		if ( auto text = m_text )
 		{
-			text->setOrder( index++, 0u );
+			text->setOrder( index, 0u );
+			++index;
 		}
 	}
 

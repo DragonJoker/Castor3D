@@ -164,7 +164,7 @@ namespace castor3d
 
 		writer.implementMainT< shader::FragmentSurfaceT, shader::PrepassOutputT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer, submeshShaders, passShaders, flags }
 			, sdw::FragmentOutT< shader::PrepassOutputT >{ writer, flags }
-			, [&]( sdw::FragmentInT< shader::FragmentSurfaceT > in
+			, [&]( sdw::FragmentInT< shader::FragmentSurfaceT > const & in
 				, sdw::FragmentOutT< shader::PrepassOutputT > out )
 			{
 				auto modelData = writer.declLocale( "modelData"
@@ -193,7 +193,7 @@ namespace castor3d
 					{
 						writer.demote();
 					}
-					FI;
+					FI
 				}
 
 				out.depthObj = vec4( in.fragCoord.z()

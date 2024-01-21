@@ -34,7 +34,7 @@ namespace castor3d
 	void createUniformPassBinding( crg::FramePass & pass
 		, uint32_t binding
 		, std::string const & name
-		, std::vector< ashes::BufferBase const * > buffers
+		, std::vector< ashes::BufferBase const * > const & buffers
 		, VkDeviceSize offset
 		, VkDeviceSize size )
 	{
@@ -48,7 +48,7 @@ namespace castor3d
 	void createInputStoragePassBinding( crg::FramePass & pass
 		, uint32_t binding
 		, std::string const & name
-		, std::vector< ashes::BufferBase const * > buffers
+		, std::vector< ashes::BufferBase const * > const & buffers
 		, VkDeviceSize offset
 		, VkDeviceSize size )
 	{
@@ -62,7 +62,7 @@ namespace castor3d
 	void createInOutStoragePassBinding( crg::FramePass & pass
 		, uint32_t binding
 		, std::string const & name
-		, std::vector< ashes::BufferBase const * > buffers
+		, std::vector< ashes::BufferBase const * > const & buffers
 		, VkDeviceSize offset
 		, VkDeviceSize size )
 	{
@@ -76,7 +76,7 @@ namespace castor3d
 	void createOutputStoragePassBinding( crg::FramePass & pass
 		, uint32_t binding
 		, std::string const & name
-		, std::vector< ashes::BufferBase const * > buffers
+		, std::vector< ashes::BufferBase const * > const & buffers
 		, VkDeviceSize offset
 		, VkDeviceSize size )
 	{
@@ -90,7 +90,7 @@ namespace castor3d
 	void createClearableOutputStorageBinding( crg::FramePass & pass
 		, uint32_t binding
 		, std::string const & name
-		, std::vector< ashes::BufferBase const * > buffers
+		, std::vector< ashes::BufferBase const * > const & buffers
 		, VkDeviceSize offset
 		, VkDeviceSize size )
 	{
@@ -256,11 +256,11 @@ namespace castor3d
 		m_buffers.clear();
 	}
 
-	void GpuBufferPool::upload( UploadData & uploader )
+	void GpuBufferPool::upload( UploadData & uploader )const
 	{
-		for ( auto & buffers : m_buffers )
+		for ( auto const & [_, buffers] : m_buffers )
 		{
-			for ( auto & buffer : buffers.second )
+			for ( auto const & buffer : buffers )
 			{
 				buffer->upload( uploader );
 			}
@@ -277,7 +277,7 @@ namespace castor3d
 
 		if ( it == m_buffers.end() )
 		{
-			it = m_buffers.emplace( key, BufferArray{} ).first;
+			it = m_buffers.try_emplace( key ).first;
 		}
 
 		auto itB = doFindBuffer( size, it->second );
@@ -285,12 +285,12 @@ namespace castor3d
 		if ( itB == it->second.end() )
 		{
 			VkDeviceSize level = 21u;
-			VkDeviceSize maxSize = VkDeviceSize( 1ull << level ) * m_minBlockSize;
+			VkDeviceSize maxSize = VkDeviceSize( 1ULL << level ) * m_minBlockSize;
 
 			while ( size > maxSize && level <= 24 )
 			{
 				++level;
-				maxSize = VkDeviceSize( 1ull << level ) * m_minBlockSize;
+				maxSize = VkDeviceSize( 1ULL << level ) * m_minBlockSize;
 			}
 
 			CU_Require( maxSize < std::numeric_limits< uint32_t >::max() );
@@ -314,7 +314,7 @@ namespace castor3d
 	void GpuBufferPool::doPutBuffer( GpuBufferBase const & buffer
 		, VkBufferUsageFlags target
 		, VkMemoryPropertyFlags memory
-		, MemChunk const & chunk )
+		, MemChunk const & chunk )noexcept
 	{
 		auto key = doMakeKey( target, memory );
 		auto it = m_buffers.find( key );
@@ -330,7 +330,7 @@ namespace castor3d
 	}
 
 	GpuBufferPool::BufferArray::iterator GpuBufferPool::doFindBuffer( VkDeviceSize size
-		, GpuBufferPool::BufferArray & array )
+		, GpuBufferPool::BufferArray & array )const
 	{
 		auto it = array.begin();
 
@@ -343,7 +343,7 @@ namespace castor3d
 	}
 
 	uint32_t GpuBufferPool::doMakeKey( VkBufferUsageFlags target
-		, VkMemoryPropertyFlags flags )
+		, VkMemoryPropertyFlags flags )const noexcept
 	{
 		return ( target << 0u )
 			| ( flags << 16u );

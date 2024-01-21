@@ -41,7 +41,7 @@ namespace castor3d
 
 	namespace back
 	{
-		enum Bindings : uint32_t
+		enum class Bindings : uint32_t
 		{
 			eMatrix = 0u,
 			eModel = 1u,
@@ -75,12 +75,9 @@ namespace castor3d
 				, RenderDevice const & device
 				, SceneBackground & background
 				, VkExtent2D const & size
-				, crg::ImageViewIdArray const & colour
 				, crg::ImageViewIdArray const & depth
 				, bool forceVisible )
 				: BackgroundPassBase{ pass
-					, context
-					, graph
 					, device
 					, background
 					, forceVisible }
@@ -225,17 +222,17 @@ namespace castor3d
 						C3D_ModelData( writer, Bindings::eModel, 0u );
 						C3D_HdrConfig( writer, Bindings::eHdrConfig, 0u );
 						C3D_Scene( writer, Bindings::eScene, 0u );
-						auto c3d_mapSkybox = writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapSkybox", Bindings::eSkybox, 0u, programIndex == 0u );
+						auto c3d_mapSkybox = writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapSkybox", uint32_t( Bindings::eSkybox ), 0u, programIndex == 0u );
 
-						writer.implementEntryPointT< shader::Position3FT, shader::Uv3FT >( [&]( sdw::VertexInT< shader::Position3FT > in
+						writer.implementEntryPointT< shader::Position3FT, shader::Uv3FT >( [&c3d_cameraData, &c3d_modelData]( sdw::VertexInT< shader::Position3FT > const & in
 							, sdw::VertexOutT< shader::Uv3FT > out )
 							{
 								out.vtx.position = c3d_cameraData.worldToCurProj( c3d_modelData.modelToWorld( vec4( in.position(), 1.0_f ) ) ).xyww();
 								out.uv() = in.position();
 							} );
 
-						writer.implementEntryPointT< shader::Uv3FT, shader::Colour4FT >( [&]( sdw::FragmentInT< shader::Uv3FT >  in
-							, sdw::FragmentOutT< shader::Colour4FT > out )
+						writer.implementEntryPointT< shader::Uv3FT, shader::Colour4FT >( [this, &writer, &c3d_sceneData, &c3d_hdrConfigData, &c3d_mapSkybox, programIndex]( sdw::FragmentInT< shader::Uv3FT > const & in
+							, sdw::FragmentOutT< shader::Colour4FT > const & out )
 							{
 								if ( programIndex == SceneBackground::VisiblePassIndex )
 								{
@@ -258,7 +255,7 @@ namespace castor3d
 									{
 										out.colour() = vec4( c3d_sceneData.getBackgroundColour( c3d_hdrConfigData ).xyz(), 1.0_f );
 									}
-									FI;
+									FI
 								}
 								else
 								{
@@ -371,7 +368,7 @@ namespace castor3d
 			static castor::Point3f const Scale{ 1, -1, 1 };
 			static castor::Matrix3x3f const Identity{ 1.0f };
 
-			auto & camera = *updater.camera;
+			auto const & camera = *updater.camera;
 			auto node = camera.getParent();
 
 			castor::matrix::setTranslate( updater.bgMtxModl, node->getDerivedPosition() );
@@ -437,7 +434,7 @@ namespace castor3d
 			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
 
 		auto & result = graph.createPass( "Background"
-			, [this, &backgroundPass, &device, progress, size, colour, depth, forceVisible]( crg::FramePass const & framePass
+			, [this, &backgroundPass, &device, progress, size, depth, forceVisible]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
@@ -448,7 +445,6 @@ namespace castor3d
 					, device
 					, *this
 					, size
-					, colour
 					, depth
 					, forceVisible );
 				backgroundPass = res.get();
@@ -457,16 +453,16 @@ namespace castor3d
 				return res;
 			} );
 		cameraUbo.createPassBinding( result
-			, back::Bindings::eMatrix );
+			, uint32_t( back::Bindings::eMatrix ) );
 		modelUbo.createPassBinding( result
 			, "Model"
-			, back::Bindings::eModel );
+			, uint32_t( back::Bindings::eModel ) );
 		hdrConfigUbo.createPassBinding( result
-			, back::Bindings::eHdrConfig );
+			, uint32_t( back::Bindings::eHdrConfig ) );
 		sceneUbo.createPassBinding( result
-			, back::Bindings::eScene );
+			, uint32_t( back::Bindings::eScene ) );
 		result.addSampledView( m_textureId.sampledViewId
-			, back::Bindings::eSkybox
+			, uint32_t( back::Bindings::eSkybox )
 			, crg::SamplerDesc{ VK_FILTER_LINEAR
 				, VK_FILTER_LINEAR } );
 
@@ -506,20 +502,23 @@ namespace castor3d
 		{
 			auto & ibl = getIbl();
 			pass.addSampledView( ibl.getIrradianceTexture().sampledViewId
-				, index++
+				, index
 				, crg::SamplerDesc{ VK_FILTER_LINEAR
 					, VK_FILTER_LINEAR
 					, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
+			++index;
 			pass.addSampledView( ibl.getPrefilteredEnvironmentTexture().sampledViewId
-				, index++
+				, index
 				, crg::SamplerDesc{ VK_FILTER_LINEAR
 					, VK_FILTER_LINEAR
 					, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
+			++index;
 			pass.addSampledView( ibl.getPrefilteredEnvironmentSheenTexture().sampledViewId
-				, index++
+				, index
 				, crg::SamplerDesc{ VK_FILTER_LINEAR
 					, VK_FILTER_LINEAR
 					, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
+			++index;
 		}
 	}
 
@@ -531,15 +530,18 @@ namespace castor3d
 
 		if ( hasIbl() )
 		{
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( index
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, shaderStages ) );	// c3d_mapIrradiance
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+			++index;
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( index
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, shaderStages ) );	// c3d_mapPrefiltered
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+			++index;
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( index
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, shaderStages ) );	// c3d_mapPrefilteredSheen
+			++index;
 		}
 	}
 
@@ -582,8 +584,7 @@ namespace castor3d
 		return getEngine()->getBackgroundModelFactory().getTypeId( getModelName() );
 	}
 
-	castor::PxBufferBaseUPtr SceneBackground::adaptBuffer( Engine & engine
-		, castor::PxBufferBase & buffer
+	castor::PxBufferBaseUPtr SceneBackground::adaptBuffer( castor::PxBufferBase const & buffer
 		, castor::String const & name
 		, bool generateMips )
 	{
@@ -648,8 +649,7 @@ namespace castor3d
 			, name
 			, folder
 			, relative );
-		auto buffer = adaptBuffer( engine
-			, image.getPxBuffer()
+		auto buffer = adaptBuffer( image.getPxBuffer()
 			, name
 			, generateMips );
 		castor::ImageLayout layout{ image.getLayout().type, * buffer };

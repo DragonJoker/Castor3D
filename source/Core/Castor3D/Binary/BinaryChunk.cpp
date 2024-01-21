@@ -124,15 +124,12 @@ namespace castor3d
 
 	BinaryChunk::BinaryChunk( bool isLittleEndian )
 		: m_type{ ChunkType::eUnknown }
-		, m_index{ 0 }
 		, m_isLittleEndian{ isLittleEndian }
 	{
 	}
 
 	BinaryChunk::BinaryChunk( ChunkType type )
 		: m_type{ type }
-		, m_index{ 0 }
-		, m_isLittleEndian{ true }
 	{
 	}
 
@@ -213,17 +210,17 @@ namespace castor3d
 
 	bool BinaryChunk::addSubChunk( BinaryChunk const & subchunk )
 	{
-		uint32_t size = uint32_t( subchunk.m_data.size() );
+		auto size = uint32_t( subchunk.m_data.size() );
 		castor::ByteArray buffer;
 		buffer.reserve( sizeof( uint32_t ) + sizeof( ChunkType ) + size );
 
 		// Write subchunk type,
 		auto type = castor::systemEndianToLittleEndian( subchunk.m_type );
-		auto data = reinterpret_cast< uint8_t const * >( &type );
+		auto data = ByteCPtr( &type );
 		buffer.insert( buffer.end(), data, data + sizeof( ChunkType ) );
 		// Then its size,
 		castor::systemEndianToLittleEndian( size );
-		data = reinterpret_cast< uint8_t * >( &size );
+		data = ByteCPtr( &size );
 		buffer.insert( buffer.end(), data, data + sizeof( uint32_t ) );
 		// And eventually its data.
 		buffer.insert( buffer.end(), subchunk.m_data.begin(), subchunk.m_data.end() );
@@ -285,7 +282,7 @@ namespace castor3d
 		return result;
 	}
 
-	void BinaryChunk::binaryError( std::string_view view )
+	void BinaryChunk::binaryError( std::string_view view )const
 	{
 		log::error << view;
 	}

@@ -48,7 +48,7 @@ namespace castor3d
 		 *\brief		Calcule la texture de radiance.
 		 *\param[in]	queueData	La queue recevant les commandes GPU.
 		 */
-		C3D_API void render( QueueData const & queueData );
+		C3D_API void render( QueueData const & queueData )const;
 		/**
 		 *\~english
 		 *\brief		Computes the radiance map.
@@ -61,7 +61,7 @@ namespace castor3d
 		 *\param[in]	signalsToWait	Les sémaphores de la passe de rendu précédente.
 		 *\return		Les sémaphores signalés par ce dessin.
 		 */
-		C3D_API crg::SemaphoreWaitArray render( crg::SemaphoreWaitArray signalsToWait
+		C3D_API crg::SemaphoreWaitArray render( crg::SemaphoreWaitArray const & signalsToWait
 			, ashes::Queue const & queue )const;
 		/**
 		*\~english

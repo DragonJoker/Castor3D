@@ -26,9 +26,9 @@ namespace castor3d
 			, RenderDevice const & device );
 
 		C3D_API OverlayTextBufferIndex fill( uint32_t overlayIndex
-			, TextOverlay const & overlay );
+			, TextOverlay const & overlay )noexcept;
 		C3D_API void fillDescriptorSet( ashes::DescriptorSetLayout const & descriptorLayout
-			, ashes::DescriptorSet & descriptorSet );
+			, ashes::DescriptorSet & descriptorSet )const;
 		C3D_API void upload( UploadData & uploader );
 
 		Engine & engine;
@@ -58,7 +58,7 @@ namespace castor3d
 
 		C3D_API OverlayTextBufferIndex fill( uint32_t overlayIndex
 			, FontTexture const * fontTexture
-			, TextOverlay const & overlay );
+			, TextOverlay const & overlay )noexcept;
 		C3D_API void fillDescriptorSet( FontTexture const * fontTexture
 			, ashes::DescriptorSetLayout const & descriptorLayout
 			, ashes::DescriptorSet & descriptorSet );

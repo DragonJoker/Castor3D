@@ -57,7 +57,7 @@ namespace castor3d
 				, 0u );
 
 			auto loadPointLightAABB = writer.implementFunction< shader::AABB >( "loadPointLightAABB"
-				, [&]( sdw::UInt lightIndex )
+				, [&]( sdw::UInt const & lightIndex )
 				{
 					auto lightOffset = writer.declLocale( "lightOffset"
 						, lights.getDirectionalsEnd() + lightIndex * PointLight::LightDataComponents );
@@ -71,9 +71,9 @@ namespace castor3d
 				, sdw::InUInt{ writer, "lightIndex" } );
 
 			auto getConeAABB = writer.implementFunction< shader::AABB >( "getConeAABB"
-				, [&]( sdw::Vec3 const vsApex
-					, sdw::Vec3 const vsBase
-					, sdw::Float const fBaseRadius )
+				, [&]( sdw::Vec3 const & vsApex
+					, sdw::Vec3 const & vsBase
+					, sdw::Float const & fBaseRadius )
 				{
 					auto a = writer.declLocale( "a"
 						, vsBase - vsApex );
@@ -88,7 +88,7 @@ namespace castor3d
 				, sdw::InFloat{ writer, "fBaseRadius" } );
 
 			auto loadSpotLightAABB = writer.implementFunction< shader::AABB >( "loadSpotLightAABB"
-				, [&]( sdw::UInt lightIndex )
+				, [&]( sdw::UInt const & lightIndex )
 				{
 					auto lightOffset = writer.declLocale( "lightOffset"
 						, lights.getPointsEnd() + lightIndex * SpotLight::LightDataComponents );
@@ -124,7 +124,7 @@ namespace castor3d
 							writer.returnStmt( shader::AABB{ vec4( min( vsApex, smallBase - e ), 1.0_f )
 								, vec4( max( vsApex, smallBase + e ), 1.0_f ) } );
 						}
-						FI;
+						FI
 
 						auto smallAABB = writer.declLocale( "smallAABB"
 							, getConeAABB( vsApex, smallBase, baseRadius ) );
@@ -147,7 +147,7 @@ namespace castor3d
 				, sdw::InUInt{ writer, "lightIndex" } );
 
 			writer.implementMainT< sdw::VoidT >( 1024u, 1u, 1u
-				, [&]( sdw::ComputeIn in )
+				, [&]( sdw::ComputeIn const & in )
 				{
 					// First compute point lights AABB.
 					IF( writer, in.globalInvocationID.x() < c3d_clustersData.pointLightCount() )
@@ -156,7 +156,7 @@ namespace castor3d
 							, loadPointLightAABB( in.globalInvocationID.x() ) );
 						c3d_allLightsAABB[in.globalInvocationID.x()] = aabb;
 					}
-					FI;
+					FI
 
 					// Next, compute AABB for spot lights.
 					IF( writer, in.globalInvocationID.x() < c3d_clustersData.spotLightCount() )
@@ -165,7 +165,7 @@ namespace castor3d
 							, loadSpotLightAABB( in.globalInvocationID.x() ) );
 						c3d_allLightsAABB[c3d_clustersData.pointLightCount() + in.globalInvocationID.x()] = aabb;
 					}
-					FI;
+					FI
 				} );
 			return writer.getBuilder().releaseShader();
 		}
@@ -194,12 +194,14 @@ namespace castor3d
 		private:
 			struct ProgramData
 			{
-				ShaderModule module;
-				ashes::PipelineShaderStageCreateInfoArray stages;
+				ProgramData() = default;
+
+				ShaderModule shaderModule{};
+				ashes::PipelineShaderStageCreateInfoArray stages{};
 			};
 
 		private:
-			uint32_t doGetPassIndex( ClustersConfig const & clustersConfig )
+			uint32_t doGetPassIndex( ClustersConfig const & clustersConfig )const
 			{
 				return clustersConfig.useSpotTightBoundingBox ? 1u : 0u;
 			}
@@ -208,21 +210,21 @@ namespace castor3d
 				, ClustersConfig const & clustersConfig
 				, uint32_t passIndex )
 			{
-				auto ires = m_programs.emplace( passIndex, ProgramData{} );
+				auto [it, res] = m_programs.try_emplace( passIndex );
 
-				if ( ires.second )
+				if ( res )
 				{
-					auto & program = ires.first->second;
-					program.module = ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, "AssignLightsToClusters", createShader( device, clustersConfig ) };
-					program.stages = ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, program.module ) };
+					auto & program = it->second;
+					program.shaderModule = ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, "AssignLightsToClusters", createShader( device, clustersConfig ) };
+					program.stages = ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, program.shaderModule ) };
 				}
 
-				return ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( ires.first->second.stages );
+				return ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( it->second.stages );
 			}
 
 			void doPostRecord( crg::RecordContext & context
 				, VkCommandBuffer commandBuffer
-				, uint32_t index )
+				, uint32_t index )const
 			{
 				for ( auto & attach : m_pass.buffers )
 				{
@@ -255,7 +257,7 @@ namespace castor3d
 		, crg::FramePass const * previousPass
 		, RenderDevice const & device
 		, CameraUbo const & cameraUbo
-		, FrustumClusters & clusters )
+		, FrustumClusters const & clusters )
 	{
 		auto & pass = graph.createPass( "ComputeLightsAABB"
 			, [&clusters, &device]( crg::FramePass const & framePass
@@ -277,7 +279,7 @@ namespace castor3d
 		pass.addDependency( *previousPass );
 		cameraUbo.createPassBinding( pass, cptlgtb::eCamera );
 		clusters.getClustersUbo().createPassBinding( pass, cptlgtb::eClusters );
-		auto & lights = clusters.getCamera().getScene()->getLightCache();
+		auto const & lights = clusters.getCamera().getScene()->getLightCache();
 		lights.createPassBinding( pass, cptlgtb::eLights );
 		createClearableOutputStorageBinding( pass, uint32_t( cptlgtb::eAllLightsAABB ), "C3D_AllLightsAABB", clusters.getAllLightsAABBBuffer(), 0u, ashes::WholeSize );
 		return pass;

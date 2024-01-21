@@ -301,9 +301,9 @@ namespace castor3d
 
 	void SubsurfaceScatteringComponent::Plugin::createSections( castor::StrUInt32Map & sections )const
 	{
-		sections.emplace( uint32_t( sss::Section::eSubsurfaceScattering )
+		sections.try_emplace( uint32_t( sss::Section::eSubsurfaceScattering )
 			, "subsurface_scattering" );
-		sections.emplace( uint32_t( sss::Section::eTransmittanceProfile )
+		sections.try_emplace( uint32_t( sss::Section::eTransmittanceProfile )
 			, "transmittance_profile" );
 	}
 
@@ -352,7 +352,7 @@ namespace castor3d
 	void SubsurfaceScatteringComponent::setSubsurfaceScattering( SubsurfaceScatteringUPtr value )
 	{
 		( *m_value ) = std::move( value );
-		m_sssConnection = ( *m_value )->onChanged.connect( [this]( SubsurfaceScattering const & sss )
+		m_sssConnection = ( *m_value )->onChanged.connect( [this]( SubsurfaceScattering const & )
 			{
 				m_sssDirty = true;
 			} );

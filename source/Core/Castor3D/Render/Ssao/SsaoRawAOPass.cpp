@@ -223,7 +223,7 @@ namespace castor3d
 							, max( c3d_ssaoConfigData.radius2 - vv, 0.0_f ) );
 						writer.returnStmt( f * f * f * max( ( vn - c3d_ssaoConfigData.bias ) / ( epsilon + vv ), 0.0_f ) );
 					}
-					FI;
+					FI
 
 					// C: Medium contrast (which looks better at high radii), no division.  Note that the 
 					// contribution still falls off with radius^2, but we've adjusted the rate in a way that is
@@ -306,8 +306,8 @@ namespace castor3d
 				, sdw::OutFloat{ writer, "occlusion" } );
 
 			auto isOccluded = writer.implementFunction< sdw::Float >( "isOccluded"
-				, [&]( sdw::Vec3 const & csPosition
-					, sdw::Vec3 const & csCenter )
+				, [&]( sdw::Vec3 const &
+					, sdw::Vec3 const & )
 				{
 					writer.returnStmt( 0.0_f );
 				}
@@ -334,7 +334,7 @@ namespace castor3d
 						stepIdx += 1u;
 						current += step;
 					}
-					ELIHW;
+					ELIHW
 
 					writer.returnStmt( current * ( 1.0_f - ( currentOcclusion / writer.cast< sdw::Float >( stepIdx ) ) ) );
 				}
@@ -348,14 +348,14 @@ namespace castor3d
 				}
 				, sdw::InFloat{ writer, "x" } );
 
-			writer.implementEntryPoint( [&]( sdw::VertexIn in
+			writer.implementEntryPoint( [&]( sdw::VertexIn const &
 				, sdw::VertexOut out )
 				{
 					out.vtx.position = vec4( inPosition, 0.0_f, 1.0_f );
 				} );
 
-			writer.implementEntryPoint( [&]( sdw::FragmentIn in
-				, sdw::FragmentOut out )
+			writer.implementEntryPoint( [&]( sdw::FragmentIn const & in
+				, sdw::FragmentOut const & )
 				{
 					// Pixel being shaded
 					auto ssCenter = writer.declLocale( "ssCenter"
@@ -398,7 +398,7 @@ namespace castor3d
 							// Precision is pretty bad on 16-bit depth
 							normal = normalize( normal );
 						}
-						FI;
+						FI
 					}
 
 					// Choose the screen-space sample radius
@@ -414,7 +414,7 @@ namespace castor3d
 						outBentNormal.a() = 0.0f;
 						writer.returnStmt();
 					}
-					FI;
+					FI
 
 					// Hash function used in the HPG12 AlchemyAO paper
 					auto randomPatternRotationAngle = writer.declLocale( "randomPatternRotationAngle"
@@ -446,7 +446,7 @@ namespace castor3d
 						sum += occlusion;
 						bentNormal += sampleRay( csCenter, csRay );
 					}
-					ROF;
+					ROF
 
 					bentNormal = normalize( bentNormal )/* * 0.5_f + 0.5_f*/;
 					outBentNormal.xyz() = c3d_cameraData.writeNormal( bentNormal );
@@ -467,7 +467,7 @@ namespace castor3d
 						// (x^0.2 + 1.2 * x^4)/2.2
 						A = ( pow( A, 0.2_f ) + 1.2_f * A * A * A * A ) / 2.2_f;
 					}
-					FI;
+					FI
 
 					// Visualize random spin distribution
 					//A = mod(randomPatternRotationAngle / (2 * 3.141592653589), 1.0);

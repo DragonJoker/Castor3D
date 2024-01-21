@@ -28,7 +28,7 @@
 
 namespace castor3d
 {
-	BrdfPrefilter::BrdfPrefilter( Engine & engine
+	BrdfPrefilter::BrdfPrefilter( Engine const & engine
 		, RenderDevice const & device
 		, castor::Size const & size
 		, Texture const & dstTexture )
@@ -161,7 +161,7 @@ namespace castor3d
 				*m_renderPass
 			} );
 
-		auto & cmd = *m_commands.commandBuffer;
+		auto const & cmd = *m_commands.commandBuffer;
 		cmd.begin();
 		cmd.beginDebugBlock( { "Prefiltering BRDF"
 			, makeFloatArray( m_renderSystem.getEngine()->getNextRainbowColour() ) } );
@@ -179,14 +179,14 @@ namespace castor3d
 		cmd.end();
 	}
 
-	void BrdfPrefilter::render( QueueData const & queueData )
+	void BrdfPrefilter::render( QueueData const & queueData )const
 	{
 		m_commands.submit( *queueData.queue );
 	}
 
 	ashes::PipelineShaderStageCreateInfoArray BrdfPrefilter::doCreateProgram()
 	{
-		ProgramModule module{ "BRDFPrefilter" };
+		ProgramModule programModule{ "BRDFPrefilter" };
 		{
 			sdw::TraditionalGraphicsWriter writer{ &m_renderSystem.getEngine()->getShaderAllocator() };
 
@@ -256,7 +256,7 @@ namespace castor3d
 								A += ( 1.0_f - Fc ) * vis;
 								B += Fc * vis;
 							}
-							FI;
+							FI
 						}
 
 						// Charlie
@@ -282,9 +282,9 @@ namespace castor3d
 								, brdf.visibilityAshikhmin( NdotL, NdotV ) );
 							C += sheenVisibility * sheenDistribution * NdotL * VdotH;
 						}
-						FI;
+						FI
 					}
-					ROF;
+					ROF
 
 					A /= writer.cast< sdw::Float >( sampleCount );
 					B /= writer.cast< sdw::Float >( sampleCount );
@@ -294,22 +294,22 @@ namespace castor3d
 				, sdw::InFloat( writer, "NdotV" )
 				, sdw::InFloat( writer, "roughness" ) );
 
-			writer.implementEntryPointT< sdw::VoidT, sdw::VoidT >( [&]( sdw::VertexIn in
+			writer.implementEntryPointT< sdw::VoidT, sdw::VoidT >( [&]( sdw::VertexIn const & in
 				, sdw::VertexOut out )
 				{
 					outTexture = inUv;
 					out.vtx.position = vec4( inPosition, 0.0_f, 1.0_f );
 				} );
 
-			writer.implementEntryPointT< sdw::VoidT, sdw::VoidT >( [&]( sdw::FragmentIn in
-				, sdw::FragmentOut out )
+			writer.implementEntryPointT< sdw::VoidT, sdw::VoidT >( [&]( sdw::FragmentIn const & in
+				, sdw::FragmentOut const & )
 				{
 					outColour = vec4( integrateBRDF( inTexture.x(), inTexture.y() ), 1.0_f );
 				} );
 
-			module.shader = writer.getBuilder().releaseShader();
+			programModule.shader = writer.getBuilder().releaseShader();
 		}
 
-		return makeProgramStates( m_device, module );
+		return makeProgramStates( m_device, programModule );
 	}
 }

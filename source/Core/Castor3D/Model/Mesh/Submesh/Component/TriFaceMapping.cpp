@@ -21,7 +21,7 @@ namespace castor3d
 	{
 		struct FaceDistance
 		{
-			uint32_t m_index[3];
+			castor::Array< uint32_t, 3u > m_index;
 			double m_distance;
 		};
 
@@ -54,9 +54,9 @@ namespace castor3d
 	Face TriFaceMapping::ComponentData::addFace( uint32_t a, uint32_t b, uint32_t c )
 	{
 		Face result{ a, b, c };
-		auto size = m_submesh.getPointsCount();
 
-		if ( a < size && b < size && c < size )
+		if ( auto size = m_submesh.getPointsCount();
+			a < size && b < size && c < size )
 		{
 			m_faces.push_back( result );
 			m_hasNormals = false;

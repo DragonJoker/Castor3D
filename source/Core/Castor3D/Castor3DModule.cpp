@@ -12,7 +12,7 @@ CU_ImplementSmartPtr( castor3d, FramePassTimer )
 
 namespace castor3d
 {
-	castor::LoggerInstance & getLogger( Engine & engine )
+	castor::LoggerInstance & getLogger( Engine const & engine )
 	{
 		return engine.getLogger();
 	}

@@ -44,7 +44,7 @@ namespace castor3d
 		}
 	}
 
-	PassRPtr getComponentPass( PassComponent & component )
+	PassRPtr getComponentPass( PassComponent const & component )
 	{
 		return component.getOwner();
 	}

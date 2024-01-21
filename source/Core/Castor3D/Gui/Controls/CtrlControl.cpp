@@ -157,7 +157,7 @@ namespace castor3d
 		onChanged( *this );
 	}
 
-	void Control::setUV( castor::Point4d const & value )
+	void Control::setUV( castor::Point4d const & value )const
 	{
 		doGetBackground().setUV( value );
 	}
@@ -171,12 +171,12 @@ namespace castor3d
 		onChanged( *this );
 	}
 
-	void Control::setBorderInnerUV( castor::Point4d const & value )
+	void Control::setBorderInnerUV( castor::Point4d const & value )const
 	{
 		doGetBackground().setBorderInnerUV( value );
 	}
 
-	void Control::setBorderOuterUV( castor::Point4d const & value )
+	void Control::setBorderOuterUV( castor::Point4d const & value )const
 	{
 		doGetBackground().setBorderOuterUV( value );
 	}
@@ -195,10 +195,9 @@ namespace castor3d
 
 	castor::Position Control::getAbsolutePosition()const
 	{
-		ControlRPtr parent = getParent();
 		auto result = m_position;
 
-		if ( parent )
+		if ( auto parent = getParent() )
 		{
 			result += parent->getAbsolutePosition();
 		}
@@ -209,9 +208,9 @@ namespace castor3d
 	bool Control::isVisible()const
 	{
 		auto visible = isBackgroundVisible();
-		ControlRPtr parent = getParent();
 
-		if ( visible && parent )
+		if ( auto parent = getParent();
+			visible && parent )
 		{
 			visible = parent->isVisible();
 		}
@@ -224,7 +223,7 @@ namespace castor3d
 		auto lock( castor::makeUniqueLock( m_mutexChildren ) );
 		auto it = std::find_if( std::begin( m_children )
 			, std::end( m_children )
-			, [&id]( ControlRPtr lookup )
+			, [&id]( Control const * lookup )
 			{
 				return lookup ? ( lookup->getId() == id ) : false;
 			} );
@@ -278,7 +277,7 @@ namespace castor3d
 		return doGetBackground().getOverlay();
 	}
 
-	void Control::setBackgroundMaterial( MaterialObs value )
+	void Control::setBackgroundMaterial( MaterialObs value )const
 	{
 		if ( !m_style->isBackgroundInvisible() )
 		{
@@ -286,17 +285,17 @@ namespace castor3d
 		}
 	}
 
-	void Control::setBackgroundSize( castor::Size const & value )
+	void Control::setBackgroundSize( castor::Size const & value )const
 	{
 		doGetBackground().setPixelSize( value );
 	}
 
-	void Control::setBackgroundBorderPosition( BorderPosition value )
+	void Control::setBackgroundBorderPosition( BorderPosition value )const
 	{
 		doGetBackground().setBorderPosition( value );
 	}
 
-	void Control::setBackgroundBorderMaterial( MaterialObs value )
+	void Control::setBackgroundBorderMaterial( MaterialObs value )const
 	{
 		if ( !m_style->isForegroundInvisible() )
 		{
@@ -395,8 +394,9 @@ namespace castor3d
 
 		if ( hasMovable )
 		{
-			doGetBackground().setOrder( ( *realIndex )++, 0u );
-			doUpdateZIndex( ( *realIndex ) );
+			doGetBackground().setOrder( *realIndex, 0u );
+			++( *realIndex );
+			doUpdateZIndex( *realIndex );
 			std::vector< Control * > scrollbars;
 
 			for ( auto control : m_children )
@@ -409,19 +409,20 @@ namespace castor3d
 					}
 					else
 					{
-						control->updateZIndex( ( *realIndex ), controls, topControls );
+						control->updateZIndex( *realIndex, controls, topControls );
 					}
 				}
 			}
 
 			for ( auto control : scrollbars )
 			{
-				control->updateZIndex( ( *realIndex ), controls, topControls );
+				control->updateZIndex( *realIndex, controls, topControls );
 			}
 		}
 		else
 		{
-			doGetBackground().setOrder( ( *realIndex )++, 0u );
+			doGetBackground().setOrder( *realIndex, 0u );
+			++( *realIndex );
 			auto findex = *realIndex;
 			doUpdateZIndex( findex );
 			std::vector< Control * > scrollbars;
@@ -566,7 +567,7 @@ namespace castor3d
 		setPosition( { newPos->x, newPos->y } );
 	}
 
-	void Control::endMove( MouseEvent const & event )
+	void Control::endMove()
 	{
 		m_moving = false;
 	}
@@ -655,7 +656,7 @@ namespace castor3d
 			, uint32_t( newSize->y + diff->y ) } );
 	}
 
-	void Control::endResize( MouseEvent const & event )
+	void Control::endResize()
 	{
 		m_resizingN = false;
 		m_resizingW = false;

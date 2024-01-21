@@ -77,7 +77,7 @@ namespace castor3d
 			, m_values
 			, m_selected
 			, castor::Position{ 0, int32_t( size->y ) }
-			, castor::Size{ size->x - size->y, ~( 0u ) }
+			, castor::Size{ size->x - size->y, ~0u }
 			, uint64_t( ControlFlag::eAlwaysOnTop )
 			, false ) );
 		m_choicesSelectedConnection = m_choices->connect( ListBoxEvent::eSelected
@@ -99,7 +99,7 @@ namespace castor3d
 				, nullptr
 				, &getBackgroundOverlay() )->getTextOverlay();
 		text->setPixelPosition( getClientOffset() );
-		text->setPixelSize( { clientSize->x - clientSize->x, clientSize->y } );
+		text->setPixelSize( { getSize()->x - clientSize->x, clientSize->y } );
 		text->setVAlign( VAlign::eCenter );
 		m_text = text;
 
@@ -184,7 +184,7 @@ namespace castor3d
 		m_expand->setSize( castor::Size( getSize()->y, getSize()->y ) );
 
 		m_choices->setPosition( castor::Position( 0, int32_t( getSize()->y ) ) );
-		m_choices->setSize( castor::Size( getSize()->x - getSize()->y, ~( 0u ) ) );
+		m_choices->setSize( castor::Size( getSize()->x - getSize()->y, ~0u ) );
 
 		EventHandler::connect( KeyboardEventType::ePushed
 			, [this]( KeyboardEvent const & event )
@@ -192,16 +192,15 @@ namespace castor3d
 				onKeyDown( event );
 			} );
 		NonClientEventHandler::connectNC( KeyboardEventType::ePushed
-			, [this]( ControlRPtr control
+			, [this]( ControlRPtr
 				, KeyboardEvent const & event )
 			{
-				onNcKeyDown( control, event );
+				onNcKeyDown( event );
 			} );
 
 		if ( auto text = m_text )
 		{
 			auto clientSize = getClientSize();
-			auto clientOffset = getClientOffset();
 			text->setMaterial( style.getExpandStyle().getTextMaterial() );
 			text->setPixelSize( castor::Size( clientSize->x - clientSize->y
 				, clientSize->y ) );
@@ -258,11 +257,11 @@ namespace castor3d
 		if ( auto text = m_text )
 		{
 			auto clientSize = getClientSize();
-			text->setPixelSize( { clientSize->x - clientSize->x, clientSize->y } );
+			text->setPixelSize( { getSize()->x - clientSize->x, clientSize->y } );
 		}
 
 		m_expand->setSize( castor::Size( value->y, value->y ) );
-		m_choices->setSize( castor::Size( value->x - value->y, ~( 0u ) ) );
+		m_choices->setSize( castor::Size( value->x - value->y, ~0u ) );
 		m_expand->setPosition( castor::Position( int32_t( value->x - value->y ), 0 ) );
 		m_choices->setPosition( castor::Position( 0, int32_t( value->y ) ) );
 	}
@@ -279,7 +278,7 @@ namespace castor3d
 		m_expand->setPosition( { int32_t( size->x - size->y ), 0 } );
 		m_choices->setPosition( { 0, int32_t( size->y ) } );
 		m_expand->setSize( { size->y, size->y } );
-		m_choices->setSize( { size->x - size->y, ~( 0u ) } );
+		m_choices->setSize( { size->x - size->y, ~0u } );
 	}
 
 	bool ComboBoxCtrl::doCatchesMouseEvents()const
@@ -314,7 +313,7 @@ namespace castor3d
 		}
 	}
 
-	void ComboBoxCtrl::onNcKeyDown( ControlRPtr control, KeyboardEvent const & event )
+	void ComboBoxCtrl::onNcKeyDown( KeyboardEvent const & event )
 	{
 		onKeyDown( event );
 	}
@@ -334,7 +333,8 @@ namespace castor3d
 	{
 		if ( auto text = m_text )
 		{
-			text->setOrder( index++, 0u );
+			text->setOrder( index, 0u );
+			++index;
 		}
 	}
 

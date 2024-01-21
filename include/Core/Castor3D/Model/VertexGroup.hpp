@@ -10,6 +10,19 @@ namespace castor3d
 {
 	struct InterleavedVertex
 	{
+		InterleavedVertex()= default;
+
+		explicit InterleavedVertex( castor::Point3f pos
+			, castor::Point3f nml = {}
+			, castor::Point4f tan = {}
+			, castor::Point3f tex = {} )
+			: pos{ std::move( pos ) }
+			, nml{ std::move( nml ) }
+			, tan{ std::move( tan ) }
+			, tex{ std::move( tex ) }
+		{
+		}
+
 		InterleavedVertex & position( castor::Point3f const & val )
 		{
 			pos = val;

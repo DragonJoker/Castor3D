@@ -44,7 +44,7 @@ namespace castor3d
 			if ( !m_rgbToHsv )
 			{
 				m_rgbToHsv = writer.implementFunction< sdw::Vec3 >( "rgbToHsv"
-					, [&]( sdw::Vec3 c )
+					, [&writer]( sdw::Vec3 const & c )
 					{
 						auto K = writer.declLocale( "K", vec4( 0.0_f, -1.0_f / 3.0_f, 2.0_f / 3.0_f, -1.0_f ) );
 						auto p = writer.declLocale( "p", mix( vec4( c.bg(), K.wz() ), vec4( c.gb(), K.xy() ), vec4( step( c.b(), c.g() ) ) ) );
@@ -59,7 +59,7 @@ namespace castor3d
 			if ( !m_hsvToRgb )
 			{
 				m_hsvToRgb = writer.implementFunction< sdw::Vec3 >( "hsvToRgb"
-					, [&]( sdw::Vec3 c )
+					, [&writer]( sdw::Vec3 const & c )
 					{
 						auto K = writer.declLocale( "K", vec4( 1.0_f, 2.0_f / 3.0_f, 1.0_f / 3.0_f, 3.0_f ) );
 						auto p = writer.declLocale( "p", abs( fract( vec3( c.x() ) + K.xyz() ) * 6.0_f - K.www() ) );
@@ -71,7 +71,7 @@ namespace castor3d
 			if ( !m_splitToning )
 			{
 				m_splitToning = writer.implementFunction< sdw::Vec3 >( "splitToning"
-					, [&]( sdw::Vec3 colour )
+					, [this, &writer]( sdw::Vec3 colour )
 					{
 						colour = max( colour, vec3( 0.0_f ) );
 						colour = pow( colour, vec3( 1.0_f / 2.2_f ) );
@@ -88,7 +88,7 @@ namespace castor3d
 			if ( !m_shadowsMidtoneHighlight )
 			{
 				m_shadowsMidtoneHighlight = writer.implementFunction< sdw::Vec3 >( "shadowsMidtoneHighlight"
-					, [&]( sdw::Vec3 colour )
+					, [this, &writer]( sdw::Vec3 const & colour )
 					{
 						auto luminance = writer.declLocale( "luminance", getLuminance( colour ) );
 						auto shadowsWeight = writer.declLocale( "shadowsWeight", 1.0_f - smoothStep( shadowsStart(), shadowsEnd(), luminance ) );
@@ -104,7 +104,7 @@ namespace castor3d
 			if ( !m_colourGrade )
 			{
 				m_colourGrade = writer.implementFunction< sdw::Vec3 >( "colourGrade"
-					, [&]( sdw::Vec3 hdrColour )
+					, [this, &writer]( sdw::Vec3 hdrColour )
 					{
 						IF( writer, enabled() )
 						{
@@ -115,31 +115,31 @@ namespace castor3d
 								hdrColour *= whiteBalance();
 								hdrColour = lmsToLinear( hdrColour );
 							}
-							FI;
+							FI
 							IF( writer, enableSplitToning() )
 							{
 								hdrColour = m_splitToning( hdrColour );
 							}
-							FI;
+							FI
 							IF( writer, enableChannelMix() )
 							{
 								hdrColour = vec3( dot( hdrColour, channelMixRed() )
 									, dot( hdrColour, channelMixGreen() )
 									, dot( hdrColour, channelMixBlue() ) );
 							}
-							FI;
+							FI
 							IF( writer, enableShadowMidToneHighlight() )
 							{
 								hdrColour = m_shadowsMidtoneHighlight( hdrColour );
 							}
-							FI;
+							FI
 							IF( writer, enableContrast() )
 							{
 								hdrColour = linearToLogC( hdrColour );
 								hdrColour = ( hdrColour - midGray() ) * contrast() + midGray();
 								hdrColour = logCToLinear( hdrColour );
 							}
-							FI;
+							FI
 							hdrColour *= colourFilter();
 							IF( writer, enableHueShift() )
 							{
@@ -148,14 +148,14 @@ namespace castor3d
 								hdrColour.x() = rotateHue( hue, 0.0_f, 1.0_f );
 								hdrColour = m_hsvToRgb( hdrColour );
 							}
-							FI;
+							FI
 							// Saturation
 							auto luminance = writer.declLocale( "luminance", getLuminance( hdrColour ) );
 							hdrColour = ( hdrColour - luminance ) * saturation() + luminance;
 							// Prevent negative colours
 							writer.returnStmt( max( vec3( 0.0_f ), hdrColour ) );
 						}
-						FI;
+						FI
 
 						writer.returnStmt( hdrColour );
 					}
@@ -165,22 +165,22 @@ namespace castor3d
 			return m_colourGrade( phdrColour );
 		}
 
-		sdw::Float ColourGradingData::getLuminance( sdw::Vec3 const & colour )
+		sdw::Float ColourGradingData::getLuminance( sdw::Vec3 const & colour )const
 		{
 			return dot( colour, vec3( 0.2126729_f, 0.7151522_f, 0.0721750_f ) );
 		}
 
-		sdw::Vec3 ColourGradingData::linearToLogC( sdw::Vec3 const & colour )
+		sdw::Vec3 ColourGradingData::linearToLogC( sdw::Vec3 const & colour )const
 		{
 			return m_paramsLogC[3] * sdw::log( m_paramsLogC[1] * colour + m_paramsLogC[2] ) / sdw::log( 10.0_f ) + m_paramsLogC[4];
 		}
 
-		sdw::Vec3 ColourGradingData::logCToLinear( sdw::Vec3 const & colour )
+		sdw::Vec3 ColourGradingData::logCToLinear( sdw::Vec3 const & colour )const
 		{
 			return ( pow( vec3( 10.0_f ), ( colour - m_paramsLogC[4] ) / m_paramsLogC[3] ) - m_paramsLogC[2] ) / m_paramsLogC[1];
 		}
 
-		sdw::Float ColourGradingData::rotateHue( sdw::Float const & value, sdw::Float const & low, sdw::Float const & hi )
+		sdw::Float ColourGradingData::rotateHue( sdw::Float const & value, sdw::Float const & low, sdw::Float const & hi )const
 		{
 			auto & writer = sdw::findWriterMandat( value, low, hi );
 			return writer.ternary( value < low
@@ -188,17 +188,17 @@ namespace castor3d
 				, writer.ternary( value > hi, value - hi, value ) );
 		}
 
-		sdw::Vec3 ColourGradingData::linearToLms( sdw::Vec3 const & colour )
+		sdw::Vec3 ColourGradingData::linearToLms( sdw::Vec3 const & colour )const
 		{
 			return m_linearToLms * colour;
 		}
 
-		sdw::Vec3 ColourGradingData::lmsToLinear( sdw::Vec3 const & colour )
+		sdw::Vec3 ColourGradingData::lmsToLinear( sdw::Vec3 const & colour )const
 		{
 			return m_lmsToLinear * colour;
 		}
 
-		sdw::Vec3 ColourGradingData::softLight( sdw::Vec3 const & base, sdw::Vec3 const & blend )
+		sdw::Vec3 ColourGradingData::softLight( sdw::Vec3 const & base, sdw::Vec3 const & blend )const
 		{
 			return mix(
 				sqrt( base ) * ( 2.0_f * blend - 1.0_f ) + 2.0_f * base * ( 1.0_f - blend ),

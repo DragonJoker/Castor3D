@@ -14,16 +14,15 @@ namespace castor3d
 {
 	//*********************************************************************************************
 
-	ShaderAppendBuffer::ShaderAppendBuffer( Engine & engine
-		, RenderDevice const & device
+	ShaderAppendBuffer::ShaderAppendBuffer( RenderDevice const & device
 		, VkDeviceSize size
-		, castor::String name )
+		, castor::String const & name )
 		: m_device{ device }
 		, m_size{ ashes::getAlignedSize( size + sizeof( uint32_t )
 			, m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) ) }
 		, m_buffer{ makeBufferBase( m_device
 			, m_size
-			, ( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT )
+			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, name ) }
 	{

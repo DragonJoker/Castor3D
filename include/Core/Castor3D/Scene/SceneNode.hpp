@@ -358,7 +358,7 @@ namespace castor3d
 	private:
 		static uint64_t CurrentId;
 		Scene & m_scene;
-		uint64_t m_id;
+		uint64_t m_id{ CurrentId };
 		bool m_static{ false };
 		bool m_displayable;
 		bool m_visible{ true };

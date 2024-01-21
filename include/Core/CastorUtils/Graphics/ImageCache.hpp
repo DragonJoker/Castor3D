@@ -28,21 +28,21 @@ namespace castor
 			eParam,
 		};
 
-		explicit ImageCreateParams( Path const & ppath
+		explicit ImageCreateParams( Path ppath
 			, ImageLoaderConfig ploadConfig = { true, true, true } )
 			: mode{ eFile }
-			, path{ ppath }
+			, path{ std::move( ppath ) }
 			, loadConfig{ std::move( ploadConfig ) }
 		{
 		}
 
-		explicit ImageCreateParams( String const & ptype
-			, ByteArray const & pdata
+		explicit ImageCreateParams( String ptype
+			, ByteArray pdata
 			, ImageLoaderConfig ploadConfig = { true, true, true } )
 			: mode{ eBuffer }
 			, loadConfig{ std::move( ploadConfig ) }
-			, type{ ptype }
-			, data{ pdata }
+			, type{ std::move( ptype ) }
+			, data{ std::move( pdata ) }
 		{
 		}
 

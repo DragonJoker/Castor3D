@@ -45,7 +45,7 @@ namespace castor
 			return writeMask( file, cuT( "glossiness_mask" ), m_mask );
 		}
 
-		bool operator()( StringStream & file )
+		bool operator()( StringStream & file )const
 		{
 			return writeMask( file, cuT( "glossiness_mask" ), m_mask );
 		}
@@ -85,7 +85,7 @@ namespace castor3d
 		static CU_ImplementAttributeParserBlock( parserTexRemapGlossiness, SceneImportContext )
 		{
 			auto & plugin = getEngine( *blockContext )->getPassComponentsRegister().getPlugin( GlossinessMapComponent::TypeName );
-			blockContext->textureRemapIt = blockContext->textureRemaps.emplace( plugin.getTextureFlags(), TextureConfiguration{} ).first;
+			blockContext->textureRemapIt = blockContext->textureRemaps.try_emplace( plugin.getTextureFlags() ).first;
 			blockContext->textureRemapIt->second = TextureConfiguration{};
 		}
 		CU_EndAttributePushBlock( CSCNSection::eTextureRemapChannel, blockContext )
@@ -153,20 +153,22 @@ namespace castor3d
 	void GlossinessMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		channelFillers.emplace( "glossiness", ChannelFiller{ getTextureFlags()
+		channelFillers.try_emplace( "glossiness"
+			, getTextureFlags()
 			, []( TextureContext & blockContext )
 			{
-				auto & component = getPassComponent< GlossinessMapComponent >( blockContext );
+				auto const & component = getPassComponent< GlossinessMapComponent >( blockContext );
 				component.fillChannel( blockContext.configuration
 					, 0x00FF0000 );
-			} } );
-		channelFillers.emplace( "shininess", ChannelFiller{ getTextureFlags()
+			} );
+		channelFillers.try_emplace( "shininess"
+			, getTextureFlags()
 			, []( TextureContext & blockContext )
 			{
-				auto & component = getPassComponent< GlossinessMapComponent >( blockContext );
+				auto const & component = getPassComponent< GlossinessMapComponent >( blockContext );
 				component.fillChannel( blockContext.configuration
 					, 0x00FF0000 );
-			} } );
+			} );
 
 		castor::addParserT( parsers
 			, CSCNSection::eTexture

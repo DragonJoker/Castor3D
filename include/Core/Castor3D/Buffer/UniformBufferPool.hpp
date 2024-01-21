@@ -25,7 +25,7 @@ namespace castor3d
 			uint32_t index;
 			PoolUniformBufferUPtr buffer;
 		};
-		using BufferArray = std::vector< Buffer >;
+		using BufferArray = castor::Vector< Buffer >;
 
 	public:
 		/**
@@ -55,7 +55,7 @@ namespace castor3d
 		 *\brief		Met à jour tous les tampons GPU en VRAM.
 		 *\param[in]	cb	Le command buffer sur lequel les commandes de transfert sont enregistrées.
 		 */
-		C3D_API void upload( UploadData & uploader )const;
+		C3D_API void upload( UploadData const & uploader )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves a uniform buffer.
@@ -88,7 +88,7 @@ namespace castor3d
 
 	private:
 		C3D_API BufferArray::iterator doFindBuffer( BufferArray & array
-			, VkDeviceSize alignedSize );
+			, VkDeviceSize alignedSize )const;
 		C3D_API BufferArray::iterator doCreatePoolBuffer( VkMemoryPropertyFlags flags
 			, UniformBufferPool::BufferArray & buffers );
 
@@ -96,7 +96,7 @@ namespace castor3d
 		RenderDevice const & m_device;
 		uint32_t m_maxUboSize{ 0u };
 		uint32_t m_currentUboIndex{ 0u };
-		std::map< uint32_t, BufferArray > m_buffers;
+		castor::Map< uint32_t, BufferArray > m_buffers;
 		castor::String m_debugName;
 		std::mutex m_mutex;
 	};

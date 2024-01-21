@@ -1246,7 +1246,7 @@ namespace c3d_assimp
 		{
 			auto & factory = engine.getLightingModelFactory();
 
-			if ( engine.getDefaultLightingModel() != factory.getNameId( castor3d::PhongPass::LightingModel ) )
+			if ( engine.getDefaultLightingModel() != factory.getNameId( castor::String{ castor3d::PhongPass::LightingModel } ) )
 			{
 				return engine.getDefaultLightingModel();
 			}
@@ -1257,7 +1257,7 @@ namespace c3d_assimp
 			case aiShadingMode_Gouraud:
 			case aiShadingMode_Phong:
 			case aiShadingMode_Blinn:
-				return factory.getNameId( castor3d::PhongPass::LightingModel );
+				return factory.getNameId( castor::String{ castor3d::PhongPass::LightingModel } );
 			case aiShadingMode_Toon:
 				return factory.getNameId( toon::shader::ToonPhongLightingModel::getName() );
 			case aiShadingMode_OrenNayar:
@@ -1267,12 +1267,12 @@ namespace c3d_assimp
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wswitch"
 			case aiShadingMode_PBR_BRDF:
-				return factory.getNameId( castor3d::PbrPass::LightingModel );
+				return factory.getNameId( castor::String{ castor3d::PbrPass::LightingModel } );
 #pragma GCC diagnostic pop
 			case aiShadingMode_Unlit:
-				return factory.getNameId( castor3d::PbrPass::LightingModel );
+				return factory.getNameId( castor::String{ castor3d::PbrPass::LightingModel } );
 			default:
-				return factory.getNameId( castor3d::PhongPass::LightingModel );
+				return factory.getNameId( castor::String{ castor3d::PhongPass::LightingModel } );
 			}
 		}
 	}

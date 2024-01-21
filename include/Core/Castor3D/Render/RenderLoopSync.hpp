@@ -54,7 +54,7 @@ namespace castor3d
 
 	private:
 		//!\~english Tells if the render loop is active.	\~french Dit si la boucle de rendu est active.
-		bool m_active;
+		bool m_active{ true };
 	};
 }
 

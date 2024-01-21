@@ -24,7 +24,6 @@ namespace castor3d
 {
 	PrepassRendering::PrepassRendering( RenderTechnique & parent
 		, RenderDevice const & device
-		, QueueData const & queueData
 		, crg::FramePassArray const & previousPasses
 		, ProgressBar * progress
 		, bool visbuffer )
@@ -59,15 +58,11 @@ namespace castor3d
 		}
 	}
 
-	PrepassRendering::~PrepassRendering()
-	{
-	}
-
 	uint32_t PrepassRendering::countInitialisationSteps()noexcept
 	{
 		uint32_t result = 0u;
-		result += 1;// m_depthPass;
-		result += 1;// m_computeDepthRange;
+		result += 1;// depth pass
+		result += 1;// compute depth range
 		return result;
 	}
 
@@ -78,11 +73,11 @@ namespace castor3d
 			return;
 		}
 
-		if ( hasVisibility() )
+		if ( m_visibilityPass )
 		{
 			m_visibilityPass->update( updater );
 		}
-		else
+		else if ( m_depthPass )
 		{
 			m_depthPass->update( updater );
 		}
@@ -189,9 +184,9 @@ namespace castor3d
 		result.addOutputColourView( getOwner()->getNormal().targetViewId
 			, transparentBlackClearColor );
 
-		for ( auto & mesh : getOwner()->getRenderTarget().getScene()->getMeshCache() )
+		for ( auto const & [_, mesh] : getOwner()->getRenderTarget().getScene()->getMeshCache() )
 		{
-			mesh.second->registerDependencies( result );
+			mesh->registerDependencies( result );
 		}
 
 		return result;
@@ -247,9 +242,9 @@ namespace castor3d
 		result.addOutputColourView( getOwner()->getNormal().targetViewId
 			, transparentBlackClearColor );
 
-		for ( auto & mesh : getOwner()->getRenderTarget().getScene()->getMeshCache() )
+		for ( auto const & [_, mesh] : getOwner()->getRenderTarget().getScene()->getMeshCache() )
 		{
-			mesh.second->registerDependencies( result );
+			mesh->registerDependencies( result );
 		}
 
 		return result;

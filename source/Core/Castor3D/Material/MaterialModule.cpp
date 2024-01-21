@@ -28,9 +28,9 @@ namespace castor3d
 	bool hasAny( TextureFlagsSet const & lhs
 		, PassComponentTextureFlag rhs )
 	{
-		auto split = splitTextureFlag( rhs );
-		auto rhsComponentId = split.first;
-		auto rhsTextureFlag = split.second;
+		auto [id, flags] = splitTextureFlag( rhs );
+		auto rhsComponentId = id;
+		auto rhsTextureFlag = flags;
 		auto it = std::find_if( lhs.begin()
 			, lhs.end()
 			, [rhsComponentId, rhsTextureFlag]( PassComponentTextureFlag const & lookup )

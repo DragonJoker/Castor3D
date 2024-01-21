@@ -21,9 +21,8 @@ namespace castor3d
 
 	void AnimatedObject::startAnimation( castor::String const & name )
 	{
-		auto it = m_animations.find( name );
-
-		if ( it != m_animations.end() )
+		if ( auto it = m_animations.find( name );
+			it != m_animations.end() )
 		{
 			auto & animation = *it->second;
 
@@ -44,9 +43,8 @@ namespace castor3d
 
 	void AnimatedObject::stopAnimation( castor::String const & name )
 	{
-		auto it = m_animations.find( name );
-
-		if ( it != m_animations.end() )
+		if ( auto it = m_animations.find( name );
+			it != m_animations.end() )
 		{
 			auto & animation = *it->second;
 
@@ -60,9 +58,8 @@ namespace castor3d
 
 	void AnimatedObject::pauseAnimation( castor::String const & name )
 	{
-		auto it = m_animations.find( name );
-
-		if ( it != m_animations.end() )
+		if ( auto it = m_animations.find( name );
+			it != m_animations.end() )
 		{
 			it->second->pause();
 		}
@@ -72,18 +69,18 @@ namespace castor3d
 	{
 		doClearAnimations();
 
-		for ( auto & it : m_animations )
+		for ( auto const & [nm, anim] : m_animations )
 		{
-			it.second->play();
-			doStartAnimation( *it.second );
+			anim->play();
+			doStartAnimation( *anim );
 		}
 	}
 
 	void AnimatedObject::stopAllAnimations()
 	{
-		for ( auto & it : m_animations )
+		for ( auto const & [nm, anim] : m_animations )
 		{
-			it.second->stop();
+			anim->stop();
 		}
 
 		doClearAnimations();
@@ -91,9 +88,9 @@ namespace castor3d
 
 	void AnimatedObject::pauseAllAnimations()
 	{
-		for ( auto & it : m_animations )
+		for ( auto const & [nm, anim] : m_animations )
 		{
-			it.second->pause();
+			anim->pause();
 		}
 	}
 

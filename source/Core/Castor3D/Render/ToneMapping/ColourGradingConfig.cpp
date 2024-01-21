@@ -13,6 +13,7 @@ namespace castor3d
 	{
 		static CU_ImplementAttributeParserBlock( parserColourGrading, CameraContext )
 		{
+			// Nothing else to do than to push the block
 		}
 		CU_EndAttributePushBlock( CSCNSection::eColourGrading, blockContext )
 
@@ -346,37 +347,6 @@ namespace castor3d
 			}
 		}
 		CU_EndAttribute()
-	}
-
-	ColourGradingConfig::ColourGradingConfig()
-		: whiteBalance{ 1.0f, 1.0f, 1.0f }
-		, postExposure{ 1.0f }
-		, colourFilter{ 1.0f, 1.0f, 1.0f }
-		, midGray{ 0.4135884f }
-		, splitToningShadows{ 0.5f, 0.5f, 0.5f }
-		, contrast{ 1.0f }
-		, splitToningHighlights{ 0.5f, 0.5f, 0.5f }
-		, splitToningBalance{ 1.0f }
-		, channelMixRed{ 1.0f, 0.0f, 0.0f }
-		, saturation{ 1.0f }
-		, channelMixGreen{ 0.0f, 1.0f, 0.0f }
-		, shadowsStart{ 0.0f }
-		, channelMixBlue{ 0.0f, 0.0f, 1.0f }
-		, shadowsEnd{ 1.0f }
-		, shadows{ 1.0f, 1.0f, 1.0f }
-		, highlightsStart{ 0.0f }
-		, midtones{ 1.0f, 1.0f, 1.0f }
-		, highlightsEnd{ 1.0f }
-		, highlights{ 1.0f, 1.0f, 1.0f }
-		, hueShift{ 0.0f }
-		, enabled{ true }
-		, enableSplitToning{ true }
-		, enableShadowMidToneHighlight{ true }
-		, enableChannelMix{ true }
-		, enableWhiteBalance{ true }
-		, enableHueShift{ true }
-		, enableContrast{ true }
-	{
 	}
 
 	void ColourGradingConfig::accept( ConfigurationVisitorBase & visitor )

@@ -32,6 +32,15 @@ namespace castor3d
 		using NodesPtrMapT = std::unordered_map< size_t, castor::UniquePtr< NodeT > >;
 		struct NodeData
 		{
+			NodeData( Pass const * pass
+				, SceneNode const * node
+				, RenderedObject const * object )
+				: pass{ pass }
+				, node{ node }
+				, object{ object }
+			{
+			}
+
 			Pass const * pass;
 			SceneNode const * node;
 			RenderedObject const * object;

@@ -22,10 +22,9 @@ namespace castor3d
 	//*********************************************************************************************
 	
 	BackgroundRenderer::BackgroundRenderer( crg::FramePassGroup & graph
-		, crg::FramePassArray previousPasses
+		, crg::FramePassArray const & previousPasses
 		, RenderDevice const & device
 		, ProgressBar * progress
-		, castor::String const & name
 		, SceneBackground & background
 		, HdrConfigUbo const & hdrConfigUbo
 		, SceneUbo const & sceneUbo
@@ -40,8 +39,7 @@ namespace castor3d
 		, m_cameraUbo{ m_device }
 		, m_modelUbo{ m_device.uboPool->getBuffer< ModelBufferConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) }
 		, m_backgroundPassDesc{ &doCreatePass( graph
-			, std::move( previousPasses )
-			, name
+			, previousPasses
 			, background
 			, hdrConfigUbo
 			, sceneUbo
@@ -55,7 +53,7 @@ namespace castor3d
 	{
 	}
 
-	BackgroundRenderer::~BackgroundRenderer()
+	BackgroundRenderer::~BackgroundRenderer()noexcept
 	{
 		m_device.uboPool->putBuffer( m_modelUbo );
 	}
@@ -88,8 +86,7 @@ namespace castor3d
 	}
 
 	crg::FramePass const & BackgroundRenderer::doCreatePass( crg::FramePassGroup & graph
-		, crg::FramePassArray previousPasses
-		, castor::String const & name
+		, crg::FramePassArray const & previousPasses
 		, SceneBackground & background
 		, HdrConfigUbo const & hdrConfigUbo
 		, SceneUbo const & sceneUbo

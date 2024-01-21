@@ -186,7 +186,7 @@ namespace castor3d
 							normalCloseness = normalCloseness * normalCloseness;
 							k_normal = 4.0_f;
 						}
-						FI;
+						FI
 
 						auto normalError = writer.declLocale( "normalError"
 							, ( 1.0_f - normalCloseness ) * k_normal );
@@ -220,7 +220,7 @@ namespace castor3d
 										, 1.0_f - c3d_ssaoConfigData.edgeSharpness * 2.0f * k_plane * planeError / sqrt( distance2 ) )
 									, 2.0_f ) } );
 						}
-						FI;
+						FI
 					}
 
 					writer.returnStmt( depthWeight * normalWeight * planeWeight );
@@ -232,14 +232,14 @@ namespace castor3d
 				, sdw::InVec3{ writer, "tapNormal" }
 				, sdw::InVec3{ writer, "position" } );
 
-			writer.implementEntryPoint( [&]( sdw::VertexIn in
+			writer.implementEntryPoint( [&]( sdw::VertexIn const & in
 				, sdw::VertexOut out )
 				{
 					out.vtx.position = vec4( inPosition, 0.0_f, 1.0_f );
 				} );
 
-			writer.implementEntryPoint( [&]( sdw::FragmentIn in
-				, sdw::FragmentOut out )
+			writer.implementEntryPoint( [&]( sdw::FragmentIn const & in
+				, sdw::FragmentOut const & )
 				{
 					auto ssCenter = writer.declLocale( "ssCenter"
 						, ivec2( in.fragCoord.xy() ) );
@@ -269,7 +269,7 @@ namespace castor3d
 						outBentNormal = c3d_cameraData.writeNormal( bentNormal );
 						writer.returnStmt();
 					}
-					FI;
+					FI
 
 					// Base weight for depth falloff.  Increase this for more blurriness,
 					// decrease it for better edge discrimination
@@ -320,9 +320,9 @@ namespace castor3d
 							bentNormal += bent * weight;
 							totalWeight += weight;
 						}
-						FI;
+						FI
 					}
-					ROF;
+					ROF
 
 					auto const epsilon = writer.declLocale( "epsilon"
 						, 0.0001_f );
@@ -401,12 +401,12 @@ namespace castor3d
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, crg::rq::Config rqConfig
-		, crg::ru::Config ruConfig
+		, crg::ru::Config const & ruConfig
 		, SsaoConfig const & ssaoConfig )
 		: crg::RenderQuad{ pass
 			, context
 			, graph
-			, std::move( ruConfig )
+			, ruConfig
 			, std::move( rqConfig ) }
 		, ssaoConfig{ ssaoConfig }
 	{

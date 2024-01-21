@@ -52,7 +52,7 @@ namespace castor3d::shader
 		auto volumetricSteps()const { return getMember< "volumetricSteps" >(); }
 		auto volumetricScattering()const { return getMember< "volumetricScattering" >(); }
 
-		C3D_API void updateShadowType( ShadowType type );
+		C3D_API void updateShadowType( ShadowType type )const;
 
 	private:
 		auto cascadeCount()const { return getMember< "cascadeCount" >(); }
@@ -139,9 +139,9 @@ namespace castor3d::shader
 			, uint32_t set
 			, bool enable = true );
 
-		C3D_API DirectionalShadowData getDirectionalShadows();
-		C3D_API PointShadowData getPointShadows( sdw::Int const & index );
-		C3D_API SpotShadowData getSpotShadows( sdw::Int const & index );
+		C3D_API DirectionalShadowData getDirectionalShadows()const;
+		C3D_API PointShadowData getPointShadows( sdw::Int const & index )const;
+		C3D_API SpotShadowData getSpotShadows( sdw::Int const & index )const;
 
 	private:
 		std::unique_ptr< AllShadowData > m_data;

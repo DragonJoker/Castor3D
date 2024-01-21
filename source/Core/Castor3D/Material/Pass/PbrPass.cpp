@@ -10,8 +10,8 @@
 
 namespace castor3d
 {
-	castor::String const PbrPass::Type = "pbr";
-	castor::String const PbrPass::LightingModel = shader::PbrLightingModel::getName();
+	castor::StringView const PbrPass::Type = "pbr";
+	castor::StringView const PbrPass::LightingModel = shader::PbrLightingModel::getName();
 
 	PassUPtr PbrPass::create( LightingModelID lightingModelId
 		, Material & parent )

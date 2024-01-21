@@ -25,12 +25,12 @@ namespace castor3d
 	void MeshMorphTarget::setTargetsWeights( Submesh const & submesh
 		, std::vector< float > weights )
 	{
-		auto & data = m_submeshesTargets.emplace( submesh.getId(), std::move( weights ) ).first->second;
+		auto & data = m_submeshesTargets.try_emplace( submesh.getId(), std::move( weights ) ).first->second;
 		auto weightIt = data.begin();
 		auto component = submesh.getComponent< MorphComponent >();
 		m_boundingBox = submesh.getBoundingBox();
 
-		for ( auto & morphTarget : component->getData().getMorphTargetsBuffers() )
+		for ( auto const & morphTarget : component->getData().getMorphTargetsBuffers() )
 		{
 			auto targetbb = morphTarget.boundingBox;
 			targetbb.load( m_boundingBox.getMin() + targetbb.getMin() * *weightIt
@@ -53,7 +53,7 @@ namespace castor3d
 
 		std::vector< float > weights;
 		weights.resize( size );
-		auto & data = m_submeshesTargets.emplace( submesh.getId(), std::move( weights ) ).first->second;
+		auto & data = m_submeshesTargets.try_emplace( submesh.getId(), std::move( weights ) ).first->second;
 		CU_Require( data.size() == submesh.getMorphTargetsCount() );
 		data[targetIndex] = targetWeight;
 	}

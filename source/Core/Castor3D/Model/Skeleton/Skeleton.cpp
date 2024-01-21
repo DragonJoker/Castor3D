@@ -18,11 +18,10 @@ namespace castor3d
 		: castor::Named{ name }
 		, Animable{ *scene.getEngine() }
 		, m_scene{ &scene }
-		, m_globalInverse{ 1.0f }
 	{
 	}
 
-	Skeleton::~Skeleton()
+	Skeleton::~Skeleton()noexcept
 	{
 		Animable::cleanupAnimations();
 	}
@@ -136,10 +135,9 @@ namespace castor3d
 
 	void Skeleton::computeContainers( Mesh & mesh )
 	{
-		auto ires = m_boxes.emplace( &mesh, std::vector< castor::BoundingBox >{} );
-		auto it = ires.first;
+		auto [it, res] = m_boxes.try_emplace( &mesh );
 
-		if ( ires.second )
+		if ( res )
 		{
 			auto & boxes = it->second;
 			boxes.reserve( m_bones.size() );

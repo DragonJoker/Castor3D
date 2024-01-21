@@ -93,7 +93,7 @@ namespace castor3d
 		, Engine & engine
 		, castor::Path const & file
 		, Parameters const & parameters
-		, ProgressBar * progress )
+		, ProgressBar * progress )const
 	{
 		return create( type
 			, "any"
@@ -107,7 +107,7 @@ namespace castor3d
 		, Scene & scene
 		, castor::Path const & file
 		, Parameters const & parameters
-		, ProgressBar * progress )
+		, ProgressBar * progress )const
 	{
 		return create( type
 			, "any"
@@ -122,7 +122,7 @@ namespace castor3d
 		, Engine & engine
 		, castor::Path const & file
 		, Parameters const & parameters
-		, ProgressBar * progress )
+		, ProgressBar * progress )const
 	{
 		return doCreate( type
 			, name
@@ -138,7 +138,7 @@ namespace castor3d
 		, Scene & scene
 		, castor::Path const & file
 		, Parameters const & parameters
-		, ProgressBar * progress )
+		, ProgressBar * progress )const
 	{
 		return doCreate( type
 			, name
@@ -166,9 +166,8 @@ namespace castor3d
 
 		if ( name == "any" )
 		{
-			auto tit = it->second.find( type );
-
-			if ( tit != it->second.end() )
+			if ( auto tit = it->second.find( type );
+				tit != it->second.end() )
 			{
 				return tit->second( engine, scene, file, parameters, progress );
 			}

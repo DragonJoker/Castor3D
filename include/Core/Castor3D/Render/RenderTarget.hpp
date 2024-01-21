@@ -114,9 +114,7 @@ namespace castor3d
 		 *\param[in]	toWait	Les sémaphores à attendre.
 		 *\return		Les sémaphores signalés par ce dessin.
 		 */
-		C3D_API crg::SemaphoreWaitArray render( RenderDevice const & device
-			, RenderInfo & info
-			, ashes::Queue const & queue
+		C3D_API crg::SemaphoreWaitArray render( ashes::Queue const & queue
 			, crg::SemaphoreWaitArray const & toWait = {} );
 		/**
 		 *\~english
@@ -150,7 +148,7 @@ namespace castor3d
 		 *\param[in]	onInitialised	Le callback appelé lorsque l'initialisation est terminée.
 		 *\param[in]	progress		La barre de progression optionnelle.
 		 */
-		C3D_API void initialise( OnInitialisedFunc onInitialised
+		C3D_API void initialise( OnInitialisedFunc const & onInitialised
 			, ProgressBar * progress = nullptr );
 		/**
 		 *\~english
@@ -216,8 +214,7 @@ namespace castor3d
 		 *\param[in]	name		Le type.
 		 *\param[in]	parameters	Les paramètres.
 		 */
-		C3D_API void setToneMappingType( castor::String const & name
-			, Parameters const & parameters );
+		C3D_API void setToneMappingType( castor::StringView name );
 		/**
 		 *\~english
 		 *\brief		adds a post effect to the list.
@@ -481,7 +478,7 @@ namespace castor3d
 			, crg::FramePassArray previousPasses );
 		void doCleanupTechnique();
 		void doCleanupCopyCommands();
-		void doInitCombineProgram( ProgressBar * progress );
+		void doInitCombineProgram();
 		void doCleanupCombineProgram();
 		Texture const & doUpdatePostEffects( CpuUpdater & updater
 			, PostEffectArray const & effects
@@ -506,7 +503,7 @@ namespace castor3d
 		crg::ResourcesCache m_resources;
 		std::unique_ptr< HdrConfigUbo > m_hdrConfigUbo;
 		std::unique_ptr< ColourGradingUbo > m_colourGradingUbo;
-		RenderTechniqueUPtr m_renderTechnique;
+		RenderTechniqueUPtr m_renderTechnique{};
 		SceneRPtr m_scene{};
 		CameraRPtr m_camera{};
 		uint32_t m_index{};

@@ -37,38 +37,22 @@ namespace castor3d
 		 *\brief		Constructor
 		 *\param[in]	parent			The parent technique.
 		 *\param[in]	device			The GPU device.
-		 *\param[in]	queueData		The queue receiving the GPU commands.
 		 *\param[in]	previous		The prepass renderer.
 		 *\param[in]	previousPasses	The passes this pass depends on.
-		 *\param[in]	ssaoConfig		The SSAO configuration.
 		 *\param[in]	progress		The optional progress bar.
-		 *\param[in]	normal			The scene normals map.
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	parent			La technique parente.
 		 *\param[in]	device			Le device GPU.
-		 *\param[in]	queueData		La queue recevant les commandes GPU.
 		 *\param[in]	previous		Le renderer de prépasse.
 		 *\param[in]	previousPasses	Les passes dont celle-ci dépend.
-		 *\param[in]	ssaoConfig		La configuration du SSAO.
 		 *\param[in]	progress		La barre de progression optionnelle.
-		 *\param[in]	normal			La texture de normales de la scène.
 		 */
 		C3D_API OpaqueRendering( RenderTechnique & parent
 			, RenderDevice const & device
-			, QueueData const & queueData
 			, PrepassRendering const & previous
 			, crg::FramePassArray const & previousPasses
-			, SsaoConfig const & ssaoConfig
-			, ProgressBar * progress
-			, Texture const * normal );
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		C3D_API ~OpaqueRendering()noexcept;
+			, ProgressBar * progress );
 		/**
 		 *\~english
 		 *\return		The number of steps needed for initialisation, to show progression.
@@ -102,7 +86,7 @@ namespace castor3d
 		 *\brief			Met à jour la passe de rendu, au niveau GPU.
 		 *\param[in, out]	updater	Les données d'update.
 		 */
-		C3D_API void update( GpuUpdater & updater );
+		C3D_API void update( GpuUpdater & updater )const;
 		/**
 		*\~english
 		*\brief

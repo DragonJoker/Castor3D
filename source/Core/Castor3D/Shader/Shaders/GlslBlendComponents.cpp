@@ -196,7 +196,7 @@ namespace castor3d::shader
 	sdw::expr::ExprPtr BlendComponents::makeInit( Materials const & materials
 		, bool zeroInit )
 	{
-		auto & writer = *materials.getWriter();
+		auto const & writer = *materials.getWriter();
 		sdw::expr::ExprList initializers;
 		auto type = BlendComponents::makeType( writer.getTypesCache(), materials, zeroInit, initializers );
 
@@ -218,7 +218,7 @@ namespace castor3d::shader
 		, sdw::StructInstance const & surface
 		, sdw::Vec4 const * clrCot )
 	{
-		auto & writer = *materials.getWriter();
+		auto const & writer = *materials.getWriter();
 		sdw::expr::ExprList initializers;
 		auto type = BlendComponents::makeType( writer.getTypesCache(), materials, material, surface, clrCot, initializers );
 

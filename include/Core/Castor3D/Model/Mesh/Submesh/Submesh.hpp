@@ -54,7 +54,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API ~Submesh();
+		C3D_API ~Submesh()noexcept;
 		/**
 		 *\~english
 		 *\brief		Initialises the submesh.
@@ -189,7 +189,7 @@ namespace castor3d
 		 *\param[in]	value	Les coordonnées du point
 		 *\return		Le vertex créé
 		 */
-		C3D_API InterleavedVertex addPoint( float * value );
+		C3D_API InterleavedVertex addPoint( float const * value );
 		/**
 		 *\~english
 		 *\brief		Adds a vertex to the list.

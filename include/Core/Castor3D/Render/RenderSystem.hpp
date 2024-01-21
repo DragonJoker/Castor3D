@@ -99,7 +99,7 @@ namespace castor3d
 		*\param[in] instanceExtensions
 		*	Les extensions d'instance.
 		*/
-		C3D_API static ashes::InstancePtr createInstance( Engine & engine
+		C3D_API static ashes::InstancePtr createInstance( Engine const & engine
 			, AshPluginDescription const & desc
 			, Extensions & instanceExtensions );
 		/**
@@ -159,7 +159,7 @@ namespace castor3d
 		 */
 		C3D_API SpirVShader compileShader( VkShaderStageFlagBits stage
 			, castor::String const & name
-			, castor::String const & glsl );
+			, castor::String const & glsl )const;
 		/**
 		 *\~english
 		 *\brief		Compiles a shader module to the necessary shader language.

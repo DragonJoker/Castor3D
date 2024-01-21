@@ -66,9 +66,8 @@ namespace castor3d
 	{
 		while ( !m_registered.empty() )
 		{
-			auto & componentDesc = m_registered.back();
-
-			if ( componentDesc.plugin )
+			if ( auto const & componentDesc = m_registered.back();
+				componentDesc.plugin )
 			{
 				unregisterComponent( componentDesc.id );
 			}
@@ -81,9 +80,9 @@ namespace castor3d
 	{
 		SubmeshComponentCombine result{};
 
-		for ( auto & component : submesh.getComponents() )
+		for ( auto & [_, component] : submesh.getComponents() )
 		{
-			addFlags( result, component.second->getSubmeshFlags() );
+			addFlags( result, component->getSubmeshFlags() );
 		}
 
 		registerSubmeshComponentCombine( result );
@@ -166,10 +165,10 @@ namespace castor3d
 			return SubmeshComponentCombine{};
 		}
 
-		return m_componentCombines[id - 1u];
+		return m_componentCombines[id - 1ULL];
 	}
 
-	SubmeshData SubmeshComponentRegister::getSubmeshData( SubmeshComponentFlag value )
+	SubmeshData SubmeshComponentRegister::getSubmeshData( SubmeshComponentFlag value )const
 	{
 		if ( value == m_lineIndexFlag
 			|| value == m_triangleIndexFlag )
@@ -290,7 +289,7 @@ namespace castor3d
 		if ( it == m_registered.end() )
 		{
 			CU_Failure( "Submesh doesn't contain any render shader component" );
-			throw std::logic_error{ "Submesh doesn't contain any render shader component" };
+			CU_Exception( "Submesh doesn't contain any render shader component" );
 		}
 
 		auto rit = m_renderShaders.find( it->id );
@@ -298,20 +297,20 @@ namespace castor3d
 		if ( rit == m_renderShaders.end() )
 		{
 			CU_Failure( "Submesh doesn't contain any render shader component" );
-			throw std::logic_error{ "Submesh doesn't contain any render shader component" };
+			CU_Exception( "Submesh doesn't contain any render shader component" );
 		}
 
 		rit->second->getShaderSource( *getOwner(), flags, componentsMask, builder );
 	}
 
-	SubmeshRenderDataPtr SubmeshComponentRegister::createRenderData( SubmeshComponent & component )
+	SubmeshRenderDataPtr SubmeshComponentRegister::createRenderData( SubmeshComponent const & component )
 	{
 		auto it = m_renderShaders.find( component.getId() );
 
 		if ( it == m_renderShaders.end() )
 		{
 			CU_Failure( "Submesh doesn't contain the wanted render shader component" );
-			throw std::logic_error{ "Submesh doesn't contain the wanted render shader component" };
+			CU_Exception( "Submesh doesn't contain the wanted render shader component" );
 		}
 
 		auto result = it->second->createData( component );
@@ -342,9 +341,8 @@ namespace castor3d
 	SubmeshComponentID SubmeshComponentRegister::registerComponent( castor::String const & componentType
 		, SubmeshComponentPluginUPtr componentPlugin )
 	{
-		auto id = getNameId( componentType );
-
-		if ( id != smshcompreg::InvalidId )
+		if ( auto id = getNameId( componentType );
+			id != smshcompreg::InvalidId )
 		{
 			log::error << "Submesh component type [" << componentType << "] is already registered." << std::endl;
 			CU_Failure( "Submesh component type is already registered" );
@@ -410,7 +408,7 @@ namespace castor3d
 		if ( it == m_registered.end() )
 		{
 			auto id = SubmeshComponentID( m_registered.size() + 1u );
-			m_registered.push_back( { id } );
+			m_registered.emplace_back( id );
 			it = std::next( m_registered.begin()
 				, ptrdiff_t( id - 1u ) );
 		}
@@ -547,33 +545,31 @@ namespace castor3d
 		{
 			auto & componentDesc = m_registered[id - 1u];
 			getEngine()->unregisterParsers( componentDesc.name );
-			auto vit = m_vertexSurfaceShaders.find( id );
 
-			if ( vit != m_vertexSurfaceShaders.end() )
+			if ( auto vit = m_vertexSurfaceShaders.find( id );
+				vit != m_vertexSurfaceShaders.end() )
 			{
 				m_vertexSurfaceShaders.erase( vit );
 			}
 
-			auto ait = m_rasterSurfaceShaders.find( id );
-
-			if ( ait != m_rasterSurfaceShaders.end() )
+			if ( auto ait = m_rasterSurfaceShaders.find( id );
+				ait != m_rasterSurfaceShaders.end() )
 			{
 				m_rasterSurfaceShaders.erase( ait );
 			}
 
-			auto rit = m_renderShaders.find( id );
-
-			if ( rit != m_renderShaders.end() )
+			if ( auto rit = m_renderShaders.find( id );
+				rit != m_renderShaders.end() )
 			{
 				m_renderShaders.erase( rit );
 			}
 
 			auto flag = componentDesc.plugin->getComponentFlags();
-			auto fit = std::find( m_renderShaderFlags.begin()
-				, m_renderShaderFlags.end()
-				, flag );
 
-			if ( fit != m_renderShaderFlags.end() )
+			if ( auto fit = std::find( m_renderShaderFlags.begin()
+					, m_renderShaderFlags.end()
+					, flag );
+				fit != m_renderShaderFlags.end() )
 			{
 				m_renderShaderFlags.erase( fit );
 			}
@@ -585,7 +581,7 @@ namespace castor3d
 		}
 	}
 
-	void SubmeshComponentRegister::fillSubmeshComponentCombine( SubmeshComponentCombine & combine )
+	void SubmeshComponentRegister::fillSubmeshComponentCombine( SubmeshComponentCombine & combine )const
 	{
 		combine.hasLineIndexFlag = hasAny( combine, m_lineIndexFlag );
 		combine.hasTriangleIndexFlag = hasAny( combine, m_triangleIndexFlag );

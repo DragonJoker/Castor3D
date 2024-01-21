@@ -11,13 +11,13 @@ namespace castor3d
 {
 	AnimationInstance::AnimationInstance( AnimationInstance && rhs )noexcept
 		: castor::OwnedBy< AnimatedObject >{ *rhs.getOwner() }
-		, m_animation{ std::move( rhs.m_animation ) }
+		, m_animation{ rhs.m_animation }
 		, m_looped{ rhs.m_looped.load() }
 	{
 	}
 
 	AnimationInstance::AnimationInstance( AnimatedObject & object
-		, Animation & animation
+		, Animation const & animation
 		, bool looped )
 		: castor::OwnedBy< AnimatedObject >{ object }
 		, m_animation{ animation }

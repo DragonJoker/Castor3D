@@ -55,8 +55,7 @@ namespace castor3d
 		, ShadowMap const & shadowMap
 		, bool needsVsm
 		, bool needsRsm
-		, bool isStatic
-		, uint32_t cascadeIndex )
+		, bool isStatic )
 		: ShadowMapPass{ pass
 			, context
 			, graph
@@ -80,9 +79,8 @@ namespace castor3d
 
 	void ShadowMapPassDirectional::update( CpuUpdater & updater )
 	{
-		auto sceneIt = updater.dirtyScenes.find( &getScene() );
-
-		if ( sceneIt != updater.dirtyScenes.end() )
+		if ( auto sceneIt = updater.dirtyScenes.find( &getScene() );
+			sceneIt != updater.dirtyScenes.end() )
 		{
 			auto & sceneObjs = sceneIt->second;
 			auto it = std::find( sceneObjs.dirtyCameras.begin()
@@ -177,7 +175,7 @@ namespace castor3d
 
 		writer.implementMainT< shader::MeshVertexT, shader::FragmentSurfaceT >( sdw::VertexInT< shader::MeshVertexT >{ writer, submeshShaders }
 			, sdw::VertexOutT< shader::FragmentSurfaceT >{ writer, submeshShaders, passShaders, flags }
-			, [&]( sdw::VertexInT< shader::MeshVertexT > in
+			, [&]( sdw::VertexInT< shader::MeshVertexT > const & in
 				, sdw::VertexOutT< shader::FragmentSurfaceT > out )
 			{
 				auto nodeId = writer.declLocale( "nodeId"
@@ -278,10 +276,12 @@ namespace castor3d
 			, RenderPipeline::eBuffers
 			, enableTextures };
 		auto index = uint32_t( castor3d::GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
-		auto lightsIndex = index++;
+		auto lightsIndex = index;
+		++index;
 		C3D_ShadowMap( writer
-			, index++
+			, index
 			, RenderPipeline::eBuffers );
+		++index;
 		shader::Lights lights{ *getEngine()
 			, flags.lightingModelId
 			, flags.backgroundModelId
@@ -308,7 +308,7 @@ namespace castor3d
 
 		writer.implementMainT< shader::FragmentSurfaceT, shader::ShadowsOutputT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer, submeshShaders, passShaders, flags }
 			, sdw::FragmentOutT< shader::ShadowsOutputT >{ writer, needsVsm, needsRsm }
-			, [&]( sdw::FragmentInT< shader::FragmentSurfaceT > in
+			, [&]( sdw::FragmentInT< shader::FragmentSurfaceT > const & in
 				, sdw::FragmentOutT< shader::ShadowsOutputT > out )
 			{
 				auto modelData = writer.declLocale( "modelData"

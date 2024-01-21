@@ -123,7 +123,7 @@ namespace castor3d
 		 *\param[in]	data	Les données de l'image.
 		 *\return		L'unité de texture.
 		 */
-		C3D_API castor::ImageRPtr loadImage( castor::String name
+		C3D_API castor::ImageRPtr loadImage( castor::String const & name
 			, castor::String type
 			, castor::ByteArray data )const;
 		/**

@@ -9,7 +9,7 @@ namespace castor3d
 		, char const * strFile
 		, char const * strFunction
 		, uint32_t uiLine )
-		:	Exception( "", strFile, strFunction, uiLine )
+		: Exception{ "", strFile, strFunction, uiLine }
 	{
 		std::stringstream stream;
 		stream << "Expected version [";

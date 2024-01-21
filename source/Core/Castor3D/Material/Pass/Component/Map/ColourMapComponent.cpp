@@ -39,7 +39,7 @@ namespace castor
 			return writeMask( file, cuT( "colour_mask" ), m_mask );
 		}
 
-		bool operator()( StringStream & file )
+		bool operator()( StringStream & file )const
 		{
 			return writeMask( file, cuT( "colour_mask" ), m_mask );
 		}
@@ -79,7 +79,7 @@ namespace castor3d
 		static CU_ImplementAttributeParserBlock( parserTexRemapColour, SceneImportContext )
 		{
 			auto & plugin = getEngine( *blockContext )->getPassComponentsRegister().getPlugin( ColourMapComponent::TypeName );
-			blockContext->textureRemapIt = blockContext->textureRemaps.emplace( plugin.getTextureFlags(), TextureConfiguration{} ).first;
+			blockContext->textureRemapIt = blockContext->textureRemaps.try_emplace( plugin.getTextureFlags() ).first;
 			blockContext->textureRemapIt->second = TextureConfiguration{};
 		}
 		CU_EndAttributePushBlock( CSCNSection::eTextureRemapChannel, blockContext )
@@ -124,27 +124,30 @@ namespace castor3d
 	void ColourMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		channelFillers.emplace( "diffuse", ChannelFiller{ getTextureFlags()
+		channelFillers.try_emplace( "diffuse"
+			, getTextureFlags()
 			, []( TextureContext & blockContext )
 			{
-				auto & component = getPassComponent< ColourMapComponent >( blockContext );
+				auto const & component = getPassComponent< ColourMapComponent >( blockContext );
 				component.fillChannel( blockContext.configuration
 					, 0x00FFFFFF );
-			} } );
-		channelFillers.emplace( "albedo", ChannelFiller{ getTextureFlags()
+			} );
+		channelFillers.try_emplace( "albedo"
+			, getTextureFlags()
 			, []( TextureContext & blockContext )
 			{
-				auto & component = getPassComponent< ColourMapComponent >( blockContext );
+				auto const & component = getPassComponent< ColourMapComponent >( blockContext );
 				component.fillChannel( blockContext.configuration
 					, 0x00FFFFFF );
-			} } );
-		channelFillers.emplace( "colour", ChannelFiller{ getTextureFlags()
+			} );
+		channelFillers.try_emplace( "colour"
+			, getTextureFlags()
 			, []( TextureContext & blockContext )
 			{
-				auto & component = getPassComponent< ColourMapComponent >( blockContext );
+				auto const & component = getPassComponent< ColourMapComponent >( blockContext );
 				component.fillChannel( blockContext.configuration
 					, 0x00FFFFFF );
-			} } );
+			} );
 
 		castor::addParserT( parsers
 			, CSCNSection::eTexture

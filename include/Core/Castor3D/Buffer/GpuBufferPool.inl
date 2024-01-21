@@ -21,7 +21,7 @@ namespace castor3d
 	}
 
 	template< typename DataT >
-	void GpuBufferPool::putBuffer( GpuBufferOffsetT< DataT > const & bufferOffset )
+	void GpuBufferPool::putBuffer( GpuBufferOffsetT< DataT > const & bufferOffset )noexcept
 	{
 		doPutBuffer( *bufferOffset.buffer
 			, bufferOffset.target

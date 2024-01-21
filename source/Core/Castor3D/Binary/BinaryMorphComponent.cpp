@@ -14,7 +14,7 @@ namespace castor3d
 	{
 		bool result = true;
 
-		for ( auto & it : obj.getData().getMorphTargetsBuffers() )
+		for ( auto const & it : obj.getData().getMorphTargetsBuffers() )
 		{
 			if ( result )
 			{
@@ -110,6 +110,7 @@ namespace castor3d
 				if ( count )
 				{
 					obj.getData().addMorphTarget( std::move( buffer ) );
+					buffer = {};
 					count = 0u;
 				}
 				result = doParseChunk( count, chunk );

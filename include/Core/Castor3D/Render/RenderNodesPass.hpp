@@ -385,16 +385,16 @@ namespace castor3d
 		 *\brief		Ajuste les flags donnés pour qu'ils correspondent aux pré-requis de la passe.
 		 *\param[in]	submeshCombine	Les flags.
 		 */
-		C3D_API SubmeshComponentCombine adjustFlags( SubmeshComponentCombine submeshCombine )const;
+		C3D_API SubmeshComponentCombine adjustFlags( SubmeshComponentCombine const & submeshCombine )const;
 		/**
 		 *\~english
 		 *\brief		Adjusts given flags to match the render pass requirements.
-		 *\param[in]	flags	The flags.
+		 *\param[in]	passCombine	The flags.
 		 *\~french
 		 *\brief		Ajuste les flags donnés pour qu'ils correspondent aux pré-requis de la passe.
-		 *\param[in]	flags	Les flags.
+		 *\param[in]	passCombine	Les flags.
 		 */
-		C3D_API PassComponentCombine adjustFlags( PassComponentCombine flags )const;
+		C3D_API PassComponentCombine adjustFlags( PassComponentCombine const & passCombine )const;
 		/**
 		 *\~english
 		 *\brief		Adjusts given flags to match the render pass requirements.
@@ -416,14 +416,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Filters the given textures flags using this pass needed textures.
-		 *\param[in]	texturesFlags	The textures flags.
+		 *\param[in]	textureCombine	The textures flags.
 		 *\return		The filtered flags.
 		 *\~french
 		 *\brief		Filtre les indicateurs de textures donnés en utilisant ceux voulus par cette passe.
-		 *\param[in]	texturesFlags	Les indicateurs de textures.
+		 *\param[in]	textureCombine	Les indicateurs de textures.
 		 *\return		Les indicateurs filtrés.
 		 */
-		C3D_API TextureCombine adjustFlags( TextureCombine texturesFlags )const;
+		C3D_API TextureCombine adjustFlags( TextureCombine const & textureCombine )const;
 		/**
 		 *\~english
 		 *\brief		Creates the pipeline flags for given configuration.
@@ -462,8 +462,8 @@ namespace castor3d
 		 *\param[in]	passLayerIndex		L'indice de la couche de la passe de matériau.
 		 *\param[in]	morphTargets		Le buffer de morph targets.
 		 */
-		C3D_API PipelineFlags createPipelineFlags( PassComponentCombine passComponents
-			, SubmeshComponentCombine submeshComponents
+		C3D_API PipelineFlags createPipelineFlags( PassComponentCombine const & passComponents
+			, SubmeshComponentCombine const & submeshComponents
 			, BlendMode colourBlendMode
 			, BlendMode alphaBlendMode
 			, RenderPassTypeID renderPassTypeId
@@ -478,7 +478,7 @@ namespace castor3d
 			, bool isFrontCulled
 			, uint32_t passLayerIndex
 			, GpuBufferOffsetT< castor::Point4f > const & morphTargets
-			, SubmeshRenderData * submeshData )const noexcept;
+			, SubmeshRenderData const * submeshData )const noexcept;
 		/**
 		 *\~english
 		 *\brief		Creates the pipeline flags for given configuration.
@@ -503,13 +503,13 @@ namespace castor3d
 		 */
 		C3D_API PipelineFlags createPipelineFlags( Pass const & pass
 			, TextureCombine const & textures
-			, SubmeshComponentCombine submeshComponents
+			, SubmeshComponentCombine const & submeshComponents
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, VkPrimitiveTopology topology
 			, bool isFrontCulled
 			, GpuBufferOffsetT< castor::Point4f > const & morphTargets
-			, SubmeshRenderData * submeshData )const noexcept;
+			, SubmeshRenderData const * submeshData )const noexcept;
 		/**
 		 *\~english
 		 *\brief			Prepares the pipeline matching the given flags, for back face culling nodes.
@@ -828,9 +828,7 @@ namespace castor3d
 
 	private:
 		void doSubInitialise();
-		void doSubRecordInto( crg::RecordContext & context
-			, VkCommandBuffer commandBuffer
-			, uint32_t index );
+		void doSubRecordInto( VkCommandBuffer commandBuffer );
 
 	protected:
 		/**
@@ -875,26 +873,22 @@ namespace castor3d
 		C3D_API virtual SubmeshComponentCombine doAdjustSubmeshComponents( SubmeshComponentCombine submeshCombine )const;
 		C3D_API virtual ProgramFlags doAdjustProgramFlags( ProgramFlags flags )const;
 		C3D_API virtual SceneFlags doAdjustSceneFlags( SceneFlags flags )const;
-		C3D_API ShaderProgramRPtr doGetProgram( PipelineFlags const & flags
-			, VkCullModeFlags cullMode = VK_CULL_MODE_NONE );
+		C3D_API ShaderProgramRPtr doGetProgram( PipelineFlags const & flags );
 		/**
 		 *\copydoc	castor3d::RenderTechniquePass::doAccept
 		 */
 		C3D_API void doAccept( castor3d::RenderTechniqueVisitor & visitor );
 		C3D_API void doUpdateFlags( PipelineFlags & flags )const;
 		C3D_API void doAddShadowBindings( Scene const & scene
-			, PipelineFlags const & flags
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings
 			, uint32_t & index )const;
 		C3D_API void doAddBackgroundBindings( Scene const & scene
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings
 			, uint32_t & index )const;
 		C3D_API void doAddClusteredLightingBindings( RenderTarget const & target
-			, PipelineFlags const & flags
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings
 			, uint32_t & index )const;
 		C3D_API void doAddShadowDescriptor( Scene const & scene
-			, PipelineFlags const & flags
 			, ashes::WriteDescriptorSetArray & descriptorWrites
 			, ShadowMapLightTypeArray const & shadowMaps
 			, ShadowBuffer const * shadowBuffer
@@ -904,7 +898,6 @@ namespace castor3d
 			, crg::ImageViewIdArray const & targetImage
 			, uint32_t & index )const;
 		C3D_API void doAddClusteredLightingDescriptor( RenderTarget const & target
-			, PipelineFlags const & flags
 			, ashes::WriteDescriptorSetArray & descriptorWrites
 			, uint32_t & index )const;
 
@@ -1038,9 +1031,11 @@ namespace castor3d
 	private:
 		struct PassDescriptors
 		{
-			ashes::DescriptorSetPoolPtr pool;
-			ashes::DescriptorSetLayoutPtr layout;
-			ashes::DescriptorSetPtr set;
+			PassDescriptors() = default;
+
+			ashes::DescriptorSetPoolPtr pool{};
+			ashes::DescriptorSetLayoutPtr layout{};
+			ashes::DescriptorSetPtr set{};
 		};
 		using PassDescriptorsMap = std::unordered_map< size_t, PassDescriptors >;
 

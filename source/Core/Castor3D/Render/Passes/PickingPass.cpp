@@ -76,11 +76,7 @@ namespace castor3d
 	{
 	}
 
-	void PickingPass::addScene( Scene & scene, Camera & camera )
-	{
-	}
-
-	void PickingPass::updateArea( VkRect2D const & scissor )
+	void PickingPass::updateArea( VkRect2D const & scissor )const
 	{
 		ShadowMapLightTypeArray shadowMaps;
 		getRenderQueue().update( shadowMaps, nullptr, scissor );
@@ -111,7 +107,7 @@ namespace castor3d
 	
 	SubmeshComponentCombine PickingPass::doAdjustSubmeshComponents( SubmeshComponentCombine submeshCombine )const
 	{
-		auto & components = getEngine()->getSubmeshComponentsRegister();
+		auto const & components = getEngine()->getSubmeshComponentsRegister();
 		remFlags( submeshCombine, components.getNormalFlag() );
 		remFlags( submeshCombine, components.getTangentFlag() );
 		remFlags( submeshCombine, components.getBitangentFlag() );
@@ -186,8 +182,8 @@ namespace castor3d
 				, passShaders
 				, flags }
 			, sdw::FragmentOut{ writer }
-			, [&]( sdw::FragmentInT< shader::FragmentSurfaceT > in
-				, sdw::FragmentOut out )
+			, [&]( sdw::FragmentInT< shader::FragmentSurfaceT > const & in
+				, sdw::FragmentOut const & )
 			{
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[in.nodeId - 1u] );

@@ -22,7 +22,7 @@ namespace castor3d
 		m_category = factory.create( lightType, std::ref( *this ) );
 	}
 
-	void Light::update( CpuUpdater & updater )
+	void Light::update( CpuUpdater & /*updater*/ )
 	{
 		m_category->update();
 		onGPUChanged( *this );

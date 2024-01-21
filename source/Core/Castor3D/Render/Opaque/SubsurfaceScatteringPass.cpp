@@ -114,15 +114,15 @@ namespace castor3d
 			auto c3d_mapDepthObj = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapDepthObj", BlurDepthObjImgId, 0u );
 			auto c3d_mapLightDiffuse = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapLightDiffuse", BlurLgtDiffImgId, 0u );
 
-			writer.implementEntryPointT< VertexT, VertexT >( [&]( sdw::VertexInT< VertexT > in
+			writer.implementEntryPointT< VertexT, VertexT >( [&]( sdw::VertexInT< VertexT > const & in
 				, sdw::VertexOutT< VertexT > out )
 				{
 					out.texcoord() = in.texcoord();
 					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
 				} );
 
-			writer.implementEntryPointT< VertexT, shader::Colour4FT >( [&]( sdw::FragmentInT< VertexT > in
-				, sdw::FragmentOutT< shader::Colour4FT > out )
+			writer.implementEntryPointT< VertexT, shader::Colour4FT >( [&]( sdw::FragmentInT< VertexT > const & in
+				, sdw::FragmentOutT< shader::Colour4FT > const & out )
 				{
 					auto depthObj = writer.declLocale( "depthObj"
 						, c3d_mapDepthObj.lod( in.texcoord(), 0.0_f ) );
@@ -133,7 +133,7 @@ namespace castor3d
 					{
 						writer.demote();
 					}
-					FI;
+					FI
 
 					auto modelData = writer.declLocale( "modelData"
 						, c3d_modelsData[writer.cast< sdw::UInt >( nodeId ) - 1u] );
@@ -146,7 +146,7 @@ namespace castor3d
 					{
 						writer.demote();
 					}
-					FI;
+					FI
 
 					auto sssProfile = writer.declLocale( "sssProfile"
 						, sssProfiles.getProfile( sssProfileIndex ) );
@@ -216,7 +216,7 @@ namespace castor3d
 						// Accumulate:
 						out.colour().rgb() += w[i] * color;
 					}
-					ROF;
+					ROF
 				} );
 			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
@@ -240,15 +240,15 @@ namespace castor3d
 			auto c3d_mapBlur3 = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapBlur3", CombBlur3ImgId, 0u );
 			auto c3d_mapLightDiffuse = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapLightDiffuse", CombLgtDiffImgId, 0u );
 
-			writer.implementEntryPointT< VertexT, VertexT >( [&]( sdw::VertexInT< VertexT > in
+			writer.implementEntryPointT< VertexT, VertexT >( [&]( sdw::VertexInT< VertexT > const & in
 				, sdw::VertexOutT< VertexT > out )
 				{
 					out.texcoord() = in.texcoord();
 					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
 				} );
 
-			writer.implementEntryPointT< VertexT, shader::Colour4FT >( [&]( sdw::FragmentInT< VertexT > in
-				, sdw::FragmentOutT< shader::Colour4FT > out )
+			writer.implementEntryPointT< VertexT, shader::Colour4FT >( [&]( sdw::FragmentInT< VertexT > const & in
+				, sdw::FragmentOutT< shader::Colour4FT > const & out )
 				{
 					auto depthObj = writer.declLocale( "depthObj"
 						, c3d_mapDepthObj.lod( in.texcoord(), 0.0_f ) );
@@ -259,7 +259,7 @@ namespace castor3d
 					{
 						writer.demote();
 					}
-					FI;
+					FI
 
 					auto modelData = writer.declLocale( "modelData"
 						, c3d_modelsData[writer.cast< sdw::UInt >( nodeId ) - 1u] );
@@ -306,7 +306,7 @@ namespace castor3d
 							+ blur2 * blurWeights[1]
 							+ blur3 * blurWeights[2];
 					}
-					FI;
+					FI
 				} );
 			return writer.getBuilder().releaseShader();
 		}
@@ -315,7 +315,7 @@ namespace castor3d
 			, RenderDevice const & device
 			, castor::Size const & size
 			, VkFormat format
-			, std::string name )
+			, std::string const & name )
 		{
 			return { device
 				, resources
@@ -540,7 +540,7 @@ namespace castor3d
 		m_result.destroy();
 	}
 
-	void SubsurfaceScatteringPass::update( CpuUpdater & updater )
+	void SubsurfaceScatteringPass::update( CpuUpdater & /*updater*/ )
 	{
 		m_enabled = m_scene.needsSubsurfaceScattering();
 	}

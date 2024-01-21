@@ -48,16 +48,16 @@ namespace castor3d
 			, VkCompareOp compareOp = VK_COMPARE_OP_NEVER )
 		{
 			auto & engine = *device.renderSystem.getEngine();
-			SamplerObs c3dSampler{};
-			auto splName = getSamplerName( compareOp
-				, minFilter
-				, magFilter
-				, mipFilter
-				, addressMode
-				, addressMode
-				, addressMode );
+			Sampler const * c3dSampler{};
 
-			if ( engine.hasSampler( splName ) )
+			if ( auto splName = getSamplerName( compareOp
+					, minFilter
+					, magFilter
+					, mipFilter
+					, addressMode
+					, addressMode
+					, addressMode );
+				engine.hasSampler( splName ) )
 			{
 				c3dSampler = engine.findSampler( splName );
 			}
@@ -87,22 +87,6 @@ namespace castor3d
 	}
 
 	//*********************************************************************************************
-
-	Texture::Texture()
-		: resources{}
-		, device{}
-		, imageId{}
-		, image{}
-		, wholeViewId{}
-		, targetViewId{}
-		, sampledViewId{}
-		, wholeView{}
-		, targetView{}
-		, sampledView{}
-		, subViewsId{}
-		, sampler{}
-	{
-	}
 
 	Texture::Texture( Texture && rhs )noexcept
 		: resources{ std::move( rhs.resources ) }
@@ -601,7 +585,8 @@ namespace castor3d
 			, ashes::getAccessMask( srcLayout )
 			, ashes::getAccessMask( dstLayout )
 			, srcQueueFamily
-			, dstQueueFamily );
+			, dstQueueFamily
+			, target );
 	}
 
 	VkImageMemoryBarrier Texture::makeLayoutTransition( VkImageLayout srcLayout
@@ -616,7 +601,8 @@ namespace castor3d
 			, srcAccessFlags
 			, ashes::getAccessMask( dstLayout )
 			, srcQueueFamily
-			, dstQueueFamily );
+			, dstQueueFamily
+			, target );
 	}
 
 	VkImageMemoryBarrier Texture::makeLayoutTransition( VkImageLayout srcLayout

@@ -208,7 +208,7 @@ namespace castor3d
 
 		static ashes::DescriptorSetPtr createDescriptorSet( RenderDevice const & device
 			, crg::ResourcesCache & resources
-			, SamplerRPtr sampler
+			, Sampler const * sampler
 			, ashes::DescriptorSetPool const & pool
 			, UniformBufferOffsetT< Texture3DTo2DData > const & uniformBuffer
 			, CameraUbo const & cameraUbo
@@ -305,12 +305,12 @@ namespace castor3d
 			, ashes::GraphicsPipeline const & pipeline
 			, ashes::DescriptorSet const & descriptorSet
 			, IntermediateView const & view
-			, SamplerRPtr sampler )
+			, Sampler const * sampler )
 		{
 			auto & context = device.makeContext();
 			auto textureSize = getExtent( view.viewId ).width;
 			CommandsSemaphore result{ device, queueData, "Texture3DTo2D" };
-			auto & cmd = *result.commandBuffer;
+			auto const & cmd = *result.commandBuffer;
 			cmd.begin();
 			cmd.beginDebugBlock( { "Texture3D To Texture2D"
 				, makeFloatArray( device.renderSystem.getEngine()->getNextRainbowColour() ) } );
@@ -422,7 +422,7 @@ namespace castor3d
 
 			// Creates a unit cube triangle strip from just vertex ID (14 vertices)
 			auto createCube = writer.implementFunction< sdw::Vec3 >( "createCube"
-				, [&]( sdw::UInt const vertexID )
+				, [&]( sdw::UInt const & vertexID )
 				{
 					auto b = writer.declLocale( "b"
 						, 1_u << vertexID );
@@ -432,7 +432,7 @@ namespace castor3d
 				}
 				, sdw::InUInt{ writer, "vertexID" } );
 
-			writer.implementEntryPointT< sdw::VoidT, SurfaceT >( [&]( sdw::VertexIn in
+			writer.implementEntryPointT< sdw::VoidT, SurfaceT >( [&]( sdw::VertexIn const & in
 				, sdw::VertexOutT< SurfaceT > out )
 				{
 					auto coord = writer.declLocale( "coord"
@@ -443,8 +443,8 @@ namespace castor3d
 					out.voxelColour() = inSource.load( ivec3( coord ) );
 				} );
 
-			writer.implementEntryPointT< 14u, sdw::PointListT< SurfaceT >, sdw::TriangleStreamT< SurfaceT > >( [&]( sdw::GeometryIn in
-				, sdw::PointListT< SurfaceT > list
+			writer.implementEntryPointT< 14u, sdw::PointListT< SurfaceT >, sdw::TriangleStreamT< SurfaceT > >( [&]( sdw::GeometryIn const & in
+				, sdw::PointListT< SurfaceT > const & list
 				, sdw::TriangleStreamT< SurfaceT > out )
 				{
 					IF( writer, list[0].voxelColour().a() > 0.0f )
@@ -472,21 +472,21 @@ namespace castor3d
 
 							out.append();
 						}
-						ROF;
+						ROF
 
 						out.restartStrip();
 					}
-					FI;
+					FI
 				} );
 
-			writer.implementEntryPointT< SurfaceT, shader::Colour4FT >( [&]( sdw::FragmentInT< SurfaceT > in
-				, sdw::FragmentOutT< shader::Colour4FT > out )
+			writer.implementEntryPointT< SurfaceT, shader::Colour4FT >( [&]( sdw::FragmentInT< SurfaceT > const & in
+				, sdw::FragmentOutT< shader::Colour4FT > const & out )
 				{
 					IF( writer, in.voxelColour().a() > 0.0_f )
 					{
 						writer.demote();
 					}
-					FI;
+					FI
 
 					out.colour() = in.voxelColour();
 				} );
@@ -502,15 +502,15 @@ namespace castor3d
 			UBO_GRID( writer, eGridUbo );
 			auto inSource( writer.declCombinedImg< FImg3DRgba32 >( "inSource", eSource, 0u ) );
 
-			writer.implementEntryPointT< sdw::VoidT, shader::Uv2FT >( [&]( sdw::VertexIn in
+			writer.implementEntryPointT< sdw::VoidT, shader::Uv2FT >( [&]( sdw::VertexIn const & in
 				, sdw::VertexOutT< shader::Uv2FT > out )
 				{
 					out.uv() = vec2( ( in.vertexIndex << 1 ) & 2, in.vertexIndex & 2 );
 					out.vtx.position = vec4( out.uv() * 2.0f - 1.0f, 0.0f, 1.0f );
 				} );
 
-			writer.implementEntryPointT< shader::Uv2FT, shader::Colour4FT >( [&]( sdw::FragmentInT< shader::Uv2FT > in
-				, sdw::FragmentOutT< shader::Colour4FT > out )
+			writer.implementEntryPointT< shader::Uv2FT, shader::Colour4FT >( [&]( sdw::FragmentInT< shader::Uv2FT > const & in
+				, sdw::FragmentOutT< shader::Colour4FT > const & out )
 				{
 					out.colour() = inSource.lod( vec3( in.uv(), sliceIndex / maxSlice ), 0.0_f );
 				} );
@@ -531,7 +531,7 @@ namespace castor3d
 		, ashes::FrameBuffer const & frameBuffer
 		, ashes::PipelineLayout const & pipelineLayout
 		, ashes::GraphicsPipeline const & pipeline
-		, SamplerRPtr sampler )
+		, Sampler const * sampler )
 		: descriptorSet{ t3dto2d::createDescriptorSet( device, resources, sampler, descriptorSetPool, uniformBuffer, cameraUbo, texture3D ) }
 		, commands{ t3dto2d::createCommandBuffer( device, queueData, resources, renderPass, frameBuffer, pipelineLayout, pipeline, *descriptorSet, texture3D, sampler ) }
 	{

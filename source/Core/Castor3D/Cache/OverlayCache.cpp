@@ -30,8 +30,9 @@ namespace castor
 		}
 
 		auto level = overlay.computeLevel();
+		++m_overlayCountPerLevel[level][uint32_t( overlay.getType() )];
 		overlay.getCategory().setOrder( level
-			, ++m_overlayCountPerLevel[level][uint32_t( overlay.getType() )] );
+			, m_overlayCountPerLevel[level][uint32_t( overlay.getType() )] );
 
 		if ( auto parent = overlay.getParent() )
 		{
@@ -82,11 +83,11 @@ namespace castor
 	{
 		auto lock( makeUniqueLock( *this ) );
 
-		for ( auto & texture : m_fontTextures )
+		for ( auto const & [name, texture] : m_fontTextures )
 		{
-			if ( texture.second )
+			if ( texture )
 			{
-				texture.second->upload( uploader );
+				texture->upload( uploader );
 			}
 		}
 	}
@@ -129,9 +130,9 @@ namespace castor
 
 		m_overlays.clear();
 
-		for ( auto & it : m_fontTextures )
+		for ( auto const & [name, texture] : m_fontTextures )
 		{
-			m_engine.postEvent( makeGpuCleanupEvent( *it.second ) );
+			m_engine.postEvent( makeGpuCleanupEvent( *texture ) );
 		}
 	}
 
@@ -153,9 +154,9 @@ namespace castor
 	{
 		auto lock( makeUniqueLock( *this ) );
 		auto fontName = font->getName();
-		auto ires = m_fontTextures.emplace( fontName, nullptr );
+		auto [it, res] = m_fontTextures.try_emplace( fontName );
 
-		if ( ires.second )
+		if ( res )
 		{
 			auto result = castor::makeUnique< FontTexture >( m_engine, font );
 			auto tmp = result.get();
@@ -165,9 +166,9 @@ namespace castor
 				{
 					tmp->initialise( device, queueData );
 				} ) );
-			ires.first->second = std::move( result );
+			it->second = std::move( result );
 		}
 
-		return ires.first->second.get();
+		return it->second.get();
 	}
 }

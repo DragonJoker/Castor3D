@@ -34,8 +34,7 @@ namespace castor3d
 
 	private:
 		void doRecordInto( crg::RecordContext & context
-			, VkCommandBuffer commandBuffer
-			, uint32_t index )const;
+			, VkCommandBuffer commandBuffer )const;
 		bool doIsComputePass()const noexcept;
 
 	private:

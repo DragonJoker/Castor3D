@@ -140,9 +140,8 @@ namespace castor3d
 
 			while ( itLevel != views.levels.end() )
 			{
-				auto & level = *itLevel;
-
-				if ( level->getBaseMipLevel() >= mipLevels )
+				if ( auto const & level = *itLevel;
+					level->getBaseMipLevel() >= mipLevels )
 				{
 					itLevel = views.levels.erase( itLevel );
 				}
@@ -220,7 +219,7 @@ namespace castor3d
 		}
 
 		static void createViews( ashes::ImageCreateInfo const & info
-			, castor::String debugName
+			, castor::String const & debugName
 			, TextureLayout & layout
 			, MipView & view
 			, uint32_t baseArrayLayer
@@ -244,16 +243,17 @@ namespace castor3d
 					level = createSubview( layout
 						, debugName
 						, info
-						, levelIndex++
+						, levelIndex
 						, 1u
 						, baseArrayLayer
 						, layerCount );
+					++levelIndex;
 				}
 			}
 		}
 
 		static void createViews( ashes::ImageCreateInfo const & info
-			, castor::String debugName
+			, castor::String const & debugName
 			, TextureLayout & layout
 			, MipView & view
 			, uint32_t & baseArrayLayer )
@@ -262,12 +262,13 @@ namespace castor3d
 				, debugName
 				, layout
 				, view
-				, baseArrayLayer++
+				, baseArrayLayer
 				, 1u );
+			++baseArrayLayer;
 		}
 
 		static void createViews( ashes::ImageCreateInfo const & info
-			, castor::String debugName
+			, castor::String const & debugName
 			, TextureLayout & layout
 			, CubeView & view
 			, uint32_t & baseArrayLayer )
@@ -328,7 +329,7 @@ namespace castor3d
 
 		static MipView createViews( ashes::ImageCreateInfo const & info
 			, TextureLayout & layout
-			, castor::String debugName )
+			, castor::String const & debugName )
 		{
 			MipView result;
 			createViews( info
@@ -351,7 +352,7 @@ namespace castor3d
 				, mipLevels
 				, arrayLayers );
 
-			for ( auto & level : view.levels )
+			for ( auto const & level : view.levels )
 			{
 				level->update( extent
 					, format
@@ -422,7 +423,7 @@ namespace castor3d
 			}
 		}
 
-		static castor::PxBufferBaseUPtr adaptBuffer( castor::PxBufferBaseRPtr buffer
+		static castor::PxBufferBaseUPtr adaptBuffer( castor::PxBufferBase const * buffer
 			, uint32_t mipLevels )
 		{
 			auto dstFormat = buffer->getFormat();
@@ -480,8 +481,7 @@ namespace castor3d
 			, castor::Path const & folder
 			, castor::Path const & relative
 			, uint32_t mipLevels
-			, uint32_t & srcMipLevels
-			, castor::ImageLoaderConfig config )
+			, uint32_t & srcMipLevels )
 		{
 			auto & image = castor3d::getFileImage( engine, name, folder, relative );
 			auto buffer = texlayt::adaptBuffer( image.getPixels(), mipLevels );
@@ -519,7 +519,6 @@ namespace castor3d
 		}
 
 		static castor::ImageLayout::Type convert( VkImageCreateFlags flags
-			, VkImageType imageType
 			, VkExtent3D const & extent
 			, uint32_t arrayLayers )
 		{
@@ -563,7 +562,7 @@ namespace castor3d
 		{
 			return castor::ImageLayout
 			{
-				convert( value->flags, value->imageType, value->extent, value->arrayLayers ),
+				convert( value->flags, value->extent, value->arrayLayers ),
 				castor::PixelFormat( value->format ),
 				castor::Point3ui{ value->extent.width, value->extent.height, value->extent.depth },
 				0u,
@@ -599,7 +598,7 @@ namespace castor3d
 	TextureLayout::TextureLayout( RenderSystem & renderSystem
 		, ashes::ImageCreateInfo info
 		, VkMemoryPropertyFlags memoryProperties
-		, castor::String debugName
+		, castor::String const & debugName
 		, bool isStatic )
 		: OwnedBy< RenderSystem >{ renderSystem }
 		, m_static{ isStatic }
@@ -652,7 +651,6 @@ namespace castor3d
 		, ashes::ImagePtr image
 		, VkImageCreateInfo const & createInfo )
 		: OwnedBy< RenderSystem >{ renderSystem }
-		, m_static{ false }
 		, m_info{ createInfo }
 		, m_properties{}
 		, m_image{ castor::cuEmptyString
@@ -895,7 +893,7 @@ namespace castor3d
 			, srcLayout );
 	}
 
-	void TextureLayout::generateMipmaps( ashes::CommandBuffer & cmd
+	void TextureLayout::generateMipmaps( ashes::CommandBuffer const & cmd
 		, VkImageLayout srcLayout )const
 	{
 		CU_Require( m_texture );
@@ -906,8 +904,7 @@ namespace castor3d
 	}
 
 	void TextureLayout::setSource( castor::Path const & folder
-		, castor::Path const & relative
-		, castor::ImageLoaderConfig config )
+		, castor::Path const & relative )
 	{
 		uint32_t srcMips = 1u;
 		m_image = texlayt::getFileImage( *getRenderSystem()->getEngine()
@@ -915,8 +912,7 @@ namespace castor3d
 			, folder
 			, relative
 			, m_image.getLevels()
-			, srcMips
-			, std::move( config ) );
+			, srcMips );
 		doUpdateCreateInfo( m_image.getLayout() );
 		doUpdateMips( false, srcMips );
 		m_static = true;

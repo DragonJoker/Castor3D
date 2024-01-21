@@ -17,10 +17,10 @@ namespace castor3d
 		{
 			if ( message.find_first_of( "|\n" ) == message.find( "\n" ) )
 			{
-				auto split = castor::string::split( castor::StringView{ message.data() }, "\n", ~( 0u ), false );
+				auto split = castor::string::split( castor::StringView{ message.data() }, "\n", ~0u, false );
 				std::stringstream stream;
 
-				for ( auto & str : split )
+				for ( auto const & str : split )
 				{
 					stream << "\n" << prefix << str;
 				}
@@ -28,7 +28,7 @@ namespace castor3d
 				return stream.str();
 			}
 
-			auto split = castor::string::split( castor::StringView{ message.data() }, "|", ~( 0u ), false );
+			auto split = castor::string::split( castor::StringView{ message.data() }, "|", ~0u, false );
 			std::stringstream stream;
 
 			if ( !split.empty() )
@@ -97,7 +97,7 @@ namespace castor3d
 		static VkBool32 VKAPI_PTR debugMessageCallback( VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity
 			, VkDebugUtilsMessageTypeFlagsEXT messageTypes
 			, const VkDebugUtilsMessengerCallbackDataEXT * pCallbackData
-			, void * pUserData )
+			, void * /*pUserData*/ )
 		{
 			VkBool32 result = VK_FALSE;
 
@@ -217,11 +217,11 @@ namespace castor3d
 		static VkBool32 VKAPI_PTR debugReportCallback( VkDebugReportFlagsEXT flags
 			, VkDebugReportObjectTypeEXT objectType
 			, uint64_t object
-			, size_t location
+			, size_t /*location*/
 			, int32_t messageCode
-			, const char * pLayerPrefix
-			, const char * pMessage
-			, void * pUserData )
+			, char const * pLayerPrefix
+			, char const * pMessage
+			, void * /*pUserData*/ )
 		{
 			// Select prefix depending on flags passed to the callback
 			// Note that multiple flags may be set for a single validation message
@@ -340,7 +340,7 @@ namespace castor3d
 		}
 	}
 
-	DebugCallbacks::~DebugCallbacks()
+	DebugCallbacks::~DebugCallbacks()noexcept
 	{
 #if VK_EXT_debug_report
 

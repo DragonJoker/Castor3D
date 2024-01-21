@@ -61,9 +61,9 @@ namespace castor3d
 		castor::Point3f e1{ pt2 - pt1 };
 		castor::Point3f e2{ pt1 - pt3 };
 		castor::Point3f h{ castor::point::cross( m_direction, e2 ) };
-		float a = castor::point::dot( e1, h );
 
-		if ( std::abs( a ) > 0.00001f )
+		if ( float a = castor::point::dot( e1, h );
+			std::abs( a ) > 0.00001f )
 		{
 			auto f = 1.0f / a;
 			castor::Point3f s( m_origin - pt1 );
@@ -89,17 +89,17 @@ namespace castor3d
 		return result;
 	}
 
-	castor::Intersection Ray::intersects( Face const & face
-		, castor::Matrix4x4f const & transform
-		, Submesh const & submesh
-		, float & distance )const
+	castor::Intersection Ray::intersects( Face const & /*face*/
+		, castor::Matrix4x4f const & /*transform*/
+		, Submesh const & /*submesh*/
+		, float & /*distance*/ )const
 	{
-		//castor::Point3f pt1, pt2, pt3;
-		//auto stride = submesh.getVertexBuffer().getDeclaration().stride();
-		//return intersects( transform * Vertex::getPosition( &submesh.getVertexBuffer().getData()[face[0] * stride], pt1 )
-		//	, transform * Vertex::getPosition( &submesh.getVertexBuffer().getData()[face[1] * stride], pt2 )
-		//	, transform * Vertex::getPosition( &submesh.getVertexBuffer().getData()[face[2] * stride], pt3 )
-		//	, distance );
+		//! castor::Point3f pt1, pt2, pt3;
+		//! auto stride = submesh.getVertexBuffer().getDeclaration().stride();
+		//! return intersects( transform * Vertex::getPosition( &submesh.getVertexBuffer().getData()[face[0] * stride], pt1 )
+		//! 	, transform * Vertex::getPosition( &submesh.getVertexBuffer().getData()[face[1] * stride], pt2 )
+		//! 	, transform * Vertex::getPosition( &submesh.getVertexBuffer().getData()[face[2] * stride], pt3 )
+		//! 	, distance );
 		return castor::Intersection::eOut;
 	}
 
@@ -108,9 +108,9 @@ namespace castor3d
 	{
 		castor::Intersection result = castor::Intersection::eOut;
 		castor::Point3f u( m_origin - vertex );
-		castor::Point3f puv;
 
-		if ( projectVertex( u, puv ) && castor::point::lengthSquared( puv ) < 0.000001 )
+		if ( castor::Point3f puv;
+			projectVertex( u, puv ) && castor::point::lengthSquared( puv ) < 0.000001 )
 		{
 			distance = float( castor::point::length( u ) );
 			result = castor::Intersection::eIn;
@@ -220,9 +220,9 @@ namespace castor3d
 		// see http://www.lighthouse3d.com/tutorials/maths/ray-sphere-intersection/
 		auto result = castor::Intersection::eOut;
 		castor::Point3f v( sphere.getCenter() - m_origin );
-		castor::Point3f puv;
 
-		if ( projectVertex( v, puv ) )
+		if ( castor::Point3f puv;
+			projectVertex( v, puv ) )
 		{
 			// Sphere's center projects on the ray.
 			distance = float( castor::point::length( puv - v ) );
@@ -282,7 +282,7 @@ namespace castor3d
 		auto mesh = geometry->getMesh();
 		castor::Point3f center{ geometry->getParent()->getDerivedPosition() };
 		castor::BoundingSphere sphere{ center, mesh->getBoundingSphere().getRadius() };
-		//castor::Matrix4x4f const & transform{ geometry->getParent()->getDerivedTransformationMatrix() };
+		//! castor::Matrix4x4f const & transform{ geometry->getParent()->getDerivedTransformationMatrix() };
 		auto result = castor::Intersection::eOut;
 
 		if ( intersects( sphere, distance ) != castor::Intersection::eOut )
@@ -295,32 +295,32 @@ namespace castor3d
 				{
 					result = castor::Intersection::eIn;
 
-					//if ( auto indices = submesh->getIndexBuffer().lock() )
-					//{
-					//	float faceDist = std::numeric_limits< float >::max();
-
-					//	for ( uint32_t k = 0u; k < submesh->getFaceCount(); k++ )
-					//	{
-					//		Face face
-					//		{
-					//			indices[k * 3 + 0],
-					//			indices[k * 3 + 1],
-					//			indices[k * 3 + 2],
-					//		};
-					//		float curfaceDist = 0.0f;
-
-					//		if ( intersects( face, transform, *submesh, curfaceDist ) != Intersection::eOut && curfaceDist < faceDist )
-					//		{
-					//			result = Intersection::eIn;
-					//			nearestFace = face;
-					//			nearestSubmesh = submesh;
-					//			distance = curfaceDist;
-					//			faceDist = curfaceDist;
-					//		}
-					//	}
-					//}
-
-					//submesh->getIndexBuffer().unlock();
+					//! if ( auto indices = submesh->getIndexBuffer().lock() )
+					//! {
+					//! 	float faceDist = std::numeric_limits< float >::max();
+					//! 
+					//! 	for ( uint32_t k = 0u; k < submesh->getFaceCount(); k++ )
+					//! 	{
+					//! 		Face face
+					//! 		{
+					//! 			indices[k * 3 + 0],
+					//! 			indices[k * 3 + 1],
+					//! 			indices[k * 3 + 2],
+					//! 		};
+					//! 		float curfaceDist = 0.0f;
+					//! 
+					//! 		if ( intersects( face, transform, *submesh, curfaceDist ) != Intersection::eOut && curfaceDist < faceDist )
+					//! 		{
+					//! 			result = Intersection::eIn;
+					//! 			nearestFace = face;
+					//! 			nearestSubmesh = submesh;
+					//! 			distance = curfaceDist;
+					//! 			faceDist = curfaceDist;
+					//! 		}
+					//! 	}
+					//! }
+					//! 
+					//! submesh->getIndexBuffer().unlock();
 				}
 			}
 		}

@@ -87,23 +87,17 @@ namespace castor3d
 
 		while ( result && doGetSubChunk( chunk ) )
 		{
-			switch ( chunk.getChunkType() )
+			if ( m_fileVersion <= Version{ 1, 5, 0 }
+				&& chunk.getChunkType() == ChunkType::eName )
 			{
-			case ChunkType::eName:
-				if ( m_fileVersion <= Version{ 1, 5, 0 } )
-				{
-					result = doParseChunk( name, chunk );
-					checkError( result, "Couldn't parse name." );
+				result = doParseChunk( name, chunk );
+				checkError( result, "Couldn't parse name." );
 
-					if ( result )
-					{
-						auto node = static_cast< Skeleton * >( obj.getOwner()->getAnimable() )->createNode( name );
-						obj.setNode( *node );
-					}
+				if ( result )
+				{
+					auto node = static_cast< Skeleton * >( obj.getOwner()->getAnimable() )->createNode( name );
+					obj.setNode( *node );
 				}
-				break;
-			default:
-				break;
 			}
 		}
 

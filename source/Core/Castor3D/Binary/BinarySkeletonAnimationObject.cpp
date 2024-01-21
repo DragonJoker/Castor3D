@@ -35,9 +35,8 @@ namespace castor3d
 
 			for ( auto & kf : in )
 			{
-				size_t index{ 0u };
-				castor::Milliseconds timeIndex{ int64_t( kf[index++] * 1000.0 ) };
-				castor::Matrix4x4f transform{ &kf[index] };
+				castor::Milliseconds timeIndex{ int64_t( kf[0] * 1000.0 ) };
+				castor::Matrix4x4f transform{ &kf[1] };
 				( *it ) = KeyFrame{ timeIndex, transform };
 				++it;
 			}

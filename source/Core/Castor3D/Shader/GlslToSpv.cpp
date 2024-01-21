@@ -30,8 +30,12 @@ namespace castor3d
 	{
 		struct BlockLocale
 		{
+			BlockLocale( BlockLocale const & ) = delete;
+			BlockLocale( BlockLocale && )noexcept = delete;
+			BlockLocale & operator=( BlockLocale const & ) = delete;
+			BlockLocale & operator=( BlockLocale && )noexcept = delete;
+
 			BlockLocale()
-				: m_prvLoc{ std::locale( "" ) }
 			{
 				if ( m_prvLoc.name() != "C" )
 				{
@@ -39,16 +43,23 @@ namespace castor3d
 				}
 			}
 
-			~BlockLocale()
+			~BlockLocale()noexcept
 			{
-				if ( m_prvLoc.name() != "C" )
+				try
 				{
-					std::locale::global( m_prvLoc );
+					if ( m_prvLoc.name() != "C" )
+					{
+						std::locale::global( m_prvLoc );
+					}
+				}
+				catch ( ... )
+				{
+					// Nothing to do here
 				}
 			}
 
 		private:
-			std::locale m_prvLoc;
+			std::locale m_prvLoc{ std::locale( "" ) };
 		};
 
 		static void doInitResources( ashes::Device const & device

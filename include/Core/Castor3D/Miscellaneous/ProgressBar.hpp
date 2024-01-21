@@ -64,16 +64,16 @@ namespace castor3d
 		{
 			void update( ProgressCtrlRPtr progress );
 			void initRange( int32_t mod );
-			void setTitle( castor::String const & value );
-			void setLabel( castor::String const & value );
-			void step( castor::String const & label );
+			void setTitle( castor::StringView value );
+			void setLabel( castor::StringView value );
+			void step( castor::StringView label );
 			void step();
-			void setStep( castor::String const & label, int32_t value );
+			void setStep( castor::StringView label, int32_t value );
 			void setStep( int32_t value );
 			void setRange( int32_t max );
 			int32_t incRange( int32_t mod );
 			int32_t getIndex()const;
-			void set( castor::String const & label
+			void set( castor::StringView label
 				, int32_t rangeMax
 				, int32_t value );
 

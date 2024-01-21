@@ -89,7 +89,7 @@ namespace castor3d
 		, uint32_t count )
 		: m_stride{ uint32_t( engine.getPassComponentsRegister().getPassBufferStride() ) }
 		, m_maxCount{ count }
-		, m_buffer{ engine, device, count * VkDeviceSize( m_stride ), cuT( "PassBuffer" ) }
+		, m_buffer{ device, count * VkDeviceSize( m_stride ), cuT( "PassBuffer" ) }
 		, m_data{ castor::makeArrayView( m_buffer.getPtr(), count * m_stride ) }
 	{
 	}

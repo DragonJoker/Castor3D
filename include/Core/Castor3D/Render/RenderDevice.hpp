@@ -263,10 +263,12 @@ namespace castor3d
 	private:
 		struct QueueThreadData
 		{
-			QueueData const * data;
-			uint32_t count;
+			QueueThreadData() = default;
+
+			QueueData const * data{};
+			uint32_t count{};
 #ifndef NDEBUG
-			std::string callstack;
+			std::string callstack{};
 #endif
 		};
 
@@ -398,7 +400,7 @@ namespace castor3d
 		UniformBufferPoolUPtr uboPool;
 
 	private:
-		bool doTryAddExtension( std::string name
+		bool doTryAddExtension( std::string const & name
 			, void * pFeature = nullptr
 			, void * pProperty = nullptr );
 
@@ -513,7 +515,7 @@ namespace castor3d
 #endif
 #pragma GCC diagnostic pop
 
-		bool m_prefersMeshShaderEXT;
+		bool m_prefersMeshShaderEXT{ true };
 		Extensions m_deviceExtensions;
 		ashes::VkExtensionPropertiesArray m_availableExtensions;
 		QueuesData * m_preferredGraphicsQueue{};

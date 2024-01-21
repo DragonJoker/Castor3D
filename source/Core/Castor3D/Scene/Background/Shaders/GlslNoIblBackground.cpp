@@ -20,15 +20,16 @@ namespace castor3d::shader
 		: BackgroundModel{ writer, utils, std::move( targetSize ) }
 	{
 		m_writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapBackground"
-			, binding++
+			, binding
 			, set );
+		++binding;
 	}
 
-	BackgroundModelPtr NoIblBackgroundModel::create( Engine const & engine
+	BackgroundModelPtr NoIblBackgroundModel::create( Engine const & /*engine*/
 		, sdw::ShaderWriter & writer
 		, Utils & utils
 		, VkExtent2D targetSize
-		, bool needsForeground
+		, bool /*needsForeground*/
 		, uint32_t & binding
 		, uint32_t set )
 	{
@@ -52,7 +53,7 @@ namespace castor3d::shader
 		if ( !m_computeReflections )
 		{
 			m_computeReflections = m_writer.implementFunction< sdw::Void >( "c3d_noiblbg_computeReflections"
-				, [&]( sdw::Vec3 const & wsIncident
+				, [this]( sdw::Vec3 const & wsIncident
 					, sdw::Vec3 const & wsNormal
 					, sdw::CombinedImageCubeRgba32 const & backgroundMap
 					, sdw::Vec3 const & specular
@@ -92,7 +93,7 @@ namespace castor3d::shader
 		if ( !m_computeRefractions )
 		{
 			m_computeRefractions = m_writer.implementFunction< sdw::Vec3 >( "c3d_noiblbg_computeRefractions"
-				, [&]( sdw::Vec3 const & wsIncident
+				, [this]( sdw::Vec3 const & wsIncident
 					, sdw::Vec3 const & wsNormal
 					, sdw::CombinedImageCubeRgba32 const & backgroundMap
 					, sdw::Float const & refractionRatio

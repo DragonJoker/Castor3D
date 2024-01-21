@@ -120,9 +120,8 @@ namespace castor3d
 	{
 		if ( m_voxelConfig.enabled )
 		{
-			auto sceneIt = updater.dirtyScenes.find( &getScene() );
-
-			if ( sceneIt != updater.dirtyScenes.end() )
+			if ( auto sceneIt = updater.dirtyScenes.find( &getScene() );
+				sceneIt != updater.dirtyScenes.end() )
 			{
 				auto & sceneObjs = sceneIt->second;
 				m_outOfDate = m_outOfDate
@@ -132,7 +131,7 @@ namespace castor3d
 				{
 					auto it = std::find_if( sceneObjs.dirtyNodes.begin()
 						, sceneObjs.dirtyNodes.end()
-						, [this]( SceneNode * node )
+						, [this]( SceneNode const * node )
 						{
 							return node->isStatic() == filtersNonStatic();
 						} );
@@ -173,7 +172,7 @@ namespace castor3d
 	
 	SubmeshComponentCombine VoxelizePass::doAdjustSubmeshComponents( SubmeshComponentCombine submeshCombine )const
 	{
-		auto & components = getEngine()->getSubmeshComponentsRegister();
+		auto const & components = getEngine()->getSubmeshComponentsRegister();
 		remFlags( submeshCombine, components.getTangentFlag() );
 		remFlags( submeshCombine, components.getBitangentFlag() );
 		submeshCombine.hasTangentFlag = false;
@@ -201,14 +200,17 @@ namespace castor3d
 	{
 		auto index = uint32_t( GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
 		bindings.emplace_back( m_scene.getLightCache().createLayoutBinding( VK_SHADER_STAGE_FRAGMENT_BIT
-			, index++ ) );
-		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+			, index ) );
+		++index;
+		bindings.emplace_back( makeDescriptorSetLayoutBinding( index
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+		++index;
+		bindings.emplace_back( makeDescriptorSetLayoutBinding( index
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		doAddShadowBindings( m_scene, flags, bindings, index );
+		++index;
+		doAddShadowBindings( m_scene, bindings, index );
 		doAddBackgroundBindings( m_scene, bindings, index );
 	}
 
@@ -231,10 +233,12 @@ namespace castor3d
 		, ShadowBuffer const * shadowBuffer )
 	{
 		auto index = uint32_t( GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
-		descriptorWrites.push_back( m_scene.getLightCache().getBinding( index++ ) );
-		descriptorWrites.push_back( m_voxelizerUbo.getDescriptorWrite( index++ ) );
+		descriptorWrites.push_back( m_scene.getLightCache().getBinding( index ) );
+		++index;
+		descriptorWrites.push_back( m_voxelizerUbo.getDescriptorWrite( index ) );
+		++index;
 		bindBuffer( m_voxels.getBuffer(), descriptorWrites, index );
-		doAddShadowDescriptor( m_scene, flags, descriptorWrites, shadowMaps, shadowBuffer, index );
+		doAddShadowDescriptor( m_scene, descriptorWrites, shadowMaps, shadowBuffer, index );
 		doAddBackgroundDescriptor( m_scene, descriptorWrites, m_targetImage, index );
 	}
 
@@ -283,7 +287,7 @@ namespace castor3d
 
 			writer.implementEntryPointT< shader::BillboardSurfaceT, shader::VoxelSurfaceT >( sdw::VertexInT< shader::BillboardSurfaceT >{ writer, flags }
 				, sdw::VertexOutT< shader::VoxelSurfaceT >{ writer, flags }
-				,[&]( sdw::VertexInT< shader::BillboardSurfaceT > in
+				,[&]( sdw::VertexInT< shader::BillboardSurfaceT > const & in
 				, sdw::VertexOutT< shader::VoxelSurfaceT > out )
 				{
 					auto nodeId = writer.declLocale( "nodeId"
@@ -336,7 +340,7 @@ namespace castor3d
 		{
 			writer.implementEntryPointT< shader::MeshVertexT, shader::VoxelSurfaceT >( sdw::VertexInT< shader::MeshVertexT >{ writer, submeshShaders }
 				, sdw::VertexOutT< shader::VoxelSurfaceT >{ writer, flags }
-				, [&]( sdw::VertexInT< shader::MeshVertexT > in
+				, [&]( sdw::VertexInT< shader::MeshVertexT > const & in
 					, sdw::VertexOutT< shader::VoxelSurfaceT > out )
 				{
 					auto nodeId = writer.declLocale( "nodeId"
@@ -385,8 +389,8 @@ namespace castor3d
 			, sdw::TriangleStreamT< shader::VoxelSurfaceT >{ writer
 				, 3u
 				, flags }
-			, [&]( sdw::GeometryIn in
-				, sdw::TriangleListT< shader::VoxelSurfaceT > list
+			, [&]( sdw::GeometryIn const & in
+				, sdw::TriangleListT< shader::VoxelSurfaceT > const & list
 				, sdw::TriangleStreamT< shader::VoxelSurfaceT > out )
 			{
 				auto facenormal = writer.declLocale( "facenormal"
@@ -409,12 +413,12 @@ namespace castor3d
 					{
 						positions[i] = positions[i].xzy();
 					}
-					FI;
+					FI
 
 					positions[i].xy() *= c3d_voxelData.gridToClip;
 					positions[i].z() = 1.0_f;
 				}
-				ROF;
+				ROF
 
 				IF( writer, c3d_voxelData.enableConservativeRasterization != 0_u )
 				{
@@ -428,7 +432,7 @@ namespace castor3d
 					positions[1].xy() += normalize( side0N - side1N ) * c3d_voxelData.gridToClip;
 					positions[2].xy() += normalize( side1N - side2N ) * c3d_voxelData.gridToClip;
 				}
-				FI;
+				FI
 
 				// Output
 				FOR( writer, sdw::UInt, i, 0_u, i < 3_u, ++i )
@@ -446,7 +450,7 @@ namespace castor3d
 
 					out.append();
 				}
-				ROF;
+				ROF
 
 				out.restartStrip();
 			} );
@@ -483,14 +487,17 @@ namespace castor3d
 			, uint32_t( GlobalBuffersIdx::eTexAnims )
 			, RenderPipeline::eBuffers
 			, enableTextures };
-		auto lightsIndex = addIndex++;
+		auto lightsIndex = addIndex;
+		++addIndex;
 		C3D_Voxelizer( writer
-			, addIndex++
+			, addIndex
 			, RenderPipeline::eBuffers
 			, true );
+		++addIndex;
 		auto output( writer.declArrayStorageBuffer< shader::Voxel >( "voxels"
-			, addIndex++
+			, addIndex
 			, RenderPipeline::eBuffers ) );
+		++addIndex;
 		shader::Lights lights{ *getEngine()
 			, flags.lightingModelId
 			, flags.backgroundModelId
@@ -584,7 +591,7 @@ namespace castor3d
 							* components.colour
 							* combined;
 					}
-					FI;
+					FI
 
 					auto encodedColor = writer.declLocale( "encodedColor"
 						, utils.encodeColor( vec4( color.xyz(), components.opacity ) ) );
@@ -594,10 +601,10 @@ namespace castor3d
 						, uvec3( floor( uvw * c3d_voxelData.clipToGrid ) ) );
 					auto id = writer.declLocale( "id"
 						, utils.flatten( writecoord, uvec3( sdw::UInt{ m_voxelConfig.gridSize.value() } ) ) );
-					atomicMax( output[id].colorMask, encodedColor );
-					atomicMax( output[id].normalMask, encodedNormal );
+					atomicMax( output[id].colorMask(), encodedColor );
+					atomicMax( output[id].normalMask(), encodedNormal );
 				}
-				FI;
+				FI
 			} );
 	}
 

@@ -11,18 +11,13 @@ namespace castor3d
 {
 	namespace rendlpasnc
 	{
-		static const char * CALL_RENDER_SYNC_FRAME = "Can't call renderSyncFrame in threaded render loop";
-		static const char * CALL_PAUSE_RENDERING = "Can't call Pause on a paused render loop";
-		static const char * CALL_RESUME_RENDERING = "Can't call Resume on a non paused render loop";
+		static char const * const CALL_RENDER_SYNC_FRAME = "Can't call renderSyncFrame in threaded render loop";
+		static char const * const CALL_PAUSE_RENDERING = "Can't call Pause on a paused render loop";
+		static char const * const CALL_RESUME_RENDERING = "Can't call Resume on a non paused render loop";
 	}
 
 	RenderLoopAsync::RenderLoopAsync( Engine & engine, uint32_t wantedFPS )
-		: RenderLoop{ engine, wantedFPS, true }
-		, m_mainLoopThread{ nullptr }
-		, m_ended{ false }
-		, m_rendering{ false }
-		, m_paused{ false }
-		, m_interrupted{ false }
+		: RenderLoop{ engine, wantedFPS }
 	{
 		m_mainLoopThread = std::make_unique< std::thread >( [this]()
 		{

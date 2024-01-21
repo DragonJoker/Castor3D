@@ -86,8 +86,8 @@ namespace castor3d
 			auto item = doCreateItemCtrl( value
 				, uint32_t( m_values.size() - 1u ) );
 			getEngine().postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
-				, [this, item]( RenderDevice const & device
-					, QueueData const & queueData )
+				, [this, item]( RenderDevice const &
+					, QueueData const & )
 				{
 					getControlsManager()->create( item );
 				} ) );
@@ -123,8 +123,8 @@ namespace castor3d
 				{
 					auto control = *it;
 					getEngine().postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
-						, [this, control]( RenderDevice const & device
-							, QueueData const & queueData )
+						, [this, control]( RenderDevice const &
+							, QueueData const & )
 						{
 							getControlsManager()->destroy( control );
 						} ) );
@@ -298,7 +298,7 @@ namespace castor3d
 			} );
 		uint32_t index = 0u;
 
-		for ( auto value : m_initialValues )
+		for ( auto const & value : m_initialValues )
 		{
 			doCreateItem( value, index );
 			++index;
@@ -344,14 +344,14 @@ namespace castor3d
 	}
 
 	void ListBoxCtrl::onItemMouseEnter( ControlRPtr control
-		, MouseEvent const & event )
+		, MouseEvent const & )
 	{
 		auto & style = getStyle();
 		control->setStyle( &style.getHighlightedItemStyle() );
 	}
 
 	void ListBoxCtrl::onItemMouseLeave( ControlRPtr control
-		, MouseEvent const & event )
+		, MouseEvent const & )
 	{
 		auto & style = getStyle();
 
@@ -368,27 +368,24 @@ namespace castor3d
 	void ListBoxCtrl::onItemMouseLButtonUp( ControlRPtr control
 		, MouseEvent const & event )
 	{
-		if ( event.getButton() == MouseButton::eLeft )
+		if ( event.getButton() == MouseButton::eLeft
+			&& m_selectedItem != control )
 		{
-			if ( m_selectedItem != control )
-			{
-				auto it = std::find_if( m_items.begin()
-					, m_items.end()
-					, [&control]( StaticCtrlRPtr const & lookup )
-					{
-						return lookup == control;
-					} );
+			int index = -1;
 
-				int index = -1;
-
-				if ( it != m_items.end() )
+			if ( auto it = std::find_if( m_items.begin()
+				, m_items.end()
+				, [&control]( StaticCtrlRPtr const & lookup )
 				{
-					index = int( std::distance( m_items.begin(), it ) );
-				}
-
-				setSelected( index );
-				m_signals[size_t( ListBoxEvent::eSelected )]( m_selected );
+					return lookup == control;
+				} );
+				it != m_items.end() )
+			{
+				index = int( std::distance( m_items.begin(), it ) );
 			}
+
+			setSelected( index );
+			m_signals[size_t( ListBoxEvent::eSelected )]( m_selected );
 		}
 	}
 

@@ -89,7 +89,7 @@ namespace castor3d
 		C3D_API float fillBuffer( uint32_t overlayIndex
 			, castor::ArrayView< TextChar > texts
 			, castor::ArrayView< TextWord > words
-			, castor::ArrayView< TextLine > lines )const;
+			, castor::ArrayView< TextLine > lines )const noexcept;
 		/**
 		 *\~english
 		 *\brief		Creates the shader program used to compute the overlay's vertices.
@@ -107,7 +107,7 @@ namespace castor3d
 		 *\brief		Définit la police du texte
 		 *\param[in]	value	La nouvelle valeur
 		 */
-		C3D_API void setFont( castor::String value );
+		C3D_API void setFont( castor::String const & value );
 		/**
 		*\~english
 		*\name

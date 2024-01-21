@@ -155,7 +155,7 @@ namespace GuiCommon
 			, [this]( wxVariant const & var )
 			{
 				auto selected = variantCast< uint32_t >( var );
-				m_target.setToneMappingType( make_String( m_choices[selected] ), {} );
+				m_target.setToneMappingType( make_String( m_choices[selected] ) );
 
 			} );
 		auto toneMapping = m_target.getToneMapping();

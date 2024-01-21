@@ -39,7 +39,7 @@ namespace castor3d
 		C3D_API ~OverlayPreparer()noexcept;
 
 		C3D_API OverlaysCounts registerOverlay( Overlay const & overlay );
-		C3D_API void fillDrawData();
+		C3D_API void fillDrawData()noexcept;
 
 		void setDrawCounts( uint32_t & value )noexcept
 		{
@@ -52,7 +52,7 @@ namespace castor3d
 			, ashes::BufferBase const & indirectCommands
 			, uint32_t drawCount
 			, uint32_t & offset
-			, ashes::CommandBuffer & commandBuffer );
+			, ashes::CommandBuffer const & commandBuffer )noexcept;
 		void doUpdateUbo( OverlayUboConfiguration & data
 			, PanelOverlay const & overlay
 			, Pass const & pass

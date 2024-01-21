@@ -58,7 +58,7 @@ namespace castor3d
 		static std::map< uint32_t, castor::Point3fArray > cache;
 		angle += 2u;
 		angle *= 2u;
-		auto & result = cache.emplace( angle, castor::Point3fArray{} ).first->second;
+		auto & result = cache.try_emplace( angle ).first->second;
 
 		if ( result.empty() )
 		{

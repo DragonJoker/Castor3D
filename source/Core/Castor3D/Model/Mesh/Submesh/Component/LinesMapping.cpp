@@ -18,7 +18,7 @@ namespace castor3d
 	{
 		struct LineDistance
 		{
-			uint32_t m_index[2];
+			castor::Array< uint32_t, 2u > m_index;
 			double m_distance;
 		};
 
@@ -27,7 +27,7 @@ namespace castor3d
 		struct Compare
 		{
 			bool operator()( LineDistance const & lhs
-				, LineDistance const & rhs )
+				, LineDistance const & rhs )const
 			{
 				return lhs.m_distance < rhs.m_distance;
 			}
@@ -46,9 +46,9 @@ namespace castor3d
 	Line LinesMapping::ComponentData::addLine( uint32_t a, uint32_t b )
 	{
 		Line result{ a, b };
-		auto size = m_submesh.getPointsCount();
 
-		if ( a < size && b < size )
+		if ( auto size = m_submesh.getPointsCount();
+			a < size && b < size )
 		{
 			m_lines.push_back( result );
 		}

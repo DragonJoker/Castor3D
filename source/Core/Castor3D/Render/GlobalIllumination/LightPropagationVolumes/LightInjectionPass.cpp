@@ -81,17 +81,20 @@ namespace castor3d
 						result->declMember( "layer"
 							, sdw::type::Kind::eInt
 							, sdw::type::NotArray
-							, index++ );
+							, index );
+						++index;
 					}
 
 					result->declMember( "rsmNormal"
 						, sdw::type::Kind::eVec3F
 						, sdw::type::NotArray
-						, index++ );
+						, index );
+					++index;
 					result->declMember( "rsmFlux"
 						, sdw::type::Kind::eVec3F
 						, sdw::type::NotArray
-						, index++ );
+						, index );
+					++index;
 				}
 
 				return result;
@@ -165,7 +168,7 @@ namespace castor3d
 				, index /* shadowMapBinding */
 				, 1u /* shadowMapSet */ };
 
-			writer.implementEntryPointT< sdw::VoidT, lpvlgt::SurfaceT >( [&]( sdw::VertexIn in
+			writer.implementEntryPointT< sdw::VoidT, lpvlgt::SurfaceT >( [&]( sdw::VertexIn const & in
 				, sdw::VertexOutT< lpvlgt::SurfaceT > out )
 				{
 					auto light = writer.declLocale( "light"
@@ -231,7 +234,7 @@ namespace castor3d
 				, index /* shadowMapBinding */
 				, 1u /* shadowMapSet */ };
 
-			writer.implementEntryPointT< sdw::VoidT, lpvlgt::SurfaceT >( [&]( sdw::VertexIn in
+			writer.implementEntryPointT< sdw::VoidT, lpvlgt::SurfaceT >( [&]( sdw::VertexIn const & in
 				, sdw::VertexOutT< lpvlgt::SurfaceT > out )
 				{
 					auto light = writer.declLocale( "light"
@@ -293,7 +296,7 @@ namespace castor3d
 				, index /* shadowMapBinding */
 				, 1u /* shadowMapSet */ };
 
-			writer.implementEntryPointT< sdw::VoidT, lpvlgt::SurfaceT >( [&]( sdw::VertexIn in
+			writer.implementEntryPointT< sdw::VoidT, lpvlgt::SurfaceT >( [&]( sdw::VertexIn const & in
 				, sdw::VertexOutT< lpvlgt::SurfaceT > out )
 				{
 					auto light = writer.declLocale( "light"
@@ -337,8 +340,7 @@ namespace castor3d
 			}
 		}
 
-		static void getGeomFragProgram( RenderSystem const & renderSystem
-			, sdw::TraditionalGraphicsWriter & writer )
+		static void getGeomFragProgram( sdw::TraditionalGraphicsWriter & writer )
 		{
 			/*Cosine lobe coeff*/
 			auto SH_cosLobe_C0 = writer.declConstant( "SH_cosLobe_C0"
@@ -346,8 +348,8 @@ namespace castor3d
 			auto SH_cosLobe_C1 = writer.declConstant( "SH_cosLobe_C1"
 				, sdw::Float{ float( sqrt( castor::Pi< float > ) / 3.0f ) } );
 
-			// SH_C0 * SH_cosLobe_C0 = 0.25000000007f
-			// SH_C1 * SH_cosLobe_C1 = 0.5000000011f
+			//! SH_C0 * SH_cosLobe_C0 = 0.25000000007f
+			//! SH_C1 * SH_cosLobe_C1 = 0.5000000011f
 
 			auto outLpvGridR = writer.declOutput< sdw::Vec4 >( "outLpvGridR", sdw::EntryPoint::eFragment, 0u );
 			auto outLpvGridG = writer.declOutput< sdw::Vec4 >( "outLpvGridG", sdw::EntryPoint::eFragment, 1u );
@@ -368,8 +370,8 @@ namespace castor3d
 
 			writer.implementEntryPointT< sdw::PointListT< lpvlgt::SurfaceT >, sdw::PointStreamT< lpvlgt::SurfaceT > >( sdw::PointListT< lpvlgt::SurfaceT >{ writer, false }
 				, sdw::PointStreamT< lpvlgt::SurfaceT >{ writer, 1u, true }
-				, [&]( sdw::GeometryIn in
-					, sdw::PointListT< lpvlgt::SurfaceT > list
+				, [&]( sdw::GeometryIn const & in
+					, sdw::PointListT< lpvlgt::SurfaceT > const & list
 					, sdw::PointStreamT< lpvlgt::SurfaceT > out )
 				{
 					out.vtx.position = list[0].vtx.position;
@@ -385,8 +387,8 @@ namespace castor3d
 
 			writer.implementEntryPointT< lpvlgt::SurfaceT, sdw::VoidT >( sdw::FragmentInT< lpvlgt::SurfaceT >{ writer, true }
 				, sdw::FragmentOut{ writer }
-				, [&]( sdw::FragmentInT< lpvlgt::SurfaceT > in
-					, sdw::FragmentOut out )
+				, [&]( sdw::FragmentInT< lpvlgt::SurfaceT > const & in
+					, sdw::FragmentOut const & out )
 				{
 					auto lobeDir = writer.declLocale( "lobeDir"
 						, evalCosineLobeToDir( in.rsmNormal ) );
@@ -409,7 +411,7 @@ namespace castor3d
 		{
 			sdw::TraditionalGraphicsWriter writer{ &renderSystem.getEngine()->getShaderAllocator() };
 			getVertexProgram( lightType, rsmTexSize, renderSystem, writer );
-			getGeomFragProgram( renderSystem, writer );
+			getGeomFragProgram( writer );
 			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
@@ -419,12 +421,11 @@ namespace castor3d
 		{
 			sdw::TraditionalGraphicsWriter writer{ &renderSystem.getEngine()->getShaderAllocator() };
 			getPointVertexProgram( face, rsmTexSize, renderSystem, writer );
-			getGeomFragProgram( renderSystem, writer );
+			getGeomFragProgram( writer );
 			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static GpuBufferOffsetT< NonTexturedQuad::Vertex > createVertexBuffer( castor::String const & name
-			, RenderDevice const & device
+		static GpuBufferOffsetT< NonTexturedQuad::Vertex > createVertexBuffer( RenderDevice const & device
 			, uint32_t rsmSize )
 		{
 			auto vplCount = rsmSize * rsmSize;
@@ -564,7 +565,7 @@ namespace castor3d
 			, { gridSize, gridSize } }
 		, m_device{ device }
 		, m_rsmSize{ rsmSize }
-		, m_vertexBuffer{ lpvlgt::createVertexBuffer( getName(), m_device, m_rsmSize ) }
+		, m_vertexBuffer{ lpvlgt::createVertexBuffer( m_device, m_rsmSize ) }
 		, m_shader{ getName(), lpvlgt::getProgram( lightType, m_rsmSize, device.renderSystem ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
 		, m_holder{ pass
@@ -592,7 +593,7 @@ namespace castor3d
 			, { gridSize, gridSize } }
 		, m_device{ device }
 		, m_rsmSize{ rsmSize }
-		, m_vertexBuffer{ lpvlgt::createVertexBuffer( getName(), m_device, m_rsmSize ) }
+		, m_vertexBuffer{ lpvlgt::createVertexBuffer( m_device, m_rsmSize ) }
 		, m_shader{ getName(), lpvlgt::getProgram( face, m_rsmSize, device.renderSystem ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
 		, m_holder{ pass

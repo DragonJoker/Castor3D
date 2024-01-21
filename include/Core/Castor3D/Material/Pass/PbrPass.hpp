@@ -14,8 +14,8 @@ namespace castor3d
 		C3D_API static PassUPtr create( LightingModelID lightingModelId
 			, Material & parent );
 
-		C3D_API static castor::String const Type;
-		C3D_API static castor::String const LightingModel;
+		C3D_API static castor::StringView const Type;
+		C3D_API static castor::StringView const LightingModel;
 	};
 }
 

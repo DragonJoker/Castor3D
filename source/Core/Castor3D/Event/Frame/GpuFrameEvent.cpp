@@ -4,6 +4,10 @@
 
 namespace castor3d
 {
+#if !defined( NDEBUG )
+	static bool constexpr C3D_UseGpuEventsStack = false;
+#endif
+
 	GpuFrameEvent::GpuFrameEvent( GpuFrameEvent const & rhs )
 		: m_type{ rhs.m_type }
 		, m_skip{ rhs.m_skip.load() }
@@ -28,7 +32,10 @@ namespace castor3d
 		m_type = rhs.m_type;
 		m_skip = rhs.m_skip.load();
 #if !defined( NDEBUG )
-		m_stackTrace = rhs.m_stackTrace;
+		if constexpr ( C3D_UseGpuEventsStack )
+		{
+			m_stackTrace = rhs.m_stackTrace;
+		}
 #endif
 
 		return *this;
@@ -39,7 +46,10 @@ namespace castor3d
 		m_type = rhs.m_type;
 		m_skip = rhs.m_skip.load();
 #if !defined( NDEBUG )
-		m_stackTrace = std::move( rhs.m_stackTrace );
+		if constexpr ( C3D_UseGpuEventsStack )
+		{
+			m_stackTrace = std::move( rhs.m_stackTrace );
+		}
 #endif
 		rhs.m_skip = true;
 
@@ -50,11 +60,12 @@ namespace castor3d
 		: m_type{ type }
 	{
 #if !defined( NDEBUG )
-
-		castor::StringStream stream = castor::makeStringStream();
-		stream << castor::Debug::Backtrace{ 20 };
-		m_stackTrace = stream.str();
-
+		if constexpr ( C3D_UseGpuEventsStack )
+		{
+			castor::StringStream stream = castor::makeStringStream();
+			stream << castor::Debug::Backtrace{ 20 };
+			m_stackTrace = stream.str();
+		}
 #endif
 	}
 }

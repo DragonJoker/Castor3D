@@ -23,7 +23,7 @@ namespace castor3d::shader
 			, Shadow & shadowModel
 			, Lights & lights
 			, bool enableVolumetric );
-		C3D_API static castor::String getName();
+		C3D_API static castor::StringView getName();
 		C3D_API static LightingModelUPtr create( LightingModelID lightingModelId
 			, sdw::ShaderWriter & writer
 			, Materials const & materials
