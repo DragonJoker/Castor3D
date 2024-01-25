@@ -227,7 +227,7 @@ namespace castor3d
 		/** \return
 		*	The root controls.
 		*/
-		C3D_API std::vector< ControlRPtr > getRootControls()const;
+		C3D_API castor::Vector< ControlRPtr > getRootControls()const;
 
 		//@}
 
@@ -351,16 +351,16 @@ namespace castor3d
 		/** \return
 		*	The controls by z-index.
 		*/
-		std::vector< ControlRPtr > doGetControlsByZIndex()const;
+		castor::Vector< ControlRPtr > doGetControlsByZIndex()const;
 
 		/** Sets the controls by z-index.
 		*/
-		void doSetControlsByZIndex( std::vector< ControlRPtr > v );
+		void doSetControlsByZIndex( castor::Vector< ControlRPtr > v );
 
 		/** \return
 		*	The controls by ID.
 		*/
-		std::map< ControlID, ControlRPtr > doGetControlsById()const;
+		castor::Map< ControlID, ControlRPtr > doGetControlsById()const;
 
 		/** Marks the manager as to be updated.
 		*/
@@ -370,23 +370,23 @@ namespace castor3d
 		C3D_API static castor::String Name;
 
 	private:
-		mutable std::mutex m_mutexControlsById;
-		std::map< ControlID, ControlRPtr > m_controlsById;
-		std::vector< ControlRPtr > m_rootControls;
-		mutable std::mutex m_mutexControlsByZIndex;
-		mutable std::vector< ControlRPtr > m_controlsByZIndex;
+		mutable castor::Mutex m_mutexControlsById;
+		castor::Map< ControlID, ControlRPtr > m_controlsById;
+		castor::Vector< ControlRPtr > m_rootControls;
+		mutable castor::Mutex m_mutexControlsByZIndex;
+		mutable castor::Vector< ControlRPtr > m_controlsByZIndex;
 		mutable std::atomic< CpuFrameEvent * > m_event{};
 		castor::StringMap< ThemeUPtr > m_themes;
-		std::map< Control const *, OnButtonEventConnection > m_onButtonClicks;
-		std::map< Control const *, OnComboEventConnection > m_onComboSelects;
-		std::map< Control const *, OnEditEventConnection > m_onEditUpdates;
-		std::map< Control const *, OnListEventConnection > m_onListSelects;
-		std::map< Control const *, OnScrollBarEventConnection > m_onScrollTracks;
-		std::map< Control const *, OnScrollBarEventConnection > m_onScrollReleases;
-		std::map< Control const *, OnSliderEventConnection > m_onSliderTracks;
-		std::map< Control const *, OnSliderEventConnection > m_onSliderReleases;
-		std::map< Control const *, OnExpandablePanelEventConnection > m_onPanelExpands;
-		std::map< Control const *, OnExpandablePanelEventConnection > m_onPanelRetracts;
+		castor::Map< Control const *, OnButtonEventConnection > m_onButtonClicks;
+		castor::Map< Control const *, OnComboEventConnection > m_onComboSelects;
+		castor::Map< Control const *, OnEditEventConnection > m_onEditUpdates;
+		castor::Map< Control const *, OnListEventConnection > m_onListSelects;
+		castor::Map< Control const *, OnScrollBarEventConnection > m_onScrollTracks;
+		castor::Map< Control const *, OnScrollBarEventConnection > m_onScrollReleases;
+		castor::Map< Control const *, OnSliderEventConnection > m_onSliderTracks;
+		castor::Map< Control const *, OnSliderEventConnection > m_onSliderReleases;
+		castor::Map< Control const *, OnExpandablePanelEventConnection > m_onPanelExpands;
+		castor::Map< Control const *, OnExpandablePanelEventConnection > m_onPanelRetracts;
 		ControlRPtr m_movedControl{};
 		ControlRPtr m_resizedControl{};
 		castor::Size m_size;
@@ -400,9 +400,9 @@ namespace castor3d
 		RootContext * root{};
 		SceneContext * scene{};
 		ControlsManager * controls{};
-		std::stack< ControlRPtr > parents{};
-		std::stack< ControlStyleRPtr > styles{};
-		std::stack< StylesHolderRPtr > stylesHolder{};
+		castor::Stack< ControlRPtr > parents{};
+		castor::Stack< ControlStyleRPtr > styles{};
+		castor::Stack< StylesHolderRPtr > stylesHolder{};
 		castor::String controlName{};
 		ButtonCtrlRPtr button{};
 		ComboBoxCtrlRPtr combo{};

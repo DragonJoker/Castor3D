@@ -31,8 +31,8 @@ namespace Bloom
 		}
 
 	public:
-		static castor::String const CombineMapPasses;
-		static castor::String const CombineMapScene;
+		static castor::MbString const CombineMapPasses;
+		static castor::MbString const CombineMapScene;
 
 	private:
 		castor3d::ProgramModule m_shader;

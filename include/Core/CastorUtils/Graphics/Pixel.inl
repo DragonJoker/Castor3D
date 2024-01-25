@@ -127,7 +127,7 @@ namespace castor
 
 	template< PixelFormat FT >
 	template< PixelFormat FU >
-	Pixel< FT >::Pixel( std::array< uint8_t, PixelDefinitionsT< FU >::Size > const & components )
+	Pixel< FT >::Pixel( Array< uint8_t, PixelDefinitionsT< FU >::Size > const & components )
 		: m_components{ new uint8_t[PixelDefinitionsT< FT >::Size] }
 		, m_delete{ true }
 	{
@@ -150,7 +150,7 @@ namespace castor
 	template< PixelFormat FT >
 	Pixel< FT >::Pixel( Pixel && rhs )noexcept
 	{
-		m_components = std::move( rhs.m_components );
+		m_components = castor::move( rhs.m_components );
 		m_delete = rhs.m_delete;
 
 		rhs.m_components = nullptr;
@@ -197,7 +197,7 @@ namespace castor
 	{
 		clear();
 
-		m_components = std::move( rhs.m_components );
+		m_components = castor::move( rhs.m_components );
 		m_delete = rhs.m_delete;
 
 		rhs.m_components = nullptr;
@@ -309,7 +309,7 @@ namespace castor
 
 	template< PixelFormat FT >
 	template< PixelFormat FU >
-	void Pixel< FT >::set( std::array< uint8_t, PixelDefinitionsT< FU >::Size > const & components )
+	void Pixel< FT >::set( Array< uint8_t, PixelDefinitionsT< FU >::Size > const & components )
 	{
 		uint8_t const * src = &components[0];
 		uint8_t * dst = m_components;

@@ -17,7 +17,7 @@ namespace castor3d
 		return engine.getLogger();
 	}
 
-	castor::Matrix4x4f convert( std::array< float, 16 > const & value )
+	castor::Matrix4x4f convert( castor::Array< float, 16 > const & value )
 	{
 		castor::Matrix4x4f result;
 		std::memcpy( result.ptr(), value.data(), 16 * sizeof( float ) );
@@ -44,7 +44,7 @@ namespace castor3d
 		return result;
 	}
 
-	std::array< float, 4u > makeFloatArray( castor::RgbaColour const & value )
+	castor::Array< float, 4u > makeFloatArray( castor::RgbaColour const & value )
 	{
 		return
 		{

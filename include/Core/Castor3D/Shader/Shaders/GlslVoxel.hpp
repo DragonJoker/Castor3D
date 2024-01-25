@@ -20,7 +20,7 @@ namespace castor3d::shader
 		Voxel( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstanceHelperT{ writer, std::move( expr ), isEnabled() }
+			: StructInstanceHelperT{ writer, castor::move( expr ), isEnabled() }
 		{
 		}
 

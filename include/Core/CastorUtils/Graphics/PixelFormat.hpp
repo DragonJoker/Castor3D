@@ -236,7 +236,7 @@ namespace castor
 	 *\~french
 	 *\return		Le PixelComponents correspondant au PixelFormat donné.
 	 */
-	constexpr castor::PixelComponents getComponents( castor::PixelFormat format );
+	constexpr PixelComponents getComponents( PixelFormat format );
 
 	/**
 	 *\~english

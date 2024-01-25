@@ -45,13 +45,13 @@ namespace castor3d
 			| uint32_t( componentTextureFlag ) };
 	}
 
-	constexpr std::pair< PassComponentID, TextureFlags > splitTextureFlag( PassComponentTextureFlag flag )noexcept
+	constexpr castor::Pair< PassComponentID, TextureFlags > splitTextureFlag( PassComponentTextureFlag flag )noexcept
 	{
 		return { PassComponentID( uint32_t( flag ) >> 8u )
 			, TextureFlags( uint32_t( flag ) & 0x000000FFu ) };
 	}
 
-	using TextureFlagsSet = std::set< PassComponentTextureFlag >;
+	using TextureFlagsSet = castor::Set< PassComponentTextureFlag >;
 	/**
 	*\~english
 	*\brief
@@ -82,13 +82,13 @@ namespace castor3d
 			| uint32_t( componentTextureFlag ) };
 	}
 
-	constexpr std::pair< PassComponentID, PassFlags > splitPassComponentFlag( PassComponentFlag flag )noexcept
+	constexpr castor::Pair< PassComponentID, PassFlags > splitPassComponentFlag( PassComponentFlag flag )noexcept
 	{
 		return { PassComponentID( uint32_t( flag ) >> 8u )
 			, PassFlags( uint32_t( flag ) & 0x000000FFu ) };
 	}
 
-	using PassComponentFlagsSet = std::set< PassComponentFlag >;
+	using PassComponentFlagsSet = castor::Set< PassComponentFlag >;
 	/**
 	*\~english
 	*\brief
@@ -127,7 +127,7 @@ namespace castor3d
 
 	using PassTypeID = uint16_t;
 
-	using OnMaterialChangedFunction = std::function< void( Material const & ) >;
+	using OnMaterialChangedFunction = castor::Function< void( Material const & ) >;
 	using OnMaterialChanged = castor::SignalT< OnMaterialChangedFunction >;
 	using OnMaterialChangedConnection = OnMaterialChanged::connection;
 

@@ -9,11 +9,11 @@ namespace castor3d
 {
 	namespace rendlpsnc
 	{
-		static char const * const CALL_START_RENDERING = "Can't call beginRendering in a synchronous render loop";
-		static char const * const CALL_END_RENDERING = "Can't call endRendering in a synchronous render loop";
-		static char const * const CALL_PAUSE_RENDERING = "Can't call Pause in a synchronous render loop";
-		static char const * const CALL_RESUME_RENDERING = "Can't call Resume in a synchronous render loop";
-		static char const * const RLS_UNKNOWN_EXCEPTION = "Unknown exception";
+		static castor::MbString const CALL_START_RENDERING = "Can't call beginRendering in a synchronous render loop";
+		static castor::MbString const CALL_END_RENDERING = "Can't call endRendering in a synchronous render loop";
+		static castor::MbString const CALL_PAUSE_RENDERING = "Can't call Pause in a synchronous render loop";
+		static castor::MbString const CALL_RESUME_RENDERING = "Can't call Resume in a synchronous render loop";
+		static castor::MbString const RLS_UNKNOWN_EXCEPTION = "Unknown exception";
 	}
 
 	RenderLoopSync::RenderLoopSync( Engine & engine
@@ -22,7 +22,7 @@ namespace castor3d
 	{
 	}
 
-	RenderLoopSync::~RenderLoopSync()
+	RenderLoopSync::~RenderLoopSync()noexcept
 	{
 		cleanup();
 	}
@@ -42,17 +42,17 @@ namespace castor3d
 			}
 			catch ( castor::Exception & exc )
 			{
-				log::error << exc.getFullDescription() << std::endl;
+				log::error << castor::makeString( exc.getFullDescription() ) << std::endl;
 				m_active = false;
 			}
 			catch ( std::exception & exc )
 			{
-				log::error << exc.what() << std::endl;
+				log::error << castor::makeString( exc.what() ) << std::endl;
 				m_active = false;
 			}
 			catch ( ... )
 			{
-				log::error << rendlpsnc::RLS_UNKNOWN_EXCEPTION << std::endl;
+				log::error << castor::makeString( rendlpsnc::RLS_UNKNOWN_EXCEPTION ) << std::endl;
 				m_active = false;
 			}
 		}

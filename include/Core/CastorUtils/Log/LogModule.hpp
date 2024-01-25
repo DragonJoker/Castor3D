@@ -24,10 +24,10 @@ namespace castor
 	struct Message
 	{
 		Message( LogType type
-			, std::string message
+			, MbString message
 			, bool newLine )
 			: m_type{ type }
-			, m_message{ std::move( message ) }
+			, m_message{ castor::move( message ) }
 			, m_newLine{ newLine }
 		{
 		}
@@ -35,12 +35,12 @@ namespace castor
 		//! The message type.
 		LogType m_type;
 		//! The message text.
-		std::string m_message;
+		MbString m_message;
 		//! Tells if the new line character is printed.
 		bool m_newLine;
 	};
 	//! The message queue.
-	using MessageQueue = std::deque< Message >;
+	using MessageQueue = Deque< Message >;
 	/**
 	\~english
 	\brief		Log management class
@@ -97,9 +97,9 @@ namespace castor
 	 *\param[in]	type	Le type de log.
 	 *\param[in]	newLine	Dit si on ajoute le caractère de fin de ligne.
 	 */
-	using LogCallback = std::function< void( String const & text, LogType type, bool newLine ) >;
+	using LogCallback = castor::Function< void( MbString const & text, LogType type, bool newLine ) >;
 
-	using LoggerInstancePtr = std::unique_ptr< LoggerInstance >;
+	using LoggerInstancePtr = castor::RawUniquePtr< LoggerInstance >;
 	//@}
 }
 

@@ -18,7 +18,7 @@ namespace castor3d
 		: public castor::OwnedBy< SkeletonAnimationInstance >
 	{
 	protected:
-		using ObjectArray = std::vector< SkeletonAnimationInstanceObjectRPtr >;
+		using ObjectArray = castor::Vector< SkeletonAnimationInstanceObjectRPtr >;
 
 		C3D_API SkeletonAnimationInstanceObject( SkeletonAnimationInstanceObject && rhs )noexcept = default;
 		C3D_API SkeletonAnimationInstanceObject( SkeletonAnimationInstanceObject const & rhs ) = delete;

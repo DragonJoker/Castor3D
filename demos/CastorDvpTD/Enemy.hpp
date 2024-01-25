@@ -88,9 +88,9 @@ namespace castortd
 		}
 
 	private:
-		std::reference_wrapper< Path const > m_path;
-		std::reference_wrapper< castor3d::SceneNode > m_node;
-		std::reference_wrapper< Category const > m_category;
+		castor::ReferenceWrapper< Path const > m_path;
+		castor::ReferenceWrapper< castor3d::SceneNode > m_node;
+		castor::ReferenceWrapper< Category const > m_category;
 		State m_state{ State::Walking };
 		float m_speed{ 0.0f };
 		uint32_t m_life{ 0 };

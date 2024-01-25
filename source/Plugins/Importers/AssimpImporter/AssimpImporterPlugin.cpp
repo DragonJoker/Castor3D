@@ -19,9 +19,9 @@
 
 namespace
 {
-	std::vector< std::pair< castor::String, castor3d::ImporterPlugin::Extension > > getExtensions( castor3d::Engine * engine )
+	castor::Vector< castor::Pair< castor::String, castor3d::ImporterPlugin::Extension > > getExtensions( castor3d::Engine * engine )
 	{
-		std::vector< std::pair< castor::String, castor3d::ImporterPlugin::Extension > > extensions;
+		castor::Vector< castor::Pair< castor::String, castor3d::ImporterPlugin::Extension > > extensions;
 		using Extension = castor3d::ImporterPlugin::Extension;
 
 		if ( extensions.empty() )

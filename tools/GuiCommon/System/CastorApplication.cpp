@@ -298,7 +298,7 @@ namespace GuiCommon
 				{
 					if ( has( make_wxString( plugin.name ) ) )
 					{
-						config.rendererName = plugin.name;
+						config.rendererName = castor::makeString( plugin.name );
 					}
 				}
 
@@ -334,12 +334,12 @@ namespace GuiCommon
 		, uint32_t wantedFPS
 		, bool isCastorThreaded
 		, castor::String rendererType )
-		: m_internalName{ std::move( internalName ) }
-		, m_displayName{ std::move( displayName ) }
+		: m_internalName{ castor::move( internalName ) }
+		, m_displayName{ castor::move( displayName ) }
 		, m_castor{ nullptr }
 		, m_steps{ steps + 4 }
 		, m_splashScreen{ nullptr }
-		, m_version{ std::move( version ) }
+		, m_version{ castor::move( version ) }
 		, m_config{ DefaultValidation
 			, 0u
 			, false
@@ -486,7 +486,7 @@ namespace GuiCommon
 		// load language if possible, fall back to english otherwise
 		if ( wxLocale::IsAvailable( language ) )
 		{
-			m_locale = std::make_unique< wxLocale >( language, wxLOCALE_LOAD_DEFAULT );
+			m_locale = castor::make_unique< wxLocale >( language, wxLOCALE_LOAD_DEFAULT );
 			// add locale search paths
 			m_locale->AddCatalogLookupPathPrefix( pathCurrent / cuT( "share" ) / m_internalName );
 			m_locale->AddCatalog( m_internalName );
@@ -494,14 +494,14 @@ namespace GuiCommon
 			if ( !m_locale->IsOk() )
 			{
 				std::cerr << "Selected language is wrong" << std::endl;
-				m_locale = std::make_unique< wxLocale >( wxLANGUAGE_ENGLISH );
+				m_locale = castor::make_unique< wxLocale >( wxLANGUAGE_ENGLISH );
 			}
 		}
 		else
 		{
 			std::cerr << "The selected language is not supported by your system."
 					  << "Try installing support for this language." << std::endl;
-			m_locale = std::make_unique< wxLocale >( wxLANGUAGE_ENGLISH );
+			m_locale = castor::make_unique< wxLocale >( wxLANGUAGE_ENGLISH );
 		}
 
 		return true;
@@ -527,7 +527,7 @@ namespace GuiCommon
 			, m_config.enableApiTrace
 			, m_config.keepTextShaders
 			, m_config.enableDebugTargets };
-		m_castor = castor::makeUnique< castor3d::Engine >( std::move( config ) );
+		m_castor = castor::makeUnique< castor3d::Engine >( castor::move( config ) );
 		doloadPlugins( splashScreen );
 
 		splashScreen.Step( _( "Initialising Castor3D" ), 1 );
@@ -539,7 +539,7 @@ namespace GuiCommon
 		}
 		else if ( std::next( renderers.begin() ) == renderers.end() )
 		{
-			m_config.rendererName = renderers.begin()->name;
+			m_config.rendererName = castor::makeString( renderers.begin()->name );
 		}
 
 		if ( m_config.rendererName == castor3d::RenderTypeUndefined )
@@ -553,7 +553,7 @@ namespace GuiCommon
 
 			m_castor->loadRenderer( m_dialog.getSelected() );
 		}
-		else if ( auto it = m_castor->getRenderersList().find( m_config.rendererName );
+		else if ( auto it = m_castor->getRenderersList().find( castor::toUtf8( m_config.rendererName ) );
 			it != m_castor->getRenderersList().end() )
 		{
 			m_castor->loadRenderer( castor3d::Renderer{ *m_castor
@@ -563,7 +563,7 @@ namespace GuiCommon
 		}
 		else
 		{
-			CU_Exception( "Renderer plugin " + m_config.rendererName + " not found" );
+			CU_Exception( "Renderer plugin " + castor::toUtf8( m_config.rendererName ) + " not found" );
 		}
 
 		if ( !isUnlimitedFps() )

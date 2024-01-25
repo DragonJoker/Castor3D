@@ -48,7 +48,7 @@ namespace castor3d
 			TexcoordT( sdw::ShaderWriter & writer
 				, sdw::expr::ExprPtr expr
 				, bool enabled = true )
-				: TexcoordStructT< FlagT >{ writer, std::move( expr ), enabled }
+				: TexcoordStructT< FlagT >{ writer, castor::move( expr ), enabled }
 			{
 			}
 
@@ -106,9 +106,9 @@ namespace castor3d
 			return writer.getBuilder().releaseShader();
 		}
 
-		static std::vector< float > getHalfPascal( uint32_t height )
+		static castor::Vector< float > getHalfPascal( uint32_t height )
 		{
-			std::vector< float > result;
+			castor::Vector< float > result;
 			result.resize( height );
 			auto x = 1.0f;
 			auto max = 1 + height;
@@ -165,8 +165,8 @@ namespace castor3d
 			}
 
 			result.name = source.data->name;
-			result.name += "L" + castor::string::toString( layer );
-			result.name += "M" + castor::string::toString( level );
+			result.name += "L" + castor::string::toMbString( layer );
+			result.name += "M" + castor::string::toMbString( level );
 			return result;
 		}
 
@@ -176,7 +176,8 @@ namespace castor3d
 			, VkExtent3D const & size
 			, uint32_t mipLevels )
 		{
-			auto intermediate = graph.createImage( crg::ImageData{ prefix + "GB"
+			auto mbPrefix = castor::toUtf8( prefix );
+			auto intermediate = graph.createImage( crg::ImageData{ mbPrefix + "GB"
 				, 0u
 				, VK_IMAGE_TYPE_2D
 				, format
@@ -187,7 +188,7 @@ namespace castor3d
 						? ( VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT )
 						: 0u ) )
 				, mipLevels } );
-			return graph.createView( crg::ImageViewData{ prefix + "GB"
+			return graph.createView( crg::ImageViewData{ mbPrefix + "GB"
 				, intermediate
 				, 0u
 				, VK_IMAGE_VIEW_TYPE_2D
@@ -219,10 +220,10 @@ namespace castor3d
 
 	//*********************************************************************************************
 	
-	castor::String const GaussianBlur::Config = cuT( "Config" );
-	castor::String const GaussianBlur::Coefficients = cuT( "c3d_coefficients" );
-	castor::String const GaussianBlur::CoefficientsCount = cuT( "c3d_coefficientsCount" );
-	castor::String const GaussianBlur::TextureSize = cuT( "c3d_textureSize" );
+	castor::MbString const GaussianBlur::Config = "Config";
+	castor::MbString const GaussianBlur::Coefficients = "c3d_coefficients";
+	castor::MbString const GaussianBlur::CoefficientsCount = "c3d_coefficientsCount";
+	castor::MbString const GaussianBlur::TextureSize = "c3d_textureSize";
 
 	GaussianBlur::GaussianBlur( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
@@ -274,7 +275,7 @@ namespace castor3d
 							.isEnabled( isEnabled )
 							.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stagesX ) )
 							.build( framePass, context, graph );
-						m_device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+						m_device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 							, result->getTimer() );
 						return result;
 					} );
@@ -299,7 +300,7 @@ namespace castor3d
 							.isEnabled( isEnabled )
 							.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stagesY ) )
 							.build( framePass, context, graph );
-						m_device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+						m_device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 							, result->getTimer() );
 						return result;
 					} );
@@ -369,7 +370,7 @@ namespace castor3d
 
 	void GaussianBlur::accept( ConfigurationVisitorBase & visitor )
 	{
-		visitor.visit( m_prefix + " GaussianBlur Intermediate"
+		visitor.visit( m_prefix + cuT( " GaussianBlur Intermediate" )
 			, m_intermediateView
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) );

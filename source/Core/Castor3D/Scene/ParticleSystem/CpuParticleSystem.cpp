@@ -87,7 +87,7 @@ namespace castor3d
 
 	ParticleEmitter * CpuParticleSystem::addEmitter( ParticleEmitterUPtr emitter )
 	{
-		m_emitters.emplace_back( std::move( emitter ) );
+		m_emitters.emplace_back( castor::move( emitter ) );
 		auto result = m_emitters.back().get();
 
 		if ( result )
@@ -103,7 +103,7 @@ namespace castor3d
 
 	ParticleUpdater * CpuParticleSystem::addUpdater( ParticleUpdaterUPtr updater )
 	{
-		m_updaters.emplace_back( std::move( updater ) );
+		m_updaters.emplace_back( castor::move( updater ) );
 		return m_updaters.back().get();
 	}
 }

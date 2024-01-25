@@ -74,7 +74,7 @@ namespace castor3d
 
 		if ( m_parameters.get( cuT( "prefix" ), prefix ) )
 		{
-			m_prefix = prefix + "-";
+			m_prefix = prefix + cuT( "-" );
 		}
 	}
 	
@@ -96,7 +96,7 @@ namespace castor3d
 		, ProgressBar * progress )const
 	{
 		return create( type
-			, "any"
+			, cuT( "any" )
 			, engine
 			, file
 			, parameters
@@ -110,7 +110,7 @@ namespace castor3d
 		, ProgressBar * progress )const
 	{
 		return create( type
-			, "any"
+			, cuT( "any" )
 			, scene
 			, file
 			, parameters
@@ -164,7 +164,7 @@ namespace castor3d
 			CU_Exception( castor::ERROR_UNKNOWN_OBJECT );
 		}
 
-		if ( name == "any" )
+		if ( name == cuT( "any" ) )
 		{
 			if ( auto tit = it->second.find( type );
 				tit != it->second.end() )

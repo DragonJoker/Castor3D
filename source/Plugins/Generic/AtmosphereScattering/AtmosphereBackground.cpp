@@ -52,74 +52,74 @@ namespace castor
 			auto result = false;
 			file << ( cuT( "\n" ) + tabs() + cuT( "//Skybox\n" ) );
 
-			if ( auto block{ beginBlock( file, "atmospheric_scattering" ) } )
+			if ( auto block{ beginBlock( file, cuT( "atmospheric_scattering" ) ) } )
 			{
 				auto transmittance = background.getTransmittance().getExtent();
 				auto multiScatter = background.getMultiScatter().getExtent().width;
 				auto atmosphereVolume = background.getVolumeResolution();
 				result = ( background.getSunNode()
-					? writeName( file, "sunNode", background.getSunNode()->getName() )
+					? writeName( file, cuT( "sunNode" ), background.getSunNode()->getName() )
 					: true );
 				result = result && ( background.getPlanetNode()
-					? writeName( file, "planetNode", background.getPlanetNode()->getName() )
+					? writeName( file, cuT( "planetNode" ), background.getPlanetNode()->getName() )
 					: true );
-				result = result && write( file, "transmittanceResolution", transmittance.width, transmittance.height );
-				result = result && write( file, "multiScatterResolution", multiScatter );
-				result = result && write( file, "atmosphereVolumeResolution", atmosphereVolume );
+				result = result && write( file, cuT( "transmittanceResolution" ), transmittance.width, transmittance.height );
+				result = result && write( file, cuT( "multiScatterResolution" ), multiScatter );
+				result = result && write( file, cuT( "atmosphereVolumeResolution" ), atmosphereVolume );
 
 				auto & config = background.getAtmosphereCfg();
-				result = result && write( file, "sunIlluminance", config.sunIlluminance );
-				result = result && write( file, "sunIlluminanceScale", config.sunIlluminanceScale );
-				result = result && write( file, "rayMarchMinSPP", uint32_t( config.rayMarchMinMaxSPP->x ) );
-				result = result && write( file, "rayMarchMaxSPP", uint32_t( config.rayMarchMinMaxSPP->y ) );
-				result = result && write( file, "multipleScatteringFactor", config.multipleScatteringFactor );
-				result = result && write( file, "solarIrradiance", config.solarIrradiance );
-				result = result && write( file, "sunAngularRadius", config.sunAngularRadius );
-				result = result && write( file, "absorptionExtinction", config.absorptionExtinction );
-				result = result && write( file, "maxSunZenithAngle", acos( config.muSMin ) );
-				result = result && write( file, "rayleighScattering", config.rayleighScattering );
-				result = result && write( file, "mieScattering", config.mieScattering );
-				result = result && write( file, "miePhaseFunctionG", config.miePhaseFunctionG );
-				result = result && write( file, "mieExtinction", config.mieExtinction );
-				result = result && write( file, "bottomRadius", config.bottomRadius );
-				result = result && write( file, "topRadius", config.topRadius );
-				result = result && write( file, "groundAlbedo", config.groundAlbedo );
-				result = result && writeDensity( file, "minRayleighDensity", config.rayleighDensity[0] );
-				result = result && writeDensity( file, "maxRayleighDensity", config.rayleighDensity[1] );
-				result = result && writeDensity( file, "minMieDensity", config.mieDensity[0] );
-				result = result && writeDensity( file, "maxMieDensity", config.mieDensity[1] );
-				result = result && writeDensity( file, "minAbsorptionDensity", config.absorptionDensity[0] );
-				result = result && writeDensity( file, "maxAbsorptionDensity", config.absorptionDensity[1] );
+				result = result && write( file, cuT( "sunIlluminance" ), config.sunIlluminance );
+				result = result && write( file, cuT( "sunIlluminanceScale" ), config.sunIlluminanceScale );
+				result = result && write( file, cuT( "rayMarchMinSPP" ), uint32_t( config.rayMarchMinMaxSPP->x ) );
+				result = result && write( file, cuT( "rayMarchMaxSPP" ), uint32_t( config.rayMarchMinMaxSPP->y ) );
+				result = result && write( file, cuT( "multipleScatteringFactor" ), config.multipleScatteringFactor );
+				result = result && write( file, cuT( "solarIrradiance" ), config.solarIrradiance );
+				result = result && write( file, cuT( "sunAngularRadius" ), config.sunAngularRadius );
+				result = result && write( file, cuT( "absorptionExtinction" ), config.absorptionExtinction );
+				result = result && write( file, cuT( "maxSunZenithAngle" ), acos( config.muSMin ) );
+				result = result && write( file, cuT( "rayleighScattering" ), config.rayleighScattering );
+				result = result && write( file, cuT( "mieScattering" ), config.mieScattering );
+				result = result && write( file, cuT( "miePhaseFunctionG" ), config.miePhaseFunctionG );
+				result = result && write( file, cuT( "mieExtinction" ), config.mieExtinction );
+				result = result && write( file, cuT( "bottomRadius" ), config.bottomRadius );
+				result = result && write( file, cuT( "topRadius" ), config.topRadius );
+				result = result && write( file, cuT( "groundAlbedo" ), config.groundAlbedo );
+				result = result && writeDensity( file, cuT( "minRayleighDensity" ), config.rayleighDensity[0] );
+				result = result && writeDensity( file, cuT( "maxRayleighDensity" ), config.rayleighDensity[1] );
+				result = result && writeDensity( file, cuT( "minMieDensity" ), config.mieDensity[0] );
+				result = result && writeDensity( file, cuT( "maxMieDensity" ), config.mieDensity[1] );
+				result = result && writeDensity( file, cuT( "minAbsorptionDensity" ), config.absorptionDensity[0] );
+				result = result && writeDensity( file, cuT( "maxAbsorptionDensity" ), config.absorptionDensity[1] );
 
-				if ( auto wblock{ beginBlock( file, "weather" ) } )
+				if ( auto wblock{ beginBlock( file, cuT( "weather" ) ) } )
 				{
 					auto & weather = background.getWeatherCfg();
-					result = result && write( file, "worleyResolution", background.getWorleyResolution() );
-					result = result && write( file, "perlinWorleyResolution", background.getPerlinWorleyResolution() );
-					result = result && write( file, "curlResolution", background.getCurlResolution() );
-					result = result && write( file, "weatherResolution", background.getWeatherResolution() );
-					result = result && write( file, "amplitude", weather.perlinAmplitude );
-					result = result && write( file, "frequency", weather.perlinFrequency );
-					result = result && write( file, "scale", weather.perlinScale );
-					result = result && write( file, "octaves", weather.perlinOctaves );
+					result = result && write( file, cuT( "worleyResolution" ), background.getWorleyResolution() );
+					result = result && write( file, cuT( "perlinWorleyResolution" ), background.getPerlinWorleyResolution() );
+					result = result && write( file, cuT( "curlResolution" ), background.getCurlResolution() );
+					result = result && write( file, cuT( "weatherResolution" ), background.getWeatherResolution() );
+					result = result && write( file, cuT( "amplitude" ), weather.perlinAmplitude );
+					result = result && write( file, cuT( "frequency" ), weather.perlinFrequency );
+					result = result && write( file, cuT( "scale" ), weather.perlinScale );
+					result = result && write( file, cuT( "octaves" ), weather.perlinOctaves );
 				}
 
-				if ( auto cblock{ beginBlock( file, "clouds" ) } )
+				if ( auto cblock{ beginBlock( file, cuT( "clouds" ) ) } )
 				{
 					auto & clouds = background.getCloudsCfg();
-					result = result && write( file, "windDirection", clouds.windDirection );
-					result = result && write( file, "speed", clouds.speed );
-					result = result && write( file, "coverage", clouds.coverage );
-					result = result && write( file, "crispiness", clouds.crispiness );
-					result = result && write( file, "curliness", clouds.curliness );
-					result = result && write( file, "density", clouds.density );
-					result = result && write( file, "absorption", clouds.absorption );
-					result = result && write( file, "innerRadius", clouds.innerRadius );
-					result = result && write( file, "outerRadius", clouds.outerRadius );
-					result = result && write( file, "topColour", clouds.colorTop );
-					result = result && write( file, "bottomColour", clouds.colorBottom );
-					result = result && write( file, "enablePowder", clouds.enablePowder != 0 );
-					result = result && write( file, "topOffset", clouds.topOffset );
+					result = result && write( file, cuT( "windDirection" ), clouds.windDirection );
+					result = result && write( file, cuT( "speed" ), clouds.speed );
+					result = result && write( file, cuT( "coverage" ), clouds.coverage );
+					result = result && write( file, cuT( "crispiness" ), clouds.crispiness );
+					result = result && write( file, cuT( "curliness" ), clouds.curliness );
+					result = result && write( file, cuT( "density" ), clouds.density );
+					result = result && write( file, cuT( "absorption" ), clouds.absorption );
+					result = result && write( file, cuT( "innerRadius" ), clouds.innerRadius );
+					result = result && write( file, cuT( "outerRadius" ), clouds.outerRadius );
+					result = result && write( file, cuT( "topColour" ), clouds.colorTop );
+					result = result && write( file, cuT( "bottomColour" ), clouds.colorBottom );
+					result = result && write( file, cuT( "enablePowder" ), clouds.enablePowder != 0 );
+					result = result && write( file, cuT( "topOffset" ), clouds.topOffset );
 				}
 			}
 
@@ -135,11 +135,11 @@ namespace castor
 
 			if ( auto block{ beginBlock( file, name ) } )
 			{
-				result = write( file, "layerWidth", config.layerWidth );
-				result = result && write( file, "expTerm", config.expTerm );
-				result = result && write( file, "expScale", config.expScale );
-				result = result && write( file, "linearTerm", config.linearTerm );
-				result = result && write( file, "constantTerm", config.constantTerm );
+				result = write( file, cuT( "layerWidth" ), config.layerWidth );
+				result = result && write( file, cuT( "expTerm" ), config.expTerm );
+				result = result && write( file, cuT( "expScale" ), config.expScale );
+				result = result && write( file, cuT( "linearTerm" ), config.linearTerm );
+				result = result && write( file, cuT( "constantTerm" ), config.constantTerm );
 			}
 
 			return result;
@@ -180,7 +180,7 @@ namespace atmosphere_scattering
 		, castor3d::BackgroundPassBase *& backgroundPass )
 		: skyView{ device
 			, background.getScene().getResources()
-			, "AtmosphereSkyView" + std::to_string( index )
+			, cuT( "AtmosphereSkyView" ) + castor::string::toString( index )
 			, 0u
 			, { skyViewResolution->x, skyViewResolution->y, 1u }
 			, 1u
@@ -192,7 +192,7 @@ namespace atmosphere_scattering
 			, VK_SAMPLER_MIPMAP_MODE_NEAREST }
 		, volume{ device
 			, background.getScene().getResources()
-			, "AtmosphereVolume" + std::to_string( index )
+			, cuT( "AtmosphereVolume" ) + castor::string::toString( index )
 			, 0u
 			, { volumeResolution, volumeResolution, volumeResolution }
 			, 1u
@@ -204,7 +204,7 @@ namespace atmosphere_scattering
 			, VK_SAMPLER_MIPMAP_MODE_NEAREST }
 		, skyColour{ device
 			, background.getScene().getResources()
-			, "SkyColour" + std::to_string( index )
+			, cuT( "SkyColour" ) + castor::string::toString( index )
 			, 0u
 			, { size.width, size.height, 1u }
 			, 1u
@@ -217,7 +217,7 @@ namespace atmosphere_scattering
 			, VK_SAMPLER_ADDRESS_MODE_REPEAT }
 		, sunColour{ device
 			, background.getScene().getResources()
-			, "SunColour" + std::to_string( index )
+			, cuT( "SunColour" ) + castor::string::toString( index )
 			, 0u
 			, { size.width, size.height, 1u }
 			, 1u
@@ -230,7 +230,7 @@ namespace atmosphere_scattering
 			, VK_SAMPLER_ADDRESS_MODE_REPEAT }
 		, cloudsColour{ device
 			, background.getScene().getResources()
-			, "CloudsColour" + std::to_string( index )
+			, cuT( "CloudsColour" ) + castor::string::toString( index )
 			, 0u
 			, { size.width, size.height, 1u }
 			, 1u
@@ -243,7 +243,7 @@ namespace atmosphere_scattering
 			, VK_SAMPLER_ADDRESS_MODE_REPEAT }
 		, cloudsResult{ device
 			, background.getScene().getResources()
-			, "CloudsResult" + std::to_string( index )
+			, cuT( "CloudsResult" ) + castor::string::toString( index )
 			, 0u
 			, { size.width, size.height, 1u }
 			, 1u
@@ -255,7 +255,7 @@ namespace atmosphere_scattering
 			, VK_SAMPLER_MIPMAP_MODE_NEAREST
 			, VK_SAMPLER_ADDRESS_MODE_REPEAT }
 		, cameraUbo{ device, camAtmoChanged }
-		, skyViewPass{ std::make_unique< AtmosphereSkyViewPass >( graph
+		, skyViewPass{ castor::make_unique< AtmosphereSkyViewPass >( graph
 			, crg::FramePassArray{ &transmittancePass }
 			, device
 			, cameraUbo
@@ -264,7 +264,7 @@ namespace atmosphere_scattering
 			, skyView.targetViewId
 			, index
 			, camAtmoChanged ) }
-		, volumePass{ std::make_unique< AtmosphereVolumePass >( graph
+		, volumePass{ castor::make_unique< AtmosphereVolumePass >( graph
 			, crg::FramePassArray{ &transmittancePass }
 			, device
 			, cameraUbo
@@ -273,7 +273,7 @@ namespace atmosphere_scattering
 			, volume.targetViewId
 			, index
 			, camAtmoChanged ) }
-		, volumetricCloudsPass{ std::make_unique< CloudsVolumePass >( graph
+		, volumetricCloudsPass{ castor::make_unique< CloudsVolumePass >( graph
 			, crg::FramePassArray{ &transmittancePass , &weatherPass, &skyViewPass->getLastPass(), &multiscatterPass }
 			, device
 			, atmosphereUbo
@@ -292,7 +292,7 @@ namespace atmosphere_scattering
 			, sunColour.targetViewId
 			, cloudsColour.targetViewId
 			, index ) }
-		, cloudsResolvePass{ std::make_unique< CloudsResolvePass >( graph
+		, cloudsResolvePass{ castor::make_unique< CloudsResolvePass >( graph
 			, crg::FramePassArray{ &volumetricCloudsPass->getLastPass() }
 			, device
 			, cameraUbo
@@ -315,7 +315,7 @@ namespace atmosphere_scattering
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
-				auto res = std::make_unique< AtmosphereBackgroundPass >( framePass
+				auto res = castor::make_unique< AtmosphereBackgroundPass >( framePass
 					, context
 					, runnableGraph
 					, device
@@ -324,7 +324,7 @@ namespace atmosphere_scattering
 					, colour
 					, forceVisible );
 				backgroundPass = res.get();
-				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );
@@ -353,23 +353,23 @@ namespace atmosphere_scattering
 
 	void AtmosphereBackground::CameraPasses::accept( castor3d::ConfigurationVisitorBase & visitor )
 	{
-		visitor.visit( "Atmosphere SkyView"
+		visitor.visit( cuT( "Atmosphere SkyView" )
 			, skyView.sampledViewId
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, castor3d::TextureFactors{}.invert( true ) );
-		visitor.visit( "Sky Colour"
+		visitor.visit( cuT( "Sky Colour" )
 			, skyColour
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, castor3d::TextureFactors{}.invert( true ) );
-		visitor.visit( "Sun Colour"
+		visitor.visit( cuT( "Sun Colour" )
 			, sunColour
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, castor3d::TextureFactors{}.invert( true ) );
-		visitor.visit( "Clouds Colour"
+		visitor.visit( cuT( "Clouds Colour" )
 			, cloudsColour
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, castor3d::TextureFactors{}.invert( true ) );
-		visitor.visit( "Clouds Result"
+		visitor.visit( cuT( "Clouds Result" )
 			, cloudsResult
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, castor3d::TextureFactors{}.invert( true ) );
@@ -403,11 +403,11 @@ namespace atmosphere_scattering
 	AtmosphereBackground::AtmosphereBackground( castor3d::Engine & engine
 		, castor3d::Scene & scene )
 		: SceneBackground{ engine, scene, cuT( "Atmosphere" ), cuT( "atmosphere" ), false }
-		, m_weatherUbo{ std::make_unique< WeatherUbo >( engine.getRenderSystem()->getRenderDevice()
+		, m_weatherUbo{ castor::make_unique< WeatherUbo >( engine.getRenderSystem()->getRenderDevice()
 			, m_weatherChanged ) }
-		, m_cloudsUbo{ std::make_unique< CloudsUbo >( engine.getRenderSystem()->getRenderDevice()
+		, m_cloudsUbo{ castor::make_unique< CloudsUbo >( engine.getRenderSystem()->getRenderDevice()
 			, m_cloudsChanged ) }
-		, m_atmosphereUbo{ std::make_unique< AtmosphereScatteringUbo >( engine.getRenderSystem()->getRenderDevice()
+		, m_atmosphereUbo{ castor::make_unique< AtmosphereScatteringUbo >( engine.getRenderSystem()->getRenderDevice()
 			, m_atmosphereChanged ) }
 	{
 	}
@@ -528,11 +528,11 @@ namespace atmosphere_scattering
 			, m_weatherCfg.perlinOctaves
 			, &m_weatherChanged );
 
-		visitor.visit( "Atmosphere Transmittance"
+		visitor.visit( cuT( "Atmosphere Transmittance" )
 			, m_transmittance
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, castor3d::TextureFactors{}.invert( true ) );
-		visitor.visit( "Atmosphere Multiscatter"
+		visitor.visit( cuT( "Atmosphere Multiscatter" )
 			, m_multiScatter
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, castor3d::TextureFactors{}.invert( true ) );
@@ -542,18 +542,18 @@ namespace atmosphere_scattering
 			cameraPass.second->accept( visitor );
 		}
 
-		visitor.visit( "Weather Result"
+		visitor.visit( cuT( "Weather Result" )
 			, m_weather
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, castor3d::TextureFactors{}.invert( true ) );
-		visitor.visit( "Curl Noise"
+		visitor.visit( cuT( "Curl Noise" )
 			, m_curl
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, castor3d::TextureFactors{}.invert( true ) );
 
 		for ( uint32_t index = 0u; index < m_worley.subViewsId.size(); ++index )
 		{
-			visitor.visit( "Worley Noise Slice " + castor::string::toString( index )
+			visitor.visit( cuT( "Worley Noise Slice " ) + castor::string::toString( index )
 				, m_worley.sampledViewId
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 				, castor3d::TextureFactors::tex3DSlice( index ).invert( true ) );
@@ -561,7 +561,7 @@ namespace atmosphere_scattering
 
 		for ( uint32_t index = 0u; index < m_perlinWorley.subViewsId.size(); ++index )
 		{
-			visitor.visit( "Perlin Worley Noise Slice " + castor::string::toString( index )
+			visitor.visit( cuT( "Perlin Worley Noise Slice " )+ castor::string::toString( index )
 				, m_perlinWorley.sampledViewId
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 				, castor3d::TextureFactors::tex3DSlice( index ).invert( true ) );
@@ -586,22 +586,22 @@ namespace atmosphere_scattering
 	{
 		if ( !m_transmittancePass )
 		{
-			m_worleyPass = std::make_unique< CloudsWorleyPass >( graph
+			m_worleyPass = castor::make_unique< CloudsWorleyPass >( graph
 				, crg::FramePassArray{}
 				, device
 				, m_worley.sampledViewId
 				, m_generateWorley );
-			m_perlinWorleyPass = std::make_unique< CloudsPerlinPass >( graph
+			m_perlinWorleyPass = castor::make_unique< CloudsPerlinPass >( graph
 				, crg::FramePassArray{}
 				, device
 				, m_perlinWorley.sampledViewId
 				, m_generatePerlinWorley );
-			m_curlPass = std::make_unique< CloudsCurlPass >( graph
+			m_curlPass = castor::make_unique< CloudsCurlPass >( graph
 				, crg::FramePassArray{}
 				, device
 				, m_curl.targetViewId
 				, m_generateCurl );
-			m_weatherPass = std::make_unique< CloudsWeatherPass >( graph
+			m_weatherPass = castor::make_unique< CloudsWeatherPass >( graph
 				, crg::FramePassArray{ &m_worleyPass->getLastPass()
 					, &m_perlinWorleyPass->getLastPass()
 					, &m_curlPass->getLastPass() }
@@ -609,13 +609,13 @@ namespace atmosphere_scattering
 				, *m_weatherUbo
 				, m_weather.targetViewId
 				, m_weatherChanged );
-			m_transmittancePass = std::make_unique< AtmosphereTransmittancePass >( graph
+			m_transmittancePass = castor::make_unique< AtmosphereTransmittancePass >( graph
 				, crg::FramePassArray{}
 				, device
 				, *m_atmosphereUbo
 				, m_transmittance.targetViewId
 				, m_atmosphereChanged );
-			m_multiScatteringPass = std::make_unique< AtmosphereMultiScatteringPass >( graph
+			m_multiScatteringPass = castor::make_unique< AtmosphereMultiScatteringPass >( graph
 				, crg::FramePassArray{ &m_transmittancePass->getLastPass() }
 				, device
 				, *m_atmosphereUbo
@@ -629,7 +629,7 @@ namespace atmosphere_scattering
 		if ( it == m_cameraPasses.end() )
 		{
 			it = m_cameraPasses.emplace( colour.front().data->image.data
-				, std::make_unique< CameraPasses >( graph
+				, castor::make_unique< CameraPasses >( graph
 					, device
 					, *this
 					, m_transmittancePass->getLastPass()
@@ -705,7 +705,7 @@ namespace atmosphere_scattering
 		m_worleyResolution = dimension;
 		m_worley = castor3d::Texture{ device
 			, resources
-			, "WorleyNoise"
+			, cuT( "WorleyNoise" )
 			, 0u
 			, { dimension, dimension, dimension }
 			, 1u
@@ -726,7 +726,7 @@ namespace atmosphere_scattering
 		m_perlinWorleyResolution = dimension;
 		m_perlinWorley = castor3d::Texture{ device
 			, resources
-			, "PerlinWorleyNoise"
+			, cuT( "PerlinWorleyNoise" )
 			, 0u
 			, { dimension, dimension, dimension }
 			, 1u
@@ -747,7 +747,7 @@ namespace atmosphere_scattering
 		m_curlResolution = dimension;
 		m_curl = castor3d::Texture{ device
 			, resources
-			, "CurlNoise"
+			, cuT( "CurlNoise" )
 			, 0u
 			, { dimension, dimension, 1u }
 			, 1u
@@ -768,7 +768,7 @@ namespace atmosphere_scattering
 		m_weatherResolution = dimension;
 		m_weather = castor3d::Texture{ device
 			, resources
-			, "Weather"
+			, cuT( "Weather" )
 			, 0u
 			, { dimension, dimension, 1u }
 			, 1u
@@ -788,7 +788,7 @@ namespace atmosphere_scattering
 		auto & device = getScene().getEngine()->getRenderSystem()->getRenderDevice();
 		m_transmittance = castor3d::Texture{ device
 			, resources
-			, "Transmittance"
+			, cuT( "Transmittance" )
 			, 0u
 			, { dimensions->x, dimensions->y, 1u }
 			, 1u
@@ -807,7 +807,7 @@ namespace atmosphere_scattering
 		auto & device = getScene().getEngine()->getRenderSystem()->getRenderDevice();
 		m_multiScatter = castor3d::Texture{ device
 			, resources
-			, "MultiScatter"
+			, cuT( "MultiScatter" )
 			, 0u
 			, { dimension, dimension, 1u }
 			, 1u
@@ -838,7 +838,7 @@ namespace atmosphere_scattering
 		auto & resources = getScene().getResources();
 		m_textureId = castor3d::Texture{ device
 			, resources
-			, "Dummy"
+			, cuT( "Dummy" )
 			, 0u
 			, { SkyTexSize, SkyTexSize, 1u }
 			, 1u
@@ -852,7 +852,7 @@ namespace atmosphere_scattering
 		m_multiScatter.create();
 		m_textureId.create();
 		m_texture = castor::makeUnique< castor3d::TextureLayout >( device.renderSystem
-			, "AtmosphereBackground/Dummy"
+			, cuT( "AtmosphereBackground/Dummy" )
 			, *m_textureId.image
 			, m_textureId.wholeViewId );
 		m_hdr = true;

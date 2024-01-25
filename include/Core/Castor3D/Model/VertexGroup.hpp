@@ -16,10 +16,10 @@ namespace castor3d
 			, castor::Point3f nml = {}
 			, castor::Point4f tan = {}
 			, castor::Point3f tex = {} )
-			: pos{ std::move( pos ) }
-			, nml{ std::move( nml ) }
-			, tan{ std::move( tan ) }
-			, tex{ std::move( tex ) }
+			: pos{ castor::move( pos ) }
+			, nml{ castor::move( nml ) }
+			, tan{ castor::move( tan ) }
+			, tex{ castor::move( tex ) }
 		{
 		}
 

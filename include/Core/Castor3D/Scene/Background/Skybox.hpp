@@ -266,7 +266,7 @@ namespace castor3d
 			return m_crossTexturePath;
 		}
 
-		std::array< castor::Path, 6u > const & getLayerTexturePath()const
+		castor::Array< castor::Path, 6u > const & getLayerTexturePath()const
 		{
 			return m_layerTexturePath;
 		}
@@ -292,8 +292,8 @@ namespace castor3d
 		void doInitialiseEquiTexture( RenderDevice const & device );
 
 	private:
-		std::array< castor::ImageUPtr, 6u > m_layerTexture;
-		std::array< castor::Path, 6u > m_layerTexturePath;
+		castor::Array< castor::ImageUPtr, 6u > m_layerTexture;
+		castor::Array< castor::Path, 6u > m_layerTexturePath;
 		TextureLayoutUPtr m_equiTexture;
 		castor::Path m_equiTexturePath;
 		castor::Size m_equiSize;
@@ -303,7 +303,7 @@ namespace castor3d
 			, castor::StringView faceName
 			, castor::Image const & lines
 			, uint32_t index );
-		static std::array< castor::ImageUPtr, 6u > splitCrossImageBuffer( Engine & engine
+		static castor::Array< castor::ImageUPtr, 6u > splitCrossImageBuffer( Engine & engine
 			, castor::Image const & cross );
 	};
 

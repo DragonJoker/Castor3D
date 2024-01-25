@@ -38,7 +38,7 @@ namespace castor3d
 			float gaussianWidth{};
 			float subsurfaceScatteringStrength{};
 			float thicknessScale{};
-			std::array< Data, TransmittanceProfileSize > transmittanceProfile{};
+			castor::Array< Data, TransmittanceProfileSize > transmittanceProfile{};
 		};
 		using SssProfilesData = castor::ArrayView< SssProfileData >;
 
@@ -48,7 +48,7 @@ namespace castor3d
 			float * gaussianWidth{};
 			float * subsurfaceScatteringStrength{};
 			float * thicknessScale{};
-			std::array< Data, TransmittanceProfileSize > * transmittanceProfile{};
+			castor::Array< Data, TransmittanceProfileSize > * transmittanceProfile{};
 		};
 
 		static constexpr uint32_t DataSize = sizeof( SssProfileData );
@@ -152,12 +152,12 @@ namespace castor3d
 
 	private:
 		ShaderBuffer m_buffer;
-		std::vector< SubsurfaceScatteringComponent * > m_components;
-		std::vector< SubsurfaceScatteringComponent const * > m_dirty;
-		std::vector< OnSssProfileChangedConnection > m_connections;
+		castor::Vector< SubsurfaceScatteringComponent * > m_components;
+		castor::Vector< SubsurfaceScatteringComponent const * > m_dirty;
+		castor::Vector< OnSssProfileChangedConnection > m_connections;
 		uint32_t m_profileID{ 1u };
 		SssProfilesData m_data;
-		std::mutex m_mutex;
+		castor::Mutex m_mutex;
 	};
 }
 

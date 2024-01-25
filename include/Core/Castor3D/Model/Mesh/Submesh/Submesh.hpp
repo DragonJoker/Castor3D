@@ -34,6 +34,10 @@ namespace castor3d
 		CU_DeclareList( castor::ByteArray, BytePtr );
 
 	public:
+		Submesh( Submesh const & ) = delete;
+		Submesh( Submesh && )noexcept = default;
+		Submesh & operator=( Submesh const & ) = delete;
+		Submesh & operator=( Submesh && )noexcept = default;
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -94,7 +98,7 @@ namespace castor3d
 		 *\brief		Enregistre les passes de rendu des dépendances des composants.
 		 */
 		C3D_API crg::FramePassArray record( crg::ResourcesCache & resources
-			, crg::FrameGraph & graph
+			, crg::FramePassGroup & graph
 			, crg::FramePassArray previousPasses );
 		/**
 		 *\~english
@@ -300,9 +304,9 @@ namespace castor3d
 		C3D_API void addComponent( SubmeshComponentUPtr component );
 		void disableSceneUpdate();
 		void needsUpdate();
-		void addPoints( std::vector< InterleavedVertex > const & vertices );
+		void addPoints( castor::Vector< InterleavedVertex > const & vertices );
 		template< size_t Count >
-		void addPoints( std::array< InterleavedVertex, Count > const & vertices );
+		void addPoints( castor::Array< InterleavedVertex, Count > const & vertices );
 		void setDefaultMaterial( MaterialObs material );
 		void setIndexMapping( IndexMappingUPtr mapping );
 		IndexMappingRPtr getIndexMapping()const;
@@ -341,8 +345,8 @@ namespace castor3d
 		C3D_API castor::Point3fArray & getBaseData( SubmeshData submeshData );
 		C3D_API GpuBufferOffsetT< castor::Point4f > const & getMorphTargets()const;
 		C3D_API uint32_t getMorphTargetsCount()const;
-		C3D_API std::vector< Meshlet > const & getMeshlets()const;
-		C3D_API std::vector< Meshlet > & getMeshlets();
+		C3D_API castor::Vector< Meshlet > const & getMeshlets()const;
+		C3D_API castor::Vector< Meshlet > & getMeshlets();
 		C3D_API uint32_t getMeshletsCount()const;
 		C3D_API bool isDynamic()const;
 		C3D_API bool isAnimated()const;
@@ -411,8 +415,8 @@ namespace castor3d
 		bool m_dirty{ true };
 		VkPrimitiveTopology m_topology{ VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST };
 		ObjectBufferOffset m_sourceBufferOffset;
-		std::unordered_map< size_t, ObjectBufferOffset > m_finalBufferOffsets;
-		mutable std::unordered_map< size_t, GeometryBuffers > m_geometryBuffers;
+		castor::UnorderedMap< size_t, ObjectBufferOffset > m_finalBufferOffsets;
+		mutable castor::UnorderedMap< size_t, GeometryBuffers > m_geometryBuffers;
 		bool m_needsNormalsCompute{ false };
 		bool m_disableSceneUpdate{ false };
 

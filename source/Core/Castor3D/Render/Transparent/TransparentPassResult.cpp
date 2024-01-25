@@ -15,11 +15,11 @@ namespace castor3d
 
 	castor::String getTexName( WbTexture texture )
 	{
-		static std::array< castor::String, size_t( WbTexture::eCount ) > Values
+		static castor::Array< castor::String, size_t( WbTexture::eCount ) > Values
 		{
 			{
-				"Accumulation",
-				"Revealage",
+				cuT( "Accumulation" ),
+				cuT( "Revealage" ),
 			}
 		};
 
@@ -28,7 +28,7 @@ namespace castor3d
 
 	VkFormat getFormat( RenderDevice const &, WbTexture texture )
 	{
-		static std::array< VkFormat, size_t( WbTexture::eCount ) > Values
+		static castor::Array< VkFormat, size_t( WbTexture::eCount ) > Values
 		{
 			{
 				VK_FORMAT_R16G16B16A16_SFLOAT,
@@ -40,7 +40,7 @@ namespace castor3d
 
 	VkClearValue getClearValue( WbTexture texture )
 	{
-		static std::array< VkClearValue, size_t( WbTexture::eCount ) > Values
+		static castor::Array< VkClearValue, size_t( WbTexture::eCount ) > Values
 		{
 			{
 				transparentBlackClearColor,
@@ -52,7 +52,7 @@ namespace castor3d
 
 	VkImageUsageFlags getUsageFlags( WbTexture texture )
 	{
-		static std::array< VkImageUsageFlags, size_t( WbTexture::eCount ) > Values
+		static castor::Array< VkImageUsageFlags, size_t( WbTexture::eCount ) > Values
 		{
 			{
 				VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT,
@@ -64,7 +64,7 @@ namespace castor3d
 
 	VkBorderColor getBorderColor( WbTexture texture )
 	{
-		static std::array< VkBorderColor, size_t( WbTexture::eCount ) > Values
+		static castor::Array< VkBorderColor, size_t( WbTexture::eCount ) > Values
 		{
 			{
 				VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK,

@@ -46,7 +46,7 @@ namespace castor3d
 		C3D_API bool import( Scene & scene
 			, ImporterFile * file
 			, Parameters const & parameters
-			, std::map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps );
+			, castor::Map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps );
 		/**
 		 *\~english
 		 *\brief		Scene import Function.
@@ -66,7 +66,7 @@ namespace castor3d
 		C3D_API bool import( Scene & scene
 			, castor::Path const & pathFile
 			, Parameters const & parameters
-			, std::map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps
+			, castor::Map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps
 			, ProgressBar * progress = nullptr );
 		/**
 		 *\~english
@@ -107,7 +107,7 @@ namespace castor3d
 	private:
 		void doImportMaterials( Scene & scene
 			, Parameters const & parameters
-			, std::map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps );
+			, castor::Map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps );
 		castor::StringMap< SkeletonRPtr > doImportSkeletons( Scene & scene );
 		castor::StringMap< MeshResPtr > doImportMeshes( Scene & scene
 			, castor::StringMap< SkeletonRPtr > const & skeletons );
@@ -121,9 +121,9 @@ namespace castor3d
 		struct AnimObjects
 		{
 			AnimObjects() = default;
-			std::vector< SkeletonRPtr > skeletons;
-			std::vector< MeshRPtr > meshes;
-			std::vector< SceneNodeRPtr > nodes;
+			castor::Vector< SkeletonRPtr > skeletons;
+			castor::Vector< MeshRPtr > meshes;
+			castor::Vector< SceneNodeRPtr > nodes;
 		};
 
 		void doImportSkeletonsAnims( Scene & scene
@@ -159,14 +159,14 @@ namespace castor3d
 		castor::PathArray files{};
 		castor::PathArray animFiles{};
 		castor::String prefix{};
-		std::map< PassComponentTextureFlag, TextureConfiguration > textureRemaps;
+		castor::Map< PassComponentTextureFlag, TextureConfiguration > textureRemaps;
 		float rescale{ 1.0f };
 		float pitch{ 0.0f };
 		float yaw{ 0.0f };
 		float roll{ 0.0f };
 		bool noOptimisations{ false };
 		float emissiveMult{ 1.0f };
-		std::map< PassComponentTextureFlag, TextureConfiguration >::iterator textureRemapIt;
+		castor::Map< PassComponentTextureFlag, TextureConfiguration >::iterator textureRemapIt;
 		castor::String centerCamera{};
 		castor::String preferredImporter{ cuT( "any" ) };
 	};

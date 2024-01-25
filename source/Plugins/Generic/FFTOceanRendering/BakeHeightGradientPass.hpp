@@ -50,7 +50,7 @@ namespace ocean_fft
 		void accept( castor3d::RenderTechniqueVisitor & visitor );
 
 	public:
-		static castor::String const Name;
+		static castor::MbString const Name;
 
 		struct Data
 		{
@@ -88,8 +88,8 @@ namespace ocean_fft
 		, OceanUbo const & ubo
 		, ashes::BufferBase const & height
 		, ashes::BufferBase const & displacement
-		, std::array< castor3d::Texture, 2u > const & heightDisp
-		, std::array< castor3d::Texture, 2u > const & gradJacob );
+		, castor::Array< castor3d::Texture, 2u > const & heightDisp
+		, castor::Array< castor3d::Texture, 2u > const & gradJacob );
 }
 
 #endif

@@ -20,8 +20,8 @@ namespace castor3d
 	{
 		C3D_API explicit TransformPipeline( uint32_t index );
 
-		C3D_API std::string getName( Engine const & engine )const;
-		C3D_API static std::string getName( Engine const & engine
+		C3D_API castor::String getName( Engine const & engine )const;
+		C3D_API static castor::String getName( Engine const & engine
 			, SubmeshComponentCombineID combine
 			, MorphFlags const & morphFlags
 			, bool meshletsBounds
@@ -48,8 +48,8 @@ namespace castor3d
 	{
 		C3D_API explicit BoundsTransformPipeline( bool normals );
 
-		C3D_API std::string getName()const;
-		C3D_API static std::string getName( bool normals );
+		C3D_API castor::String getName()const;
+		C3D_API static castor::String getName( bool normals );
 
 		bool normals;
 

@@ -11,7 +11,7 @@ namespace castor
 
 	namespace rgb
 	{
-		static std::map< PredefinedRgbColour, String > const PredefinedNames
+		static Map< PredefinedRgbColour, String > const PredefinedNames
 		{
 			{ PredefinedRgbColour::eBlack, cuT( "black" ) },
 			{ PredefinedRgbColour::eDarkBlue, cuT( "darkblue" ) },

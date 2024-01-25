@@ -38,7 +38,7 @@ namespace castor3d
 			{
 			case ChunkType::eName:
 				result = doParseChunk( name, chunk );
-				checkError( result, "Couldn't parse name." );
+				checkError( result, cuT( "Couldn't parse name." ) );
 
 				if ( result )
 				{
@@ -50,7 +50,7 @@ namespace castor3d
 			case ChunkType::eMeshMorphTarget:
 				keyFrame = castor::makeUnique< MeshMorphTarget >( obj, 0_ms );
 				result = createBinaryParser< MeshMorphTarget >().parse( *keyFrame, chunk );
-				checkError( result, "Couldn't parse keyframe." );
+				checkError( result, cuT( "Couldn't parse keyframe." ) );
 
 				if ( result )
 				{
@@ -83,7 +83,7 @@ namespace castor3d
 				{
 				case ChunkType::eName:
 					result = doParseChunk( name, chunk );
-					checkError( result, "Couldn't parse name." );
+					checkError( result, cuT( "Couldn't parse name." ) );
 
 					if ( result )
 					{
@@ -101,7 +101,7 @@ namespace castor3d
 #pragma warning( pop )
 					keyFrame = castor::makeUnique< MeshMorphTarget >( obj, 0_ms );
 					result = createBinaryParser< MeshMorphTarget >().parse( *keyFrame, chunk );
-					checkError( result, "Couldn't parse keyframe." );
+					checkError( result, cuT( "Couldn't parse keyframe." ) );
 
 					if ( result )
 					{

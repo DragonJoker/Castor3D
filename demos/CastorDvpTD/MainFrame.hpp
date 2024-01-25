@@ -35,7 +35,7 @@ namespace castortd
 
 	private:
 		wxWindowPtr< RenderPanel > m_panel;
-		std::unique_ptr< Game > m_game;
+		castor::RawUniquePtr< Game > m_game;
 		wxTimer * m_timer{ nullptr };
 	};
 }

@@ -49,7 +49,7 @@
 
 namespace castor3d
 {
-	castor::String const TransparentPass::Type = "c3d.transparent.accumulation";
+	castor::String const TransparentPass::Type = cuT( "c3d.transparent.accumulation" );
 
 	TransparentPass::TransparentPass( RenderTechnique * parent
 		, crg::FramePass const & pass
@@ -69,8 +69,8 @@ namespace castor3d
 			, graph
 			, device
 			, Type
-			, std::move( targetImage )
-			, std::move( targetDepth )
+			, castor::move( targetImage )
+			, castor::move( targetDepth )
 			, renderPassDesc
 			, techniquePassDesc }
 		, m_sceneImage{ sceneImage }
@@ -121,7 +121,7 @@ namespace castor3d
 			0u,
 			VK_FALSE,
 			VK_LOGIC_OP_COPY,
-			std::move( attachments ),
+			castor::move( attachments ),
 		};
 	}
 
@@ -361,11 +361,11 @@ namespace castor3d
 					, modelData.getMaterialId()
 					, in.passMultipliers
 					, components );
-				output.registerOutput( "Surface", "Normal", fma( components.normal, vec3( 0.5_f ), vec3( 0.5_f ) ) );
-				output.registerOutput( "Surface", "Tangent", fma( in.tangent.xyz(), vec3( 0.5_f ), vec3( 0.5_f ) ) );
-				output.registerOutput( "Surface", "Bitangent", fma( in.bitangent, vec3( 0.5_f ), vec3( 0.5_f ) ) );
-				output.registerOutput( "Surface", "World Position", in.worldPosition );
-				output.registerOutput( "Surface", "View Position", in.viewPosition );
+				output.registerOutput( cuT( "Surface" ), cuT( "Normal" ), fma( components.normal, vec3( 0.5_f ), vec3( 0.5_f ) ) );
+				output.registerOutput( cuT( "Surface" ), cuT( "Tangent" ), fma( in.tangent.xyz(), vec3( 0.5_f ), vec3( 0.5_f ) ) );
+				output.registerOutput( cuT( "Surface" ), cuT( "Bitangent" ), fma( in.bitangent, vec3( 0.5_f ), vec3( 0.5_f ) ) );
+				output.registerOutput( cuT( "Surface" ), cuT( "World Position" ), in.worldPosition );
+				output.registerOutput( cuT( "Surface" ), cuT( "View Position" ), in.viewPosition );
 
 				if ( components.occlusion )
 				{
@@ -410,9 +410,9 @@ namespace castor3d
 							, output
 							, directLighting );
 						directLighting.ambient() = components.ambientColour * c3d_sceneData.ambientLight() * components.ambientFactor;
-						output.registerOutput( "Lighting", "Ambient", directLighting.ambient() );
-						output.registerOutput( "Lighting", "Occlusion", occlusion );
-						output.registerOutput( "Lighting", "Emissive", components.emissiveColour * components.emissiveFactor );
+						output.registerOutput( cuT( "Lighting" ), cuT( "Ambient" ), directLighting.ambient() );
+						output.registerOutput( cuT( "Lighting" ), cuT( "Occlusion" ), occlusion );
+						output.registerOutput( cuT( "Lighting" ), cuT( "Emissive" ), components.emissiveColour * components.emissiveFactor );
 
 						// Indirect Lighting
 						lightSurface.updateL( utils
@@ -480,7 +480,7 @@ namespace castor3d
 							components.emissiveFactor *= components.opacity;
 						}
 
-						output.registerOutput( "Reflections", "Incident", sdw::fma( incident, vec3( 0.5_f ), vec3( 0.5_f ) ) );
+						output.registerOutput( cuT( "Reflections" ), cuT( "Incident" ), sdw::fma( incident, vec3( 0.5_f ), vec3( 0.5_f ) ) );
 
 						// Combine
 						colour = lightingModel->combine( output

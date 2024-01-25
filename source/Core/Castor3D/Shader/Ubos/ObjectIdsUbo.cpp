@@ -18,7 +18,7 @@ namespace castor3d::shader
 	ObjectsIds::ObjectsIds( sdw::ShaderWriter & writer
 		, ast::expr::ExprPtr expr
 		, bool enabled )
-		: StructInstance{ writer, std::move( expr ), enabled }
+		: StructInstance{ writer, castor::move( expr ), enabled }
 		, m_data{ getMemberArray< sdw::UVec4 >( "data" ) }
 	{
 	}

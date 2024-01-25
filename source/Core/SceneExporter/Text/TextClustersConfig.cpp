@@ -25,7 +25,7 @@ namespace castor
 		bool result{ false };
 		log::info << tabs() << cuT( "Writing ClustersConfig" ) << std::endl;
 
-		if ( auto block{ beginBlock( file, "clusters" ) } )
+		if ( auto block{ beginBlock( file, cuT( "clusters" ) ) } )
 		{
 			result = writeOpt( file, cuT( "enabled" ), object.enabled, true )
 				&& writeOpt( file, cuT( "use_lights_bvh" ), object.useLightsBVH.value(), true )

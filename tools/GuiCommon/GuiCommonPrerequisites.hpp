@@ -272,7 +272,8 @@ namespace GuiCommon
 	*	Conversions de Castor vers wxWidgets.
 	*/
 	//@{
-	wxString make_wxString( castor::String const & value );
+	wxString make_wxString( castor::MbString const & value );
+	wxString make_wxString( castor::WString const & value );
 	wxString make_wxString( castor::U32String const & value );
 	wxSize make_wxSize( castor::Size const & value );
 	wxArrayString make_wxArrayString( castor::StringArray const & values );
@@ -299,7 +300,7 @@ namespace GuiCommon
 	 *\return		The wxArrayString.
 	 */
 	template< size_t Count >
-	wxArrayString make_wxArrayString( std::array< wxString, Count > values )
+	wxArrayString make_wxArrayString( castor::Array< wxString, Count > values )
 	{
 		return wxArrayString{ Count, values.data() };
 	}
@@ -309,7 +310,7 @@ namespace GuiCommon
 	 *\return		The make_wxArrayInt.
 	 */
 	template< size_t Count >
-	wxArrayInt make_wxArrayInt( std::array< int, Count > values )
+	wxArrayInt make_wxArrayInt( castor::Array< int, Count > values )
 	{
 		wxArrayInt result{ Count };
 		std::memcpy( &result[0], values.data(), Count * sizeof( int ) );
@@ -332,7 +333,7 @@ namespace GuiCommon
 	template< typename WindowT, typename ... ParamsT >
 	wxWindowPtr< WindowT > wxMakeWindowPtr( ParamsT && ... params )
 	{
-		return wxWindowPtr< WindowT >{ new WindowT{ std::forward< ParamsT >( params )... } };
+		return wxWindowPtr< WindowT >{ new WindowT{ castor::forward< ParamsT >( params )... } };
 	}
 }
 

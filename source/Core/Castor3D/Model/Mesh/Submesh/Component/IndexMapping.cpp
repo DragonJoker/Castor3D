@@ -7,7 +7,7 @@ namespace castor3d
 	IndexMapping::IndexMapping( Submesh & submesh
 		, castor::String const & type
 		, SubmeshComponentDataUPtr data )
-		: SubmeshComponent{ submesh, type, std::move( data ) }
+		: SubmeshComponent{ submesh, type, castor::move( data ) }
 	{
 	}
 }

@@ -42,7 +42,7 @@ namespace GuiCommon
 		void doCleanupParser( castor::PreprocessedFile & preprocessed )override;
 		void doValidate( castor::PreprocessedFile & preprocessed )override;
 		castor::String doGetSectionName( castor::SectionId section )const override;
-		std::unique_ptr< castor::FileParser > doCreateParser()const override;
+		castor::RawUniquePtr< castor::FileParser > doCreateParser()const override;
 
 	private:
 		StcContext * m_stcContext;

@@ -9,7 +9,7 @@ namespace castor3d
 	SkeletonNode::SkeletonNode( SkeletonNodeType type
 		, castor::String name
 		, Skeleton & skeleton )
-		: castor::Named{ std::move( name ) }
+		: castor::Named{ castor::move( name ) }
 		, m_type{ type }
 		, m_skeleton{ skeleton }
 	{
@@ -17,7 +17,7 @@ namespace castor3d
 
 	SkeletonNode::SkeletonNode( castor::String name
 		, Skeleton & skeleton )
-		: SkeletonNode{ SkeletonNodeType::eNode, std::move( name ), skeleton }
+		: SkeletonNode{ SkeletonNodeType::eNode, castor::move( name ), skeleton }
 	{
 	}
 

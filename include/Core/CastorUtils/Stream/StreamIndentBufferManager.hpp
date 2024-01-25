@@ -21,11 +21,11 @@ namespace castor::format
 	private:
 		using bos = std::ios_base;
 		using bsb = std::basic_streambuf< char_type, traits >;
-		using table_type = std::map< bos *, bsb * >;
+		using table_type = Map< bos *, bsb * >;
 		using value_type = typename table_type::value_type;
 		using iterator = typename table_type::iterator;
 		using const_iterator = typename table_type::const_iterator;
-		using lock_type = std::unique_lock< std::mutex >;
+		using lock_type = castor::UniqueLock< castor::Mutex >;
 
 		BasicIndentBufferManager( BasicIndentBufferManager const & ) = delete;
 		BasicIndentBufferManager & operator =( BasicIndentBufferManager const & ) = delete;
@@ -174,7 +174,7 @@ namespace castor::format
 		table_type m_list;
 		//!\~english	mutex protecting the associated elements list.
 		//!\~french		Le mutex protégeant les éléments associés.
-		std::mutex m_mutex;
+		castor::Mutex m_mutex;
 	};
 
 	template< typename char_type, typename traits >

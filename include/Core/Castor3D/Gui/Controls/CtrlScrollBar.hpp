@@ -70,7 +70,7 @@ namespace castor3d
 		OnScrollBarEventConnection connect( ScrollBarEvent event
 			, OnScrollBarEventFunction function )
 		{
-			return m_signals[size_t( event )].connect( std::move( function ) );
+			return m_signals[size_t( event )].connect( castor::move( function ) );
 		}
 
 		/**
@@ -204,7 +204,7 @@ namespace castor3d
 		void doScroll( int32_t v );
 
 	private:
-		std::array< OnScrollBarEvent, size_t( ScrollBarEvent::eCount ) > m_signals;
+		castor::Array< OnScrollBarEvent, size_t( ScrollBarEvent::eCount ) > m_signals;
 		ButtonCtrlRPtr m_begin{};
 		PanelCtrlRPtr m_bar{};
 		PanelCtrlRPtr m_thumb{};

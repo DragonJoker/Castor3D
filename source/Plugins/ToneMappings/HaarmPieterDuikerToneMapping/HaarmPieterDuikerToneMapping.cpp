@@ -14,7 +14,7 @@ namespace HaarmPieterDuiker
 {
 	namespace c3d = castor3d::shader;
 	castor::String ToneMapping::Type = cuT( "haarm" );
-	castor::String ToneMapping::Name = cuT( "Haarm Pieter Duiker Tone Mapping" );
+	castor::MbString ToneMapping::Name = "Haarm Pieter Duiker Tone Mapping";
 
 	void ToneMapping::create( ast::ShaderBuilder & builder )
 	{

@@ -40,7 +40,7 @@ namespace ocean_fft
 			, VkFFTConfig const & config
 			, VkExtent2D const & extent
 			, ashes::BufferBase const & input
-			, std::array< ashes::BufferBasePtr, 2u > const & output
+			, castor::Array< ashes::BufferBasePtr, 2u > const & output
 			, crg::RunnablePass::IsEnabledCallback isEnabled = crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
 		~ProcessFFTPass()override;
 		/**
@@ -64,7 +64,7 @@ namespace ocean_fft
 		VkDeviceSize m_inBufferSize{};
 		VkBuffer m_vkInput{};
 		VkDeviceSize m_outBufferSize{};
-		std::array< VkBuffer, 2u > m_vkOutput{};
+		castor::Array< VkBuffer, 2u > m_vkOutput{};
 		VkFFTApplication m_app{};
 	};
 
@@ -75,7 +75,7 @@ namespace ocean_fft
 		, VkExtent2D const & extent
 		, VkFFTConfig const & config
 		, ashes::BufferBase const & input
-		, std::array< ashes::BufferBasePtr, 2u > const & output );
+		, castor::Array< ashes::BufferBasePtr, 2u > const & output );
 }
 
 #endif

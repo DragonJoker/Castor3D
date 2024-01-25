@@ -19,28 +19,28 @@ namespace castor
 	{
 		static bool isReworkedImage( String texName )
 		{
-			return String::npos != texName.find( "/Compressed" )
-				|| String::npos != texName.find( "/Mipped" )
-				|| String::npos != texName.find( "/Tiled" )
-				|| String::npos != texName.find( "/RGBA" )
-				|| String::npos != texName.find( "/HResampled" )
-				|| String::npos != texName.find( "/WResampled" );
+			return String::npos != texName.find( cuT( "/Compressed" ) )
+				|| String::npos != texName.find( cuT( "/Mipped" ) )
+				|| String::npos != texName.find( cuT( "/Tiled" ) )
+				|| String::npos != texName.find( cuT( "/RGBA" ) )
+				|| String::npos != texName.find( cuT( "/HResampled" ) )
+				|| String::npos != texName.find( cuT( "/WResampled" ) );
 		}
 
 		static void reworkImageFileName( String texName, Path & path, bool & needsYInversion )
 		{
-			if ( path.getExtension() != "dds" )
+			if ( path.getExtension() != cuT( "dds" ) )
 			{
 				needsYInversion = !needsYInversion;
 			}
 
 			// Remove TextureCache generated suffixes.
-			castor::string::replace( texName, "/Compressed", "" );
-			castor::string::replace( texName, "/Mipped", "" );
-			castor::string::replace( texName, "/Tiled", "" );
-			castor::string::replace( texName, "/RGBA", "" );
-			castor::string::replace( texName, "/HResampled", "" );
-			castor::string::replace( texName, "/WResampled", "" );
+			castor::string::replace( texName, cuT( "/Compressed" ), cuT( "" ) );
+			castor::string::replace( texName, cuT( "/Mipped" ), cuT( "" ) );
+			castor::string::replace( texName, cuT( "/Tiled" ), cuT( "" ) );
+			castor::string::replace( texName, cuT( "/RGBA" ), cuT( "" ) );
+			castor::string::replace( texName, cuT( "/HResampled" ), cuT( "" ) );
+			castor::string::replace( texName, cuT( "/WResampled" ), cuT( "" ) );
 
 			texName = File::normaliseFileName( texName );
 			path = Path{ Path{ texName }.getFileName() + cuT( ".dds" ) };
@@ -53,7 +53,7 @@ namespace castor
 		, castor3d::Engine const & engine
 		, Path const & folder
 		, String subFolder )
-		: TextWriterT< TextureData >{ tabs, "TextureData" }
+		: TextWriterT< TextureData >{ tabs, cuT( "TextureData" ) }
 		, m_engine{ engine }
 		, m_folder{ folder }
 		, m_subFolder{ subFolder }
@@ -109,7 +109,7 @@ namespace castor
 						path /= imageFile;
 						auto & writer = m_engine.getImageWriter();
 						result = writer.write( m_folder / path, object.image->getPxBuffer() );
-						checkError( result, "Image creation" );
+						checkError( result, cuT( "Image creation" ) );
 
 						if ( result )
 						{
@@ -134,7 +134,7 @@ namespace castor
 				if ( result )
 				{
 					result = writeSub( file, config, m_engine );
-					checkError( result, "configuration" );
+					checkError( result, cuT( "configuration" ) );
 				}
 			}
 		}

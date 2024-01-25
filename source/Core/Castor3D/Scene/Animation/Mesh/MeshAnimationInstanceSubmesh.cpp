@@ -43,8 +43,8 @@ namespace castor3d
 	}
 
 	void MeshAnimationInstanceSubmesh::update( float factor
-		, std::vector< float > const & prv
-		, std::vector< float > const & cur
+		, castor::Vector< float > const & prv
+		, castor::Vector< float > const & cur
 		, castor::BoundingBox const & prvbb
 		, castor::BoundingBox const & curbb )
 	{

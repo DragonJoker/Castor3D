@@ -33,14 +33,13 @@ namespace toon::shader
 		ToonProfile( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+			: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
 		{
 		}
 
-		static std::string const & getName()
+		static castor::StringView constexpr getName()noexcept
 		{
-			static std::string const name{ "C3D_ToonProfile" };
-			return name;
+			return cuT( "C3D_ToonProfile" );
 		}
 		
 		auto edgeWidth()const { return getMember< "edgeWidth" >(); }

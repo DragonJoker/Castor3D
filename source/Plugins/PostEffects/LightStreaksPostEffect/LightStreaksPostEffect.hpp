@@ -60,7 +60,7 @@ namespace light_streaks
 
 	public:
 		static castor::String const Type;
-		static castor::String const Name;
+		static castor::MbString const Name;
 		static uint32_t const Count = 4u;
 
 	private:
@@ -69,9 +69,9 @@ namespace light_streaks
 		KawaseConfig m_kawaseCfg;
 		KawaseUbo m_kawaseUbo;
 		crg::FramePass const * m_pass{};
-		std::unique_ptr< HiPass > m_hiPass;
-		std::unique_ptr< KawasePass > m_kawasePass;
-		std::unique_ptr< CombinePass > m_combinePass;
+		castor::RawUniquePtr< HiPass > m_hiPass;
+		castor::RawUniquePtr< KawasePass > m_kawasePass;
+		castor::RawUniquePtr< CombinePass > m_combinePass;
 	};
 }
 

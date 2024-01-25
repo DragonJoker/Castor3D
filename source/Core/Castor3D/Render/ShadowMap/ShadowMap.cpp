@@ -139,7 +139,7 @@ namespace castor3d
 		, m_lightType{ lightType }
 		, m_staticsResult{ resources
 			, m_device
-			, m_name + "/Statics"
+			, m_name + cuT( "/Statics" )
 			, createFlags
 			, size
 			, layerCount }
@@ -193,7 +193,7 @@ namespace castor3d
 		if ( updater.index < doGetMaxCount()
 			&& updater.index >= myPasses.otherNodes.runnables.size() )
 		{
-			auto graph = std::make_unique< crg::FrameGraph >( m_resources.getHandler(), m_name + "SM" );
+			auto graph = castor::make_unique< crg::FrameGraph >( m_resources.getHandler(), castor::toUtf8( m_name ) + "SM" );
 			auto previous = doCreatePasses( *graph
 				, crg::FramePassArray{}
 				, updater.index
@@ -209,7 +209,7 @@ namespace castor3d
 				, false
 				, myPasses.otherNodes );
 			myPasses.staticNodes.graphs.emplace_back( nullptr );
-			myPasses.otherNodes.graphs.emplace_back( std::move( graph ) );
+			myPasses.otherNodes.graphs.emplace_back( castor::move( graph ) );
 		}
 
 		doUpdate( updater, myPasses.staticNodes );
@@ -233,7 +233,7 @@ namespace castor3d
 			for ( auto & view : result.subViewsId )
 			{
 				auto smTexture = SmTexture( i );
-				visitor.visit( m_name + "/" + getTexName( smTexture ) + cuT( "L" ) + castor::string::toString( index )
+				visitor.visit( m_name + cuT( "/" ) + getTexName( smTexture ) + cuT( "L" ) + castor::string::toString( index )
 					, view
 					, ( ashes::isDepthOrStencilFormat( view.data->info.format )
 						? VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL
@@ -265,7 +265,7 @@ namespace castor3d
 		{
 			CU_Require( myPasses.otherNodes.graphs[index] != nullptr );
 			myPasses.otherNodes.runnables[index] = myPasses.otherNodes.graphs[index]->compile( m_device.makeContext() );
-			getEngine()->registerTimer( myPasses.otherNodes.runnables[index]->getName()
+			getEngine()->registerTimer( castor::makeString( myPasses.otherNodes.runnables[index]->getName() )
 				, myPasses.otherNodes.runnables[index]->getTimer() );
 			printGraph( *myPasses.otherNodes.runnables.back() );
 			myPasses.otherNodes.runnables[index]->record();
@@ -308,7 +308,7 @@ namespace castor3d
 		, bool isStatic
 		, Passes & passes )
 	{
-		auto result = doCreatePass( graph
+		auto result = doCreatePass( graph.getDefaultGroup()
 			, previousPasses
 			, index
 			, vsm
@@ -320,7 +320,7 @@ namespace castor3d
 		{
 			// The graph will be defined for finale shadow map pass, but not for static one.
 			passes.runnables.push_back( graph.compile( m_device.makeContext() ) );
-			getEngine()->registerTimer( passes.runnables.back()->getName()
+			getEngine()->registerTimer( castor::makeString( passes.runnables.back()->getName() )
 				, passes.runnables.back()->getTimer() );
 			printGraph( *passes.runnables.back() );
 			passes.runnables.back()->record();
@@ -333,7 +333,7 @@ namespace castor3d
 		return result;
 	}
 
-	void ShadowMap::doRegisterGraphIO( crg::FrameGraph & graph
+	void ShadowMap::doRegisterGraphIO( crg::FramePassGroup & graph
 		, bool vsm
 		, bool rsm
 		, bool isStatic )const

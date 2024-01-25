@@ -49,5 +49,5 @@ namespace castor3d
 	*/
 	C3D_API UInt32Array compileGlslToSpv( RenderDevice const & device
 		, VkShaderStageFlagBits stage
-		, std::string const & shader );
+		, castor::MbString const & shader );
 }

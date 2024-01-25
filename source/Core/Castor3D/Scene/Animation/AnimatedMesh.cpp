@@ -88,14 +88,11 @@ namespace castor3d
 	void AnimatedMesh::doAddAnimation( castor::String const & name )
 	{
 		if ( auto it = m_animations.find( name );
-			it == m_animations.end() )
+			it == m_animations.end() && m_mesh.hasAnimation( name ) )
 		{
-			if ( m_mesh.hasAnimation( name ) )
-			{
-				auto & animation = static_cast< MeshAnimation & >( m_mesh.getAnimation( name ) );
-				auto instance = castor::makeUniqueDerived< AnimationInstance, MeshAnimationInstance >( *this, animation );
-				m_animations.emplace( name, std::move( instance ) );
-			}
+			auto & animation = static_cast< MeshAnimation & >( m_mesh.getAnimation( name ) );
+			auto instance = castor::makeUniqueDerived< AnimationInstance, MeshAnimationInstance >( *this, animation );
+			m_animations.try_emplace( name, castor::move( instance ) );
 		}
 	}
 

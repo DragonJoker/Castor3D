@@ -14,7 +14,7 @@ namespace castor
 		: public std::basic_ostringstream< CharT >
 	{
 		template< typename T >
-		using StreambufPtrT = std::unique_ptr< StreambufT< T > >;
+		using StreambufPtrT = castor::RawUniquePtr< StreambufT< T > >;
 
 	public:
 		LoggerStreamT()
@@ -25,7 +25,7 @@ namespace castor
 		void set( LoggerInstance & logger )
 		{
 			m_streambuf.reset();
-			m_streambuf = std::make_unique< StreambufT< CharT > >( logger
+			m_streambuf = castor::make_unique< StreambufT< CharT > >( logger
 				, static_cast< std::basic_ostream< CharT > & >( *this ) );
 			this->imbue( std::locale{ "C" } );
 		}

@@ -220,7 +220,7 @@ namespace castor3d::shader
 		, m_shadowModel{ castor::makeUnique< Shadow >( shadowOptions, m_writer ) }
 		, m_sssTransmittance{ ( ( sssProfiles && sssProfiles->isEnabled() )
 			? castor::makeUnique< SssTransmittance >( m_writer
-				, std::move( shadowOptions )
+				, castor::move( shadowOptions )
 				, *sssProfiles )
 			: nullptr ) }
 	{
@@ -354,11 +354,11 @@ namespace castor3d::shader
 					, parentOutput );
 			}
 
-			debugOutput.registerOutput( "Lighting", "Diffuse", parentOutput.diffuse() );
-			debugOutput.registerOutput( "Lighting", "Specular", parentOutput.specular() );
-			debugOutput.registerOutput( "Lighting", "Scattering", parentOutput.scattering() );
-			debugOutput.registerOutput( "Lighting", "CoatingSpecular", parentOutput.coatingSpecular() );
-			debugOutput.registerOutput( "Lighting", "Sheen", parentOutput.sheen() );
+			debugOutput.registerOutput( cuT( "Lighting" ), cuT( "Diffuse" ), parentOutput.diffuse() );
+			debugOutput.registerOutput( cuT( "Lighting" ), cuT( "Specular" ), parentOutput.specular() );
+			debugOutput.registerOutput( cuT( "Lighting" ), cuT( "Scattering" ), parentOutput.scattering() );
+			debugOutput.registerOutput( cuT( "Lighting" ), cuT( "CoatingSpecular" ), parentOutput.coatingSpecular() );
+			debugOutput.registerOutput( cuT( "Lighting" ), cuT( "Sheen" ), parentOutput.sheen() );
 		}
 	}
 
@@ -419,11 +419,11 @@ namespace castor3d::shader
 					, parentOutput );
 			}
 
-			debugOutput.registerOutput( "Lighting", "Diffuse", parentOutput.diffuse() );
-			debugOutput.registerOutput( "Lighting", "Specular", parentOutput.specular() );
-			debugOutput.registerOutput( "Lighting", "Scattering", parentOutput.scattering() );
-			debugOutput.registerOutput( "Lighting", "CoatingSpecular", parentOutput.coatingSpecular() );
-			debugOutput.registerOutput( "Lighting", "Sheen", parentOutput.sheen() );
+			debugOutput.registerOutput( cuT( "Lighting" ), cuT( "Diffuse" ), parentOutput.diffuse() );
+			debugOutput.registerOutput( cuT( "Lighting" ), cuT( "Specular" ), parentOutput.specular() );
+			debugOutput.registerOutput( cuT( "Lighting" ), cuT( "Scattering" ), parentOutput.scattering() );
+			debugOutput.registerOutput( cuT( "Lighting" ), cuT( "CoatingSpecular" ), parentOutput.coatingSpecular() );
+			debugOutput.registerOutput( cuT( "Lighting" ), cuT( "Sheen" ), parentOutput.sheen() );
 		}
 	}
 
@@ -480,7 +480,7 @@ namespace castor3d::shader
 					, output );
 			}
 
-			debugOutput.registerOutput( "Lighting", "Diffuse", output );
+			debugOutput.registerOutput( cuT( "Lighting" ), cuT( "Diffuse" ), output );
 		}
 	}
 

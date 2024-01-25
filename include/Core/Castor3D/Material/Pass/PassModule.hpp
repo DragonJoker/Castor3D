@@ -125,7 +125,7 @@ namespace castor3d
 
 	CU_DeclareMap( PassComponentID, PassComponentUPtr, PassComponent );
 
-	using OnPassChangedFunction = std::function< void( Pass const & pass
+	using OnPassChangedFunction = castor::Function< void( Pass const & pass
 		, PassComponentCombineID oldComponents
 		, PassComponentCombineID newComponents ) >;
 	using OnPassChanged = castor::SignalT< OnPassChangedFunction >;
@@ -136,10 +136,10 @@ namespace castor3d
 
 	struct SpecificsBuffer
 	{
-		using ShaderBufferCreator = std::function< ShaderBufferUPtr( RenderDevice const & ) >;
-		using ShaderBufferUpdater = std::function< void( ShaderBuffer &
+		using ShaderBufferCreator = castor::Function< ShaderBufferUPtr( RenderDevice const & ) >;
+		using ShaderBufferUpdater = castor::Function< void( ShaderBuffer &
 			, Pass const & ) >;
-		using ShaderBufferDeclarator = std::function< shader::BufferBaseUPtr( sdw::ShaderWriter & writer
+		using ShaderBufferDeclarator = castor::Function< shader::BufferBaseUPtr( sdw::ShaderWriter & writer
 			, uint32_t binding
 			, uint32_t set ) >;
 
@@ -148,7 +148,7 @@ namespace castor3d
 		ShaderBufferDeclarator declare;
 	};
 
-	using PassCreator = std::function< PassUPtr( LightingModelID, Material & ) >;
+	using PassCreator = castor::Function< PassUPtr( LightingModelID, Material & ) >;
 
 	struct PassFactoryEntry
 	{
@@ -165,7 +165,7 @@ namespace castor3d
 		, PassCreator
 		, PassTypeID
 		, PassFactoryEntry >;
-	using SpecificsBuffers = castor::StringMap< std::pair< SpecificsBuffer, ShaderBufferUPtr > >;
+	using SpecificsBuffers = castor::StringMap< castor::Pair< SpecificsBuffer, ShaderBufferUPtr > >;
 
 	CU_DeclareSmartPtr( castor3d, RenderPassRegisterInfo, C3D_API );
 

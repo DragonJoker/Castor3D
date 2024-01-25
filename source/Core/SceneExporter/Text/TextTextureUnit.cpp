@@ -20,7 +20,7 @@ namespace castor
 	TextWriter< TextureUnit >::TextWriter( String const & tabs
 		, Path const & folder
 		, String subFolder )
-		: TextWriterT< TextureUnit >{ tabs, "TextureUnit" }
+		: TextWriterT< TextureUnit >{ tabs, cuT( "TextureUnit" ) }
 		, m_folder{ folder }
 		, m_subFolder{ subFolder }
 	{
@@ -42,7 +42,7 @@ namespace castor
 			{
 				if ( unit.getSampler() && defaultSampler != &unit.getSampler() )
 				{
-					result = writeName( file, cuT( "sampler" ), unit.getSampler().getName() );
+					result = writeName( file, cuT( "sampler" ), castor::makeString( unit.getSampler().getName() ) );
 				}
 
 				if ( result )
@@ -81,7 +81,7 @@ namespace castor
 						|| rotate != 0.0f
 						|| scale != castor::Point3f{ 1.0f, 1.0f, 1.0f } )
 					{
-						if ( auto animBlock{ beginBlock( file, "transform" ) } )
+						if ( auto animBlock{ beginBlock( file, cuT( "transform" ) ) } )
 						{
 							result = writeNamedSubOpt( file, cuT( "translate" ), translate, castor::Point3f{} )
 								&& writeNamedSubOpt( file, cuT( "rotate" ), rotate, 0.0f )
@@ -103,7 +103,7 @@ namespace castor
 						|| rotate != 0.0f
 						|| scale != castor::Point2f{} )
 					{
-						if ( auto animBlock{ beginBlock( file, "animation" ) } )
+						if ( auto animBlock{ beginBlock( file, cuT( "animation" ) ) } )
 						{
 							if ( anim.isTileAnimated() )
 							{

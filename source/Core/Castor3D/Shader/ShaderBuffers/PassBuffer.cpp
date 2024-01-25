@@ -145,8 +145,8 @@ namespace castor3d
 
 		if ( !m_dirty.empty() )
 		{
-			std::vector< Pass const * > dirty;
-			std::swap( m_dirty, dirty );
+			castor::Vector< Pass const * > dirty;
+			castor::swap( m_dirty, dirty );
 			auto end = std::unique( dirty.begin(), dirty.end() );
 
 			for ( auto pass : castor::makeArrayView( dirty.begin(), end ) )
@@ -202,7 +202,7 @@ namespace castor3d
 
 	void PassBuffer::createPassBinding( crg::FramePass & pass, uint32_t binding )const
 	{
-		return m_buffer.createPassBinding( pass, cuT( "C3D_Materials" ), binding );
+		return m_buffer.createPassBinding( pass, binding );
 	}
 
 	void PassBuffer::createBinding( ashes::DescriptorSet & descriptorSet
@@ -259,7 +259,7 @@ namespace castor3d
 	{
 		auto it = std::find_if( m_passTypeIndices.begin()
 			, m_passTypeIndices.end()
-			, [&passTypeIndex]( std::unordered_map< uint32_t, PassTypeData >::value_type const & lookup )
+			, [&passTypeIndex]( castor::UnorderedMap< uint32_t, PassTypeData >::value_type const & lookup )
 			{
 				return lookup.second.index == passTypeIndex;
 			} );

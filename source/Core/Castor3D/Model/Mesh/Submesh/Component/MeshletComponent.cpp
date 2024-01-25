@@ -24,10 +24,10 @@ namespace castor3d
 #if VK_EXT_mesh_shader || VK_NV_mesh_shader
 	namespace mshletcomp
 	{
-		static castor::String getName( Submesh & submesh )
+		static castor::MbString getName( Submesh const & submesh )
 		{
-			return submesh.getOwner()->getName()
-				+ castor::string::toString( submesh.getId() )
+			return castor::toUtf8( submesh.getOwner()->getName() )
+				+ castor::string::toMbString( submesh.getId() )
 				+ "Meshlet";
 		}
 	}
@@ -136,7 +136,7 @@ namespace castor3d
 				writes.push_back( bufferIt->second.buffer.getStorageBinding( uint32_t( MeshBuffersIdx::eInstances ) ) );
 			}
 
-			descSetIt->second->setBindings( std::move( writes ) );
+			descSetIt->second->setBindings( castor::move( writes ) );
 			descSetIt->second->update();
 		}
 #endif
@@ -362,7 +362,7 @@ namespace castor3d
 			, VK_SHADER_STAGE_TASK_BIT_NV | VK_SHADER_STAGE_MESH_BIT_NV ) );
 
 		m_descriptorLayout = device->createDescriptorSetLayout( mshletcomp::getName( m_submesh )
-			, std::move( bindings ) );
+			, castor::move( bindings ) );
 		m_descriptorPool = m_descriptorLayout->createPool( mshletcomp::getName( m_submesh )
 			, MaxNodesPerPipeline );
 #endif
@@ -374,7 +374,7 @@ namespace castor3d
 
 	MeshletComponent::MeshletComponent( Submesh & submesh )
 		: SubmeshComponent{ submesh, TypeName
-			, std::make_unique< ComponentData >( submesh ) }
+			, castor::make_unique< ComponentData >( submesh ) }
 	{
 	}
 

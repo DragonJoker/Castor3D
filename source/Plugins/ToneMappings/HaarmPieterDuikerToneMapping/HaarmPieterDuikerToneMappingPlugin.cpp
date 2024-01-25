@@ -44,7 +44,7 @@ extern "C"
 		engine->getToneMappingFactory().registerType( HaarmPieterDuiker::ToneMapping::Type
 			, &HaarmPieterDuiker::ToneMapping::create );
 		engine->getRenderTargetCache().registerToneMappingName( HaarmPieterDuiker::ToneMapping::Type
-			, HaarmPieterDuiker::ToneMapping::Name );
+			, castor::makeString( HaarmPieterDuiker::ToneMapping::Name ) );
 	}
 
 	C3D_HaarmPieterDuikerToneMapping_API void OnUnload( castor3d::Engine * engine )

@@ -24,9 +24,9 @@ namespace castor3d
 				, name
 				, scene
 				, engine }
-			, m_headerStyle{ name + "/Header", scene, engine }
-			, m_expandStyle{ name + "/Expand", scene, engine, fontName }
-			, m_contentStyle{ name + "/Content", scene, engine }
+			, m_headerStyle{ name + cuT( "/Header" ), scene, engine }
+			, m_expandStyle{ name + cuT( "/Expand" ), scene, engine, fontName }
+			, m_contentStyle{ name + cuT( "/Content" ), scene, engine }
 		{
 		}
 

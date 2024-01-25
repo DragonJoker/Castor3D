@@ -4,16 +4,13 @@
 
 #include <cmath>
 
-using namespace castor;
-using namespace castor3d;
-
 namespace Testing
 {
 	namespace details
 	{
-		static castor::StringMap< SceneNodeRPtr > sortNodes( Scene const & scene )
+		static castor::StringMap< castor3d::SceneNodeRPtr > sortNodes( castor3d::Scene const & scene )
 		{
-			castor::StringMap< SceneNodeRPtr > result;
+			castor::StringMap< castor3d::SceneNodeRPtr > result;
 			auto lock = castor::makeUniqueLock( scene.getSceneNodeCache() );
 
 			for ( auto & it : scene.getSceneNodeCache() )
@@ -24,9 +21,9 @@ namespace Testing
 			return result;
 		}
 
-		static castor::StringMap< GeometryRPtr > sortGeometries( Scene const & scene )
+		static castor::StringMap< castor3d::GeometryRPtr > sortGeometries( castor3d::Scene const & scene )
 		{
-			castor::StringMap< GeometryRPtr > result;
+			castor::StringMap< castor3d::GeometryRPtr > result;
 			auto lock = castor::makeUniqueLock( scene.getGeometryCache() );
 
 			for ( auto & it : scene.getGeometryCache() )
@@ -37,9 +34,9 @@ namespace Testing
 			return result;
 		}
 
-		static castor::StringMap< LightRPtr > sortLights( Scene const & scene )
+		static castor::StringMap< castor3d::LightRPtr > sortLights( castor3d::Scene const & scene )
 		{
-			castor::StringMap< LightRPtr > result;
+			castor::StringMap< castor3d::LightRPtr > result;
 			auto lock = castor::makeUniqueLock( scene.getLightCache() );
 
 			for ( auto & it : scene.getLightCache() )
@@ -50,9 +47,9 @@ namespace Testing
 			return result;
 		}
 
-		static castor::StringMap< CameraRPtr > sortCameras( Scene const & scene )
+		static castor::StringMap< castor3d::CameraRPtr > sortCameras( castor3d::Scene const & scene )
 		{
-			castor::StringMap< CameraRPtr > result;
+			castor::StringMap< castor3d::CameraRPtr > result;
 			auto lock = castor::makeUniqueLock( scene.getCameraCache() );
 
 			for ( auto & it : scene.getCameraCache() )
@@ -63,9 +60,9 @@ namespace Testing
 			return result;
 		}
 
-		static castor::StringMap< AnimatedObjectGroupRPtr > sortAnimatedGroups( Scene const & scene )
+		static castor::StringMap< castor3d::AnimatedObjectGroupRPtr > sortAnimatedGroups( castor3d::Scene const & scene )
 		{
-			castor::StringMap< AnimatedObjectGroupRPtr > result;
+			castor::StringMap< castor3d::AnimatedObjectGroupRPtr > result;
 			auto lock = castor::makeUniqueLock( scene.getAnimatedObjectGroupCache() );
 
 			for ( auto & it : scene.getAnimatedObjectGroupCache() )
@@ -81,7 +78,7 @@ namespace Testing
 		, castor3d::Engine & engine )
 		: TestCase{ name }
 		, m_engine{ engine }
-		, m_testDataFolder{ Engine::getDataDirectory() / cuT( "Castor3DTest" ) / cuT( "data" ) }
+		, m_testDataFolder{ castor3d::Engine::getDataDirectory() / cuT( "Castor3DTest" ) / cuT( "data" ) }
 	{
 	}
 
@@ -103,7 +100,7 @@ namespace Testing
 			} );
 	}
 
-	bool C3DTestCase::compare( Angle const & lhs, Angle const & rhs )
+	bool C3DTestCase::compare( castor::Angle const & lhs, castor::Angle const & rhs )
 	{
 		return lhs.radians() == rhs.radians();
 	}
@@ -120,7 +117,7 @@ namespace Testing
 		return result && CT_EQUAL( alphaA, alphaB );
 	}
 
-	bool C3DTestCase::compare( Scene const & lhs, Scene const & rhs )
+	bool C3DTestCase::compare( castor3d::Scene const & lhs, castor3d::Scene const & rhs )
 	{
 		bool result = true;
 		{
@@ -134,8 +131,8 @@ namespace Testing
 			while ( result && itA != endItA && itB != endItB )
 			{
 				if ( result
-					&& itA->first.find( cuT( "_REye" ) ) == String::npos
-					&& itA->first.find( cuT( "_LEye" ) ) == String::npos )
+					&& itA->first.find( cuT( "_REye" ) ) == castor::String::npos
+					&& itA->first.find( cuT( "_LEye" ) ) == castor::String::npos )
 				{
 					result = CT_EQUAL( itA->first, itB->first );
 					result = result && CT_EQUAL( *itA->second, *itB->second );
@@ -194,8 +191,8 @@ namespace Testing
 			while ( result && itA != endItA && itB != endItB )
 			{
 				if ( result
-					 && itA->first.find( cuT( "_REye" ) ) == String::npos
-					 && itA->first.find( cuT( "_LEye" ) ) == String::npos )
+					 && itA->first.find( cuT( "_REye" ) ) == castor::String::npos
+					 && itA->first.find( cuT( "_LEye" ) ) == castor::String::npos )
 				{
 					result = CT_EQUAL( itA->first, itB->first );
 					result = result && CT_EQUAL( *itA->second, *itB->second );
@@ -231,7 +228,7 @@ namespace Testing
 		return result;
 	}
 
-	bool C3DTestCase::compare( SceneNode const & lhs, SceneNode const & rhs )
+	bool C3DTestCase::compare( castor3d::SceneNode const & lhs, castor3d::SceneNode const & rhs )
 	{
 		bool result{ CT_EQUAL( lhs.getName(), rhs.getName() ) };
 		result = result && CT_EQUAL( lhs.getOrientation(), rhs.getOrientation() );
@@ -247,7 +244,7 @@ namespace Testing
 		return result;
 	}
 
-	bool C3DTestCase::compare( Animable const & lhs, Animable const & rhs )
+	bool C3DTestCase::compare( castor3d::Animable const & lhs, castor3d::Animable const & rhs )
 	{
 		bool result{ CT_EQUAL( lhs.getAnimations().size(), rhs.getAnimations().size() ) };
 		auto itA = lhs.getAnimations().begin();
@@ -266,37 +263,37 @@ namespace Testing
 		return result;
 	}
 
-	bool C3DTestCase::compare( MovableObject const & lhs, MovableObject const & rhs )
+	bool C3DTestCase::compare( castor3d::MovableObject const & lhs, castor3d::MovableObject const & rhs )
 	{
 		bool result{ CT_EQUAL( lhs.getName(), rhs.getName() ) };
 		result = result && CT_EQUAL( lhs.getParent()->getName(), rhs.getParent()->getName() );
-		result = result && CT_EQUAL( static_cast< Animable const & >( *lhs.getParent() ), static_cast< Animable const & >( *rhs.getParent() ) );
+		result = result && CT_EQUAL( static_cast< castor3d::Animable const & >( *lhs.getParent() ), static_cast< castor3d::Animable const & >( *rhs.getParent() ) );
 		return result;
 	}
 
-	bool C3DTestCase::compare( Light const & lhs, Light const & rhs )
+	bool C3DTestCase::compare( castor3d::Light const & lhs, castor3d::Light const & rhs )
 	{
-		bool result{ CT_EQUAL( static_cast< MovableObject const & >( lhs ), static_cast< MovableObject const & >( rhs ) ) };
+		bool result{ CT_EQUAL( static_cast< castor3d::MovableObject const & >( lhs ), static_cast< castor3d::MovableObject const & >( rhs ) ) };
 		result = result && CT_EQUAL( *lhs.getCategory(), *rhs.getCategory() );
 		return result;
 	}
 
-	bool C3DTestCase::compare( Geometry const & lhs, Geometry const & rhs )
+	bool C3DTestCase::compare( castor3d::Geometry const & lhs, castor3d::Geometry const & rhs )
 	{
-		bool result{ CT_EQUAL( static_cast< MovableObject const & >( lhs ), static_cast< MovableObject const & >( rhs ) ) };
-		result = result && CT_EQUAL( static_cast< Mesh const & >( *lhs.getMesh() )
-			, static_cast< Mesh const & >( *rhs.getMesh() ) );
+		bool result{ CT_EQUAL( static_cast< castor3d::MovableObject const & >( lhs ), static_cast< castor3d::MovableObject const & >( rhs ) ) };
+		result = result && CT_EQUAL( static_cast< castor3d::Mesh const & >( *lhs.getMesh() )
+			, static_cast< castor3d::Mesh const & >( *rhs.getMesh() ) );
 		return result;
 	}
 
-	bool C3DTestCase::compare( Camera const & lhs, Camera const & rhs )
+	bool C3DTestCase::compare( castor3d::Camera const & lhs, castor3d::Camera const & rhs )
 	{
-		bool result{ CT_EQUAL( static_cast< MovableObject const & >( lhs ), static_cast< MovableObject const & >( rhs ) ) };
+		bool result{ CT_EQUAL( static_cast< castor3d::MovableObject const & >( lhs ), static_cast< castor3d::MovableObject const & >( rhs ) ) };
 		result = result && CT_EQUAL( lhs.getViewport(), rhs.getViewport() );
 		return result;
 	}
 
-	bool C3DTestCase::compare( LightCategory const & lhs, LightCategory const & rhs )
+	bool C3DTestCase::compare( castor3d::LightCategory const & lhs, castor3d::LightCategory const & rhs )
 	{
 		CT_REQUIRE( lhs.getLightType() == rhs.getLightType() );
 		bool result{ CT_EQUAL( lhs.getIntensity(), rhs.getIntensity() ) };
@@ -304,16 +301,16 @@ namespace Testing
 
 		switch ( lhs.getLightType() )
 		{
-		case LightType::eDirectional:
-			result = result && CT_EQUAL( static_cast< DirectionalLight const & >( lhs ), static_cast< DirectionalLight const & >( rhs ) );
+		case castor3d::LightType::eDirectional:
+			result = result && CT_EQUAL( static_cast< castor3d::DirectionalLight const & >( lhs ), static_cast< castor3d::DirectionalLight const & >( rhs ) );
 			break;
 
-		case LightType::ePoint:
-			result = result && CT_EQUAL( static_cast< PointLight const & >( lhs ), static_cast< PointLight const & >( rhs ) );
+		case castor3d::LightType::ePoint:
+			result = result && CT_EQUAL( static_cast< castor3d::PointLight const & >( lhs ), static_cast< castor3d::PointLight const & >( rhs ) );
 			break;
 
-		case LightType::eSpot:
-			result = result && CT_EQUAL( static_cast< SpotLight const & >( lhs ), static_cast< SpotLight const & >( rhs ) );
+		case castor3d::LightType::eSpot:
+			result = result && CT_EQUAL( static_cast< castor3d::SpotLight const & >( lhs ), static_cast< castor3d::SpotLight const & >( rhs ) );
 			break;
 
 		default:
@@ -324,19 +321,19 @@ namespace Testing
 		return result;
 	}
 
-	bool C3DTestCase::compare( DirectionalLight const & lhs, DirectionalLight const & rhs )
+	bool C3DTestCase::compare( castor3d::DirectionalLight const & lhs, castor3d::DirectionalLight const & rhs )
 	{
 		bool result{ CT_EQUAL( lhs.getDirection(), rhs.getDirection() ) };
 		return result;
 	}
 
-	bool C3DTestCase::compare( PointLight const & lhs, PointLight const & rhs )
+	bool C3DTestCase::compare( castor3d::PointLight const & lhs, castor3d::PointLight const & rhs )
 	{
 		bool result{ CT_EQUAL( lhs.getRange(), rhs.getRange() ) };
 		return result;
 	}
 
-	bool C3DTestCase::compare( SpotLight const & lhs, SpotLight const & rhs )
+	bool C3DTestCase::compare( castor3d::SpotLight const & lhs, castor3d::SpotLight const & rhs )
 	{
 		bool result{ CT_EQUAL( lhs.getExponent(), rhs.getExponent() ) };
 		result = result && CT_EQUAL( lhs.getRange(), rhs.getRange() );
@@ -345,7 +342,7 @@ namespace Testing
 		return result;
 	}
 
-	bool C3DTestCase::compare( Viewport const & lhs, Viewport const & rhs )
+	bool C3DTestCase::compare( castor3d::Viewport const & lhs, castor3d::Viewport const & rhs )
 	{
 		bool result{ CT_EQUAL( lhs.getLeft(), rhs.getLeft() ) };
 		result = result && CT_EQUAL( lhs.getRight(), rhs.getRight() );
@@ -361,7 +358,7 @@ namespace Testing
 		return result;
 	}
 
-	bool C3DTestCase::compare( Mesh const & lhs, Mesh const & rhs )
+	bool C3DTestCase::compare( castor3d::Mesh const & lhs, castor3d::Mesh const & rhs )
 	{
 		bool result{ CT_EQUAL( lhs.getSubmeshCount(), rhs.getSubmeshCount() ) };
 		auto itA = lhs.begin();
@@ -386,7 +383,7 @@ namespace Testing
 		return result;
 	}
 
-	bool C3DTestCase::compare( SkinComponent const & lhs, SkinComponent const & rhs )
+	bool C3DTestCase::compare( castor3d::SkinComponent const & lhs, castor3d::SkinComponent const & rhs )
 	{
 		auto lhsData = lhs.getData().getData();
 		auto rhsData = rhs.getData().getData();
@@ -466,7 +463,7 @@ namespace Testing
 		return result;
 	}
 
-	bool C3DTestCase::compare( Face const & lhs, Face const & rhs )
+	bool C3DTestCase::compare( castor3d::Face const & lhs, castor3d::Face const & rhs )
 	{
 		bool result{ CT_EQUAL( lhs[0], rhs[0] ) };
 		result = result && CT_EQUAL( lhs[1], rhs[1] );
@@ -474,7 +471,7 @@ namespace Testing
 		return result;
 	}
 
-	bool C3DTestCase::compare( TriFaceMapping const & lhs, TriFaceMapping const & rhs )
+	bool C3DTestCase::compare( castor3d::TriFaceMapping const & lhs, castor3d::TriFaceMapping const & rhs )
 	{
 		auto lhsData = lhs.getData().getFaces();
 		auto rhsData = rhs.getData().getFaces();
@@ -482,14 +479,14 @@ namespace Testing
 		return result;
 	}
 
-	bool C3DTestCase::compare( Line const & lhs, Line const & rhs )
+	bool C3DTestCase::compare( castor3d::Line const & lhs, castor3d::Line const & rhs )
 	{
 		bool result{ CT_EQUAL( lhs[0], rhs[0] ) };
 		result = result && CT_EQUAL( lhs[1], rhs[1] );
 		return result;
 	}
 
-	bool C3DTestCase::compare( LinesMapping const & lhs, LinesMapping const & rhs )
+	bool C3DTestCase::compare( castor3d::LinesMapping const & lhs, castor3d::LinesMapping const & rhs )
 	{
 		auto lhsData = lhs.getData().getFaces();
 		auto rhsData = rhs.getData().getFaces();
@@ -497,79 +494,79 @@ namespace Testing
 		return result;
 	}
 
-	bool C3DTestCase::compare( SubmeshComponent const & lhs, SubmeshComponent const & rhs )
+	bool C3DTestCase::compare( castor3d::SubmeshComponent const & lhs, castor3d::SubmeshComponent const & rhs )
 	{
 		bool result = CT_EQUAL( lhs.getType(), rhs.getType() );
 		//result = result && CT_EQUAL( lhs.getProgramFlags(), rhs.getProgramFlags() );
 
 		if ( result )
 		{
-			if ( lhs.getType() == PositionsComponent::TypeName )
+			if ( lhs.getType() == castor3d::PositionsComponent::TypeName )
 			{
-				result = CT_EQUAL( static_cast< PositionsComponent const & >( lhs )
-					, static_cast< PositionsComponent const & >( rhs ) );
+				result = CT_EQUAL( static_cast< castor3d::PositionsComponent const & >( lhs )
+					, static_cast< castor3d::PositionsComponent const & >( rhs ) );
 			}
-			else if ( lhs.getType() == NormalsComponent::TypeName )
+			else if ( lhs.getType() == castor3d::NormalsComponent::TypeName )
 			{
-				result = CT_EQUAL( static_cast< NormalsComponent const & >( lhs )
-					, static_cast< NormalsComponent const & >( rhs ) );
+				result = CT_EQUAL( static_cast< castor3d::NormalsComponent const & >( lhs )
+					, static_cast< castor3d::NormalsComponent const & >( rhs ) );
 			}
-			else if ( lhs.getType() == TangentsComponent::TypeName )
+			else if ( lhs.getType() == castor3d::TangentsComponent::TypeName )
 			{
-				result = CT_EQUAL( static_cast< TangentsComponent const & >( lhs )
-					, static_cast< TangentsComponent const & >( rhs ) );
+				result = CT_EQUAL( static_cast< castor3d::TangentsComponent const & >( lhs )
+					, static_cast< castor3d::TangentsComponent const & >( rhs ) );
 			}
-			else if ( lhs.getType() == BitangentsComponent::TypeName )
+			else if ( lhs.getType() == castor3d::BitangentsComponent::TypeName )
 			{
-				result = CT_EQUAL( static_cast< BitangentsComponent const & >( lhs )
-					, static_cast< BitangentsComponent const & >( rhs ) );
+				result = CT_EQUAL( static_cast< castor3d::BitangentsComponent const & >( lhs )
+					, static_cast< castor3d::BitangentsComponent const & >( rhs ) );
 			}
-			else if ( lhs.getType() == Texcoords0Component::TypeName )
+			else if ( lhs.getType() == castor3d::Texcoords0Component::TypeName )
 			{
-				result = CT_EQUAL( static_cast< Texcoords0Component const & >( lhs )
-					, static_cast< Texcoords0Component const & >( rhs ) );
+				result = CT_EQUAL( static_cast< castor3d::Texcoords0Component const & >( lhs )
+					, static_cast< castor3d::Texcoords0Component const & >( rhs ) );
 			}
-			else if ( lhs.getType() == Texcoords1Component::TypeName )
+			else if ( lhs.getType() == castor3d::Texcoords1Component::TypeName )
 			{
-				result = CT_EQUAL( static_cast< Texcoords1Component const & >( lhs )
-					, static_cast< Texcoords1Component const & >( rhs ) );
+				result = CT_EQUAL( static_cast< castor3d::Texcoords1Component const & >( lhs )
+					, static_cast< castor3d::Texcoords1Component const & >( rhs ) );
 			}
-			else if ( lhs.getType() == Texcoords2Component::TypeName )
+			else if ( lhs.getType() == castor3d::Texcoords2Component::TypeName )
 			{
-				result = CT_EQUAL( static_cast< Texcoords2Component const & >( lhs )
-					, static_cast< Texcoords2Component const & >( rhs ) );
+				result = CT_EQUAL( static_cast< castor3d::Texcoords2Component const & >( lhs )
+					, static_cast< castor3d::Texcoords2Component const & >( rhs ) );
 			}
-			else if ( lhs.getType() == Texcoords3Component::TypeName )
+			else if ( lhs.getType() == castor3d::Texcoords3Component::TypeName )
 			{
-				result = CT_EQUAL( static_cast< Texcoords3Component const & >( lhs )
-					, static_cast< Texcoords3Component const & >( rhs ) );
+				result = CT_EQUAL( static_cast< castor3d::Texcoords3Component const & >( lhs )
+					, static_cast< castor3d::Texcoords3Component const & >( rhs ) );
 			}
-			else if ( lhs.getType() == ColoursComponent::TypeName )
+			else if ( lhs.getType() == castor3d::ColoursComponent::TypeName )
 			{
-				result = CT_EQUAL( static_cast< ColoursComponent const & >( lhs )
-					, static_cast< ColoursComponent const & >( rhs ) );
+				result = CT_EQUAL( static_cast< castor3d::ColoursComponent const & >( lhs )
+					, static_cast< castor3d::ColoursComponent const & >( rhs ) );
 			}
-			else if ( lhs.getType() == SkinComponent::TypeName )
+			else if ( lhs.getType() == castor3d::SkinComponent::TypeName )
 			{
-				result = CT_EQUAL( static_cast< SkinComponent const & >( lhs )
-					, static_cast< SkinComponent const & >( rhs ) );
+				result = CT_EQUAL( static_cast< castor3d::SkinComponent const & >( lhs )
+					, static_cast< castor3d::SkinComponent const & >( rhs ) );
 			}
-			else if ( lhs.getType() == TriFaceMapping::TypeName )
+			else if ( lhs.getType() == castor3d::TriFaceMapping::TypeName )
 			{
-				result = CT_EQUAL( static_cast< TriFaceMapping const & >( lhs )
-					, static_cast< TriFaceMapping const & >( rhs ) );
+				result = CT_EQUAL( static_cast< castor3d::TriFaceMapping const & >( lhs )
+					, static_cast< castor3d::TriFaceMapping const & >( rhs ) );
 			}
-			else if ( lhs.getType() == LinesMapping::TypeName )
+			else if ( lhs.getType() == castor3d::LinesMapping::TypeName )
 			{
-				result = CT_EQUAL( static_cast< LinesMapping const & >( lhs )
-					, static_cast< LinesMapping const & >( rhs ) );
+				result = CT_EQUAL( static_cast< castor3d::LinesMapping const & >( lhs )
+					, static_cast< castor3d::LinesMapping const & >( rhs ) );
 			}
 		}
 
 		return result;
 	}
 
-	bool C3DTestCase::compare( Submesh const & lhs, Submesh const & rhs )
+	bool C3DTestCase::compare( castor3d::Submesh const & lhs, castor3d::Submesh const & rhs )
 	{
 		bool result{ CT_EQUAL( lhs.getPointsCount(), rhs.getPointsCount() ) };
 
@@ -591,7 +588,7 @@ namespace Testing
 		return result;
 	}
 
-	bool C3DTestCase::compare( Skeleton const & lhs, Skeleton const & rhs )
+	bool C3DTestCase::compare( castor3d::Skeleton const & lhs, castor3d::Skeleton const & rhs )
 	{
 		bool result{ CT_EQUAL( lhs.getGlobalInverseTransform(), rhs.getGlobalInverseTransform() ) };
 
@@ -635,13 +632,13 @@ namespace Testing
 
 		if ( result )
 		{
-			result = result && CT_EQUAL( static_cast< Animable const & >( lhs ), static_cast< Animable const & >( rhs ) );
+			result = result && CT_EQUAL( static_cast< castor3d::Animable const & >( lhs ), static_cast< castor3d::Animable const & >( rhs ) );
 		}
 
 		return result;
 	}
 
-	bool C3DTestCase::compare( SkeletonNode const & lhs, SkeletonNode const & rhs )
+	bool C3DTestCase::compare( castor3d::SkeletonNode const & lhs, castor3d::SkeletonNode const & rhs )
 	{
 		bool result{ CT_EQUAL( lhs.getName(), rhs.getName() ) };
 		result = result && CT_EQUAL( lhs.getParent() == nullptr, rhs.getParent() == nullptr );
@@ -654,29 +651,29 @@ namespace Testing
 		return result;
 	}
 
-	bool C3DTestCase::compare( BoneNode const & lhs, BoneNode const & rhs )
+	bool C3DTestCase::compare( castor3d::BoneNode const & lhs, castor3d::BoneNode const & rhs )
 	{
-		bool result{ compare( static_cast< SkeletonNode const & >( lhs )
-			, static_cast< SkeletonNode const & >( rhs ) ) };
+		bool result{ compare( static_cast< castor3d::SkeletonNode const & >( lhs )
+			, static_cast< castor3d::SkeletonNode const & >( rhs ) ) };
 		result = result && CT_EQUAL( lhs.getInverseTransform(), rhs.getInverseTransform() );
 		result = result && CT_EQUAL( lhs.getId(), rhs.getId() );
 		return result;
 	}
 
-	bool C3DTestCase::compare( Animation const & lhs, Animation const & rhs )
+	bool C3DTestCase::compare( castor3d::Animation const & lhs, castor3d::Animation const & rhs )
 	{
 		bool result{ CT_EQUAL( lhs.getName(), rhs.getName() ) };
 		CT_REQUIRE( lhs.getType() == rhs.getType() );
 
-		if ( lhs.getType() == AnimationType::eSkeleton )
+		if ( lhs.getType() == castor3d::AnimationType::eSkeleton )
 		{
-			result = CT_EQUAL( static_cast< SkeletonAnimation const & >( lhs ), static_cast< SkeletonAnimation const & >( rhs ) );
+			result = CT_EQUAL( static_cast< castor3d::SkeletonAnimation const & >( lhs ), static_cast< castor3d::SkeletonAnimation const & >( rhs ) );
 		}
 
 		return result;
 	}
 
-	bool C3DTestCase::compare( SkeletonAnimation const & lhs, SkeletonAnimation const & rhs )
+	bool C3DTestCase::compare( castor3d::SkeletonAnimation const & lhs, castor3d::SkeletonAnimation const & rhs )
 	{
 		bool result = CT_EQUAL( lhs.getObjects().size(), rhs.getObjects().size() );
 
@@ -723,8 +720,8 @@ namespace Testing
 
 			while ( result && itA != endItA )
 			{
-				result = CT_EQUAL( static_cast< SkeletonAnimationKeyFrame const & >( **itA )
-					, static_cast< SkeletonAnimationKeyFrame const & >( **itB ) );
+				result = CT_EQUAL( static_cast< castor3d::SkeletonAnimationKeyFrame const & >( **itA )
+					, static_cast< castor3d::SkeletonAnimationKeyFrame const & >( **itB ) );
 				++itA;
 				++itB;
 			}
@@ -733,7 +730,7 @@ namespace Testing
 		return result;
 	}
 
-	bool C3DTestCase::compare( SkeletonAnimationObject const & lhs, SkeletonAnimationObject const & rhs )
+	bool C3DTestCase::compare( castor3d::SkeletonAnimationObject const & lhs, castor3d::SkeletonAnimationObject const & rhs )
 	{
 		bool result{ CT_EQUAL( lhs.getName(), rhs.getName() ) };
 		result = result && CT_EQUAL( lhs.getInterpolationMode(), rhs.getInterpolationMode() );
@@ -767,7 +764,7 @@ namespace Testing
 		return result;
 	}
 
-	bool C3DTestCase::compare( AnimationKeyFrame const & lhs, AnimationKeyFrame const & rhs )
+	bool C3DTestCase::compare( castor3d::AnimationKeyFrame const & lhs, castor3d::AnimationKeyFrame const & rhs )
 	{
 		bool result{ CT_EQUAL( lhs.getTimeIndex(), rhs.getTimeIndex() ) };
 		return result;
@@ -823,7 +820,7 @@ namespace Testing
 		return result;
 	}
 
-	bool C3DTestCase::compare( AnimatedObjectGroup const & lhs, AnimatedObjectGroup const & rhs )
+	bool C3DTestCase::compare( castor3d::AnimatedObjectGroup const & lhs, castor3d::AnimatedObjectGroup const & rhs )
 	{
 		bool result{ CT_EQUAL( lhs.getName(), rhs.getName() ) };
 
@@ -868,7 +865,7 @@ namespace Testing
 		return result;
 	}
 
-	bool C3DTestCase::compare( AnimatedObject const & lhs, AnimatedObject const & rhs )
+	bool C3DTestCase::compare( castor3d::AnimatedObject const & lhs, castor3d::AnimatedObject const & rhs )
 	{
 		bool result{ CT_EQUAL( lhs.getName(), rhs.getName() ) };
 
@@ -892,7 +889,7 @@ namespace Testing
 		return result;
 	}
 
-	bool C3DTestCase::compare( AnimationInstance const & lhs, AnimationInstance const & rhs )
+	bool C3DTestCase::compare( castor3d::AnimationInstance const & lhs, castor3d::AnimationInstance const & rhs )
 	{
 		bool result{ CT_EQUAL( lhs.getAnimation().getName(), rhs.getAnimation().getName() ) };
 		result = result && CT_EQUAL( lhs.getScale(), rhs.getScale() );
@@ -902,19 +899,19 @@ namespace Testing
 
 		switch ( lhs.getAnimation().getType() )
 		{
-		case AnimationType::eSkeleton:
-			result = result && CT_EQUAL( static_cast< SkeletonAnimationInstance const & >( lhs ), static_cast< SkeletonAnimationInstance const & >( rhs ) );
+		case castor3d::AnimationType::eSkeleton:
+			result = result && CT_EQUAL( static_cast< castor3d::SkeletonAnimationInstance const & >( lhs ), static_cast< castor3d::SkeletonAnimationInstance const & >( rhs ) );
 			break;
 
 		default:
-			CT_FAILURE( "Unsupported AnimationType" );
+			CT_FAILURE( "Unsupported castor3d::AnimationType" );
 			break;
 		}
 
 		return result;
 	}
 
-	bool C3DTestCase::compare( SkeletonAnimationInstance const & lhs, SkeletonAnimationInstance const & rhs )
+	bool C3DTestCase::compare( castor3d::SkeletonAnimationInstance const & lhs, castor3d::SkeletonAnimationInstance const & rhs )
 	{
 		return CT_EQUAL( lhs.getObjectsCount(), rhs.getObjectsCount() );
 	}

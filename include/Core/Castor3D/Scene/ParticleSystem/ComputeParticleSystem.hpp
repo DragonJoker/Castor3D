@@ -118,13 +118,13 @@ namespace castor3d
 		ParticleDeclaration m_inputs;
 		ShaderProgramRPtr m_program{};
 		UniformBufferOffsetT< Configuration > m_ubo;
-		std::array< ashes::BufferPtr< uint8_t >, 2 > m_particlesStorages;
+		castor::Array< ashes::BufferPtr< uint8_t >, 2 > m_particlesStorages;
 		ashes::BufferPtr< uint32_t > m_generatedCountBuffer;
 		ashes::DescriptorSetLayoutPtr m_descriptorLayout;
 		ashes::PipelineLayoutPtr m_pipelineLayout;
 		ashes::ComputePipelinePtr m_pipeline;
 		ashes::DescriptorSetPoolPtr m_descriptorPool;
-		std::array< ashes::DescriptorSetPtr, 2u > m_descriptorSets;
+		castor::Array< ashes::DescriptorSetPtr, 2u > m_descriptorSets;
 		ashes::CommandBufferPtr m_commandBuffer;
 		ashes::FencePtr m_fence;
 		uint32_t m_particlesCount{ 0u };

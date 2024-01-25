@@ -17,14 +17,14 @@ namespace PbrBloom
 	//*********************************************************************************************
 
 	castor::String const PostEffect::Type = cuT( "pbr_bloom" );
-	castor::String const PostEffect::Name = cuT( "PBR Bloom PostEffect" );
+	castor::MbString const PostEffect::Name = "PBR Bloom PostEffect";
 
 	PostEffect::PostEffect( castor3d::RenderTarget & renderTarget
 		, castor3d::RenderSystem & renderSystem
 		, castor3d::Parameters const & params )
 		: castor3d::PostEffect{ PostEffect::Type
-			, "PbrBloom"
-			, PostEffect::Name
+			, cuT( "PbrBloom" )
+			, castor::makeString( PostEffect::Name )
 			, renderTarget
 			, renderSystem
 			, params }
@@ -113,7 +113,7 @@ namespace PbrBloom
 			, mipCount } );
 
 		m_duPassesCount = std::min( m_duPassesCount, mipCount );
-		m_downsamplePass = std::make_unique< DownsamplePass >( m_graph
+		m_downsamplePass = castor::make_unique< DownsamplePass >( m_graph
 			, previousPass
 			, device
 			, crg::ImageViewIdArray{ source.sampledViewId, target.sampledViewId }
@@ -121,14 +121,14 @@ namespace PbrBloom
 			, m_duPassesCount
 			, &isEnabled()
 			, &m_passIndex );
-		m_upsamplePass = std::make_unique< UpsamplePass >( m_graph
+		m_upsamplePass = castor::make_unique< UpsamplePass >( m_graph
 			, m_downsamplePass->getPass()
 			, device
 			, m_intermediateImg
 			, m_ubo
 			, m_duPassesCount
 			, &isEnabled() );
-		m_combinePass = std::make_unique< CombinePass >( m_graph
+		m_combinePass = castor::make_unique< CombinePass >( m_graph
 			, m_upsamplePass->getPass()
 			, device
 			, crg::ImageViewIdArray{ source.sampledViewId, target.sampledViewId }

@@ -37,7 +37,7 @@ namespace castor3d
 		 *\brief		Ajoute un tampon de sous-maillage.
 		 */
 		C3D_API void setTargetsWeights( Submesh const & submesh
-			, std::vector< float > weights );
+			, castor::Vector< float > weights );
 		/**
 		 *\~english
 		 *\brief		Adds a submesh buffer.

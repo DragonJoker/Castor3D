@@ -27,7 +27,7 @@ namespace castor3d
 			LightingModelID lightingModelId{};
 			BackgroundModelID backgroundModelId{};
 		};
-		using ObjCont = std::vector< Entry >;
+		using ObjCont = castor::Vector< Entry >;
 
 	public:
 		/**
@@ -93,7 +93,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Les ID uniques des modèles d'éclairage.
 		 */
-		C3D_API std::vector< LightingModelID > getLightingModelsID()const;
+		C3D_API castor::Vector< LightingModelID > getLightingModelsID()const;
 		/**
 		 *\~english
 		 *\param[in]	backgroundModelId	The background model ID.
@@ -102,7 +102,7 @@ namespace castor3d
 		 *\param[in]	backgroundModelId	L'ID du modèle de fond.
 		 *\return		Les modèles d'éclairage du mod_le de fond donné.
 		 */
-		C3D_API std::vector< LightingModelID > getLightingModelsID( BackgroundModelID backgroundModelId )const;
+		C3D_API castor::Vector< LightingModelID > getLightingModelsID( BackgroundModelID backgroundModelId )const;
 		/**
 		 *\~english
 		 *\brief		Replaces old names with registered ones.
@@ -148,7 +148,7 @@ namespace castor3d
 			}
 
 			return it->create( lightingModelId
-				, std::forward< Parameters >( params )... );
+				, castor::forward< Parameters >( params )... );
 		}
 
 	private:

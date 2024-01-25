@@ -56,7 +56,7 @@ namespace castor3d
 			, cuT( "Header" )
 			, &style->getHeaderStyle()
 			, this
-			, castor::string::toU32String( name )
+			, castor::toUtf8U32String( name )
 			, castor::Position{ 0, 0 }
 			, castor::Size{ size->x - m_headerHeight, m_headerHeight } ) ) }
 		, m_content{ getEngine().getControlsManager()->registerControlT( castor::makeUnique< PanelCtrl >( m_scene

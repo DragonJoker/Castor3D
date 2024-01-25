@@ -14,7 +14,7 @@ namespace HejlBurgessDawson
 {
 	namespace c3d = castor3d::shader;
 	castor::String ToneMapping::Type = cuT( "hejl" );
-	castor::String ToneMapping::Name = cuT( "Hejl Burgess Dawson Tone Mapping" );
+	castor::MbString ToneMapping::Name = "Hejl Burgess Dawson Tone Mapping";
 
 	void ToneMapping::create( ast::ShaderBuilder & builder )
 	{

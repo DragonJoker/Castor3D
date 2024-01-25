@@ -245,7 +245,7 @@ namespace castor3d
 
 	private:
 		GpuFeatures m_features{ 0u };
-		std::map< VkShaderStageFlagBits, bool > m_useShader
+		castor::Map< VkShaderStageFlagBits, bool > m_useShader
 		{
 			{ VK_SHADER_STAGE_VERTEX_BIT, false },
 			{ VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT, false },
@@ -254,8 +254,8 @@ namespace castor3d
 			{ VK_SHADER_STAGE_FRAGMENT_BIT, false },
 			{ VK_SHADER_STAGE_COMPUTE_BIT, false },
 		};
-		std::map< GpuMin, uint32_t > m_minValues;
-		std::map< GpuMax, uint32_t > m_maxValues;
+		castor::Map< GpuMin, uint32_t > m_minValues;
+		castor::Map< GpuMax, uint32_t > m_maxValues;
 		uint32_t m_totalMemorySize{};
 		castor::String m_vendor;
 		castor::String m_renderer;
@@ -273,7 +273,7 @@ namespace castor3d
 	 *\param[in]		object	L'objet à mettre dans le flux.
 	 *\return			Le flux
 	 */
-	C3D_API std::ostream & operator<<( std::ostream & stream, GpuInformations const & object );
+	C3D_API castor::OutputStream & operator<<( castor::OutputStream & stream, GpuInformations const & object );
 }
 
 #endif

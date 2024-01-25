@@ -161,7 +161,7 @@ namespace castor3d
 		, crg::ImageViewIdArray targetDepth
 		, RenderNodesPassDesc const & desc )
 		: castor::OwnedBy< Engine >{ *device.renderSystem.getEngine() }
-		, castor::Named{ castor::string::stringCast< castor::xchar >( pass.getFullName() ) }
+		, castor::Named{ castor::makeString( pass.getFullName() ) }
 		, SceneCullerHolder{ &desc.m_culler }
 		, RenderQueueHolder{ castor::makeUnique< RenderQueue >( *this, device, desc.m_culler, typeName, desc.m_meshShading, desc.m_ignored ) }
 		, crg::RenderPass{ pass
@@ -180,12 +180,12 @@ namespace castor3d
 		, m_device{ device }
 		, m_renderSystem{ m_device.renderSystem }
 		, m_cameraUbo{ desc.m_cameraUbo }
-		, m_targetImage{ std::move( targetImage ) }
-		, m_targetDepth{ std::move( targetDepth ) }
+		, m_targetImage{ castor::move( targetImage ) }
+		, m_targetDepth{ castor::move( targetDepth ) }
 		, m_typeName{ typeName }
 		, m_typeID{ getEngine()->getRenderPassTypeID( m_typeName ) }
 		, m_filters{ desc.m_filters }
-		, m_category{ pass.group.getFullName() }
+		, m_category{ castor::makeString( pass.group.getFullName() ) }
 		, m_size{ desc.m_size.width, desc.m_size.height }
 		, m_oit{ desc.m_oit }
 		, m_forceTwoSided{ desc.m_forceTwoSided }
@@ -1023,7 +1023,7 @@ namespace castor3d
 		if ( !descriptors.set )
 		{
 			auto const & scene = getCuller().getScene();
-			descriptors.set = descriptors.pool->createDescriptorSet( getName() + rendndpass::Suffix
+			descriptors.set = descriptors.pool->createDescriptorSet( castor::toUtf8( getName() + rendndpass::Suffix )
 				, RenderPipeline::eBuffers );
 			auto & descriptorSet = *descriptors.set;
 			ashes::WriteDescriptorSetArray descriptorWrites;
@@ -1090,12 +1090,12 @@ namespace castor3d
 		pipeline.setAdditionalDescriptorSet( *descriptors.set );
 	}
 
-	void RenderNodesPass::doSubInitialise()
+	void RenderNodesPass::doSubInitialise()const
 	{
 		getRenderQueue().invalidate();
 	}
 
-	void RenderNodesPass::doSubRecordInto( VkCommandBuffer commandBuffer )
+	void RenderNodesPass::doSubRecordInto( VkCommandBuffer commandBuffer )const
 	{
 		VkCommandBuffer secondary = getRenderQueue().initCommandBuffer();
 		m_context.vkCmdExecuteCommands( commandBuffer
@@ -1357,22 +1357,22 @@ namespace castor3d
 		return addBindings;
 	}
 
-	std::vector< RenderPipelineUPtr > & RenderNodesPass::doGetFrontPipelines()
+	castor::Vector< RenderPipelineUPtr > & RenderNodesPass::doGetFrontPipelines()
 	{
 		return m_frontPipelines;
 	}
 
-	std::vector< RenderPipelineUPtr > & RenderNodesPass::doGetBackPipelines()
+	castor::Vector< RenderPipelineUPtr > & RenderNodesPass::doGetBackPipelines()
 	{
 		return m_backPipelines;
 	}
 
-	std::vector< RenderPipelineUPtr > const & RenderNodesPass::doGetFrontPipelines()const
+	castor::Vector< RenderPipelineUPtr > const & RenderNodesPass::doGetFrontPipelines()const
 	{
 		return m_frontPipelines;
 	}
 
-	std::vector< RenderPipelineUPtr > const & RenderNodesPass::doGetBackPipelines()const
+	castor::Vector< RenderPipelineUPtr > const & RenderNodesPass::doGetBackPipelines()const
 	{
 		return m_backPipelines;
 	}
@@ -1419,8 +1419,8 @@ namespace castor3d
 				if ( !addDescriptors.layout )
 				{
 					auto bindings = doCreateAdditionalBindings( flags );
-					addDescriptors.layout = device->createDescriptorSetLayout( getName() + rendndpass::Suffix
-						, std::move( bindings ) );
+					addDescriptors.layout = device->createDescriptorSetLayout( castor::toUtf8( getName() + rendndpass::Suffix )
+						, castor::move( bindings ) );
 					addDescriptors.pool = addDescriptors.layout->createPool( 1u );
 				}
 
@@ -1444,7 +1444,7 @@ namespace castor3d
 
 				pipeline->initialise( device
 					, getRenderPass( 0u ) );
-				pipelines.emplace_back( std::move( pipeline ) );
+				pipelines.emplace_back( castor::move( pipeline ) );
 				it = std::next( pipelines.begin()
 					, ptrdiff_t( pipelines.size() - 1u ) );
 			}

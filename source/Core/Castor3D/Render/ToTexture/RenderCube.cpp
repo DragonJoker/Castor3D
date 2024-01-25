@@ -67,9 +67,9 @@ namespace castor3d
 		{
 			static castor::Matrix4x4f const projection = device.renderSystem.getPerspective( 90.0_degrees, 1.0f, 0.1f, 10.0f );
 
-			static std::array< castor::Matrix4x4f, 6u > const views = []()
+			static castor::Array< castor::Matrix4x4f, 6u > const views = []()
 			{
-				std::array< castor::Matrix4x4f, 6u > result
+				castor::Array< castor::Matrix4x4f, 6u > result
 				{
 					castor::matrix::lookAt( castor::Point3f{ 0.0f, 0.0f, 0.0f }, castor::Point3f{ +1.0f, +0.0f, +0.0f }, castor::Point3f{ 0.0f, -1.0f, +0.0f } ),
 					castor::matrix::lookAt( castor::Point3f{ 0.0f, 0.0f, 0.0f }, castor::Point3f{ -1.0f, +0.0f, +0.0f }, castor::Point3f{ 0.0f, -1.0f, +0.0f } ),
@@ -85,7 +85,7 @@ namespace castor3d
 				, ( VK_BUFFER_USAGE_TRANSFER_DST_BIT
 					| VK_BUFFER_USAGE_TRANSFER_SRC_BIT )
 				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-				, "RenderCubeMatrix" );
+				, cuT( "RenderCubeMatrix" ) );
 
 			for ( uint32_t i = 0u; i < 6u; ++i )
 			{
@@ -101,7 +101,7 @@ namespace castor3d
 			, ashes::Queue const & queue
 			, ashes::CommandPool const & commandPool )
 		{
-			std::vector< castor::Point4f > vertexData
+			castor::Vector< castor::Point4f > vertexData
 			{
 				castor::Point4f{ -1, +1, -1, +1 }, castor::Point4f{ +1, -1, -1, +1 }, castor::Point4f{ -1, -1, -1, +1 }, castor::Point4f{ +1, -1, -1, +1 }, castor::Point4f{ -1, +1, -1, +1 }, castor::Point4f{ +1, +1, -1, +1 },// Back
 				castor::Point4f{ -1, -1, +1, +1 }, castor::Point4f{ -1, +1, -1, +1 }, castor::Point4f{ -1, -1, -1, +1 }, castor::Point4f{ -1, +1, -1, +1 }, castor::Point4f{ -1, -1, +1, +1 }, castor::Point4f{ -1, +1, +1, +1 },// Left
@@ -114,11 +114,11 @@ namespace castor3d
 				, uint32_t( vertexData.size() )
 				, VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-				, "RenderCube" );
+				, cuT( "RenderCube" ) );
 			{
 				InstantDirectUploadData uploader{ queue
 					, device
-					, "RenderCube"
+					, cuT( "RenderCube" )
 					, commandPool };
 				uploader->pushUpload( vertexData.data()
 					, result->getSize()
@@ -150,7 +150,7 @@ namespace castor3d
 		, SamplerObs sampler )
 		: m_device{ device }
 		, m_sampler{ ( sampler
-			? std::move( sampler )
+			? castor::move( sampler )
 			: rendcube::doCreateSampler( m_device.renderSystem, nearest ) ) }
 	{
 	}
@@ -201,7 +201,7 @@ namespace castor3d
 		};
 		doFillDescriptorLayoutBindings( bindings );
 		m_descriptorLayout = m_device->createDescriptorSetLayout( "RenderCube"
-			, std::move( bindings ) );
+			, castor::move( bindings ) );
 		m_pipelineLayout = m_device->createPipelineLayout( "RenderCube"
 			, { *m_descriptorLayout }, pushRanges );
 		m_descriptorPool = m_descriptorLayout->createPool( "RenderCube", 6u );
@@ -209,7 +209,7 @@ namespace castor3d
 
 		for ( auto & facePipeline : m_faces )
 		{
-			facePipeline.pipeline = m_device->createPipeline( "RenderCubeFace" + castor::string::toString( face )
+			facePipeline.pipeline = m_device->createPipeline( "RenderCubeFace" + castor::string::toMbString( face )
 				, ashes::GraphicsPipelineCreateInfo
 				{
 					0u,
@@ -226,7 +226,7 @@ namespace castor3d
 					*m_pipelineLayout,
 					renderPass,
 				} );
-			facePipeline.descriptorSet = m_descriptorPool->createDescriptorSet( "RenderCubeFace" + castor::string::toString( face ) );
+			facePipeline.descriptorSet = m_descriptorPool->createDescriptorSet( "RenderCubeFace" + castor::string::toMbString( face ) );
 			facePipeline.descriptorSet->createSizedBinding( m_descriptorLayout->getBinding( 0u )
 				, m_matrixUbo->getBuffer()
 				, face

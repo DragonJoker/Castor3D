@@ -110,7 +110,7 @@ namespace castor3d
 					, baseArrayLayer
 					, arrayLayers )
 				, 0u
-				, std::move( debugName ) );
+				, castor::move( debugName ) );
 		}
 
 		static uint32_t getMinMipLevels( uint32_t mipLevels
@@ -496,7 +496,7 @@ namespace castor3d
 			return castor::Image{ name
 				, folder / relative
 				, layout
-				, std::move( buffer ) };
+				, castor::move( buffer ) };
 		}
 
 		static auto updateMipLevels( bool genNeeded
@@ -602,7 +602,7 @@ namespace castor3d
 		, bool isStatic )
 		: OwnedBy< RenderSystem >{ renderSystem }
 		, m_static{ isStatic }
-		, m_info{ std::move( info ) }
+		, m_info{ castor::move( info ) }
 		, m_properties{ memoryProperties }
 		, m_image{ debugName, castor::Path{}, texlayt::convert( m_info ) }
 		, m_defaultView{ texlayt::createViews( m_info, *this, m_image.getName() ) }
@@ -639,8 +639,8 @@ namespace castor3d
 		, VkImage image
 		, crg::ImageViewId imageView )
 		: TextureLayout{ renderSystem
-			, std::make_unique< ashes::Image >( *renderSystem.getRenderDevice()
-				, name
+			, castor::make_unique< ashes::Image >( *renderSystem.getRenderDevice()
+				, castor::toUtf8( name )
 				, image
 				, ashes::ImageCreateInfo{ imageView.data->image.data->info } )
 			, imageView.data->image.data->info }
@@ -661,7 +661,7 @@ namespace castor3d
 		, m_arrayView{ &m_defaultView }
 		, m_cubeView{ &m_defaultView }
 		, m_sliceView{ &m_defaultView }
-		, m_ownTexture{ std::move( image ) }
+		, m_ownTexture{ castor::move( image ) }
 		, m_texture{ m_ownTexture.get() }
 	{
 		m_info->mipLevels = std::max( 1u, m_info->mipLevels );
@@ -705,15 +705,6 @@ namespace castor3d
 			} );
 
 		m_initialised = true;
-	}
-
-	TextureLayout::~TextureLayout()
-	{
-		m_sliceView.slices.clear();
-		m_arrayView.layers.clear();
-		m_cubeView.layers.clear();
-		m_defaultView.levels.clear();
-		m_defaultView.view.reset();
 	}
 
 	bool TextureLayout::initialise( RenderDevice const & device )
@@ -875,7 +866,7 @@ namespace castor3d
 			CU_Require( m_texture );
 			auto commandBuffer = queueData.commandPool->createCommandBuffer( "TextureGenMipmaps" );
 			commandBuffer->begin();
-			commandBuffer->beginDebugBlock( { getName() + " Mipmaps Generation"
+			commandBuffer->beginDebugBlock( { castor::toUtf8( getName() ) + " Mipmaps Generation"
 				, makeFloatArray( getRenderSystem()->getEngine()->getNextRainbowColour() ) } );
 			generateMipmaps( *commandBuffer
 				, srcLayout );
@@ -934,7 +925,7 @@ namespace castor3d
 	{
 		buffer = texlayt::adaptBuffer( buffer.get(), buffer->getLevels() );
 		auto layout = castor::ImageLayout{ *buffer };
-		m_image = { m_image.getName(), layout, std::move( buffer ) };
+		m_image = { m_image.getName(), layout, castor::move( buffer ) };
 		doUpdateCreateInfo( m_image.getLayout() );
 		doUpdateMips( false, bufferOrigLevels );
 		m_static = isStatic;
@@ -943,7 +934,7 @@ namespace castor3d
 	void TextureLayout::setSource( castor::PxBufferBaseUPtr buffer
 		, bool isStatic )
 	{
-		setSource( std::move( buffer )
+		setSource( castor::move( buffer )
 			, m_image.getPixels()->getLevels()
 			, isStatic );
 	}

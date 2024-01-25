@@ -78,7 +78,7 @@ namespace castor3d
 
 	GBufferBase::GBufferBase( RenderDevice const & device
 		, castor::String name )
-		: castor::Named{ std::move( name ) }
+		: castor::Named{ castor::move( name ) }
 		, m_device{ device }
 	{
 	}

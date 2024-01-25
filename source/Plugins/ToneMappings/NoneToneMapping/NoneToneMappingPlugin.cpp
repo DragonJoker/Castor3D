@@ -44,7 +44,7 @@ extern "C"
 		engine->getToneMappingFactory().registerType( NoTM::ToneMapping::Type
 			, &NoTM::ToneMapping::create );
 		engine->getRenderTargetCache().registerToneMappingName( NoTM::ToneMapping::Type
-			, NoTM::ToneMapping::Name );
+			, castor::makeString( NoTM::ToneMapping::Name ) );
 	}
 
 	C3D_NoneToneMapping_API void OnUnload( castor3d::Engine * engine )

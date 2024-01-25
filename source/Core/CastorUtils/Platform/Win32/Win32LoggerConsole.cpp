@@ -6,12 +6,11 @@
 
 #include <Windows.h>
 #include <tchar.h>
-#include <codecvt>
 #include <iomanip>
 
 namespace castor
 {
-	void printCDBConsole( String const & toLog, bool newLine )
+	void printCDBConsole( MbString const & toLog, bool newLine )
 	{
 		if ( ::IsDebuggerPresent() )
 		{
@@ -87,7 +86,7 @@ namespace castor
 			::SetConsoleTextAttribute( m_handle, attributes );
 		}
 
-		void print( String const & toLog, bool newLine )override
+		void print( MbString const & toLog, bool newLine )override
 		{
 			printCDBConsole( toLog, newLine );
 			printf( "%s", toLog.c_str() );
@@ -117,7 +116,7 @@ namespace castor
 	ProgramConsole::ProgramConsole( bool showConsole )
 	{
 		std::ios::sync_with_stdio( false );
-		m_console = std::make_unique< Win32Console >( showConsole );
+		m_console = castor::make_unique< Win32Console >( showConsole );
 	}
 
 	void ProgramConsole::beginLog( LogType logLevel )
@@ -125,7 +124,7 @@ namespace castor
 		m_console->beginLog( logLevel );
 	}
 
-	void ProgramConsole::print( String const & toLog, bool newLine )
+	void ProgramConsole::print( MbString const & toLog, bool newLine )
 	{
 		m_console->print( toLog, newLine );
 	}

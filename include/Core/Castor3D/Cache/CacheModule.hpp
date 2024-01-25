@@ -26,12 +26,12 @@ namespace castor3d
 		using ElementKeyT = KeyT;
 		using ElementPtrT = castor::UniquePtr< ElementT >;
 		using ElementObsT = ElementT *;
-		using ElementContT = std::unordered_map< ElementKeyT, ElementPtrT >;
+		using ElementContT = castor::UnorderedMap< ElementKeyT, ElementPtrT >;
 		using ElementCacheT = castor::ResourceCacheBaseT< ElementT, ElementKeyT, PtrCacheTraitsT< ElementT, ElementKeyT > >;
 
-		using ElementInitialiserT = std::function< void( ElementT & ) >;
-		using ElementCleanerT = std::function< void( ElementT & ) >;
-		using ElementMergerT = std::function< void( ElementCacheT const &
+		using ElementInitialiserT = castor::Function< void( ElementT & ) >;
+		using ElementCleanerT = castor::Function< void( ElementT & ) >;
+		using ElementMergerT = castor::Function< void( ElementCacheT const &
 			, ElementContT &
 			, ElementPtrT ) >;
 
@@ -41,7 +41,7 @@ namespace castor3d
 			, ParametersT && ... params )
 		{
 			return castor::makeUnique< ElementT >( key
-				, std::forward< ParametersT >( params )... );
+				, castor::forward< ParametersT >( params )... );
 		}
 
 		static ElementObsT makeElementObs( ElementPtrT const & element )
@@ -205,14 +205,14 @@ namespace castor3d
 			, ParametersT && ... parameters )const\
 		{\
 			return m_##memberName##Cache->create( key\
-				, std::forward< ParametersT >( parameters )... );\
+				, castor::forward< ParametersT >( parameters )... );\
 		}\
 		template< typename ... ParametersT >\
 		className##Cache::ElementObsT addNew##className( className##Cache::ElementKeyT const & key\
 			, ParametersT && ... parameters )\
 		{\
 			return m_##memberName##Cache->add( key\
-				, std::forward< ParametersT >( parameters )... );\
+				, castor::forward< ParametersT >( parameters )... );\
 		}\
 		className##Cache::ElementObsT add##className( className##Cache::ElementKeyT const & key\
 			, className##Cache::ElementPtrT & element\
@@ -255,7 +255,7 @@ namespace castor3d
 			, ParametersT && ... parameters )const\
 		{\
 			return m_##memberName##Cache->create( key\
-				, std::forward< ParametersT >( parameters )... );\
+				, castor::forward< ParametersT >( parameters )... );\
 		}\
 		className##Cache::ElementPtrT remove##className( className##Cache::ElementKeyT const & key\
 			, bool cleanup = false )noexcept\
@@ -285,7 +285,7 @@ namespace castor3d
 			, ParametersT && ... parameters )\
 		{\
 			return m_##memberName##Cache->add( key\
-				, std::forward< ParametersT >( parameters )... );\
+				, castor::forward< ParametersT >( parameters )... );\
 		}\
 		className##Cache::ElementObsT add##className( className##Cache::ElementKeyT const & key\
 			, className##Cache::ElementPtrT & element\
@@ -314,7 +314,7 @@ namespace castor3d
 			, ParametersT && ... parameters )\
 		{\
 			return m_##memberName##CacheView->add( key\
-				, std::forward< ParametersT >( parameters )... );\
+				, castor::forward< ParametersT >( parameters )... );\
 		}\
 		className##Cache::ElementObsT add##className( className##Cache::ElementKeyT const & key\
 			, className##Cache::ElementPtrT & element\
@@ -356,7 +356,7 @@ namespace castor3d
 			, ParametersT && ... parameters )\
 		{\
 			return m_##memberName##CacheView->add( key\
-				, std::forward< ParametersT >( parameters )... );\
+				, castor::forward< ParametersT >( parameters )... );\
 		}\
 		castor::className##Cache::ElementObsT add##className( castor::className##Cache::ElementKeyT const & key\
 			, castor::className##Cache::ElementPtrT & element\

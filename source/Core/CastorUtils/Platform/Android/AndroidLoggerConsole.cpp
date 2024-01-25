@@ -42,12 +42,12 @@ namespace castor
 			}
 		}
 
-		void print( String const & toLog, bool newLine )override
+		void print( MbString const & toLog, bool newLine )override
 		{
 			__android_log_print( m_logLevel
 				, "Castor3D"
 				, "%s"
-				, string::stringCast< char >( toLog ).c_str() );
+				, toLog.c_str() );
 		}
 
 	private:
@@ -56,10 +56,10 @@ namespace castor
 
 	//************************************************************************************************
 
-	ProgramConsole::ProgramConsole( bool CU_UnusedParam( showConsole ) )
+	ProgramConsole::ProgramConsole( CU_UnusedParam( bool, showConsole ) )
 	{
 		std::ios::sync_with_stdio( false );
-		m_console = std::make_unique< LogcatConsole >();
+		m_console = castor::make_unique< LogcatConsole >();
 	}
 
 	void ProgramConsole::beginLog( LogType logLevel )
@@ -67,7 +67,7 @@ namespace castor
 		m_console->beginLog( logLevel );
 	}
 
-	void ProgramConsole::print( String const & toLog, bool newLine )
+	void ProgramConsole::print( MbString const & toLog, bool newLine )
 	{
 		m_console->print( toLog, newLine );
 	}

@@ -12,7 +12,7 @@ namespace castor
 {
 	template< typename ComponentT >
 	class TextWriter< RgbaColourT< ComponentT > >
-		: public castor::TextWriterT< RgbaColourT< ComponentT > >
+		: public TextWriterT< RgbaColourT< ComponentT > >
 	{
 	public:
 		explicit TextWriter( String const & tabs );

@@ -140,7 +140,7 @@ namespace castor3d
 			writes.push_back( output.getStorageBinding( SubmeshData::eVelocity
 				, VertexTransformPass::eOutVelocity ) );
 
-			auto descriptorSet = pipeline.descriptorSetPool->createDescriptorSet( pipeline.getName( engine ) );
+			auto descriptorSet = pipeline.descriptorSetPool->createDescriptorSet( castor::toUtf8( pipeline.getName( engine ) ) );
 			descriptorSet->setBindings( writes );
 			descriptorSet->update();
 			return descriptorSet;

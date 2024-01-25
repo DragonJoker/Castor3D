@@ -71,7 +71,7 @@ namespace castor3d
 			pushUpload( srcData.data()
 				, srcData.size()
 				, dstImage
-				, std::move( dstLayout )
+				, castor::move( dstLayout )
 				, dstRange
 				, dstImageLayout
 				, dstPipelineFlags );
@@ -101,7 +101,7 @@ namespace castor3d
 			pushUpload( srcData.data()
 				, srcData.size()
 				, dstImage
-				, std::move( dstLayout )
+				, castor::move( dstLayout )
 				, dstRange
 				, dstImageLayout
 				, dstPipelineFlags );
@@ -145,7 +145,7 @@ namespace castor3d
 		};
 
 		C3D_API UploadData( RenderDevice const & device
-			, std::string debugName
+			, castor::String debugName
 			, ashes::CommandBuffer const * commandBuffer );
 
 		C3D_API bool doCopyData( void const * srcData
@@ -160,10 +160,10 @@ namespace castor3d
 			, VkDeviceSize srcOffset )const;
 
 		RenderDevice const & m_device;
-		std::string m_debugName;
+		castor::String m_debugName;
 		ashes::CommandBuffer const * m_commandBuffer;
-		std::vector< BufferDataRange > m_pendingBuffers;
-		std::vector< ImageDataRange > m_pendingImages;
+		castor::Vector< BufferDataRange > m_pendingBuffers;
+		castor::Vector< ImageDataRange > m_pendingImages;
 
 	private:
 		virtual VkDeviceSize doUpload( BufferDataRange & data ) = 0;
@@ -179,8 +179,8 @@ namespace castor3d
 			return {};
 		}
 
-		virtual void doPreprocess( std::vector< BufferDataRange > *& pendingBuffers
-			, std::vector< ImageDataRange > *& pendingImages )
+		virtual void doPreprocess( castor::Vector< BufferDataRange > *& pendingBuffers
+			, castor::Vector< ImageDataRange > *& pendingImages )
 		{
 			pendingBuffers = &m_pendingBuffers;
 			pendingImages = &m_pendingImages;
@@ -191,7 +191,7 @@ namespace castor3d
 		}
 	};
 
-	C3D_API std::ostream & operator<<( std::ostream & stream, VkImageSubresourceRange const & rhs );
+	C3D_API castor::OutputStream & operator<<( castor::OutputStream & stream, VkImageSubresourceRange const & rhs );
 }
 
 #endif

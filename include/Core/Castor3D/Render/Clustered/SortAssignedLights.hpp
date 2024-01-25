@@ -9,7 +9,7 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	C3D_API crg::FramePass const & createSortAssignedLightsPass( crg::FramePassGroup & graph
-		, crg::FramePassArray previousPasses
+		, crg::FramePassArray const & previousPasses
 		, RenderDevice const & device
 		, FrustumClusters const & clusters );
 }

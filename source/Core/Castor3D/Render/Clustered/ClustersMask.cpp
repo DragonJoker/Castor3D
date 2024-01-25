@@ -63,7 +63,7 @@ namespace castor3d
 					, device
 					, cuT( "c3d.clusters_mask" )
 					, {}
-					, std::move( targetDepth )
+					, castor::move( targetDepth )
 					, renderPassDesc
 					, { false, ssaoConfig } }
 			{
@@ -242,7 +242,7 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
-				auto res = std::make_unique< clsmsk::NodesPass >( &technique
+				auto res = castor::make_unique< clsmsk::NodesPass >( &technique
 					, framePass
 					, context
 					, runnableGraph
@@ -262,7 +262,7 @@ namespace castor3d
 						.componentModeFlags( ComponentModeFlag::eOpacity
 							| ComponentModeFlag::eGeometry ) );
 				nodesPass = res.get();
-				nodesPass->getEngine()->registerTimer( framePass.getFullName()
+				nodesPass->getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );

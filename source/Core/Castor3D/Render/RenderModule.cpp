@@ -24,11 +24,11 @@ namespace castor3d
 {
 	namespace rndmodl
 	{
-		static std::string normalizeName( std::string name )
+		static castor::String normalizeName( castor::String name )
 		{
-			castor::string::replace( name, "/", "_" );
-			castor::string::replace( name, "\\", "_" );
-			castor::string::replace( name, ":", "_" );
+			castor::string::replace( name, cuT( "/" ), cuT( "_" ) );
+			castor::string::replace( name, cuT( "\\" ), cuT( "_" ) );
+			castor::string::replace( name, cuT( ":" ), cuT( "_" ) );
 			return name;
 		}
 	}
@@ -309,7 +309,7 @@ namespace castor3d
 
 	void printGraph( crg::RunnableGraph const & graph )
 	{
-		auto name = rndmodl::normalizeName( graph.getGraph()->getName() );
+		auto name = rndmodl::normalizeName( castor::makeString( graph.getGraph()->getName() ) );
 		auto graphsDir = Engine::getEngineDirectory() / cuT( "Graphs" );
 
 		if ( !castor::File::directoryExists( graphsDir ) )
@@ -327,13 +327,13 @@ namespace castor3d
 
 			{
 				auto streams = crg::dot::displayTransitions( graph, { true, true, true, false } );
-				std::ofstream file{ path / ( name + ".dot" ) };
-				file << streams.find( std::string{} )->second.str();
+				std::ofstream file{ path / ( name + cuT( ".dot" ) ) };
+				file << streams.find( castor::MbString{} )->second.str();
 			}
 			{
 				auto streams = crg::dot::displayTransitions( graph, { true, true, false, false } );
-				std::ofstream file{ path / ( "flat_" + name + ".dot" ) };
-				file << streams.find( std::string{} )->second.str();
+				std::ofstream file{ path / ( cuT( "flat_" ) + name + cuT( ".dot" ) ) };
+				file << streams.find( castor::MbString{} )->second.str();
 			}
 			{
 				auto streams = crg::dot::displayTransitions( graph, { true, true, true, true } );
@@ -342,7 +342,7 @@ namespace castor3d
 				{
 					if ( !str.empty() )
 					{
-						std::ofstream file{ path / ( name + "_" + str + ".dot" ) };
+						std::ofstream file{ path / ( name + cuT( "_" ) + castor::makeString( str ) + cuT( ".dot" ) ) };
 						file << strm.str();
 					}
 				}
@@ -358,13 +358,13 @@ namespace castor3d
 
 			{
 				auto streams = crg::dot::displayPasses( graph, { true, true, true, false } );
-				std::ofstream file{ path / ( name + ".dot" ) };
-				file << streams.find( std::string{} )->second.str();
+				std::ofstream file{ path / ( name + cuT( ".dot" ) ) };
+				file << streams.find( castor::MbString{} )->second.str();
 			}
 			{
 				auto streams = crg::dot::displayPasses( graph, { true, true, false, false } );
-				std::ofstream file{ path / ( "flat_" + name + ".dot" ) };
-				file << streams.find( std::string{} )->second.str();
+				std::ofstream file{ path / ( cuT( "flat_" ) + name + cuT( ".dot" ) ) };
+				file << streams.find( castor::MbString{} )->second.str();
 			}
 			{
 				auto streams = crg::dot::displayPasses( graph, { true, true, true, true } );
@@ -373,7 +373,7 @@ namespace castor3d
 				{
 					if ( !str.empty() )
 					{
-						std::ofstream file{ path / ( name + "_" + str + ".dot" ) };
+						std::ofstream file{ path / ( name + cuT( "_" ) + castor::makeString( str ) + cuT( ".dot" ) ) };
 						file << strm.str();
 					}
 				}

@@ -182,7 +182,7 @@ namespace castor3d
 	using ParticleFactory = castor::Factory< CpuParticleSystem
 		, castor::String
 		, CpuParticleSystemUPtr
-		, std::function< CpuParticleSystemUPtr( ParticleSystem & ) > >;
+		, castor::Function< CpuParticleSystemUPtr( ParticleSystem & ) > >;
 
 	template< ParticleFormat Type >
 	struct ElementTyper;

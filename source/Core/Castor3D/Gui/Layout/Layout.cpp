@@ -104,7 +104,7 @@ namespace castor3d
 		control.removeFlag( ControlFlag::eMovable );
 
 		m_items.emplace_back( control
-			, std::move( flags )
+			, castor::move( flags )
 			, control.onChanged.connect( [this]( Control const & )
 				{
 					if ( !m_updating )

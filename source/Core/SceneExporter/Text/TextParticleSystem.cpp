@@ -26,7 +26,7 @@ namespace castor
 
 		if ( auto block{ beginBlock( file, cuT( "particle_system" ), obj.getName() ) } )
 		{
-			result = writeName( file, "parent", obj.getParent()->getName() )
+			result = writeName( file, cuT( "parent" ), obj.getParent()->getName() )
 				&& write( file, cuT( "particles_count" ), obj.getMaxParticlesCount() )
 				&& writeNamedSub( file, cuT( "dimensions" ), obj.getDimensions() )
 				&& writeName( file, cuT( "material" ), obj.getMaterial()->getName() );
@@ -35,7 +35,7 @@ namespace castor
 			{
 				result = false;
 
-				if ( auto partBlock{ beginBlock( file, "particle" ) } )
+				if ( auto partBlock{ beginBlock( file, cuT( "particle" ) ) } )
 				{
 					result = true;
 
@@ -54,7 +54,7 @@ namespace castor
 									+ var.m_name + cuT( "\" " )
 									+ castor3d::getName( var.m_dataType ) + cuT( " " )
 									+ values[cuT( "out_" ) + var.m_name] + cuT( "\n" ) );
-						checkError( result, "ParticleSystem particle variable" );
+						checkError( result, cuT( "ParticleSystem particle variable" ) );
 					}
 				}
 			}

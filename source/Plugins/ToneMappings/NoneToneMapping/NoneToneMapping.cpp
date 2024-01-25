@@ -14,7 +14,7 @@ namespace NoTM
 {
 	namespace c3d = castor3d::shader;
 	castor::String ToneMapping::Type = cuT( "none" );
-	castor::String ToneMapping::Name = cuT( "No Tone Mapping" );
+	castor::MbString ToneMapping::Name = "No Tone Mapping";
 
 	void ToneMapping::create( ast::ShaderBuilder & builder )
 	{

@@ -15,7 +15,7 @@ namespace castor3d
 		, Viewport viewport
 		, bool ownProjMtx )
 		: MovableObject{ name, scene, MovableType::eCamera, node }
-		, m_viewport{ std::move( viewport ) }
+		, m_viewport{ castor::move( viewport ) }
 		, m_frustum{ m_viewport }
 		, m_ownProjection{ ownProjMtx }
 	{

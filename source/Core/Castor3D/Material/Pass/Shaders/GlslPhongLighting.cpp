@@ -35,7 +35,7 @@ namespace castor3d::shader
 			, lights
 			, false
 			, enableVolumetric
-			, std::string{ "c3d_phong_" } }
+			, castor::String{ cuT( "c3d_phong_" ) } }
 	{
 	}
 

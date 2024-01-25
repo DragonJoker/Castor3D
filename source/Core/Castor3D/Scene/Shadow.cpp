@@ -146,7 +146,7 @@ namespace castor3d
 			}
 			else
 			{
-				blockContext->light->setShadowConfig( std::move( *blockContext->shadowConfig ) );
+				blockContext->light->setShadowConfig( castor::move( *blockContext->shadowConfig ) );
 			}
 		}
 		CU_EndAttributePop()
@@ -298,7 +298,7 @@ namespace castor3d
 		auto baseBlock = visitor.visit( cuT( "Shadows" ) );
 		baseBlock.visit( cuT( "Type" )
 			, filterType
-			, castor::StringArray{ "None", "RAW", "PCF", "VSM" }
+			, castor::StringArray{ cuT( "None" ), cuT( "RAW" ), cuT( "PCF" ), cuT( "VSM" ) }
 			, ConfigurationVisitorBase::OnEnumValueChangeT< ShadowType >( [this]( ShadowType, ShadowType newV )
 			{
 				filterType = newV;
@@ -330,7 +330,7 @@ namespace castor3d
 		{
 			baseBlock.visit( cuT( "GI Type" )
 				, globalIllumination
-				, castor::StringArray{ "None", "LPV", "LPV (Geometry)", "Layered LPV", "Layered LPV (Geometry)" }
+				, castor::StringArray{ cuT( "None" ), cuT( "LPV" ), cuT( "LPV (Geometry)" ), cuT( "Layered LPV" ), cuT( "Layered LPV (Geometry)" ) }
 				, ConfigurationVisitorBase::OnEnumValueChangeT< GlobalIlluminationType >( [this]( GlobalIlluminationType, GlobalIlluminationType newV )
 				{
 					globalIllumination = GlobalIlluminationType( newV );
@@ -340,7 +340,7 @@ namespace castor3d
 		{
 			baseBlock.visit( cuT( "GI Type" )
 				, globalIllumination
-				, castor::StringArray{ "None", "LPV", "LPV (Geometry)" }
+				, castor::StringArray{ cuT( "None" ), cuT( "LPV" ), cuT( "LPV (Geometry)" ) }
 				, ConfigurationVisitorBase::OnEnumValueChangeT< GlobalIlluminationType >( [this]( GlobalIlluminationType, GlobalIlluminationType newV )
 				{
 					globalIllumination = GlobalIlluminationType( newV );

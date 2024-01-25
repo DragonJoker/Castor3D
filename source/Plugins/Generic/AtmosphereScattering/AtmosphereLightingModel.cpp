@@ -72,7 +72,7 @@ namespace atmosphere_scattering
 			, lights
 			, enableVolumetric }
 	{
-		m_prefix = "atm_phong_";
+		m_prefix = cuT( "atm_phong_" );
 	}
 
 	c3d::LightingModelUPtr AtmospherePhongLightingModel::create( castor3d::LightingModelID lightingModelId
@@ -141,7 +141,7 @@ namespace atmosphere_scattering
 			, lights
 			, enableVolumetric }
 	{
-		m_prefix = "atm_pbr_";
+		m_prefix = cuT( "atm_pbr_" );
 	}
 
 	c3d::LightingModelUPtr AtmospherePbrLightingModel::create( castor3d::LightingModelID lightingModelId

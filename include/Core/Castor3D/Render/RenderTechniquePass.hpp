@@ -34,7 +34,7 @@ namespace castor3d
 		 */
 		RenderTechniquePassDesc & indirect( IndirectLightingData value )
 		{
-			m_indirectLighting = std::move( value );
+			m_indirectLighting = castor::move( value );
 			return *this;
 		}
 		/**
@@ -169,8 +169,8 @@ namespace castor3d
 		/**
 		 *\copydoc	castor3d::RenderNodesPass::createPipelineFlags
 		 */
-		C3D_API virtual PipelineFlags createPipelineFlags( PassComponentCombine passComponents
-			, SubmeshComponentCombine submeshComponents
+		C3D_API virtual PipelineFlags createPipelineFlags( PassComponentCombine const & passComponents
+			, SubmeshComponentCombine const & submeshComponents
 			, BlendMode colourBlendMode
 			, BlendMode alphaBlendMode
 			, RenderPassTypeID renderPassTypeId
@@ -301,8 +301,8 @@ namespace castor3d
 		/**
 		 *\copydoc	castor3d::RenderNodesPass::createPipelineFlags
 		 */
-		C3D_API PipelineFlags createPipelineFlags( PassComponentCombine passComponents
-			, SubmeshComponentCombine submeshComponents
+		C3D_API PipelineFlags createPipelineFlags( PassComponentCombine const & passComponents
+			, SubmeshComponentCombine const & submeshComponents
 			, BlendMode colourBlendMode
 			, BlendMode alphaBlendMode
 			, RenderPassTypeID renderPassTypeId

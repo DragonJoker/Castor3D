@@ -84,7 +84,7 @@ namespace castor3d
 		}
 
 		void createPassBinding( crg::FramePass & pass
-			, std::string const & name
+			, castor::MbString const & name
 			, uint32_t binding )const
 		{
 			pass.addUniformBuffer( { getBuffer(), name }

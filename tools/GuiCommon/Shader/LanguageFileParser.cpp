@@ -11,11 +11,11 @@ namespace GuiCommon
 {
 	//*********************************************************************************************
 
-	namespace
+	namespace parse
 	{
-		static castor::String const ParsersName{ "gc.language" };
+		static castor::String const ParsersName{ cuT( "gc.language" ) };
 
-		LanguageFileContext & getParserContext( castor::FileParserContext & context )
+		static LanguageFileContext & getParserContext( castor::FileParserContext & context )
 		{
 			return *static_cast< LanguageFileContext * >( context.getUserContext( ParsersName ) );
 		}
@@ -35,7 +35,7 @@ namespace GuiCommon
 		}
 		CU_EndAttributePush( LANGSection::eLanguage )
 
-		CU_ImplementAttributeParser( Language_Pattern )
+		static CU_ImplementAttributeParser( Language_Pattern )
 		{
 			auto & langContext = getParserContext( context );
 
@@ -71,7 +71,7 @@ namespace GuiCommon
 		}
 		CU_EndAttribute()
 
-		CU_ImplementAttributeParser( Language_FoldFlags )
+		static CU_ImplementAttributeParser( Language_FoldFlags )
 		{
 			auto & langContext = getParserContext( context );
 
@@ -102,7 +102,7 @@ namespace GuiCommon
 		}
 		CU_EndAttribute()
 
-		CU_ImplementAttributeParser( Language_Keywords )
+		static CU_ImplementAttributeParser( Language_Keywords )
 		{
 			auto & langContext = getParserContext( context );
 			langContext.keywords.clear();
@@ -118,7 +118,7 @@ namespace GuiCommon
 		}
 		CU_EndAttributePush( LANGSection::eKeywords )
 
-		CU_ImplementAttributeParser( Language_CPrimaryKeywords )
+		static CU_ImplementAttributeParser( Language_CPrimaryKeywords )
 		{
 			auto & langContext = getParserContext( context );
 			langContext.keywords.clear();
@@ -126,7 +126,7 @@ namespace GuiCommon
 		}
 		CU_EndAttributePush( LANGSection::eKeywords )
 
-		CU_ImplementAttributeParser( Language_CSecondaryKeywords )
+		static CU_ImplementAttributeParser( Language_CSecondaryKeywords )
 		{
 			auto & langContext = getParserContext( context );
 			langContext.keywords.clear();
@@ -134,7 +134,7 @@ namespace GuiCommon
 		}
 		CU_EndAttributePush( LANGSection::eKeywords )
 
-		CU_ImplementAttributeParser( Language_CDocumentationKeywords )
+		static CU_ImplementAttributeParser( Language_CDocumentationKeywords )
 		{
 			auto & langContext = getParserContext( context );
 			langContext.keywords.clear();
@@ -142,7 +142,7 @@ namespace GuiCommon
 		}
 		CU_EndAttributePush( LANGSection::eKeywords )
 
-		CU_ImplementAttributeParser( Language_CGlobalClasses )
+		static CU_ImplementAttributeParser( Language_CGlobalClasses )
 		{
 			auto & langContext = getParserContext( context );
 			langContext.keywords.clear();
@@ -150,7 +150,7 @@ namespace GuiCommon
 		}
 		CU_EndAttributePush( LANGSection::eKeywords )
 
-		CU_ImplementAttributeParser( Language_CPreprocessorDefinitions )
+		static CU_ImplementAttributeParser( Language_CPreprocessorDefinitions )
 		{
 			auto & langContext = getParserContext( context );
 			langContext.keywords.clear();
@@ -158,7 +158,7 @@ namespace GuiCommon
 		}
 		CU_EndAttributePush( LANGSection::eKeywords )
 
-		CU_ImplementAttributeParser( Language_CTaskErrorMarkers )
+		static CU_ImplementAttributeParser( Language_CTaskErrorMarkers )
 		{
 			auto & langContext = getParserContext( context );
 			langContext.keywords.clear();
@@ -166,7 +166,7 @@ namespace GuiCommon
 		}
 		CU_EndAttributePush( LANGSection::eKeywords )
 
-		CU_ImplementAttributeParser( Language_AsmCpuInstructions )
+		static CU_ImplementAttributeParser( Language_AsmCpuInstructions )
 		{
 			auto & langContext = getParserContext( context );
 			langContext.keywords.clear();
@@ -174,7 +174,7 @@ namespace GuiCommon
 		}
 		CU_EndAttributePush( LANGSection::eKeywords )
 
-		CU_ImplementAttributeParser( Language_AsmRegisters )
+		static CU_ImplementAttributeParser( Language_AsmRegisters )
 		{
 			auto & langContext = getParserContext( context );
 			langContext.keywords.clear();
@@ -182,7 +182,7 @@ namespace GuiCommon
 		}
 		CU_EndAttributePush( LANGSection::eKeywords )
 
-		CU_ImplementAttributeParser( Language_AsmDirectives )
+		static CU_ImplementAttributeParser( Language_AsmDirectives )
 		{
 			auto & langContext = getParserContext( context );
 			langContext.keywords.clear();
@@ -190,7 +190,7 @@ namespace GuiCommon
 		}
 		CU_EndAttributePush( LANGSection::eKeywords )
 
-		CU_ImplementAttributeParser( Language_AsmExtInstructions )
+		static CU_ImplementAttributeParser( Language_AsmExtInstructions )
 		{
 			auto & langContext = getParserContext( context );
 			langContext.keywords.clear();
@@ -198,7 +198,7 @@ namespace GuiCommon
 		}
 		CU_EndAttributePush( LANGSection::eKeywords )
 
-		CU_ImplementAttributeParser( Keywords_Add )
+		static CU_ImplementAttributeParser( Keywords_Add )
 		{
 			auto & langContext = getParserContext( context );
 
@@ -213,12 +213,13 @@ namespace GuiCommon
 		}
 		CU_EndAttribute()
 
-		CU_ImplementAttributeParser( Language_Style )
+		static CU_ImplementAttributeParser( Language_Style )
 		{
+			// Nothing else to do here
 		}
 		CU_EndAttributePush( LANGSection::eStyle )
 
-		CU_ImplementAttributeParser( Language_FontName )
+		static CU_ImplementAttributeParser( Language_FontName )
 		{
 			auto & langContext = getParserContext( context );
 
@@ -233,7 +234,7 @@ namespace GuiCommon
 		}
 		CU_EndAttribute()
 
-		CU_ImplementAttributeParser( Language_FontSize )
+		static CU_ImplementAttributeParser( Language_FontSize )
 		{
 			auto & langContext = getParserContext( context );
 
@@ -248,7 +249,7 @@ namespace GuiCommon
 		}
 		CU_EndAttribute()
 
-		CU_ImplementAttributeParser( Language_CLike )
+		static CU_ImplementAttributeParser( Language_CLike )
 		{
 			auto & langContext = getParserContext( context );
 
@@ -264,7 +265,7 @@ namespace GuiCommon
 		}
 		CU_EndAttribute()
 
-		CU_ImplementAttributeParser( Style_Type )
+		static CU_ImplementAttributeParser( Style_Type )
 		{
 			auto & langContext = getParserContext( context );
 
@@ -281,7 +282,7 @@ namespace GuiCommon
 		}
 		CU_EndAttribute()
 
-		CU_ImplementAttributeParser( Style_FgColour )
+		static CU_ImplementAttributeParser( Style_FgColour )
 		{
 			auto & langContext = getParserContext( context );
 
@@ -298,7 +299,7 @@ namespace GuiCommon
 		}
 		CU_EndAttribute()
 
-		CU_ImplementAttributeParser( Style_BgColour )
+		static CU_ImplementAttributeParser( Style_BgColour )
 		{
 			auto & langContext = getParserContext( context );
 
@@ -315,7 +316,7 @@ namespace GuiCommon
 		}
 		CU_EndAttribute()
 
-		CU_ImplementAttributeParser( Style_FontStyle )
+		static CU_ImplementAttributeParser( Style_FontStyle )
 		{
 			castor::String langParams;
 			params[0]->get( langParams );
@@ -355,14 +356,14 @@ namespace GuiCommon
 		}
 		CU_EndAttribute()
 
-		CU_ImplementAttributeParser( Keywords_End )
+		static CU_ImplementAttributeParser( Keywords_End )
 		{
 			auto & langContext = getParserContext( context );
 			langContext.currentLanguage->setKeywords( langContext.index - 1, langContext.keywords );
 		}
 		CU_EndAttributePop()
 
-		castor::AttributeParsers registerParsers()
+			static castor::AttributeParsers registerParsers()
 		{
 			using namespace castor;
 			static UInt32StrMap mapTypes;
@@ -428,7 +429,7 @@ namespace GuiCommon
 			addParser( result, uint32_t( LANGSection::eLanguage ), cuT( "font_size" ), Language_FontSize, { makeParameter< ParameterType::eInt32 >() } );
 			addParser( result, uint32_t( LANGSection::eLanguage ), cuT( "is_c_like" ), Language_CLike, { makeParameter< ParameterType::eBool >() } );
 			addParser( result, uint32_t( LANGSection::eLanguage ), cuT( "style" ), Language_Style );
-			addParser( result, uint32_t( LANGSection::eStyle ), cuT( "type" ), Style_Type, { makeParameter< ParameterType::eCheckedText>( "StyleType", mapTypes ) } );
+			addParser( result, uint32_t( LANGSection::eStyle ), cuT( "type" ), Style_Type, { makeParameter< ParameterType::eCheckedText>( cuT( "StyleType" ), mapTypes ) } );
 			addParser( result, uint32_t( LANGSection::eStyle ), cuT( "fg_colour" ), Style_FgColour, { makeParameter< ParameterType::eText >() } );
 			addParser( result, uint32_t( LANGSection::eStyle ), cuT( "bg_colour" ), Style_BgColour, { makeParameter< ParameterType::eText >() } );
 			addParser( result, uint32_t( LANGSection::eStyle ), cuT( "font_style" ), Style_FontStyle, { makeParameter< ParameterType::eText >() } );
@@ -438,7 +439,7 @@ namespace GuiCommon
 			return result;
 		}
 
-		castor::StrUInt32Map registerSections()
+		static castor::StrUInt32Map registerSections()
 		{
 			return { { uint32_t( LANGSection::eRoot ), castor::String{} }
 				, { uint32_t( LANGSection::eLanguage ), cuT( "language" ) }
@@ -446,14 +447,14 @@ namespace GuiCommon
 				, { uint32_t( LANGSection::eStyle ), cuT( "style" ) } };
 		}
 
-		void * createContext( castor::FileParserContext & context )
+		static void * createContext( castor::FileParserContext & context )
 		{
 			LanguageFileContext * userContext = new LanguageFileContext;
 			userContext->currentLanguage.reset( new LanguageInfo );
 			return userContext;
 		}
 
-		castor::AdditionalParsers createParsers()
+		static castor::AdditionalParsers createParsers()
 		{
 			return { registerParsers()
 				, registerSections()
@@ -467,18 +468,18 @@ namespace GuiCommon
 		: FileParser{ castor::SectionId( LANGSection::eRoot ) }
 		, m_stcContext{ stcContext }
 	{
-		registerParsers( ParsersName, createParsers() );
+		registerParsers( parse::ParsersName, parse::createParsers() );
 	}
 
 	void LanguageFileParser::doCleanupParser( castor::PreprocessedFile & preprocessed )
 	{
-		getParserContext( preprocessed.getContext() ).currentLanguage.reset();
+		parse::getParserContext( preprocessed.getContext() ).currentLanguage.reset();
 	}
 
 	void LanguageFileParser::doValidate( castor::PreprocessedFile & preprocessed )
 	{
-		auto & context = getParserContext( preprocessed.getContext() );
-		m_stcContext->push_back( std::move( context.currentLanguage ) );
+		auto & context = parse::getParserContext( preprocessed.getContext() );
+		m_stcContext->push_back( castor::move( context.currentLanguage ) );
 	}
 
 	castor::String LanguageFileParser::doGetSectionName( castor::SectionId section )const
@@ -510,9 +511,9 @@ namespace GuiCommon
 		return result;
 	}
 
-	std::unique_ptr< castor::FileParser > LanguageFileParser::doCreateParser()const
+	castor::RawUniquePtr< castor::FileParser > LanguageFileParser::doCreateParser()const
 	{
-		return std::make_unique< LanguageFileParser >( m_stcContext );
+		return castor::make_unique< LanguageFileParser >( m_stcContext );
 	}
 
 	//*********************************************************************************************

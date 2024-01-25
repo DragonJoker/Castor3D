@@ -50,7 +50,7 @@ namespace waves
 		{
 			if ( !blockContext->mesh )
 			{
-				CU_ParsingError( "Mesh not initialised" );
+				CU_ParsingError( cuT( "Mesh not initialised" ) );
 			}
 
 			newBlockContext->mesh = blockContext->mesh;
@@ -61,11 +61,11 @@ namespace waves
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
-				blockContext->parameters.add( "width_subdiv"
+				blockContext->parameters.add( cuT( "width_subdiv" )
 					, castor::string::toString( params[0]->get< uint32_t >() ) );
 			}
 		}
@@ -75,11 +75,11 @@ namespace waves
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
-				blockContext->parameters.add( "depth_subdiv"
+				blockContext->parameters.add( cuT( "depth_subdiv" )
 					, castor::string::toString( params[0]->get< uint32_t >() ) );
 			}
 		}
@@ -89,11 +89,11 @@ namespace waves
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
-				blockContext->parameters.add( "width"
+				blockContext->parameters.add( cuT( "width" )
 					, castor::string::toString( params[0]->get< uint32_t >() ) );
 			}
 		}
@@ -103,11 +103,11 @@ namespace waves
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
-				blockContext->parameters.add( "depth"
+				blockContext->parameters.add( cuT( "depth" )
 					, castor::string::toString( params[0]->get< uint32_t >() ) );
 			}
 		}
@@ -117,7 +117,7 @@ namespace waves
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -130,7 +130,7 @@ namespace waves
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -146,14 +146,14 @@ namespace waves
 
 		static CU_ImplementAttributeParserBlock( parserWavesComponentEnd, WavesContext )
 		{
-			auto & factory = blockContext->mesh->getEngine()->getMeshFactory();
+			auto const & factory = blockContext->mesh->getEngine()->getMeshFactory();
 			blockContext->parameters.add( cuT( "flipYZ" ), true );
-			factory.create( "plane" )->generate( *blockContext->mesh, blockContext->parameters );
+			factory.create( cuT( "plane" ) )->generate( *blockContext->mesh, blockContext->parameters );
 
 			auto submesh = blockContext->mesh->getSubmesh( 0u );
 			auto & component = *submesh->createComponent< WavesRenderComponent >();
 			blockContext->config.numWaves = blockContext->wave;
-			component.setConfig( std::move( blockContext->config ) );
+			component.setConfig( castor::move( blockContext->config ) );
 		}
 		CU_EndAttributePop()
 
@@ -161,7 +161,7 @@ namespace waves
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -174,7 +174,7 @@ namespace waves
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -187,7 +187,7 @@ namespace waves
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -200,7 +200,7 @@ namespace waves
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -213,7 +213,7 @@ namespace waves
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -241,7 +241,7 @@ namespace waves
 			WaveResult( sdw::ShaderWriter & writer
 				, sdw::expr::ExprPtr expr
 				, bool enabled = true )
-				: sdw::StructInstance{ writer, std::move( expr ), enabled }
+				: sdw::StructInstance{ writer, castor::move( expr ), enabled }
 				, position{ getMember< sdw::Vec3 >( "position" ) }
 				, normal{ getMember< sdw::Vec3 >( "normal" ) }
 				, bitangent{ getMember< sdw::Vec3 >( "bitangent" ) }
@@ -285,7 +285,7 @@ namespace waves
 
 	bool WavesRenderComponent::RenderData::initialise( RenderDevice const & device )
 	{
-		m_ubo = std::make_unique< WavesUbo >( device );
+		m_ubo = castor::make_unique< WavesUbo >( device );
 		return true;
 	}
 
@@ -719,7 +719,7 @@ namespace waves
 	//*********************************************************************************************
 
 	castor::String const WavesRenderComponent::TypeName = C3D_PluginMakeSubmeshRenderComponentName( "waves", "waves" );
-	castor::String const WavesRenderComponent::FullName = "Waves Rendering";
+	castor::MbString const WavesRenderComponent::FullName = "Waves Rendering";
 
 	WavesRenderComponent::WavesRenderComponent( Submesh & submesh )
 		: SubmeshComponent{ submesh, TypeName }

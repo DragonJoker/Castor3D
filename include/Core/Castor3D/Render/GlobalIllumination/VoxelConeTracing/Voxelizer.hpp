@@ -119,7 +119,7 @@ namespace castor3d
 		crg::FramePass & doCreateVoxelToTexture( crg::FramePass const & previousPass
 			, ProgressBar * progress );
 		crg::FramePass & doCreateVoxelMipGen( crg::FramePass const & previousPass
-			, std::string const & name
+			, castor::String const & name
 			, crg::ImageViewId const & view
 			, crg::RunnablePass::IsEnabledCallback isEnabled
 			, ProgressBar * progress );

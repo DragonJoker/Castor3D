@@ -48,7 +48,7 @@ namespace smaa
 			VertexT( sdw::ShaderWriter & writer
 				, sdw::expr::ExprPtr expr
 				, bool enabled )
-				: VertexStructT< FlagT >{ writer, std::move( expr ), enabled }
+				: VertexStructT< FlagT >{ writer, castor::move( expr ), enabled }
 			{
 			}
 
@@ -224,7 +224,7 @@ namespace smaa
 		, m_blendView{ blendView }
 		, m_velocityView{ velocityView }
 		, m_extent{ castor3d::getSafeBandedExtent3D( renderTarget.getSize() ) }
-		, m_shader{ "SmaaNeighbourhood", neighblend::getProgram( device, velocityView != nullptr ) }
+		, m_shader{ cuT( "SmaaNeighbourhood" ), neighblend::getProgram( device, velocityView != nullptr ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
 		, m_pass{ m_graph.createPass( "NeighbourhoodBlending"
 			, [this, &device, &config, enabled, passIndex]( crg::FramePass const & pass
@@ -239,7 +239,7 @@ namespace smaa
 					.passIndex( passIndex )
 					.enabled( enabled )
 					.build( pass, context, frameGraph, { config.maxSubsampleIndices * 2u } );
-				device.renderSystem.getEngine()->registerTimer( pass.getFullName()
+				device.renderSystem.getEngine()->registerTimer( castor::makeString( pass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} ) }
@@ -283,7 +283,7 @@ namespace smaa
 		{
 			m_images.emplace_back( m_device
 				, renderTarget.getResources()
-				, "SMNBRes" + std::to_string( i )
+				, cuT( "SMNBRes" ) + castor::string::toString( i )
 				, 0u
 				, m_extent
 				, 1u
@@ -316,7 +316,7 @@ namespace smaa
 
 		for ( uint32_t i = 0; i < m_images.size(); ++i )
 		{
-			visitor.visit( "SMAA NeighbourhoodBlending " + std::to_string( i )
+			visitor.visit( cuT( "SMAA NeighbourhoodBlending " ) + castor::string::toString( i )
 				, m_images[i]
 				, m_graph.getFinalLayoutState( m_images[i].wholeViewId ).layout
 				, castor3d::TextureFactors{}.invert( true ) );

@@ -61,7 +61,7 @@ namespace castor3d
 		}
 
 		static void rem( LightingModelID id
-			, std::map< LightingModelID, size_t > & models )
+			, castor::Map< LightingModelID, size_t > & models )
 		{
 			auto it = models.find( id );
 
@@ -73,7 +73,7 @@ namespace castor3d
 		}
 
 		static void add( LightingModelID id
-			, std::map< LightingModelID, size_t > & models )
+			, castor::Map< LightingModelID, size_t > & models )
 		{
 			auto it = models.emplace( id, 0u ).first;
 			it->second++;
@@ -374,7 +374,7 @@ namespace castor3d
 		, Material const & oldMaterial
 		, Material const & newMaterial )
 	{
-		std::vector< std::pair< uint32_t, SubmeshRenderNodeUPtr > > nodes;
+		castor::Vector< castor::Pair< uint32_t, SubmeshRenderNodeUPtr > > nodes;
 
 		for ( auto & pass : oldMaterial )
 		{
@@ -383,7 +383,7 @@ namespace castor3d
 			if ( submeshIt != m_submeshNodes.end() )
 			{
 				scnrendnd::rem( pass->getLightingModelId(), m_lightingModels );
-				auto node = std::move( submeshIt->second );
+				auto node = castor::move( submeshIt->second );
 				m_submeshNodes.erase( submeshIt );
 
 				for ( auto & culler : m_cullers )
@@ -391,7 +391,7 @@ namespace castor3d
 					culler->removeCulled( *node );
 				}
 
-				nodes.emplace_back( instance.getId( *pass, data ), std::move( node ) );
+				nodes.emplace_back( instance.getId( *pass, data ), castor::move( node ) );
 			}
 		}
 
@@ -406,7 +406,7 @@ namespace castor3d
 				auto pass = passIt->get();
 				scnrendnd::add( pass->getLightingModelId(), m_lightingModels );
 				auto submeshIt = m_submeshNodes.emplace( scnrendnd::makeNodeHash( *pass, data, instance ), nullptr ).first;
-				submeshIt->second = std::move( nodeIt->second );
+				submeshIt->second = castor::move( nodeIt->second );
 
 				auto it = std::find_if( m_nodesData.begin()
 					, m_nodesData.end()
@@ -455,7 +455,7 @@ namespace castor3d
 		, Material const & oldMaterial
 		, Material const & newMaterial )
 	{
-		std::vector< std::pair< uint32_t, BillboardRenderNodeUPtr > > nodes;
+		castor::Vector< castor::Pair< uint32_t, BillboardRenderNodeUPtr > > nodes;
 
 		for ( auto & pass : oldMaterial )
 		{
@@ -464,7 +464,7 @@ namespace castor3d
 			if ( billboardIt != m_billboardNodes.end() )
 			{
 				scnrendnd::rem( pass->getLightingModelId(), m_lightingModels );
-				auto node = std::move( billboardIt->second );
+				auto node = castor::move( billboardIt->second );
 				m_billboardNodes.erase( billboardIt );
 
 				for ( auto & culler : m_cullers )
@@ -472,7 +472,7 @@ namespace castor3d
 					culler->removeCulled( *node );
 				}
 
-				nodes.emplace_back( billboard.getId( *pass ), std::move( node ) );
+				nodes.emplace_back( billboard.getId( *pass ), castor::move( node ) );
 			}
 		}
 
@@ -487,7 +487,7 @@ namespace castor3d
 				auto pass = passIt->get();
 				scnrendnd::add( pass->getLightingModelId(), m_lightingModels );
 				auto billboardIt = m_billboardNodes.emplace( scnrendnd::makeNodeHash( *pass, billboard ), nullptr ).first;
-				billboardIt->second = std::move( nodeIt->second );
+				billboardIt->second = castor::move( nodeIt->second );
 
 				auto it = std::find_if( m_nodesData.begin()
 					, m_nodesData.end()
@@ -528,7 +528,7 @@ namespace castor3d
 #if C3D_DebugTimers
 		auto block( m_timerRenderNodes->start() );
 #endif
-		std::map< Submesh const *, std::map< uint32_t, uint32_t > > indices;
+		castor::Map< Submesh const *, castor::Map< uint32_t, uint32_t > > indices;
 		
 		for ( auto const & [_, node] : m_submeshNodes )
 		{

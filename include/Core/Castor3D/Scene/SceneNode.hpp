@@ -25,7 +25,7 @@ namespace castor3d
 		//!\~french		Le nombre total de noeuds de scène.
 		static uint64_t Count;
 		using SceneNodeMap = castor::StringMap< SceneNodeRPtr >;
-		using MovableArray = std::list< std::reference_wrapper< MovableObject > >;
+		using MovableArray = castor::List< castor::ReferenceWrapper< MovableObject > >;
 
 	public:
 		/**
@@ -150,7 +150,7 @@ namespace castor3d
 		 *\brief		Détache un noeud des enfants de ce noeud, s'il en fait partie
 		 *\param[in]	child	Le noeud à détacher
 		 */
-		C3D_API void detachChild( SceneNode & child )noexcept;
+		C3D_API void detachChild( SceneNode const & child )noexcept;
 		/**
 		 *\~english
 		 *\brief		Detaches a child from my child's list, if it is one of my childs
@@ -440,7 +440,7 @@ namespace castor3d
 				ires = destination.emplace( name, ElementPtrT{} );
 			}
 
-			ires.first->second = std::move( element );
+			ires.first->second = castor::move( element );
 			ires.first->second->rename( name );
 		}
 	};

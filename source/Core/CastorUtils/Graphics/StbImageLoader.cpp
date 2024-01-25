@@ -111,7 +111,7 @@ namespace castor
 			}
 			else
 			{
-				CU_LoaderError( String( cuT( "Can't load image:\n" ) ) + stbi_failure_reason() );
+				CU_LoaderError( MbString( "Can't load image:\n" ) + stbi_failure_reason() );
 			}
 
 			return result;
@@ -210,7 +210,7 @@ namespace castor
 			}
 			else
 			{
-				CU_LoaderError( String( cuT( "Can't load image:\n" ) ) + stbi_failure_reason() );
+				CU_LoaderError( MbString( "Can't load image:\n" ) + stbi_failure_reason() );
 			}
 
 			return result;
@@ -245,7 +245,7 @@ namespace castor
 	void StbImageLoader::registerLoader( ImageLoader & reg )
 	{
 		reg.registerLoader( stbil::listExtensions()
-			, std::make_unique< StbImageLoader >() );
+			, castor::make_unique< StbImageLoader >() );
 	}
 
 	void StbImageLoader::unregisterLoader( ImageLoader & reg )

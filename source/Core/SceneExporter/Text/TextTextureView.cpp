@@ -14,6 +14,6 @@ namespace castor
 	bool TextWriter< TextureView >::operator()( TextureView const & obj
 		, StringStream & file )
 	{
-		return write( file, "", obj.toString() );
+		return write( file, cuT( "" ), obj.toString() );
 	}
 }

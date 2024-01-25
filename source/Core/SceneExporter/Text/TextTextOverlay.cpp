@@ -25,7 +25,7 @@ namespace castor
 		if ( auto block{ beginBlock( file, cuT( "text_overlay" ), overlay.getOverlayName() ) } )
 		{
 			result = writeName( file, cuT( "font" ), overlay.getFontTexture()->getFontName() )
-				&& writeName( file, cuT( "text" ), string::stringCast< xchar >( overlay.getCaption() ) )
+				&& writeName( file, cuT( "text" ), makeString( overlay.getCaption() ) )
 				&& write( file, cuT( "text_wrapping" ), getName( overlay.getTextWrappingMode() ) )
 				&& writeOpt( file, cuT( "horizontal_align" ), getName( overlay.getHAlign() ), getName( HAlign::eLeft ) )
 				&& writeOpt( file, cuT( "vertical_align" ), getName( overlay.getVAlign() ), getName( VAlign::eTop ) )

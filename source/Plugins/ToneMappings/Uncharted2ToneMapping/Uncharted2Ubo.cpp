@@ -14,7 +14,7 @@ namespace Uncharted2
 	Uncharted2Data::Uncharted2Data( sdw::ShaderWriter & writer
 		, ast::expr::ExprPtr expr
 		, bool enabled )
-		: StructInstance{ writer, std::move( expr ), enabled }
+		: StructInstance{ writer, castor::move( expr ), enabled }
 		, shoulderStrength{ getMember< sdw::Float >( "shoulderStrength" ) }
 		, linearStrength{ getMember< sdw::Float >( "linearStrength" ) }
 		, linearAngle{ getMember< sdw::Float >( "linearAngle" ) }
@@ -46,9 +46,9 @@ namespace Uncharted2
 		return result;
 	}
 
-	std::unique_ptr< sdw::Struct > Uncharted2Data::declare( sdw::ShaderWriter & writer )
+	castor::RawUniquePtr< sdw::Struct > Uncharted2Data::declare( sdw::ShaderWriter & writer )
 	{
-		return std::make_unique< sdw::Struct >( writer
+		return castor::make_unique< sdw::Struct >( writer
 			, makeType( writer.getTypesCache() ) );
 	}
 

@@ -40,15 +40,6 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Background text serialiser.
-	*\~french
-	*\brief
-	*	Sérialiseur texte de fond.
-	*/
-	class BackgroundTextWriter;
-	/**
-	*\~english
-	*\brief
 	*	Base class for a background visitor.
 	*\~french
 	*\brief
@@ -97,7 +88,7 @@ namespace castor3d
 	CU_DeclareSmartPtr( castor3d, ImageBackground, C3D_API );
 	CU_DeclareSmartPtr( castor3d, SkyboxBackground, C3D_API );
 
-	using BackgroundChangedFunc = std::function< void( SceneBackground const & ) >;
+	using BackgroundChangedFunc = castor::Function< void( SceneBackground const & ) >;
 	using OnBackgroundChanged = castor::SignalT< BackgroundChangedFunc >;
 	using OnBackgroundChangedConnection = OnBackgroundChanged::connection;
 

@@ -13,9 +13,9 @@ namespace castor::platform
 {
 	namespace win32
 	{
-		static std::string makeString( int32_t v )
+		static String makeString( int32_t v )
 		{
-			std::string result;
+			MbString result;
 			auto c = char( ( v >> 0 ) & 0xff );
 
 			if ( c )
@@ -41,20 +41,20 @@ namespace castor::platform
 				result += c;
 			}
 
-			return result;
+			return castor::makeString( result );
 		};
 	}
 
 #if defined( CU_CompilerMSVC )
 
-	void callCpuid( uint32_t func, std::array< int32_t, 4 > & data )
+	void callCpuid( uint32_t func, Array< int32_t, 4 > & data )
 	{
 		__cpuid( data.data(), int( func ) );
 	}
 
 #else
 
-	void callCpuid( uint32_t func, std::array< int32_t, 4 > & data )
+	void callCpuid( uint32_t func, Array< int32_t, 4 > & data )
 	{
 		uint32_t a;
 		uint32_t b;
@@ -76,9 +76,9 @@ namespace castor::platform
 		return uint32_t( sysinfo.dwNumberOfProcessors );
 	}
 
-	std::string getCPUModel()
+	String getCPUModel()
 	{
-		std::array< std::array< int32_t, 4 >, 3 > brand{};
+		Array< Array< int32_t, 4 >, 3 > brand{};
 		callCpuid( 0x80000002, brand[0] );
 		callCpuid( 0x80000003, brand[1] );
 		callCpuid( 0x80000004, brand[2] );

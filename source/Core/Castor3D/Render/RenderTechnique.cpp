@@ -58,12 +58,12 @@ namespace castor3d
 
 	namespace rendtech
 	{
-		static std::map< double, LightRPtr > doSortLights( LightCache const & cache
+		static castor::Map< double, LightRPtr > doSortLights( LightCache const & cache
 			, LightType type
 			, Camera const & camera )
 		{
 			auto lock( castor::makeUniqueLock( cache ) );
-			std::map< double, LightRPtr > lights;
+			castor::Map< double, LightRPtr > lights;
 
 			if ( cache.getLightsBufferCount( LightType::eDirectional ) <= 1u
 				&& cache.getLightsBufferCount( LightType::ePoint ) <= MaxPointShadowMapCount
@@ -122,7 +122,7 @@ namespace castor3d
 			{
 				int32_t index = 0;
 				auto lightIt = lights.begin();
-				activeShadowMaps[size_t( type )].emplace_back( std::ref( shadowMap ) );
+				activeShadowMaps[size_t( type )].emplace_back( castor::ref( shadowMap ) );
 				auto & active = activeShadowMaps[size_t( type )].back();
 
 				for ( auto i = 0u; i < count; ++i )
@@ -245,15 +245,16 @@ namespace castor3d
 				}
 			};
 
-			stepProgressBarLocal( progress, "Creating clear LPV commands" );
-			crg::FrameGraph result{ resources.getHandler(), name + "/ClearLpv" };
-			auto & pass = result.createPass( name + "LpvClear"
+			stepProgressBarLocal( progress, cuT( "Creating clear LPV commands" ) );
+			auto mbName = castor::toUtf8( name );
+			crg::FrameGraph result{ resources.getHandler(), mbName + "/ClearLpv" };
+			auto & pass = result.createPass( mbName + "LpvClear"
 				, [progress]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & runnableGraph )
 				{
-					stepProgressBarLocal( progress, "Initialising clear LPV commands" );
-					return std::make_unique< LpvClear >( framePass
+					stepProgressBarLocal( progress, cuT( "Initialising clear LPV commands" ) );
+					return castor::make_unique< LpvClear >( framePass
 						, context
 						, runnableGraph );
 				} );
@@ -309,11 +310,8 @@ namespace castor3d
 	RenderTechnique::RenderTechnique( castor::String const & name
 		, RenderTarget & renderTarget
 		, RenderDevice const & device
-		, QueueData const & queueData
-		, Parameters const & parameters
 		, Texture const & colour
 		, Texture const & intermediate
-		, SsaoConfig const & ssaoConfig
 		, crg::FramePassArray previousPasses
 		, ProgressBar * progress
 		, bool visbuffer
@@ -328,7 +326,7 @@ namespace castor3d
 		, m_intermediate{ &intermediate }
 		, m_depth{ m_device
 			, m_renderTarget.getResources()
-			, getName() + "/Depth"
+			, getName() + cuT( "/Depth" )
 			, 0u
 			, m_colour->getExtent()
 			, 1u
@@ -338,7 +336,7 @@ namespace castor3d
 			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
 		, m_normal{ m_device
 			, m_renderTarget.getResources()
-			, getName() + "/Normal"
+			, getName() + cuT( "/Normal" )
 			, 0u
 			, m_colour->getExtent()
 			, 1u
@@ -348,7 +346,7 @@ namespace castor3d
 			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
 		, m_scattering{ m_device
 			, m_renderTarget.getResources()
-			, getName() + "/Scattering"
+			, getName() + cuT( "/Scattering" )
 			, 0u
 			, m_colour->getExtent()
 			, 1u
@@ -358,7 +356,7 @@ namespace castor3d
 			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
 		, m_diffuse{ m_device
 			, m_renderTarget.getResources()
-			, getName() + "/Diffuse"
+			, getName() + cuT( "/Diffuse" )
 			, 0u
 			, m_colour->getExtent()
 			, 1u
@@ -404,7 +402,7 @@ namespace castor3d
 				, *m_renderTarget.getCamera()
 				, m_vctConfigUbo
 				, m_renderTarget.getScene()->getVoxelConeTracingConfig()
-				, std::move( previousPasses ) )
+				, previousPasses )
 			: nullptr ) }
 		, m_lpvResult{ ( m_shadowBuffer
 			? castor::makeUnique< LightVolumePassResult >( m_renderTarget.getResources()
@@ -426,7 +424,7 @@ namespace castor3d
 			, ( m_voxelizer ? &m_voxelizer->getSecondaryBounce() : nullptr ) }
 		, m_prepass{ *this
 			, m_device
-			, doCreateRenderPasses( TechniquePassEvent::eBeforeDepth, &m_renderTarget.createVertexTransformPass( m_graph ), std::move( previousPasses ) )
+			, doCreateRenderPasses( TechniquePassEvent::eBeforeDepth, &m_renderTarget.createVertexTransformPass( m_graph ), castor::move( previousPasses ) )
 			, progress
 			, visbuffer }
 		, m_lastDepthPass{ &m_prepass.getLastPass() }
@@ -454,14 +452,14 @@ namespace castor3d
 		, m_lastTransparentPass{ &m_transparent.getLastPass() }
 		, m_clearLpvGraph{ ( m_shadowBuffer
 			? rendtech::doCreateClearLpvCommands( m_renderTarget.getResources(), progress, getName(), *m_lpvResult, m_llpvResult )
-			: crg::FrameGraph{ m_renderTarget.getResources().getHandler(), getName() + "/ClearLpv" } ) }
+			: crg::FrameGraph{ m_renderTarget.getResources().getHandler(), castor::toUtf8( getName() ) + "/ClearLpv" } ) }
 		, m_clearLpvRunnable{ ( m_shadowBuffer
 			? m_clearLpvGraph.compile( m_device.makeContext() )
 			: nullptr ) }
 	{
 		if ( m_clearLpvRunnable )
 		{
-			getEngine()->registerTimer( m_clearLpvRunnable->getName()
+			getEngine()->registerTimer( castor::makeString( m_clearLpvRunnable->getName() )
 				, m_clearLpvRunnable->getTimer() );
 		}
 
@@ -490,17 +488,17 @@ namespace castor3d
 #if !C3D_DebugDisableShadowMaps
 		if ( m_directionalShadowMap )
 		{
-			m_allShadowMaps[size_t( LightType::eDirectional )].emplace_back( std::ref( *m_directionalShadowMap ), UInt32Array{} );
+			m_allShadowMaps[size_t( LightType::eDirectional )].emplace_back( castor::ref( *m_directionalShadowMap ), UInt32Array{} );
 		}
 
 		if ( m_spotShadowMap )
 		{
-			m_allShadowMaps[size_t( LightType::eSpot )].emplace_back( std::ref( *m_spotShadowMap ), UInt32Array{} );
+			m_allShadowMaps[size_t( LightType::eSpot )].emplace_back( castor::ref( *m_spotShadowMap ), UInt32Array{} );
 		}
 
 		if ( m_pointShadowMap )
 		{
-			m_allShadowMaps[size_t( LightType::ePoint )].emplace_back( std::ref( *m_pointShadowMap ), UInt32Array{} );
+			m_allShadowMaps[size_t( LightType::ePoint )].emplace_back( castor::ref( *m_pointShadowMap ), UInt32Array{} );
 		}
 
 		doInitialiseLpv();
@@ -511,7 +509,7 @@ namespace castor3d
 	{
 		if ( m_clearLpvRunnable )
 		{
-			getEngine()->unregisterTimer( m_clearLpvRunnable->getName()
+			getEngine()->unregisterTimer( castor::makeString( m_clearLpvRunnable->getName() )
 				, m_clearLpvRunnable->getTimer() );
 		}
 
@@ -661,11 +659,11 @@ namespace castor3d
 
 	void RenderTechnique::accept( RenderTechniqueVisitor & visitor )
 	{
-		visitor.visit( "Technique Colour"
+		visitor.visit( cuT( "Technique Colour" )
 			, *m_colour
 			, m_renderTarget.getGraph().getFinalLayoutState( m_colour->sampledViewId ).layout
 			, TextureFactors{}.invert( true ) );
-		visitor.visit( "Technique Depth"
+		visitor.visit( cuT( "Technique Depth" )
 			, m_depth
 			, m_renderTarget.getGraph().getFinalLayoutState( m_depth.sampledViewId ).layout
 			, TextureFactors{}.invert( true ) );
@@ -840,7 +838,7 @@ namespace castor3d
 			result = renderPassInfo->create( m_device
 				, *this
 				, m_renderPasses
-				, std::move( result ) );
+				, castor::move( result ) );
 		}
 
 		return result;

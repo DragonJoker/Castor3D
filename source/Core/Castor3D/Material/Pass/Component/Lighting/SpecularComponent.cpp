@@ -37,7 +37,7 @@ namespace castor
 		bool operator()( castor3d::SpecularComponent const & object
 			, StringStream & file )override
 		{
-			return writeNamedSubOpt( file, "specular_colour", object.getSpecular(), castor3d::SpecularComponent::Default );
+			return writeNamedSubOpt( file, cuT( "specular_colour" ), object.getSpecular(), castor3d::SpecularComponent::Default );
 		}
 	};
 }

@@ -110,8 +110,8 @@ namespace castor3d
 	private:
 		ShaderBuffer m_buffer;
 		TextureAnimationsData m_data;
-		std::vector< AnimatedTexture const * > m_animations;
-		std::mutex m_mutex;
+		castor::Vector< AnimatedTexture const * > m_animations;
+		castor::Mutex m_mutex;
 		std::atomic_uint32_t m_count{ 0u };
 	};
 }

@@ -52,17 +52,17 @@ namespace castor3d
 
 			if ( needsVsm )
 			{
-				result += "_VSM";
+				result += cuT( "_VSM" );
 			}
 
 			if ( needsRsm )
 			{
-				result += "_RSM";
+				result += cuT( "_RSM" );
 			}
 
 			if ( isStatic )
 			{
-				result += "_Statics";
+				result += cuT( "_Statics" );
 			}
 
 			return result;
@@ -170,25 +170,25 @@ namespace castor3d
 		, m_cascades{ scene.getDirectionalShadowCascades() }
 	{
 #if C3D_DebugCascadeFrustum
-		std::array< castor::RgbColour, 4u > colours{ castor::RgbColour::fromPredefined( castor::PredefinedRgbColour::eRed )
+		castor::Array< castor::RgbColour, 4u > colours{ castor::RgbColour::fromPredefined( castor::PredefinedRgbColour::eRed )
 			, castor::RgbColour::fromPredefined( castor::PredefinedRgbColour::eGreen )
 			, castor::RgbColour::fromPredefined( castor::PredefinedRgbColour::eBlue )
 			, castor::RgbColour::fromComponents( 1.0f, 1.0f, 0.0f ) };
-		std::array< castor::String, 4u > colourNames{ cuT( "Red" )
+		castor::Array< castor::String, 4u > colourNames{ cuT( "Red" )
 			, cuT( "Green" )
 			, cuT( "Blue" )
 			, cuT( "Yellow" ) };
 
 		for ( uint32_t cascade = 0u; cascade < m_cascades; ++cascade )
 		{
-			auto name = "CascadeFrustum" + std::to_string( cascade );
+			auto name = cuT( "CascadeFrustum" ) + castor::string::toString( cascade );
 			auto mesh = shdmapdir::doCreateFrustumMesh( name, scene, colours[cascade], colourNames[cascade] );
 			m_frustumMeshes.push_back( mesh );
 
 			if ( !scene.hasGeometry( name ) )
 			{
 				auto sceneNode = scene.addNewSceneNode( name );
-				auto geometry = std::make_shared< Geometry >( name, scene, *sceneNode, mesh );
+				auto geometry = castor::make_shared< Geometry >( name, scene, *sceneNode, mesh );
 				geometry->setShadowCaster( false );
 				geometry->setCullable( false );
 
@@ -199,15 +199,15 @@ namespace castor3d
 
 				sceneNode->attachTo( *scene.getObjectRootNode() );
 				sceneNode->setVisible( false );
-				scene.addGeometry( std::move( geometry ) );
+				scene.addGeometry( castor::move( geometry ) );
 			}
 		}
 
 #endif
-		stepProgressBarLocal( progress, "Creating ShadowMapDirectional" );
+		stepProgressBarLocal( progress, cuT( "Creating ShadowMapDirectional" ) );
 	}
 
-	crg::FramePassArray ShadowMapDirectional::doCreatePass( crg::FrameGraph & graph
+	crg::FramePassArray ShadowMapDirectional::doCreatePass( crg::FramePassGroup & graph
 		, crg::FramePassArray const & previousPasses
 		, uint32_t index
 		, bool vsm
@@ -240,12 +240,12 @@ namespace castor3d
 
 		for ( uint32_t cascade = 0u; cascade < cascadeCount; ++cascade )
 		{
-			std::string debugName = shdmapdir::getPassName( cascade, vsm, rsm, isStatic );
+			auto debugName = castor::toUtf8( shdmapdir::getPassName( cascade, vsm, rsm, isStatic ) );
 			auto & group = graph.createPassGroup( debugName );
 
 			if ( m_passes[m_passesIndex].cameras.size() <= cascade )
 			{
-				m_passes[m_passesIndex].cameraUbos.push_back( std::make_unique< CameraUbo >( m_device ) );
+				m_passes[m_passesIndex].cameraUbos.push_back( castor::make_unique< CameraUbo >( m_device ) );
 				m_passes[m_passesIndex].cameras.push_back( m_scene.createCamera( shdmapdir::getPassName( cascade, false, false, false )
 					, m_scene
 					, *m_scene.getCameraRootNode()
@@ -256,7 +256,7 @@ namespace castor3d
 
 			auto & camera = *m_passes[m_passesIndex].cameras[cascade];
 			auto & cameraUbo = *m_passes[m_passesIndex].cameraUbos[cascade];
-			passes.passes.emplace_back( std::make_unique< ShadowMap::PassData >() );
+			passes.passes.emplace_back( castor::make_unique< ShadowMap::PassData >() );
 			auto & passData = *passes.passes.back();
 			passData.ownCuller = castor::makeUniqueDerived< SceneCuller, DummyCuller >( m_scene, &camera, isStatic );
 			passData.culler = passData.ownCuller.get();
@@ -265,7 +265,7 @@ namespace castor3d
 					, crg::GraphContext & context
 					, crg::RunnableGraph & runnableGraph )
 				{
-					auto res = std::make_unique< ShadowMapPassDirectional >( framePass
+					auto res = castor::make_unique< ShadowMapPassDirectional >( framePass
 						, context
 						, runnableGraph
 						, m_device
@@ -277,7 +277,7 @@ namespace castor3d
 						, rsm
 						, isStatic );
 					passData.pass = res.get();
-					m_device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+					m_device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 						, res->getTimer() );
 					return res;
 				} );
@@ -338,7 +338,7 @@ namespace castor3d
 							, crg::GraphContext & context
 							, crg::RunnableGraph & runnableGraph )
 						{
-							auto result = std::make_unique< crg::ImageCopy >( framePass
+							auto result = castor::make_unique< crg::ImageCopy >( framePass
 								, context
 								, runnableGraph
 								, getShadowPassResult( isStatic )[SmTexture::eDepth].getExtent()
@@ -346,7 +346,7 @@ namespace castor3d
 								, crg::ru::Config{}
 								, crg::ImageCopy::GetPassIndexCallback( [](){ return 0u; } )
 								, crg::ImageCopy::IsEnabledCallback( [this, cascade](){ return doEnableCopyStatic( cascade ); } ) );
-							getOwner()->registerTimer( framePass.getFullName()
+							getOwner()->registerTimer( castor::makeString( framePass.getFullName() )
 								, result->getTimer() );
 							return result;
 						} );
@@ -434,7 +434,7 @@ namespace castor3d
 							, crg::GraphContext & context
 							, crg::RunnableGraph & runnableGraph )
 						{
-							auto result = std::make_unique< crg::ImageCopy >( framePass
+							auto result = castor::make_unique< crg::ImageCopy >( framePass
 								, context
 								, runnableGraph
 								, getShadowPassResult( isStatic )[SmTexture::eDepth].getExtent()
@@ -442,7 +442,7 @@ namespace castor3d
 								, crg::ru::Config{}
 								, crg::ImageCopy::GetPassIndexCallback( [](){ return 0u; } )
 								, crg::ImageCopy::IsEnabledCallback( [this, cascade](){ return doEnableCopyStatic( cascade ); } ) );
-							getOwner()->registerTimer( framePass.getFullName()
+							getOwner()->registerTimer( castor::makeString( framePass.getFullName() )
 								, result->getTimer() );
 							return result;
 						} );
@@ -552,7 +552,7 @@ namespace castor3d
 				lightCamera.updateFrustum();
 
 #if C3D_DebugCascadeFrustum
-				auto name = "CascadeFrustum" + std::to_string( cascade );
+				auto name = cuT( "CascadeFrustum" ) + castor::string::toString( cascade );
 				auto & scene = *light.getScene();
 				auto sceneNode = scene.tryFindGeometry( name );
 				sceneNode->setVisible( true );

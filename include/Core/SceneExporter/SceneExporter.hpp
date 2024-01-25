@@ -35,7 +35,7 @@ namespace castor3d::exporter
 	{
 	public:
 		SceneExporter( ExportOptions options )
-			: m_options{ std::move( options ) }
+			: m_options{ castor::move( options ) }
 		{
 		}
 

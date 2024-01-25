@@ -7,14 +7,14 @@ namespace castor
 {
 	void ImageWriter::registerWriter( String const & extension, ImageWriterPtr writer )
 	{
-		m_writers.emplace_back( std::move( writer ) );
+		m_writers.emplace_back( castor::move( writer ) );
 		auto ptr = m_writers.back().get();
 		m_extWriters[string::lowerCase( extension )] = ptr;
 	}
 
 	void ImageWriter::registerWriter( StringArray const & extensions, ImageWriterPtr writer )
 	{
-		m_writers.emplace_back( std::move( writer ) );
+		m_writers.emplace_back( castor::move( writer ) );
 		auto ptr = m_writers.back().get();
 
 		for ( auto & extension : extensions )

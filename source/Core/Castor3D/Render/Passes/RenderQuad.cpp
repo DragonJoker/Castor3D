@@ -114,7 +114,7 @@ namespace castor3d
 		template<>
 		struct DefaultValueGetterT< BlendMode >
 		{
-			static BlendMode const Value = BlendMode::eNoBlend;
+			static inline BlendMode const Value = BlendMode::eNoBlend;
 
 			static BlendMode const & get()
 			{
@@ -186,7 +186,7 @@ namespace castor3d
 		, castor::String const & name
 		, VkFilter samplerFilter
 		, rq::Config config )
-		: castor::Named{ name + "Quad" }
+		: castor::Named{ name + cuT( "Quad" ) }
 		, m_renderSystem{ device.renderSystem }
 		, m_device{ device }
 		, m_sampler{ createSampler( *m_renderSystem.getEngine()
@@ -203,21 +203,21 @@ namespace castor3d
 	}
 
 	RenderQuad::RenderQuad( RenderQuad && rhs )noexcept
-		: castor::Named{ std::move( rhs ) }
+		: castor::Named{ castor::move( rhs ) }
 		, m_renderSystem{ rhs.m_renderSystem }
 		, m_device{ rhs.m_device }
-		, m_sampler{ std::move( rhs.m_sampler ) }
-		, m_config{ std::move( rhs.m_config ) }
+		, m_sampler{ castor::move( rhs.m_sampler ) }
+		, m_config{ castor::move( rhs.m_config ) }
 		, m_useTexCoord{ rhs.m_useTexCoord }
-		, m_descriptorSetLayout{ std::move( rhs.m_descriptorSetLayout ) }
-		, m_pipelineLayout{ std::move( rhs.m_pipelineLayout ) }
-		, m_pipeline{ std::move( rhs.m_pipeline ) }
-		, m_descriptorSetPool{ std::move( rhs.m_descriptorSetPool ) }
-		, m_passes{ std::move( rhs.m_passes ) }
-		, m_descriptorSets{ std::move( rhs.m_descriptorSets ) }
-		, m_invertY{ std::move( rhs.m_invertY ) }
-		, m_vertexBuffer{ std::move( rhs.m_vertexBuffer ) }
-		, m_uvInvVertexBuffer{ std::move( rhs.m_uvInvVertexBuffer ) }
+		, m_descriptorSetLayout{ castor::move( rhs.m_descriptorSetLayout ) }
+		, m_pipelineLayout{ castor::move( rhs.m_pipelineLayout ) }
+		, m_pipeline{ castor::move( rhs.m_pipeline ) }
+		, m_descriptorSetPool{ castor::move( rhs.m_descriptorSetPool ) }
+		, m_passes{ castor::move( rhs.m_passes ) }
+		, m_descriptorSets{ castor::move( rhs.m_descriptorSets ) }
+		, m_invertY{ castor::move( rhs.m_invertY ) }
+		, m_vertexBuffer{ castor::move( rhs.m_vertexBuffer ) }
+		, m_uvInvVertexBuffer{ castor::move( rhs.m_uvInvVertexBuffer ) }
 	{
 	}
 
@@ -262,7 +262,7 @@ namespace castor3d
 
 		if ( auto buffer = m_vertexBuffer->lock( 0u, 4u, 0u ) )
 		{
-			std::array< TexturedQuad::Vertex, 4u > vertexData
+			castor::Array< TexturedQuad::Vertex, 4u > vertexData
 			{
 				TexturedQuad::Vertex{ castor::Point2f{ -1.0, -1.0 }
 					, ( m_useTexCoord
@@ -295,7 +295,7 @@ namespace castor3d
 
 		if ( auto buffer = m_uvInvVertexBuffer->lock( 0u, 4u, 0u ) )
 		{
-			std::array< TexturedQuad::Vertex, 4u > vertexData
+			castor::Array< TexturedQuad::Vertex, 4u > vertexData
 			{
 				TexturedQuad::Vertex{ castor::Point2f{ -1.0, -1.0 }
 					, ( m_useTexCoord
@@ -337,14 +337,15 @@ namespace castor3d
 			{
 				{ 0u, sizeof( TexturedQuad::Vertex ), VK_VERTEX_INPUT_RATE_VERTEX },
 			},
-			std::move( attributes ),
+			castor::move( attributes ),
 		};
 
 		auto bindings = passrquad::createBindings( m_config.bindings );
 		CU_Require( bindings.capacity() < 1000u );
-		m_descriptorSetLayout = m_device->createDescriptorSetLayout( getName()
-			, std::move( bindings ) );
-		m_pipelineLayout = m_device->createPipelineLayout( getName()
+		auto mbName = castor::toUtf8( getName() );
+		m_descriptorSetLayout = m_device->createDescriptorSetLayout( mbName
+			, castor::move( bindings ) );
+		m_pipelineLayout = m_device->createPipelineLayout( mbName
 			, { *m_descriptorSetLayout }, pushRanges );
 
 		// Initialise the pipeline.
@@ -358,18 +359,18 @@ namespace castor3d
 			1u,
 			ashes::VkScissorArray{ scissor },
 		};
-		m_pipeline = m_device->createPipeline( getName()
+		m_pipeline = m_device->createPipeline( mbName
 			, ashes::GraphicsPipelineCreateInfo
 			(
 				0u,
 				program,
-				std::move( vertexState ),
+				castor::move( vertexState ),
 				ashes::PipelineInputAssemblyStateCreateInfo{ 0u, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP },
 				ashes::nullopt,
-				std::move( vpState ),
+				castor::move( vpState ),
 				ashes::PipelineRasterizationStateCreateInfo{ 0u, VK_FALSE, VK_FALSE, VK_POLYGON_MODE_FILL, VK_CULL_MODE_NONE },
 				ashes::PipelineMultisampleStateCreateInfo{},
-				ashes::Optional< ashes::PipelineDepthStencilStateCreateInfo >( std::move( dsState ) ),
+				ashes::Optional< ashes::PipelineDepthStencilStateCreateInfo >( castor::move( dsState ) ),
 				passrquad::doCreateBlendState( renderPass, m_config.blendMode ),
 				ashes::nullopt,
 				*m_pipelineLayout,
@@ -391,22 +392,23 @@ namespace castor3d
 	void RenderQuad::initialisePass( uint32_t passIndex )
 	{
 		CU_Require( m_descriptorSetLayout );
+		auto mbName = castor::toUtf8( getName() );
 
 		if ( !m_descriptorSetPool )
 		{
 			auto descriptorSetCount = uint32_t( m_passes.size() );
-			m_descriptorSetPool = m_descriptorSetLayout->createPool( getName()
+			m_descriptorSetPool = m_descriptorSetLayout->createPool( mbName
 				, descriptorSetCount );
 			m_descriptorSets.resize( descriptorSetCount );
 		}
 
 		if ( !m_descriptorSets[passIndex] )
 		{
-			auto prefix = getName() + ", Pass " + castor::string::toString( passIndex );
+			auto prefix = mbName + ", Pass " + castor::string::toMbString( passIndex );
 			auto descriptorSet = m_descriptorSetPool->createDescriptorSet( prefix );
 			descriptorSet->setBindings( m_passes[passIndex] );
 			descriptorSet->update();
-			m_descriptorSets[passIndex] = std::move( descriptorSet );
+			m_descriptorSets[passIndex] = castor::move( descriptorSet );
 		}
 	}
 
@@ -436,7 +438,7 @@ namespace castor3d
 			, program
 			, renderPass
 			, pushRanges
-			, std::move( dsState ) );
+			, castor::move( dsState ) );
 		m_passes.emplace_back( writes );
 		m_invertY.emplace_back( false );
 		initialisePasses();

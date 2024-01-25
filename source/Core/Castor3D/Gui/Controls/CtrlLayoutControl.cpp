@@ -58,7 +58,7 @@ namespace castor3d
 
 	void LayoutControl::setLayout( LayoutUPtr layout )
 	{
-		m_layout = std::move( layout );
+		m_layout = castor::move( layout );
 	}
 
 	void LayoutControl::doCreate()

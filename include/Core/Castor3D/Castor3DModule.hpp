@@ -39,7 +39,7 @@ See LICENSE file in root folder
 
 #define C3D_Stringify( x ) C3DX_Stringify(x)
 #define C3DX_Stringify( x ) #x
-#define C3D_Join2Strings( l, r ) l "." r
+#define C3D_Join2Strings( l, r ) l cuT( "." ) r
 #define C3D_Join3Strings( l, m, r ) C3D_Join2Strings(l, C3D_Join2Strings(m, r))
 #define C3D_Join4Strings( l, ml, mr, r ) C3D_Join3Strings(l, ml, C3D_Join2Strings(mr, r))
 
@@ -51,7 +51,6 @@ namespace castor3d
 	using castor::StringHash;
 
 	using castor::xchar;
-	using castor::ychar;
 
 	using castor::s8;
 	using castor::u8;
@@ -129,10 +128,10 @@ namespace castor3d
 
 	C3D_API castor::LoggerInstance & getLogger( Engine const & engine );
 
-	C3D_API castor::Matrix4x4f convert( std::array< float, 16 > const & value );
+	C3D_API castor::Matrix4x4f convert( castor::Array< float, 16 > const & value );
 	C3D_API VkClearColorValue convert( castor::RgbaColour const & value );
 	C3D_API castor::RgbaColour convert( VkClearColorValue const & value );
-	C3D_API std::array< float, 4u > makeFloatArray( castor::RgbaColour const & value );
+	C3D_API castor::Array< float, 4u > makeFloatArray( castor::RgbaColour const & value );
 
 	CU_DeclareVector( float, Float );
 	CU_DeclareMap( uint32_t, int, IntUInt );
@@ -398,7 +397,7 @@ namespace castor3d
 
 		for ( uint32_t i = uint32_t( min ); i <= uint32_t( max ); ++i )
 		{
-			result[getName( EnumT( i ) )] = i;
+			result[castor::makeString( getName( EnumT( i ) ) )] = i;
 		}
 
 		return result;
@@ -488,7 +487,7 @@ namespace castor3d
 
 		DebugConfig()
 		{
-			registerValue( "Default", "Result" );
+			registerValue( cuT( "Default" ), cuT( "Result" ) );
 		}
 
 		uint32_t registerValue( castor::String const & category

@@ -126,7 +126,7 @@ namespace castor3d
 		{
 			auto indexMapping = submesh->createComponent< TriFaceMapping >();
 			auto & indexMappingData = indexMapping->getData();
-			std::vector< FaceIndices > faces;
+			castor::Vector< FaceIndices > faces;
 			faces.reserve( size_t( subDivisionsW ) * subDivisionsD * 2u );
 
 			for ( uint32_t i = 0; i < subDivisionsW; i++ )

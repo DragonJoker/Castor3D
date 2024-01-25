@@ -67,16 +67,16 @@ namespace draw_edges
 		bool doWriteInto( castor::StringStream & file, castor::String const & tabs ) override;
 
 	public:
+		static const castor::MbString Name;
 		static const castor::String Type;
-		static const castor::String Name;
 		static const castor::String NormalDepthWidth;
 		static const castor::String ObjectWidth;
 
 	private:
 		castor3d::ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
-		std::unique_ptr< DepthNormalEdgeDetection > m_depthNormal;
-		std::unique_ptr< ObjectIDEdgeDetection > m_objectID;
+		castor::RawUniquePtr< DepthNormalEdgeDetection > m_depthNormal;
+		castor::RawUniquePtr< ObjectIDEdgeDetection > m_objectID;
 		DrawEdgesUbo m_ubo;
 		DrawEdgesUboConfiguration m_config;
 		crg::FramePass const * m_pass{};

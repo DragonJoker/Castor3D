@@ -30,7 +30,7 @@ namespace castor
 
 			if ( material.getRenderPassInfo() )
 			{
-				result = writeName( file, "render_pass", material.getRenderPassInfo()->name );
+				result = writeName( file, cuT( "render_pass" ), material.getRenderPassInfo()->name );
 			}
 
 			for ( auto & pass : material )

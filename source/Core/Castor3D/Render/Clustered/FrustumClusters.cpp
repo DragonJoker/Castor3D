@@ -32,7 +32,7 @@ namespace castor3d
 
 	namespace frscls
 	{
-		inline const std::array< uint32_t, 6u > NumLevelNodes
+		inline const castor::Array< uint32_t, 6u > NumLevelNodes
 		{
 			1,          // 1st level (32^0)
 			32,         // 2nd level (32^1)
@@ -42,7 +42,7 @@ namespace castor3d
 			33554432,   // 6th level (32^5)
 		};
 
-		inline const std::array< uint32_t, 6u > NumBVHNodes
+		inline const castor::Array< uint32_t, 6u > NumBVHNodes
 		{
 			1,          // 1 level  =32^0
 			33,         // 2 levels +32^1
@@ -55,21 +55,21 @@ namespace castor3d
 		template< typename DataT >
 		void updateBuffer( RenderDevice const & device
 			, VkDeviceSize elementCount
-			, std::string const & debugName
+			, castor::String const & debugName
 			, ashes::BufferBasePtr & buffer
-			, std::vector< ashes::BufferBasePtr > & toDelete
+			, castor::Vector< ashes::BufferBasePtr > & toDelete
 			, VkBufferUsageFlags usage = VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT )
 		{
 			if ( buffer )
 			{
-				toDelete.emplace_back( std::move( buffer ) );
+				toDelete.emplace_back( castor::move( buffer ) );
 			}
 
 			buffer = makeBufferBase( device
 				, elementCount * sizeof( DataT )
 				, usage
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-				, "C3D_" + debugName );
+				, cuT( "C3D_" ) + debugName );
 		}
 	}
 
@@ -90,67 +90,67 @@ namespace castor3d
 			, getNumNodes( MaxLightsCount )
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-			, "C3D_ClustersIndirect" ) }
+			, cuT( "C3D_ClustersIndirect" ) ) }
 		, m_allLightsAABBBuffer{ makeBuffer< AABB >( m_device
 			, MaxLightsCount
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-			, "C3D_AllLightsAABB" ) }
+			, cuT( "C3D_AllLightsAABB" ) ) }
 		, m_reducedLightsAABBBuffer{ makeBuffer< AABB >( m_device
 			, 513u
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-			, "C3D_ReducedLightsAABB" ) }
+			, cuT( "C3D_ReducedLightsAABB" ) ) }
 		, m_pointMortonCodesBuffers{ { makeBuffer< u32 >( m_device
 				, MaxLightsCount
 				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-				, "C3D_PointLightMortonCodesA" )
+				, cuT( "C3D_PointLightMortonCodesA" ) )
 			, makeBuffer< u32 >( m_device
 				, MaxLightsCount
 				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-				, "C3D_PointLightMortonCodesB" ) } }
+				, cuT( "C3D_PointLightMortonCodesB" ) ) } }
 		, m_spotMortonCodesBuffers{ { makeBuffer< u32 >( m_device
 				, MaxLightsCount
 				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-				, "C3D_SpotLightMortonCodesA" )
+				, cuT( "C3D_SpotLightMortonCodesA" ) )
 			, makeBuffer< u32 >( m_device
 				, MaxLightsCount
 				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-				, "C3D_SpotLightMortonCodesB" ) } }
+				, cuT( "C3D_SpotLightMortonCodesB" ) ) } }
 		, m_pointIndicesBuffers{ { makeBuffer< u32 >( m_device
 				, MaxLightsCount
 				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-				, "C3D_PointLightIndicesA" )
+				, cuT( "C3D_PointLightIndicesA" ) )
 			, makeBuffer< u32 >( m_device
 				, MaxLightsCount
 				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-				, "C3D_PointLightIndicesB" ) } }
+				, cuT( "C3D_PointLightIndicesB" ) ) } }
 		, m_spotIndicesBuffers{ { makeBuffer< u32 >( m_device
 				, MaxLightsCount
 				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-				, "C3D_SpotLightIndicesA" )
+				, cuT( "C3D_SpotLightIndicesA" ) )
 			, makeBuffer< u32 >( m_device
 				, MaxLightsCount
 				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-				, "C3D_SpotLightIndicesB" ) } }
+				, cuT( "C3D_SpotLightIndicesB" ) ) } }
 		, m_pointBVHBuffer{ makeBuffer< AABB >( m_device
 			, getNumNodes( MaxLightsCount )
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-			, "C3D_PointLightBVH" ) }
+			, cuT( "C3D_PointLightBVH" ) ) }
 		, m_spotBVHBuffer{ makeBuffer< AABB >( m_device
 			, getNumNodes( MaxLightsCount )
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-			, "C3D_SpotLightBVH" ) }
+			, cuT( "C3D_SpotLightBVH" ) ) }
 	{
 		static uint32_t constexpr NumThreadsPerThreadGroup = 256u;
 		static uint32_t constexpr ElementsPerThread = 8u;
@@ -180,7 +180,7 @@ namespace castor3d
 			, maxMergePathPartitions
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-			, "C3D_MergePathPartitions" );
+			, cuT( "C3D_MergePathPartitions" ) );
 
 		doUpdate();
 	}
@@ -235,13 +235,13 @@ namespace castor3d
 			, m_device, *this ) };
 		lastPasses = createRadixSortLightsPass( graph, lastPasses.front()
 			, m_device, *this );
-		lastPasses = createMergeSortLightsPass( graph, std::move( lastPasses )
+		lastPasses = createMergeSortLightsPass( graph, lastPasses
 			, m_device, *this );
-		lastPasses = createBuildLightsBVHPass( graph, std::move( lastPasses )
+		lastPasses = createBuildLightsBVHPass( graph, lastPasses
 			, m_device, *this );
-		lastPasses = { &createAssignLightsToClustersPass( graph, std::move( lastPasses )
+		lastPasses = { &createAssignLightsToClustersPass( graph, lastPasses
 			, m_device, cameraUbo, *this ) };
-		return createSortAssignedLightsPass( graph, std::move( lastPasses )
+		return createSortAssignedLightsPass( graph, lastPasses
 			, m_device, *this );
 	}
 
@@ -292,13 +292,13 @@ namespace castor3d
 			|| m_aabbBuffer->getSize() < cellCount * sizeof( AABB ) )
 		{
 			auto indexCount = cellCount * MaxLightsPerCluster;
-			frscls::updateBuffer< AABB >( m_device, cellCount, "ClustersAABB", m_aabbBuffer, m_toDelete );
-			frscls::updateBuffer< castor::Point2ui >( m_device, cellCount, "PointLightClusterGrid", m_pointLightClusterGridBuffer, m_toDelete );
-			frscls::updateBuffer< castor::Point2ui >( m_device, cellCount, "SpotLightClusterGrid", m_spotLightClusterGridBuffer, m_toDelete );
-			frscls::updateBuffer< u32 >( m_device, indexCount, "PointLightClusterIndex", m_pointLightClusterIndexBuffer, m_toDelete );
-			frscls::updateBuffer< u32 >( m_device, indexCount, "SpotLightClusterIndex", m_spotLightClusterIndexBuffer, m_toDelete );
-			frscls::updateBuffer< u32 >( m_device, cellCount, "ClusterFlags", m_clusterFlags, m_toDelete );
-			frscls::updateBuffer< u32 >( m_device, cellCount, "UniqueClusters", m_uniqueClusters, m_toDelete );
+			frscls::updateBuffer< AABB >( m_device, cellCount, cuT( "ClustersAABB" ), m_aabbBuffer, m_toDelete );
+			frscls::updateBuffer< castor::Point2ui >( m_device, cellCount, cuT( "PointLightClusterGrid" ), m_pointLightClusterGridBuffer, m_toDelete );
+			frscls::updateBuffer< castor::Point2ui >( m_device, cellCount, cuT( "SpotLightClusterGrid" ), m_spotLightClusterGridBuffer, m_toDelete );
+			frscls::updateBuffer< u32 >( m_device, indexCount, cuT( "PointLightClusterIndex" ), m_pointLightClusterIndexBuffer, m_toDelete );
+			frscls::updateBuffer< u32 >( m_device, indexCount, cuT( "SpotLightClusterIndex" ), m_spotLightClusterIndexBuffer, m_toDelete );
+			frscls::updateBuffer< u32 >( m_device, cellCount, cuT( "ClusterFlags" ), m_clusterFlags, m_toDelete );
+			frscls::updateBuffer< u32 >( m_device, cellCount, cuT( "UniqueClusters" ), m_uniqueClusters, m_toDelete );
 			onClusterBuffersChanged( *this );
 		}
 	}

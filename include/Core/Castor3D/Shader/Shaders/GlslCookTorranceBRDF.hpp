@@ -27,7 +27,7 @@ namespace castor3d::shader
 	private:
 		sdw::ShaderWriter & m_writer;
 		BRDFHelpers & m_brdf;
-		std::unique_ptr< sdw::Float > m_diffuseFactor;
+		castor::RawUniquePtr< sdw::Float > m_diffuseFactor;
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3
 			, sdw::InFloat

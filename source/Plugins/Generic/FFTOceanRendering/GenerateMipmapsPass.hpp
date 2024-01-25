@@ -35,7 +35,7 @@ namespace ocean_fft
 		bool doIsComputePass()const;
 
 	public:
-		static castor::String const Name;
+		static castor::MbString const Name;
 
 	private:
 		crg::LayoutState m_outputLayout;
@@ -45,8 +45,8 @@ namespace ocean_fft
 		castor3d::ShaderModule m_shader;
 		ashes::ComputePipelinePtr m_pipeline;
 		ashes::DescriptorSetPoolPtr m_descriptorSetPool;
-		std::vector< ashes::DescriptorSetPtr > m_descriptorSets;
-		std::vector< castor::Point2f > m_invSizes;
+		castor::Vector< ashes::DescriptorSetPtr > m_descriptorSets;
+		castor::Vector< castor::Point2f > m_invSizes;
 	};
 }
 

@@ -26,7 +26,7 @@ namespace castor3d
 		: public castor::OwnedBy< RenderQueue const >
 	{
 	public:
-		using PipelineMap = std::unordered_map< size_t, PipelineAndID >;
+		using PipelineMap = castor::UnorderedMap< size_t, PipelineAndID >;
 
 	public:
 		C3D_API explicit QueueRenderNodes( RenderQueue const & queue
@@ -174,8 +174,8 @@ namespace castor3d
 		SceneCullerSubmeshSignalConnection m_onSubmeshChanged;
 		SceneCullerBillboardSignalConnection m_onBillboardChanged;
 
-		std::unordered_set< CulledNodeT< SubmeshRenderNode > const * > m_pendingSubmeshes;
-		std::unordered_set< CulledNodeT< BillboardRenderNode > const * > m_pendingBillboards;
+		castor::UnorderedSet< CulledNodeT< SubmeshRenderNode > const * > m_pendingSubmeshes;
+		castor::UnorderedSet< CulledNodeT< BillboardRenderNode > const * > m_pendingBillboards;
 
 		PipelineMap m_pipelines;
 		RenderCounts m_visible{};

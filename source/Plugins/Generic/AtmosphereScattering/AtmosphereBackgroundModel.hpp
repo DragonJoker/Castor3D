@@ -61,7 +61,7 @@ namespace atmosphere_scattering
 	public:
 		static castor::String const Name;
 		static castor::String const PluginType;
-		static castor::String const PluginName;
+		static castor::MbString const PluginName;
 
 		sdw::UniformBuffer cameraBuffer;
 		CameraData cameraData;

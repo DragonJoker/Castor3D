@@ -47,7 +47,7 @@ namespace castor
 
 				if ( ctrl )
 				{
-					result = writeControl( *this, *ctrl, file, control.getName() + "/" );
+					result = writeControl( *this, *ctrl, file, control.getName() + cuT( "/" ) );
 				}
 			}
 		}
@@ -56,7 +56,7 @@ namespace castor
 		{
 			if ( auto layout = control.getLayout() )
 			{
-				if ( layout->getName() == "c3d.layout.box" )
+				if ( layout->getName() == cuT( "c3d.layout.box" ) )
 				{
 					if ( auto block{ beginBlock( file, cuT( "box_layout" ) ) } )
 					{

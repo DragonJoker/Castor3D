@@ -17,19 +17,21 @@ namespace castor
 	public:
 		struct Action
 		{
-			Action( Path file = {}
-				, uint64_t line = {}
+			Action() = default;
+
+			Action( Path file
+				, uint64_t line
 				, String name = {}
 				, uint32_t section = {}
 				, ParserFunctionAndParams function = {}
 				, String params = {}
 				, bool implicit = {} )
-				: file{ std::move( file ) }
+				: file{ castor::move( file ) }
 				, line{ line }
-				, name{ std::move( name ) }
+				, name{ castor::move( name ) }
 				, section{ section }
-				, function{ std::move( function ) }
-				, params{ std::move( params ) }
+				, function{ castor::move( function ) }
+				, params{ castor::move( params ) }
 				, implicit{ implicit }
 			{
 			}
@@ -76,7 +78,7 @@ namespace castor
 			return uint32_t( m_actions.size() );
 		}
 
-		using ActionFunc = std::function< void( SectionId, Action const & ) >;
+		using ActionFunc = castor::Function< void( SectionId, Action const & ) >;
 		using ActionSignal = SignalT< ActionFunc >;
 		using ActionConnection = ConnectionT< ActionSignal >;
 
@@ -103,8 +105,8 @@ namespace castor
 	protected:
 		FileParser & m_parser;
 		FileParserContextUPtr m_context;
-		std::vector< Action > m_actions;
-		std::vector< Action >::iterator m_current;
+		Vector< Action > m_actions;
+		Vector< Action >::iterator m_current;
 		Action m_popAction;
 	};
 
@@ -152,7 +154,7 @@ namespace castor
 		 *\param[in]	name		Le nom d'enregistrement.
 		 *\param[in]	parsers		Les analyseurs.
 		 */
-		CU_API void registerParsers( castor::String const & name
+		CU_API void registerParsers( String const & name
 			, AdditionalParsers const & parsers );
 		/**
 		 *\~english
@@ -448,20 +450,20 @@ namespace castor
 		 *\return		Le nom.
 		 */
 		CU_API virtual String doGetSectionName( SectionId section )const = 0;
-		CU_API virtual std::unique_ptr< FileParser > doCreateParser()const = 0;
+		CU_API virtual castor::RawUniquePtr< FileParser > doCreateParser()const = 0;
 
 	private:
 		void doProcessNoBlockLine( StringView curLine
 			, PreprocessedFile & preprocessed
-			, std::vector< StringView > const & work
-			, std::vector< StringView > const & nextWork
+			, Vector< StringView > const & work
+			, Vector< StringView > const & nextWork
 			, uint64_t lineIndex
 			, SectionId & pendingSection
 			, bool & isNextOpenBrace );
 		void doProcessLine( StringView curLine
 			, PreprocessedFile & preprocessed
-			, std::vector< StringView > const & work
-			, std::vector< StringView > const & nextWork
+			, Vector< StringView > const & work
+			, Vector< StringView > const & nextWork
 			, uint64_t lineIndex
 			, SectionId & pendingSection
 			, bool & commented
@@ -473,7 +475,7 @@ namespace castor
 		bool doParseScriptBlockEnd( PreprocessedFile & preprocessed
 			, uint64_t lineIndex
 			, bool implicit );
-		std::pair< bool, SectionId > doInvokeParser( PreprocessedFile & preprocessed
+		Pair< bool, SectionId > doInvokeParser( PreprocessedFile & preprocessed
 			, StringView line
 			, StringView nextToken
 			, uint64_t lineIndex );
@@ -499,7 +501,7 @@ namespace castor
 		Path m_path;
 		String m_fileName;
 		StringMap< AdditionalParsers > m_additionalParsers;
-		std::deque< SectionId > m_sections{};
+		Deque< SectionId > m_sections{};
 
 	protected:
 		LoggerInstance & m_logger;

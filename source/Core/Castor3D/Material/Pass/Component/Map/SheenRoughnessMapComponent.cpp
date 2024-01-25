@@ -109,7 +109,7 @@ namespace castor3d
 		, shader::BlendComponents & components
 		, shader::SampleTexture const & sampleTexture )const
 	{
-		applyFloatComponent( "sheenRoughness"
+		applyFloatComponent( cuT( "sheenRoughness" )
 			, passShaders
 			, textureConfigs
 			, textureAnims
@@ -123,7 +123,7 @@ namespace castor3d
 	void SheenRoughnessMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		channelFillers.try_emplace( "sheen_roughness"
+		channelFillers.try_emplace( cuT( "sheen_roughness" )
 			, getTextureFlags()
 			, []( TextureContext & blockContext )
 			{
@@ -164,7 +164,7 @@ namespace castor3d
 	}
 
 	void SheenRoughnessMapComponent::Plugin::createMapComponent( Pass & pass
-		, std::vector< PassComponentUPtr > & result )const
+		, castor::Vector< PassComponentUPtr > & result )const
 	{
 		result.push_back( castor::makeUniqueDerived< PassComponent, SheenRoughnessMapComponent >( pass ) );
 	}

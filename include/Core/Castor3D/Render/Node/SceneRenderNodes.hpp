@@ -29,7 +29,7 @@ namespace castor3d
 	{
 	public:
 		template< typename NodeT >
-		using NodesPtrMapT = std::unordered_map< size_t, castor::UniquePtr< NodeT > >;
+		using NodesPtrMapT = castor::UnorderedMap< size_t, castor::UniquePtr< NodeT > >;
 		struct NodeData
 		{
 			NodeData( Pass const * pass
@@ -45,7 +45,7 @@ namespace castor3d
 			SceneNode const * node;
 			RenderedObject const * object;
 		};
-		using NodeDataArray = std::vector< NodeData >;
+		using NodeDataArray = castor::Vector< NodeData >;
 
 	public:
 		C3D_API explicit SceneRenderNodes( Scene & scene );
@@ -107,7 +107,7 @@ namespace castor3d
 
 	private:
 		RenderDevice const & m_device;
-		std::mutex m_nodesMutex;
+		castor::Mutex m_nodesMutex;
 		NodesPtrMapT< SubmeshRenderNode > m_submeshNodes;
 		NodesPtrMapT< BillboardRenderNode > m_billboardNodes;
 		ashes::BufferPtr< ModelBufferConfiguration > m_modelsData;
@@ -117,11 +117,11 @@ namespace castor3d
 		FramePassTimerUPtr m_timerRenderNodes;
 		NodeDataArray m_nodesData;
 		uint32_t m_nodeId{};
-		std::vector< SceneCuller * > m_cullers;
+		castor::Vector< SceneCuller * > m_cullers;
 		bool m_dirty{ true };
 		VertexTransformingUPtr m_vertexTransform;
-		std::map< LightingModelID, size_t > m_lightingModels;
-		std::map< Pass const *, OnPassChangedConnection > m_onPassChanged;
+		castor::Map< LightingModelID, size_t > m_lightingModels;
+		castor::Map< Pass const *, OnPassChangedConnection > m_onPassChanged;
 	};
 }
 

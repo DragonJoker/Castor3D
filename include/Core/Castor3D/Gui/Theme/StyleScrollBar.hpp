@@ -24,10 +24,10 @@ namespace castor3d
 				, scene
 				, engine
 				, MouseCursor::eHand }
-			, m_barStyle{ name + "/Bar", scene, engine }
-			, m_thumbStyle{ name + "/Thumb", scene, engine }
-			, m_beginStyle{ name + "/Begin", scene, engine, fontName }
-			, m_endStyle{ name + "/End", scene, engine, fontName }
+			, m_barStyle{ name + cuT( "/Bar" ), scene, engine }
+			, m_thumbStyle{ name + cuT( "/Thumb" ), scene, engine }
+			, m_beginStyle{ name + cuT( "/Begin" ), scene, engine, fontName }
+			, m_endStyle{ name + cuT( "/End" ), scene, engine, fontName }
 		{
 		}
 

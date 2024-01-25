@@ -778,13 +778,13 @@ namespace castor3d
 
 	CU_DeclareVector( IntermediateView, IntermediateView );
 
-	using RenderQueueArray = castor::Vector< std::reference_wrapper< RenderQueue > >;
+	using RenderQueueArray = castor::Vector< castor::ReferenceWrapper< RenderQueue > >;
 	using TextureArray = castor::Vector< Texture >;
 
-	using ShadowMapRefIds = std::pair< std::reference_wrapper< ShadowMap >, UInt32Array >;
+	using ShadowMapRefIds = castor::Pair< castor::ReferenceWrapper< ShadowMap >, UInt32Array >;
 	using ShadowMapRefArray = castor::Vector< ShadowMapRefIds >;
 	using ShadowMapLightTypeArray = castor::Array< ShadowMapRefArray, size_t( LightType::eCount ) >;
-	using LightIdArray = castor::Vector< std::pair< Light *, uint32_t > >;
+	using LightIdArray = castor::Vector< castor::Pair< Light *, uint32_t > >;
 
 	template< typename NodeT >
 	struct CulledNodeT
@@ -805,7 +805,7 @@ namespace castor3d
 	};
 
 	template< typename NodeT >
-	using CulledNodePtrT = std::unique_ptr< CulledNodeT< NodeT > >;
+	using CulledNodePtrT = castor::RawUniquePtr< CulledNodeT< NodeT > >;
 
 	template< typename NodeT, template< typename NodeU > typename NodeWrapperT = CulledNodeT >
 	using NodeArrayT = castor::Vector< NodeWrapperT< NodeT > >;
@@ -818,14 +818,14 @@ namespace castor3d
 
 	struct ShadowMapLightIds
 	{
-		explicit ShadowMapLightIds( std::reference_wrapper< ShadowMap > shadowMap
+		explicit ShadowMapLightIds( castor::ReferenceWrapper< ShadowMap > shadowMap
 			, LightIdArray ids = {} )
-			: shadowMap{ std::move( shadowMap ) }
-			, ids{ std::move( ids ) }
+			: shadowMap{ castor::move( shadowMap ) }
+			, ids{ castor::move( ids ) }
 		{
 		}
 
-		std::reference_wrapper< ShadowMap > shadowMap;
+		castor::ReferenceWrapper< ShadowMap > shadowMap;
 		LightIdArray ids;
 	};
 	using ShadowMapLightIdArray = castor::Vector< ShadowMapLightIds >;
@@ -848,7 +848,7 @@ namespace castor3d
 		CU_ScopedEnumBounds( eBeforeDepth, eBeforePostEffects )
 	};
 
-	using RenderNodesPassChangeSignalFunction = std::function< void( RenderNodesPass const & ) >;
+	using RenderNodesPassChangeSignalFunction = castor::Function< void( RenderNodesPass const & ) >;
 	using RenderNodesPassChangeSignal = castor::SignalT< RenderNodesPassChangeSignalFunction >;
 	using RenderNodesPassChangeSignalConnection = castor::ConnectionT< RenderNodesPassChangeSignal >;
 
@@ -866,7 +866,7 @@ namespace castor3d
 
 	struct RenderPassRegisterInfo
 	{
-		using Creator = std::function< crg::FramePassArray( RenderDevice const &
+		using Creator = castor::Function< crg::FramePassArray( RenderDevice const &
 			, RenderTechnique &
 			, TechniquePasses &
 			, crg::FramePassArray ) >;
@@ -875,9 +875,9 @@ namespace castor3d
 			, Creator pcreate
 			, TechniquePassEvent pevent
 			, RenderPassTypeID pid = {} )
-			: name{ std::move( pname ) }
-			, create{ std::move( pcreate ) }
-			, event{ std::move( pevent ) }
+			: name{ castor::move( pname ) }
+			, create{ castor::move( pcreate ) }
+			, event{ castor::move( pevent ) }
 			, id{ pid }
 		{
 		}
@@ -934,7 +934,7 @@ namespace castor3d
 			castor::Vector< Light * > dirtyLights{};
 			castor::Vector< Camera * > dirtyCameras{};
 		};
-		std::map< Scene const *, DirtyObjects > dirtyScenes;
+		castor::Map< Scene const *, DirtyObjects > dirtyScenes;
 	};
 
 	struct GpuUpdater

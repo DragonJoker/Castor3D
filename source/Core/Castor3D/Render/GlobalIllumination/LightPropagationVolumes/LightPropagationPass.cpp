@@ -44,7 +44,7 @@ namespace castor3d
 			SurfaceT( sdw::ShaderWriter & writer
 				, sdw::expr::ExprPtr expr
 				, bool enabled = true )
-				: sdw::StructInstance{ writer, std::move( expr ), enabled }
+				: sdw::StructInstance{ writer, castor::move( expr ), enabled }
 				, cellIndex{ getMember< sdw::IVec3 >( "cellIndex" ) }
 			{
 			}
@@ -109,7 +109,7 @@ namespace castor3d
 			auto sideFaceSubtendedSolidAngle = writer.declConstant( "sideFaceSubtendedSolidAngle"
 				, sdw::Float{ 0.4234413544f / castor::Pi< float > } );
 			auto propDirections = writer.declConstantArray( "propDirections"
-				, std::vector< sdw::IVec3 >
+				, castor::Vector< sdw::IVec3 >
 				{
 					//+Z
 					ivec3( 0_i, 0_i, 1_i ),
@@ -127,7 +127,7 @@ namespace castor3d
 
 			//Sides of the cell - right, top, left, bottom
 			auto cellSides = writer.declConstantArray( "cellSides"
-				, std::vector< sdw::IVec2 >
+				, castor::Vector< sdw::IVec2 >
 				{
 					ivec2( 1_i, 0_i ),
 					ivec2( 0_i, 1_i ),
@@ -136,9 +136,9 @@ namespace castor3d
 				} );
 
 			C3D_LpvGridConfig( writer, LightPropagationPass::LpvGridUboIdx, 0u, true );
-			auto c3d_lpvGridR = writer.declCombinedImg< FImg3DRgba16 >( getTextureName( LpvTexture::eR, "Grid" ), LightPropagationPass::RLpvGridIdx, 0u );
-			auto c3d_lpvGridG = writer.declCombinedImg< FImg3DRgba16 >( getTextureName( LpvTexture::eG, "Grid" ), LightPropagationPass::GLpvGridIdx, 0u );
-			auto c3d_lpvGridB = writer.declCombinedImg< FImg3DRgba16 >( getTextureName( LpvTexture::eB, "Grid" ), LightPropagationPass::BLpvGridIdx, 0u );
+			auto c3d_lpvGridR = writer.declCombinedImg< FImg3DRgba16 >( castor::toUtf8( getTextureName( LpvTexture::eR, cuT( "Grid" ) ) ), LightPropagationPass::RLpvGridIdx, 0u );
+			auto c3d_lpvGridG = writer.declCombinedImg< FImg3DRgba16 >( castor::toUtf8( getTextureName( LpvTexture::eG, cuT( "Grid" ) ) ), LightPropagationPass::GLpvGridIdx, 0u );
+			auto c3d_lpvGridB = writer.declCombinedImg< FImg3DRgba16 >( castor::toUtf8( getTextureName( LpvTexture::eB, cuT( "Grid" ) ) ), LightPropagationPass::BLpvGridIdx, 0u );
 			auto c3d_geometryVolume = writer.declCombinedImg< FImg3DRgba16 >( "c3d_geometryVolume", LightPropagationPass::GpGridIdx, 0u, occlusion );
 
 			auto inPosition = writer.declInput< sdw::Vec3 >( "inPosition", sdw::EntryPoint::eVertex, 0u );
@@ -292,7 +292,7 @@ namespace castor3d
 				, sdw::OutVec4{ writer, "shG" }
 				, sdw::OutVec4{ writer, "shB" } );
 
-			writer.implementEntryPointT< sdw::VoidT, lpvprop::SurfaceT >( [&]( sdw::VertexIn in
+			writer.implementEntryPointT< sdw::VoidT, lpvprop::SurfaceT >( [&]( sdw::VertexIn const &
 				, sdw::VertexOutT< lpvprop::SurfaceT > out )
 				{
 					out.cellIndex = ivec3( inPosition );
@@ -301,7 +301,7 @@ namespace castor3d
 					out.vtx.position = vec4( screenPos, 0.0, 1.0 );
 				} );
 
-			writer.implementEntryPointT< 1u, sdw::PointListT< lpvprop::SurfaceT >, sdw::PointStreamT< lpvprop::SurfaceT > >( [&]( sdw::GeometryIn const & in
+			writer.implementEntryPointT< 1u, sdw::PointListT< lpvprop::SurfaceT >, sdw::PointStreamT< lpvprop::SurfaceT > >( [&]( sdw::GeometryIn const &
 				, sdw::PointListT< lpvprop::SurfaceT > const & list
 				, sdw::PointStreamT< lpvprop::SurfaceT > out )
 				{
@@ -316,7 +316,7 @@ namespace castor3d
 				} );
 
 			writer.implementEntryPointT< lpvprop::SurfaceT, sdw::VoidT >( [&]( sdw::FragmentInT< lpvprop::SurfaceT > const & in
-				, sdw::FragmentOut const & out )
+				, sdw::FragmentOut const & )
 				{
 					auto shR = writer.declLocale( "shR"
 						, vec4( 0.0_f ) );
@@ -374,7 +374,7 @@ namespace castor3d
 		, crg::pp::Config config
 		, uint32_t gridSize
 		, BlendMode blendMode )
-		: m_holder{ pass, context, graph, std::move( config ), VK_PIPELINE_BIND_POINT_GRAPHICS, 1u }
+		: m_holder{ pass, context, graph, castor::move( config ), VK_PIPELINE_BIND_POINT_GRAPHICS, 1u }
 		, m_gridSize{ gridSize }
 		, m_blendMode{ blendMode }
 	{
@@ -481,7 +481,7 @@ namespace castor3d
 		, bool occlusion
 		, uint32_t gridSize
 		, BlendMode blendMode )
-		: castor::Named{ pass.getName() }
+		: castor::Named{ castor::makeString( pass.getName() ) }
 		, crg::RenderPass{ pass
 			, context
 			, graph

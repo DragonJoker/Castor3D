@@ -49,7 +49,6 @@
 #include <CastorUtils/Graphics/StbImageWriter.hpp>
 #include <CastorUtils/Graphics/XpmImageLoader.hpp>
 #include <CastorUtils/Miscellaneous/DynamicLibrary.hpp>
-#include <CastorUtils/Pool/UniqueObjectPool.hpp>
 
 #include <ashespp/Image/StagingTexture.hpp>
 
@@ -93,7 +92,7 @@ namespace castor3d
 			{
 				Texture result{ device
 					, resources
-					, "BrdfLUT"
+					, cuT( "BrdfLUT" )
 					, 0u
 					, { size[0], size[1], 1u }
 					, 1u
@@ -129,7 +128,7 @@ namespace castor3d
 			{
 				Texture result{ device
 					, resources
-					, "BrdfLUT"
+					, cuT( "BrdfLUT" )
 					, 0u
 					, { size[0], size[1], 1u }
 					, 1u
@@ -156,9 +155,9 @@ namespace castor3d
 		, castor::LoggerInstancePtr ownedLogger
 		, castor::LoggerInstance * logger )
 		: Unique< Engine >( this )
-		, m_ownedLogger{ std::move( ownedLogger ) }
+		, m_ownedLogger{ castor::move( ownedLogger ) }
 		, m_logger{ log::initialise( *( logger ? logger : m_ownedLogger.get() ) ) }
-		, m_config{ std::move( config ) }
+		, m_config{ castor::move( config ) }
 		, m_fontCache{ *m_logger }
 		, m_imageCache{ *m_logger, m_imageLoader }
 		, m_meshFactory{ castor::makeUnique< MeshFactory >() }
@@ -239,7 +238,7 @@ namespace castor3d
 	}
 
 	Engine::Engine( EngineConfig config )
-		: Engine{ std::move( config )
+		: Engine{ castor::move( config )
 			, eng::createLogger( castor::Logger::getLevel()
 				, getEngineDirectory() / cuT( "Castor3D.log" )
 				, getEngineDirectory() / cuT( "Castor3D-Debug.log" ) )
@@ -249,13 +248,13 @@ namespace castor3d
 	
 	Engine::Engine( EngineConfig config
 		, castor::LoggerInstance & logger )
-		: Engine{ std::move( config )
+		: Engine{ castor::move( config )
 			, nullptr
 			, &logger }
 	{
 	}
 
-	Engine::~Engine()
+	Engine::~Engine()noexcept
 	{
 		m_lightsSampler = {};
 		m_defaultSampler = {};
@@ -299,13 +298,13 @@ namespace castor3d
 
 	void Engine::initialise( uint32_t wanted, bool threaded )
 	{
-		castor::Debug::initialise();
+		castor::debug::initialise();
 		m_cpuJobs.reset();
 		m_threaded = threaded;
 
 		if ( !m_renderSystem )
 		{
-			CU_Exception( castor::String{ eng::noRenderSystem } );
+			CU_Exception( castor::toUtf8( eng::noRenderSystem ) );
 		}
 
 		if ( auto created = m_samplerCache->create( cuT( "Default" ), *this ) )
@@ -423,12 +422,12 @@ namespace castor3d
 			m_shaderCache->clear();
 		}
 
-		castor::Debug::cleanup();
+		castor::debug::cleanup();
 	}
 
 	bool Engine::loadRenderer( castor::String const & type )
 	{
-		if ( auto it = m_rendererList.find( type );
+		if ( auto it = m_rendererList.find( castor::toUtf8( type ) );
 			it != m_rendererList.end() )
 		{
 			m_renderSystem = castor::makeUnique< RenderSystem >( *this, *it );
@@ -440,7 +439,7 @@ namespace castor3d
 	void Engine::loadRenderer( Renderer renderer )
 	{
 		m_renderSystem = castor::makeUnique< RenderSystem >( *this
-			, std::move( renderer ) );
+			, castor::move( renderer ) );
 	}
 
 	CpuFrameEvent * Engine::postEvent( CpuFrameEventUPtr event )const
@@ -450,7 +449,7 @@ namespace castor3d
 		if ( auto listener = m_defaultListener )
 		{
 			result = event.get();
-			listener->postEvent( std::move( event ) );
+			listener->postEvent( castor::move( event ) );
 		}
 
 		return result;
@@ -470,7 +469,7 @@ namespace castor3d
 		if ( auto listener = m_defaultListener )
 		{
 			result = event.get();
-			listener->postEvent( std::move( event ) );
+			listener->postEvent( castor::move( event ) );
 		}
 
 		return result;
@@ -675,7 +674,7 @@ namespace castor3d
 
 		if ( res )
 		{
-			it->second = std::make_unique< ast::ShaderAllocator >( ast::AllocationMode::eFragmented );
+			it->second = castor::make_unique< ast::ShaderAllocator >( ast::AllocationMode::eFragmented );
 		}
 
 		return *it->second;
@@ -716,7 +715,7 @@ namespace castor3d
 		, shader::LightingModelCreator creator
 		, BackgroundModelID backgroundModelId )const
 	{
-		return getLightingModelFactory().registerType( name, backgroundModelId, std::move( creator ) );
+		return getLightingModelFactory().registerType( name, backgroundModelId, castor::move( creator ) );
 	}
 
 	void Engine::unregisterLightingModel( castor::String const & name
@@ -734,7 +733,7 @@ namespace castor3d
 	BackgroundModelID Engine::registerBackgroundModel( castor::String const & name
 		, shader::BackgroundModelCreator creator )
 	{
-		return BackgroundModelID( getBackgroundModelFactory().registerType( name, std::move( creator ) ).id );
+		return BackgroundModelID( getBackgroundModelFactory().registerType( name, castor::move( creator ) ).id );
 	}
 
 	BackgroundModelID Engine::unregisterBackgroundModel( castor::String const & name )
@@ -772,7 +771,7 @@ namespace castor3d
 
 	void Engine::registerPassModels( PassRegisterInfo const & info )const
 	{
-		std::set< LightingModelID > lightingModels;
+		castor::Set< LightingModelID > lightingModels;
 
 		for ( auto const & entry : getBackgroundModelFactory().listRegisteredTypes() )
 		{
@@ -811,13 +810,13 @@ namespace castor3d
 		log::error << "Engine::unregisterPassModels - " << exc.what() << std::endl;
 	}
 
-	void Engine::registerSpecificsBuffer( std::string const & name
+	void Engine::registerSpecificsBuffer( castor::String const & name
 		, SpecificsBuffer buffer )const
 	{
-		m_materialCache->registerSpecificsBuffer( name, std::move( buffer ) );
+		m_materialCache->registerSpecificsBuffer( name, castor::move( buffer ) );
 	}
 
-	void Engine::unregisterSpecificsBuffer( std::string const & name )const
+	void Engine::unregisterSpecificsBuffer( castor::String const & name )const
 	{
 		m_materialCache->unregisterSpecificsBuffer( name );
 	}
@@ -853,7 +852,7 @@ namespace castor3d
 		, PassComponentPluginUPtr componentPlugin )const
 	{
 		return m_passComponents->registerComponent( type
-			, std::move( componentPlugin ) );
+			, castor::move( componentPlugin ) );
 	}
 
 	void Engine::unregisterPassComponent( castor::String const & type )const
@@ -865,7 +864,7 @@ namespace castor3d
 		, SubmeshComponentPluginUPtr componentPlugin )const
 	{
 		return m_submeshComponents->registerComponent( type
-			, std::move( componentPlugin ) );
+			, castor::move( componentPlugin ) );
 	}
 
 	void Engine::unregisterSubmeshComponent( castor::String const & type )const
@@ -878,7 +877,7 @@ namespace castor3d
 	{
 		if ( info )
 		{
-			auto & ninfo = *m_passRenderPassTypes.try_emplace( renderPassType, std::move( info ) ).first->second;
+			auto & ninfo = *m_passRenderPassTypes.try_emplace( renderPassType, castor::move( info ) ).first->second;
 			auto [it, res] = m_renderPassTypes.try_emplace( renderPassType );
 
 			if ( res )
@@ -909,7 +908,7 @@ namespace castor3d
 
 		if ( it != m_renderPassTypes.end() )
 		{
-			it->second.second = std::move( parameters );
+			it->second.second = castor::move( parameters );
 		}
 	}
 
@@ -1017,13 +1016,13 @@ namespace castor3d
 		if ( auto it = m_additionalParsers.find( name );
 			it != m_additionalParsers.end() )
 		{
-			CU_Exception( "registerParsers - Duplicate entry for " + name );
+			CU_Exception( "registerParsers - Duplicate entry for " + castor::toUtf8( name ) );
 		}
 
-		m_additionalParsers.try_emplace( std::move( name )
-			, std::move( parsers )
-			, std::move( sections )
-			, std::move( contextCreator ) );
+		m_additionalParsers.try_emplace( castor::move( name )
+			, castor::move( parsers )
+			, castor::move( sections )
+			, castor::move( contextCreator ) );
 	}
 
 	void Engine::unregisterParsers( castor::String const & name )noexcept
@@ -1041,7 +1040,7 @@ namespace castor3d
 
 	void Engine::pushCpuJob( castor::AsyncJobQueue::Job job )
 	{
-		m_cpuJobs.pushJob( std::move( job ) );
+		m_cpuJobs.pushJob( castor::move( job ) );
 	}
 
 	void Engine::setLoadingScene( SceneUPtr scene )
@@ -1065,7 +1064,7 @@ namespace castor3d
 				} ) );
 		}
 
-		m_loadingScene = std::move( scene );
+		m_loadingScene = castor::move( scene );
 		m_loadingScene->initialise();
 
 		if ( hadLoadingScene )
@@ -1083,7 +1082,7 @@ namespace castor3d
 			castor::File::fileExists( path / cuT( "Core.zip" ) ) )
 		{
 			if ( SceneFileParser parser( *this );
-				!parser.parseFile( "Castor3D", path / cuT( "Core.zip" ) ) )
+				!parser.parseFile( cuT( "Castor3D" ), path / cuT( "Core.zip" ) ) )
 			{
 				log::error << cuT( "Can't read Core.zip data file" ) << std::endl;
 			}

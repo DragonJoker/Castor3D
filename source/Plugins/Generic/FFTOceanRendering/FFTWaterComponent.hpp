@@ -78,12 +78,12 @@ namespace ocean_fft
 
 			castor3d::shader::PassComponentsShaderPtr createComponentsShader()const override
 			{
-				return std::make_unique< ComponentsShader >( *this );
+				return castor::make_unique< ComponentsShader >( *this );
 			}
 
 			castor3d::shader::PassMaterialShaderPtr createMaterialShader()const override
 			{
-				return std::make_unique< MaterialShader >();
+				return castor::make_unique< MaterialShader >();
 			}
 
 			void filterComponentFlags( castor3d::ComponentModeFlags filter

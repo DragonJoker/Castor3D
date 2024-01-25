@@ -55,7 +55,7 @@ namespace castor
 	}
 
 	template< typename BlockTypeT >
-	inline DynamicBitsetT< BlockTypeT >::DynamicBitsetT( String const & bits )
+	inline DynamicBitsetT< BlockTypeT >::DynamicBitsetT( MbString const & bits )
 		: DynamicBitsetT{ bits.data(), bits.size() }
 	{
 	}
@@ -305,7 +305,7 @@ namespace castor
 	template< typename BlockTypeT >
 	inline DynamicBitsetT< BlockTypeT > & DynamicBitsetT< BlockTypeT >::operator&=( DynamicBitsetT const & value )
 	{
-		std::pair< size_t, size_t > minmax = std::minmax( getBlockCount(), value.getBlockCount() );
+		Pair< size_t, size_t > minmax = std::minmax( getBlockCount(), value.getBlockCount() );
 		m_blocks.resize( minmax.second );
 		m_bitCount = std::max( getSize(), value.getSize() );
 
@@ -390,11 +390,11 @@ namespace castor
 	template< typename BlockTypeT >
 	inline String DynamicBitsetT< BlockTypeT >::toString()const
 	{
-		String result( m_bitCount, '0' );
+		String result( m_bitCount, cuT( '0' ) );
 
 		for ( auto i = 0u; i < m_bitCount; ++i )
 		{
-			result[i] = get( i ) ? '1' : '0';
+			result[i] = get( i ) ? cuT( '1' ) : cuT( '0' );
 		}
 
 		return result;
@@ -507,6 +507,13 @@ namespace castor
 
 	template< typename BlockTypeT >
 	inline typename DynamicBitsetT< BlockTypeT >::Bit & DynamicBitsetT< BlockTypeT >::Bit::operator=( DynamicBitsetT< BlockTypeT >::Bit const & bit )
+	{
+		set( bit );
+		return *this;
+	}
+
+	template< typename BlockTypeT >
+	inline typename DynamicBitsetT< BlockTypeT >::Bit & DynamicBitsetT< BlockTypeT >::Bit::operator=( DynamicBitsetT< BlockTypeT >::Bit && bit )noexcept
 	{
 		set( bit );
 		return *this;

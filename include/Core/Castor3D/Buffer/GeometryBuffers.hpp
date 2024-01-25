@@ -16,10 +16,10 @@ namespace castor3d
 			, ashes::BufferCRefArray buffers
 			, ashes::UInt64Array offsets
 			, ashes::PipelineVertexInputStateCreateInfoCRefArray layouts )noexcept
-			: indexOffset{ std::move( indexOffset ) }
-			, buffers{ std::move( buffers ) }
-			, offsets{ std::move( offsets ) }
-			, layouts{ std::move( layouts ) }
+			: indexOffset{ castor::move( indexOffset ) }
+			, buffers{ castor::move( buffers ) }
+			, offsets{ castor::move( offsets ) }
+			, layouts{ castor::move( layouts ) }
 		{
 		}
 		ObjectBufferOffset::GpuBufferChunk indexOffset{};

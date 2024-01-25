@@ -27,18 +27,18 @@ namespace castor
 			, TraverseDirT const & directoryFunction
 			, HitFileT const & fileFunction
 			, WIN32_FIND_DATAA const & findData
-			, String const & name
+			, MbString const & name
 			, bool & result )
 		{
-			if ( name != cuT( "." ) && name != cuT( ".." ) )
+			if ( name != "." && name != ".." )
 			{
 				if ( ( findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) == FILE_ATTRIBUTE_DIRECTORY )
 				{
-					result = directoryFunction( folderPath / name );
+					result = directoryFunction( folderPath / makeString( name ) );
 				}
 				else
 				{
-					fileFunction( folderPath, name );
+					fileFunction( folderPath, makeString( name ) );
 				}
 			}
 		}
@@ -52,11 +52,11 @@ namespace castor
 		bool result = false;
 		WIN32_FIND_DATAA findData{};
 
-		if ( HANDLE handle = ::FindFirstFileA( ( folderPath / cuT( "*.*" ) ).c_str(), &findData );
+		if ( HANDLE handle = ::FindFirstFileA( toUtf8( folderPath / cuT( "*.*" ) ).c_str(), &findData );
 			handle != INVALID_HANDLE_VALUE )
 		{
 			result = true;
-			String name = findData.cFileName;
+			MbString name = findData.cFileName;
 			file::traverse( folderPath, directoryFunction, fileFunction, findData, name, result );
 
 			while ( result && ::FindNextFileA( handle, &findData ) == TRUE )
@@ -80,7 +80,7 @@ namespace castor
 		, std::filesystem::path const & path
 		, char const * modes )
 	{
-		auto mode = string::stringCast< wchar_t >( std::string{ modes } );
+		auto mode = toSystemWide( modes );
 		errno_t err = _wfopen_s( &file, path.c_str(), mode.c_str() );
 
 		if ( err && !file )
@@ -95,7 +95,7 @@ namespace castor
 		, std::filesystem::path const & path
 		, char const * modes )
 	{
-		auto mode = string::stringCast< wchar_t >( std::string{ modes } );
+		auto mode = toSystemWide( modes );
 		errno_t err = _wfopen_s( &file, path.c_str(), mode.c_str() );
 
 		if ( err && !file )
@@ -153,12 +153,12 @@ namespace castor
 	Path File::getExecutableDirectory()
 	{
 		Path pathReturn;
-		std::array< xchar, FILENAME_MAX > path{};
+		Array< char, FILENAME_MAX > path{};
 
 		if ( DWORD result = ::GetModuleFileNameA( nullptr, path.data(), DWORD( path.size() ) );
 			result != 0 )
 		{
-			pathReturn = Path{ path.data() };
+			pathReturn = Path{ makeString( path.data() ) };
 		}
 
 		pathReturn = pathReturn.getPath();
@@ -168,12 +168,12 @@ namespace castor
 	Path File::getUserDirectory()
 	{
 		Path pathReturn;
-		std::array< xchar, FILENAME_MAX > path{};
+		Array< char, FILENAME_MAX > path{};
 
 		if ( HRESULT hr = SHGetFolderPathA( nullptr, CSIDL_PROFILE, nullptr, 0, path.data() );
 			SUCCEEDED( hr ) )
 		{
-			pathReturn = Path{ path.data() };
+			pathReturn = Path{ makeString( path.data() ) };
 		}
 
 		return pathReturn;
@@ -182,7 +182,7 @@ namespace castor
 	bool File::directoryExists( Path const & path )
 	{
 		struct _stat status = { 0 };
-		_stat( string::stringCast< char >( path ).c_str(), &status );
+		_stat( toUtf8( path ).c_str(), &status );
 		return ( status.st_mode & S_IFDIR ) == S_IFDIR;
 	}
 
@@ -196,26 +196,18 @@ namespace castor
 		}
 
 #if defined( CU_CompilerMSVC )
-
-		return _mkdir( inpath.c_str() ) == 0;
-
+		return _mkdir( toUtf8( inpath ).c_str() ) == 0;
 #else
-
-		return mkdir( string::stringCast< char >( inpath ).c_str() ) == 0;
-
+		return mkdir( toUtf8( inpath ).c_str() ) == 0;
 #endif
 	}
 
 	bool File::deleteEmptyDirectory( Path const & path )
 	{
 #if defined( CU_CompilerMSVC )
-
-		bool result = _rmdir( path.c_str() ) == 0;
-
+		bool result = _rmdir( toUtf8( path ).c_str() ) == 0;
 #else
-
-		bool result = rmdir( string::stringCast< char >( path ).c_str() ) == 0;
-
+		bool result = rmdir( toUtf8( path ).c_str() ) == 0;
 #endif
 
 		if ( !result )

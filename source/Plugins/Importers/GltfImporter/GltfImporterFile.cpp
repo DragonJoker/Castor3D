@@ -77,7 +77,7 @@ namespace c3d_gltf
 
 			if ( result.error() != fastgltf::Error::None )
 			{
-				castor3d::log::error << "Failed to load glTF: " << fastgltf::getErrorMessage( result.error() ) << std::endl;
+				castor3d::log::error << "Failed to load glTF: " << castor::makeString( fastgltf::getErrorMessage( result.error() ) ) << std::endl;
 			}
 
 			return result;
@@ -85,9 +85,9 @@ namespace c3d_gltf
 
 		static void parseNodesRec( fastgltf::pmr::MaybeSmallVector< size_t > const & nodes
 			, size_t parentNodeIndex
-			, std::vector< fastgltf::Node > const & allNodes
-			, std::function< std::tuple< size_t, bool, bool >( fastgltf::Node const &, size_t, size_t, size_t, bool ) > func
-			, std::set< size_t > & parsed
+			, castor::Vector< fastgltf::Node > const & allNodes
+			, castor::Function< std::tuple< size_t, bool, bool >( fastgltf::Node const &, size_t, size_t, size_t, bool ) > func
+			, castor::Set< size_t > & parsed
 			, size_t instanceCount
 			, bool skeletonNode )
 		{
@@ -107,15 +107,15 @@ namespace c3d_gltf
 		}
 
 		static void parseNodes( fastgltf::pmr::MaybeSmallVector< size_t > const & nodes
-			, std::vector< fastgltf::Node > const & allNodes
-			, std::function< std::tuple< size_t, bool, bool >( fastgltf::Node const &, size_t, size_t, size_t, bool ) > func )
+			, castor::Vector< fastgltf::Node > const & allNodes
+			, castor::Function< std::tuple< size_t, bool, bool >( fastgltf::Node const &, size_t, size_t, size_t, bool ) > func )
 		{
-			std::set< size_t > parsed;
+			castor::Set< size_t > parsed;
 			size_t parent = ~0u;
 			parseNodesRec( nodes, parent, allNodes, func, parsed, 1u, false );
 		}
 
-		static std::vector< castor3d::NodeTransform > listInstances( fastgltf::Asset const & impAsset
+		static castor::Vector< castor3d::NodeTransform > listInstances( fastgltf::Asset const & impAsset
 			, fastgltf::Node const & impNode )
 		{
 			castor::Point3fArray translations;
@@ -131,7 +131,7 @@ namespace c3d_gltf
 					, impAsset.accessors[tit->second]
 					, [&translations]( castor::Point3f value )
 					{
-						translations.push_back( std::move( value ) );
+						translations.push_back( castor::move( value ) );
 					} );
 			}
 
@@ -151,7 +151,7 @@ namespace c3d_gltf
 					, impAsset.accessors[sit->second]
 					, [&scalings]( castor::Point3f value )
 					{
-						scalings.push_back( std::move( value ) );
+						scalings.push_back( castor::move( value ) );
 					} );
 			}
 
@@ -175,7 +175,7 @@ namespace c3d_gltf
 				}
 			}
 
-			std::vector< castor3d::NodeTransform > result;
+			castor::Vector< castor3d::NodeTransform > result;
 			result.reserve( instanceCount );
 
 			for ( size_t i = 0u; i < instanceCount; ++i )
@@ -245,7 +245,7 @@ namespace c3d_gltf
 			, size_t index
 			, castor::String const & baseName )
 		{
-			castor::String result = castor::String( elements[index].name );
+			castor::String result = castor::makeString( elements[index].name );
 
 			if ( result.empty() )
 			{
@@ -272,7 +272,7 @@ namespace c3d_gltf
 				return it->second;
 			}
 
-			castor::String result = castor::String( elements[index].name );
+			castor::String result = castor::makeString( elements[index].name );
 
 			if ( result.empty() )
 			{
@@ -294,17 +294,17 @@ namespace c3d_gltf
 			return result;
 		}
 
-		static std::string getLongestCommonSubstring( std::string const & a, std::string const & b )
+		static castor::String getLongestCommonSubstring( castor::String const & a, castor::String const & b )
 		{
 			auto result = castor::string::getLongestCommonSubstring( a, b );
 			return castor::string::trim( result
 				, true
 				, true
-				, " \r\t-_/\\|*$<>[](){}" );
+				, castor::StringView{ cuT( " \r\t-_/\\|*$<>[](){}" ) } );
 		}
 
 		template< typename IterT, typename TypeT >
-		static std::pair< IterT, castor::String > replaceIter( castor::String const & name
+		static castor::Pair< IterT, castor::String > replaceIter( castor::String const & name
 			, IterT iter
 			, castor::StringMap< TypeT > & map )
 		{
@@ -402,11 +402,11 @@ namespace c3d_gltf
 		}
 
 		static void listNodeMeshes( GltfImporterFile const & file
-			, std::map< size_t, castor::Matrix4x4f > const & cumulativeTransforms
+			, castor::Map< size_t, castor::Matrix4x4f > const & cumulativeTransforms
 			, castor::StringMap< GltfMeshData > const & meshes
 			, size_t meshIndex
 			, castor::Matrix4x4f const & matrix
-			, std::map< GltfMeshData const *, std::vector< size_t > > & processedMeshes
+			, castor::Map< GltfMeshData const *, castor::Vector< size_t > > & processedMeshes
 			, GltfNodeData & nodeData )
 		{
 			auto it = file::findNodeMesh( meshIndex, meshes );
@@ -418,7 +418,7 @@ namespace c3d_gltf
 					, &it->second ) )
 				{
 					// Don't add the mesh if it has already been added to a node with the same transform.
-					auto & nodeArray = processedMeshes.emplace( &it->second, std::vector< size_t >{} ).first->second;
+					auto & nodeArray = processedMeshes.emplace( &it->second, castor::Vector< size_t >{} ).first->second;
 					auto nodeIt = std::find_if( nodeArray.begin()
 						, nodeArray.end()
 						, [&cumulativeTransforms, &matrix]( size_t lookup )
@@ -445,13 +445,13 @@ namespace c3d_gltf
 			, bool isSkeletonNode
 			, size_t parentIndex
 			, size_t & parentInstanceCount
-			, std::vector< GltfNodeData > & nodes
-			, std::vector< GltfNodeData > & skeletonNodes )
+			, castor::Vector< GltfNodeData > & nodes
+			, castor::Vector< GltfNodeData > & skeletonNodes )
 		{
 			if ( isSkeletonNode )
 			{
 				parentInstanceCount = 1u;
-				skeletonNodes.push_back( std::move( nodeData ) );
+				skeletonNodes.push_back( castor::move( nodeData ) );
 			}
 			else
 			{
@@ -470,7 +470,7 @@ namespace c3d_gltf
 						{
 							for ( size_t j = 0u; j < parentInstanceCount; ++j )
 							{
-								nodeData.parent = parentIndex < asset.nodes.size() ? file.getNodeName( parentIndex, j + 1u ) : std::string{};
+								nodeData.parent = parentIndex < asset.nodes.size() ? file.getNodeName( parentIndex, j + 1u ) : castor::String{};
 								nodeData.name = file.getNodeName( nodeData.index, index + 1u );
 								nodeData.instance = index + 1u;
 								nodeData.instanceCount = parentInstanceCount * instanceCount;
@@ -484,11 +484,11 @@ namespace c3d_gltf
 					{
 						for ( size_t i = 0u; i < instanceCount; ++i )
 						{
-							nodeData.parent = parentIndex < asset.nodes.size() ? file.getNodeName( parentIndex, 0u ) : std::string{};
+							nodeData.parent = parentIndex < asset.nodes.size() ? file.getNodeName( parentIndex, 0u ) : castor::String{};
 							nodeData.name = file.getNodeName( nodeData.index, i + 1u );
 							nodeData.instance = i + 1u;
 							nodeData.instanceCount = instanceCount;
-							nodeData.transform = std::move( transforms[i] );
+							nodeData.transform = castor::move( transforms[i] );
 							nodes.push_back( nodeData );
 						}
 					}
@@ -501,7 +501,7 @@ namespace c3d_gltf
 					{
 						for ( size_t i = 0u; i < parentInstanceCount; ++i )
 						{
-							nodeData.parent = parentIndex < asset.nodes.size() ? file.getNodeName( parentIndex, i + 1u ) : std::string{};
+							nodeData.parent = parentIndex < asset.nodes.size() ? file.getNodeName( parentIndex, i + 1u ) : castor::String{};
 							nodeData.name = file.getNodeName( nodeData.index, i + 1u );
 							nodeData.instance = i + 1u;
 							nodeData.instanceCount = parentInstanceCount;
@@ -510,7 +510,7 @@ namespace c3d_gltf
 					}
 					else
 					{
-						nodes.push_back( std::move( nodeData ) );
+						nodes.push_back( castor::move( nodeData ) );
 					}
 				}
 			}
@@ -529,28 +529,28 @@ namespace c3d_gltf
 				, convert( trs.rotation ) };
 		}
 
-		std::array< float, 3u > translation;
-		std::array< float, 3u > scale;
-		std::array< float, 4u > rotation;
+		castor::Array< float, 3u > translation;
+		castor::Array< float, 3u > scale;
+		castor::Array< float, 4u > rotation;
 		fastgltf::decomposeTransformMatrix( std::get< 1 >( transform ), scale, rotation, translation );
 		return { convert( translation )
 			, convert( scale )
 			, convert( rotation ) };
 	}
 
-	castor::Point3f convert( std::array< float, 3u > const & value )
+	castor::Point3f convert( castor::Array< float, 3u > const & value )
 	{
 		return castor::Point3f{ value[0], value[1], value[2] };;
 	}
 
-	castor::Quaternion convert( std::array< float, 4u > const & value )
+	castor::Quaternion convert( castor::Array< float, 4u > const & value )
 	{
 		return castor::Quaternion::fromComponents( value[0], value[1], value[2], value[3] );
 	}
 
 	//*********************************************************************************************
 
-	castor::String const GltfImporterFile::Name = cuT( "GLTF Importer" );
+	castor::MbString const GltfImporterFile::Name = "GLTF Importer";
 
 	GltfImporterFile::GltfImporterFile( castor3d::Engine & engine
 		, castor3d::Scene * scene
@@ -566,7 +566,7 @@ namespace c3d_gltf
 			m_asset = &m_expAsset.get< 1 >();
 			uint32_t sceneIndex{};
 
-			if ( getParameters().get( "sceneIndex", sceneIndex ) )
+			if ( getParameters().get( cuT( "sceneIndex" ), sceneIndex ) )
 			{
 				m_sceneIndices.push_back( sceneIndex );
 			}
@@ -800,9 +800,9 @@ namespace c3d_gltf
 			} );
 	}
 
-	std::vector< castor::String > GltfImporterFile::listMaterials()
+	castor::StringArray GltfImporterFile::listMaterials()
 	{
-		std::vector< castor::String > result;
+		castor::StringArray result;
 
 		if ( isValid() )
 		{
@@ -815,9 +815,9 @@ namespace c3d_gltf
 		return result;
 	}
 
-	std::vector< castor3d::ImporterFile::MeshData > GltfImporterFile::listMeshes()
+	castor::Vector< castor3d::ImporterFile::MeshData > GltfImporterFile::listMeshes()
 	{
-		std::vector< MeshData > result;
+		castor::Vector< MeshData > result;
 
 		for ( auto it : m_sceneData.meshes )
 		{
@@ -830,9 +830,9 @@ namespace c3d_gltf
 		return result;
 	}
 
-	std::vector< castor::String > GltfImporterFile::listSkeletons()
+	castor::StringArray GltfImporterFile::listSkeletons()
 	{
-		std::vector< castor::String > result;
+		castor::StringArray result;
 
 		if ( isValid() )
 		{
@@ -845,9 +845,9 @@ namespace c3d_gltf
 		return result;
 	}
 
-	std::vector< castor3d::ImporterFile::NodeData > GltfImporterFile::listSceneNodes()
+	castor::Vector< castor3d::ImporterFile::NodeData > GltfImporterFile::listSceneNodes()
 	{
-		std::vector< NodeData > result;
+		castor::Vector< NodeData > result;
 
 		if ( isValid() )
 		{
@@ -860,9 +860,9 @@ namespace c3d_gltf
 		return result;
 	}
 
-	std::vector< castor3d::ImporterFile::LightData > GltfImporterFile::listLights()
+	castor::Vector< castor3d::ImporterFile::LightData > GltfImporterFile::listLights()
 	{
-		std::vector< LightData > result;
+		castor::Vector< LightData > result;
 
 		if ( isValid() )
 		{
@@ -882,9 +882,9 @@ namespace c3d_gltf
 		return result;
 	}
 
-	std::vector< castor3d::ImporterFile::GeometryData > GltfImporterFile::listGeometries()
+	castor::Vector< castor3d::ImporterFile::GeometryData > GltfImporterFile::listGeometries()
 	{
-		std::vector< GeometryData > result;
+		castor::Vector< GeometryData > result;
 
 		if ( isValid() )
 		{
@@ -914,9 +914,9 @@ namespace c3d_gltf
 		return result;
 	}
 
-	std::vector< castor3d::ImporterFile::CameraData > GltfImporterFile::listCameras()
+	castor::Vector< castor3d::ImporterFile::CameraData > GltfImporterFile::listCameras()
 	{
-		std::vector< CameraData > result;
+		castor::Vector< CameraData > result;
 
 		if ( isValid() )
 		{
@@ -936,9 +936,9 @@ namespace c3d_gltf
 		return result;
 	}
 
-	std::vector< castor::String > GltfImporterFile::listMeshAnimations( castor3d::Mesh const & mesh )
+	castor::StringArray GltfImporterFile::listMeshAnimations( castor3d::Mesh const & mesh )
 	{
-		std::set< castor::String > result;
+		castor::Set< castor::String > result;
 		auto it = m_sceneData.meshes.find( mesh.getName() );
 
 		if ( it != m_sceneData.meshes.end() )
@@ -952,13 +952,13 @@ namespace c3d_gltf
 			}
 		}
 
-		return std::vector< castor::String >{ result.begin()
+		return castor::StringArray{ result.begin()
 			, result.end() };
 	}
 
-	std::vector< castor::String > GltfImporterFile::listSkeletonAnimations( castor3d::Skeleton const & skeleton )
+	castor::StringArray GltfImporterFile::listSkeletonAnimations( castor3d::Skeleton const & skeleton )
 	{
-		std::set< castor::String > result;
+		castor::Set< castor::String > result;
 
 		if ( isValid() )
 		{
@@ -981,13 +981,13 @@ namespace c3d_gltf
 			}
 		}
 
-		return std::vector< castor::String >{ result.begin()
+		return castor::StringArray{ result.begin()
 			, result.end() };
 	}
 
-	std::vector< castor::String > GltfImporterFile::listSceneNodeAnimations( castor3d::SceneNode const & node )
+	castor::StringArray GltfImporterFile::listSceneNodeAnimations( castor3d::SceneNode const & node )
 	{
-		std::vector< castor::String > result;
+		castor::StringArray result;
 		auto it = std::find_if( m_sceneData.nodes.begin()
 			, m_sceneData.nodes.end()
 			, [&node]( GltfNodeData const & lookup )
@@ -1006,9 +1006,9 @@ namespace c3d_gltf
 		return result;
 	}
 
-	std::vector< castor::String > GltfImporterFile::listAllMeshAnimations()
+	castor::StringArray GltfImporterFile::listAllMeshAnimations()
 	{
-		std::vector< castor::String > result;
+		castor::StringArray result;
 
 		for ( auto & [_, mesh] : m_sceneData.meshes )
 		{
@@ -1024,9 +1024,9 @@ namespace c3d_gltf
 		return result;
 	}
 
-	std::vector< castor::String > GltfImporterFile::listAllSkeletonAnimations()
+	castor::StringArray GltfImporterFile::listAllSkeletonAnimations()
 	{
-		std::set< castor::String > result;
+		castor::Set< castor::String > result;
 
 		if ( isValid() )
 		{
@@ -1049,13 +1049,13 @@ namespace c3d_gltf
 			}
 		}
 
-		return std::vector< castor::String >{ result.begin()
+		return castor::StringArray{ result.begin()
 			, result.end() };
 	}
 
-	std::vector< castor::String > GltfImporterFile::listAllSceneNodeAnimations()
+	castor::StringArray GltfImporterFile::listAllSceneNodeAnimations()
 	{
-		std::vector< castor::String > result;
+		castor::StringArray result;
 
 		for ( auto & node : m_sceneData.nodes )
 		{
@@ -1114,8 +1114,8 @@ namespace c3d_gltf
 
 	void GltfImporterFile::doPrelistNodes()
 	{
-		std::map< GltfMeshData const *, std::vector< size_t > > processedMeshes;
-		std::map< size_t, castor::Matrix4x4f > cumulativeTransforms;
+		castor::Map< GltfMeshData const *, castor::Vector< size_t > > processedMeshes;
+		castor::Map< size_t, castor::Matrix4x4f > cumulativeTransforms;
 
 		for ( auto & sceneIndex : m_sceneIndices )
 		{
@@ -1130,7 +1130,7 @@ namespace c3d_gltf
 						transform.rotate *= castor::Quaternion::fromAxisAngle( castor::Point3f{ 0.0f, 1.0f, 0.0f }, castor::Angle::fromDegrees( 180.0f ) );
 					}
 
-					GltfNodeData nodeData{ parentIndex < m_asset->nodes.size() ? getNodeName( parentIndex, 0u ) : std::string{}
+					GltfNodeData nodeData{ parentIndex < m_asset->nodes.size() ? getNodeName( parentIndex, 0u ) : castor::String{}
 						, getNodeName( nodeIndex, 0u )
 						, node.cameraIndex.has_value()
 						, nodeIndex
@@ -1162,7 +1162,7 @@ namespace c3d_gltf
 							, processedMeshes, nodeData );
 					}
 
-					file::addNode( *this, std::move( nodeData ), isSkeletonNode, parentIndex
+					file::addNode( *this, castor::move( nodeData ), isSkeletonNode, parentIndex
 						, parentInstanceCount
 						, m_sceneData.nodes, m_sceneData.skeletonNodes );
 					return std::make_tuple( parentInstanceCount, true, isSkeletonNode );

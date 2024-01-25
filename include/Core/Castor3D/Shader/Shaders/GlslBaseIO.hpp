@@ -36,7 +36,7 @@ namespace castor3d::shader
 		ColourT( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
 			, bool enabled )
-			: ColourStructT< ColTypeT, FlagT >{ writer, std::move( expr ), enabled }
+			: ColourStructT< ColTypeT, FlagT >{ writer, castor::move( expr ), enabled }
 		{
 		}
 
@@ -50,7 +50,7 @@ namespace castor3d::shader
 		PositionT( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
 			, bool enabled )
-			: PositionStructT< PosTypeT, FlagT >{ writer, std::move( expr ), enabled }
+			: PositionStructT< PosTypeT, FlagT >{ writer, castor::move( expr ), enabled }
 		{
 		}
 
@@ -64,7 +64,7 @@ namespace castor3d::shader
 		PosUvT( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
 			, bool enabled )
-			: PosUvStructT< PosTypeT, FlagT >{ writer, std::move( expr ), enabled }
+			: PosUvStructT< PosTypeT, FlagT >{ writer, castor::move( expr ), enabled }
 		{
 		}
 
@@ -79,7 +79,7 @@ namespace castor3d::shader
 		UvT( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
 			, bool enabled )
-			: UvStructT< UvTypeT, FlagT >{ writer, std::move( expr ), enabled }
+			: UvStructT< UvTypeT, FlagT >{ writer, castor::move( expr ), enabled }
 		{
 		}
 

@@ -47,7 +47,7 @@ namespace castor3d
 			&& angle.degrees() > 0.0f )
 		{
 			auto arcAngle = angle / ( 2.0f * float( nbFaces ) );
-			std::vector< castor::Point2f > arc( nbFaces + 1u );
+			castor::Vector< castor::Point2f > arc( nbFaces + 1u );
 			castor::Angle arcAlpha = 0.0_degrees;
 			uint32_t iCur = 0;
 			uint32_t iPrv = 0;

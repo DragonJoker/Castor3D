@@ -46,8 +46,8 @@ namespace castor
 		}
 			
 		PixelIterator( PixelIterator && iter )noexcept
-			: m_current{ std::move( iter.m_current ) }
-			, m_end{ std::move( iter.m_end ) }
+			: m_current{ castor::move( iter.m_current ) }
+			, m_end{ castor::move( iter.m_end ) }
 		{
 			doLink();
 			iter.m_pixel.unlink();
@@ -63,8 +63,8 @@ namespace castor
 
 		PixelIterator & operator=( PixelIterator && it )noexcept
 		{
-			m_current = std::move( it.m_current );
-			m_end = std::move( it.m_end );
+			m_current = castor::move( it.m_current );
+			m_end = castor::move( it.m_end );
 			doLink();
 			it.m_pixel.unlink();
 			return *this;

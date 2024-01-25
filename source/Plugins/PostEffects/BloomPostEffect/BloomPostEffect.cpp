@@ -22,14 +22,14 @@ namespace Bloom
 	//*********************************************************************************************
 
 	castor::String const PostEffect::Type = cuT( "bloom" );
-	castor::String const PostEffect::Name = cuT( "HDR Bloom PostEffect" );
+	castor::MbString const PostEffect::Name = "HDR Bloom PostEffect";
 
 	PostEffect::PostEffect( castor3d::RenderTarget & renderTarget
 		, castor3d::RenderSystem & renderSystem
 		, castor3d::Parameters const & params )
 		: castor3d::PostEffect{ PostEffect::Type
-			, "Bloom"
-			, PostEffect::Name
+			, cuT( "Bloom" )
+			, castor::makeString( PostEffect::Name )
 			, renderTarget
 			, renderSystem
 			, params }
@@ -73,7 +73,7 @@ namespace Bloom
 
 		for ( auto & view : m_blurViews )
 		{
-			visitor.visit( "PostFX: HDRB - Blur " + std::to_string( view.data->info.subresourceRange.baseMipLevel )
+			visitor.visit( cuT( "PostFX: HDRB - Blur " ) + castor::string::toString( view.data->info.subresourceRange.baseMipLevel )
 				, view
 				, m_renderTarget.getGraph().getFinalLayoutState( view ).layout
 				, castor3d::TextureFactors{}.invert( true ) );
@@ -121,7 +121,7 @@ namespace Bloom
 
 		for ( uint32_t i = 0u; i < m_blurPassesCount; ++i )
 		{
-			m_blurViews.push_back( m_graph.createView( crg::ImageViewData{ m_blurImg.data->name + castor::string::toString( i )
+			m_blurViews.push_back( m_graph.createView( crg::ImageViewData{ m_blurImg.data->name + castor::string::toMbString( i )
 				, m_blurImg
 				, 0u
 				, VK_IMAGE_VIEW_TYPE_2D
@@ -130,7 +130,7 @@ namespace Bloom
 		}
 #endif
 
-		m_hiPass = std::make_unique< HiPass >( m_graph
+		m_hiPass = castor::make_unique< HiPass >( m_graph
 			, previousPass
 			, device
 			, crg::ImageViewIdArray{ source.sampledViewId, target.sampledViewId }
@@ -139,7 +139,7 @@ namespace Bloom
 			, &isEnabled()
 			, &m_passIndex );
 #if !Bloom_DebugHiPass
-		m_blurXPass = std::make_unique< BlurPass >( m_graph
+		m_blurXPass = castor::make_unique< BlurPass >( m_graph
 			, m_hiPass->getPass()
 			, device
 			, m_hiPass->getResult()
@@ -149,7 +149,7 @@ namespace Bloom
 			, m_blurPassesCount
 			, false
 			, &isEnabled() );
-		m_blurYPass = std::make_unique< BlurPass >( m_graph
+		m_blurYPass = castor::make_unique< BlurPass >( m_graph
 			, m_blurXPass->getPasses()
 			, device
 			, m_blurViews
@@ -159,7 +159,7 @@ namespace Bloom
 			, m_blurPassesCount
 			, true
 			, &isEnabled() );
-		m_combinePass = std::make_unique< CombinePass >( m_graph
+		m_combinePass = castor::make_unique< CombinePass >( m_graph
 			, m_blurYPass->getPasses()
 			, device
 			, crg::ImageViewIdArray{ source.sampledViewId, target.sampledViewId }

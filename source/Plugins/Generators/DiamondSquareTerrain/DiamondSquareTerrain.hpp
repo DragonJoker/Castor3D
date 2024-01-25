@@ -23,7 +23,7 @@ namespace diamond_square_terrain
 
 		void setBiomes( Biomes biomes )
 		{
-			m_biomes = std::move( biomes );
+			m_biomes = castor::move( biomes );
 		}
 
 	private:
@@ -34,8 +34,8 @@ namespace diamond_square_terrain
 			, castor3d::Parameters const & parameters )override;
 
 	public:
+		static castor::MbString const Name;
 		static castor::String const Type;
-		static castor::String const Name;
 		static castor::String const Biome;
 		static castor::String const BiomeRange;
 		static castor::String const BiomeLowSteepness;

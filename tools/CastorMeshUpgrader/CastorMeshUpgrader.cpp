@@ -13,23 +13,23 @@
 namespace
 {
 #if defined( VK_USE_PLATFORM_ANDROID_KHR )
-		std::string const KHR_PLATFORM_SURFACE_EXTENSION_NAME = "VK_KHR_android_surface";
+		castor::MbString const KHR_PLATFORM_SURFACE_EXTENSION_NAME = "VK_KHR_android_surface";
 #elif defined( VK_USE_PLATFORM_FUCHSIA )
-		std::string const KHR_PLATFORM_SURFACE_EXTENSION_NAME = "VK_FUCHSIA_imagepipe_surface";
+		castor::MbString const KHR_PLATFORM_SURFACE_EXTENSION_NAME = "VK_FUCHSIA_imagepipe_surface";
 #elif defined( VK_USE_PLATFORM_IOS_MVK )
-		std::string const KHR_PLATFORM_SURFACE_EXTENSION_NAME = "VK_MVK_ios_surface";
+		castor::MbString const KHR_PLATFORM_SURFACE_EXTENSION_NAME = "VK_MVK_ios_surface";
 #elif defined( VK_USE_PLATFORM_MACOS_MVK )
-		std::string const KHR_PLATFORM_SURFACE_EXTENSION_NAME = "VK_MVK_macos_surface";
+		castor::MbString const KHR_PLATFORM_SURFACE_EXTENSION_NAME = "VK_MVK_macos_surface";
 #elif defined( VK_USE_PLATFORM_VI_NN )
-		std::string const KHR_PLATFORM_SURFACE_EXTENSION_NAME = "VK_NN_vi_surface";
+		castor::MbString const KHR_PLATFORM_SURFACE_EXTENSION_NAME = "VK_NN_vi_surface";
 #elif defined( VK_USE_PLATFORM_XLIB_KHR )
-		std::string const KHR_PLATFORM_SURFACE_EXTENSION_NAME = "VK_KHR_xlib_surface";
+		castor::MbString const KHR_PLATFORM_SURFACE_EXTENSION_NAME = "VK_KHR_xlib_surface";
 #elif defined( VK_USE_PLATFORM_XCB_KHR )
-		std::string const KHR_PLATFORM_SURFACE_EXTENSION_NAME = "VK_KHR_xcb_surface";
+		castor::MbString const KHR_PLATFORM_SURFACE_EXTENSION_NAME = "VK_KHR_xcb_surface";
 #elif defined( VK_USE_PLATFORM_WAYLAND_KHR )
-		std::string const KHR_PLATFORM_SURFACE_EXTENSION_NAME = "VK_KHR_wayland_surface";
+		castor::MbString const KHR_PLATFORM_SURFACE_EXTENSION_NAME = "VK_KHR_wayland_surface";
 #elif defined( VK_USE_PLATFORM_WIN32_KHR )
-		std::string const KHR_PLATFORM_SURFACE_EXTENSION_NAME = "VK_KHR_win32_surface";
+		castor::MbString const KHR_PLATFORM_SURFACE_EXTENSION_NAME = "VK_KHR_win32_surface";
 #endif
 	class DummyWindowHandle
 		: public ashes::IWindowHandle
@@ -45,7 +45,7 @@ namespace
 			return true;
 		}
 	};
-	using StringArray = std::vector< std::string >;
+	using StringArray = castor::Vector< castor::MbString >;
 
 	struct Options
 	{
@@ -94,7 +94,7 @@ namespace
 		}
 
 		it = std::find( args.begin(), args.end(), "-o" );
-		options.input = castor::Path{ castor::string::stringCast< castor::xchar >( args[0] ) };
+		options.input = castor::Path{ castor::makeString( args[0] ) };
 
 		if ( it == args.end() )
 		{
@@ -108,7 +108,7 @@ namespace
 		}
 		else
 		{
-			options.output = castor::Path{ *it };
+			options.output = castor::Path{ castor::makeString( *it ) };
 
 			if ( options.output.getExtension().empty() )
 			{
@@ -139,7 +139,7 @@ namespace
 
 			if ( renderer != renderers.end() )
 			{
-				if ( engine.loadRenderer( renderer->name ) )
+				if ( engine.loadRenderer( castor::makeString( renderer->name ) ) )
 				{
 					engine.initialise( 1, false );
 					result = true;
@@ -289,7 +289,7 @@ int main( int argc, char * argv[] )
 
 		if ( !castor::File::fileExists( inputPath ) )
 		{
-			std::cerr << "File [" << inputPath << "] does not exist." << std::endl << std::endl;
+			std::cerr << "File [" << castor::toUtf8( inputPath ) << "] does not exist." << std::endl << std::endl;
 			printUsage();
 			return EXIT_SUCCESS;
 		}
@@ -314,7 +314,7 @@ int main( int argc, char * argv[] )
 			, castor3d::Version{ CastorMeshUpgrader_VERSION_MAJOR, CastorMeshUpgrader_VERSION_MINOR, CastorMeshUpgrader_VERSION_BUILD }
 			, false
 			, false };
-		castor3d::Engine engine{ std::move( config ) };
+		castor3d::Engine engine{ castor::move( config ) };
 
 		if ( doInitialiseEngine( engine ) )
 		{
@@ -322,7 +322,7 @@ int main( int argc, char * argv[] )
 			auto name = inputPath.getFileName();
 			auto & renderSystem = *engine.getRenderSystem();
 			auto surface( renderSystem.getInstance().createSurface( renderSystem.getPhysicalDevice()
-				, ashes::WindowHandle{ std::make_unique< DummyWindowHandle >() } ) );
+				, ashes::WindowHandle{ castor::make_unique< DummyWindowHandle >() } ) );
 			auto & device = renderSystem.getRenderDevice();
 
 			if ( extension == cuT( "cmsh" ) )

@@ -30,7 +30,7 @@ namespace castor
 		 *\param[in]	center	Le centre.
 		 */
 		explicit BoundingContainer( MyPoint center )
-			: m_center{ std::move( center ) }
+			: m_center{ castor::move( center ) }
 		{
 		}
 		/**
@@ -69,7 +69,7 @@ namespace castor
 	protected:
 		void setCenter( MyPoint center )noexcept
 		{
-			m_center = std::move( center );
+			m_center = castor::move( center );
 		}
 
 	private:

@@ -98,7 +98,7 @@ namespace castor3d
 		uint32_t m_currentUboIndex{ 0u };
 		castor::Map< uint32_t, BufferArray > m_buffers;
 		castor::String m_debugName;
-		std::mutex m_mutex;
+		castor::Mutex m_mutex;
 	};
 }
 

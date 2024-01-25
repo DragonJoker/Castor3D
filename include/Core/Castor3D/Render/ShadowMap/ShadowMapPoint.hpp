@@ -55,7 +55,7 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		crg::FramePassArray doCreatePass( crg::FrameGraph & graph
+		crg::FramePassArray doCreatePass( crg::FramePassGroup & graph
 			, crg::FramePassArray const & previousPasses
 			, uint32_t index
 			, bool vsm

@@ -152,7 +152,7 @@ namespace castor3d
 		{
 			castor::Point2i axis{};
 			castor::Point2i dummy{};
-			std::array< castor::Point4f, 2u > gaussian{};
+			castor::Array< castor::Point4f, 2u > gaussian{};
 		};
 
 		RenderDevice const & m_device;
@@ -165,7 +165,7 @@ namespace castor3d
 		Texture m_result;
 		Texture m_bentResult;
 		UniformBufferOffsetT< Configuration > m_configurationUbo;
-		std::array< Program, 2u > m_programs;
+		castor::Array< Program, 2u > m_programs;
 		crg::FramePass const * m_lastPass{};
 
 	};

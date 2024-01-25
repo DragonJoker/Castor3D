@@ -213,7 +213,7 @@ namespace castor3d
 			auto & handler = device.renderSystem.getEngine()->getGraphResourceHandler();
 			auto imageId = view.viewId.data->image;
 			auto info = view.viewId.data->info;
-			crg::ImageViewId viewId{ handler.createViewId( crg::ImageViewData{ view.name + "Barrier"
+			crg::ImageViewId viewId{ handler.createViewId( crg::ImageViewData{ castor::toUtf8( view.name ) + "Barrier"
 				, imageId
 				, info.flags
 				, info.viewType
@@ -270,7 +270,7 @@ namespace castor3d
 			auto & handler = device.renderSystem.getEngine()->getGraphResourceHandler();
 			auto imageId = view.viewId.data->image;
 			auto info = view.viewId.data->info;
-			crg::ImageViewId viewId{ handler.createViewId( crg::ImageViewData{ view.name + "Sampled"
+			crg::ImageViewId viewId{ handler.createViewId( crg::ImageViewData{ castor::toUtf8( view.name ) + "Sampled"
 				, imageId
 				, info.flags
 				, info.viewType
@@ -336,21 +336,21 @@ namespace castor3d
 			switch ( v )
 			{
 			case VK_DEVICE_FAULT_ADDRESS_TYPE_NONE_EXT:
-				return "None";
+				return cuT( "None" );
 			case VK_DEVICE_FAULT_ADDRESS_TYPE_READ_INVALID_EXT:
-				return "Read Invalid";
+				return cuT( "Read Invalid" );
 			case VK_DEVICE_FAULT_ADDRESS_TYPE_WRITE_INVALID_EXT:
-				return "Write Invalid";
+				return cuT( "Write Invalid" );
 			case VK_DEVICE_FAULT_ADDRESS_TYPE_EXECUTE_INVALID_EXT:
-				return "Execute Invalid";
+				return cuT( "Execute Invalid" );
 			case VK_DEVICE_FAULT_ADDRESS_TYPE_INSTRUCTION_POINTER_UNKNOWN_EXT:
-				return "Instruction Pointer Unknown";
+				return cuT( "Instruction Pointer Unknown" );
 			case VK_DEVICE_FAULT_ADDRESS_TYPE_INSTRUCTION_POINTER_INVALID_EXT:
-				return "Instruction Pointer  Invalid";
+				return cuT( "Instruction Pointer  Invalid" );
 			case VK_DEVICE_FAULT_ADDRESS_TYPE_INSTRUCTION_POINTER_FAULT_EXT:
-				return "Instruction Pointer Fault";
+				return cuT( "Instruction Pointer Fault" );
 			default:
-				return "Unknown";
+				return cuT( "Unknown" );
 			}
 		}
 #endif
@@ -373,11 +373,11 @@ namespace castor3d
 		, ashes::WindowHandle handle )
 		: OwnedBy< Engine >{ engine }
 		, castor::Named{ name }
-		, m_evtHandler{ std::make_unique< EvtHandler >( *this ) }
+		, m_evtHandler{ castor::make_unique< EvtHandler >( *this ) }
 		, m_index{ s_nbRenderWindows++ }
 		, m_device{ engine.getRenderSystem()->getRenderDevice() }
 		, m_surface{ m_device.renderSystem.getInstance().createSurface( m_device.renderSystem.getPhysicalDevice()
-			, std::move( handle ) ) }
+			, castor::move( handle ) ) }
 		, m_queues{ rendwndw::getQueueFamily( *m_surface, m_device.queueFamilies ) }
 		, m_reservedQueue{ m_queues->getQueueSize() > 1 ? m_queues->reserveQueue() : nullptr }
 		, m_commandBufferPool{ m_device->createCommandPool( m_device.getGraphicsQueueFamilyIndex()
@@ -474,19 +474,19 @@ namespace castor3d
 							{
 								auto progress = m_progressBar.get();
 								stepProgressBarGlobalStartLocal( progress
-									, "Initialising: Render Window"
+									, cuT( "Initialising: Render Window" )
 									, 6u );
-								stepProgressBarLocal( progress, "Loading picking" );
+								stepProgressBarLocal( progress, cuT( "Loading picking" ) );
 								doCreatePickingPass( queue );
-								stepProgressBarLocal( progress, "Loading intermediate views" );
+								stepProgressBarLocal( progress, cuT( "Loading intermediate views" ) );
 								doCreateIntermediateViews( queue );
-								stepProgressBarLocal( progress, "Loading combine quad" );
+								stepProgressBarLocal( progress, cuT( "Loading combine quad" ) );
 								doCreateRenderQuad();
-								stepProgressBarLocal( progress, "Loading command buffers" );
+								stepProgressBarLocal( progress, cuT( "Loading command buffers" ) );
 								doCreateCommandBuffers();
-								stepProgressBarLocal( progress, "Loading save data" );
+								stepProgressBarLocal( progress, cuT( "Loading save data" ) );
 								doCreateSaveData();
-								stepProgressBarLocal( progress, "Finalising..." );
+								stepProgressBarLocal( progress, cuT( "Finalising..." ) );
 
 								getListener()->postEvent( makeCpuFunctorEvent( CpuEventType::ePostCpuStep
 									, [this]()
@@ -709,7 +709,7 @@ namespace castor3d
 					, *resources
 					, *m_loadingScreen
 					, fence
-					, std::move( baseToWait ) );
+					, castor::move( baseToWait ) );
 				doPresentLoadingFrame( *queueData
 					, fence
 					, *resources
@@ -1029,11 +1029,11 @@ namespace castor3d
 				, VK_ACCESS_MEMORY_READ_BIT
 				, VK_DEPENDENCY_BY_REGION_BIT } };
 		ashes::RenderPassCreateInfo createInfo{ 0u
-			, std::move( attaches )
-			, std::move( subpasses )
-			, std::move( dependencies ) };
-		m_renderPass = getDevice()->createRenderPass( getName()
-			, std::move( createInfo ) );
+			, castor::move( attaches )
+			, castor::move( subpasses )
+			, castor::move( dependencies ) };
+		m_renderPass = getDevice()->createRenderPass( castor::toUtf8( getName() )
+			, castor::move( createInfo ) );
 	}
 
 	void RenderWindow::doDestroyRenderPass()noexcept
@@ -1108,11 +1108,11 @@ namespace castor3d
 		m_swapChain = getDevice()->createSwapChain( rendwndw::getSwapChainCreateInfo( *m_surface
 			, { m_size.getWidth(), m_size.getHeight() }
 			, m_allowHdrSwapchain ) );
-		log::info << "Created SwapChain [" << getName()
-			<< ", FMT(" << ashes::getName( m_swapChain->getFormat() ) << ")"
-			<< ", IMGS(" << m_swapChain->getImageCount() << ")"
-			<< ", DIM(" << makeSize( m_swapChain->getDimensions() ) << ")"
-			<< ", MODE(" << ashes::getName( m_swapChain->getPresentMode() ) << ")]" << std::endl;
+		log::info << cuT( "Created SwapChain [" ) << getName()
+			<< cuT( ", FMT(" ) << castor::makeString( ashes::getName( m_swapChain->getFormat() ) ) << cuT( ")" )
+			<< cuT( ", IMGS(" ) << m_swapChain->getImageCount() << cuT( ")" )
+			<< cuT( ", DIM(" ) << makeSize( m_swapChain->getDimensions() ) << cuT( ")" )
+			<< cuT( ", MODE(" ) << castor::makeString( ashes::getName( m_swapChain->getPresentMode() ) ) << cuT( ")]" ) << std::endl;
 
 		if ( !m_renderPass
 			|| m_swapChain->getFormat() != m_swapchainFormat )
@@ -1147,10 +1147,11 @@ namespace castor3d
 	{
 		for ( uint32_t i = 0u; i < uint32_t( m_swapChain->getImageCount() ); ++i )
 		{
-			m_renderingResources.emplace_back( std::make_unique< RenderingResources >( getDevice()->createSemaphore( getName() + castor::string::toString( i ) + "ImageAvailable" )
-				, getDevice()->createSemaphore( getName() + castor::string::toString( i ) + "FinishedRendering" )
-				, getDevice()->createFence( getName() + castor::string::toString( i ), VkFenceCreateFlags{ 0u } )
-				, m_commandBufferPool->createCommandBuffer( getName() + castor::string::toString( i ) )
+			auto mbName = castor::toUtf8( getName() + castor::string::toString( i ) );
+			m_renderingResources.emplace_back( castor::make_unique< RenderingResources >( getDevice()->createSemaphore( mbName + "ImageAvailable" )
+				, getDevice()->createSemaphore( mbName + "FinishedRendering" )
+				, getDevice()->createFence( mbName, VkFenceCreateFlags{ 0u } )
+				, m_commandBufferPool->createCommandBuffer( mbName )
 				, 0u ) );
 		}
 	}
@@ -1192,9 +1193,10 @@ namespace castor3d
 		for ( size_t i = 0u; i < m_frameBuffers.size(); ++i )
 		{
 			auto attaches = doPrepareAttaches( uint32_t( i ) );
-			m_frameBuffers[i] = m_renderPass->createFrameBuffer( getName() + std::to_string( i )
+			auto mbName = castor::toUtf8( getName() + castor::string::toString( i ) );
+			m_frameBuffers[i] = m_renderPass->createFrameBuffer( mbName
 				, m_swapChain->getDimensions()
-				, std::move( attaches ) );
+				, castor::move( attaches ) );
 		}
 	}
 
@@ -1361,7 +1363,7 @@ namespace castor3d
 		for ( auto & commandBuffer : commandBuffers )
 		{
 			auto const & frameBuffer = *m_frameBuffers[index];
-			auto name = getName() + castor::string::toString( index );
+			auto name = castor::toUtf8( getName() + castor::string::toString( index ) );
 
 			if ( !commandBuffer )
 			{
@@ -1464,7 +1466,7 @@ namespace castor3d
 			, m_resources
 			, extent
 			, target->getCameraUbo() );
-		m_tex3DTo2DIntermediate = { "Texture3DTo2DResult"
+		m_tex3DTo2DIntermediate = { cuT( "Texture3DTo2DResult" )
 			, m_texture3Dto2D->getTarget().sampledViewId
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, castor3d::TextureFactors{}.invert( true ) };
@@ -1506,7 +1508,7 @@ namespace castor3d
 			, bufferSize
 			, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-			, "Snapshot" );
+			, cuT( "Snapshot" ) );
 		m_snapshotData = castor::makeArrayView( m_snapshotBuffer->lock( 0u, bufferSize, 0u )
 			, bufferSize );
 #if C3D_DebugPicking || C3D_DebugBackgroundPicking
@@ -1675,7 +1677,7 @@ namespace castor3d
 		auto & context = m_device.makeContext();
 		auto targetExtent = makeExtent2D( m_saveBuffer->getDimensions() );
 
-		transferCommands = { getDevice(), queueData, "Snapshot" };
+		transferCommands = { getDevice(), queueData, cuT( "Snapshot" ) };
 #if !C3D_DebugPicking && !C3D_DebugBackgroundPicking
 		auto target = getRenderTarget();
 		CU_Require( target );
@@ -1967,9 +1969,9 @@ namespace castor3d
 			for ( uint32_t i = 0u; i < faultCounts.addressInfoCount; ++i )
 			{
 				auto const & info = faultInfo.pAddressInfos[i];
-				log::error << "    From 0x" << std::hex << std::setw( 8u ) << std::setfill( '0' ) << ( info.reportedAddress & ~( info.addressPrecision - 1 ) )
-					<< " to 0x" << std::hex << std::setw( 8u ) << ( info.reportedAddress | ( info.addressPrecision - 1 ) )
-					<< ": " << rendwndw::getAddressTypeName( info.addressType ) << "\n";
+				log::error << cuT( "    From 0x" ) << std::hex << std::setw( 8u ) << std::setfill( cuT( '0' ) ) << ( info.reportedAddress & ~( info.addressPrecision - 1 ) )
+					<< cuT( " to 0x" ) << std::hex << std::setw( 8u ) << ( info.reportedAddress | ( info.addressPrecision - 1 ) )
+					<< cuT( ": " ) << rendwndw::getAddressTypeName( info.addressType ) << cuT( "\n" );
 			}
 		}
 
@@ -1980,8 +1982,8 @@ namespace castor3d
 			for ( uint32_t i = 0u; i < faultCounts.vendorInfoCount; ++i )
 			{
 				auto const & info = faultInfo.pVendorInfos[i];
-				log::error << "    " << std::setw( 8u ) << std::setfill( '0' ) << info.vendorFaultCode
-					<< ": " << info.description << "\n";
+				log::error << cuT( "    " ) << std::setw( 8u ) << std::setfill( cuT( '0' ) ) << info.vendorFaultCode
+					<< cuT( ": " ) << info.description << "\n";
 			}
 		}
 #endif

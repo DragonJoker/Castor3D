@@ -62,7 +62,7 @@ namespace castor3d
 		C3D_API void doCleanupParser( castor::PreprocessedFile & preprocessed )override;
 		C3D_API void doValidate( castor::PreprocessedFile & preprocessed )override;
 		C3D_API castor::String doGetSectionName( castor::SectionId section )const override;
-		C3D_API std::unique_ptr< FileParser > doCreateParser()const override;
+		C3D_API castor::RawUniquePtr< FileParser > doCreateParser()const override;
 	};
 }
 

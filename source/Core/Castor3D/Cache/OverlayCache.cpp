@@ -102,7 +102,7 @@ namespace castor
 			{
 				cleanup( resource );
 			}
-			, castor::ResourceMergerT< OverlayCache >{ "_" } }
+			, castor::ResourceMergerT< OverlayCache >{ cuT( "_" ) } }
 		, m_engine{ engine }
 		, m_viewport{ engine }
 	{
@@ -166,7 +166,7 @@ namespace castor
 				{
 					tmp->initialise( device, queueData );
 				} ) );
-			it->second = std::move( result );
+			it->second = castor::move( result );
 		}
 
 		return it->second.get();

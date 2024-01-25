@@ -62,7 +62,7 @@ namespace castor3d
 		 *\param[in]	target	Le shader object concerné.
 		 *\param[in]	source	Le code de la source.
 		 */
-		C3D_API void setSource( VkShaderStageFlagBits target, castor::String const & source );
+		C3D_API void setSource( VkShaderStageFlagBits target, castor::MbString const & source );
 		/**
 		 *\~english
 		 *\brief		Sets the shader source.
@@ -113,7 +113,7 @@ namespace castor3d
 		/**@}*/
 
 	protected:
-		std::map< VkShaderStageFlagBits, castor::Path > m_files;
+		castor::Map< VkShaderStageFlagBits, castor::Path > m_files;
 		ProgramModule m_module;
 		ashes::PipelineShaderStageCreateInfoArray m_states;
 	};
@@ -141,33 +141,30 @@ namespace castor3d
 	inline ashes::PipelineShaderStageCreateInfo makeShaderState( ashes::Device const & device
 		, VkShaderStageFlagBits stage
 		, SpirVShader const & code
-		, std::string const & name
-		, std::string mainFuncName = "main"
+		, castor::String const & name
+		, castor::String const & mainFuncName = cuT( "main" )
 		, ashes::Optional< ashes::SpecializationInfo > specialization = ashes::nullopt )
 	{
-		auto shaderModule = device.createShaderModule( name + "ShdMod" + "_" + ashes::getName( stage )
+		auto shaderModule = device.createShaderModule( castor::toUtf8( name ) + "ShdMod_" + ashes::getName( stage )
 			, code.spirv );
-		return ashes::PipelineShaderStageCreateInfo
-		{
-			0u,
-			stage,
-			std::move( shaderModule ),
-			std::move( mainFuncName ),
-			std::move( specialization ),
-		};
+		return ashes::PipelineShaderStageCreateInfo{ 0u
+			, stage
+			, castor::move( shaderModule )
+			, castor::toUtf8( mainFuncName )
+			, castor::move( specialization ) };
 	}
 
 	inline ashes::PipelineShaderStageCreateInfo makeShaderState( RenderDevice const & device
 		, ShaderModule & shaderModule
-		, std::string mainFuncName = "main"
+		, castor::String const & mainFuncName = cuT( "main" )
 		, ashes::Optional< ashes::SpecializationInfo > specialization = ashes::nullopt )
 	{
 		return makeShaderState( *device
 			, shaderModule.stage
 			, compileShader( device, shaderModule )
 			, shaderModule.name
-			, std::move( mainFuncName )
-			, std::move( specialization ) );
+			, mainFuncName
+			, castor::move( specialization ) );
 	}
 
 	struct ParticleSystemContext;

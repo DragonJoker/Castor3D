@@ -142,12 +142,12 @@ namespace atmosphere_scattering
 		, crg::ImageViewId const & resultView
 		, uint32_t index
 		, bool const & enabled )
-		: castor::Named{ "SkyViewPass" + castor::string::toString( index ) }
+		: castor::Named{ cuT( "SkyViewPass" ) + castor::string::toString( index ) }
 		, m_shader{ getName(), skyview::getProgram( *device.renderSystem.getEngine(), getExtent( resultView ), getExtent( transmittanceView ) ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
 	{
 		auto renderSize = getExtent( resultView );
-		auto & pass = graph.createPass( getName()
+		auto & pass = graph.createPass( castor::toUtf8( getName() )
 			, [this, &device, &enabled, renderSize]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
@@ -158,7 +158,7 @@ namespace atmosphere_scattering
 					.instances( renderSize.depth )
 					.enabled( &enabled )
 					.build( framePass, context, graph );
-				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );

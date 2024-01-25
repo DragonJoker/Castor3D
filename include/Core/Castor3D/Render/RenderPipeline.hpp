@@ -144,10 +144,10 @@ namespace castor3d
 			m_meshletDescriptorLayout = &layout;
 		}
 
-		void setVertexLayouts( std::vector< ashes::PipelineVertexInputStateCreateInfo > layouts )noexcept
+		void setVertexLayouts( castor::Vector< ashes::PipelineVertexInputStateCreateInfo > layouts )noexcept
 		{
 			CU_Require( !m_pipeline );
-			m_vertexLayouts = std::move( layouts );
+			m_vertexLayouts = castor::move( layouts );
 		}
 
 		void setPushConstantRanges( ashes::VkPushConstantRangeArray const & pushConstantRanges )noexcept
@@ -159,13 +159,13 @@ namespace castor3d
 		void setViewport( VkViewport const & viewport )
 		{
 			CU_Require( !m_pipeline );
-			m_viewport = std::make_unique< VkViewport >( viewport );
+			m_viewport = castor::make_unique< VkViewport >( viewport );
 		}
 
 		void setScissor( VkRect2D const & scissor )
 		{
 			CU_Require( !m_pipeline );
-			m_scissor = std::make_unique< VkRect2D >( scissor );
+			m_scissor = castor::make_unique< VkRect2D >( scissor );
 		}
 		/**@}*/
 		/**
@@ -247,10 +247,10 @@ namespace castor3d
 		ShaderProgramRPtr m_program{};
 		PipelineFlags m_flags;
 		PipelineBaseHash m_flagsHash;
-		std::vector< ashes::PipelineVertexInputStateCreateInfo > m_vertexLayouts;
+		castor::Vector< ashes::PipelineVertexInputStateCreateInfo > m_vertexLayouts;
 		ashes::VkPushConstantRangeArray m_pushConstantRanges;
-		std::unique_ptr< VkViewport > m_viewport;
-		std::unique_ptr< VkRect2D > m_scissor;
+		castor::RawUniquePtr< VkViewport > m_viewport;
+		castor::RawUniquePtr< VkRect2D > m_scissor;
 		ashes::PipelineLayoutPtr m_pipelineLayout;
 		ashes::GraphicsPipelinePtr m_pipeline;
 		ashes::DescriptorSetLayout const * m_addDescriptorLayout{};

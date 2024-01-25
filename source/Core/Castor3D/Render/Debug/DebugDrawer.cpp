@@ -26,7 +26,7 @@ namespace castor3d
 	namespace dbgdrw
 	{
 		static ashes::RenderPassPtr createRenderPass( RenderDevice const & device
-			, std::string const & name
+			, castor::String const & name
 			, Texture const & colour
 			, Texture const & depth )
 		{
@@ -56,7 +56,7 @@ namespace castor3d
 				, VkAttachmentReference{ 0u, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL }
 				, {} };
 			ashes::SubpassDescriptionArray subpasses;
-			subpasses.push_back( std::move( subpassesDesc ) );
+			subpasses.push_back( castor::move( subpassesDesc ) );
 			ashes::VkSubpassDependencyArray dependencies{ { VK_SUBPASS_EXTERNAL
 					, 0u
 					, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
@@ -72,15 +72,15 @@ namespace castor3d
 					, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
 					, VK_DEPENDENCY_BY_REGION_BIT } };
 			ashes::RenderPassCreateInfo createInfo{ 0u
-				, std::move( attaches )
-				, std::move( subpasses )
-				, std::move( dependencies ) };
-			return device->createRenderPass( name + "/Debug"
-				, std::move( createInfo ) );
+				, castor::move( attaches )
+				, castor::move( subpasses )
+				, castor::move( dependencies ) };
+			return device->createRenderPass( castor::toUtf8( name ) + "/Debug"
+				, castor::move( createInfo ) );
 		}
 
 		static ashes::FrameBufferPtr createFrameBuffer( ashes::RenderPass const & renderPass
-			, std::string const & name
+			, castor::String const & name
 			, Texture const & colour
 			, Texture const & depth )
 		{
@@ -88,7 +88,7 @@ namespace castor3d
 			auto extent = colour.getExtent();
 			fbAttaches.emplace_back( depth.targetView );
 			fbAttaches.emplace_back( colour.targetView );
-			return renderPass.createFrameBuffer( name + "/Debug"
+			return renderPass.createFrameBuffer( castor::toUtf8( name ) + "/Debug"
 				, makeVkStruct< VkFramebufferCreateInfo >( 0u
 					, renderPass
 					, uint32_t( fbAttaches.size() )
@@ -135,9 +135,11 @@ namespace castor3d
 		, m_device{ device }
 		, m_renderPass{ dbgdrw::createRenderPass( m_device, parent.getName(), colour, depth ) }
 		, m_framebuffer{ dbgdrw::createFrameBuffer( *m_renderPass, parent.getName(), colour, depth ) }
-		, m_commandPool{ m_device->createCommandPool( parent.getName() + "/Debug", m_device.getGraphicsQueueFamilyIndex(), 0u ) }
-		, m_commandBuffers{ CommandsSemaphore{ m_commandPool->createCommandBuffer( parent.getName() + "/Debug/0" ), m_device->createSemaphore( parent.getName() + "/Debug/0" ) }
-			, CommandsSemaphore{ m_commandPool->createCommandBuffer( parent.getName() + "/Debug/1" ), m_device->createSemaphore( parent.getName() + "/Debug/1" ) } }
+		, m_commandPool{ m_device->createCommandPool( castor::toUtf8( parent.getName() ) + "/Debug", m_device.getGraphicsQueueFamilyIndex(), 0u ) }
+		, m_commandBuffers{ CommandsSemaphore{ m_commandPool->createCommandBuffer( castor::toUtf8( parent.getName() ) + "/Debug/0" )
+				, m_device->createSemaphore( castor::toUtf8( parent.getName() ) + "/Debug/0" ) }
+			, CommandsSemaphore{ m_commandPool->createCommandBuffer( castor::toUtf8( parent.getName() ) + "/Debug/1" )
+				, m_device->createSemaphore( castor::toUtf8( parent.getName() ) + "/Debug/1" ) } }
 	{
 	}
 
@@ -148,11 +150,11 @@ namespace castor3d
 		, ashes::PipelineShaderStageCreateInfoArray shader )
 	{
 		auto hash = dbgdrw::hash( buffer, offset, size, shader );
-		auto ires = m_pipelines.try_emplace( hash );
+		auto [it, res] = m_pipelines.try_emplace( hash );
 
-		if ( ires.second )
+		if ( res )
 		{
-			auto name = getOwner()->getName() + "/Debug/AABB/" + std::to_string( hash );
+			auto name = castor::toUtf8( getOwner()->getName() ) + "/Debug/AABB/" + castor::string::toMbString( hash );
 			auto & extent = m_framebuffer->getDimensions();
 			ashes::PipelineVertexInputStateCreateInfo vertexState{ 0u
 				, ashes::VkVertexInputBindingDescriptionArray{ VkVertexInputBindingDescription{ 0u, 16u, VK_VERTEX_INPUT_RATE_VERTEX } }
@@ -160,30 +162,30 @@ namespace castor3d
 			ashes::PipelineViewportStateCreateInfo viewportState{ 0u
 				, { makeViewport( castor::Point2ui{ extent.width, extent.height } ) }
 				, { makeScissor( castor::Point2ui{ extent.width, extent.height } ) } };
-			ires.first->second->descriptorLayout = m_device->createDescriptorSetLayout( name
+			it->second->descriptorLayout = m_device->createDescriptorSetLayout( name
 				, ashes::VkDescriptorSetLayoutBindingArray{ VkDescriptorSetLayoutBinding{ 0u, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1u, VK_SHADER_STAGE_VERTEX_BIT, nullptr } } );
-			ires.first->second->pipelineLayout = m_device->createPipelineLayout( name
-				, *ires.first->second->descriptorLayout );
+			it->second->pipelineLayout = m_device->createPipelineLayout( name
+				, *it->second->descriptorLayout );
 			ashes::GraphicsPipelineCreateInfo graphics{ 0u
-				, std::move( shader )
-				, std::move( vertexState )
+				, castor::move( shader )
+				, castor::move( vertexState )
 				, ashes::PipelineInputAssemblyStateCreateInfo{ 0u, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST }
 				, ashes::nullopt
-				, std::move( viewportState )
+				, castor::move( viewportState )
 				, ashes::PipelineRasterizationStateCreateInfo{ 0u, VK_FALSE, VK_FALSE, VK_POLYGON_MODE_FILL, VK_CULL_MODE_NONE }
 				, ashes::PipelineMultisampleStateCreateInfo{}
 				, ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_TRUE, VK_FALSE, VK_COMPARE_OP_GREATER }
 				, ashes::PipelineColorBlendStateCreateInfo{}
 				, ashes::nullopt
-				, static_cast< VkPipelineLayout >( *ires.first->second->pipelineLayout )
+				, static_cast< VkPipelineLayout >( *it->second->pipelineLayout )
 				, static_cast< VkRenderPass >( *m_renderPass ) };
-			ires.first->second->pipeline = m_device->createPipeline( name, std::move( graphics ) );
+			it->second->pipeline = m_device->createPipeline( name, castor::move( graphics ) );
 
-			ires.first->second->descriptorPool = ires.first->second->descriptorLayout->createPool( name, 1u );
-			ires.first->second->descriptorSet = ires.first->second->descriptorPool->createDescriptorSet( name );
-			ires.first->second->vertices = m_device.vertexPools->getBuffer< castor::Point4f >( 36u );			
+			it->second->descriptorPool = it->second->descriptorLayout->createPool( name, 1u );
+			it->second->descriptorSet = it->second->descriptorPool->createDescriptorSet( name );
+			it->second->vertices = m_device.vertexPools->getBuffer< castor::Point4f >( 36u );			
 			{
-				std::vector< castor::Point4f > vertexData
+				castor::Vector< castor::Point4f > vertexData
 				{
 					castor::Point4f{ -1, +1, -1, +1 }, castor::Point4f{ +1, -1, -1, +1 }, castor::Point4f{ -1, -1, -1, +1 }, castor::Point4f{ +1, -1, -1, +1 }, castor::Point4f{ -1, +1, -1, +1 }, castor::Point4f{ +1, +1, -1, +1 },// Back
 					castor::Point4f{ -1, -1, +1, +1 }, castor::Point4f{ -1, +1, -1, +1 }, castor::Point4f{ -1, -1, -1, +1 }, castor::Point4f{ -1, +1, -1, +1 }, castor::Point4f{ -1, -1, +1, +1 }, castor::Point4f{ -1, +1, +1, +1 },// Left
@@ -195,18 +197,18 @@ namespace castor3d
 				auto queue = m_device.graphicsData();
 				InstantDirectUploadData uploader{ *queue->queue
 					, m_device
-					, "RenderCube"
+					, cuT( "RenderCube" )
 					, *m_commandPool };
 				uploader->pushUpload( vertexData.data()
-					, ires.first->second->vertices.getAskedSize( SubmeshData::ePositions )
-					, ires.first->second->vertices.getBuffer( SubmeshData::ePositions )
-					, ires.first->second->vertices.getOffset( SubmeshData::ePositions )
+					, it->second->vertices.getAskedSize( SubmeshData::ePositions )
+					, it->second->vertices.getBuffer( SubmeshData::ePositions )
+					, it->second->vertices.getOffset( SubmeshData::ePositions )
 					, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
 					, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
 			}
 		}
 		
-		m_aabbs.emplace_back( buffer, offset, size, count, ires.first->second.get() );
+		m_aabbs.emplace_back( buffer, offset, size, count, it->second.get() );
 	}
 
 	crg::SemaphoreWaitArray DebugDrawer::render( ashes::Queue const & queue

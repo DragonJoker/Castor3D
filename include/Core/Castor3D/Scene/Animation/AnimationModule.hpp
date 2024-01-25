@@ -99,7 +99,7 @@ namespace castor3d
 	struct GroupAnimation
 	{
 		explicit GroupAnimation( castor::String name )
-			: name{ std::move( name ) }
+			: name{ castor::move( name ) }
 		{
 		}
 
@@ -109,8 +109,8 @@ namespace castor3d
 			, float scale = {}
 			, castor::Milliseconds startingPoint = {}
 			, castor::Milliseconds stoppingPoint = {}
-			, InterpolatorType interpolation = { InterpolatorType::eLinear } )
-			: name{ std::move( name ) }
+			, InterpolatorType interpolation = InterpolatorType::eLinear )
+			: name{ castor::move( name ) }
 			, state{ state }
 			, looped{ looped }
 			, scale{ scale }
@@ -145,19 +145,19 @@ namespace castor3d
 
 	CU_DeclareTemplateSmartPtr( castor3d, Animable );
 
-	using OnAnimatedSkeletonChangeFunction = std::function< void( AnimatedObjectGroup const &, AnimatedSkeleton & ) >;
+	using OnAnimatedSkeletonChangeFunction = castor::Function< void( AnimatedObjectGroup const &, AnimatedSkeleton & ) >;
 	using OnAnimatedSkeletonChange = castor::SignalT< OnAnimatedSkeletonChangeFunction >;
 	using OnAnimatedSkeletonChangeConnection = OnAnimatedSkeletonChange::connection;
 
-	using OnAnimatedMeshChangeFunction = std::function< void( AnimatedObjectGroup const &, AnimatedMesh & ) >;
+	using OnAnimatedMeshChangeFunction = castor::Function< void( AnimatedObjectGroup const &, AnimatedMesh & ) >;
 	using OnAnimatedMeshChange = castor::SignalT< OnAnimatedMeshChangeFunction >;
 	using OnAnimatedMeshChangeConnection = OnAnimatedMeshChange::connection;
 
-	using OnAnimatedTextureChangeFunction = std::function< void( AnimatedObjectGroup const &, AnimatedTexture & ) >;
+	using OnAnimatedTextureChangeFunction = castor::Function< void( AnimatedObjectGroup const &, AnimatedTexture & ) >;
 	using OnAnimatedTextureChange = castor::SignalT< OnAnimatedTextureChangeFunction >;
 	using OnAnimatedTextureChangeConnection = OnAnimatedTextureChange::connection;
 
-	using OnAnimatedSceneNodeChangeFunction = std::function< void( AnimatedObjectGroup const &, AnimatedSceneNode & ) >;
+	using OnAnimatedSceneNodeChangeFunction = castor::Function< void( AnimatedObjectGroup const &, AnimatedSceneNode & ) >;
 	using OnAnimatedSceneNodeChange = castor::SignalT< OnAnimatedSceneNodeChangeFunction >;
 	using OnAnimatedSceneNodeChangeConnection = OnAnimatedSceneNodeChange::connection;
 	/**

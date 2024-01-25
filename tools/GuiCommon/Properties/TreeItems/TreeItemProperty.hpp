@@ -29,7 +29,7 @@ See LICENSE file in root folder
 
 namespace GuiCommon
 {
-	using PropertyArray = std::vector< wxPGProperty * >;
+	using PropertyArray = castor::Vector< wxPGProperty * >;
 	/**
 	\brief		Helper class to communicate between Scene objects or Materials lists and PropertiesContainer
 	*/
@@ -109,7 +109,7 @@ namespace GuiCommon
 		virtual void doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid ) = 0;
 
 	public:
-		using PropertyChangeHandler = std::function< void ( wxVariant const & ) >;
+		using PropertyChangeHandler = castor::Function< void ( wxVariant const & ) >;
 		static PropertyChangeHandler const EmptyHandler;
 
 		template< typename ObjectT, typename ValueT >
@@ -214,7 +214,7 @@ namespace GuiCommon
 			, wxString const & name
 			, wxArrayString const & choices
 			, castor3d::MaterialObs selected
-			, std::function< void( castor3d::MaterialObs ) > setter );
+			, castor::Function< void( castor3d::MaterialObs ) > setter );
 
 		template< typename ParentT, typename ValueT, typename ControlT = bool >
 		wxPGProperty * addPropertyT( ParentT * parent
@@ -312,7 +312,7 @@ namespace GuiCommon
 		{
 			return createProperty( parent
 				, name
-				, std::forward< MyValueT >( value )
+				, castor::forward< MyValueT >( value )
 				, handler
 				, castor3d::ConfigurationVisitorBase::makeControlsList( control ) );
 		}
@@ -604,7 +604,7 @@ namespace GuiCommon
 	private:
 		bool m_editable;
 		castor3d::Engine * m_engine;
-		std::map< wxString, PropertyChangeHandler > m_handlers;
+		castor::Map< wxString, PropertyChangeHandler > m_handlers;
 		castor::String m_prefix;
 	};
 }

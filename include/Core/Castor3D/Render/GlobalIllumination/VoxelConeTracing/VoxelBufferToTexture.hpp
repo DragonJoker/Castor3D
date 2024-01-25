@@ -68,7 +68,7 @@ namespace castor3d
 		VctConfig const & m_vctConfig;
 		ashes::DescriptorSetLayoutPtr m_descriptorSetLayout;
 		ashes::PipelineLayoutPtr m_pipelineLayout;
-		std::array< Pipeline, 4u > m_pipelines;
+		castor::Array< Pipeline, 4u > m_pipelines;
 		ashes::DescriptorSetPoolPtr m_descriptorSetPool;
 		ashes::DescriptorSetPtr m_descriptorSet;
 	};

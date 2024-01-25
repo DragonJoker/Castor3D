@@ -76,7 +76,7 @@ namespace light_streaks
 		, VkExtent2D size
 		, bool const * enabled
 		, uint32_t const * passIndex )
-		: m_shader{ "LightStreaksHiPass", hipass::getProgram( device ) }
+		: m_shader{ cuT( "LightStreaksHiPass" ), hipass::getProgram( device ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
 	{
 		auto previous = &previousPass;
@@ -95,7 +95,7 @@ namespace light_streaks
 						, context
 						, graph
 						, crg::ru::Config{ 2u } );
-				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
@@ -113,19 +113,19 @@ namespace light_streaks
 
 		for ( uint32_t i = 1u; i < resultViews.size(); ++i )
 		{
-			auto & pass = graph.createPass( "Copy" + std::to_string( i )
+			auto & pass = graph.createPass( "Copy" + castor::string::toMbString( i )
 				, [&device, size, enabled]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{
-					auto result = std::make_unique< crg::ImageCopy >( framePass
+					auto result = castor::make_unique< crg::ImageCopy >( framePass
 						, context
 						, graph
 						, VkExtent3D{ size.width, size.height, 1u }
 						, crg::ru::Config{}
 						, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
 						, crg::RunnablePass::IsEnabledCallback( [enabled](){ return ( enabled ? *enabled : true ); } ) );
-					device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+					device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 						, result->getTimer() );
 					return result;
 				} );

@@ -36,9 +36,9 @@ namespace castor
 			, ElementCleanerT clean = ElementCleanerT{}
 			, ElementMergerT merge = ElementMergerT{} )
 			: ElementCacheT{ logger
-				, std::move( initialise )
-				, std::move( clean )
-				, std::move( merge ) }
+				, castor::move( initialise )
+				, castor::move( clean )
+				, castor::move( merge ) }
 		{
 		}
 		/**@}*/
@@ -76,7 +76,7 @@ namespace castor
 		, typename ... ParametersT >
 	ResourceCachePtrT< ResT, KeyT, TraitsT > makeCache( ParametersT && ... parameters )
 	{
-		return castor::makeUnique< ResourceCacheT< ResT, KeyT, TraitsT > >( std::forward< ParametersT >( parameters )... );
+		return castor::makeUnique< ResourceCacheT< ResT, KeyT, TraitsT > >( castor::forward< ParametersT >( parameters )... );
 	}
 }
 

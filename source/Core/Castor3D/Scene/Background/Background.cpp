@@ -56,7 +56,7 @@ namespace castor3d
 			ashes::PipelineShaderStageCreateInfoArray stages;
 		};
 
-		using Programs = std::array< Shaders, 2u >;
+		using Programs = castor::Array< Shaders, 2u >;
 
 		class BackgroundPass
 			: public castor::DataHolderT< ashes::VertexBufferPtr< castor::Point3f > >
@@ -114,7 +114,7 @@ namespace castor3d
 			{
 				if ( !castor::DataHolderT< ashes::BufferPtr< uint16_t > >::getData() )
 				{
-					std::vector< uint16_t > indexData
+					castor::Vector< uint16_t > indexData
 					{
 						// Front
 						0, 1, 2, 2, 1, 3,
@@ -133,13 +133,13 @@ namespace castor3d
 						, uint32_t( indexData.size() )
 						, VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 						, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-						, "BackgroundIndexBuffer" ) );
+						, cuT( "BackgroundIndexBuffer" ) ) );
 					auto & indexBuffer = *castor::DataHolderT< ashes::BufferPtr< uint16_t > >::getData();
 					{
 						auto data = m_device.graphicsData();
 						InstantDirectUploadData uploader{ *data->queue
 							, device
-							, "BackgroundIndexBuffer"
+							, cuT( "BackgroundIndexBuffer" )
 							, *data->commandPool };
 						uploader->pushUpload( indexData.data()
 							, VkDeviceSize( sizeof( uint16_t ) * indexData.size() )
@@ -162,7 +162,7 @@ namespace castor3d
 					using castor::Point3f;
 
 					// Vertex Buffer
-					static constexpr std::array< Point3f, 24u > vertexData
+					static constexpr castor::Array< Point3f, 24u > vertexData
 					{
 						// Front
 						Point3f{ -1.0, -1.0, +1.0 }, Point3f{ -1.0, +1.0, +1.0 }, Point3f{ +1.0, -1.0, +1.0 }, Point3f{ +1.0, +1.0, +1.0 },
@@ -181,13 +181,13 @@ namespace castor3d
 						, 24u
 						, VK_BUFFER_USAGE_TRANSFER_DST_BIT
 						, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-						, "Background" ) );
+						, cuT( "Background" )) );
 					auto & vertexBuffer = *VertexBufferHolder::getData();
 					{
 						auto data = m_device.graphicsData();
 						InstantDirectUploadData uploader{ *data->queue
 							, device
-							, "BackgroundVertexBuffer"
+							, cuT( "BackgroundVertexBuffer" )
 							, *data->commandPool };
 						uploader->pushUpload( vertexData.data()
 							, vertexData.size() * sizeof( Point3f )
@@ -213,7 +213,7 @@ namespace castor3d
 				if ( program.stages.empty() )
 				{
 					auto & engine = *device.renderSystem.getEngine();
-					program.shader = ProgramModule{ "Background" };
+					program.shader = ProgramModule{ cuT( "Background" ) };
 					{
 						sdw::TraditionalGraphicsWriter writer{ &engine.getShaderAllocator() };
 						shader::Utils utils{ writer };
@@ -283,7 +283,7 @@ namespace castor3d
 		: castor::OwnedBy< Engine >{ engine }
 		, castor::Named{ scene.getName() + name }
 		, m_scene{ scene }
-		, m_type{ std::move( type ) }
+		, m_type{ castor::move( type ) }
 		, m_hasIBLSupport{ hasIBLSupport }
 	{
 	}
@@ -334,7 +334,7 @@ namespace castor3d
 				&& m_hasIBLSupport
 				&& m_texture->getLayersCount() == 6u )
 			{
-				m_ibl = std::make_unique< IblTextures >( m_scene
+				m_ibl = castor::make_unique< IblTextures >( m_scene
 					, device
 					, m_textureId
 					, device.renderSystem.getPrefilteredBrdfTexture()
@@ -438,8 +438,8 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
-				stepProgressBarLocal( progress, "Initialising background pass" );
-				auto res = std::make_unique< back::BackgroundPass >( framePass
+				stepProgressBarLocal( progress, cuT( "Initialising background pass" ) );
+				auto res = castor::make_unique< back::BackgroundPass >( framePass
 					, context
 					, runnableGraph
 					, device
@@ -448,7 +448,7 @@ namespace castor3d
 					, depth
 					, forceVisible );
 				backgroundPass = res.get();
-				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );
@@ -656,7 +656,7 @@ namespace castor3d
 		return castor::makeUnique< castor::Image >( name
 			, folder / relative
 			, layout
-			, std::move( buffer ) );
+			, castor::move( buffer ) );
 	}
 
 	//*********************************************************************************************

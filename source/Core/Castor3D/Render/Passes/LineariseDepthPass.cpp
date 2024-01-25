@@ -61,7 +61,7 @@ namespace castor3d
 			// Shader inputs
 			auto position = writer.declInput< sdw::Vec2 >( "position", sdw::EntryPoint::eVertex, 0u );
 
-			writer.implementEntryPointT< sdw::VoidT, sdw::VoidT >( [&]( sdw::VertexIn const & in
+			writer.implementEntryPointT< sdw::VoidT, sdw::VoidT >( [&]( sdw::VertexIn const &
 				, sdw::VertexOut out )
 				{
 					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
@@ -160,14 +160,14 @@ namespace castor3d
 		, m_graph{ graph }
 		, m_engine{ *m_device.renderSystem.getEngine() }
 		, m_ssaoConfig{ ssaoConfig }
-		, m_prefix{ graph.getName() + prefix }
+		, m_prefix{ castor::makeString( graph.getName() ) + prefix }
 		, m_size{ size }
 		, m_result{ passlindpth::doCreateTexture( m_device, resources, m_size, m_prefix ) }
 		, m_clipInfo{ m_device.uboPool->getBuffer< castor::Point3f >( 0u ) }
-		, m_extractShader{ m_prefix + "ExtractDepth", passlindpth::getLineariseProgram( *device.renderSystem.getEngine() ) }
+		, m_extractShader{ m_prefix + cuT( "ExtractDepth" ), passlindpth::getLineariseProgram( *device.renderSystem.getEngine() ) }
 		, m_extractStages{ makeProgramStates( m_device, m_extractShader ) }
 		, m_extractPass{ doInitialiseExtractPass( progress, previousPasses, depthObj ) }
-		, m_minifyShader{ m_prefix + "MinifyDepth", passlindpth::getMinifyProgram( *device.renderSystem.getEngine() ) }
+		, m_minifyShader{ m_prefix + cuT( "MinifyDepth" ), passlindpth::getMinifyProgram( *device.renderSystem.getEngine() ) }
 		, m_minifyStages{ makeProgramStates( m_device, m_minifyShader ) }
 	{
 		doInitialiseMinifyPass( progress );
@@ -214,7 +214,7 @@ namespace castor3d
 
 		for ( auto & layer : getResult() )
 		{
-			visitor.visit( "Linearised Depth " + castor::string::toString( index )
+			visitor.visit( cuT( "Linearised Depth " ) + castor::string::toString( index )
 				, layer
 				, m_graph.getFinalLayoutState( layer ).layout
 				, TextureFactors{}.invert( true ) );
@@ -229,19 +229,19 @@ namespace castor3d
 		, crg::FramePassArray const & previousPasses
 		, Texture const & depthObj )
 	{
-		stepProgressBarLocal( progress, "Creating linearised depth extraction pass" );
+		stepProgressBarLocal( progress, cuT( "Creating linearised depth extraction pass" ) );
 		auto & pass = m_graph.createPass( "ExtractDepth"
 			, [this, progress]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				stepProgressBarLocal( progress, "Initialising linearised depth extraction pass" );
+				stepProgressBarLocal( progress, cuT( "Initialising linearised depth extraction pass" ) );
 				auto result = crg::RenderQuadBuilder{}
 					.program( crg::makeVkArray< VkPipelineShaderStageCreateInfo >( m_extractStages ) )
 					.renderSize( m_size )
 					.enabled( &m_ssaoConfig.enabled )
 					.build( framePass, context, graph );
-				m_device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+				m_device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
@@ -260,37 +260,37 @@ namespace castor3d
 
 		for ( auto index = 0u; index < MaxLinearizedDepthMipLevel; ++index )
 		{
-			stepProgressBarLocal( progress, "Creating depth minify pass " + std::to_string( index ) );
+			stepProgressBarLocal( progress, cuT( "Creating depth minify pass " ) + castor::string::toString( index ) );
 			m_previousLevel.push_back( m_device.uboPool->getBuffer< castor::Point2i >( 0u ) );
 			auto & previousLevel = m_previousLevel.back();
 			auto & data = previousLevel.getData();
 			data = castor::Point2i{ size.width, size.height };
 			size.width >>= 1;
 			size.height >>= 1;
-			auto source = m_graph.createView( crg::ImageViewData{ m_result.imageId.data->name + std::to_string( index )
+			auto source = m_graph.createView( crg::ImageViewData{ m_result.imageId.data->name + castor::string::toMbString( index )
 				, m_result.imageId
 				, 0u
 				, VK_IMAGE_VIEW_TYPE_2D
 				, m_result.getFormat()
 				, VkImageSubresourceRange{ VK_IMAGE_ASPECT_COLOR_BIT, index, 1u, 0u, 1u } } );
-			auto destination = m_graph.createView( crg::ImageViewData{ m_result.imageId.data->name + std::to_string( index + 1u )
+			auto destination = m_graph.createView( crg::ImageViewData{ m_result.imageId.data->name + castor::string::toMbString( index + 1u )
 				, m_result.imageId
 				, 0u
 				, VK_IMAGE_VIEW_TYPE_2D
 				, m_result.getFormat()
 				, VkImageSubresourceRange{ VK_IMAGE_ASPECT_COLOR_BIT, index + 1u, 1u, 0u, 1u } } );
-			auto & pass = m_graph.createPass( "MinimiseDepth" + std::to_string( index )
+			auto & pass = m_graph.createPass( "MinimiseDepth" + castor::string::toMbString( index )
 				, [this, progress, size]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{
-					stepProgressBarLocal( progress, "Initialising depth minify pass" );
+					stepProgressBarLocal( progress, cuT( "Initialising depth minify pass" ) );
 					auto result = crg::RenderQuadBuilder{}
 						.program( crg::makeVkArray< VkPipelineShaderStageCreateInfo >( m_minifyStages ) )
 						.renderSize( size )
 						.enabled( &m_ssaoConfig.enabled )
 						.build( framePass, context, graph );
-					m_device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+					m_device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 						, result->getTimer() );
 					return result;
 				} );

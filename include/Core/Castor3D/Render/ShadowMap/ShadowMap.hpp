@@ -28,15 +28,15 @@ namespace castor3d
 			PassData() = default;
 
 			explicit PassData( SceneCullerUPtr culler )
-				: ownCuller{ std::move( culler ) }
+				: ownCuller{ castor::move( culler ) }
 				, culler{ ownCuller.get() }
 			{
 			}
 
 			PassData( ViewportUPtr viewport
 				, SceneCullerUPtr culler )
-				: viewport{ std::move( viewport ) }
-				, ownCuller{ std::move( culler ) }
+				: viewport{ castor::move( viewport ) }
+				, ownCuller{ castor::move( culler ) }
 				, culler{ ownCuller.get() }
 			{
 			}
@@ -52,20 +52,20 @@ namespace castor3d
 			SceneCuller * culler{};
 			ShadowMapPass * pass{};
 		};
-		using PassDataPtr = std::unique_ptr< PassData >;
+		using PassDataPtr = castor::RawUniquePtr< PassData >;
 
 		struct Passes
 		{
-			std::vector< PassDataPtr > passes;
-			std::vector< std::unique_ptr< crg::FrameGraph > > graphs;
-			std::vector< crg::RunnableGraphPtr > runnables;
-			std::vector< GaussianBlurUPtr > blurs;
+			castor::Vector< PassDataPtr > passes;
+			castor::Vector< castor::RawUniquePtr< crg::FrameGraph > > graphs;
+			castor::Vector< crg::RunnableGraphPtr > runnables;
+			castor::Vector< GaussianBlurUPtr > blurs;
 		};
 
 		struct AllPasses
 		{
-			std::vector< std::unique_ptr< CameraUbo > > cameraUbos;
-			std::vector< CameraUPtr > cameras;
+			castor::Vector< castor::RawUniquePtr< CameraUbo > > cameraUbos;
+			castor::Vector< CameraUPtr > cameras;
 			Passes staticNodes;
 			Passes otherNodes;
 		};
@@ -195,7 +195,7 @@ namespace castor3d
 		/**@}*/
 
 	protected:
-		C3D_API void doRegisterGraphIO( crg::FrameGraph & graph
+		C3D_API void doRegisterGraphIO( crg::FramePassGroup & graph
 			, bool vsm
 			, bool rsm
 			, bool isStatic )const;
@@ -211,7 +211,7 @@ namespace castor3d
 			, bool isStatic
 			, Passes & passes );
 
-		C3D_API virtual crg::FramePassArray doCreatePass( crg::FrameGraph & graph
+		C3D_API virtual crg::FramePassArray doCreatePass( crg::FramePassGroup & graph
 			, crg::FramePassArray const & previousPasses
 			, uint32_t index
 			, bool vsm
@@ -237,8 +237,8 @@ namespace castor3d
 		ShadowMapResult m_staticsResult;
 		ShadowMapResult m_result;
 		uint32_t m_count;
-		std::set< std::reference_wrapper< GeometryBuffers > > m_geometryBuffers;
-		std::array< AllPasses, 4u > m_passes;
+		castor::Set< castor::ReferenceWrapper< GeometryBuffers > > m_geometryBuffers;
+		castor::Array< AllPasses, 4u > m_passes;
 		uint32_t m_passesIndex{};
 	};
 }

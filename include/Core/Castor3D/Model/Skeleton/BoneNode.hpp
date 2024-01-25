@@ -56,7 +56,7 @@ namespace castor3d
 
 		void setInverseTransform( castor::Matrix4x4f value )noexcept
 		{
-			m_inverseTransform = std::move( value );
+			m_inverseTransform = castor::move( value );
 		}
 
 	private:

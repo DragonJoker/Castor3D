@@ -30,7 +30,7 @@ namespace castor3d
 		auto result = castor::makeUnique< ShaderProgram >( name , *getEngine()->getRenderSystem() );
 		auto lock( castor::makeUniqueLock( m_mutex ) );
 		auto ret = result.get();
-		doAddProgram( std::move( result ) );
+		doAddProgram( castor::move( result ) );
 		return ret;
 	}
 
@@ -47,7 +47,7 @@ namespace castor3d
 		auto result = doCreateAutomaticProgram( renderPass, flags );
 		CU_Require( result );
 		auto ret = result.get();
-		doAddAutomaticProgram( std::move( result ), renderPass, flags );
+		doAddAutomaticProgram( castor::move( result ), renderPass, flags );
 		return ret;
 	}
 
@@ -94,11 +94,11 @@ namespace castor3d
 			, renderPass.getDeferredLightingFilter()
 			, renderPass.getParallaxOcclusionFilter()
 			, program.get() );
-		doAddProgram( std::move( program ) );
+		doAddProgram( castor::move( program ) );
 	}
 
 	void ShaderProgramCache::doAddProgram( ShaderProgramUPtr program )
 	{
-		m_programs.push_back( std::move( program ) );
+		m_programs.push_back( castor::move( program ) );
 	}
 }

@@ -93,8 +93,8 @@ namespace castor3d
 		using ElementObjectCacheT::addNoLock;
 
 	private:
-		std::vector< SceneNode * > m_linearNodes;
-		std::map< SceneNode * , OnSceneNodeReparentConnection > m_connections;
+		castor::Vector< SceneNode * > m_linearNodes;
+		castor::Map< SceneNode * , OnSceneNodeReparentConnection > m_connections;
 	};
 }
 

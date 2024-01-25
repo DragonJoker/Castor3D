@@ -17,7 +17,7 @@ namespace castor3d
 		{
 			for ( auto & vtx : vertices )
 			{
-				std::swap( vtx.pos[lhs], vtx.pos[rhs] );
+				castor::swap( vtx.pos[lhs], vtx.pos[rhs] );
 			}
 		}
 	}
@@ -58,11 +58,11 @@ namespace castor3d
 
 		if ( parameters.get( cuT( "axis" ), param ) )
 		{
-			if ( param == "x" )
+			if ( param == cuT( "x" ) )
 			{
 				axis = 0u;
 			}
-			else if ( param == "z" )
+			else if ( param == cuT( "z" ) )
 			{
 				axis = 2u;
 			}
@@ -117,11 +117,6 @@ namespace castor3d
 			submeshSide.addPoints( sideVertex );
 
 			//RECONSTITION DES FACES
-			if ( height < 0 )
-			{
-				height = -height;
-			}
-
 			auto indexMappingBase = submeshBase.createComponent< TriFaceMapping >();
 			auto & indexMappingBaseData = indexMappingBase->getData();
 			auto indexMappingSide = submeshSide.createComponent< TriFaceMapping >();

@@ -84,7 +84,6 @@ namespace castor3d
 		 *\brief		Crée une attache de frame pass.
 		 */
 		C3D_API void createPassBinding( crg::FramePass & pass
-			, castor::String const & name
 			, uint32_t binding )const;
 		/**
 		 *\~english

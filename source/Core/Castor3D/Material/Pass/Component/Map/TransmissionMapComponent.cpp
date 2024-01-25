@@ -109,7 +109,7 @@ namespace castor3d
 		, shader::BlendComponents & components
 		, shader::SampleTexture const & sampleTexture )const
 	{
-		applyFloatComponent( "transmission"
+		applyFloatComponent( cuT( "transmission" )
 			, passShaders
 			, textureConfigs
 			, textureAnims
@@ -123,7 +123,7 @@ namespace castor3d
 	void TransmissionMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		channelFillers.try_emplace( "transmission"
+		channelFillers.try_emplace( cuT( "transmission" )
 			, getTextureFlags()
 			, []( TextureContext & blockContext )
 			{
@@ -164,7 +164,7 @@ namespace castor3d
 	}
 
 	void TransmissionMapComponent::Plugin::createMapComponent( Pass & pass
-		, std::vector< PassComponentUPtr > & result )const
+		, castor::Vector< PassComponentUPtr > & result )const
 	{
 		result.push_back( castor::makeUniqueDerived< PassComponent, TransmissionMapComponent >( pass ) );
 	}

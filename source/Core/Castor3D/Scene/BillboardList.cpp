@@ -48,7 +48,7 @@ namespace castor3d
 
 			Element( Element && rhs )noexcept
 				: m_buffer{ rhs.m_buffer }
-				, m_position{ std::move( rhs.m_position ) }
+				, m_position{ castor::move( rhs.m_position ) }
 				, m_stride{ rhs.m_stride }
 			{
 				rhs.m_buffer = nullptr;
@@ -65,7 +65,7 @@ namespace castor3d
 				if ( &rhs != this )
 				{
 					m_buffer = rhs.m_buffer;
-					m_position = std::move( rhs.m_position );
+					m_position = castor::move( rhs.m_position );
 					m_stride = rhs.m_stride;
 					rhs.m_buffer = nullptr;
 				}
@@ -96,8 +96,8 @@ namespace castor3d
 		, GpuBufferOffsetT< uint8_t > vertexBuffer )
 		: m_scene{ scene }
 		, m_node{ node }
-		, m_vertexBuffer{ std::move( vertexBuffer ) }
-		, m_vertexLayout{ std::move( vertexLayout ) }
+		, m_vertexBuffer{ castor::move( vertexBuffer ) }
+		, m_vertexLayout{ castor::move( vertexLayout ) }
 		, m_vertexStride{ vertexStride }
 		, m_proxyCombine{ scene.getEngine()->getSubmeshComponentsRegister().getDefaultComponentCombine() }
 	{
@@ -122,7 +122,7 @@ namespace castor3d
 				auto queueData = device.graphicsData();
 				InstantDirectUploadData uploader{ *queueData->queue
 					, device
-					, "BillboardBase"
+					, cuT( "BillboardBase" )
 					, *queueData->commandPool };
 				uploader->pushUpload( &vertices
 					, sizeof( Quad )
@@ -132,13 +132,13 @@ namespace castor3d
 					, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
 			}
 
-			m_quadLayout = std::make_unique< ashes::PipelineVertexInputStateCreateInfo >( 0u
+			m_quadLayout = castor::make_unique< ashes::PipelineVertexInputStateCreateInfo >( 0u
 				, ashes::VkVertexInputBindingDescriptionArray{ { 0u, sizeof( BillboardVertex ), VK_VERTEX_INPUT_RATE_VERTEX } }
 				, ashes::VkVertexInputAttributeDescriptionArray{ { 0u, 0u, VK_FORMAT_R32G32B32_SFLOAT, offsetof( BillboardVertex, position ) }
 					, { 1u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( BillboardVertex, uv ) } } );
 
 			ashes::BufferCRefArray buffers;
-			std::vector< uint64_t > offsets;
+			castor::Vector< uint64_t > offsets;
 			ashes::PipelineVertexInputStateCreateInfoCRefArray layouts;
 			doGatherBuffers( buffers, offsets, layouts );
 
@@ -174,7 +174,7 @@ namespace castor3d
 			auto gpuBuffer = m_vertexBuffer.getData().data();
 			castor::ByteArray copy{ gpuBuffer
 				, gpuBuffer + ( size_t( m_vertexStride ) * m_count ) };
-			std::vector< billboard::Element > elements;
+			castor::Vector< billboard::Element > elements;
 			auto buffer = copy.data();
 			elements.reserve( m_count );
 
@@ -206,7 +206,7 @@ namespace castor3d
 			}
 			catch ( castor::Exception const & exc )
 			{
-				log::error << "Submesh::SortFaces - Error: " << exc.what() << std::endl;
+				log::error << cuT( "Submesh::SortFaces - Error: " ) << castor::makeString( exc.what() ) << std::endl;
 			}
 		}
 	}
@@ -292,7 +292,7 @@ namespace castor3d
 	}
 
 	void BillboardBase::doGatherBuffers( ashes::BufferCRefArray & buffers
-		, std::vector< uint64_t > & offsets
+		, castor::Vector< uint64_t > & offsets
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts )
 	{
 		layouts.emplace_back( *m_quadLayout );
@@ -315,7 +315,7 @@ namespace castor3d
 			, node )
 		, BillboardBase{ scene
 			, &node
-			, std::make_unique< ashes::PipelineVertexInputStateCreateInfo >( 0u
+			, castor::make_unique< ashes::PipelineVertexInputStateCreateInfo >( 0u
 				, ashes::VkVertexInputBindingDescriptionArray{ { 1u, sizeof( castor::Point4f ), VK_VERTEX_INPUT_RATE_INSTANCE } }
 				, ashes::VkVertexInputAttributeDescriptionArray{ { 2u, 1u, VK_FORMAT_R32G32B32_SFLOAT, 0u } } )
 			, sizeof( castor::Point4f ) }
@@ -329,7 +329,7 @@ namespace castor3d
 			, MovableType::eBillboard )
 		, BillboardBase{ scene
 			, nullptr
-			, std::make_unique< ashes::PipelineVertexInputStateCreateInfo >( 0u
+			, castor::make_unique< ashes::PipelineVertexInputStateCreateInfo >( 0u
 				, ashes::VkVertexInputBindingDescriptionArray{ { 1u, sizeof( castor::Point4f ), VK_VERTEX_INPUT_RATE_INSTANCE } }
 				, ashes::VkVertexInputAttributeDescriptionArray{ { 2u, 1u, VK_FORMAT_R32G32B32_SFLOAT, 0u } } )
 			, sizeof( castor::Point4f ) }

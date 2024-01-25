@@ -16,7 +16,7 @@ namespace castor3d
 	inline ashes::DeviceMemoryPtr setupMemory( ashes::Device const & device
 		, ResT & resource
 		, VkMemoryPropertyFlags flags
-		, std::string const & name )
+		, castor::String const & name )
 	{
 		return setupMemory( device
 			, resource.getMemoryRequirements()
@@ -28,7 +28,7 @@ namespace castor3d
 	inline ashes::DeviceMemoryPtr setupMemory( RenderDevice const & device
 		, ResT & resource
 		, VkMemoryPropertyFlags flags
-		, std::string const & name )
+		, castor::String const & name )
 	{
 		return setupMemory( *device, resource, flags, name );
 	}

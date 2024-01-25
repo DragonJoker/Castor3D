@@ -65,7 +65,7 @@ namespace castor3d
 	using ToneMappingFactory = castor::Factory< ToneMapping
 		, castor::String
 		, void
-		, std::function< void( ast::ShaderBuilder & ) > >;
+		, castor::Function< void( ast::ShaderBuilder & ) > >;
 
 	//@}
 	//@}

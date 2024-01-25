@@ -280,16 +280,16 @@ namespace castor3d
 			/**@}*/
 
 		protected:
-			C3D_API void applyFloatComponent( std::string const & mapName
-				, std::string const & valueName
+			C3D_API void applyFloatComponent( castor::String const & mapName
+				, castor::String const & valueName
 				, PassShaders const & passShaders
 				, TextureConfigurations const & textureConfigs
 				, TextureAnimations const & textureAnims
 				, Material const & material
 				, BlendComponents & components
 				, SampleTexture const & sampleTexture )const;
-			C3D_API void applyVec3Component( std::string const & mapName
-				, std::string const & valueName
+			C3D_API void applyVec3Component( castor::String const & mapName
+				, castor::String const & valueName
 				, PassShaders const & passShaders
 				, TextureConfigurations const & textureConfigs
 				, TextureAnimations const & textureAnims
@@ -297,7 +297,7 @@ namespace castor3d
 				, BlendComponents & components
 				, SampleTexture const & sampleTexture )const;
 
-			void applyFloatComponent( std::string const & valueName
+			void applyFloatComponent( castor::String const & valueName
 				, PassShaders const & passShaders
 				, TextureConfigurations const & textureConfigs
 				, TextureAnimations const & textureAnims
@@ -315,7 +315,7 @@ namespace castor3d
 					, sampleTexture );
 			}
 
-			void applyVec3Component( std::string const & valueName
+			void applyVec3Component( castor::String const & valueName
 				, PassShaders const & passShaders
 				, TextureConfigurations const & textureConfigs
 				, TextureAnimations const & textureAnims
@@ -453,7 +453,7 @@ namespace castor3d
 
 			void setMaterialChunk( MemChunk v )
 			{
-				m_chunk = std::move( v );
+				m_chunk = castor::move( v );
 			}
 
 		private:
@@ -746,7 +746,7 @@ namespace castor3d
 		*	Reçoit le composant créé.
 		*/
 		C3D_API virtual void createMapComponent( Pass & pass
-			, std::vector< PassComponentUPtr > & result )const
+			, castor::Vector< PassComponentUPtr > & result )const
 		{
 		}
 		/**
@@ -1192,7 +1192,7 @@ namespace castor3d
 			CU_Require( hasColour() );
 
 			static castor::HdrRgbColour dummy{};
-			dummy = std::move( v );
+			dummy = castor::move( v );
 		}
 
 		C3D_API virtual PassComponentFlag getPassFlags()const

@@ -107,7 +107,7 @@ namespace water
 
 			castor3d::shader::PassComponentsShaderPtr createComponentsShader()const override
 			{
-				return std::make_unique< ComponentsShader >( *this );
+				return castor::make_unique< ComponentsShader >( *this );
 			}
 		};
 
@@ -119,7 +119,7 @@ namespace water
 		static bool isComponentAvailable( castor3d::ComponentModeFlags componentsMask
 			, castor3d::shader::Materials const & materials );
 
-		void onAddToPass()const;
+		void onAddToPass()const override;
 
 		void accept( castor3d::ConfigurationVisitorBase & vis )override;
 

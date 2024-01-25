@@ -194,8 +194,8 @@ namespace castor3d
 			, graph
 			, device
 			, typeName
-			, std::move( targetImage )
-			, std::move( targetDepth )
+			, castor::move( targetImage )
+			, castor::move( targetDepth )
 			, renderPassDesc }
 		, RenderTechniquePass{ parent, renderPassDesc.m_culler.getScene(), techniquePassDesc.m_outputScattering }
 		, m_camera{ renderPassDesc.m_culler.hasCamera() ? &renderPassDesc.m_culler.getCamera() : nullptr }
@@ -217,8 +217,8 @@ namespace castor3d
 		RenderNodesPass::update( updater );
 	}
 
-	PipelineFlags RenderTechniqueNodesPass::createPipelineFlags( PassComponentCombine passComponents
-		, SubmeshComponentCombine submeshComponents
+	PipelineFlags RenderTechniqueNodesPass::createPipelineFlags( PassComponentCombine const & passComponents
+		, SubmeshComponentCombine const & submeshComponents
 		, BlendMode colourBlendMode
 		, BlendMode alphaBlendMode
 		, RenderPassTypeID renderPassTypeId
@@ -235,8 +235,8 @@ namespace castor3d
 		, GpuBufferOffsetT< castor::Point4f > const & morphTargets
 		, SubmeshRenderData * submeshData )const
 	{
-		return RenderNodesPass::createPipelineFlags( std::move( passComponents )
-			, std::move( submeshComponents )
+		return RenderNodesPass::createPipelineFlags( passComponents
+			, submeshComponents
 			, colourBlendMode
 			, alphaBlendMode
 			, renderPassTypeId

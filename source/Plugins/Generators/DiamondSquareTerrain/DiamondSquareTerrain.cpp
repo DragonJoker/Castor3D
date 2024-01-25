@@ -28,8 +28,8 @@ namespace diamond_square_terrain
 		}
 	}
 
+	castor::MbString const Generator::Name = "Diamond Square Terrain Generator";
 	castor::String const Generator::Type = cuT( "diamond_square_terrain" );
-	castor::String const Generator::Name = cuT( "Diamond Square Terrain Generator" );
 	castor::String const Generator::Biome = cuT( "biome" );
 	castor::String const Generator::BiomeRange = cuT( "range" );
 	castor::String const Generator::BiomeLowSteepness = cuT( "lowSteepness" );
@@ -78,12 +78,12 @@ namespace diamond_square_terrain
 
 		if ( parameters.get( ParamRandomSeed, param ) )
 		{
-			disableRandomSeed = ( param == "1" );
+			disableRandomSeed = ( param == cuT( "1" ) );
 		}
 
 		if ( parameters.get( ParamIsland, param ) )
 		{
-			island = ( param == "1" );
+			island = ( param == cuT( "1" ) );
 		}
 
 		if ( parameters.get( ParamYMin, param ) )
@@ -148,7 +148,7 @@ namespace diamond_square_terrain
 				return s * ( float( v ) - float( max ) / 2.0f );
 			};
 
-			std::map< uint32_t, uint32_t > vertexMap;
+			castor::Map< uint32_t, uint32_t > vertexMap;
 			uint32_t index{};
 
 			for ( auto z = 1u; z < max; z++ )
@@ -198,21 +198,21 @@ namespace diamond_square_terrain
 				, submeshBuffers );
 
 			auto submesh = mesh.createSubmesh();
-			submesh->createComponent< castor3d::PositionsComponent >()->getData().setData( std::move( submeshBuffers.positions ) );
-			submesh->createComponent< castor3d::Texcoords0Component >()->getData().setData( std::move( submeshBuffers.texcoords0 ) );
-			submesh->createComponent< castor3d::NormalsComponent >()->getData().setData( std::move( submeshBuffers.normals ) );
-			submesh->createComponent< castor3d::TangentsComponent >()->getData().setData( std::move( submeshBuffers.tangents ) );
-			submesh->createComponent< castor3d::TriFaceMapping >()->getData().setData( std::move( faces ) );
+			submesh->createComponent< castor3d::PositionsComponent >()->getData().setData( submeshBuffers.positions );
+			submesh->createComponent< castor3d::Texcoords0Component >()->getData().setData( submeshBuffers.texcoords0 );
+			submesh->createComponent< castor3d::NormalsComponent >()->getData().setData( submeshBuffers.normals );
+			submesh->createComponent< castor3d::TangentsComponent >()->getData().setData( submeshBuffers.tangents );
+			submesh->createComponent< castor3d::TriFaceMapping >()->getData().setData( castor::move( faces ) );
 			submesh->createComponent< castor3d::DefaultRenderComponent >();
 
 			if ( !submeshBuffers.colours.empty() )
 			{
-				submesh->createComponent< castor3d::ColoursComponent >()->getData().setData( std::move( submeshBuffers.colours ) );
+				submesh->createComponent< castor3d::ColoursComponent >()->getData().setData( submeshBuffers.colours );
 			}
 
 			if ( !submeshBuffers.passMasks.empty() )
 			{
-				submesh->createComponent< castor3d::PassMasksComponent >()->getData().setData( std::move( submeshBuffers.passMasks ) );
+				submesh->createComponent< castor3d::PassMasksComponent >()->getData().setData( submeshBuffers.passMasks );
 			}
 		}
 	}

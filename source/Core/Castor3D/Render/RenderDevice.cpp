@@ -71,7 +71,7 @@ namespace castor3d
 
 			for ( auto & queueData : queues )
 			{
-				std::vector< float > queuePriorities;
+				castor::Vector< float > queuePriorities;
 				queuePriorities.resize( queueData.getQueueSize(), 1.0f );
 
 				queueCreateInfos.emplace_back( 0u
@@ -90,14 +90,14 @@ namespace castor3d
 		{
 			log::debug << "Instance enabled layers count: " << uint32_t( instance.getEnabledLayerNames().size() ) << std::endl;
 			auto result = ashes::DeviceCreateInfo{ 0u
-				, std::move( queueCreateInfos )
+				, castor::move( queueCreateInfos )
 				, instance.getEnabledLayerNames()
 				, enabledExtensions };
 			result->pNext = &features2;
 			return result;
 		}
 
-		static bool isExtensionSupported( std::string const & name
+		static bool isExtensionSupported( castor::MbString const & name
 			, ashes::VkExtensionPropertiesArray const & cont )
 		{
 			return ( cont.end() != std::find_if( cont.begin()
@@ -108,7 +108,7 @@ namespace castor3d
 				} ) );
 		}
 
-		static bool tryAddExtension( std::string const & name
+		static bool tryAddExtension( castor::MbString const & name
 			, ashes::VkExtensionPropertiesArray const & available
 			, Extensions & enabled
 			, void * pFeature = nullptr )
@@ -134,12 +134,12 @@ namespace castor3d
 
 	//*************************************************************************
 
-	void Extensions::addExtension( std::string const & extName )
+	void Extensions::addExtension( castor::MbString const & extName )
 	{
 		m_extensionsNames.push_back( extName );
 	}
 
-	void Extensions::addExtension( std::string const & extName
+	void Extensions::addExtension( castor::MbString const & extName
 		, VkStructure * featureStruct
 		, VkStructure * propertyStruct )
 	{
@@ -153,9 +153,9 @@ namespace castor3d
 	QueuesData::QueuesData( QueuesData && rhs )noexcept
 		: familySupport{ rhs.familySupport }
 		, familyIndex{ rhs.familyIndex }
-		, m_allQueuesData{ std::move( rhs.m_allQueuesData ) }
-		, m_remainingQueuesData{ std::move( rhs.m_remainingQueuesData ) }
-		, m_busyQueues{ std::move( rhs.m_busyQueues ) }
+		, m_allQueuesData{ castor::move( rhs.m_allQueuesData ) }
+		, m_remainingQueuesData{ castor::move( rhs.m_remainingQueuesData ) }
+		, m_busyQueues{ castor::move( rhs.m_busyQueues ) }
 	{
 	}
 
@@ -163,9 +163,9 @@ namespace castor3d
 	{
 		familySupport = rhs.familySupport;
 		familyIndex = rhs.familyIndex;
-		m_allQueuesData = std::move( rhs.m_allQueuesData );
-		m_remainingQueuesData = std::move( rhs.m_remainingQueuesData );
-		m_busyQueues = std::move( rhs.m_busyQueues );
+		m_allQueuesData = castor::move( rhs.m_allQueuesData );
+		m_remainingQueuesData = castor::move( rhs.m_remainingQueuesData );
+		m_busyQueues = castor::move( rhs.m_busyQueues );
 		return *this;
 	}
 
@@ -182,8 +182,8 @@ namespace castor3d
 
 		for ( auto & queue : m_allQueuesData )
 		{
-			std::string name = "Queue_" + std::to_string( familyIndex ) + "_" + std::to_string( index );
-			queue = std::make_unique< QueueData >( this );
+			castor::MbString name = "Queue_" + castor::string::toMbString( familyIndex ) + "_" + castor::string::toMbString( index );
+			queue = castor::make_unique< QueueData >( this );
 			queue->queue = device.getQueue( name, familyIndex, index );
 			queue->commandPool = device.createCommandPool( familyIndex
 				, VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT );
@@ -222,13 +222,10 @@ namespace castor3d
 		else
 		{
 			if ( auto it = m_busyQueues.find( std::this_thread::get_id() );
-				it != m_busyQueues.end() )
+				it != m_busyQueues.end() && it->second.data )
 			{
-				if ( it->second.data )
-				{
-					++it->second.count;
-					return it->second.data;
-				}
+				++it->second.count;
+				return it->second.data;
 			}
 
 			while ( m_remainingQueuesData.empty() )
@@ -249,8 +246,8 @@ namespace castor3d
 		}
 
 #ifndef NDEBUG
-		std::stringstream stream;
-		stream << castor::Debug::Backtrace{};
+		castor::StringStream stream;
+		stream << castor::debug::Backtrace{};
 		result.callstack = stream.str();
 #endif
 
@@ -328,8 +325,8 @@ namespace castor3d
 		, features{ gpu.getFeatures() }
 		, properties{ gpu.getProperties() }
 		, queueFamilies{ renddvc::initialiseQueueFamilies( gpu ) }
-		, m_deviceExtensions{ std::move( pdeviceExtensions ) }
-		, m_availableExtensions{ gpu.enumerateExtensionProperties( std::string{} ) }
+		, m_deviceExtensions{ castor::move( pdeviceExtensions ) }
+		, m_availableExtensions{ gpu.enumerateExtensionProperties( castor::MbString{} ) }
 	{
 		auto apiVersion = gpu.getProperties().apiVersion;
 		bool hasFeatures11 = false;
@@ -532,9 +529,9 @@ namespace castor3d
 				, m_features2 ) );
 		device->setCallstackCallback( []()
 			{
-				std::stringstream callback;
-				callback << castor::Debug::Backtrace{ 20, 6 };
-				return callback.str();
+				castor::StringStream callback;
+				callback << castor::debug::Backtrace{ 20, 6 };
+				return castor::toUtf8( callback.str() );
 			} );
 
 		for ( auto & queuesData : queueFamilies )
@@ -591,7 +588,7 @@ namespace castor3d
 
 	VkFormat RenderDevice::selectSuitableDepthFormat( VkFormatFeatureFlags requiredFeatures )const
 	{
-		std::vector< VkFormat > depthFormats
+		castor::Vector< VkFormat > depthFormats
 		{
 			VK_FORMAT_D32_SFLOAT,
 			VK_FORMAT_X8_D24_UNORM_PACK32,
@@ -602,7 +599,7 @@ namespace castor3d
 
 	VkFormat RenderDevice::selectSuitableStencilFormat( VkFormatFeatureFlags requiredFeatures )const
 	{
-		std::vector< VkFormat > depthFormats
+		castor::Vector< VkFormat > depthFormats
 		{
 			VK_FORMAT_S8_UINT,
 			VK_FORMAT_D16_UNORM_S8_UINT,
@@ -614,7 +611,7 @@ namespace castor3d
 
 	VkFormat RenderDevice::selectSuitableDepthStencilFormat( VkFormatFeatureFlags requiredFeatures )const
 	{
-		std::vector< VkFormat > depthFormats
+		castor::Vector< VkFormat > depthFormats
 		{
 			VK_FORMAT_D32_SFLOAT_S8_UINT,
 			VK_FORMAT_D24_UNORM_S8_UINT,
@@ -625,7 +622,7 @@ namespace castor3d
 
 	VkFormat RenderDevice::selectSmallestFormatRSFloatFormat( VkFormatFeatureFlags requiredFeatures )const
 	{
-		std::vector< VkFormat > formats
+		castor::Vector< VkFormat > formats
 		{
 			VK_FORMAT_R16_SFLOAT,
 			VK_FORMAT_R32_SFLOAT,
@@ -635,7 +632,7 @@ namespace castor3d
 
 	VkFormat RenderDevice::selectSmallestFormatRGSFloatFormat( VkFormatFeatureFlags requiredFeatures )const
 	{
-		std::vector< VkFormat > formats
+		castor::Vector< VkFormat > formats
 		{
 			VK_FORMAT_R16G16_SFLOAT,
 			VK_FORMAT_R32G32_SFLOAT,
@@ -647,7 +644,7 @@ namespace castor3d
 
 	VkFormat RenderDevice::selectSmallestFormatRGBUFloatFormat( VkFormatFeatureFlags requiredFeatures )const
 	{
-		std::vector< VkFormat > formats
+		castor::Vector< VkFormat > formats
 		{
 			VK_FORMAT_B10G11R11_UFLOAT_PACK32,
 			VK_FORMAT_R16G16B16_SFLOAT,
@@ -660,7 +657,7 @@ namespace castor3d
 
 	VkFormat RenderDevice::selectSmallestFormatRGBSFloatFormat( VkFormatFeatureFlags requiredFeatures )const
 	{
-		std::vector< VkFormat > formats
+		castor::Vector< VkFormat > formats
 		{
 			VK_FORMAT_R16G16B16_SFLOAT,
 			VK_FORMAT_R32G32B32_SFLOAT,
@@ -670,7 +667,7 @@ namespace castor3d
 		return selectSuitableFormat( formats, requiredFeatures );
 	}
 
-	VkFormat RenderDevice::selectSuitableFormat( std::vector< VkFormat > const & formats
+	VkFormat RenderDevice::selectSuitableFormat( castor::Vector< VkFormat > const & formats
 		, VkFormatFeatureFlags requiredFeatures )const
 	{
 		auto it = std::find_if( formats.begin()
@@ -688,8 +685,8 @@ namespace castor3d
 
 		if ( it != formats.begin() )
 		{
-			log::warn << "The first format (" << ashes::getName( *formats.begin() )
-				<< ") did not support the wanted properties, using a secondary choice (" << ashes::getName( *it )
+			log::warn << "The first format (" << castor::makeString( ashes::getName( *formats.begin() ) )
+				<< ") did not support the wanted properties, using a secondary choice (" << castor::makeString( ashes::getName( *it ) )
 				<< ").\n";
 		}
 
@@ -728,7 +725,7 @@ namespace castor3d
 
 		if ( res )
 		{
-			it->second = std::make_unique< crg::GraphContext >( *device
+			it->second = castor::make_unique< crg::GraphContext >( *device
 				, VkPipelineCache{}
 				, device->getAllocationCallbacks()
 				, device->getMemoryProperties()
@@ -737,20 +734,20 @@ namespace castor3d
 				, device->vkGetDeviceProcAddr );
 			it->second->setCallstackCallback( []()
 				{
-					std::stringstream callback;
-					callback << castor::Debug::Backtrace{ 20, 6 };
-					return callback.str();
+					castor::StringStream callback;
+					callback << castor::debug::Backtrace{ 20, 6 };
+					return castor::toUtf8( callback.str() );
 				} );
 		}
 
 		return *it->second;
 	}
 
-	bool RenderDevice::hasExtension( std::string_view const & name )const noexcept
+	bool RenderDevice::hasExtension( castor::MbStringView name )const noexcept
 	{
 		auto it = std::find_if( m_deviceExtensions.getExtensionsNames().begin()
 			, m_deviceExtensions.getExtensionsNames().end()
-			, [&name]( castor::String const & lookup )
+			, [&name]( castor::MbString const & lookup )
 			{
 				return lookup == name;
 			} );
@@ -1016,7 +1013,7 @@ namespace castor3d
 #endif
 	}
 
-	bool RenderDevice::doTryAddExtension( std::string const & name
+	bool RenderDevice::doTryAddExtension( castor::MbString const & name
 		, void * pFeature
 		, void * pProperty )
 	{

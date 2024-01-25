@@ -45,7 +45,7 @@ namespace castor3d::shader
 				{
 					auto albedoSheenScalingLUT = m_writer.declLocaleArray( "albedoSheenScalingLUT"
 						, 256u
-						, std::vector< sdw::Float >{ 0x000000cd_h, 0x000000a2_h, 0x00000083_h, 0x0000006a_h, 0x00000055_h, 0x00000042_h, 0x00000032_h, 0x00000025_h
+						, castor::Vector< sdw::Float >{ 0x000000cd_h, 0x000000a2_h, 0x00000083_h, 0x0000006a_h, 0x00000055_h, 0x00000042_h, 0x00000032_h, 0x00000025_h
 							, 0x00000019_h, 0x00000010_h, 0x00000008_h, 0x00000004_h, 0x00000001_h, 0x00000000_h, 0x00000000_h, 0x00000000_h
 							, 0x000000df_h, 0x000000c0_h, 0x000000a9_h, 0x00000095_h, 0x00000084_h, 0x00000075_h, 0x00000067_h, 0x00000059_h
 							, 0x0000004d_h, 0x00000042_h, 0x00000037_h, 0x0000002d_h, 0x00000023_h, 0x0000001a_h, 0x00000011_h, 0x00000007_h

@@ -12,7 +12,7 @@ namespace fxaa
 	FxaaData::FxaaData( sdw::ShaderWriter & writer
 		, ast::expr::ExprPtr expr
 		, bool enabled )
-		: sdw::StructInstance{ writer, std::move( expr ), enabled }
+		: sdw::StructInstance{ writer, castor::move( expr ), enabled }
 		, pixelSize{ getMember< sdw::Vec2 >( "pixelSize" ) }
 		, subpixShift{ getMember< sdw::Float >( "subpixShift" ) }
 		, spanMax{ getMember< sdw::Float >( "spanMax" ) }
@@ -38,8 +38,8 @@ namespace fxaa
 
 	//*********************************************************************************************
 
-	castor::String const FxaaUbo::Buffer = cuT( "Fxaa" );
-	castor::String const FxaaUbo::Data = cuT( "c3d_fxaaData" );
+	castor::MbString const FxaaUbo::Buffer = "Fxaa";
+	castor::MbString const FxaaUbo::Data = "c3d_fxaaData";
 
 	FxaaUbo::FxaaUbo( castor3d::RenderDevice const & device
 		, castor::Size const & size )

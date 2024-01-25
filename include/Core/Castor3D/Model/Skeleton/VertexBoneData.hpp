@@ -35,7 +35,7 @@ namespace castor3d
 				castor::Point4ui id0;
 				castor::Point4ui id1;
 			};
-			std::array< uint32_t, MaxBonesPerVertex > data{};
+			castor::Array< uint32_t, MaxBonesPerVertex > data{};
 
 			Ids() = default;
 
@@ -78,7 +78,7 @@ namespace castor3d
 				castor::Point4f weight0;
 				castor::Point4f weight1;
 			};
-			std::array< float, MaxBonesPerVertex > data{};
+			castor::Array< float, MaxBonesPerVertex > data{};
 
 			Weights() = default;
 

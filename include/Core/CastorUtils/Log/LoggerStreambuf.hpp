@@ -134,12 +134,12 @@ namespace castor
 		static void log( LoggerInstance & logger
 			, std::basic_string< CharType > const & text )
 		{
-			logger.lockedLogTrace( string::stringCast< char >( text ) );
+			logger.lockedLogTrace( text );
 		}
 		static void logNoLF( LoggerInstance & logger
 			, std::basic_string< CharType > const & text )
 		{
-			logger.lockedLogTraceNoLF( string::stringCast< char >( text ) );
+			logger.lockedLogTraceNoLF( text );
 		}
 	};
 	/**
@@ -154,12 +154,12 @@ namespace castor
 		static void log( LoggerInstance & logger
 			, std::basic_string< CharType > const & text )
 		{
-			logger.lockedLogDebug( string::stringCast< char >( text ) );
+			logger.lockedLogDebug( text );
 		}
 		static void logNoLF( LoggerInstance & logger
 			, std::basic_string< CharType > const & text )
 		{
-			logger.lockedLogDebugNoLF( string::stringCast< char >( text ) );
+			logger.lockedLogDebugNoLF( text );
 		}
 	};
 	/**
@@ -174,12 +174,12 @@ namespace castor
 		static void log( LoggerInstance & logger
 			, std::basic_string< CharType > const & text )
 		{
-			logger.lockedLogInfo( string::stringCast< char >( text ) );
+			logger.lockedLogInfo( text );
 		}
 		static void logNoLF( LoggerInstance & logger
 			, std::basic_string< CharType > const & text )
 		{
-			logger.lockedLogInfoNoLF( string::stringCast< char >( text ) );
+			logger.lockedLogInfoNoLF( text );
 		}
 	};
 	/**
@@ -194,12 +194,12 @@ namespace castor
 		static void log( LoggerInstance & logger
 			, std::basic_string< CharType > const & text )
 		{
-			logger.lockedLogWarning( string::stringCast< char >( text ) );
+			logger.lockedLogWarning( text );
 		}
 		static void logNoLF( LoggerInstance & logger
 			, std::basic_string< CharType > const & text )
 		{
-			logger.lockedLogWarningNoLF( string::stringCast< char >( text ) );
+			logger.lockedLogWarningNoLF( text );
 		}
 	};
 	/**
@@ -214,12 +214,12 @@ namespace castor
 		static void log( LoggerInstance & logger
 			, std::basic_string< CharType > const & text )
 		{
-			logger.lockedLogError( string::stringCast< char >( text ) );
+			logger.lockedLogError( text );
 		}
 		static void logNoLF( LoggerInstance & logger
 			, std::basic_string< CharType > const & text )
 		{
-			logger.lockedLogErrorNoLF( string::stringCast< char >( text ) );
+			logger.lockedLogErrorNoLF( text );
 		}
 	};
 

@@ -39,10 +39,10 @@ namespace castor3d
 		friend struct PassComponent;
 
 	public:
-		using UnitArray = std::vector< TextureUnitRPtr >;
-		using PassTextureSource = std::pair< TextureSourceInfo, PassTextureConfig >;
-		using TextureSourceArray = std::vector< PassTextureSource >;
-		using UnitDataSources = std::map< TextureUnitDataRPtr, std::vector< TextureSourceInfo > >;
+		using UnitArray = castor::Vector< TextureUnitRPtr >;
+		using PassTextureSource = castor::Pair< TextureSourceInfo, PassTextureConfig >;
+		using TextureSourceArray = castor::Vector< PassTextureSource >;
+		using UnitDataSources = castor::Map< TextureUnitDataRPtr, castor::Vector< TextureSourceInfo > >;
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -107,7 +107,7 @@ namespace castor3d
 		C3D_API void addComponent( PassComponentUPtr component );
 		C3D_API bool hasComponent( castor::String const & name )const noexcept;
 		C3D_API PassComponent * getComponent( castor::String const & name )const;
-		C3D_API std::vector< PassComponentUPtr > removeComponent( castor::String const & name );
+		C3D_API castor::Vector< PassComponentUPtr > removeComponent( castor::String const & name );
 		C3D_API shader::PassMaterialShader * getMaterialShader( castor::String const & componentType )const;
 		C3D_API PassComponentID getComponentId( castor::String const & componentType )const;
 		C3D_API PassComponentPlugin const & getComponentPlugin( PassComponentID componentId )const;
@@ -145,7 +145,7 @@ namespace castor3d
 			if ( !result )
 			{
 				auto component = castor::makeUnique< ComponentT >( *this
-					, std::forward< ParamsT >( params )... );
+					, castor::forward< ParamsT >( params )... );
 				result = component.get();
 				this->addComponent( castor::ptrRefCast< PassComponent >( component ) );
 			}
@@ -539,7 +539,7 @@ namespace castor3d
 			, TextureUnitRPtr unit
 			, UnitArray & result );
 		void doUpdateTextureFlags();
-		std::vector< PassComponentUPtr > doRemoveDependencies( castor::String const & name );
+		castor::Vector< PassComponentUPtr > doRemoveDependencies( castor::String const & name );
 		void doRemoveConfiguration( PassComponentTextureFlag flag );
 
 	private:
@@ -549,7 +549,7 @@ namespace castor3d
 		PassComponentMap m_components;
 		TextureSourceArray m_sources;
 		TextureUnitDataRefs m_prepared;
-		std::unordered_map< TextureSourceInfo, TextureAnimationUPtr, TextureSourceInfoHasher > m_animations;
+		castor::UnorderedMap< TextureSourceInfo, TextureAnimationUPtr, TextureSourceInfoHasher > m_animations;
 		uint32_t m_maxTexcoordSet{};
 		std::atomic_bool m_texturesReduced{ false };
 		UnitArray m_textureUnits;

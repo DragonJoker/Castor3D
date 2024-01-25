@@ -48,7 +48,7 @@ namespace waves
 		float time{ 0.0f };
 		float dampeningFactor{ 5.0f };
 
-		std::array< WaveConfigurationData, MaxWaves > waves{ WaveConfigurationData{ castor::Point3f{ 0.3f, 0.0f, -0.7f }, 1.79f, 3.75f, 0.85f, 1.21f }
+		castor::Array< WaveConfigurationData, MaxWaves > waves{ WaveConfigurationData{ castor::Point3f{ 0.3f, 0.0f, -0.7f }, 1.79f, 3.75f, 0.85f, 1.21f }
 			, WaveConfigurationData{ castor::Point3f{ 0.5f, 0.0f, -0.2f }, 1.79f, 4.1f, 0.52f, 1.03f }
 			, WaveConfigurationData{}
 			, WaveConfigurationData{}
@@ -71,7 +71,7 @@ namespace waves
 		Wave( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
 			, bool enabled = true )
-			: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+			: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
 		{
 		}
 
@@ -96,7 +96,7 @@ namespace waves
 		WavesData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+			: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
 		{
 		}
 

@@ -46,7 +46,7 @@ extern "C"
 		engine->getToneMappingFactory().registerType( aces::ToneMapping::Type
 			, &aces::ToneMapping::create );
 		engine->getRenderTargetCache().registerToneMappingName( aces::ToneMapping::Type
-			, aces::ToneMapping::Name );
+			, castor::makeString( aces::ToneMapping::Name ) );
 	}
 
 	C3D_ACESToneMapping_API void OnUnload( castor3d::Engine * engine )

@@ -158,7 +158,7 @@ namespace castor3d
 	*/
 	struct LayeredLpvGridConfigUboConfiguration
 	{
-		std::array< castor::Point4f, LpvMaxCascadesCount > allMinVolumeCorners{};
+		castor::Array< castor::Point4f, LpvMaxCascadesCount > allMinVolumeCorners{};
 		castor::Point4f allCellSizes{};
 		castor::Point4f gridSizeAtt{};
 	};
@@ -189,7 +189,7 @@ namespace castor3d
 	*/
 	struct CameraUboConfiguration
 	{
-		std::array< castor::Point4f, 6u > frustumPlanes{};
+		castor::Array< castor::Point4f, 6u > frustumPlanes{};
 		castor::Matrix4x4f projection{};
 		castor::Matrix4x4f invProjection{};
 		castor::Matrix4x4f curView{};
@@ -319,9 +319,9 @@ namespace castor3d
 		// Contains the actual number of weights
 		castor::Point4ui morphTargetsData{};
 		// x4 because the shader stores a uvec4[MaxMorphTargets]
-		std::array< uint32_t, MaxMorphTargets * 4u > morphTargetsIndices{};
+		castor::Array< uint32_t, MaxMorphTargets * 4u > morphTargetsIndices{};
 		// x4 because the shader stores a vec4[MaxMorphTargets]
-		std::array< float, MaxMorphTargets * 4u > morphTargetsWeights{};
+		castor::Array< float, MaxMorphTargets * 4u > morphTargetsWeights{};
 	};
 	/**
 	*\~english
@@ -465,7 +465,7 @@ namespace castor3d
 	*/
 	struct SkinningTransformsConfiguration
 	{
-		std::array< castor::Matrix4x4f, MaxBonesCount > bonesMatrix{};
+		castor::Array< castor::Matrix4x4f, MaxBonesCount > bonesMatrix{};
 	};
 	/**
 	*\~english

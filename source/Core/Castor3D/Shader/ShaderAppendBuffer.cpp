@@ -37,10 +37,9 @@ namespace castor3d
 	}
 
 	void ShaderAppendBuffer::createPassBinding( crg::FramePass & pass
-		, castor::String const & name
 		, uint32_t binding )const
 	{
-		pass.addInputStorageBuffer( { *m_buffer, name }
+		pass.addInputStorageBuffer( { *m_buffer, m_buffer->getName() }
 			, binding
 			, 0u
 			, uint32_t( m_size ) );

@@ -528,17 +528,17 @@ namespace castor3d
 	template<>
 	inline castor::String getNodesTypeName< SubmeshRenderNode >()
 	{
-		return "Submeshes";
+		return cuT( "Submeshes" );
 	}
 
 	template<>
 	inline castor::String getNodesTypeName< BillboardRenderNode >()
 	{
-		return "Billboards";
+		return cuT( "Billboards" );
 	}
 
 	template< typename NodeT >
-	static std::ostream & operator<<( std::ostream & stream, PipelinesNodesT< NodeT > const & rhs )
+	static castor::OutputStream & operator<<( castor::OutputStream & stream, PipelinesNodesT< NodeT > const & rhs )
 	{
 		if constexpr ( queuerndnd::C3D_PrintNodesFullCounts )
 		{
@@ -607,7 +607,7 @@ namespace castor3d
 	}
 
 	template< typename NodeT >
-	static std::ostream & operator<<( std::ostream & stream, InstantiatedPipelinesNodesT< NodeT > const & rhs )
+	static castor::OutputStream & operator<<( castor::OutputStream & stream, InstantiatedPipelinesNodesT< NodeT > const & rhs )
 	{
 		if constexpr ( queuerndnd::C3D_PrintNodesFullCounts )
 		{
@@ -721,7 +721,7 @@ namespace castor3d
 					, MaxSubmeshMeshletDrawIndirectCommand
 					, VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT
 					, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-					, typeName + "/SubmeshMeshletIndirectBuffer" );
+					, typeName + cuT( "/SubmeshMeshletIndirectBuffer" ) );
 			}
 			else
 			{
@@ -729,20 +729,20 @@ namespace castor3d
 					, MaxSubmeshMeshletDrawIndirectCommand
 					, VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT
 					, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-					, typeName + "/SubmeshMeshletIndirectBuffer" );
+					, typeName + cuT( "/SubmeshMeshletIndirectBuffer" ) );
 			}
 #	elif VK_EXT_mesh_shader
 			m_submeshMeshletIndirectCommandsEXT = makeBuffer< VkDrawMeshTasksIndirectCommandEXT >( device
 				, MaxSubmeshMeshletDrawIndirectCommand
 				, VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT
 				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-				, typeName + "/SubmeshMeshletIndirectBuffer" );
+				, typeName + cuT( "/SubmeshMeshletIndirectBuffer" ) );
 #	else
 			m_submeshMeshletIndirectCommandsNV = makeBuffer< VkDrawMeshTasksIndirectCommandNV >( device
 				, MaxSubmeshMeshletDrawIndirectCommand
 				, VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT
 				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-				, typeName + "/SubmeshMeshletIndirectBuffer" );
+				, typeName + cuT( "/SubmeshMeshletIndirectBuffer" ) );
 #	endif
 		}
 
@@ -751,22 +751,22 @@ namespace castor3d
 			, MaxSubmeshIdxDrawIndirectCommand
 			, VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-			, typeName + "/SubmeshIndexedIndirectBuffer" );
+			, typeName + cuT( "/SubmeshIndexedIndirectBuffer" ) );
 		m_submeshNIdxIndirectCommands = makeBuffer< VkDrawIndirectCommand >( device
 			, MaxSubmeshNIdxDrawIndirectCommand
 			, VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-			, typeName + "/SubmeshIndirectBuffer" );
+			, typeName + cuT( "/SubmeshIndirectBuffer" ) );
 		m_billboardIndirectCommands = makeBuffer< VkDrawIndirectCommand >( device
 			, MaxBillboardDrawIndirectCommand
 			, VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-			, typeName + "/BillboardIndirectBuffer" );
+			, typeName + cuT( "/BillboardIndirectBuffer" ) );
 		m_pipelinesNodes = makeBuffer< PipelineNodes >( device
 			, MaxPipelinesNodes
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-			, typeName + "/NodesIDs" );
+			, typeName + cuT( "/NodesIDs" ) );
 	}
 
 	QueueRenderNodes::~QueueRenderNodes()noexcept
@@ -971,8 +971,8 @@ namespace castor3d
 		auto & renderPass = *queue.getOwner();
 		{
 			C3D_DebugTime( renderPass.getTypeName() );
-			auto pendingSubmeshes = std::move( m_pendingSubmeshes );
-			auto pendingBillboards = std::move( m_pendingBillboards );
+			auto pendingSubmeshes = castor::move( m_pendingSubmeshes );
+			auto pendingBillboards = castor::move( m_pendingBillboards );
 
 			for ( auto culled : pendingSubmeshes )
 			{

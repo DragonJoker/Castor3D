@@ -32,7 +32,7 @@ namespace diamond_square_terrain
 	}
 
 	template< typename DataT >
-	inline BlendRanges buildBlendRanges( std::vector< DataT > const & values )
+	inline BlendRanges buildBlendRanges( castor::Vector< DataT > const & values )
 	{
 		BlendRanges result;
 		auto cur = values.begin();
@@ -100,7 +100,7 @@ namespace diamond_square_terrain
 		, Matrix const & heightMap
 		, Biomes biomes
 		, castor3d::FaceArray const & faces
-		, std::map< uint32_t, uint32_t > const & vertexMap
+		, castor::Map< uint32_t, uint32_t > const & vertexMap
 		, castor3d::SubmeshAnimationBuffer & submesh );
 }
 

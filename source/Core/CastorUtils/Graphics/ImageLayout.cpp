@@ -11,7 +11,7 @@
 
 namespace castor
 {
-	ImageLayout::Range ImageLayout::range()const noexcept
+	ImageLayout::SubresourceRange ImageLayout::range()const noexcept
 	{
 		auto off = offset();
 		auto sze = size();
@@ -22,7 +22,7 @@ namespace castor
 		};
 	}
 	
-	ImageLayout::Range ImageLayout::slice( uint32_t index )const noexcept
+	ImageLayout::SubresourceRange ImageLayout::slice( uint32_t index )const noexcept
 	{
 		auto offset = sliceOffset( index );
 		auto size = sliceSize();
@@ -33,7 +33,7 @@ namespace castor
 		};
 	}
 
-	ImageLayout::Range ImageLayout::sliceMip( uint32_t index, uint32_t level )const noexcept
+	ImageLayout::SubresourceRange ImageLayout::sliceMip( uint32_t index, uint32_t level )const noexcept
 	{
 		auto offset = sliceMipOffset( index, level );
 		auto size = sliceMipSize( level );

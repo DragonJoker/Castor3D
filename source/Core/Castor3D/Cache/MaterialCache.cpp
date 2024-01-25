@@ -54,7 +54,7 @@ namespace castor
 		passBuffer.update( m_buffers, uploader );
 	}
 
-	void ResourceCacheT< Material, String, MaterialCacheTraits >::PassDataBuffers::registerBuffer( std::string const & name
+	void ResourceCacheT< Material, String, MaterialCacheTraits >::PassDataBuffers::registerBuffer( castor::String const & name
 		, SpecificsBuffer buffer )
 	{
 		if ( auto it = m_buffers.find( name );
@@ -63,10 +63,10 @@ namespace castor
 			CU_Exception( "Buffer with given name already registered." );
 		}
 
-		m_buffers.try_emplace( name, std::move( buffer ), nullptr );
+		m_buffers.try_emplace( name, castor::move( buffer ), nullptr );
 	}
 
-	void ResourceCacheT< Material, String, MaterialCacheTraits >::PassDataBuffers::unregisterBuffer( std::string const & name )
+	void ResourceCacheT< Material, String, MaterialCacheTraits >::PassDataBuffers::unregisterBuffer( castor::String const & name )
 	{
 		if ( auto it = m_buffers.find( name );
 			it != m_buffers.end() )
@@ -101,7 +101,7 @@ namespace castor
 	{
 		for ( auto & [name, buffer] : m_buffers )
 		{
-			buffer.second->createPassBinding( pass, name, index );
+			buffer.second->createPassBinding( pass, index );
 			++index;
 		}
 	}
@@ -131,7 +131,7 @@ namespace castor
 			{
 				m_engine.postEvent( makeCpuCleanupEvent( resource ) );
 			}
-			, castor::ResourceMergerT< MaterialCache >{ "_" } }
+			, castor::ResourceMergerT< MaterialCache >{ cuT( "_" ) } }
 		, m_engine{ engine }
 	{
 	}
@@ -249,13 +249,13 @@ namespace castor
 		}
 	}
 
-	void ResourceCacheT< Material, String, MaterialCacheTraits >::registerSpecificsBuffer( std::string const & name
+	void ResourceCacheT< Material, String, MaterialCacheTraits >::registerSpecificsBuffer( castor::String const & name
 		, SpecificsBuffer buffer )
 	{
-		m_specificsBuffers.registerBuffer( name, std::move( buffer ) );
+		m_specificsBuffers.registerBuffer( name, castor::move( buffer ) );
 	}
 
-	void ResourceCacheT< Material, String, MaterialCacheTraits >::unregisterSpecificsBuffer( std::string const & name )noexcept
+	void ResourceCacheT< Material, String, MaterialCacheTraits >::unregisterSpecificsBuffer( castor::String const & name )noexcept
 	{
 		m_specificsBuffers.unregisterBuffer( name );
 	}
@@ -433,9 +433,12 @@ namespace castor
 
 	void ResourceCacheT< Material, String, MaterialCacheTraits >::doUpdatePending()
 	{
-		auto passes = std::move( m_pendingPasses );
-		auto units = std::move( m_pendingUnits );
-		auto textures = std::move( m_pendingTextures );
+		castor::Vector< castor3d::Pass * > passes;
+		castor::Vector< castor3d::TextureUnit * > units;
+		castor::Vector< castor3d::AnimatedTexture const * > textures;
+		castor::swap( passes, m_pendingPasses );
+		castor::swap( units, m_pendingUnits );
+		castor::swap( textures, m_pendingTextures );
 
 		for ( auto pass : passes )
 		{

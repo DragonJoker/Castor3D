@@ -46,14 +46,14 @@ namespace castor3d
 			{
 				submesh = castor::makeUnique< Submesh >( obj, obj.getSubmeshCount() );
 				result = createBinaryParser< Submesh >().parse( *submesh, chunk );
-				checkError( result, "Couldn't parse submesh." );
+				checkError( result, cuT( "Couldn't parse submesh." ) );
 
 				if ( result
 					&& submesh->getPointsCount() > 0
 					&& ( !submesh->getIndexMapping()
 						|| submesh->getIndexMapping()->getCount() > 0 ) )
 				{
-					obj.m_submeshes.push_back( std::move( submesh ) );
+					obj.m_submeshes.push_back( castor::move( submesh ) );
 				}
 			}
 		}
@@ -73,7 +73,7 @@ namespace castor3d
 			{
 				skeleton = obj.getScene()->addNewSkeleton( obj.getName(), *obj.getScene() );
 				result = createBinaryParser< Skeleton >().parse( *skeleton, chunk );
-				checkError( result, "Couldn't parse skeleton." );
+				checkError( result, cuT( "Couldn't parse skeleton." ) );
 
 				if ( result )
 				{

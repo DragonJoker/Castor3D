@@ -103,7 +103,7 @@ namespace castor3d
 	LinesMapping::LinesMapping( Submesh & submesh
 		, VkBufferUsageFlags bufferUsageFlags )
 		: IndexMapping{ submesh, TypeName
-			, std::make_unique< ComponentData >( submesh, bufferUsageFlags ) }
+			, castor::make_unique< ComponentData >( submesh, bufferUsageFlags ) }
 	{
 	}
 

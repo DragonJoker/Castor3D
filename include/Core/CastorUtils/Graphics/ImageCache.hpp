@@ -31,8 +31,8 @@ namespace castor
 		explicit ImageCreateParams( Path ppath
 			, ImageLoaderConfig ploadConfig = { true, true, true } )
 			: mode{ eFile }
-			, path{ std::move( ppath ) }
-			, loadConfig{ std::move( ploadConfig ) }
+			, path{ castor::move( ppath ) }
+			, loadConfig{ castor::move( ploadConfig ) }
 		{
 		}
 
@@ -40,9 +40,9 @@ namespace castor
 			, ByteArray pdata
 			, ImageLoaderConfig ploadConfig = { true, true, true } )
 			: mode{ eBuffer }
-			, loadConfig{ std::move( ploadConfig ) }
-			, type{ std::move( ptype ) }
-			, data{ std::move( pdata ) }
+			, loadConfig{ castor::move( ploadConfig ) }
+			, type{ castor::move( ptype ) }
+			, data{ castor::move( pdata ) }
 		{
 		}
 

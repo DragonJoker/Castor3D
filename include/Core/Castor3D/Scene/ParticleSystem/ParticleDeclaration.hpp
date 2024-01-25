@@ -105,7 +105,7 @@ namespace castor3d
 		 *\brief		Constructeur
 		 *\param[in]	elements	Tableau d'éléments
 		 */
-		explicit ParticleDeclaration( std::vector< ParticleElementDeclaration > const & elements )
+		explicit ParticleDeclaration( castor::Vector< ParticleElementDeclaration > const & elements )
 			: ParticleDeclaration( elements.data(), uint32_t( elements.size() ) )
 		{
 		}
@@ -193,7 +193,7 @@ namespace castor3d
 		template< typename ... Params >
 		void emplace_back( Params && ... params )
 		{
-			m_elements.emplace_back( std::forward< Params >( params )... );
+			m_elements.emplace_back( castor::forward< Params >( params )... );
 			m_stride += uint32_t( getSize( m_elements.back().m_dataType ) );
 		}
 

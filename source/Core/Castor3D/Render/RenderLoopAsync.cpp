@@ -19,13 +19,13 @@ namespace castor3d
 	RenderLoopAsync::RenderLoopAsync( Engine & engine, uint32_t wantedFPS )
 		: RenderLoop{ engine, wantedFPS }
 	{
-		m_mainLoopThread = std::make_unique< std::thread >( [this]()
+		m_mainLoopThread = castor::make_unique< std::thread >( [this]()
 		{
 			doMainLoop();
 		} );
 	}
 
-	RenderLoopAsync::~RenderLoopAsync()
+	RenderLoopAsync::~RenderLoopAsync()noexcept
 	{
 		// We wait for the main loop to end (it makes a final render to clean the render system)
 		m_interrupted = true;
@@ -174,13 +174,13 @@ namespace castor3d
 		}
 		catch ( castor::Exception & exc )
 		{
-			log::error << cuT( "RenderLoop - " ) << exc.getFullDescription() << std::endl;
+			log::error << cuT( "RenderLoop - " ) << castor::makeString( exc.getFullDescription() ) << std::endl;
 			m_frameEnded = true;
 			m_ended = true;
 		}
 		catch ( std::exception & exc )
 		{
-			log::error << std::string( "RenderLoop - " ) + exc.what() << std::endl;
+			log::error << cuT( "RenderLoop - " ) << castor::makeString( exc.what() ) << std::endl;
 			m_frameEnded = true;
 			m_ended = true;
 		}

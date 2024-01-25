@@ -44,17 +44,17 @@ namespace castor3d
 
 			if ( needsVsm )
 			{
-				result += "_VSM";
+				result += cuT( "_VSM" );
 			}
 
 			if ( needsRsm )
 			{
-				result += "_RSM";
+				result += cuT( "_RSM" );
 			}
 
 			if ( isStatic )
 			{
-				result += "_Statics";
+				result += cuT( "_Statics" );
 			}
 
 			return result;
@@ -88,10 +88,10 @@ namespace castor3d
 			, getFormat( m_blurIntermediate )
 			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } ) }
 	{
-		stepProgressBarLocal( progress, "Creating ShadowMapSpot" );
+		stepProgressBarLocal( progress, cuT( "Creating ShadowMapSpot" ) );
 	}
 
-	crg::FramePassArray ShadowMapSpot::doCreatePass( crg::FrameGraph & graph
+	crg::FramePassArray ShadowMapSpot::doCreatePass( crg::FramePassGroup & graph
 		, crg::FramePassArray const & previousPasses
 		, uint32_t index
 		, bool vsm
@@ -110,23 +110,23 @@ namespace castor3d
 		auto & position = smResult[SmTexture::ePosition];
 		auto & flux = smResult[SmTexture::eFlux];
 
-		std::string debugName = shdmapspot::getPassName( index, vsm, rsm, isStatic );
+		auto debugName = castor::toUtf8( shdmapspot::getPassName( index, vsm, rsm, isStatic ) );
 		doRegisterGraphIO( graph, vsm, rsm, isStatic );
 
 		if ( m_passes[m_passesIndex].cameras.size() <= index )
 		{
-			m_passes[m_passesIndex].cameraUbos.push_back( std::make_unique< CameraUbo >( m_device ) );
+			m_passes[m_passesIndex].cameraUbos.push_back( castor::make_unique< CameraUbo >( m_device ) );
 			m_passes[m_passesIndex].cameras.push_back( m_scene.createCamera( shdmapspot::getPassName( index, false, false, false )
 				, m_scene
 				, *m_scene.getCameraRootNode()
-				, std::move( viewport ) ) );
+				, castor::move( viewport ) ) );
 			CU_Require( m_passes[m_passesIndex].cameras.size() > index );
 		}
 
 		auto & group = graph.createPassGroup( debugName );
 		auto & camera = *m_passes[m_passesIndex].cameras[index];
 		auto & cameraUbo = *m_passes[m_passesIndex].cameraUbos[index];
-		passes.passes.emplace_back( std::make_unique< ShadowMap::PassData >( nullptr ) );
+		passes.passes.emplace_back( castor::make_unique< ShadowMap::PassData >( nullptr ) );
 		auto & passData = *passes.passes.back();
 		passData.ownCuller = castor::makeUniqueDerived< SceneCuller, FrustumCuller >( m_scene, camera, isStatic );
 		passData.culler = passData.ownCuller.get();
@@ -135,7 +135,7 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
-				auto res = std::make_unique< ShadowMapPassSpot >( framePass
+				auto res = castor::make_unique< ShadowMapPassSpot >( framePass
 					, context
 					, runnableGraph
 					, m_device
@@ -146,7 +146,7 @@ namespace castor3d
 					, rsm
 					, isStatic );
 				passData.pass = res.get();
-				m_device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+				m_device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );
@@ -203,7 +203,7 @@ namespace castor3d
 					, crg::GraphContext & context
 					, crg::RunnableGraph & runnableGraph )
 				{
-					auto result = std::make_unique< crg::ImageCopy >( pass
+					auto result = castor::make_unique< crg::ImageCopy >( pass
 						, context
 						, runnableGraph
 						, getShadowPassResult( isStatic )[SmTexture::eDepth].getExtent()
@@ -211,7 +211,7 @@ namespace castor3d
 						, crg::ru::Config{}
 						, crg::ImageCopy::GetPassIndexCallback( [](){ return 0u; } )
 						, crg::ImageCopy::IsEnabledCallback( [this, index](){ return doEnableCopyStatic( index ); } ) );
-					getOwner()->registerTimer( pass.getFullName()
+					getOwner()->registerTimer( castor::makeString( pass.getFullName() )
 						, result->getTimer() );
 					return result;
 				} );

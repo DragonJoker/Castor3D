@@ -46,7 +46,7 @@ extern "C"
 		engine->getToneMappingFactory().registerType( Uncharted2::ToneMapping::Type
 			, &Uncharted2::ToneMapping::create );
 		engine->getRenderTargetCache().registerToneMappingName( Uncharted2::ToneMapping::Type
-			, Uncharted2::ToneMapping::Name );
+			, castor::makeString( Uncharted2::ToneMapping::Name ) );
 	}
 
 	C3D_Uncharted2ToneMapping_API void OnUnload( castor3d::Engine * engine )

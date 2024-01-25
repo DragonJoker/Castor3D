@@ -38,7 +38,7 @@ namespace atmosphere_scattering
 			// =====================================================================================
 			// Code from Sebastien Hillarie 3d noise generator https://github.com/sebh/TileableVolumeNoise
 			auto frequenceMul = writer.declConstantArray( "frequenceMul"
-				, std::vector< sdw::Float >{ 2.0_f, 8.0_f, 14.0_f, 20.0_f, 26.0_f, 32.0_f } );
+				, castor::Vector< sdw::Float >{ 2.0_f, 8.0_f, 14.0_f, 20.0_f, 26.0_f, 32.0_f } );
 
 			//Code from https://github.com/NadirRoGue
 			//Special thanks https://github.com/NadirRoGue
@@ -427,7 +427,7 @@ namespace atmosphere_scattering
 		, castor3d::RenderDevice const & device
 		, crg::ImageViewId const & resultView
 		, bool & enabled )
-		: m_computeShader{ VK_SHADER_STAGE_COMPUTE_BIT, "Clouds/PerlinWorleyPass", perwor::getProgram( device, getExtent( resultView ).width ) }
+		: m_computeShader{ VK_SHADER_STAGE_COMPUTE_BIT, cuT( "Clouds/PerlinWorleyPass" ), perwor::getProgram( device, getExtent( resultView ).width ) }
 		, m_stages{ makeShaderState( device, m_computeShader ) }
 	{
 		auto renderSize = getExtent( resultView );
@@ -436,7 +436,7 @@ namespace atmosphere_scattering
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = std::make_unique< crg::ComputePass >( framePass
+				auto result = castor::make_unique< crg::ComputePass >( framePass
 					, context
 					, graph
 					, crg::ru::Config{}
@@ -446,7 +446,7 @@ namespace atmosphere_scattering
 						.groupCountZ( renderSize.depth / 4u )
 						.enabled( &enabled )
 						.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) ) );
-				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
@@ -458,14 +458,14 @@ namespace atmosphere_scattering
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = std::make_unique< crg::GenerateMipmaps >( framePass
+				auto result = castor::make_unique< crg::GenerateMipmaps >( framePass
 					, context
 					, graph
 					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 					, crg::ru::Config{}
 					, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
 					, crg::RunnablePass::IsEnabledCallback( [&enabled](){ return enabled; } ) );
-				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );

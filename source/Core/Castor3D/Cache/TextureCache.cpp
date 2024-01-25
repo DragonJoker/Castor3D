@@ -79,16 +79,16 @@ namespace castor3d
 				{
 					auto ratio = float( maxImageSize ) / float( image.getWidth() );
 					auto height = uint32_t( float( image.getHeight() ) * ratio );
-					buffer = castor::Image::resample( { maxImageSize, height }, std::move( buffer ) );
-					name += "/WResampled";
+					buffer = castor::Image::resample( { maxImageSize, height }, castor::move( buffer ) );
+					name += cuT( "/WResampled" );
 				}
 				else if ( maxDim == image.getHeight()
 					&& image.getHeight() > maxImageSize )
 				{
 					auto ratio = float( maxImageSize ) / float( image.getHeight() );
 					auto width = uint32_t( float( image.getHeight() ) * ratio );
-					buffer = castor::Image::resample( { width, maxImageSize }, std::move( buffer ) );
-					name += "/HResampled";
+					buffer = castor::Image::resample( { width, maxImageSize }, castor::move( buffer ) );
+					name += cuT( "/HResampled" );
 				}
 			}
 
@@ -104,7 +104,7 @@ namespace castor3d
 					, buffer->getConstPtr()
 					, buffer->getFormat()
 					, buffer->getAlign() );
-				name += "/RGBA";
+				name += cuT( "/RGBA" );
 			}
 
 			// Convert from layered image to tiled image
@@ -113,7 +113,7 @@ namespace castor3d
 			{
 				log::debug << name << cuT( " - Converting layers to tiles.\n" );
 				buffer->convertToTiles( engine.getRenderSystem()->getProperties().limits.maxImageDimension2D );
-				name += "/Tiled";
+				name += cuT( "/Tiled" );
 			}
 
 			// Generate mipmaps, if possible.
@@ -124,7 +124,7 @@ namespace castor3d
 			{
 				log::debug << name << cuT( " - Generating mipmaps.\n" );
 				buffer->generateMips();
-				name += "/Mipped";
+				name += cuT( "/Mipped" );
 			}
 
 			// Compress result.
@@ -144,7 +144,7 @@ namespace castor3d
 					, compressedFormat
 					, buffer->getConstPtr()
 					, buffer->getFormat() );
-				name += "/Compressed";
+				name += cuT( "/Compressed" );
 			}
 
 			// Apply original buffer flip
@@ -159,8 +159,8 @@ namespace castor3d
 				, *buffer };
 			return engine.createImage( name
 				, image.getPath()
-				, std::move( layout )
-				, std::move( buffer ) );
+				, castor::move( layout )
+				, castor::move( buffer ) );
 		}
 
 		static castor::ImageRes loadSource( Engine & engine
@@ -198,7 +198,7 @@ namespace castor3d
 
 		static bool findUnit( Engine & engine
 			, castor::CheckedMutex & loadMtx
-			, std::unordered_map< size_t, TextureUnitUPtr > & loaded
+			, castor::UnorderedMap< size_t, TextureUnitUPtr > & loaded
 			, TextureUnitData & data
 			, TextureUnitRPtr & result )
 		{
@@ -238,7 +238,7 @@ namespace castor3d
 		}
 
 		static bool hasElems( castor::CheckedMutex & loadMtx
-			, std::vector< std::unique_ptr< TextureUnitCache::ThreadData > > const & loading )
+			, castor::Vector< castor::RawUniquePtr< TextureUnitCache::ThreadData > > const & loading )
 		{
 			auto lock( castor::makeUniqueLock( loadMtx ) );
 			return !loading.empty();
@@ -342,7 +342,7 @@ namespace castor3d
 
 		// Bindless textures initialisation
 		// Descriptor layout first.
-		std::array< VkDescriptorBindingFlags, 1u > bindlessFlags{ ( VK_DESCRIPTOR_BINDING_PARTIALLY_BOUND_BIT
+		castor::Array< VkDescriptorBindingFlags, 1u > bindlessFlags{ ( VK_DESCRIPTOR_BINDING_PARTIALLY_BOUND_BIT
 				| VK_DESCRIPTOR_BINDING_VARIABLE_DESCRIPTOR_COUNT_BIT
 				| VK_DESCRIPTOR_BINDING_UPDATE_AFTER_BIND_BIT ) };
 		auto extendedInfo = makeVkStruct< VkDescriptorSetLayoutBindingFlagsCreateInfo >( uint32_t( bindlessFlags.size() )
@@ -366,7 +366,7 @@ namespace castor3d
 			, poolSizes );
 
 		// And the descriptor set.
-		std::array< uint32_t, 1u > maxBindings{ device.getMaxBindlessSampled() - 1u };
+		castor::Array< uint32_t, 1u > maxBindings{ device.getMaxBindlessSampled() - 1u };
 		auto countInfo = makeVkStruct< VkDescriptorSetVariableDescriptorCountAllocateInfo >( uint32_t( maxBindings.size() )
 			, maxBindings.data() );
 		m_bindlessTexSet = m_bindlessTexPool->createDescriptorSet( "SceneRenderNodesTextures"
@@ -429,10 +429,10 @@ namespace castor3d
 			return;
 		}
 
-		std::vector< ashes::WriteDescriptorSet > tmp;
+		castor::Vector< ashes::WriteDescriptorSet > tmp;
 		{
 			auto lock( castor::makeUniqueLock( m_dirtyWritesMtx ) );
-			std::swap( m_dirtyWrites, tmp );
+			castor::swap( m_dirtyWrites, tmp );
 		}
 
 		if ( !tmp.empty() )
@@ -443,10 +443,10 @@ namespace castor3d
 
 	void TextureUnitCache::upload( UploadData & uploader )
 	{
-		std::map< TextureData *, Texture * > toUpload;
+		castor::Map< TextureData *, Texture * > toUpload;
 		{
 			auto lock( castor::makeUniqueLock( m_uploadMtx ) );
-			toUpload = std::move( m_toUpload );
+			toUpload = castor::move( m_toUpload );
 		}
 
 		for ( auto [data, texture] : toUpload )
@@ -617,7 +617,7 @@ namespace castor3d
 
 					result->setSampler( unitData.passConfig.sampler );
 					result->setTexture( texture );
-					result->setConfiguration( std::move( config ) );
+					result->setConfiguration( castor::move( config ) );
 
 					result->initialise();
 
@@ -652,14 +652,14 @@ namespace castor3d
 			auto & sourceData = getSourceData( sourceInfo );
 			it->second = castor::makeUnique< TextureUnitData >( &sourceData
 				, passConfig
-				, std::move( animation ) );
+				, castor::move( animation ) );
 		}
 
 		return *it->second;
 	}
 
 	Texture const * TextureUnitCache::doGetTexture( TextureData & data
-		, std::function< void( TextureData const &, Texture const *, bool ) > const & onEndCpuLoad )
+		, castor::Function< void( TextureData const &, Texture const *, bool ) > const & onEndCpuLoad )
 	{
 		Texture * result{};
 		bool wasFound{};
@@ -775,7 +775,7 @@ namespace castor3d
 	TextureUnitCache::ThreadData & TextureUnitCache::doCreateThreadData( TextureData & data )
 	{
 		auto lock( castor::makeUniqueLock( m_loadMtx ) );
-		m_loading.emplace_back( std::make_unique< ThreadData >( data ) );
+		m_loading.emplace_back( castor::make_unique< ThreadData >( data ) );
 		return *m_loading.back();
 	}
 
@@ -849,7 +849,7 @@ namespace castor3d
 		}
 	}
 
-	std::vector< TextureUnit * > TextureUnitCache::doListTextureUnits( Texture const * texture )
+	castor::Vector< TextureUnit * > TextureUnitCache::doListTextureUnits( Texture const * texture )
 	{
 		auto lock( castor::makeUniqueLock( m_loadMtx ) );
 		auto it = m_unitsToAdd.find( texture );
@@ -859,7 +859,7 @@ namespace castor3d
 			return {};
 		}
 
-		auto result = std::move( it->second );
+		auto result = castor::move( it->second );
 		m_unitsToAdd.erase( it );
 		return result;
 	}

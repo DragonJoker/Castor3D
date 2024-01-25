@@ -15,7 +15,7 @@ namespace castor3d
 	{
 	protected:
 		explicit ToneMappingVisitor( Config config = { false } )
-			: ConfigurationVisitor{ std::move( config ) }
+			: ConfigurationVisitor{ castor::move( config ) }
 		{
 		}
 

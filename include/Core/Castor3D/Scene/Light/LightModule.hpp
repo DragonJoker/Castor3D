@@ -135,9 +135,9 @@ namespace castor3d
 	//! Array to non owning light pointers
 	CU_DeclareVector( LightRPtr, LightsRef );
 	//! Array of lights per light type.
-	using LightsMap = std::array< LightsArray, size_t( LightType::eCount ) >;
+	using LightsMap = castor::Array< LightsArray, size_t( LightType::eCount ) >;
 
-	using OnLightChangedFunction = std::function< void( Light & ) >;
+	using OnLightChangedFunction = castor::Function< void( Light & ) >;
 	using OnLightChanged = castor::SignalT< OnLightChangedFunction >;
 	using OnLightChangedConnection = OnLightChanged::connection;
 	/**
@@ -191,10 +191,10 @@ namespace castor3d
 	struct DirectionalShadowData
 		: BaseShadowData
 	{
-		using CascasdeFloatArray = std::array< f32, ashes::getAlignedSize( MaxDirectionalCascadesCount, 4u ) >;
+		using CascasdeFloatArray = castor::Array< f32, ashes::getAlignedSize( MaxDirectionalCascadesCount, 4u ) >;
 		CascasdeFloatArray splitDepths;
 		CascasdeFloatArray splitScales;
-		std::array< castor::Matrix4x4f, MaxDirectionalCascadesCount > transforms;
+		castor::Array< castor::Matrix4x4f, MaxDirectionalCascadesCount > transforms;
 	};
 
 	struct SpotShadowData
@@ -208,8 +208,8 @@ namespace castor3d
 	struct AllShadowData
 	{
 		DirectionalShadowData directional;
-		std::array< PointShadowData, MaxPointShadowMapCount > point;
-		std::array< SpotShadowData, MaxSpotShadowMapCount > spot;
+		castor::Array< PointShadowData, MaxPointShadowMapCount > point;
+		castor::Array< SpotShadowData, MaxSpotShadowMapCount > spot;
 	};
 	/**
 	*\~english

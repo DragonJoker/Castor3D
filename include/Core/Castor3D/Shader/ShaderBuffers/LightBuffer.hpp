@@ -142,7 +142,7 @@ namespace castor3d
 		}
 
 	private:
-		std::pair< uint32_t, uint32_t > doGetOffsetIndex( Light const & light )const;
+		castor::Pair< uint32_t, uint32_t > doGetOffsetIndex( Light const & light )const;
 		void doMarkNextDirty( LightType type
 			, uint32_t index );
 		uint32_t doGetBufferEnd( LightType type )const noexcept;
@@ -150,11 +150,11 @@ namespace castor3d
 	private:
 		ShaderBuffer m_buffer;
 		LightsMap m_typeSortedLights;
-		std::vector< Light * > m_dirty;
-		std::map< Light *, OnLightChangedConnection > m_connections;
-		std::vector< uint32_t > m_lightSizes;
+		castor::Vector< Light * > m_dirty;
+		castor::Map< Light *, OnLightChangedConnection > m_connections;
+		castor::Vector< uint32_t > m_lightSizes;
 		LightsData m_data;
-		mutable std::mutex m_mutex;
+		mutable castor::Mutex m_mutex;
 		bool m_wasDirty{};
 	};
 }

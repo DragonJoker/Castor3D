@@ -23,18 +23,18 @@
 namespace castor3d
 {
 	DirectUploadData::DirectUploadData( RenderDevice const & device
-		, std::string debugName
+		, castor::String debugName
 		, ashes::CommandBuffer const & commandBuffer )
 		: CommandBufferHolder{ nullptr }
-		, UploadData{ device, std::move( debugName ), &commandBuffer }
+		, UploadData{ device, castor::move( debugName ), &commandBuffer }
 	{
 	}
 
 	DirectUploadData::DirectUploadData( RenderDevice const & device
-		, std::string debugName
+		, castor::String debugName
 		, ashes::CommandPool const & commandPool )
-		: CommandBufferHolder{ commandPool.createCommandBuffer( debugName ) }
-		, UploadData{ device, std::move( debugName ), CommandBufferHolder::getData().get() }
+		: CommandBufferHolder{ commandPool.createCommandBuffer( castor::toUtf8( debugName ) ) }
+		, UploadData{ device, castor::move( debugName ), CommandBufferHolder::getData().get() }
 	{
 	}
 
@@ -51,7 +51,7 @@ namespace castor3d
 
 	VkDeviceSize DirectUploadData::doUpload( ImageDataRange & data )
 	{
-		traceUpload( "    Registering image upload commands: [" << data.dstImage->getName()
+		traceUpload( "    Registering image upload commands: [" << castor::makeString( data.dstImage->getName() )
 			<< "], Layout: [" << data.dstLayout
 			<< "], Range: [" << data.dstRange
 			<< ", Upload Size: " << data.srcSize
@@ -63,7 +63,7 @@ namespace castor3d
 				, mappedSize
 				, VK_BUFFER_USAGE_TRANSFER_SRC_BIT
 				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-				, m_debugName + "/StagingBuffer" ) );
+				, m_debugName + cuT( "/StagingBuffer" ) ) );
 			doCopyData( data.srcData, data.srcSize, buffer, 0u ) )
 		{
 			m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_HOST_BIT

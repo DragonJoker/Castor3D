@@ -27,7 +27,7 @@ namespace c3d_gltf
 		{
 			auto count = impAccessor.count;
 			auto lineCount = count / 2u;
-			std::vector< castor3d::LineIndices > indicesGroup;
+			castor::Vector< castor3d::LineIndices > indicesGroup;
 			indicesGroup.reserve( lineCount );
 			castor3d::LineIndices curIndices;
 			uint32_t idx{};
@@ -60,7 +60,7 @@ namespace c3d_gltf
 				--lineCount;
 			}
 
-			std::vector< castor3d::LineIndices > indicesGroup;
+			castor::Vector< castor3d::LineIndices > indicesGroup;
 			indicesGroup.reserve( lineCount );
 			castor3d::LineIndices curIndices;
 			uint32_t prvIndex{ ~0u };
@@ -99,7 +99,7 @@ namespace c3d_gltf
 		{
 			auto count = impAccessor.count;
 			auto faceCount = count / 3u;
-			std::vector< castor3d::FaceIndices > indicesGroup;
+			castor::Vector< castor3d::FaceIndices > indicesGroup;
 			indicesGroup.reserve( faceCount );
 			castor3d::FaceIndices curIndices;
 			uint32_t idx{};
@@ -114,7 +114,7 @@ namespace c3d_gltf
 					if ( idx == 3u )
 					{
 						idx = 0u;
-						std::swap( curIndices[0], curIndices[1] );
+						castor::swap( curIndices[0], curIndices[1] );
 						indicesGroup.push_back( curIndices );
 					}
 				} );
@@ -137,7 +137,7 @@ namespace c3d_gltf
 				} );
 
 			auto faceCount = count - 2u;
-			std::vector< castor3d::FaceIndices > indicesGroup;
+			castor::Vector< castor3d::FaceIndices > indicesGroup;
 			indicesGroup.reserve( faceCount );
 			castor3d::FaceIndices curIndices;
 
@@ -196,7 +196,7 @@ namespace c3d_gltf
 		static bool parseAttributeData( fastgltf::Asset const & impAsset
 			, auto const & impAttributes
 			, std::pmr::string const & attrName
-			, std::vector< castor::Point< DstDataT, DstCountT > > & result )
+			, castor::Vector< castor::Point< DstDataT, DstCountT > > & result )
 		{
 			auto it = findAttribute( impAttributes, attrName );
 
@@ -220,7 +220,7 @@ namespace c3d_gltf
 					if constexpr ( SrcCountT == DstCountT && std::is_same_v< SrcDataT, DstDataT > )
 					{
 
-						result.push_back( std::move( value ) );
+						result.push_back( castor::move( value ) );
 					}
 					else
 					{
@@ -267,7 +267,7 @@ namespace c3d_gltf
 		}
 
 		template< uint32_t CountT >
-		static void applyWeight( std::vector< castor::Point< float, CountT > > & points
+		static void applyWeight( castor::Vector< castor::Point< float, CountT > > & points
 			, float weight )
 		{
 			for ( auto & point : points )
@@ -309,9 +309,9 @@ namespace c3d_gltf
 		}
 
 		castor3d::log::info << cuT( "  Mesh found: [" ) << name << cuT( "]" ) << std::endl;
-		using PrimitiveMap = std::map< fastgltf::PrimitiveType, PrimitiveArray >;
-		using MaterialPrimitiveMap = std::map< castor3d::Material *, PrimitiveMap >;
-		std::map< fastgltf::Mesh const *, MaterialPrimitiveMap > submeshes;
+		using PrimitiveMap = castor::Map< fastgltf::PrimitiveType, PrimitiveArray >;
+		using MaterialPrimitiveMap = castor::Map< castor3d::Material *, PrimitiveMap >;
+		castor::Map< fastgltf::Mesh const *, MaterialPrimitiveMap > submeshes;
 		auto & engine = *file.getOwner();
 
 		for ( auto & submesh : it->second.submeshes )
@@ -563,7 +563,7 @@ namespace c3d_gltf
 					count = uint32_t( faceCount  * 3u );
 				}
 
-				std::vector< castor3d::FaceIndices > indicesGroup;
+				castor::Vector< castor3d::FaceIndices > indicesGroup;
 				indicesGroup.reserve( faceCount );
 				castor3d::FaceIndices indices{};
 
@@ -627,7 +627,7 @@ namespace c3d_gltf
 				auto mapping = castor::makeUnique< castor3d::TriFaceMapping >( *submesh );
 				uint32_t count = submesh->getPointsCount();
 				uint32_t faceCount = count  - 2;
-				std::vector< castor3d::FaceIndices > indicesGroup;
+				castor::Vector< castor3d::FaceIndices > indicesGroup;
 				indicesGroup.reserve( faceCount );
 				castor3d::FaceIndices indices{};
 
@@ -701,7 +701,7 @@ namespace c3d_gltf
 				auto mapping = castor::makeUnique< castor3d::TriFaceMapping >( *submesh );
 				uint32_t count = submesh->getPointsCount();
 				uint32_t faceCount = count - 2;
-				std::vector< castor3d::FaceIndices > indicesGroup;
+				castor::Vector< castor3d::FaceIndices > indicesGroup;
 				indicesGroup.reserve( faceCount );
 				castor3d::FaceIndices indices{};
 				indices.m_index[0] = 0;
@@ -803,7 +803,7 @@ namespace c3d_gltf
 			, *texcoords2
 			, *texcoords3
 			, *colours );
-		std::vector< castor3d::SubmeshAnimationBuffer > morphTargets;
+		castor::Vector< castor3d::SubmeshAnimationBuffer > morphTargets;
 		uint32_t index{};
 
 		for ( auto & impAttributes : impPrimitive.targets )
@@ -826,7 +826,7 @@ namespace c3d_gltf
 				meshes::applyWeight( buffer, impMesh.weights[index++] );
 			}
 
-			morphTargets.emplace_back( std::move( buffer ) );
+			morphTargets.emplace_back( castor::move( buffer ) );
 		}
 
 		if ( !morphTargets.empty() )
@@ -909,7 +909,7 @@ namespace c3d_gltf
 	}
 
 	void GltfMeshImporter::doTransformMesh( fastgltf::Node const & impNode
-		, std::vector< fastgltf::Node > const & impNodes
+		, castor::Vector< fastgltf::Node > const & impNodes
 		, castor3d::Mesh & mesh
 		, castor::Matrix4x4f transformAcc )
 	{

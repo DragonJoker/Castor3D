@@ -204,7 +204,7 @@ namespace castor
 		int32_t yMin{ 100 };
 		int32_t yMax{};
 		uint32_t firstCharIndex{};
-		std::vector< uint32_t > chars{};
+		Vector< uint32_t > chars{};
 	};
 	/**
 	\~english
@@ -218,7 +218,7 @@ namespace castor
 		int32_t yMax{};
 		uint32_t width{};
 		uint32_t height{};
-		std::vector< TextLineMetrics > lines{};
+		Vector< TextLineMetrics > lines{};
 	};
 	/**
 	\~english
@@ -434,8 +434,8 @@ namespace castor
 		eStencil = 0x20,
 	};
 	CU_ImplementFlags( PixelComponent )
-	CU_API std::string getName( PixelComponent const & component );
-	CU_API std::string getName( PixelComponents const & components );
+	CU_API String getName( PixelComponent const & component );
+	CU_API String getName( PixelComponents const & components );
 	/**
 	\~english
 	\brief		Holds colour/depth/stencil PixelComponentsT helper functions
@@ -844,8 +844,8 @@ namespace castor
 	};
 	using FontCacheTraits = ResourceCacheTraitsT< Font, String >;
 
-	using ImageLoaderPtr = std::unique_ptr< ImageLoaderImpl >;
-	using ImageWriterPtr = std::unique_ptr< ImageWriterImpl >;
+	using ImageLoaderPtr = castor::RawUniquePtr< ImageLoaderImpl >;
+	using ImageWriterPtr = castor::RawUniquePtr< ImageWriterImpl >;
 	using PixelBuffer = PxBuffer< PixelFormat::eR8G8B8A8_UNORM >;
 	using FontCache = ResourceCacheT< Font, String, FontCacheTraits >;
 
@@ -861,7 +861,7 @@ namespace castor
 	using HdrRgbColour = RgbColourT< HdrColourComponent >;
 	using HdrRgbaColour = RgbaColourT< HdrColourComponent >;
 
-	CU_API bool hasAlphaChannel( castor::Image const & image );
+	CU_API bool hasAlphaChannel( Image const & image );
 	//@}
 }
 

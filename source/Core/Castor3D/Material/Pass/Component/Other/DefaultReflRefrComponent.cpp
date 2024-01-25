@@ -46,7 +46,7 @@ namespace castor3d
 	{
 		if ( mippedScene.isEnabled() )
 		{
-			auto debugOutputBlock = debugOutput.pushBlock( "Reflections" );
+			auto debugOutputBlock = debugOutput.pushBlock( cuT( "Reflections" ) );
 			reflections.computeCombined( components
 				, lightSurface
 				, lightSurface.worldPosition().xyz()
@@ -109,7 +109,7 @@ namespace castor3d
 		, sdw::Vec3 & sheenReflected
 		, shader::DebugOutput & debugOutput )const
 	{
-		auto debugOutputBlock = debugOutput.pushBlock( "Reflections" );
+		auto debugOutputBlock = debugOutput.pushBlock( cuT( "Reflections" ) );
 		reflections.computeCombined( components
 			, lightSurface
 			, backgroundModel

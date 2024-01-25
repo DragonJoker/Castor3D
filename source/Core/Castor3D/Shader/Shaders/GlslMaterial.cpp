@@ -106,7 +106,7 @@ namespace castor3d::shader
 	Material::Material( sdw::ShaderWriter & writer
 		, ast::expr::ExprPtr expr
 		, bool enabled )
-		: StructInstance{ writer, std::move( expr ), enabled }
+		: StructInstance{ writer, castor::move( expr ), enabled }
 		, passId{ getMember< sdw::UInt >( "passId" ) }
 		, index{ getMember < sdw::UInt >( "index" ) }
 		, passCount{ getMember < sdw::UInt >( "passCount" ) }
@@ -248,7 +248,7 @@ namespace castor3d::shader
 	{
 		sdw::expr::ExprList initializers;
 		auto type = Material::makeType( writer.getTypesCache(), passShaders, initializers );
-		return sdw::makeAggrInit( type, std::move( initializers ) );
+		return sdw::makeAggrInit( type, castor::move( initializers ) );
 	}
 
 	//*********************************************************************************************

@@ -36,7 +36,7 @@ namespace castor
 		{
 			log::info << tabs() << cuT( "Writing ImageBackground" ) << std::endl;
 			return writeFile( file
-				, "background_image"
+				, cuT( "background_image" )
 				, background.getImagePath()
 				, m_folder
 				, cuT( "Textures" ) );
@@ -123,7 +123,7 @@ namespace castor3d
 				, ( VK_IMAGE_USAGE_TRANSFER_SRC_BIT
 					| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) };
 			m_2dTexture = castor::makeUnique< TextureLayout >( *getScene().getEngine()->getRenderSystem()
-				, std::move( image )
+				, castor::move( image )
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, cuT( "SkyboxBackground2D" ) );
 			m_2dTexture->setSource( folder, relative );

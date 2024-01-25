@@ -53,7 +53,7 @@ namespace castor3d
 		, castor::String type
 		, TextureFlags textureFlags
 		, castor::StringArray deps )
-		: PassComponent{ pass, std::move( type ), std::move( deps ) }
+		: PassComponent{ pass, castor::move( type ), castor::move( deps ) }
 		, m_textureFlags{ makeTextureFlag( getId(), textureFlags ) }
 	{
 	}

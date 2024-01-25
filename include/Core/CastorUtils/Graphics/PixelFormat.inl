@@ -1026,17 +1026,17 @@ namespace castor
 	{
 		switch ( component )
 		{
-		case castor::PixelComponent::eRed:
+		case PixelComponent::eRed:
 			return 0u;
-		case castor::PixelComponent::eGreen:
+		case PixelComponent::eGreen:
 			return 1u;
-		case castor::PixelComponent::eBlue:
+		case PixelComponent::eBlue:
 			return 2u;
-		case castor::PixelComponent::eAlpha:
+		case PixelComponent::eAlpha:
 			return 3u;
-		case castor::PixelComponent::eDepth:
+		case PixelComponent::eDepth:
 			return 0u;
-		case castor::PixelComponent::eStencil:
+		case PixelComponent::eStencil:
 			return 1u;
 		default:
 			return 0u;
@@ -1050,13 +1050,13 @@ namespace castor
 		{
 			switch ( component )
 			{
-			case castor::PixelComponent::eAlpha:
+			case PixelComponent::eAlpha:
 				return 0u;
-			case castor::PixelComponent::eBlue:
+			case PixelComponent::eBlue:
 				return 1u;
-			case castor::PixelComponent::eGreen:
+			case PixelComponent::eGreen:
 				return 2u;
-			case castor::PixelComponent::eRed:
+			case PixelComponent::eRed:
 				return 3u;
 			default:
 				return 0u;
@@ -1066,13 +1066,13 @@ namespace castor
 		{
 			switch ( component )
 			{
-			case castor::PixelComponent::eBlue:
+			case PixelComponent::eBlue:
 				return 0u;
-			case castor::PixelComponent::eGreen:
+			case PixelComponent::eGreen:
 				return 1u;
-			case castor::PixelComponent::eRed:
+			case PixelComponent::eRed:
 				return 2u;
-			case castor::PixelComponent::eAlpha:
+			case PixelComponent::eAlpha:
 				return 3u;
 			default:
 				return 0u;
@@ -1082,11 +1082,11 @@ namespace castor
 		{
 			switch ( component )
 			{
-			case castor::PixelComponent::eBlue:
+			case PixelComponent::eBlue:
 				return 0u;
-			case castor::PixelComponent::eGreen:
+			case PixelComponent::eGreen:
 				return 1u;
-			case castor::PixelComponent::eRed:
+			case PixelComponent::eRed:
 				return 2u;
 			default:
 				return 0u;
@@ -1096,17 +1096,17 @@ namespace castor
 		{
 			switch ( component )
 			{
-			case castor::PixelComponent::eRed:
+			case PixelComponent::eRed:
 				return 0u;
-			case castor::PixelComponent::eGreen:
+			case PixelComponent::eGreen:
 				return 1u;
-			case castor::PixelComponent::eBlue:
+			case PixelComponent::eBlue:
 				return 2u;
-			case castor::PixelComponent::eAlpha:
+			case PixelComponent::eAlpha:
 				return 3u;
-			case castor::PixelComponent::eDepth:
+			case PixelComponent::eDepth:
 				return 0u;
-			case castor::PixelComponent::eStencil:
+			case PixelComponent::eStencil:
 				return 1u;
 			default:
 				return 0u;
@@ -1122,15 +1122,15 @@ namespace castor
 			switch ( index )
 			{
 			case 0u:
-				return castor::PixelComponent::eAlpha;
+				return PixelComponent::eAlpha;
 			case 1u:
-				return castor::PixelComponent::eBlue;
+				return PixelComponent::eBlue;
 			case 2u:
-				return castor::PixelComponent::eGreen;
+				return PixelComponent::eGreen;
 			case 3u:
-				return castor::PixelComponent::eRed;
+				return PixelComponent::eRed;
 			default:
-				return castor::PixelComponent::eRed;
+				return PixelComponent::eRed;
 			}
 		}
 		else if ( isBGRAFormat( format ) )
@@ -1138,15 +1138,15 @@ namespace castor
 			switch ( index )
 			{
 			case 0u:
-				return castor::PixelComponent::eBlue;
+				return PixelComponent::eBlue;
 			case 1u:
-				return castor::PixelComponent::eGreen;
+				return PixelComponent::eGreen;
 			case 2u:
-				return castor::PixelComponent::eRed;
+				return PixelComponent::eRed;
 			case 3u:
-				return castor::PixelComponent::eAlpha;
+				return PixelComponent::eAlpha;
 			default:
-				return castor::PixelComponent::eRed;
+				return PixelComponent::eRed;
 			}
 		}
 		else if ( isBGRFormat( format ) )
@@ -1154,13 +1154,13 @@ namespace castor
 			switch ( index )
 			{
 			case 0u:
-				return castor::PixelComponent::eBlue;
+				return PixelComponent::eBlue;
 			case 1u:
-				return castor::PixelComponent::eGreen;
+				return PixelComponent::eGreen;
 			case 2u:
-				return castor::PixelComponent::eRed;
+				return PixelComponent::eRed;
 			default:
-				return castor::PixelComponent::eRed;
+				return PixelComponent::eRed;
 			}
 		}
 		else if ( isDepthOrStencilFormat( format ) )
@@ -1168,11 +1168,11 @@ namespace castor
 			switch ( index )
 			{
 			case 0u:
-				return castor::PixelComponent::eDepth;
+				return PixelComponent::eDepth;
 			case 1u:
-				return castor::PixelComponent::eStencil;
+				return PixelComponent::eStencil;
 			default:
-				return castor::PixelComponent::eDepth;
+				return PixelComponent::eDepth;
 			}
 		}
 		else
@@ -1180,63 +1180,63 @@ namespace castor
 			switch ( index )
 			{
 			case 0u:
-				return castor::PixelComponent::eRed;
+				return PixelComponent::eRed;
 			case 1u:
-				return castor::PixelComponent::eGreen;
+				return PixelComponent::eGreen;
 			case 2u:
-				return castor::PixelComponent::eBlue;
+				return PixelComponent::eBlue;
 			case 3u:
-				return castor::PixelComponent::eAlpha;
+				return PixelComponent::eAlpha;
 			default:
-				return castor::PixelComponent::eRed;
+				return PixelComponent::eRed;
 			}
 		}
 	}
 
-	constexpr castor::PixelComponents getComponents( PixelFormat format )
+	constexpr PixelComponents getComponents( PixelFormat format )
 	{
 		if ( isRGBAFormat( format )
 			|| isARGBFormat( format )
 			|| isBGRAFormat( format )
 			|| isABGRFormat( format ) )
 		{
-			return ( castor::PixelComponent::eRed
-				| castor::PixelComponent::eGreen
-				| castor::PixelComponent::eBlue
-				| castor::PixelComponent::eAlpha );
+			return ( PixelComponent::eRed
+				| PixelComponent::eGreen
+				| PixelComponent::eBlue
+				| PixelComponent::eAlpha );
 		}
 
 		if ( isRGBFormat( format )
 			|| isBGRFormat( format ) )
 		{
-			return ( castor::PixelComponent::eRed
-				| castor::PixelComponent::eGreen
-				| castor::PixelComponent::eBlue );
+			return ( PixelComponent::eRed
+				| PixelComponent::eGreen
+				| PixelComponent::eBlue );
 		}
 
 		if ( isRGFormat( format ) )
 		{
-			return ( castor::PixelComponent::eRed
-				| castor::PixelComponent::eGreen );
+			return ( PixelComponent::eRed
+				| PixelComponent::eGreen );
 		}
 
 		if ( ashes::isDepthStencilFormat( VkFormat( format ) ) )
 		{
-			return ( castor::PixelComponent::eDepth
-				| castor::PixelComponent::eStencil );
+			return ( PixelComponent::eDepth
+				| PixelComponent::eStencil );
 		}
 
 		if ( ashes::isDepthFormat( VkFormat( format ) ) )
 		{
-			return castor::PixelComponent::eDepth;
+			return PixelComponent::eDepth;
 		}
 
 		if ( ashes::isStencilFormat( VkFormat( format ) ) )
 		{
-			return castor::PixelComponent::eStencil;
+			return PixelComponent::eStencil;
 		}
 
-		return castor::PixelComponent::eRed;
+		return PixelComponent::eRed;
 	}
 }
 

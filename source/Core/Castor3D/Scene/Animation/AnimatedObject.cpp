@@ -100,7 +100,7 @@ namespace castor3d
 
 		if ( it == m_animations.end() )
 		{
-			CU_Exception( cuT( "No animation named " ) + name );
+			CU_Exception( "No animation named " + castor::toUtf8( name ) );
 		}
 
 		return *it->second;

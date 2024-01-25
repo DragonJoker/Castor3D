@@ -32,9 +32,9 @@ namespace castor3d
 		explicit TextureSource( castor::Image & image
 			, castor::String name
 			, castor::ImageLayout layout )
-			: castor::Named{ std::move( name ) }
+			: castor::Named{ castor::move( name ) }
 			, m_image{ &image }
-			, m_layout{ std::move( layout ) }
+			, m_layout{ castor::move( layout ) }
 		{
 		}
 

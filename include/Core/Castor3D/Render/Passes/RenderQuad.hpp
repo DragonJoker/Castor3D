@@ -71,7 +71,7 @@ namespace castor3d
 			ashes::Optional< VkImageViewType > viewType;
 			VkShaderStageFlags stageFlags;
 		};
-		using BindingDescriptionArray = std::vector< BindingDescription >;
+		using BindingDescriptionArray = castor::Vector< BindingDescription >;
 
 		template< template< typename ValueT > typename WrapperT >
 		struct ConfigT
@@ -326,9 +326,9 @@ namespace castor3d
 		ashes::PipelineLayoutPtr m_pipelineLayout;
 		ashes::GraphicsPipelinePtr m_pipeline;
 		ashes::DescriptorSetPoolPtr m_descriptorSetPool;
-		std::vector< ashes::WriteDescriptorSetArray > m_passes;
-		std::vector< ashes::DescriptorSetPtr > m_descriptorSets;
-		std::vector< bool > m_invertY;
+		castor::Vector< ashes::WriteDescriptorSetArray > m_passes;
+		castor::Vector< ashes::DescriptorSetPtr > m_descriptorSets;
+		castor::Vector< bool > m_invertY;
 		ashes::VertexBufferPtr< TexturedQuad::Vertex > m_vertexBuffer;
 		ashes::VertexBufferPtr< TexturedQuad::Vertex > m_uvInvVertexBuffer;
 	};

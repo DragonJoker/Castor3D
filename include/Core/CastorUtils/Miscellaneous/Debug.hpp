@@ -14,7 +14,7 @@ namespace castor
 {
 	class DynamicLibrary;
 
-	namespace Debug
+	namespace debug
 	{
 		struct Backtrace
 		{
@@ -63,16 +63,7 @@ namespace castor
 		 *\brief			Transmet la pile d'appels dans un flux
 		 *\param[in,out]	stream	Le flux
 		 */
-		CU_API std::wostream & operator<<( std::wostream & stream, Backtrace const & );
-		/**
-		 *\~english
-		 *\brief			Puts the backtrace into a stream
-		 *\param[in,out]	stream	The stream
-		 *\~french
-		 *\brief			Transmet la pile d'appels dans un flux
-		 *\param[in,out]	stream	Le flux
-		 */
-		CU_API std::ostream & operator<<( std::ostream & stream, Backtrace const & );
+		CU_API OutputStream & operator<<( OutputStream & stream, Backtrace const & );
 
 		/**
 		\author 	Sylvain DOREMUS
@@ -94,29 +85,26 @@ namespace castor
 			}
 
 		private:
-			static std::string doGetCallStack()
+			static String doGetCallStack()
 			{
-				std::stringstream callStack;
-				callStack << castor::Debug::Backtrace{};
+				StringStream callStack;
+				callStack << debug::Backtrace{};
 				return callStack.str();
 			}
 
 		protected:
-			std::string m_callStack;
-			friend std::ostream & operator<<( std::ostream & stream, Backtraced const & traced );
+			String m_callStack;
+			friend OutputStream & operator<<( OutputStream & stream, Backtraced const & traced );
 
 #endif
 		};
 
-		inline std::ostream & operator<<( std::ostream & stream
+		inline OutputStream & operator<<( OutputStream & stream
 			, [[maybe_unused]] Backtraced const & traced )
 		{
 #if !defined( NDEBUG )
-
 			stream << traced.m_callStack;
-
 #endif
-
 			return stream;
 		}
 	}

@@ -393,39 +393,39 @@ namespace castor3d
 	*/
 	class StaticStyle;
 
-	using OnControlEventFunction = std::function< void() >;
+	using OnControlEventFunction = castor::Function< void() >;
 	using OnControlEvent = castor::SignalT< OnControlEventFunction >;
 	using OnControlEventConnection = OnControlEvent::connection;
 
-	using OnButtonEventFunction = std::function< void() >;
+	using OnButtonEventFunction = castor::Function< void() >;
 	using OnButtonEvent = castor::SignalT< OnButtonEventFunction >;
 	using OnButtonEventConnection = OnButtonEvent::connection;
 
-	using OnComboEventFunction = std::function< void( int32_t ) >;
+	using OnComboEventFunction = castor::Function< void( int32_t ) >;
 	using OnComboEvent = castor::SignalT< OnComboEventFunction >;
 	using OnComboEventConnection = OnComboEvent::connection;
 
-	using OnEditEventFunction = std::function< void( castor::U32String const & ) >;
+	using OnEditEventFunction = castor::Function< void( castor::U32String const & ) >;
 	using OnEditEvent = castor::SignalT< OnEditEventFunction >;
 	using OnEditEventConnection = OnEditEvent::connection;
 
-	using OnExpandablePanelEventFunction = std::function< void() >;
+	using OnExpandablePanelEventFunction = castor::Function< void() >;
 	using OnExpandablePanelEvent = castor::SignalT< OnExpandablePanelEventFunction >;
 	using OnExpandablePanelEventConnection = OnExpandablePanelEvent::connection;
 
-	using OnListEventFunction = std::function< void( int32_t ) >;
+	using OnListEventFunction = castor::Function< void( int32_t ) >;
 	using OnListEvent = castor::SignalT< OnListEventFunction >;
 	using OnListEventConnection = OnListEvent::connection;
 
-	using OnSliderEventFunction = std::function< void( int32_t ) >;
+	using OnSliderEventFunction = castor::Function< void( int32_t ) >;
 	using OnSliderEvent = castor::SignalT< OnSliderEventFunction >;
 	using OnSliderEventConnection = OnSliderEvent::connection;
 
-	using OnScrollBarEventFunction = std::function< void( int32_t ) >;
+	using OnScrollBarEventFunction = castor::Function< void( int32_t ) >;
 	using OnScrollBarEvent = castor::SignalT< OnScrollBarEventFunction >;
 	using OnScrollBarEventConnection = OnScrollBarEvent::connection;
 
-	using OnControlChangedFunction = std::function< void( Control const & ) >;
+	using OnControlChangedFunction = castor::Function< void( Control const & ) >;
 	using OnControlChanged = castor::SignalT< OnControlChangedFunction >;
 	using OnControlChangedConnection = OnControlChanged::connection;
 
@@ -464,7 +464,7 @@ namespace castor3d
 	CU_DeclareSmartPtr( castor3d, SliderStyle, C3D_API );
 	CU_DeclareSmartPtr( castor3d, StaticStyle, C3D_API );
 
-	using ControlArray = std::vector< ControlRPtr >;
+	using ControlArray = castor::Vector< ControlRPtr >;
 
 	template< typename TypeT >
 	concept ControlFlagTypeT = ( std::is_same_v< TypeT, ControlFlagType >

@@ -13,7 +13,7 @@ namespace castor
 
 		for ( size_t i = 0u; i < count; ++i )
 		{
-			m_available.push_back( std::make_unique< WorkerThread >() );
+			m_available.push_back( castor::make_unique< WorkerThread >() );
 			m_endConnections.push_back( m_available.back()->onEnded.connect( [this]( WorkerThread const & worker )
 				{
 					doFreeWorker( worker );
@@ -66,7 +66,7 @@ namespace castor
 	void ThreadPool::pushJob( WorkerThread::Job job )
 	{
 		auto & worker = doReserveWorker();
-		worker.feed( std::move( job ) );
+		worker.feed( castor::move( job ) );
 	}
 
 	WorkerThread & ThreadPool::doReserveWorker()
@@ -79,7 +79,7 @@ namespace castor
 		auto lock( makeUniqueLock( m_mutex ) );
 		auto it = m_available.rbegin();
 		auto & worker = **it;
-		m_busy.push_back( std::move( *it ) );
+		m_busy.push_back( castor::move( *it ) );
 		m_available.erase( ( ++it ).base() );
 		return worker;
 	}
@@ -93,7 +93,7 @@ namespace castor
 			{
 				return lookup.get() == &worker;
 			} );
-		m_available.push_back( std::move( *it ) );
+		m_available.push_back( castor::move( *it ) );
 		m_busy.erase( it );
 	}
 }

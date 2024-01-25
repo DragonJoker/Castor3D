@@ -274,8 +274,8 @@ namespace castor::matrix
 	 *\return		La position transformée.
 	 */
 	template< typename T, typename U >
-	static Quaternion getTransformed( castor::Matrix4x4< T > const & matrix
-		, castor::Quaternion const & value );
+	static Quaternion getTransformed( Matrix4x4< T > const & matrix
+		, Quaternion const & value );
 	/**
 	 *\~english
 	 *\brief		Retrieves the given transformation matrix components.

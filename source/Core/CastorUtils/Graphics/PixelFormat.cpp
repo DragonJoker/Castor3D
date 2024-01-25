@@ -31,7 +31,7 @@ namespace castor
 		}
 
 		if ( result == PixelFormat::eCount
-			&& formatName == "argb32" )
+			&& formatName == cuT( "argb32" ) )
 		{
 			result = PixelFormat::eR8G8B8A8_UNORM;
 		}
@@ -226,382 +226,380 @@ namespace castor
 
 	String getFormatName( PixelFormat format )
 	{
-		String result = "undefined";
-
 		switch ( format )
 		{
-		case castor::PixelFormat::eUNDEFINED:
-			return "undefined";
-		case castor::PixelFormat::eR4G4_UNORM:
-			return "rg8";
-		case castor::PixelFormat::eR4G4B4A4_UNORM:
-			return "rgba16";
-		case castor::PixelFormat::eB4G4R4A4_UNORM:
-			return "rgba16s";
-		case castor::PixelFormat::eR5G6B5_UNORM:
-			return "rgb565";
-		case castor::PixelFormat::eB5G6R5_UNORM:
-			return "bgr565";
-		case castor::PixelFormat::eR5G5B5A1_UNORM:
-			return "rgba5551";
-		case castor::PixelFormat::eB5G5R5A1_UNORM:
-			return "bgra5551";
-		case castor::PixelFormat::eA1R5G5B5_UNORM:
-			return "argb1555";
-		case castor::PixelFormat::eR8_UNORM:
-			return "r8";
-		case castor::PixelFormat::eR8_SNORM:
-			return "r8s";
-		case castor::PixelFormat::eR8_USCALED:
-			return "r8us";
-		case castor::PixelFormat::eR8_SSCALED:
-			return "r8ss";
-		case castor::PixelFormat::eR8_UINT:
-			return "r8ui";
-		case castor::PixelFormat::eR8_SINT:
-			return "r8si";
-		case castor::PixelFormat::eR8_SRGB:
-			return "r8srgb";
-		case castor::PixelFormat::eR8G8_UNORM:
-			return "rg16";
-		case castor::PixelFormat::eR8G8_SNORM:
-			return "rg16s";
-		case castor::PixelFormat::eR8G8_USCALED:
-			return "rg16us";
-		case castor::PixelFormat::eR8G8_SSCALED:
-			return "rg16ss";
-		case castor::PixelFormat::eR8G8_UINT:
-			return "rg16ui";
-		case castor::PixelFormat::eR8G8_SINT:
-			return "rg16si";
-		case castor::PixelFormat::eR8G8_SRGB:
-			return "rg16srgb";
-		case castor::PixelFormat::eR8G8B8_UNORM:
-			return "rgb24";
-		case castor::PixelFormat::eR8G8B8_SNORM:
-			return "rgb24s";
-		case castor::PixelFormat::eR8G8B8_USCALED:
-			return "rgb24us";
-		case castor::PixelFormat::eR8G8B8_SSCALED:
-			return "rgb24ss";
-		case castor::PixelFormat::eR8G8B8_UINT:
-			return "rgb24ui";
-		case castor::PixelFormat::eR8G8B8_SINT:
-			return "rgb24si";
-		case castor::PixelFormat::eR8G8B8_SRGB:
-			return "rgb24srgb";
-		case castor::PixelFormat::eB8G8R8_UNORM:
-			return "bgr24";
-		case castor::PixelFormat::eB8G8R8_SNORM:
-			return "bgr24s";
-		case castor::PixelFormat::eB8G8R8_USCALED:
-			return "bgr24us";
-		case castor::PixelFormat::eB8G8R8_SSCALED:
-			return "bgr24ss";
-		case castor::PixelFormat::eB8G8R8_UINT:
-			return "bgr24ui";
-		case castor::PixelFormat::eB8G8R8_SINT:
-			return "bgr24si";
-		case castor::PixelFormat::eB8G8R8_SRGB:
-			return "bgr24srgb";
-		case castor::PixelFormat::eR8G8B8A8_UNORM:
-			return "rgba32";
-		case castor::PixelFormat::eR8G8B8A8_SNORM:
-			return "rgba32s";
-		case castor::PixelFormat::eR8G8B8A8_USCALED:
-			return "rgba32us";
-		case castor::PixelFormat::eR8G8B8A8_SSCALED:
-			return "rgba32ss";
-		case castor::PixelFormat::eR8G8B8A8_UINT:
-			return "rgba32ui";
-		case castor::PixelFormat::eR8G8B8A8_SINT:
-			return "rgba32si";
-		case castor::PixelFormat::eR8G8B8A8_SRGB:
-			return "rgba32srgb";
-		case castor::PixelFormat::eB8G8R8A8_UNORM:
-			return "bgra32";
-		case castor::PixelFormat::eB8G8R8A8_SNORM:
-			return "bgra32s";
-		case castor::PixelFormat::eB8G8R8A8_USCALED:
-			return "bgra32us";
-		case castor::PixelFormat::eB8G8R8A8_SSCALED:
-			return "bgra32ss";
-		case castor::PixelFormat::eB8G8R8A8_UINT:
-			return "bgra32ui";
-		case castor::PixelFormat::eB8G8R8A8_SINT:
-			return "bgra32si";
-		case castor::PixelFormat::eB8G8R8A8_SRGB:
-			return "bgra32srgb";
-		case castor::PixelFormat::eA8B8G8R8_UNORM:
-			return "abgr32";
-		case castor::PixelFormat::eA8B8G8R8_SNORM:
-			return "abgr32s";
-		case castor::PixelFormat::eA8B8G8R8_USCALED:
-			return "abgr32us";
-		case castor::PixelFormat::eA8B8G8R8_SSCALED:
-			return "abgr32ss";
-		case castor::PixelFormat::eA8B8G8R8_UINT:
-			return "abgr32ui";
-		case castor::PixelFormat::eA8B8G8R8_SINT:
-			return "abgr32si";
-		case castor::PixelFormat::eA8B8G8R8_SRGB:
-			return "abgr32srgb";
-		case castor::PixelFormat::eA2R10G10B10_UNORM:
-			return "argb2101010";
-		case castor::PixelFormat::eA2R10G10B10_SNORM:
-			return "argb2101010s";
-		case castor::PixelFormat::eA2R10G10B10_USCALED:
-			return "argb2101010us";
-		case castor::PixelFormat::eA2R10G10B10_SSCALED:
-			return "argb2101010ss";
-		case castor::PixelFormat::eA2R10G10B10_UINT:
-			return "argb2101010ui";
-		case castor::PixelFormat::eA2R10G10B10_SINT:
-			return "argb2101010si";
-		case castor::PixelFormat::eA2B10G10R10_UNORM:
-			return "abgr2101010";
-		case castor::PixelFormat::eA2B10G10R10_SNORM:
-			return "abgr2101010s";
-		case castor::PixelFormat::eA2B10G10R10_USCALED:
-			return "abgr2101010us";
-		case castor::PixelFormat::eA2B10G10R10_SSCALED:
-			return "abgr2101010ss";
-		case castor::PixelFormat::eA2B10G10R10_UINT:
-			return "abgr2101010ui";
-		case castor::PixelFormat::eA2B10G10R10_SINT:
-			return "abgr2101010si";
-		case castor::PixelFormat::eR16_UNORM:
-			return "r16";
-		case castor::PixelFormat::eR16_SNORM:
-			return "rg16s";
-		case castor::PixelFormat::eR16_USCALED:
-			return "rg16us";
-		case castor::PixelFormat::eR16_SSCALED:
-			return "rg16ss";
-		case castor::PixelFormat::eR16_UINT:
-			return "rg16ui";
-		case castor::PixelFormat::eR16_SINT:
-			return "rg16si";
-		case castor::PixelFormat::eR16_SFLOAT:
-			return "rg16f";
-		case castor::PixelFormat::eR16G16_UNORM:
-			return "rg32";
-		case castor::PixelFormat::eR16G16_SNORM:
-			return "rg32s";
-		case castor::PixelFormat::eR16G16_USCALED:
-			return "rg32us";
-		case castor::PixelFormat::eR16G16_SSCALED:
-			return "rg32ss";
-		case castor::PixelFormat::eR16G16_UINT:
-			return "rg32ui";
-		case castor::PixelFormat::eR16G16_SINT:
-			return "rg32si";
-		case castor::PixelFormat::eR16G16_SFLOAT:
-			return "rg32f";
-		case castor::PixelFormat::eR16G16B16_UNORM:
-			return "rgb48";
-		case castor::PixelFormat::eR16G16B16_SNORM:
-			return "rgb48s";
-		case castor::PixelFormat::eR16G16B16_USCALED:
-			return "rgb48us";
-		case castor::PixelFormat::eR16G16B16_SSCALED:
-			return "rgb48ss";
-		case castor::PixelFormat::eR16G16B16_UINT:
-			return "rgb48ui";
-		case castor::PixelFormat::eR16G16B16_SINT:
-			return "rgb48si";
-		case castor::PixelFormat::eR16G16B16_SFLOAT:
-			return "rgb48f";
-		case castor::PixelFormat::eR16G16B16A16_UNORM:
-			return "rgba64";
-		case castor::PixelFormat::eR16G16B16A16_SNORM:
-			return "rgba64s";
-		case castor::PixelFormat::eR16G16B16A16_USCALED:
-			return "rgba64us";
-		case castor::PixelFormat::eR16G16B16A16_SSCALED:
-			return "rgba64ss";
-		case castor::PixelFormat::eR16G16B16A16_UINT:
-			return "rgba64ui";
-		case castor::PixelFormat::eR16G16B16A16_SINT:
-			return "rgba64si";
-		case castor::PixelFormat::eR16G16B16A16_SFLOAT:
-			return "rgba64f";
-		case castor::PixelFormat::eR32_UINT:
-			return "r32ui";
-		case castor::PixelFormat::eR32_SINT:
-			return "r32si";
-		case castor::PixelFormat::eR32_SFLOAT:
-			return "r32f";
-		case castor::PixelFormat::eR32G32_UINT:
-			return "rg64ui";
-		case castor::PixelFormat::eR32G32_SINT:
-			return "rg64si";
-		case castor::PixelFormat::eR32G32_SFLOAT:
-			return "rg64f";
-		case castor::PixelFormat::eR32G32B32_UINT:
-			return "rgb96ui";
-		case castor::PixelFormat::eR32G32B32_SINT:
-			return "rgb96si";
-		case castor::PixelFormat::eR32G32B32_SFLOAT:
-			return "rgb96f";
-		case castor::PixelFormat::eR32G32B32A32_UINT:
-			return "rgba128ui";
-		case castor::PixelFormat::eR32G32B32A32_SINT:
-			return "rgba128si";
-		case castor::PixelFormat::eR32G32B32A32_SFLOAT:
-			return "rgba128f";
-		case castor::PixelFormat::eR64_UINT:
-			return "r64ui";
-		case castor::PixelFormat::eR64_SINT:
-			return "r64si";
-		case castor::PixelFormat::eR64_SFLOAT:
-			return "r64f";
-		case castor::PixelFormat::eR64G64_UINT:
-			return "rg128ui";
-		case castor::PixelFormat::eR64G64_SINT:
-			return "rg128si";
-		case castor::PixelFormat::eR64G64_SFLOAT:
-			return "rg128f";
-		case castor::PixelFormat::eR64G64B64_UINT:
-			return "rgb192ui";
-		case castor::PixelFormat::eR64G64B64_SINT:
-			return "rgb192si";
-		case castor::PixelFormat::eR64G64B64_SFLOAT:
-			return "rgb192f";
-		case castor::PixelFormat::eR64G64B64A64_UINT:
-			return "rgba256ui";
-		case castor::PixelFormat::eR64G64B64A64_SINT:
-			return "rgba256si";
-		case castor::PixelFormat::eR64G64B64A64_SFLOAT:
-			return "rgba256f";
-		case castor::PixelFormat::eB10G11R11_UFLOAT:
-			return "bgr32f";
-		case castor::PixelFormat::eE5B9G9R9_UFLOAT:
-			return "ebgr32f";
-		case castor::PixelFormat::eD16_UNORM:
-			return "depth16";
-		case castor::PixelFormat::eX8_D24_UNORM:
-			return "depth24";
-		case castor::PixelFormat::eD32_SFLOAT:
-			return "depth32f";
-		case castor::PixelFormat::eS8_UINT:
-			return "stencil8";
-		case castor::PixelFormat::eD16_UNORM_S8_UINT:
-			return "depth16s8";
-		case castor::PixelFormat::eD24_UNORM_S8_UINT:
-			return "depth24s8";
-		case castor::PixelFormat::eD32_SFLOAT_S8_UINT:
-			return "depth32fs8";
-		case castor::PixelFormat::eBC1_RGB_UNORM_BLOCK:
-			return "bc1_rgb";
-		case castor::PixelFormat::eBC1_RGB_SRGB_BLOCK:
-			return "bc1_srgb";
-		case castor::PixelFormat::eBC1_RGBA_UNORM_BLOCK:
-			return "bc1_rgba";
-		case castor::PixelFormat::eBC1_RGBA_SRGB_BLOCK:
-			return "bc1_rgba_srgb";
-		case castor::PixelFormat::eBC2_UNORM_BLOCK:
-			return "bc2_rgba";
-		case castor::PixelFormat::eBC2_SRGB_BLOCK:
-			return "bc2_rgba_srgb";
-		case castor::PixelFormat::eBC3_UNORM_BLOCK:
-			return "bc3_rgba";
-		case castor::PixelFormat::eBC3_SRGB_BLOCK:
-			return "bc3_rgba_srgb";
-		case castor::PixelFormat::eBC4_UNORM_BLOCK:
-			return "bc4_r";
-		case castor::PixelFormat::eBC4_SNORM_BLOCK:
-			return "bc4_r_s";
-		case castor::PixelFormat::eBC5_UNORM_BLOCK:
-			return "bc5_rg";
-		case castor::PixelFormat::eBC5_SNORM_BLOCK:
-			return "bc5_rg_s";
-		case castor::PixelFormat::eBC6H_UFLOAT_BLOCK:
-			return "bc6h";
-		case castor::PixelFormat::eBC6H_SFLOAT_BLOCK:
-			return "bc6h_s";
-		case castor::PixelFormat::eBC7_UNORM_BLOCK:
-			return "bc7";
-		case castor::PixelFormat::eBC7_SRGB_BLOCK:
-			return "bc7_srgb";
-		case castor::PixelFormat::eETC2_R8G8B8_UNORM_BLOCK:
-			return "etc2_rgb";
-		case castor::PixelFormat::eETC2_R8G8B8_SRGB_BLOCK:
-			return "etc2_rgb_srgb";
-		case castor::PixelFormat::eETC2_R8G8B8A1_UNORM_BLOCK:
-			return "etc2_rgba1";
-		case castor::PixelFormat::eETC2_R8G8B8A1_SRGB_BLOCK:
-			return "etc2_rgba1_srgb";
-		case castor::PixelFormat::eETC2_R8G8B8A8_UNORM_BLOCK:
-			return "etc2_rgba";
-		case castor::PixelFormat::eETC2_R8G8B8A8_SRGB_BLOCK:
-			return "etc2_rgba_srgb";
-		case castor::PixelFormat::eEAC_R11_UNORM_BLOCK:
-			return "eac_r";
-		case castor::PixelFormat::eEAC_R11_SNORM_BLOCK:
-			return "eac_r_s";
-		case castor::PixelFormat::eEAC_R11G11_UNORM_BLOCK:
-			return "eac_rg";
-		case castor::PixelFormat::eEAC_R11G11_SNORM_BLOCK:
-			return "eac_rg_s";
-		case castor::PixelFormat::eASTC_4x4_UNORM_BLOCK:
-			return "astc_4x4";
-		case castor::PixelFormat::eASTC_4x4_SRGB_BLOCK:
-			return "astc_4x4_srgb";
-		case castor::PixelFormat::eASTC_5x4_UNORM_BLOCK:
-			return "astc_5x4";
-		case castor::PixelFormat::eASTC_5x4_SRGB_BLOCK:
-			return "astc_5x4_srgb";
-		case castor::PixelFormat::eASTC_5x5_UNORM_BLOCK:
-			return "astc_5x5";
-		case castor::PixelFormat::eASTC_5x5_SRGB_BLOCK:
-			return "astc_5x5_srgb";
-		case castor::PixelFormat::eASTC_6x5_UNORM_BLOCK:
-			return "astc_6x5";
-		case castor::PixelFormat::eASTC_6x5_SRGB_BLOCK:
-			return "astc_6x5_srgb";
-		case castor::PixelFormat::eASTC_6x6_UNORM_BLOCK:
-			return "astc_6x6";
-		case castor::PixelFormat::eASTC_6x6_SRGB_BLOCK:
-			return "astc_6x6_srgb";
-		case castor::PixelFormat::eASTC_8x5_UNORM_BLOCK:
-			return "astc_8x5";
-		case castor::PixelFormat::eASTC_8x5_SRGB_BLOCK:
-			return "astc_8x5_srgb";
-		case castor::PixelFormat::eASTC_8x6_UNORM_BLOCK:
-			return "astc_8x6";
-		case castor::PixelFormat::eASTC_8x6_SRGB_BLOCK:
-			return "astc_8x6_srgb";
-		case castor::PixelFormat::eASTC_8x8_UNORM_BLOCK:
-			return "astc_8x8";
-		case castor::PixelFormat::eASTC_8x8_SRGB_BLOCK:
-			return "astc_8x8_srgb";
-		case castor::PixelFormat::eASTC_10x5_UNORM_BLOCK:
-			return "astc_10x5";
-		case castor::PixelFormat::eASTC_10x5_SRGB_BLOCK:
-			return "astc_10x5_srgb";
-		case castor::PixelFormat::eASTC_10x6_UNORM_BLOCK:
-			return "astc_10x6";
-		case castor::PixelFormat::eASTC_10x6_SRGB_BLOCK:
-			return "astc_10x6_srgb";
-		case castor::PixelFormat::eASTC_10x8_UNORM_BLOCK:
-			return "astc_10x8";
-		case castor::PixelFormat::eASTC_10x8_SRGB_BLOCK:
-			return "astc_10x8_srgb";
-		case castor::PixelFormat::eASTC_10x10_UNORM_BLOCK:
-			return "astc_10x10";
-		case castor::PixelFormat::eASTC_10x10_SRGB_BLOCK:
-			return "astc_10x10_srgb";
-		case castor::PixelFormat::eASTC_12x10_UNORM_BLOCK:
-			return "astc_12x10";
-		case castor::PixelFormat::eASTC_12x10_SRGB_BLOCK:
-			return "astc_12x10_srgb";
-		case castor::PixelFormat::eASTC_12x12_UNORM_BLOCK:
-			return "astc_12x12";
-		case castor::PixelFormat::eASTC_12x12_SRGB_BLOCK:
-			return "astc_12x12_srgb";
+		case PixelFormat::eUNDEFINED:
+			return cuT( "undefined" );
+		case PixelFormat::eR4G4_UNORM:
+			return cuT( "rg8" );
+		case PixelFormat::eR4G4B4A4_UNORM:
+			return cuT( "rgba16" );
+		case PixelFormat::eB4G4R4A4_UNORM:
+			return cuT( "rgba16s" );
+		case PixelFormat::eR5G6B5_UNORM:
+			return cuT( "rgb565" );
+		case PixelFormat::eB5G6R5_UNORM:
+			return cuT( "bgr565" );
+		case PixelFormat::eR5G5B5A1_UNORM:
+			return cuT( "rgba5551" );
+		case PixelFormat::eB5G5R5A1_UNORM:
+			return cuT( "bgra5551" );
+		case PixelFormat::eA1R5G5B5_UNORM:
+			return cuT( "argb1555" );
+		case PixelFormat::eR8_UNORM:
+			return cuT( "r8" );
+		case PixelFormat::eR8_SNORM:
+			return cuT( "r8s" );
+		case PixelFormat::eR8_USCALED:
+			return cuT( "r8us" );
+		case PixelFormat::eR8_SSCALED:
+			return cuT( "r8ss" );
+		case PixelFormat::eR8_UINT:
+			return cuT( "r8ui" );
+		case PixelFormat::eR8_SINT:
+			return cuT( "r8si" );
+		case PixelFormat::eR8_SRGB:
+			return cuT( "r8srgb" );
+		case PixelFormat::eR8G8_UNORM:
+			return cuT( "rg16" );
+		case PixelFormat::eR8G8_SNORM:
+			return cuT( "rg16s" );
+		case PixelFormat::eR8G8_USCALED:
+			return cuT( "rg16us" );
+		case PixelFormat::eR8G8_SSCALED:
+			return cuT( "rg16ss" );
+		case PixelFormat::eR8G8_UINT:
+			return cuT( "rg16ui" );
+		case PixelFormat::eR8G8_SINT:
+			return cuT( "rg16si" );
+		case PixelFormat::eR8G8_SRGB:
+			return cuT( "rg16srgb" );
+		case PixelFormat::eR8G8B8_UNORM:
+			return cuT( "rgb24" );
+		case PixelFormat::eR8G8B8_SNORM:
+			return cuT( "rgb24s" );
+		case PixelFormat::eR8G8B8_USCALED:
+			return cuT( "rgb24us" );
+		case PixelFormat::eR8G8B8_SSCALED:
+			return cuT( "rgb24ss" );
+		case PixelFormat::eR8G8B8_UINT:
+			return cuT( "rgb24ui" );
+		case PixelFormat::eR8G8B8_SINT:
+			return cuT( "rgb24si" );
+		case PixelFormat::eR8G8B8_SRGB:
+			return cuT( "rgb24srgb" );
+		case PixelFormat::eB8G8R8_UNORM:
+			return cuT( "bgr24" );
+		case PixelFormat::eB8G8R8_SNORM:
+			return cuT( "bgr24s" );
+		case PixelFormat::eB8G8R8_USCALED:
+			return cuT( "bgr24us" );
+		case PixelFormat::eB8G8R8_SSCALED:
+			return cuT( "bgr24ss" );
+		case PixelFormat::eB8G8R8_UINT:
+			return cuT( "bgr24ui" );
+		case PixelFormat::eB8G8R8_SINT:
+			return cuT( "bgr24si" );
+		case PixelFormat::eB8G8R8_SRGB:
+			return cuT( "bgr24srgb" );
+		case PixelFormat::eR8G8B8A8_UNORM:
+			return cuT( "rgba32" );
+		case PixelFormat::eR8G8B8A8_SNORM:
+			return cuT( "rgba32s" );
+		case PixelFormat::eR8G8B8A8_USCALED:
+			return cuT( "rgba32us" );
+		case PixelFormat::eR8G8B8A8_SSCALED:
+			return cuT( "rgba32ss" );
+		case PixelFormat::eR8G8B8A8_UINT:
+			return cuT( "rgba32ui" );
+		case PixelFormat::eR8G8B8A8_SINT:
+			return cuT( "rgba32si" );
+		case PixelFormat::eR8G8B8A8_SRGB:
+			return cuT( "rgba32srgb" );
+		case PixelFormat::eB8G8R8A8_UNORM:
+			return cuT( "bgra32" );
+		case PixelFormat::eB8G8R8A8_SNORM:
+			return cuT( "bgra32s" );
+		case PixelFormat::eB8G8R8A8_USCALED:
+			return cuT( "bgra32us" );
+		case PixelFormat::eB8G8R8A8_SSCALED:
+			return cuT( "bgra32ss" );
+		case PixelFormat::eB8G8R8A8_UINT:
+			return cuT( "bgra32ui" );
+		case PixelFormat::eB8G8R8A8_SINT:
+			return cuT( "bgra32si" );
+		case PixelFormat::eB8G8R8A8_SRGB:
+			return cuT( "bgra32srgb" );
+		case PixelFormat::eA8B8G8R8_UNORM:
+			return cuT( "abgr32" );
+		case PixelFormat::eA8B8G8R8_SNORM:
+			return cuT( "abgr32s" );
+		case PixelFormat::eA8B8G8R8_USCALED:
+			return cuT( "abgr32us" );
+		case PixelFormat::eA8B8G8R8_SSCALED:
+			return cuT( "abgr32ss" );
+		case PixelFormat::eA8B8G8R8_UINT:
+			return cuT( "abgr32ui" );
+		case PixelFormat::eA8B8G8R8_SINT:
+			return cuT( "abgr32si" );
+		case PixelFormat::eA8B8G8R8_SRGB:
+			return cuT( "abgr32srgb" );
+		case PixelFormat::eA2R10G10B10_UNORM:
+			return cuT( "argb2101010" );
+		case PixelFormat::eA2R10G10B10_SNORM:
+			return cuT( "argb2101010s" );
+		case PixelFormat::eA2R10G10B10_USCALED:
+			return cuT( "argb2101010us" );
+		case PixelFormat::eA2R10G10B10_SSCALED:
+			return cuT( "argb2101010ss" );
+		case PixelFormat::eA2R10G10B10_UINT:
+			return cuT( "argb2101010ui" );
+		case PixelFormat::eA2R10G10B10_SINT:
+			return cuT( "argb2101010si" );
+		case PixelFormat::eA2B10G10R10_UNORM:
+			return cuT( "abgr2101010" );
+		case PixelFormat::eA2B10G10R10_SNORM:
+			return cuT( "abgr2101010s" );
+		case PixelFormat::eA2B10G10R10_USCALED:
+			return cuT( "abgr2101010us" );
+		case PixelFormat::eA2B10G10R10_SSCALED:
+			return cuT( "abgr2101010ss" );
+		case PixelFormat::eA2B10G10R10_UINT:
+			return cuT( "abgr2101010ui" );
+		case PixelFormat::eA2B10G10R10_SINT:
+			return cuT( "abgr2101010si" );
+		case PixelFormat::eR16_UNORM:
+			return cuT( "r16" );
+		case PixelFormat::eR16_SNORM:
+			return cuT( "rg16s" );
+		case PixelFormat::eR16_USCALED:
+			return cuT( "rg16us" );
+		case PixelFormat::eR16_SSCALED:
+			return cuT( "rg16ss" );
+		case PixelFormat::eR16_UINT:
+			return cuT( "rg16ui" );
+		case PixelFormat::eR16_SINT:
+			return cuT( "rg16si" );
+		case PixelFormat::eR16_SFLOAT:
+			return cuT( "rg16f" );
+		case PixelFormat::eR16G16_UNORM:
+			return cuT( "rg32" );
+		case PixelFormat::eR16G16_SNORM:
+			return cuT( "rg32s" );
+		case PixelFormat::eR16G16_USCALED:
+			return cuT( "rg32us" );
+		case PixelFormat::eR16G16_SSCALED:
+			return cuT( "rg32ss" );
+		case PixelFormat::eR16G16_UINT:
+			return cuT( "rg32ui" );
+		case PixelFormat::eR16G16_SINT:
+			return cuT( "rg32si" );
+		case PixelFormat::eR16G16_SFLOAT:
+			return cuT( "rg32f" );
+		case PixelFormat::eR16G16B16_UNORM:
+			return cuT( "rgb48" );
+		case PixelFormat::eR16G16B16_SNORM:
+			return cuT( "rgb48s" );
+		case PixelFormat::eR16G16B16_USCALED:
+			return cuT( "rgb48us" );
+		case PixelFormat::eR16G16B16_SSCALED:
+			return cuT( "rgb48ss" );
+		case PixelFormat::eR16G16B16_UINT:
+			return cuT( "rgb48ui" );
+		case PixelFormat::eR16G16B16_SINT:
+			return cuT( "rgb48si" );
+		case PixelFormat::eR16G16B16_SFLOAT:
+			return cuT( "rgb48f" );
+		case PixelFormat::eR16G16B16A16_UNORM:
+			return cuT( "rgba64" );
+		case PixelFormat::eR16G16B16A16_SNORM:
+			return cuT( "rgba64s" );
+		case PixelFormat::eR16G16B16A16_USCALED:
+			return cuT( "rgba64us" );
+		case PixelFormat::eR16G16B16A16_SSCALED:
+			return cuT( "rgba64ss" );
+		case PixelFormat::eR16G16B16A16_UINT:
+			return cuT( "rgba64ui" );
+		case PixelFormat::eR16G16B16A16_SINT:
+			return cuT( "rgba64si" );
+		case PixelFormat::eR16G16B16A16_SFLOAT:
+			return cuT( "rgba64f" );
+		case PixelFormat::eR32_UINT:
+			return cuT( "r32ui" );
+		case PixelFormat::eR32_SINT:
+			return cuT( "r32si" );
+		case PixelFormat::eR32_SFLOAT:
+			return cuT( "r32f" );
+		case PixelFormat::eR32G32_UINT:
+			return cuT( "rg64ui" );
+		case PixelFormat::eR32G32_SINT:
+			return cuT( "rg64si" );
+		case PixelFormat::eR32G32_SFLOAT:
+			return cuT( "rg64f" );
+		case PixelFormat::eR32G32B32_UINT:
+			return cuT( "rgb96ui" );
+		case PixelFormat::eR32G32B32_SINT:
+			return cuT( "rgb96si" );
+		case PixelFormat::eR32G32B32_SFLOAT:
+			return cuT( "rgb96f" );
+		case PixelFormat::eR32G32B32A32_UINT:
+			return cuT( "rgba128ui" );
+		case PixelFormat::eR32G32B32A32_SINT:
+			return cuT( "rgba128si" );
+		case PixelFormat::eR32G32B32A32_SFLOAT:
+			return cuT( "rgba128f" );
+		case PixelFormat::eR64_UINT:
+			return cuT( "r64ui" );
+		case PixelFormat::eR64_SINT:
+			return cuT( "r64si" );
+		case PixelFormat::eR64_SFLOAT:
+			return cuT( "r64f" );
+		case PixelFormat::eR64G64_UINT:
+			return cuT( "rg128ui" );
+		case PixelFormat::eR64G64_SINT:
+			return cuT( "rg128si" );
+		case PixelFormat::eR64G64_SFLOAT:
+			return cuT( "rg128f" );
+		case PixelFormat::eR64G64B64_UINT:
+			return cuT( "rgb192ui" );
+		case PixelFormat::eR64G64B64_SINT:
+			return cuT( "rgb192si" );
+		case PixelFormat::eR64G64B64_SFLOAT:
+			return cuT( "rgb192f" );
+		case PixelFormat::eR64G64B64A64_UINT:
+			return cuT( "rgba256ui" );
+		case PixelFormat::eR64G64B64A64_SINT:
+			return cuT( "rgba256si" );
+		case PixelFormat::eR64G64B64A64_SFLOAT:
+			return cuT( "rgba256f" );
+		case PixelFormat::eB10G11R11_UFLOAT:
+			return cuT( "bgr32f" );
+		case PixelFormat::eE5B9G9R9_UFLOAT:
+			return cuT( "ebgr32f" );
+		case PixelFormat::eD16_UNORM:
+			return cuT( "depth16" );
+		case PixelFormat::eX8_D24_UNORM:
+			return cuT( "depth24" );
+		case PixelFormat::eD32_SFLOAT:
+			return cuT( "depth32f" );
+		case PixelFormat::eS8_UINT:
+			return cuT( "stencil8" );
+		case PixelFormat::eD16_UNORM_S8_UINT:
+			return cuT( "depth16s8" );
+		case PixelFormat::eD24_UNORM_S8_UINT:
+			return cuT( "depth24s8" );
+		case PixelFormat::eD32_SFLOAT_S8_UINT:
+			return cuT( "depth32fs8" );
+		case PixelFormat::eBC1_RGB_UNORM_BLOCK:
+			return cuT( "bc1_rgb" );
+		case PixelFormat::eBC1_RGB_SRGB_BLOCK:
+			return cuT( "bc1_srgb" );
+		case PixelFormat::eBC1_RGBA_UNORM_BLOCK:
+			return cuT( "bc1_rgba" );
+		case PixelFormat::eBC1_RGBA_SRGB_BLOCK:
+			return cuT( "bc1_rgba_srgb" );
+		case PixelFormat::eBC2_UNORM_BLOCK:
+			return cuT( "bc2_rgba" );
+		case PixelFormat::eBC2_SRGB_BLOCK:
+			return cuT( "bc2_rgba_srgb" );
+		case PixelFormat::eBC3_UNORM_BLOCK:
+			return cuT( "bc3_rgba" );
+		case PixelFormat::eBC3_SRGB_BLOCK:
+			return cuT( "bc3_rgba_srgb" );
+		case PixelFormat::eBC4_UNORM_BLOCK:
+			return cuT( "bc4_r" );
+		case PixelFormat::eBC4_SNORM_BLOCK:
+			return cuT( "bc4_r_s" );
+		case PixelFormat::eBC5_UNORM_BLOCK:
+			return cuT( "bc5_rg" );
+		case PixelFormat::eBC5_SNORM_BLOCK:
+			return cuT( "bc5_rg_s" );
+		case PixelFormat::eBC6H_UFLOAT_BLOCK:
+			return cuT( "bc6h" );
+		case PixelFormat::eBC6H_SFLOAT_BLOCK:
+			return cuT( "bc6h_s" );
+		case PixelFormat::eBC7_UNORM_BLOCK:
+			return cuT( "bc7" );
+		case PixelFormat::eBC7_SRGB_BLOCK:
+			return cuT( "bc7_srgb" );
+		case PixelFormat::eETC2_R8G8B8_UNORM_BLOCK:
+			return cuT( "etc2_rgb" );
+		case PixelFormat::eETC2_R8G8B8_SRGB_BLOCK:
+			return cuT( "etc2_rgb_srgb" );
+		case PixelFormat::eETC2_R8G8B8A1_UNORM_BLOCK:
+			return cuT( "etc2_rgba1" );
+		case PixelFormat::eETC2_R8G8B8A1_SRGB_BLOCK:
+			return cuT( "etc2_rgba1_srgb" );
+		case PixelFormat::eETC2_R8G8B8A8_UNORM_BLOCK:
+			return cuT( "etc2_rgba" );
+		case PixelFormat::eETC2_R8G8B8A8_SRGB_BLOCK:
+			return cuT( "etc2_rgba_srgb" );
+		case PixelFormat::eEAC_R11_UNORM_BLOCK:
+			return cuT( "eac_r" );
+		case PixelFormat::eEAC_R11_SNORM_BLOCK:
+			return cuT( "eac_r_s" );
+		case PixelFormat::eEAC_R11G11_UNORM_BLOCK:
+			return cuT( "eac_rg" );
+		case PixelFormat::eEAC_R11G11_SNORM_BLOCK:
+			return cuT( "eac_rg_s" );
+		case PixelFormat::eASTC_4x4_UNORM_BLOCK:
+			return cuT( "astc_4x4" );
+		case PixelFormat::eASTC_4x4_SRGB_BLOCK:
+			return cuT( "astc_4x4_srgb" );
+		case PixelFormat::eASTC_5x4_UNORM_BLOCK:
+			return cuT( "astc_5x4" );
+		case PixelFormat::eASTC_5x4_SRGB_BLOCK:
+			return cuT( "astc_5x4_srgb" );
+		case PixelFormat::eASTC_5x5_UNORM_BLOCK:
+			return cuT( "astc_5x5" );
+		case PixelFormat::eASTC_5x5_SRGB_BLOCK:
+			return cuT( "astc_5x5_srgb" );
+		case PixelFormat::eASTC_6x5_UNORM_BLOCK:
+			return cuT( "astc_6x5" );
+		case PixelFormat::eASTC_6x5_SRGB_BLOCK:
+			return cuT( "astc_6x5_srgb" );
+		case PixelFormat::eASTC_6x6_UNORM_BLOCK:
+			return cuT( "astc_6x6" );
+		case PixelFormat::eASTC_6x6_SRGB_BLOCK:
+			return cuT( "astc_6x6_srgb" );
+		case PixelFormat::eASTC_8x5_UNORM_BLOCK:
+			return cuT( "astc_8x5" );
+		case PixelFormat::eASTC_8x5_SRGB_BLOCK:
+			return cuT( "astc_8x5_srgb" );
+		case PixelFormat::eASTC_8x6_UNORM_BLOCK:
+			return cuT( "astc_8x6" );
+		case PixelFormat::eASTC_8x6_SRGB_BLOCK:
+			return cuT( "astc_8x6_srgb" );
+		case PixelFormat::eASTC_8x8_UNORM_BLOCK:
+			return cuT( "astc_8x8" );
+		case PixelFormat::eASTC_8x8_SRGB_BLOCK:
+			return cuT( "astc_8x8_srgb" );
+		case PixelFormat::eASTC_10x5_UNORM_BLOCK:
+			return cuT( "astc_10x5" );
+		case PixelFormat::eASTC_10x5_SRGB_BLOCK:
+			return cuT( "astc_10x5_srgb" );
+		case PixelFormat::eASTC_10x6_UNORM_BLOCK:
+			return cuT( "astc_10x6" );
+		case PixelFormat::eASTC_10x6_SRGB_BLOCK:
+			return cuT( "astc_10x6_srgb" );
+		case PixelFormat::eASTC_10x8_UNORM_BLOCK:
+			return cuT( "astc_10x8" );
+		case PixelFormat::eASTC_10x8_SRGB_BLOCK:
+			return cuT( "astc_10x8_srgb" );
+		case PixelFormat::eASTC_10x10_UNORM_BLOCK:
+			return cuT( "astc_10x10" );
+		case PixelFormat::eASTC_10x10_SRGB_BLOCK:
+			return cuT( "astc_10x10_srgb" );
+		case PixelFormat::eASTC_12x10_UNORM_BLOCK:
+			return cuT( "astc_12x10" );
+		case PixelFormat::eASTC_12x10_SRGB_BLOCK:
+			return cuT( "astc_12x10_srgb" );
+		case PixelFormat::eASTC_12x12_UNORM_BLOCK:
+			return cuT( "astc_12x12" );
+		case PixelFormat::eASTC_12x12_SRGB_BLOCK:
+			return cuT( "astc_12x12_srgb" );
 		default:
-			return "unsupported";
+			return cuT( "unsupported" );
 		}
 	}
 
@@ -770,13 +768,13 @@ namespace castor
 			, uint32_t pixelSize
 			, uint32_t y
 			, uint32_t widthInBlocks
-			, std::array< uint8_t, 16 * 4u > & blockBuffer
+			, Array< uint8_t, 16 * 4u > & blockBuffer
 			, uint8_t * pixelBuffer
 			, DecompressBlockT decompressBlock )
 		{
 			uint32_t newRows = ( y * 4 + 3 >= height )
 				? height - y * 4u
-				: newRows = 4u;
+				: 4u;
 
 			for ( uint32_t x = 0u; x < widthInBlocks; ++x )
 			{
@@ -874,7 +872,7 @@ namespace castor
 			result = PxBufferBase::create( src.getDimensions()
 				, PixelFormat::eR8G8B8A8_UNORM );
 			uint8_t * pixelBuffer = result->getPtr();
-			std::array< uint8_t, 16 * 4u > blockBuffer;
+			Array< uint8_t, 16 * 4u > blockBuffer;
 			uint8_t const * data = src.getConstPtr();
 			auto pixelSize = uint32_t( getBytesPerPixel( result->getFormat() ) );
 			uint32_t height = src.getHeight();
@@ -894,55 +892,55 @@ namespace castor
 		return result;
 	}
 
-	std::string getName( PixelComponent const & component )
+	String getName( PixelComponent const & component )
 	{
-		std::string result;
+		String result;
 		switch ( component )
 		{
 		case PixelComponent::eRed:
-			result = "red";
+			result = cuT( "red" );
 			break;
 		case PixelComponent::eGreen:
-			result = "green";
+			result = cuT( "green" );
 			break;
 		case PixelComponent::eBlue:
-			result = "blue";
+			result = cuT( "blue" );
 			break;
 		case PixelComponent::eAlpha:
-			result = "alpha";
+			result = cuT( "alpha" );
 			break;
 		case PixelComponent::eDepth:
-			result = "depth";
+			result = cuT( "depth" );
 			break;
 		case PixelComponent::eStencil:
-			result = "stencil";
+			result = cuT( "stencil" );
 			break;
 		default:
-			result = "unknown";
+			result = cuT( "unknown" );
 			break;
 		}
 
 		return result;
 	}
 
-	std::string getName( PixelComponents const & components )
+	String getName( PixelComponents const & components )
 	{
-		std::string result;
-		std::string sep;
+		String result;
+		String sep;
 
 		for ( auto component : components )
 		{
 			result += sep + getName( component );
-			sep = "|";
+			sep = cuT( "|" );
 		}
 
 		return result;
 	}
 
-	bool hasAlphaChannel( castor::Image const & image )
+	bool hasAlphaChannel( Image const & image )
 	{
-		auto alphaChannel = castor::extractComponent( image.getPixels()
-			, castor::PixelComponent::eAlpha );
+		auto alphaChannel = extractComponent( image.getPixels()
+			, PixelComponent::eAlpha );
 		return alphaChannel
 			&& !std::all_of( alphaChannel->begin(), alphaChannel->end()
 				, []( uint8_t byte )

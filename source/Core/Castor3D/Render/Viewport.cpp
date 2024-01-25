@@ -88,7 +88,7 @@ namespace castor3d
 		}
 	}
 
-	const std::array< castor::String, size_t( ViewportType::eCount ) > Viewport::TypeName
+	const castor::Array< castor::String, size_t( ViewportType::eCount ) > Viewport::TypeName
 	{
 		cuT( "undefined" ),
 		cuT( "ortho" ),
@@ -160,10 +160,10 @@ namespace castor3d
 		, m_type{ m_modified, rhs.m_type.value() }
 		, m_size{ m_modified, rhs.m_size.value() }
 		, m_position{ m_modified, rhs.m_position.value() }
-		, m_viewport{ std::move( rhs.m_viewport ) }
-		, m_scissor{ std::move( rhs.m_scissor ) }
-		, m_projection{ std::move( rhs.m_projection ) }
-		, m_safeBandedProjection{ std::move( rhs.m_safeBandedProjection ) }
+		, m_viewport{ castor::move( rhs.m_viewport ) }
+		, m_scissor{ castor::move( rhs.m_scissor ) }
+		, m_projection{ castor::move( rhs.m_projection ) }
+		, m_safeBandedProjection{ castor::move( rhs.m_safeBandedProjection ) }
 	{
 	}
 

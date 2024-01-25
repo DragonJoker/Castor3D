@@ -7,20 +7,20 @@ namespace castor3d
 		switch ( face )
 		{
 		case SkyboxFace::eLeft:
-			return "left";
+			return cuT( "left" );
 		case SkyboxFace::eRight:
-			return "right";
+			return cuT( "right" );
 		case SkyboxFace::eBottom:
-			return "bottom";
+			return cuT( "bottom" );
 		case SkyboxFace::eTop:
-			return "top";
+			return cuT( "top" );
 		case SkyboxFace::eBack:
-			return "back";
+			return cuT( "back" );
 		case SkyboxFace::eFront:
-			return "front";
+			return cuT( "front" );
 		default:
 			CU_Failure( "Unsupported SkyboxFace" );
-			return "unsupported";
+			return cuT( "unsupported" );
 		}
 	}
 }

@@ -26,7 +26,7 @@ namespace castor3d
 
 	struct PassMasks
 	{
-		std::array< uint8_t, MaxPassLayers > data;
+		castor::Array< uint8_t, MaxPassLayers > data;
 	};
 	/**
 	*\~english
@@ -127,7 +127,7 @@ namespace castor3d
 
 	constexpr uint32_t getSize( SubmeshData value )
 	{
-		constexpr std::array< size_t, size_t( SubmeshData::eCount ) > sizes = { sizeof( uint32_t ) /* SubmeshData::eIndex */
+		constexpr castor::Array< size_t, size_t( SubmeshData::eCount ) > sizes = { sizeof( uint32_t ) /* SubmeshData::eIndex */
 			, sizeof( castor::Point4f ) /* SubmeshData::ePositions */
 			, sizeof( castor::Point4f ) /* SubmeshData::eNormals */
 			, sizeof( castor::Point4f ) /* SubmeshData::eTangents */
@@ -158,7 +158,7 @@ namespace castor3d
 		return SubmeshComponentID( flag );
 	}
 
-	using SubmeshComponentFlagsSet = std::set< SubmeshComponentFlag >;
+	using SubmeshComponentFlagsSet = castor::Set< SubmeshComponentFlag >;
 	/**
 	*\~english
 	*\brief
@@ -323,7 +323,7 @@ namespace castor3d
 		castor::Point3fArray colours{};
 		//!\~english	The subpasses masks buffer.
 		//!\~french		Le tampon de masques de subpasses.
-		std::vector< PassMasks > passMasks{};
+		castor::Vector< PassMasks > passMasks{};
 		//!\~english	The bounding box.
 		//!\~french		La bounding box.
 		castor::BoundingBox boundingBox{};
@@ -335,8 +335,8 @@ namespace castor3d
 	CU_DeclareVector( SubmeshUPtr, SubmeshPtr );
 	CU_DeclareMap( Submesh const *, castor::BoundingBox, SubmeshBoundingBox );
 	CU_DeclareMap( Submesh const *, castor::BoundingSphere, SubmeshBoundingSphere );
-	CU_DeclareMap( uint32_t, std::vector< float >, SubmeshTargetWeight );
-	using SubmeshBoundingBoxList = std::vector< std::pair< Submesh const *, castor::BoundingBox > >;
+	CU_DeclareMap( uint32_t, castor::Vector< float >, SubmeshTargetWeight );
+	using SubmeshBoundingBoxList = castor::Vector< castor::Pair< Submesh const *, castor::BoundingBox > >;
 
 	C3D_API Submesh * getComponentSubmesh( SubmeshComponent const & component );
 	C3D_API castor::String const & getSubmeshComponentType( SubmeshComponent const & component );

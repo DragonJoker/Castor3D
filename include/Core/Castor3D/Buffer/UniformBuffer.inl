@@ -16,8 +16,8 @@ namespace castor3d
 			sizeof( DataT ),
 			usage,
 			flags,
-			std::move( debugName ),
-			std::move( sharingMode ),
+			castor::move( debugName ),
+			castor::move( sharingMode ),
 		}
 		, m_data( count, DataT{} )
 	{

@@ -81,7 +81,7 @@ namespace water
 		static CU_ImplementAttributeParserBlock( parserTexRemapWaterFoam, SceneImportContext )
 		{
 			auto & plugin = getEngine( *blockContext )->getPassComponentsRegister().getPlugin( WaterFoamMapComponent::TypeName );
-			blockContext->textureRemapIt = blockContext->textureRemaps.emplace( plugin.getTextureFlags(), TextureConfiguration{} ).first;
+			blockContext->textureRemapIt = blockContext->textureRemaps.try_emplace( plugin.getTextureFlags() ).first;
 			blockContext->textureRemapIt->second = TextureConfiguration{};
 		}
 		CU_EndAttributePushBlock( CSCNSection::eTextureRemapChannel, blockContext )
@@ -158,8 +158,8 @@ namespace water
 		, castor3d::shader::BlendComponents & components
 		, castor3d::shader::SampleTexture const & sampleTexture )const
 	{
-		std::string mapName = "waterFoamMap";
-		std::string valueName = "waterFoam";
+		castor::MbString mapName = "waterFoamMap";
+		castor::MbString valueName = "waterFoam";
 
 		if ( !material.hasMember( mapName )
 			|| !components.hasMember( valueName ) )
@@ -206,8 +206,8 @@ namespace water
 		, c3d::BlendComponents & components
 		, bool isFrontCulled )const
 	{
-		std::string valueName = "waterFoam";
-		std::string mapName = "waterFoam";
+		castor::MbString valueName = "waterFoam";
+		castor::MbString mapName = "waterFoam";
 		auto textureName = mapName + "MapAndMask";
 
 		if ( !material.hasMember( textureName )
@@ -252,13 +252,14 @@ namespace water
 	void WaterFoamMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		channelFillers.emplace( "water_foam", ChannelFiller{ getTextureFlags()
+		channelFillers.try_emplace( cuT( "water_foam" )
+			, getTextureFlags()
 			, []( TextureContext & blockContext )
 			{
-				auto & component = getPassComponent< WaterFoamMapComponent >( blockContext );
+				auto const & component = getPassComponent< WaterFoamMapComponent >( blockContext );
 				component.fillChannel( blockContext.configuration
 					, 0x00FF0000u );
-			} } );
+			} );
 
 		castor::addParserT( parsers
 			, CSCNSection::eTexture
@@ -294,7 +295,7 @@ namespace water
 	}
 
 	void WaterFoamMapComponent::Plugin::createMapComponent( Pass & pass
-		, std::vector< PassComponentUPtr > & result )const
+		, castor::Vector< PassComponentUPtr > & result )const
 	{
 		result.push_back( castor::makeUniqueDerived< PassComponent, WaterFoamMapComponent >( pass ) );
 	}

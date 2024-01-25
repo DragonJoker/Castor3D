@@ -23,8 +23,8 @@ namespace castor
 		: public NonMovable
 	{
 	public:
-		using Job = std::function< void() >;
-		using OnEnded = SignalT< std::function< void( WorkerThread const & ) > >;
+		using Job = castor::Function< void() >;
+		using OnEnded = SignalT< castor::Function< void( WorkerThread const & ) > >;
 
 	public:
 		/**
@@ -67,7 +67,7 @@ namespace castor
 		 *\param[in]	timeout	Le temps maximal à attendre.
 		 *\return		\p true si la tâche est terminée.
 		 */
-		CU_API bool wait( castor::Milliseconds const & timeout )const;
+		CU_API bool wait( Milliseconds const & timeout )const;
 		/**
 		 *\~english
 		 *\return		The signal raised when the worker has ended his job.
@@ -87,7 +87,7 @@ namespace castor
 
 	private:
 		std::thread m_thread;
-		std::mutex m_mutex;
+		castor::Mutex m_mutex;
 		std::atomic_bool m_start{ false };
 		std::atomic_bool m_terminate{ false };
 		Job m_currentJob;

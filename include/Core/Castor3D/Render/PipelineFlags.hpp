@@ -44,9 +44,9 @@ namespace castor3d
 			, uint32_t ppassLayerIndex = 0u
 			, uint32_t psubmeshDataBindings = 0u
 			, bool pisStatic = false )noexcept
-			: pass{ std::move( ppassComponents ) }
-			, submesh{ std::move( psubmeshComponents ) }
-			, textures{ std::move( ptextures ) }
+			: pass{ castor::move( ppassComponents ) }
+			, submesh{ castor::move( psubmeshComponents ) }
+			, textures{ castor::move( ptextures ) }
 			, lightingModelId{ plightingModelId }
 			, backgroundModelId{ pbackgroundModelId }
 			, alphaFunc{ palphaFunc }
@@ -107,8 +107,8 @@ namespace castor3d
 			, RenderPassTypeID renderPassType = 0u
 			, VkPrimitiveTopology ptopology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST
 			, uint32_t ppatchVertices = 3u )noexcept
-			: PipelineHiHashDetails{ std::move( hiDetails ) }
-			, PipelineLoHashDetails{ std::move( loDetails ) }
+			: PipelineHiHashDetails{ castor::move( hiDetails ) }
+			, PipelineLoHashDetails{ castor::move( loDetails ) }
 			, m_sceneFlags{ sceneFlags }
 			, colourBlendMode{ colourBlendMode }
 			, alphaBlendMode{ alphaBlendMode }
@@ -137,12 +137,12 @@ namespace castor3d
 			, VkDeviceSize pmorphTargetsOffset = {}
 			, SubmeshRenderData const * psubmeshData = {}
 			, bool pisStatic = false )noexcept
-			: PipelineFlags{ PipelineHiHashDetails{ std::move( ppassComponents )
-					, std::move( psubmeshComponents )
+			: PipelineFlags{ PipelineHiHashDetails{ castor::move( ppassComponents )
+					, castor::move( psubmeshComponents )
 					, plightingModelId
 					, pbackgroundModelId
 					, pprogramFlags
-					, std::move( textures )
+					, castor::move( textures )
 					, pshaderFlags
 					, palphaFunc
 					, ppassLayerIndex
@@ -167,12 +167,12 @@ namespace castor3d
 			, ShaderFlags shaderFlags
 			, VkCompareOp alphaFunc
 			, uint32_t passLayerIndex = 0u )
-			: PipelineFlags{ PipelineHiHashDetails{ std::move( ppassComponents )
-					, std::move( psubmeshComponents )
+			: PipelineFlags{ PipelineHiHashDetails{ castor::move( ppassComponents )
+					, castor::move( psubmeshComponents )
 					, lightingModelId
 					, pbackgroundModelId
 					, programFlags
-					, std::move( textures )
+					, castor::move( textures )
 					, shaderFlags
 					, alphaFunc
 					, passLayerIndex }

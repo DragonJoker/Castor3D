@@ -52,14 +52,14 @@ namespace castor3d
 	{
 	}
 
-	std::vector< castor::String > CmshImporterFile::listMaterials()
+	castor::StringArray CmshImporterFile::listMaterials()
 	{
-		return std::vector< castor::String >{};
+		return castor::StringArray{};
 	}
 
-	std::vector< ImporterFile::MeshData > CmshImporterFile::listMeshes()
+	castor::Vector< ImporterFile::MeshData > CmshImporterFile::listMeshes()
 	{
-		std::vector< MeshData > result;
+		castor::Vector< MeshData > result;
 
 		if ( getExtension() == CmshMeshImporter::Type )
 		{
@@ -69,9 +69,9 @@ namespace castor3d
 		return result;
 	}
 
-	std::vector< castor::String > CmshImporterFile::listSkeletons()
+	castor::StringArray CmshImporterFile::listSkeletons()
 	{
-		std::vector< castor::String > result;
+		castor::StringArray result;
 
 		if ( getExtension() == CmshSkeletonImporter::Type )
 		{
@@ -81,29 +81,29 @@ namespace castor3d
 		return result;
 	}
 
-	std::vector< ImporterFile::NodeData > CmshImporterFile::listSceneNodes()
+	castor::Vector< ImporterFile::NodeData > CmshImporterFile::listSceneNodes()
 	{
-		return std::vector< NodeData >{};
+		return castor::Vector< NodeData >{};
 	}
 
-	std::vector< ImporterFile::LightData > CmshImporterFile::listLights()
+	castor::Vector< ImporterFile::LightData > CmshImporterFile::listLights()
 	{
-		return std::vector< LightData >{};
+		return castor::Vector< LightData >{};
 	}
 
-	std::vector< CmshImporterFile::GeometryData > CmshImporterFile::listGeometries()
+	castor::Vector< CmshImporterFile::GeometryData > CmshImporterFile::listGeometries()
 	{
-		return std::vector< GeometryData >{};
+		return castor::Vector< GeometryData >{};
 	}
 
-	std::vector< ImporterFile::CameraData > CmshImporterFile::listCameras()
+	castor::Vector< ImporterFile::CameraData > CmshImporterFile::listCameras()
 	{
-		return std::vector< CameraData >{};
+		return castor::Vector< CameraData >{};
 	}
 
-	std::vector< castor::String > CmshImporterFile::listMeshAnimations( Mesh const & mesh )
+	castor::StringArray CmshImporterFile::listMeshAnimations( Mesh const & mesh )
 	{
-		std::vector< castor::String > result;
+		castor::StringArray result;
 
 		if ( getExtension() == CmshAnimationImporter::MeshAnimType )
 		{
@@ -120,9 +120,9 @@ namespace castor3d
 		return result;
 	}
 
-	std::vector< castor::String > CmshImporterFile::listSkeletonAnimations( Skeleton const & skeleton )
+	castor::StringArray CmshImporterFile::listSkeletonAnimations( Skeleton const & skeleton )
 	{
-		std::vector< castor::String > result;
+		castor::StringArray result;
 
 		if ( getExtension() == CmshAnimationImporter::SkeletonAnimType )
 		{
@@ -139,9 +139,9 @@ namespace castor3d
 		return result;
 	}
 
-	std::vector< castor::String > CmshImporterFile::listSceneNodeAnimations( castor3d::SceneNode const & node )
+	castor::StringArray CmshImporterFile::listSceneNodeAnimations( castor3d::SceneNode const & node )
 	{
-		std::vector< castor::String > result;
+		castor::StringArray result;
 
 		if ( getExtension() == CmshAnimationImporter::NodeAnimType )
 		{
@@ -158,9 +158,9 @@ namespace castor3d
 		return result;
 	}
 
-	std::vector< castor::String > CmshImporterFile::listAllMeshAnimations()
+	castor::StringArray CmshImporterFile::listAllMeshAnimations()
 	{
-		std::vector< castor::String > result;
+		castor::StringArray result;
 
 		if ( getExtension() == CmshAnimationImporter::MeshAnimType )
 		{
@@ -170,9 +170,9 @@ namespace castor3d
 		return result;
 	}
 
-	std::vector< castor::String > CmshImporterFile::listAllSkeletonAnimations()
+	castor::StringArray CmshImporterFile::listAllSkeletonAnimations()
 	{
-		std::vector< castor::String > result;
+		castor::StringArray result;
 
 		if ( getExtension() == CmshAnimationImporter::SkeletonAnimType )
 		{
@@ -182,9 +182,9 @@ namespace castor3d
 		return result;
 	}
 
-	std::vector< castor::String > CmshImporterFile::listAllSceneNodeAnimations()
+	castor::StringArray CmshImporterFile::listAllSceneNodeAnimations()
 	{
-		std::vector< castor::String > result;
+		castor::StringArray result;
 
 		if ( getExtension() == CmshAnimationImporter::NodeAnimType )
 		{

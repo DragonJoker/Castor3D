@@ -35,7 +35,7 @@ namespace castor3d
 				return lhs->getTimeIndex() < rhs->getTimeIndex();
 			} );
 		keyFrame->initialise();
-		m_keyframes.insert( it, std::move( keyFrame ) );
+		m_keyframes.insert( it, castor::move( keyFrame ) );
 		updateLength();
 	}
 

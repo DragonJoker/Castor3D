@@ -47,9 +47,9 @@ namespace castortd
 			{
 				m_destination = game.convert( castor::Point2i{ m_cur->m_x, m_cur->m_y } ) + castor::Point3f{ 0, game.getCellHeight(), 0 };
 				auto save = float( speed - distanceToDst );
-				std::swap( speed, save );
+				castor::swap( speed, save );
 				accept( game );
-				std::swap( speed, save );
+				castor::swap( speed, save );
 			}
 			else
 			{

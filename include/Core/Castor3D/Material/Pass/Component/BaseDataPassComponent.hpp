@@ -38,8 +38,8 @@ namespace castor3d
 			, castor::String type
 			, castor::StringArray deps = {}
 			, ParamsT && ... params )
-			: PassComponent{ pass, std::move( type ), std::move( deps ) }
-			, m_value{ m_dirty, std::forward< ParamsT >( params )... }
+			: PassComponent{ pass, castor::move( type ), castor::move( deps ) }
+			, m_value{ m_dirty, castor::forward< ParamsT >( params )... }
 		{
 		}
 		/**@}*/
@@ -61,7 +61,7 @@ namespace castor3d
 		template< typename ... ParamsT >
 		void setData( ParamsT && ... params )
 		{
-			m_value = { m_dirty, std::forward< ParamsT >( params )... };
+			m_value = { m_dirty, castor::forward< ParamsT >( params )... };
 		}
 		/**@}*/
 		/**

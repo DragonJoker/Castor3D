@@ -21,7 +21,7 @@ namespace castor3d
 		static VkFormat getDepthFormat( RenderDevice const & device
 			, VkFormat format )
 		{
-			std::vector< VkFormat > depthFormats
+			castor::Vector< VkFormat > depthFormats
 			{
 				format,
 				VK_FORMAT_D24_UNORM_S8_UINT,
@@ -89,18 +89,18 @@ namespace castor3d
 	//*********************************************************************************************
 
 	Texture::Texture( Texture && rhs )noexcept
-		: resources{ std::move( rhs.resources ) }
-		, device{ std::move( rhs.device ) }
-		, imageId{ std::move( rhs.imageId ) }
-		, image{ std::move( rhs.image ) }
-		, wholeViewId{ std::move( rhs.wholeViewId ) }
-		, targetViewId{ std::move( rhs.targetViewId ) }
-		, sampledViewId{ std::move( rhs.sampledViewId ) }
-		, wholeView{ std::move( rhs.wholeView ) }
-		, targetView{ std::move( rhs.targetView ) }
-		, sampledView{ std::move( rhs.sampledView ) }
-		, subViewsId{ std::move( rhs.subViewsId ) }
-		, sampler{ std::move( rhs.sampler ) }
+		: resources{ castor::move( rhs.resources ) }
+		, device{ castor::move( rhs.device ) }
+		, imageId{ castor::move( rhs.imageId ) }
+		, image{ castor::move( rhs.image ) }
+		, wholeViewId{ castor::move( rhs.wholeViewId ) }
+		, targetViewId{ castor::move( rhs.targetViewId ) }
+		, sampledViewId{ castor::move( rhs.sampledViewId ) }
+		, wholeView{ castor::move( rhs.wholeView ) }
+		, targetView{ castor::move( rhs.targetView ) }
+		, sampledView{ castor::move( rhs.sampledView ) }
+		, subViewsId{ castor::move( rhs.subViewsId ) }
+		, sampler{ castor::move( rhs.sampler ) }
 	{
 		rhs.device = nullptr;
 		rhs.resources = nullptr;
@@ -112,18 +112,18 @@ namespace castor3d
 
 	Texture & Texture::operator=( Texture && rhs )noexcept
 	{
-		resources = std::move( rhs.resources );
-		device = std::move( rhs.device );
-		imageId = std::move( rhs.imageId );
-		image = std::move( rhs.image );
-		wholeViewId = std::move( rhs.wholeViewId );
-		targetViewId = std::move( rhs.targetViewId );
-		sampledViewId = std::move( rhs.sampledViewId );
-		wholeView = std::move( rhs.wholeView );
-		targetView = std::move( rhs.targetView );
-		sampledView = std::move( rhs.sampledView );
-		subViewsId = std::move( rhs.subViewsId );
-		sampler = std::move( rhs.sampler );
+		resources = castor::move( rhs.resources );
+		device = castor::move( rhs.device );
+		imageId = castor::move( rhs.imageId );
+		image = castor::move( rhs.image );
+		wholeViewId = castor::move( rhs.wholeViewId );
+		targetViewId = castor::move( rhs.targetViewId );
+		sampledViewId = castor::move( rhs.sampledViewId );
+		wholeView = castor::move( rhs.wholeView );
+		targetView = castor::move( rhs.targetView );
+		sampledView = castor::move( rhs.sampledView );
+		subViewsId = castor::move( rhs.subViewsId );
+		sampler = castor::move( rhs.sampler );
 
 		rhs.device = nullptr;
 		rhs.resources = nullptr;
@@ -322,7 +322,8 @@ namespace castor3d
 		auto & handler = resources->getHandler();
 		mipLevels = std::max( 1u, mipLevels );
 		layerCount = ( size.depth > 1u ? 1u : layerCount );
-		imageId = handler.createImageId( crg::ImageData{ name
+		auto mbName = castor::toUtf8( name );
+		imageId = handler.createImageId( crg::ImageData{ mbName
 			, ( createFlags
 				| ( size.depth > 1u
 					? VK_IMAGE_CREATE_2D_ARRAY_COMPATIBLE_BIT
@@ -339,7 +340,7 @@ namespace castor3d
 			, mipLevels
 			, layerCount
 			, sampleCount } );
-		wholeViewId = handler.createViewId( crg::ImageViewData{ name + "Whole"
+		wholeViewId = handler.createViewId( crg::ImageViewData{ mbName + "Whole"
 			, imageId
 			, 0u
 			, ( size.depth > 1u
@@ -358,7 +359,7 @@ namespace castor3d
 		{
 			auto createInfo = *wholeViewId.data;
 			createInfo.info.viewType = VK_IMAGE_VIEW_TYPE_2D_ARRAY;
-			createInfo.name = name + "Target";
+			createInfo.name = mbName + "Target";
 			createInfo.info.subresourceRange.baseArrayLayer = 0u;
 			createInfo.info.subresourceRange.layerCount = createInfo.image.data->info.extent.depth;
 			createInfo.info.subresourceRange.baseMipLevel = 0u;
@@ -368,7 +369,7 @@ namespace castor3d
 		else if ( wholeViewId.data->info.subresourceRange.levelCount == wholeViewId.data->image.data->info.mipLevels )
 		{
 			auto createInfo = *wholeViewId.data;
-			createInfo.name = name + "Target";
+			createInfo.name = mbName + "Target";
 			createInfo.info.subresourceRange.baseMipLevel = 0u;
 			createInfo.info.subresourceRange.levelCount = 1u;
 			targetViewId = handler.createViewId( createInfo );
@@ -381,7 +382,7 @@ namespace castor3d
 		if ( ashes::isDepthStencilFormat( wholeViewId.data->image.data->info.format ) )
 		{
 			auto createInfo = *wholeViewId.data;
-			createInfo.name = name + "Sampled";
+			createInfo.name = mbName + "Sampled";
 			createInfo.info.subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
 			sampledViewId = handler.createViewId( createInfo );
 		}
@@ -396,7 +397,7 @@ namespace castor3d
 
 			for ( uint32_t index = 0u; index < sliceLayerCount; ++index )
 			{
-				subViewsId.push_back( handler.createViewId( crg::ImageViewData{ name + "Sub" + std::to_string( index )
+				subViewsId.push_back( handler.createViewId( crg::ImageViewData{ mbName + "Sub" + castor::string::toMbString( index )
 					, imageId
 					, 0u
 					, VK_IMAGE_VIEW_TYPE_2D
@@ -420,7 +421,7 @@ namespace castor3d
 
 		auto & context = device->makeContext();
 		
-		image = std::make_unique< ashes::Image >( **device
+		image = castor::make_unique< ashes::Image >( **device
 			, imageId.data->name
 			, resources->createImage( context, imageId )
 			, ashes::ImageCreateInfo{ imageId.data->info } );

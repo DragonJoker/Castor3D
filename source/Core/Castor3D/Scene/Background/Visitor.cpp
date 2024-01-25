@@ -3,7 +3,7 @@
 namespace castor3d
 {
 	BackgroundVisitor::BackgroundVisitor( Config config )
-		: ConfigurationVisitor{ std::move( config ) }
+		: ConfigurationVisitor{ castor::move( config ) }
 	{
 	}
 }

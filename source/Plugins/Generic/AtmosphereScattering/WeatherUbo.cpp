@@ -10,8 +10,8 @@
 
 namespace atmosphere_scattering
 {
-	castor::String const WeatherUbo::Buffer = cuT( "Weather" );
-	castor::String const WeatherUbo::Data = cuT( "c3d_weatherData" );
+	castor::MbString const WeatherUbo::Buffer = "Weather";
+	castor::MbString const WeatherUbo::Data = "c3d_weatherData";
 
 	WeatherUbo::WeatherUbo( castor3d::RenderDevice const & device
 		, bool & dirty )

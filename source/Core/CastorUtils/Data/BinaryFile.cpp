@@ -36,7 +36,7 @@ namespace castor
 
 		if ( result && uiSize > 0 )
 		{
-			std::vector< xchar > pTmp( uiSize + 1, 0 );
+			Vector< xchar > pTmp( uiSize + 1, 0 );
 			result = readArray< xchar >( pTmp.data(), uiSize ) == uiSize * sizeof( xchar );
 
 			if ( result )

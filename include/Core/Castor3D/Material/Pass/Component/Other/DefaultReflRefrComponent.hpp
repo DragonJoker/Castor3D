@@ -79,7 +79,7 @@ namespace castor3d
 
 			shader::PassReflRefrShaderPtr createReflRefrShader()const override
 			{
-				return std::make_unique< ReflRefrShader >( *this );
+				return castor::make_unique< ReflRefrShader >( *this );
 			}
 
 			void filterComponentFlags( ComponentModeFlags filter

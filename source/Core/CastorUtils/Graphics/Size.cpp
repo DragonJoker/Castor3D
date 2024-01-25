@@ -14,18 +14,16 @@ namespace castor
 		getData().size.y = height;
 	}
 
-	Size::Size( Size const & rhs )noexcept
-		: BaseType{ getData().buffer.data() }
+	Size::Size( Size const & rhs )
+		: DataHolderT{ rhs }
+		, BaseType{ getData().buffer.data() }
 	{
-		getData().size = rhs.getData().size;
 	}
 
 	Size::Size( Size && rhs )noexcept
-		: BaseType{ getData().buffer.data() }
+		: DataHolderT{ std::move( rhs ) }
+		, BaseType{ getData().buffer.data() }
 	{
-		getData().size = rhs.getData().size;
-		rhs.getData().size.x = 0;
-		rhs.getData().size.y = 0;
 	}
 
 	Size & Size::operator=( Size const & rhs )noexcept

@@ -29,7 +29,7 @@ namespace castor3d
 
 	void ShadowBuffer::createPassBinding( crg::FramePass & pass, uint32_t binding )const
 	{
-		return m_buffer.createPassBinding( pass, cuT( "C3D_Shadows" ), binding );
+		return m_buffer.createPassBinding( pass, "C3D_Shadows", binding );
 	}
 
 	ashes::WriteDescriptorSet ShadowBuffer::getBinding( uint32_t binding )const

@@ -214,7 +214,7 @@ namespace castor3d
 
 			if ( sel >= 0 && uint32_t( sel ) < getItemCount() )
 			{
-				text->setCaption( castor::string::toU32String( getItems()[uint32_t( sel )] ) );
+				text->setCaption( castor::toUtf8U32String( getItems()[uint32_t( sel )] ) );
 			}
 		}
 
@@ -359,7 +359,7 @@ namespace castor3d
 
 			if ( auto text = m_text )
 			{
-				text->setCaption( castor::string::toU32String( m_choices->getItemText( selected ) ) );
+				text->setCaption( castor::toUtf8U32String( m_choices->getItemText( selected ) ) );
 			}
 		}
 

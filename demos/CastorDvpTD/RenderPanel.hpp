@@ -83,7 +83,7 @@ namespace castortd
 		float m_oldX{ 0.0f };
 		float m_oldY{ 0.0f };
 		bool m_mouseLeftDown{ false };
-		std::array< wxTimer *, size_t( TimerID::eCount ) > m_timers;
+		castor::Array< wxTimer *, size_t( TimerID::eCount ) > m_timers;
 		GuiCommon::NodeStatePtr m_cameraState{};
 		castor3d::RenderWindowUPtr m_renderWindow{};
 		castor3d::FrameListenerRPtr m_listener{};

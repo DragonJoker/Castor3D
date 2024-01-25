@@ -56,7 +56,7 @@ namespace atmosphere_scattering
 		: writer{ pwriter }
 		, atmosphereData{ patmosphereData }
 		, settings{ psettings }
-		, transmittanceExtent{ std::move( ptransmittanceExtent ) }
+		, transmittanceExtent{ castor::move( ptransmittanceExtent ) }
 		, planetRadiusOffset{ 0.01_f }
 	{
 	}

@@ -24,55 +24,55 @@ namespace castor3d
 			return stream;
 		}
 
-		static std::string getName( VkShaderStageFlagBits value )
+		static castor::String getName( VkShaderStageFlagBits value )
 		{
 			switch ( value )
 			{
 			case VK_SHADER_STAGE_VERTEX_BIT:
-				return "Vert";
+				return cuT( "Vert" );
 			case VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT:
-				return "Tesc";
+				return cuT( "Tesc" );
 			case VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT:
-				return "Tese";
+				return cuT( "Tese" );
 			case VK_SHADER_STAGE_GEOMETRY_BIT:
-				return "Geom";
+				return cuT( "Geom" );
 			case VK_SHADER_STAGE_FRAGMENT_BIT:
-				return "Frag";
+				return cuT( "Frag" );
 			case VK_SHADER_STAGE_COMPUTE_BIT:
-				return "Comp";
+				return cuT( "Comp" );
 #ifdef VK_NV_ray_tracing
 			case VK_SHADER_STAGE_RAYGEN_BIT_NV:
-				return "Rgen";
+				return cuT( "Rgen" );
 			case VK_SHADER_STAGE_ANY_HIT_BIT_NV:
-				return "Ahit";
+				return cuT( "Ahit" );
 			case VK_SHADER_STAGE_CLOSEST_HIT_BIT_NV:
-				return "Chit";
+				return cuT( "Chit" );
 			case VK_SHADER_STAGE_MISS_BIT_NV:
-				return "Rmis";
+				return cuT( "Rmis" );
 			case VK_SHADER_STAGE_INTERSECTION_BIT_NV:
-				return "Rint";
+				return cuT( "Rint" );
 			case VK_SHADER_STAGE_CALLABLE_BIT_NV:
-				return "Call";
+				return cuT( "Call" );
 #endif
 #if defined( VK_EXT_mesh_shader )
 			case VK_SHADER_STAGE_TASK_BIT_EXT:
-				return "Task";
+				return cuT( "Task" );
 			case VK_SHADER_STAGE_MESH_BIT_EXT:
-				return "Mesh";
+				return cuT( "Mesh" );
 #elif defined( VK_NV_mesh_shader )
 			case VK_SHADER_STAGE_TASK_BIT_NV:
-				return "Task";
+				return cuT( "Task" );
 			case VK_SHADER_STAGE_MESH_BIT_NV:
-				return "Mesh"; 
+				return cuT( "Mesh" ); 
 #endif
 			default:
 				assert( false && "Unsupported VkShaderStageFlagBits." );
-				return "Unsupported VkShaderStageFlagBits";
+				return cuT( "Unsupported VkShaderStageFlagBits" );
 			}
 		}
 
 		static void eraseFile( VkShaderStageFlagBits target
-			, std::map< VkShaderStageFlagBits, castor::Path > & files )
+			, castor::Map< VkShaderStageFlagBits, castor::Path > & files )
 		{
 			auto it = files.find( target );
 
@@ -116,11 +116,11 @@ namespace castor3d
 			castor::TextFile file{ pathFile, castor::File::OpenMode::eRead };
 			file.copyToString( source );
 		}
-		setSource( target, source );
+		setSource( target, castor::toUtf8( source ) );
 		m_files[target] = pathFile;
 	}
 
-	void ShaderProgram::setSource( VkShaderStageFlagBits target, castor::String const & source )
+	void ShaderProgram::setSource( VkShaderStageFlagBits target, castor::MbString const & source )
 	{
 		shdprog::eraseFile( target, m_files );
 		shdprog::eraseStage( target, m_states );
@@ -147,7 +147,7 @@ namespace castor3d
 	{
 		m_files.clear();
 		m_module.compiled.clear();
-		m_module.shader = std::move( shader );
+		m_module.shader = castor::move( shader );
 		m_states = makeProgramStates( getRenderSystem()->getRenderDevice(), m_module );
 	}
 
@@ -199,7 +199,7 @@ namespace castor3d
 					, getVkShaderStage( entryPoint.stage )
 					, compileShader( device, programModule, entryPoint )
 					, programModule.name
-					, "main"
+					, cuT( "main" )
 					, specialization ) );
 			}
 		}

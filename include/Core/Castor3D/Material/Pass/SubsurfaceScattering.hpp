@@ -14,7 +14,7 @@ namespace castor3d
 	class SubsurfaceScattering
 	{
 	public:
-		using Changed = std::function< void( SubsurfaceScattering const & ) >;
+		using Changed = castor::Function< void( SubsurfaceScattering const & ) >;
 		using OnChanged = castor::SignalT< Changed >;
 		using OnChangedConnection = OnChanged::connection;
 
@@ -151,7 +151,7 @@ namespace castor3d
 		castor::GroupChangeTracked< castor::Point3f > m_transmittanceCoefficients;
 		//!\~english	The transmittance profile factors.
 		//!\~french		Les facteurs du profil de transmission.
-		std::vector< castor::GroupChangeTracked< castor::Point4f > > m_profileFactors;
+		castor::Vector< castor::GroupChangeTracked< castor::Point4f > > m_profileFactors;
 	};
 }
 

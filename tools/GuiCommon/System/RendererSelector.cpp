@@ -84,7 +84,7 @@ namespace GuiCommon
 		if ( selected < m_renderersList->GetCount() )
 		{
 			auto it = std::next( m_renderers.begin(), selected );
-			result = std::move( *it );
+			result = castor::move( *it );
 			m_renderers.erase( it );
 		}
 

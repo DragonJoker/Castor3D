@@ -27,7 +27,7 @@ namespace castor3d
 				, Pass const & pass
 				, ObjectBufferOffset const & bufferOffsets
 				, ashes::BufferCRefArray & buffers
-				, std::vector< uint64_t > & offsets
+				, castor::Vector< uint64_t > & offsets
 				, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
 				, uint32_t & currentBinding
 				, uint32_t & currentLocation )override
@@ -57,7 +57,7 @@ namespace castor3d
 			 *\brief		Ajoute des données de bones.
 			 *\param[in]	boneData	Les données de bones.
 			 */
-			C3D_API void addDatas( std::vector< VertexBoneData > const & boneData );
+			C3D_API void addDatas( castor::Vector< VertexBoneData > const & boneData );
 			/**
 			 *\~english
 			 *\brief		adds bone datas.
@@ -67,7 +67,7 @@ namespace castor3d
 			 *\param[in]	boneData	Les données de bones.
 			 */
 			template< size_t Count >
-			void addDatas( std::array< VertexBoneData, Count > const & boneData )
+			void addDatas( castor::Array< VertexBoneData, Count > const & boneData )
 			{
 				addDatas( boneData.data(), boneData.data() + boneData.size() );
 			}
@@ -93,7 +93,7 @@ namespace castor3d
 			void doUpload( UploadData & uploader )override;
 
 		private:
-			std::unordered_map< size_t, ashes::PipelineVertexInputStateCreateInfo > m_bonesLayouts;
+			castor::UnorderedMap< size_t, ashes::PipelineVertexInputStateCreateInfo > m_bonesLayouts;
 			VertexBoneDataArray m_bones;
 
 		private:

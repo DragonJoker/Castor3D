@@ -78,7 +78,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const VoxelizePass::Type = "c3d.voxelize";
+	castor::String const VoxelizePass::Type = cuT( "c3d.voxelize" );
 
 	VoxelizePass::VoxelizePass( crg::FramePass const & pass
 		, crg::GraphContext & context
@@ -326,7 +326,7 @@ namespace castor3d
 						, c3d_cameraData.worldToCurView( out.vtx.position ) );
 					out.viewPosition = viewPosition;
 					out.normal = normalize( c3d_cameraData.getPosToCamera( curBbcenter ) );
-					auto passMultipliers = std::vector< sdw::Vec4 >{ vec4( 1.0_f, 0.0_f, 0.0_f, 0.0_f )
+					auto passMultipliers = castor::Vector< sdw::Vec4 >{ vec4( 1.0_f, 0.0_f, 0.0_f, 0.0_f )
 						, vec4( 0.0_f )
 						, vec4( 0.0_f )
 						, vec4( 0.0_f ) };
@@ -389,7 +389,7 @@ namespace castor3d
 			, sdw::TriangleStreamT< shader::VoxelSurfaceT >{ writer
 				, 3u
 				, flags }
-			, [&]( sdw::GeometryIn const & in
+			, [&]( sdw::GeometryIn const &
 				, sdw::TriangleListT< shader::VoxelSurfaceT > const & list
 				, sdw::TriangleStreamT< shader::VoxelSurfaceT > out )
 			{
@@ -529,8 +529,8 @@ namespace castor3d
 				, sdw::FragmentCenter::eHalfPixel
 				, flags }
 			, sdw::FragmentOut{ writer }
-			, [&]( sdw::FragmentInT< shader::VoxelSurfaceT > in
-				, sdw::FragmentOut out )
+			, [&]( sdw::FragmentInT< shader::VoxelSurfaceT > const & in
+				, sdw::FragmentOut const & )
 			{
 				auto diff = writer.declLocale( "diff"
 					, c3d_voxelData.worldToClip( in.worldPosition.xyz() ) );

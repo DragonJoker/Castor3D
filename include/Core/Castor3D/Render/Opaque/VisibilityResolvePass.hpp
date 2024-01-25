@@ -76,8 +76,8 @@ namespace castor3d
 		/**
 		 *\copydoc	castor3d::RenderTechniquePass::createPipelineFlags
 		 */
-		C3D_API PipelineFlags createPipelineFlags( PassComponentCombine passComponents
-			, SubmeshComponentCombine submeshComponents
+		C3D_API PipelineFlags createPipelineFlags( PassComponentCombine const & passComponents
+			, SubmeshComponentCombine const & submeshComponents
 			, BlendMode colourBlendMode
 			, BlendMode alphaBlendMode
 			, RenderPassTypeID renderPassTypeId
@@ -144,7 +144,7 @@ namespace castor3d
 		struct Pipeline
 		{
 			explicit Pipeline( PipelineFlags pflags )
-				: flags{ std::move( pflags ) }
+				: flags{ castor::move( pflags ) }
 			{
 			}
 
@@ -156,7 +156,7 @@ namespace castor3d
 			ashes::DescriptorSetPoolPtr ioDescriptorPool{};
 			ProgramModule shader;
 			ashes::PipelinePtr pipeline{};
-			std::unordered_map< size_t, ashes::DescriptorSetPtr > vtxDescriptorSets{};
+			castor::UnorderedMap< size_t, ashes::DescriptorSetPtr > vtxDescriptorSets{};
 			ashes::DescriptorSetPtr ioDescriptorSet{};
 		};
 		struct PipelineNodesDescriptors
@@ -164,12 +164,12 @@ namespace castor3d
 			uint32_t pipelineId{};
 			ashes::DescriptorSet const * vtxDescriptorSet{};
 		};
-		using PipelinePtr = std::unique_ptr< Pipeline >;
-		using SubmeshPipelinesNodesDescriptors = std::map< ashes::DescriptorSet const *, UInt32Array >;
-		using SubmeshPipelinesMap = std::map< Pipeline const *, SubmeshPipelinesNodesDescriptors >;
-		using BillboardPipelinesNodesDescriptors = std::map< uint32_t, PipelineNodesDescriptors >;
-		using BillboardPipelinesMap = std::map< Pipeline const *, BillboardPipelinesNodesDescriptors >;
-		using PipelineContainer = std::vector< PipelinePtr >;
+		using PipelinePtr = castor::RawUniquePtr< Pipeline >;
+		using SubmeshPipelinesNodesDescriptors = castor::Map< ashes::DescriptorSet const *, UInt32Array >;
+		using SubmeshPipelinesMap = castor::Map< Pipeline const *, SubmeshPipelinesNodesDescriptors >;
+		using BillboardPipelinesNodesDescriptors = castor::Map< uint32_t, PipelineNodesDescriptors >;
+		using BillboardPipelinesMap = castor::Map< Pipeline const *, BillboardPipelinesNodesDescriptors >;
+		using PipelineContainer = castor::Vector< PipelinePtr >;
 
 	private:
 		void doAccept( castor3d::RenderTechniqueVisitor & visitor )override;

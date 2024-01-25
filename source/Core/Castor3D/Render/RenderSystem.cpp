@@ -235,35 +235,35 @@ namespace castor3d
 
 		//*************************************************************************
 
-		static bool isValidationLayer( std::string const & name )
+		static bool isValidationLayer( castor::MbString const & name )
 		{
-			static std::set< std::string, std::less<> > const validNames
+			static castor::Set< castor::MbString > const validNames
 			{
 				"VK_LAYER_KHRONOS_validation",
 			};
 			return validNames.find( name ) != validNames.end();
 		}
 
-		static bool isSynchronisationLayer( std::string const & name )
+		static bool isSynchronisationLayer( castor::MbString const & name )
 		{
-			static std::set< std::string, std::less<> > const validNames
+			static castor::Set< castor::MbString > const validNames
 			{
 				"VK_LAYER_KHRONOS_synchronization2",
 			};
 			return validNames.find( name ) != validNames.end();
 		}
 
-		static bool isApiTraceLayer( std::string const & name )
+		static bool isApiTraceLayer( castor::MbString const & name )
 		{
-			static std::set< std::string, std::less<> > const validNames
+			static castor::Set< castor::MbString > const validNames
 			{
 				"VK_LAYER_LUNARG_api_dump",
 			};
 			return validNames.find( name ) != validNames.end();
 		}
 
-		static bool isExtensionAvailable( std::vector< VkExtensionProperties > const & available
-			, std::string const & requested )
+		static bool isExtensionAvailable( castor::Vector< VkExtensionProperties > const & available
+			, castor::MbString const & requested )
 		{
 			return available.end() != std::find_if( available.begin()
 				, available.end()
@@ -273,7 +273,7 @@ namespace castor3d
 				} );
 		}
 
-		static void addOptionalDebugLayers( std::vector< VkExtensionProperties > const & available
+		static void addOptionalDebugLayers( castor::Vector< VkExtensionProperties > const & available
 			, Extensions & extensions )
 		{
 #if VK_KHR_synchronization2
@@ -307,7 +307,7 @@ namespace castor3d
 #endif
 		}
 
-		static void checkExtensionsAvailability( std::vector< VkExtensionProperties > const & available
+		static void checkExtensionsAvailability( castor::Vector< VkExtensionProperties > const & available
 			, ashes::StringArray const & requested )
 		{
 			for ( auto const & name : requested )
@@ -327,7 +327,7 @@ namespace castor3d
 			}
 
 			uint32_t count;
-			std::vector< VkLayerProperties > result;
+			castor::Vector< VkLayerProperties > result;
 			VkResult res;
 
 			do
@@ -351,7 +351,7 @@ namespace castor3d
 		}
 
 		static ashes::VkExtensionPropertiesArray enumerateExtensionProperties( PFN_vkEnumerateInstanceExtensionProperties enumInstanceExtensionProperties
-			, std::string const & layerName )
+			, castor::MbString const & layerName )
 		{
 			if ( !enumInstanceExtensionProperties )
 			{
@@ -359,7 +359,7 @@ namespace castor3d
 			}
 
 			uint32_t count;
-			std::vector< VkExtensionProperties > result;
+			castor::Vector< VkExtensionProperties > result;
 			VkResult res;
 
 			do
@@ -391,7 +391,7 @@ namespace castor3d
 		{
 			return ashes::ApplicationInfo
 			{
-				engine.getAppName(),
+				castor::toUtf8( engine.getAppName() ),
 				engine.getAppVersion().getVkVersion(),
 				"Castor3D",
 				Version{}.getVkVersion(),
@@ -554,8 +554,8 @@ namespace castor3d
 		, AshPluginDescription pdesc
 		, Extensions pinstanceExtensions
 		, uint32_t gpuIndex )
-		: desc{ std::move( pdesc ) }
-		, instanceExtensions{ std::move( pinstanceExtensions ) }
+		: desc{ castor::move( pdesc ) }
+		, instanceExtensions{ castor::move( pinstanceExtensions ) }
 		, instance{ RenderSystem::createInstance( engine, desc, instanceExtensions ) }
 		, gpus{ instance->enumeratePhysicalDevices() }
 	{
@@ -574,7 +574,7 @@ namespace castor3d
 		, Renderer renderer
 		, Extensions pdeviceExtensions )
 		: OwnedBy< Engine >{ engine }
-		, m_renderer{ std::move( renderer ) }
+		, m_renderer{ castor::move( renderer ) }
 	{
 		if ( !m_renderer.gpu )
 		{
@@ -585,7 +585,7 @@ namespace castor3d
 
 		if ( getEngine()->isValidationEnabled() )
 		{
-			m_debug = std::make_unique< DebugCallbacks >( *m_renderer.instance
+			m_debug = castor::make_unique< DebugCallbacks >( *m_renderer.instance
 				, this );
 		}
 
@@ -603,10 +603,10 @@ namespace castor3d
 		m_device = castor::makeUnique< RenderDevice >( *this
 			, gpu
 			, m_renderer.desc
-			, std::move( pdeviceExtensions ) );
+			, castor::move( pdeviceExtensions ) );
 		doCreateRandomStorage( *m_device );
 
-		static std::map< uint32_t, castor::String > vendors
+		static castor::Map< uint32_t, castor::String > vendors
 		{
 			{ 0x1002, cuT( "AMD" ) },
 			{ 0x10DE, cuT( "NVIDIA" ) },
@@ -620,7 +620,7 @@ namespace castor3d
 		castor::StringStream stream( castor::makeStringStream() );
 		stream << ( properties.apiVersion >> 22 ) << cuT( "." ) << ( ( properties.apiVersion >> 12 ) & 0x0FFF );
 		m_gpuInformations.setVendor( vendors[properties.vendorID] );
-		m_gpuInformations.setRenderer( properties.deviceName );
+		m_gpuInformations.setRenderer( castor::makeString( properties.deviceName ) );
 		m_gpuInformations.setVersion( stream.str() );
 		m_gpuInformations.updateFeature( castor3d::GpuFeature::eStereoRendering, limits.maxViewports > 1u );
 		m_gpuInformations.updateFeature( castor3d::GpuFeature::eShaderStorageBuffers, m_renderer.desc.features.hasStorageBuffers != 0 );
@@ -683,8 +683,8 @@ namespace castor3d
 		, Extensions instanceExtensions
 		, Extensions deviceExtensions )
 		: RenderSystem{ engine
-			, Renderer{ engine, std::move( desc ), std::move( instanceExtensions ), 0u }
-			, std::move( deviceExtensions ) }
+			, Renderer{ engine, castor::move( desc ), castor::move( instanceExtensions ), 0u }
+			, castor::move( deviceExtensions ) }
 	{
 	}
 
@@ -707,7 +707,7 @@ namespace castor3d
 			, globalLayer.layerName );
 
 		// On récupère la liste d'extensions pour chaque couche de l'instance.
-		castor::StringMap< ashes::VkExtensionPropertiesArray > layersExtensions;
+		castor::Map< castor::MbString, ashes::VkExtensionPropertiesArray > layersExtensions;
 		for ( auto const & layerProperties : layers )
 		{
 			layersExtensions.try_emplace( layerProperties.layerName
@@ -820,13 +820,13 @@ namespace castor3d
 		};
 		log::debug << "Enabled layers count: " << uint32_t( layerNames.size() ) << std::endl;
 		log::debug << "Enabled extensions count: " << uint32_t( extensionNames.size() ) << std::endl;
-		return std::make_unique< ashes::Instance >( std::move( plugin )
+		return castor::make_unique< ashes::Instance >( castor::move( plugin )
 #if C3D_UseAllocationCallbacks
 			, ashes::makeAllocator< rendsys::AlignedBuddyAllocatorTraits >()
 #else
 			, nullptr
 #endif
-			, std::move( createInfo ) );
+			, castor::move( createInfo ) );
 	}
 
 	void RenderSystem::completeLayerNames( Engine const & engine
@@ -895,7 +895,7 @@ namespace castor3d
 		, ast::Shader const & shader
 		, ast::EntryPointConfig const & entryPoint )
 	{
-		log::debug << "Compiling " << ashes::getName( stage ) << " shader [" << name << "] ...";
+		log::debug << cuT( "Compiling " ) << castor::makeString( ashes::getName( stage ) ) << cuT( " shader [" ) << name << cuT( "] ..." );
 		SpirVShader result;
 		auto availableExtensions = rendsys::listSpirVExtensions( *m_device, getEngine()->getShaderDebugLevel() );
 		spirv::SpirVConfig spirvConfig{ rendsys::getSpirVVersion( m_properties.apiVersion )
@@ -909,7 +909,7 @@ namespace castor3d
 		auto statements = ast::selectEntryPoint( compileStmtCache, compileExprCache, entryPoint, *shader.getStatements() );
 		auto shaderModule = spirv::compileSpirV( *allocator, shader, statements.get(), entryPoint.stage, spirvConfig );
 		result.spirv = spirv::serialiseModule( *shaderModule );
-		std::string glsl;
+		castor::MbString glsl;
 
 #if C3D_HasGLSL
 		if ( ( getEngine()->areTextShadersKept() && spirvConfig.debugLevel != spirv::DebugLevel::eDebugInfo )
@@ -937,7 +937,7 @@ namespace castor3d
 		if ( getEngine()->isShaderValidationEnabled() )
 		{
 			auto shadersDir = Engine::getEngineDirectory() / cuT( "Shaders" );
-			auto fileBaseName = castor::File::normaliseFileName( name + "_" + ashes::getName( stage ) );
+			auto fileBaseName = castor::File::normaliseFileName( name + cuT( "_" ) + castor::makeString( ashes::getName( stage ) ) );
 
 			if ( !castor::File::directoryExists( shadersDir ) )
 			{
@@ -950,7 +950,7 @@ namespace castor3d
 					castor::File::directoryCreate( shadersDir / cuT( "SPV" ) );
 				}
 
-				castor::BinaryFile file{ shadersDir / cuT( "SPV" ) / ( fileBaseName + ".spirv" )
+				castor::BinaryFile file{ shadersDir / cuT( "SPV" ) / ( fileBaseName + cuT( ".spirv" ) )
 					, castor::File::OpenMode::eWrite };
 				file.writeArray( result.spirv.data()
 					, result.spirv.size() );
@@ -962,7 +962,7 @@ namespace castor3d
 					castor::File::directoryCreate( shadersDir / cuT( "GLSL" ) );
 				}
 
-				castor::BinaryFile glslFile{ shadersDir / cuT( "GLSL" ) / ( fileBaseName + ".glsl" )
+				castor::BinaryFile glslFile{ shadersDir / cuT( "GLSL" ) / ( fileBaseName + cuT( ".glsl" ) )
 					, castor::File::OpenMode::eWrite };
 				glslFile.writeArray( glsl.data()
 					, glsl.size() );
@@ -972,7 +972,7 @@ namespace castor3d
 
 		if ( getEngine()->areTextShadersKept() )
 		{
-			log::debug << " Text SPIRV ...";
+			log::debug << cuT( " Text SPIRV ..." );
 			result.text = spirv::writeModule( *shaderModule );
 #if C3D_HasGLSL
 			if ( spirvConfig.debugLevel != spirv::DebugLevel::eDebugInfo )
@@ -988,7 +988,7 @@ namespace castor3d
 
 	SpirVShader RenderSystem::compileShader( VkShaderStageFlagBits stage
 		, castor::String const & name
-		, castor::String const & glsl )const
+		, castor::MbString const & glsl )const
 	{
 		SpirVShader result;
 		CU_Require( !glsl.empty() );
@@ -998,7 +998,7 @@ namespace castor3d
 			result.text = glsl;
 		}
 
-		log::debug << "Compiling " << ashes::getName( stage ) << " shader [" << name << "] ... SPV ...";
+		log::debug << "Compiling " << castor::makeString( ashes::getName( stage ) ) << " shader [" << name << "] ... SPV ...";
 		result.spirv = castor3d::compileGlslToSpv( getRenderDevice(), stage, glsl );
 		log::debug << " Done." << std::endl;
 		return result;
@@ -1051,7 +1051,7 @@ namespace castor3d
 			, RandomDataCount
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-			, "C3D_RandomStorage" );
+			, cuT( "C3D_RandomStorage" ) );
 		auto rddevice = rendsys::createRandomEngine( !getEngine()->isRandomisationEnabled() );
 		std::uniform_real_distribution< float > distribution{ -1.0f, 1.0f };
 
@@ -1082,7 +1082,7 @@ namespace castor3d
 
 		if ( res )
 		{
-			it->second = std::make_unique< ast::ShaderAllocator >( ast::AllocationMode::eIncremental );
+			it->second = castor::make_unique< ast::ShaderAllocator >( ast::AllocationMode::eIncremental );
 		}
 
 		return *it->second;

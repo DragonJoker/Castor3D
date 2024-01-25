@@ -30,7 +30,7 @@ namespace fireworks
 
 	public:
 		static castor::String const Type;
-		static castor::String const Name;
+		static castor::MbString const Name;
 	};
 }
 

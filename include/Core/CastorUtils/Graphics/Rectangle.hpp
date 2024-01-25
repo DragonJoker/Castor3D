@@ -19,7 +19,7 @@ namespace castor
 			int32_t bottom;
 		};
 		Mbr rect;
-		std::array< int32_t, 4u > buffer;
+		Array< int32_t, 4u > buffer;
 	};
 
 	class Rectangle

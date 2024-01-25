@@ -41,7 +41,7 @@ namespace castor
 	class PxBufferBase
 	{
 	public:
-		using PxArray = std::vector< uint8_t >;
+		using PxArray = Vector< uint8_t >;
 		using PixelData = PxArray::iterator;
 		using ConstPixelData = PxArray::const_iterator;
 

@@ -151,7 +151,7 @@ namespace castor3d
 		, shader::BlendComponents & components
 		, shader::SampleTexture const & sampleTexture )const
 	{
-		applyFloatComponent( "occlusion"
+		applyFloatComponent( cuT( "occlusion" )
 			, passShaders
 			, textureConfigs
 			, textureAnims
@@ -165,7 +165,7 @@ namespace castor3d
 	void OcclusionMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		channelFillers.try_emplace( "occlusion"
+		channelFillers.try_emplace( cuT( "occlusion" )
 			, getTextureFlags()
 			, []( TextureContext & blockContext )
 			{
@@ -206,7 +206,7 @@ namespace castor3d
 	}
 
 	void OcclusionMapComponent::Plugin::createMapComponent( Pass & pass
-		, std::vector< PassComponentUPtr > & result )const
+		, castor::Vector< PassComponentUPtr > & result )const
 	{
 		result.push_back( castor::makeUniqueDerived< PassComponent, OcclusionMapComponent >( pass ) );
 	}

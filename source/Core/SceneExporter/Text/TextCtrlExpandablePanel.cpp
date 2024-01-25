@@ -24,8 +24,8 @@ namespace castor
 	{
 		log::info << tabs() << cuT( "Writing ExpandablePanelCtrl " ) << control.getName() << std::endl;
 		auto result = writeSub< Control >( file, control )
-			&& writeNameOpt( file, "expand_caption", string::stringCast< xchar >( control.getExpandCaption() ), "+" )
-			&& writeNameOpt( file, "retract_caption", string::stringCast< xchar >( control.getRetractCaption() ), "-" );
+			&& writeNameOpt( file, cuT( "expand_caption" ), makeString( control.getExpandCaption() ), cuT( "+" ) )
+			&& writeNameOpt( file, cuT( "retract_caption" ), makeString( control.getRetractCaption() ), cuT( "-" ) );
 
 		if ( result )
 		{

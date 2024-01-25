@@ -37,7 +37,7 @@ namespace castor3d
 		static uint32_t constexpr ValuesPerThread = BatchesPerPass << 1u;
 		static uint32_t constexpr NumThreads = BlockSize / ValuesPerThread;
 
-		enum BindingPoints
+		enum class BindingPoints
 		{
 			eClusters,
 			eClusterIndex,
@@ -50,14 +50,14 @@ namespace castor3d
 			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			C3D_Clusters( writer
-				, eClusters
+				, BindingPoints::eClusters
 				, 0u
 				, &config );
 			C3D_LightClusterIndex( writer
-				, eClusterIndex
+				, BindingPoints::eClusterIndex
 				, 0u );
 			C3D_LightClusterGrid( writer
-				, eClusterGrid
+				, BindingPoints::eClusterGrid
 				, 0u );
 
 			auto gBatchSize = writer.declConstant( "gBatchSize", sdw::UInt{ BatchSize } );
@@ -195,7 +195,7 @@ namespace castor3d
 				, crg::cp::Config config
 				, FrustumClusters const & clusters
 				, LightType lightType )
-				: ShaderHolder{ ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, std::string{ "SortAssigned/" } + getName( lightType ), createShader( device, clusters.getConfig() ) } }
+				: ShaderHolder{ ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, castor::String{ cuT( "SortAssigned/" ) } + getName( lightType ), createShader( device, clusters.getConfig() ) } }
 				, CreateInfoHolder{ ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, ShaderHolder::getData() ) } }
 				, crg::ComputePass{ framePass
 					, context
@@ -211,7 +211,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	crg::FramePass const & createSortAssignedLightsPass( crg::FramePassGroup & graph
-		, crg::FramePassArray previousPasses
+		, crg::FramePassArray const & previousPasses
 		, RenderDevice const & device
 		, FrustumClusters const & clusters )
 	{
@@ -221,7 +221,7 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = std::make_unique< sort::FramePass >( framePass
+				auto result = castor::make_unique< sort::FramePass >( framePass
 					, context
 					, graph
 					, device
@@ -232,14 +232,14 @@ namespace castor3d
 						.isEnabled( crg::RunnablePass::IsEnabledCallback( [&clusters](){ return clusters.getCamera().getScene()->getLightCache().hasClusteredLights() && clusters.getConfig().enablePostAssignSort; } ) )
 					, clusters
 					, LightType::ePoint );
-				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
 		point.addDependency( *previousPasses.front() );
-		clusters.getClustersUbo().createPassBinding( point, sort::eClusters );
-		createInOutStoragePassBinding( point, uint32_t( sort::eClusterIndex ), "C3D_PointLightClusterIndex", clusters.getPointLightClusterIndexBuffer(), 0u, ashes::WholeSize );
-		createInOutStoragePassBinding( point, uint32_t( sort::eClusterGrid ), "C3D_PointLightClusterGrid", clusters.getPointLightClusterGridBuffer(), 0u, ashes::WholeSize );
+		clusters.getClustersUbo().createPassBinding( point, uint32_t( sort::BindingPoints::eClusters ) );
+		createInOutStoragePassBinding( point, uint32_t( sort::BindingPoints::eClusterIndex ), cuT( "C3D_PointLightClusterIndex" ), clusters.getPointLightClusterIndexBuffer(), 0u, ashes::WholeSize );
+		createInOutStoragePassBinding( point, uint32_t( sort::BindingPoints::eClusterGrid ), cuT( "C3D_PointLightClusterGrid" ), clusters.getPointLightClusterGridBuffer(), 0u, ashes::WholeSize );
 
 		// Spot lights
 		auto & spot = graph.createPass( "SortAssigned/Spot"
@@ -247,7 +247,7 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = std::make_unique< sort::FramePass >( framePass
+				auto result = castor::make_unique< sort::FramePass >( framePass
 					, context
 					, graph
 					, device
@@ -258,15 +258,15 @@ namespace castor3d
 						.isEnabled( crg::RunnablePass::IsEnabledCallback( [&clusters](){ return clusters.getCamera().getScene()->getLightCache().hasClusteredLights() && clusters.getConfig().enablePostAssignSort; } ) )
 					, clusters
 					, LightType::eSpot );
-				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
 		spot.addDependency( point );
 		spot.addDependency( *previousPasses.back() );
-		clusters.getClustersUbo().createPassBinding( spot, sort::eClusters );
-		createInOutStoragePassBinding( spot, uint32_t( sort::eClusterIndex ), "C3D_SpotLightClusterIndex", clusters.getSpotLightClusterIndexBuffer(), 0u, ashes::WholeSize );
-		createInOutStoragePassBinding( spot, uint32_t( sort::eClusterGrid ), "C3D_SpotLightClusterGrid", clusters.getSpotLightClusterGridBuffer(), 0u, ashes::WholeSize );
+		clusters.getClustersUbo().createPassBinding( spot, uint32_t( sort::BindingPoints::eClusters ) );
+		createInOutStoragePassBinding( spot, uint32_t( sort::BindingPoints::eClusterIndex ), cuT( "C3D_SpotLightClusterIndex" ), clusters.getSpotLightClusterIndexBuffer(), 0u, ashes::WholeSize );
+		createInOutStoragePassBinding( spot, uint32_t( sort::BindingPoints::eClusterGrid ), cuT( "C3D_SpotLightClusterGrid" ), clusters.getSpotLightClusterGridBuffer(), 0u, ashes::WholeSize );
 
 		return spot;
 	}

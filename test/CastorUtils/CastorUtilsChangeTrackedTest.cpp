@@ -4,8 +4,6 @@
 
 #include <numeric>
 
-using namespace castor;
-
 namespace Testing
 {
 	CastorUtilsChangeTrackedTest::CastorUtilsChangeTrackedTest()
@@ -20,7 +18,7 @@ namespace Testing
 
 	void CastorUtilsChangeTrackedTest::BasicTest()
 	{
-		auto tracked = makeChangeTracked( 1 );
+		auto tracked = castor::makeChangeTracked( 1 );
 		CT_CHECK( tracked.isDirty() );
 		CT_EQUAL( tracked.value(), 1 );
 		CT_EQUAL( int( tracked ), 1 );

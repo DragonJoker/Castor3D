@@ -28,7 +28,7 @@ namespace toon::shader
 
 		if ( !m_NdotL )
 		{
-			m_NdotL = std::make_unique< sdw::Float >( writer.declLocale( "toonNdotL", std::move( ndotl ) ) );
+			m_NdotL = castor::make_unique< sdw::Float >( writer.declLocale( "toonNdotL", castor::move( ndotl ) ) );
 		}
 		else
 		{
@@ -41,7 +41,7 @@ namespace toon::shader
 
 		if ( !m_NdotH )
 		{
-			m_NdotH = std::make_unique< sdw::Float >( writer.declLocale( "toonNdotH", std::move( ndoth ) ) );
+			m_NdotH = castor::make_unique< sdw::Float >( writer.declLocale( "toonNdotH", castor::move( ndoth ) ) );
 		}
 		else
 		{
@@ -80,7 +80,7 @@ namespace toon::shader
 			, lights
 			, enableVolumetric }
 	{
-		m_prefix = "toon_phong_";
+		m_prefix = cuT( "toon_phong_" );
 	}
 
 	const castor::String ToonPhongLightingModel::getName()
@@ -144,7 +144,7 @@ namespace toon::shader
 			, lights
 			, enableVolumetric }
 	{
-		m_prefix = "toon_pbr_";
+		m_prefix = cuT( "toon_pbr_" );
 	}
 
 	const castor::String ToonPbrLightingModel::getName()

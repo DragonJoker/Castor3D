@@ -30,7 +30,7 @@ namespace castortd
 		}
 
 	private:
-		std::reference_wrapper< castor3d::SceneNode > m_node;
+		castor::ReferenceWrapper< castor3d::SceneNode > m_node;
 		castor::Point3f m_target;
 		float m_speed{ 0.0f };
 		uint32_t m_damage{ 0u };

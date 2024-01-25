@@ -49,7 +49,7 @@ namespace castor
 		}
 
 		static void trimLine( StringView & text
-			, StringView seps = " \t\r" )
+			, StringView seps = cuT( " \t\r" ) )
 		{
 			if ( !text.empty() )
 			{
@@ -99,7 +99,7 @@ namespace castor
 					return c == '\n' || c == '\r';
 				} );
 			offset = size_t( std::distance( content.begin(), it ) );
-			StringView result{ current, it };
+			StringView result{ &*current, size_t( std::distance( current, it ) ) };
 
 			if ( it != content.end() && *it == '\r' )
 			{
@@ -115,14 +115,14 @@ namespace castor
 
 			if constexpr ( DisplayLines )
 			{
-				std::stringstream idx;
+				auto idx = makeStringStream();
 				idx << std::setw( 8 ) << std::left << std::setfill( ' ' ) << ( lineIndex + 1u );
 				logger.logDebug( idx.str() + String{ result } );
 			}
 
 			trimLine( result );
 			// Trim RHS of inline comment start
-			result = result.substr( 0, result.find( "//" ) );
+			result = result.substr( 0, result.find( cuT( "//" ) ) );
 
 			if ( result.empty() && it != content.end() )
 			{
@@ -134,7 +134,7 @@ namespace castor
 		}
 
 		static void splitLineCommentBlock( StringView text
-			, std::vector< StringView > & work )
+			, Vector< StringView > & work )
 		{
 			trimLine( text );
 			auto commentBegin = text.find( cuT( "/*" ) );
@@ -193,16 +193,16 @@ namespace castor
 		}
 
 		static void splitLine( StringView text
-			, std::vector< StringView > & work )
+			, Vector< StringView > & work )
 		{
 			std::size_t pos = 0;
 			std::size_t start = 0;
 
 			do
 			{
-				pos = text.find_first_of( "{}", start );
+				pos = text.find_first_of( cuT( "{}" ), start );
 
-				if ( pos == std::string::npos )
+				if ( pos == String::npos )
 				{
 					splitLineCommentBlock( text.substr( start ), work );
 				}
@@ -217,7 +217,7 @@ namespace castor
 					work.emplace_back( &text[pos], 1u );
 				}
 			}
-			while ( pos != std::string::npos );
+			while ( pos != String::npos );
 		}
 	}
 
@@ -243,9 +243,9 @@ namespace castor
 		}
 		else
 		{
-			parsers[name][oldSection] = { std::move( function )
+			parsers[name][oldSection] = { castor::move( function )
 				, newSection
-				, std::move( params ) };
+				, castor::move( params ) };
 		}
 	}
 
@@ -259,26 +259,26 @@ namespace castor
 	PreprocessedFile::PreprocessedFile( FileParser & parser
 		, FileParserContextUPtr context )
 		: m_parser{ parser }
-		, m_context{ std::move( context ) }
+		, m_context{ castor::move( context ) }
 	{
 		m_context->preprocessed = this;
 	}
 
 	PreprocessedFile::PreprocessedFile( PreprocessedFile && rhs )noexcept
 		: m_parser{ rhs.m_parser }
-		, m_context{ std::move( rhs.m_context ) }
-		, m_actions{ std::move( rhs.m_actions ) }
-		, m_current{ std::move( rhs.m_current ) }
-		, m_popAction{ std::move( rhs.m_popAction ) }
+		, m_context{ castor::move( rhs.m_context ) }
+		, m_actions{ castor::move( rhs.m_actions ) }
+		, m_current{ castor::move( rhs.m_current ) }
+		, m_popAction{ castor::move( rhs.m_popAction ) }
 	{
 	}
 
 	PreprocessedFile & PreprocessedFile::operator=( PreprocessedFile && rhs )noexcept
 	{
-		m_context = std::move( rhs.m_context );
-		m_actions = std::move( rhs.m_actions );
-		m_current = std::move( rhs.m_current );
-		m_popAction = std::move( rhs.m_popAction );
+		m_context = castor::move( rhs.m_context );
+		m_actions = castor::move( rhs.m_actions );
+		m_current = castor::move( rhs.m_current );
+		m_popAction = castor::move( rhs.m_popAction );
 
 		return *this;
 	}
@@ -291,12 +291,12 @@ namespace castor
 		, String params
 		, bool implicit )
 	{
-		doAddParserAction( std::move( file )
+		doAddParserAction( castor::move( file )
 			, line
-			, std::move( name )
+			, castor::move( name )
 			, section
-			, std::move( function )
-			, std::move( params )
+			, castor::move( function )
+			, castor::move( params )
 			, implicit );
 	}
 
@@ -318,7 +318,7 @@ namespace castor
 		m_context->blocks.clear();
 		m_context->blocks.push_back( m_parser.getRootBlockContext() );
 		auto first = doGetFirstAction();
-		std::vector< Action > jobs;
+		Vector< Action > jobs;
 		jobs.push_back( *first );
 
 		while ( !jobs.empty() )
@@ -345,7 +345,7 @@ namespace castor
 				{
 					if constexpr ( fileprs::DisplayLines )
 					{
-						std::stringstream idx;
+						auto idx = makeStringStream();
 						idx << std::setw( 8 ) << std::left << std::setfill( ' ' ) << action.line;
 						m_parser.getLogger().logDebug( action.file + cuT( ":" ) + idx.str() + cuT( " (" ) + action.name + cuT( ")" ) );
 					}
@@ -355,12 +355,12 @@ namespace castor
 				}
 				catch ( Exception & exc )
 				{
-					parseError( exc.getDescription() );
+					parseError( makeString( exc.getDescription() ) );
 				}
 			}
 			else
 			{
-				parseError( "Unexpected directive [" + action.name + "]" );
+				parseError( cuT( "Unexpected directive [" ) + action.name + cuT( "]" ) );
 			}
 
 			if ( jobs.empty() )
@@ -424,7 +424,7 @@ namespace castor
 
 		if ( !params.empty() )
 		{
-			auto param = std::make_shared< ParserParameter< ParameterType::eText > >();
+			auto param = castor::make_shared< ParserParameter< ParameterType::eText > >();
 			param->m_value = params;
 			received.push_back( param );
 		}
@@ -487,12 +487,12 @@ namespace castor
 		, String params
 		, bool implicit )
 	{
-		m_actions.emplace_back( std::move( file )
+		m_actions.emplace_back( castor::move( file )
 			, line
-			, std::move( name )
+			, castor::move( name )
 			, section
-			, std::move( function )
-			, std::move( params )
+			, castor::move( function )
+			, castor::move( params )
 			, implicit );
 	}
 
@@ -518,7 +518,7 @@ namespace castor
 	{
 		if ( !m_additionalParsers.try_emplace( name, parsers ).second )
 		{
-			CU_Exception( "Additional parsers for name [" + string::stringCast< char >( name ) + "] already exist." );
+			CU_Exception( cuT( "Additional parsers for name [" ) + name + cuT( "] already exist." ) );
 		}
 	}
 
@@ -570,7 +570,7 @@ namespace castor
 	void FileParser::processFile( Path const & path
 		, PreprocessedFile & preprocessed )
 	{
-		processFile( "Castor", path, preprocessed );
+		processFile( cuT( "Castor" ), path, preprocessed );
 	}
 
 	void FileParser::processFile( Path const & path
@@ -587,10 +587,10 @@ namespace castor
 		bool isNextOpenBrace = false;
 		SectionId pendingSection{};
 		bool commented = false;
-		auto lineIndex = 0ULL;
+		uint64_t lineIndex = 0ULL;
 
-		std::vector< StringView > work;
-		std::vector< StringView > nextWork;
+		Vector< StringView > work;
+		Vector< StringView > nextWork;
 		size_t offset = 0u;
 		auto nxtLine = fileprs::getLine( m_logger, content, lineIndex, offset );
 		fileprs::splitLine( nxtLine, nextWork );
@@ -600,7 +600,7 @@ namespace castor
 			if ( work.empty() )
 			{
 				++lineIndex;
-				std::swap( work, nextWork );
+				castor::swap( work, nextWork );
 				nxtLine = fileprs::getLine( m_logger, content, lineIndex, offset );
 				fileprs::splitLine( nxtLine, nextWork );
 			}
@@ -625,7 +625,7 @@ namespace castor
 
 	PreprocessedFile FileParser::processFile( Path const & path )
 	{
-		return processFile( "Castor", path );
+		return processFile( cuT( "Castor" ), path );
 	}
 
 	PreprocessedFile FileParser::processFile( Path const & path
@@ -646,7 +646,7 @@ namespace castor
 
 	bool FileParser::parseFile( Path const & path )
 	{
-		return parseFile( "Castor", path );
+		return parseFile( cuT( "Castor" ), path );
 	}
 
 	bool FileParser::parseFile( Path const & path
@@ -715,8 +715,8 @@ namespace castor
 
 	void FileParser::doProcessNoBlockLine( StringView curLine
 		, PreprocessedFile & preprocessed
-		, std::vector< StringView > const & work
-		, std::vector< StringView > const & nextWork
+		, Vector< StringView > const & work
+		, Vector< StringView > const & nextWork
 		, uint64_t lineIndex
 		, SectionId & pendingSection
 		, bool & isNextOpenBrace )
@@ -730,7 +730,7 @@ namespace castor
 			isNextOpenBrace = false;
 		}
 
-		if ( curLine == "}" )
+		if ( curLine == cuT( "}" ) )
 		{
 			doLeaveBlock( preprocessed, lineIndex, false );
 		}
@@ -739,7 +739,7 @@ namespace castor
 			auto [nextOpenBrace, newSection] = doInvokeParser( preprocessed
 				, curLine
 				, ( work.empty()
-					? nextWork.empty() ? "" : nextWork.front()
+					? nextWork.empty() ? cuT( "" ) : nextWork.front()
 					: work.front() )
 				, lineIndex );
 			isNextOpenBrace = nextOpenBrace;
@@ -753,8 +753,8 @@ namespace castor
 
 	void FileParser::doProcessLine( StringView curLine
 		, PreprocessedFile & preprocessed
-		, std::vector< StringView > const & work
-		, std::vector< StringView > const & nextWork
+		, Vector< StringView > const & work
+		, Vector< StringView > const & nextWork
 		, uint64_t lineIndex
 		, SectionId & pendingSection
 		, bool & commented
@@ -762,16 +762,16 @@ namespace castor
 	{
 		if constexpr ( fileprs::DisplayLines )
 		{
-			m_logger.logDebug( "[" + String{ curLine } + "]" );
+			m_logger.logDebug( cuT( "[" ) + String{ curLine } + cuT( "]" ) );
 		}
 
 		if ( !commented )
 		{
-			commented = curLine == "/*";
+			commented = curLine == cuT( "/*" );
 
 			if ( !commented )
 			{
-				if ( curLine == "{" )
+				if ( curLine == cuT( "{" ) )
 				{
 					isNextOpenBrace = false;
 					doEnterBlock( preprocessed, pendingSection, lineIndex, false );
@@ -782,7 +782,7 @@ namespace castor
 				}
 			}
 		}
-		else if ( curLine == "*/" )
+		else if ( curLine == cuT( "*/" ) )
 		{
 			commented = false;
 		}
@@ -804,7 +804,7 @@ namespace castor
 		auto section = m_sections.back();
 		preprocessed.addParserAction( m_path / m_fileName
 			, lineIndex
-			, "{"
+			, cuT( "{" )
 			, section
 			, ParserFunctionAndParams{ defaultPush, newSection, {} }
 			, {}
@@ -817,7 +817,7 @@ namespace castor
 		, bool implicit )
 	{
 		bool result = false;
-		auto it = m_parsers.find( "}" );
+		auto it = m_parsers.find( cuT( "}" ) );
 		auto curSection = m_sections.back();
 		m_sections.pop_back();
 		auto nxtSection = m_sections.back();
@@ -830,7 +830,7 @@ namespace castor
 			{
 				preprocessed.addParserAction( m_path / m_fileName
 					, lineIndex
-					, "}"
+					, cuT( "}" )
 					, curSection
 					, { itFunc->second.function, nxtSection, itFunc->second.params }
 					, {}
@@ -851,7 +851,7 @@ namespace castor
 			};
 			preprocessed.addParserAction( m_path / m_fileName
 				, lineIndex
-				, "}"
+				, cuT( "}" )
 				, curSection
 				, ParserFunctionAndParams{ defaultPop, nxtSection, {} }
 				, {}
@@ -861,7 +861,7 @@ namespace castor
 		return result;
 	}
 
-	std::pair< bool, SectionId > FileParser::doInvokeParser( PreprocessedFile & preprocessed
+	Pair< bool, SectionId > FileParser::doInvokeParser( PreprocessedFile & preprocessed
 		, StringView line
 		, StringView nextToken
 		, uint64_t lineIndex )
@@ -891,12 +891,12 @@ namespace castor
 						doCheckDefines( parameters );
 					}
 
-					result = nextToken == "{"
+					result = nextToken == cuT( "{" )
 						|| ( itFunc->second.resultSection != section
-							&& functionName != "}" );
+							&& functionName != cuT( "}" ) );
 					auto nextSection = itFunc->second.resultSection;
 
-					if ( result && nextToken != "{" )
+					if ( result && nextToken != cuT( "{" ) )
 					{
 						nextSection = section;
 					}
@@ -913,7 +913,7 @@ namespace castor
 				}
 				else
 				{
-					parseError( functionName, lineIndex, "Directive [" + functionName + "] not found for section " + getSectionName( section ) );
+					parseError( functionName, lineIndex, cuT( "Directive [" ) + functionName + cuT( "] not found for section " ) + getSectionName( section ) );
 				}
 			}
 
@@ -997,7 +997,7 @@ namespace castor
 	void FileParser::doAddDefine( uint64_t lineIndex
 		, StringView param )
 	{
-		auto functionName = "define";
+		auto functionName = cuT( "define" );
 		auto values = string::split( param, cuT( " \t" ), 1 );
 
 		if ( values.size() == 2 )

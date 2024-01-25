@@ -93,7 +93,7 @@ namespace castor3d
 	struct OverlayVertexBufferPoolT;
 
 	template< typename VertexT, uint32_t CountT >
-	using OverlayVertexBufferPoolPtrT = std::unique_ptr< OverlayVertexBufferPoolT< VertexT, CountT > >;
+	using OverlayVertexBufferPoolPtrT = castor::RawUniquePtr< OverlayVertexBufferPoolT< VertexT, CountT > >;
 
 	struct OverlayDrawPipeline
 	{
@@ -108,7 +108,7 @@ namespace castor3d
 			ashes::DescriptorSetPtr draw{};
 			ashes::DescriptorSetCRefArray all{};
 		};
-		using DescriptorSetsPtr = std::unique_ptr< DescriptorSets >;
+		using DescriptorSetsPtr = castor::RawUniquePtr< DescriptorSets >;
 
 		OverlayPipelineData( OverlayPipelineData const & ) = delete;
 		OverlayPipelineData & operator=( OverlayPipelineData const & ) = delete;
@@ -123,11 +123,11 @@ namespace castor3d
 			, castor::ArrayView< VkDrawIndirectCommand > indirect
 			, DescriptorSetsPtr descs
 			, uint32_t c )
-			: overlaysIDsBuffer{ std::move( iDsBuffer ) }
-			, overlaysIDs{ std::move( ids ) }
-			, indirectCommandsBuffer{ std::move( indirectBuffer ) }
-			, indirectCommands{ std::move( indirect ) }
-			, descriptorSets{ std::move( descs ) }
+			: overlaysIDsBuffer{ castor::move( iDsBuffer ) }
+			, overlaysIDs{ castor::move( ids ) }
+			, indirectCommandsBuffer{ castor::move( indirectBuffer ) }
+			, indirectCommands{ castor::move( indirect ) }
+			, descriptorSets{ castor::move( descs ) }
 			, count{ c }
 		{
 		}
@@ -178,7 +178,7 @@ namespace castor3d
 			, indirectData{ indirectData }
 			, overlayIndex{ overlayIndex }
 			, pipelineIndex{ pipelineIndex }
-			, textBuffer{ std::move( textBuffer ) }
+			, textBuffer{ castor::move( textBuffer ) }
 			, secondary{ secondary }
 		{
 		}

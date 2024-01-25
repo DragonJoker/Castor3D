@@ -436,7 +436,7 @@ namespace castor3d
 		}
 
 	private:
-		C3D_API void binaryError( std::string_view view )const;
+		C3D_API void binaryError( castor::StringView view )const;
 
 	private:
 		template< typename T >
@@ -449,7 +449,7 @@ namespace castor3d
 			if ( result )
 			{
 				using TPtr = T *;
-				auto begin = TPtr( &m_data[m_index] );
+				auto begin = reinterpret_cast< TPtr >( &m_data[m_index] );
 				auto end = begin + count;
 				auto value = values;
 
@@ -464,7 +464,7 @@ namespace castor3d
 			}
 			else
 			{
-				binaryError( "Not enough data in chunk" );
+				binaryError( cuT( "Not enough data in chunk" ) );
 			}
 
 			return result;
@@ -474,7 +474,7 @@ namespace castor3d
 		ChunkType m_type{};
 		castor::ByteArray m_data;
 		uint32_t m_index{};
-		std::list< castor::ByteArray > m_addedData;
+		castor::List< castor::ByteArray > m_addedData;
 		bool m_isLittleEndian{ true };
 	};
 }

@@ -27,8 +27,8 @@ namespace castor
 		DelayedInitialiserT & operator=( DelayedInitialiserT && rhs )noexcept = default;
 		~DelayedInitialiserT()noexcept = default;
 
-		explicit DelayedInitialiserT( std::unique_ptr< TypeT > ptr = nullptr )
-			: m_ptr{ std::move( ptr ) }
+		explicit DelayedInitialiserT( castor::RawUniquePtr< TypeT > ptr = nullptr )
+			: m_ptr{ castor::move( ptr ) }
 		{
 		}
 
@@ -36,20 +36,20 @@ namespace castor
 		static DelayedInitialiserT make( ParamsT && ... params )
 		{
 			static_assert( std::is_same_v< TypeT, RhsT > || std::is_base_of_v< TypeT, RhsT > );
-			return DelayedInitialiserT{ std::make_unique< RhsT >( std::forward< ParamsT >( params )... ) };
+			return DelayedInitialiserT{ castor::make_unique< RhsT >( castor::forward< ParamsT >( params )... ) };
 		}
 
 		template< typename RhsT >
 		DelayedInitialiserT & operator=( DelayedInitialiserT< RhsT > && rhs )
 		{
 			static_assert( std::is_same_v< TypeT, RhsT > || std::is_base_of_v< TypeT, RhsT > );
-			m_ptr = std::move( rhs.m_ptr );
+			m_ptr = castor::move( rhs.m_ptr );
 			return *this;
 		}
 
-		DelayedInitialiserT & operator=( std::unique_ptr< TypeT > ptr )
+		DelayedInitialiserT & operator=( castor::RawUniquePtr< TypeT > ptr )
 		{
-			m_ptr = std::move( ptr );
+			m_ptr = castor::move( ptr );
 			return *this;
 		}
 
@@ -97,18 +97,18 @@ namespace castor
 		void cleanup( ParamsT && ... params )
 		{
 			CU_Require( m_ptr );
-			m_ptr->cleanup( std::forward< ParamsT >( params )... );
+			m_ptr->cleanup( castor::forward< ParamsT >( params )... );
 		}
 
 		template< typename ... ParamsT >
 		void initialise( ParamsT && ... params )
 		{
 			CU_Require( m_ptr );
-			m_ptr->initialise( std::forward< ParamsT >( params )... );
+			m_ptr->initialise( castor::forward< ParamsT >( params )... );
 		}
 
 	private:
-		std::unique_ptr< TypeT > m_ptr;
+		castor::RawUniquePtr< TypeT > m_ptr;
 	};
 #else
 	template< typename TypeT >
@@ -124,8 +124,8 @@ namespace castor
 		DelayedInitialiserT & operator=( DelayedInitialiserT && rhs )noexcept = default;
 		~DelayedInitialiserT()noexcept = default;
 
-		explicit DelayedInitialiserT( std::unique_ptr< TypeT > ptr = nullptr )
-			: m_ptr{ std::move( ptr ) }
+		explicit DelayedInitialiserT( castor::RawUniquePtr< TypeT > ptr = nullptr )
+			: m_ptr{ castor::move( ptr ) }
 		{
 		}
 
@@ -133,23 +133,23 @@ namespace castor
 		static DelayedInitialiserT make( ParamsT && ... params )
 		{
 			static_assert( std::is_same_v< TypeT, RhsT > || std::is_base_of_v< TypeT, RhsT > );
-			return DelayedInitialiserT{ std::make_unique< RhsT >( std::forward< ParamsT && >( params )... ) };
+			return DelayedInitialiserT{ castor::make_unique< RhsT >( castor::forward< ParamsT >( params )... ) };
 		}
 
 		template< typename RhsT >
 		DelayedInitialiserT & operator=( DelayedInitialiserT< RhsT > && rhs )
 		{
 			static_assert( std::is_same_v< TypeT, RhsT > || std::is_base_of_v< TypeT, RhsT > );
-			m_ptr = std::move( rhs.m_ptr );
+			m_ptr = castor::move( rhs.m_ptr );
 			m_initialised = rhs.m_initialised.exchange( false );
 			m_initialiseExecuted = rhs.m_initialiseExecuted.exchange( false );
-			m_initialise = std::move( rhs.m_initialise );
+			m_initialise = castor::move( rhs.m_initialise );
 			return *this;
 		}
 
-		DelayedInitialiserT & operator=( std::unique_ptr< TypeT > ptr )
+		DelayedInitialiserT & operator=( castor::RawUniquePtr< TypeT > ptr )
 		{
-			m_ptr = std::move( ptr );
+			m_ptr = castor::move( ptr );
 
 			if ( m_initialised.exchange( false ) )
 			{
@@ -213,7 +213,7 @@ namespace castor
 			{
 				if ( m_initialiseExecuted.exchange( false ) )
 				{
-					m_ptr->cleanup( std::forward< ParamsT >( params )... );
+					m_ptr->cleanup( castor::forward< ParamsT >( params )... );
 				}
 
 				m_initialise = [](){};
@@ -228,7 +228,7 @@ namespace castor
 			{
 				m_initialise = [this, &params...]()
 				{
-					m_ptr->initialise( std::forward< ParamsT >( params )... );
+					m_ptr->initialise( castor::forward< ParamsT >( params )... );
 					m_initialiseExecuted = true;
 					m_initialise = []()
 					{};
@@ -246,23 +246,23 @@ namespace castor
 		}
 
 	private:
-		std::unique_ptr< TypeT > m_ptr;
+		castor::RawUniquePtr< TypeT > m_ptr;
 		std::atomic_bool m_initialised{ false };
 		std::atomic_bool m_initialiseExecuted{ false };
-		std::function< void() > m_initialise{ [](){} };
+		castor::Function< void() > m_initialise{ [](){} };
 	};
 #endif
 
 	template< typename LhsT, typename RhsT, typename ... ParamsT >
 	inline DelayedInitialiserT< LhsT > makeDerivedDelayedInitialiser( ParamsT && ... params )
 	{
-		return DelayedInitialiserT< LhsT >::template make< RhsT >( std::forward< ParamsT >( params )... );
+		return DelayedInitialiserT< LhsT >::template make< RhsT >( castor::forward< ParamsT >( params )... );
 	}
 
 	template< typename LhsT, typename ... ParamsT >
 	inline DelayedInitialiserT< LhsT > makeDelayedInitialiser( ParamsT && ... params )
 	{
-		return DelayedInitialiserT< LhsT >::template make< LhsT >( std::forward< ParamsT >( params )... );
+		return DelayedInitialiserT< LhsT >::template make< LhsT >( castor::forward< ParamsT >( params )... );
 	}
 }
 

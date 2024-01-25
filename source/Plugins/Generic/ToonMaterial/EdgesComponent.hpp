@@ -97,7 +97,7 @@ namespace toon
 
 			castor3d::shader::PassComponentsShaderPtr createComponentsShader()const override
 			{
-				return std::make_unique< ComponentsShader >( *this );
+				return castor::make_unique< ComponentsShader >( *this );
 			}
 		};
 

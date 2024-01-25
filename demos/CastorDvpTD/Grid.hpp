@@ -10,7 +10,7 @@ namespace castortd
 		uint32_t m_y;
 	};
 
-	using Path = std::vector< PathNode >;
+	using Path = castor::Vector< PathNode >;
 
 	struct Cell
 	{
@@ -85,7 +85,7 @@ namespace castortd
 	private:
 		constexpr static uint32_t m_width{ 32u };
 		constexpr static uint32_t m_height{ 32u };
-		using CellArray = std::array< Cell, m_width * m_height >;
+		using CellArray = castor::Array< Cell, m_width * m_height >;
 		CellArray m_cells;
 	};
 }

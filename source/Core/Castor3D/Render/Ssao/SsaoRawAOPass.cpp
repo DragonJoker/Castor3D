@@ -528,7 +528,7 @@ namespace castor3d
 			, context
 			, graph
 			, { 2u, false }
-			, std::move( config ) }
+			, castor::move( config ) }
 		, ssaoConfig{ ssaoConfig }
 	{
 	}
@@ -543,7 +543,7 @@ namespace castor3d
 	SsaoRawAOPass::Program::Program( RenderDevice const & device
 		, bool useNormalsBuffer
 		, castor::String const & prefix )
-		: shader{ prefix + "SsaoRawAO" + ( useNormalsBuffer ? std::string{ "Normals" } : std::string{} )
+		: shader{ prefix + cuT( "SsaoRawAO" ) + ( useNormalsBuffer ? castor::String{ cuT( "Normals" ) } : castor::String{} )
 			, ssaoraw::getProgram( device, useNormalsBuffer ) }
 		, stages{ makeProgramStates( device, shader ) }
 	{
@@ -570,29 +570,29 @@ namespace castor3d
 		, m_size{ size }
 		, m_result{ ssaoraw::doCreateTexture( *normals.resources
 			, m_device
-			, m_graph.getName() + "SsaoRawAOResult"
+			, castor::makeString( m_graph.getName() + "SsaoRawAOResult" )
 			, device.selectSmallestFormatRSFloatFormat( VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
 				| VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT
 				| VK_FORMAT_FEATURE_TRANSFER_SRC_BIT )
 			, m_size ) }
 		, m_bentNormals{ ssaoraw::doCreateTexture( *normals.resources
 			, m_device
-			, m_graph.getName() + "BentNormals"
+			, castor::makeString( m_graph.getName() + "BentNormals" )
 			, device.selectSmallestFormatRGBSFloatFormat( VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
 				| VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT
 				| VK_FORMAT_FEATURE_TRANSFER_SRC_BIT )
 			, m_size ) }
-		, m_programs{ Program{ device, false, m_graph.getName() }
-			, Program{ device, true, m_graph.getName() } }
+		, m_programs{ Program{ device, false, castor::makeString( m_graph.getName() ) }
+			, Program{ device, true, castor::makeString( m_graph.getName() ) } }
 	{
-		stepProgressBarLocal( progress, "Creating SSAO raw AO pass" );
+		stepProgressBarLocal( progress, cuT( "Creating SSAO raw AO pass" ) );
 		auto & pass = m_graph.createPass( "RawAO"
 			, [this, &passIndex, progress]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				stepProgressBarLocal( progress, "Initialising SSAO raw AO pass" );
-				auto result = std::make_unique< RenderQuad >( pass
+				stepProgressBarLocal( progress, cuT( "Initialising SSAO raw AO pass" ) );
+				auto result = castor::make_unique< RenderQuad >( pass
 					, context
 					, graph
 					, ssaoraw::getConfig( m_size
@@ -601,7 +601,7 @@ namespace castor3d
 						, m_programs[0].stages
 						, m_programs[1].stages )
 					, m_ssaoConfig );
-				m_device.renderSystem.getEngine()->registerTimer( pass.getFullName()
+				m_device.renderSystem.getEngine()->registerTimer( castor::makeString( pass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
@@ -626,11 +626,11 @@ namespace castor3d
 	void SsaoRawAOPass::accept( SsaoConfig & config
 		, ConfigurationVisitorBase & visitor )
 	{
-		visitor.visit( "SSAO Raw AO"
+		visitor.visit( cuT( "SSAO Raw AO" )
 			, getResult()
 			, m_graph.getFinalLayoutState( getResult().sampledViewId ).layout
 			, TextureFactors{}.invert( true ) );
-		visitor.visit( "SSAO Bent Normals"
+		visitor.visit( cuT( "SSAO Bent Normals" )
 			, getBentResult()
 			, m_graph.getFinalLayoutState( getBentResult().sampledViewId ).layout
 			, TextureFactors{}.invert( true ) );

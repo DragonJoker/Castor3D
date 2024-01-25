@@ -182,8 +182,8 @@ namespace castor3d
 		, shader::BlendComponents & components
 		, shader::SampleTexture const & sampleTexture )const
 	{
-		std::string valueName = "normal";
-		std::string mapName = "normal";
+		castor::MbString valueName = "normal";
+		castor::MbString mapName = "normal";
 		auto textureName = mapName + "MapAndMask";
 
 		if ( !material.hasMember( textureName )
@@ -235,7 +235,7 @@ namespace castor3d
 	void NormalMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		channelFillers.try_emplace( "normal"
+		channelFillers.try_emplace( cuT( "normal" )
 			, getTextureFlags()
 			, []( TextureContext & blockContext )
 			{
@@ -319,7 +319,7 @@ namespace castor3d
 	}
 
 	void NormalMapComponent::Plugin::createMapComponent( Pass & pass
-		, std::vector< PassComponentUPtr > & result )const
+		, castor::Vector< PassComponentUPtr > & result )const
 	{
 		result.push_back( castor::makeUniqueDerived< PassComponent, NormalMapComponent >( pass ) );
 	}

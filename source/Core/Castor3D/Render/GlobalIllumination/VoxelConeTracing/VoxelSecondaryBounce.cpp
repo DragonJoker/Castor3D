@@ -56,7 +56,7 @@ namespace castor3d
 					, VK_SHADER_STAGE_COMPUTE_BIT ) };
 
 			return device->createDescriptorSetLayout( "VoxelSecondaryBounce"
-				, std::move( bindings ) );
+				, castor::move( bindings ) );
 		}
 
 		static ashes::DescriptorSetPtr createDescriptorSet( crg::RunnableGraph & graph
@@ -199,12 +199,12 @@ namespace castor3d
 				, GetPipelineStateCallback( [](){ return crg::getPipelineState( VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT ); } )
 				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i ); }
 				, crg::defaultV< crg::RunnablePass::GetPassIndexCallback >
-				, std::move( isEnabled )
+				, castor::move( isEnabled )
 				, IsComputePassCallback( [this](){ return doIsComputePass(); } ) }
 			, crg::ru::Config{ 1u, false }.implicitAction( pass.images.back().view()
 				, crg::RecordContext::clearAttachment( pass.images.back().view(), transparentBlackClearColor ) ) }
 		, m_vctConfig{ vctConfig }
-		, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, "VoxelSecondaryBounce", vxlscnd::createShader( m_vctConfig.gridSize.value(), device.renderSystem ) }
+		, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, cuT( "VoxelSecondaryBounce" ), vxlscnd::createShader( m_vctConfig.gridSize.value(), device.renderSystem ) }
 		, m_descriptorSetLayout{ vxlscnd::createDescriptorLayout( device ) }
 		, m_pipelineLayout{ vxlscnd::createPipelineLayout( device, *m_descriptorSetLayout ) }
 		, m_pipeline{ vxlscnd::createPipeline( device, *m_pipelineLayout, m_shader ) }

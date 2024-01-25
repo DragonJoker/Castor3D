@@ -146,7 +146,7 @@ namespace castor3d
 				, section
 				, name
 				, ParserFunctionT< void >( function )
-				, std::move( params ) );
+				, castor::move( params ) );
 		}
 
 		template< typename BlockContextU, typename SectionT >
@@ -160,7 +160,7 @@ namespace castor3d
 				, uint32_t( newSection )
 				, name
 				, ParserFunctionT< void >( function )
-				, std::move( params ) );
+				, castor::move( params ) );
 		}
 
 		template< typename BlockContextU >
@@ -179,7 +179,7 @@ namespace castor3d
 			castor::addParser( parsers
 				, section
 				, oldSection
-				, "}"
+				, cuT( "}" )
 				, parserDefaultEnd );
 		}
 
@@ -201,11 +201,11 @@ namespace castor
 	{
 		static inline xchar const * const Name = cuT( "LengthUnit" );
 		static inline UInt32StrMap const Values = []()
-		{
-			UInt32StrMap result;
-			result = castor3d::getEnumMapT< LengthUnit >();
-			return result;
-		}( );
+			{
+				UInt32StrMap result;
+				result = castor3d::getEnumMapT< LengthUnit >();
+				return result;
+			}( );
 	};
 
 	template<>
@@ -213,16 +213,16 @@ namespace castor
 	{
 		static inline xchar const * const Name = cuT( "ShaderStage" );
 		static inline UInt32StrMap const Values = []()
-		{
-			UInt32StrMap result;
-			result[ashes::getName( VK_SHADER_STAGE_VERTEX_BIT )] = uint32_t( VK_SHADER_STAGE_VERTEX_BIT );
-			result[ashes::getName( VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT )] = uint32_t( VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT );
-			result[ashes::getName( VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT )] = uint32_t( VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT );
-			result[ashes::getName( VK_SHADER_STAGE_GEOMETRY_BIT )] = uint32_t( VK_SHADER_STAGE_GEOMETRY_BIT );
-			result[ashes::getName( VK_SHADER_STAGE_FRAGMENT_BIT )] = uint32_t( VK_SHADER_STAGE_FRAGMENT_BIT );
-			result[ashes::getName( VK_SHADER_STAGE_COMPUTE_BIT )] = uint32_t( VK_SHADER_STAGE_COMPUTE_BIT );
-			return result;
-		}( );
+			{
+				UInt32StrMap result;
+				result[castor::makeString( ashes::getName( VK_SHADER_STAGE_VERTEX_BIT ) )] = uint32_t( VK_SHADER_STAGE_VERTEX_BIT );
+				result[castor::makeString( ashes::getName( VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT ) )] = uint32_t( VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT );
+				result[castor::makeString( ashes::getName( VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT ) )] = uint32_t( VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT );
+				result[castor::makeString( ashes::getName( VK_SHADER_STAGE_GEOMETRY_BIT ) )] = uint32_t( VK_SHADER_STAGE_GEOMETRY_BIT );
+				result[castor::makeString( ashes::getName( VK_SHADER_STAGE_FRAGMENT_BIT ) )] = uint32_t( VK_SHADER_STAGE_FRAGMENT_BIT );
+				result[castor::makeString( ashes::getName( VK_SHADER_STAGE_COMPUTE_BIT ) )] = uint32_t( VK_SHADER_STAGE_COMPUTE_BIT );
+				return result;
+			}( );
 	};
 
 	template<>
@@ -230,12 +230,12 @@ namespace castor
 	{
 		static inline xchar const * const Name = cuT( "MipmapMode" );
 		static inline UInt32StrMap const Values = []()
-		{
-			UInt32StrMap result;
-			result = castor3d::getEnumMapT( VK_SAMPLER_MIPMAP_MODE_NEAREST, VK_SAMPLER_MIPMAP_MODE_LINEAR );
-			result[cuT( "none" )] = uint32_t( VK_SAMPLER_MIPMAP_MODE_NEAREST );
-			return result;
-		}( );
+			{
+				UInt32StrMap result;
+				result = castor3d::getEnumMapT( VK_SAMPLER_MIPMAP_MODE_NEAREST, VK_SAMPLER_MIPMAP_MODE_LINEAR );
+				result[cuT( "none" )] = uint32_t( VK_SAMPLER_MIPMAP_MODE_NEAREST );
+				return result;
+			}( );
 	};
 
 	template<>
@@ -243,11 +243,11 @@ namespace castor
 	{
 		static inline xchar const * const Name = cuT( "BlendFactor" );
 		static inline UInt32StrMap const Values = []()
-		{
-			UInt32StrMap result;
-			result = castor3d::getEnumMapT( VK_BLEND_FACTOR_ZERO, VK_BLEND_FACTOR_ONE_MINUS_SRC1_ALPHA );
-			return result;
-		}( );
+			{
+				UInt32StrMap result;
+				result = castor3d::getEnumMapT( VK_BLEND_FACTOR_ZERO, VK_BLEND_FACTOR_ONE_MINUS_SRC1_ALPHA );
+				return result;
+			}( );
 	};
 
 	template<>
@@ -255,11 +255,11 @@ namespace castor
 	{
 		static inline xchar const * const Name = cuT( "ImageType" );
 		static inline UInt32StrMap const Values = []()
-		{
-			UInt32StrMap result;
-			result = castor3d::getEnumMapT( VK_IMAGE_TYPE_1D, VK_IMAGE_TYPE_3D );
-			return result;
-		}( );
+			{
+				UInt32StrMap result;
+				result = castor3d::getEnumMapT( VK_IMAGE_TYPE_1D, VK_IMAGE_TYPE_3D );
+				return result;
+			}( );
 	};
 
 	template<>
@@ -267,11 +267,11 @@ namespace castor
 	{
 		static inline xchar const * const Name = cuT( "BlendOp" );
 		static inline UInt32StrMap const Values = []()
-		{
-			UInt32StrMap result;
-			result = castor3d::getEnumMapT( VK_BLEND_OP_ADD, VK_BLEND_OP_MAX );
-			return result;
-		}( );
+			{
+				UInt32StrMap result;
+				result = castor3d::getEnumMapT( VK_BLEND_OP_ADD, VK_BLEND_OP_MAX );
+				return result;
+			}( );
 	};
 
 	template<>
@@ -279,11 +279,11 @@ namespace castor
 	{
 		static inline xchar const * const Name = cuT( "Filter" );
 		static inline UInt32StrMap const Values = []()
-		{
-			UInt32StrMap result;
-			result = castor3d::getEnumMapT( VK_FILTER_NEAREST, VK_FILTER_LINEAR );
-			return result;
-		}( );
+			{
+				UInt32StrMap result;
+				result = castor3d::getEnumMapT( VK_FILTER_NEAREST, VK_FILTER_LINEAR );
+				return result;
+			}( );
 	};
 
 	template<>
@@ -291,11 +291,11 @@ namespace castor
 	{
 		static inline xchar const * const Name = cuT( "AddressMode" );
 		static inline UInt32StrMap const Values = []()
-		{
-			UInt32StrMap result;
-			result = castor3d::getEnumMapT( VK_SAMPLER_ADDRESS_MODE_REPEAT, VK_SAMPLER_ADDRESS_MODE_MIRROR_CLAMP_TO_EDGE );
-			return result;
-		}( );
+			{
+				UInt32StrMap result;
+				result = castor3d::getEnumMapT( VK_SAMPLER_ADDRESS_MODE_REPEAT, VK_SAMPLER_ADDRESS_MODE_MIRROR_CLAMP_TO_EDGE );
+				return result;
+			}( );
 	};
 
 	template<>
@@ -303,11 +303,11 @@ namespace castor
 	{
 		static inline xchar const * const Name = cuT( "BorderColor" );
 		static inline UInt32StrMap const Values = []()
-		{
-			UInt32StrMap result;
-			result = castor3d::getEnumMapT( VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK, VK_BORDER_COLOR_INT_OPAQUE_WHITE );
-			return result;
-		}( );
+			{
+				UInt32StrMap result;
+				result = castor3d::getEnumMapT( VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK, VK_BORDER_COLOR_INT_OPAQUE_WHITE );
+				return result;
+			}( );
 	};
 
 	template<>
@@ -315,11 +315,11 @@ namespace castor
 	{
 		static inline xchar const * const Name = cuT( "CompareFunc" );
 		static inline UInt32StrMap const Values = []()
-		{
-			UInt32StrMap result;
-			result = castor3d::getEnumMapT( VK_COMPARE_OP_NEVER, VK_COMPARE_OP_ALWAYS );
-			return result;
-		}( );
+			{
+				UInt32StrMap result;
+				result = castor3d::getEnumMapT( VK_COMPARE_OP_NEVER, VK_COMPARE_OP_ALWAYS );
+				return result;
+			}( );
 	};
 
 	template<>
@@ -327,11 +327,11 @@ namespace castor
 	{
 		static inline xchar const * const Name = cuT( "PrimitiveTopology" );
 		static inline UInt32StrMap const Values = []()
-		{
-			UInt32StrMap result;
-			result = castor3d::getEnumMapT( VK_PRIMITIVE_TOPOLOGY_POINT_LIST, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP_WITH_ADJACENCY );
-			return result;
-		}( );
+			{
+				UInt32StrMap result;
+				result = castor3d::getEnumMapT( VK_PRIMITIVE_TOPOLOGY_POINT_LIST, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP_WITH_ADJACENCY );
+				return result;
+			}( );
 	};
 
 	template<>
@@ -339,12 +339,12 @@ namespace castor
 	{
 		static inline xchar const * const Name = cuT( "CompareOp" );
 		static inline UInt32StrMap const Values = []()
-		{
-			UInt32StrMap result;
-			result[cuT( "none" )] = uint32_t( false );
-			result[cuT( "ref_to_texture" )] = uint32_t( true );
-			return result;
-		}( );
+			{
+				UInt32StrMap result;
+				result[cuT( "none" )] = uint32_t( false );
+				result[cuT( "ref_to_texture" )] = uint32_t( true );
+				return result;
+			}( );
 	};
 
 	template<>
@@ -352,13 +352,13 @@ namespace castor
 	{
 		static inline xchar const * const Name = cuT( "PrimitiveType" );
 		static inline UInt32StrMap const Values = []()
-		{
-			UInt32StrMap result;
-			result[ashes::getName( VK_PRIMITIVE_TOPOLOGY_POINT_LIST )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_POINT_LIST );
-			result[ashes::getName( VK_PRIMITIVE_TOPOLOGY_LINE_STRIP )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_LINE_STRIP );
-			result[ashes::getName( VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP );
-			return result;
-		}( );
+			{
+				UInt32StrMap result;
+				result[castor::makeString( ashes::getName( VK_PRIMITIVE_TOPOLOGY_POINT_LIST ) )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_POINT_LIST );
+				result[castor::makeString( ashes::getName( VK_PRIMITIVE_TOPOLOGY_LINE_STRIP ) )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_LINE_STRIP );
+				result[castor::makeString( ashes::getName( VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP ) )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP );
+				return result;
+			}( );
 	};
 }
 

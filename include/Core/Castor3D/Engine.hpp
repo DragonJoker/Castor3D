@@ -537,7 +537,7 @@ namespace castor3d
 		 *\param[in,out]	name	Le nom du shader buffer.
 		 *\param[out]		buffer	Le shader buffer.
 		 */
-		C3D_API void registerSpecificsBuffer( std::string const & name
+		C3D_API void registerSpecificsBuffer( castor::String const & name
 			, castor3d::SpecificsBuffer buffer )const;
 		/**
 		 *\~english
@@ -547,7 +547,7 @@ namespace castor3d
 		 *\brief			Désenregistre un shader buffer de données spécifiques.
 		 *\param[in,out]	name	Le nom du shader buffer.
 		 */
-		C3D_API void unregisterSpecificsBuffer( std::string const & name )const;
+		C3D_API void unregisterSpecificsBuffer( castor::String const & name )const;
 		/**
 		 *\~english
 		 *\brief			Addw the pass' specific data buffer into the given descriptor layout bindings array.
@@ -1020,7 +1020,7 @@ namespace castor3d
 
 		void setUserInputListener( UserInputListenerUPtr listener )noexcept
 		{
-			m_userInputListener = std::move( listener );
+			m_userInputListener = castor::move( listener );
 		}
 
 		template< typename ListenerT >
@@ -1073,7 +1073,7 @@ namespace castor3d
 			, ParametersT && ... parameters )const
 		{
 			return getFontCache().create( key
-				, std::forward< ParametersT >( parameters )... );
+				, castor::forward< ParametersT >( parameters )... );
 		}
 
 		template< typename ... ParametersT >
@@ -1081,7 +1081,7 @@ namespace castor3d
 			, ParametersT && ... parameters )
 		{
 			return getFontCache().add( key
-				, std::forward< ParametersT >( parameters )... );
+				, castor::forward< ParametersT >( parameters )... );
 		}
 
 		castor::FontCache::ElementObsT addFont( castor::FontCache::ElementKeyT const & key
@@ -1122,7 +1122,7 @@ namespace castor3d
 			, ParametersT && ... parameters )const
 		{
 			return getImageCache().create( key
-				, std::forward< ParametersT >( parameters )... );
+				, castor::forward< ParametersT >( parameters )... );
 		}
 
 		template< typename ... ParametersT >
@@ -1130,7 +1130,7 @@ namespace castor3d
 			, ParametersT && ... parameters )
 		{
 			return getImageCache().add( key
-				, std::forward< ParametersT >( parameters )... );
+				, castor::forward< ParametersT >( parameters )... );
 		}
 
 		castor::ImageCache::ElementObsT addImage( castor::ImageCache::ElementKeyT const & key
@@ -1170,7 +1170,7 @@ namespace castor3d
 			return getImageCache().tryAdd( name
 				, initialise
 				, created
-				, std::forward< ParametersT >( parameters )... );
+				, castor::forward< ParametersT >( parameters )... );
 		}
 		/**@}*/
 
@@ -1201,7 +1201,7 @@ namespace castor3d
 		DECLARE_CACHE_MEMBER( listener, FrameListener );
 		FrameListenerRPtr m_defaultListener{};
 		castor::StringMap< RenderWindow * > m_renderWindows;
-		std::map< RenderWindow const *, UserInputListenerUPtr > m_windowInputListeners;
+		castor::Map< RenderWindow const *, UserInputListenerUPtr > m_windowInputListeners;
 		UserInputListenerUPtr m_userInputListener;
 		DECLARE_CACHE_MEMBER_MIN( target, RenderTarget );
 		DECLARE_CACHE_MEMBER_MIN( texture, TextureUnit );
@@ -1225,10 +1225,10 @@ namespace castor3d
 		shader::BackgroundModelFactory m_backgroundModelFactory;
 		SceneUPtr m_loadingScene;
 		castor::UnorderedStringMap< castor::UniquePtr< RenderPassRegisterInfo > > m_passRenderPassTypes;
-		castor::UnorderedStringMap< std::pair< RenderPassTypeID, Parameters > > m_renderPassTypes;
+		castor::UnorderedStringMap< castor::Pair< RenderPassTypeID, Parameters > > m_renderPassTypes;
 		castor::LengthUnit m_unit{ castor::LengthUnit::eMetre };
-		mutable std::mutex m_allocMutex;
-		std::unordered_map< std::thread::id, std::unique_ptr< ast::ShaderAllocator > > m_shaderAllocators;
+		mutable castor::Mutex m_allocMutex;
+		castor::UnorderedMap< std::thread::id, castor::RawUniquePtr< ast::ShaderAllocator > > m_shaderAllocators;
 	};
 }
 

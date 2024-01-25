@@ -60,16 +60,16 @@ namespace Bloom
 
 	public:
 		static castor::String const Type;
-		static castor::String const Name;
+		static castor::MbString const Name;
 
 	private:
 		crg::ImageId m_blurImg;
 		crg::ImageViewIdArray m_blurViews;
 		crg::FramePass const * m_pass{};
-		std::unique_ptr< CombinePass > m_combinePass;
-		std::unique_ptr< HiPass > m_hiPass;
-		std::unique_ptr< BlurPass > m_blurXPass;
-		std::unique_ptr< BlurPass > m_blurYPass;
+		castor::RawUniquePtr< CombinePass > m_combinePass;
+		castor::RawUniquePtr< HiPass > m_hiPass;
+		castor::RawUniquePtr< BlurPass > m_blurXPass;
+		castor::RawUniquePtr< BlurPass > m_blurYPass;
 		uint32_t m_blurKernelSize;
 		uint32_t m_blurPassesCount;
 	};

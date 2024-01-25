@@ -6,7 +6,7 @@ namespace castor3d
 {
 	namespace cachetgt
 	{
-		using LockType = std::unique_lock< RenderTargetCache >;
+		using LockType = castor::UniqueLock< RenderTargetCache >;
 	}
 
 	RenderTargetCache::RenderTargetCache( Engine & engine )
@@ -24,7 +24,7 @@ namespace castor3d
 			, size
 			, pixelFormat );
 		auto ret = result.get();
-		m_renderTargets[size_t( type )].push_back( std::move( result ) );
+		m_renderTargets[size_t( type )].push_back( castor::move( result ) );
 		return ret;
 	}
 

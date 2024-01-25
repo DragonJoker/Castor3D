@@ -148,7 +148,7 @@ namespace castor3d
 		auto size = ashes::getAlignedSize( getMaxParticlesCount() * m_inputs.stride(), align );
 		m_particlesBillboard = castor::makeUnique< BillboardBase >( *getScene()
 			, getScene()->getObjectRootNode()
-			, std::make_unique< ashes::PipelineVertexInputStateCreateInfo >( 0u, bindings, attributes )
+			, castor::make_unique< ashes::PipelineVertexInputStateCreateInfo >( 0u, bindings, attributes )
 			, stride
 			, device.bufferPool->getBuffer< uint8_t >( VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 				, size
@@ -269,7 +269,7 @@ namespace castor3d
 		}
 		else
 		{
-			CU_Exception( cuT( "Particle type [" ) + value + cuT( "] is not registered, make sure you've got the matching plug-in installed." ) );
+			CU_Exception( "Particle type [" + castor::toUtf8( value ) + "] is not registered, make sure you've got the matching plug-in installed." );
 		}
 	}
 

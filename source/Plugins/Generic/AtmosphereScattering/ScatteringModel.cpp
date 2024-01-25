@@ -14,7 +14,7 @@ namespace atmosphere_scattering
 		, uint32_t set )
 		: m_writer{ writer }
 		, m_atmosphere{ atmosphere }
-		, m_settings{ std::move( settings ) }
+		, m_settings{ castor::move( settings ) }
 		, transmittanceMap{ writer.declCombinedImg< sdw::CombinedImage2DRgba32 >( "transmittanceMap"
 			, binding++
 			, set ) }

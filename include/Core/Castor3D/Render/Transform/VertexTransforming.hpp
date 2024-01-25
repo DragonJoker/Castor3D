@@ -36,8 +36,8 @@ namespace castor3d
 
 	private:
 		RenderDevice const & m_device;
-		std::unordered_map< uint32_t, TransformPipeline > m_pipelines;
-		std::array< std::unique_ptr< BoundsTransformPipeline >, 2u > m_boundsPipelines;
+		castor::UnorderedMap< uint32_t, TransformPipeline > m_pipelines;
+		castor::Array< castor::RawUniquePtr< BoundsTransformPipeline >, 2u > m_boundsPipelines;
 		struct PendingNode
 		{
 			PendingNode( SubmeshRenderNode const * node
@@ -55,7 +55,7 @@ namespace castor3d
 			GpuBufferOffsetT< MorphingWeightsConfiguration > const * morphingWeights;
 			GpuBufferOffsetT< SkinningTransformsConfiguration > const * skinTransforms;
 		};
-		std::vector< PendingNode > m_pending;
+		castor::Vector< PendingNode > m_pending;
 		VertexTransformingPass * m_pass{};
 		MeshletBoundsTransformingPass * m_boundsPass{};
 	};

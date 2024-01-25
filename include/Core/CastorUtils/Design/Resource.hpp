@@ -84,7 +84,7 @@ namespace castor
 		*	Signal.
 		**/
 		/**@{*/
-		using OnResourceFunc = std::function< void( ElementT const & ) >;
+		using OnResourceFunc = castor::Function< void( ElementT const & ) >;
 		using OnResourceEvent = SignalT< OnResourceFunc >;
 		using Connection = ConnectionT< OnResourceEvent >;
 
@@ -137,7 +137,7 @@ namespace castor
 		using ElementPtrT = typename CacheT::ElementPtrT;
 
 		explicit ResourceMergerT( String name )
-			: Named{ std::move( name ) }
+			: Named{ castor::move( name ) }
 		{
 		}
 
@@ -154,7 +154,7 @@ namespace castor
 				ires = destination.emplace( name, ElementPtrT{} );
 			}
 
-			ires.first->second = std::move( element );
+			ires.first->second = castor::move( element );
 			ires.first->second->rename( name );
 		}
 	};
@@ -170,7 +170,7 @@ namespace castor
 		, typename ... ParametersT >
 	inline ResourcePtrT< ResT, KeyT > makeResource( ParametersT && ... params )
 	{
-		return castor::makeUnique< ResourceT< ResT, KeyT > >( std::forward< ParametersT >( params )... );
+		return castor::makeUnique< ResourceT< ResT, KeyT > >( castor::forward< ParametersT >( params )... );
 	}
 }
 

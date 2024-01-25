@@ -27,14 +27,14 @@
 namespace light_streaks
 {
 	castor::String const PostEffect::Type = cuT( "light_streaks" );
-	castor::String const PostEffect::Name = cuT( "LightStreaks PostEffect" );
+	castor::MbString const PostEffect::Name = "LightStreaks PostEffect";
 
 	PostEffect::PostEffect( castor3d::RenderTarget & renderTarget
 		, castor3d::RenderSystem & renderSystem
 		, castor3d::Parameters const & params )
 		: castor3d::PostEffect{ PostEffect::Type
-			, "LightStreaks"
-			, PostEffect::Name
+			, cuT( "LightStreaks" )
+			, castor::makeString( PostEffect::Name )
 			, renderTarget
 			, renderSystem
 			, params
@@ -61,7 +61,7 @@ namespace light_streaks
 
 		for ( auto & view : m_hiImage.subViewsId )
 		{
-			visitor.visit( "PostFX: LS - Hi " + std::to_string( view.data->info.subresourceRange.baseArrayLayer )
+			visitor.visit( cuT( "PostFX: LS - Hi " ) + castor::string::toString( view.data->info.subresourceRange.baseArrayLayer )
 				, view
 				, m_renderTarget.getGraph().getFinalLayoutState( view ).layout
 				, castor3d::TextureFactors{}.invert( true ) );
@@ -69,7 +69,7 @@ namespace light_streaks
 
 		for ( auto & view : m_kawaseImage.subViewsId )
 		{
-			visitor.visit( "PostFX: LS - Kawase " + std::to_string( view.data->info.subresourceRange.baseArrayLayer )
+			visitor.visit( cuT( "PostFX: LS - Kawase " ) + castor::string::toString( view.data->info.subresourceRange.baseArrayLayer )
 				, view
 				, m_renderTarget.getGraph().getFinalLayoutState( view ).layout
 				, castor3d::TextureFactors{}.invert( true ) );
@@ -97,7 +97,7 @@ namespace light_streaks
 		size.height >>= 2;
 		uint32_t index = 0u;
 		static float constexpr factor = 0.2f;
-		static std::array< castor::Point2f, Count > directions
+		static castor::Array< castor::Point2f, Count > directions
 		{
 			{
 				castor::Point2f{ factor, factor },
@@ -109,7 +109,7 @@ namespace light_streaks
 
 		m_hiImage = { device
 			, m_renderTarget.getResources()
-			, "LSHi"
+			, cuT( "LSHi" )
 			, 0u
 			, VkExtent3D{ size.width, size.height, 1u }
 			, Count + 1u
@@ -121,7 +121,7 @@ namespace light_streaks
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) };
 		m_kawaseImage = { device
 			, m_renderTarget.getResources()
-			, "LSKaw"
+			, cuT( "LSKaw" )
 			, 0u
 			, VkExtent3D{ size.width, size.height, 1u }
 			, Count
@@ -144,7 +144,7 @@ namespace light_streaks
 			}
 		}
 
-		m_hiPass = std::make_unique< HiPass >( m_graph
+		m_hiPass = castor::make_unique< HiPass >( m_graph
 			, previousPass
 			, device
 			, crg::ImageViewIdArray{ source.sampledViewId, target.sampledViewId }
@@ -152,7 +152,7 @@ namespace light_streaks
 			, size
 			, &isEnabled()
 			, &m_passIndex );
-		m_kawasePass = std::make_unique< KawasePass >( m_graph
+		m_kawasePass = castor::make_unique< KawasePass >( m_graph
 			, m_hiPass->getLastPasses()
 			, device
 			, m_hiImage.subViewsId
@@ -160,7 +160,7 @@ namespace light_streaks
 			, m_kawaseUbo
 			, size
 			, &isEnabled() );
-		m_combinePass = std::make_unique< CombinePass >( m_graph
+		m_combinePass = castor::make_unique< CombinePass >( m_graph
 			, m_kawasePass->getLastPasses()
 			, device
 			, crg::ImageViewIdArray{ source.sampledViewId, target.sampledViewId }

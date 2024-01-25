@@ -15,7 +15,7 @@ namespace castor3d
 	/**@name Shader */
 	//@{
 
-	using ShaderPtr = std::unique_ptr< ast::Shader >;
+	using ShaderPtr = castor::RawUniquePtr< ast::Shader >;
 
 	/**
 	*\~english
@@ -28,7 +28,7 @@ namespace castor3d
 	struct SpirVShader
 	{
 		castor::UInt32Array spirv;
-		std::string text;
+		castor::MbString text;
 	};
 	/**
 	*\~english
@@ -48,17 +48,17 @@ namespace castor3d
 		C3D_API ~ShaderModule()noexcept = default;
 
 		C3D_API ShaderModule( VkShaderStageFlagBits stage
-			, std::string const & name );
+			, castor::String const & name );
 		C3D_API ShaderModule( VkShaderStageFlagBits stage
-			, std::string const & name
-			, std::string source );
+			, castor::String const & name
+			, castor::MbString source );
 		C3D_API ShaderModule( VkShaderStageFlagBits stage
-			, std::string const & name
+			, castor::String const & name
 			, ShaderPtr shader );
 
 		VkShaderStageFlagBits stage{};
-		std::string name{};
-		std::string source{};
+		castor::String name{};
+		castor::MbString source{};
 		ShaderPtr shader{};
 		SpirVShader compiled{};
 	};
@@ -79,13 +79,13 @@ namespace castor3d
 		C3D_API ProgramModule() = default;
 		C3D_API ~ProgramModule()noexcept = default;
 
-		C3D_API explicit ProgramModule( std::string const & name );
-		C3D_API ProgramModule( std::string const & name
+		C3D_API explicit ProgramModule( castor::String const & name );
+		C3D_API ProgramModule( castor::String const & name
 			, ShaderPtr shader );
 
-		std::string name{};
+		castor::String name{};
 		ShaderPtr shader{};
-		std::map< ast::ShaderStage, SpirVShader > compiled;
+		castor::Map< ast::ShaderStage, SpirVShader > compiled;
 	};
 	/**
 	*\~english

@@ -21,7 +21,7 @@ CU_ImplementSmartPtr( castor3d, UploadData )
 
 namespace castor3d
 {
-	std::ostream & operator<<( std::ostream & stream, VkImageSubresourceRange const & rhs )
+	castor::OutputStream & operator<<( castor::OutputStream & stream, VkImageSubresourceRange const & rhs )
 	{
 		stream << rhs.aspectMask
 			<< ", Array[" << rhs.baseArrayLayer << "/" << rhs.layerCount << "]"
@@ -30,10 +30,10 @@ namespace castor3d
 	}
 
 	UploadData::UploadData( RenderDevice const & device
-		, std::string debugName
+		, castor::String debugName
 		, ashes::CommandBuffer const * commandBuffer )
 		: m_device{ device }
-		, m_debugName{ std::move( debugName ) }
+		, m_debugName{ castor::move( debugName ) }
 		, m_commandBuffer{ commandBuffer }
 	{
 	}
@@ -64,7 +64,7 @@ namespace castor3d
 				return lhs.dstBuffer < rhs.dstBuffer
 					|| ( lhs.dstBuffer == rhs.dstBuffer && lhs.dstOffset < rhs.dstOffset );
 			} );
-		m_pendingBuffers.emplace( it, std::move( upload ) );
+		m_pendingBuffers.emplace( it, castor::move( upload ) );
 	}
 
 	void UploadData::pushUpload( void const * srcData
@@ -80,7 +80,7 @@ namespace castor3d
 			return;
 		}
 
-		ImageDataRange upload{ srcData, srcSize, &dstImage, std::move( dstLayout ), dstRange, dstImageLayout, dstPipelineFlags };
+		ImageDataRange upload{ srcData, srcSize, &dstImage, castor::move( dstLayout ), dstRange, dstImageLayout, dstPipelineFlags };
 		auto it = std::lower_bound( m_pendingImages.begin()
 			, m_pendingImages.end()
 			, upload
@@ -92,13 +92,13 @@ namespace castor3d
 							|| ( lhs.dstRange.baseArrayLayer == rhs.dstRange.baseArrayLayer
 								&& lhs.dstRange.baseMipLevel < rhs.dstRange.baseMipLevel ) ) );
 			} );
-		m_pendingImages.emplace( it, std::move( upload ) );
+		m_pendingImages.emplace( it, castor::move( upload ) );
 	}
 
 	void UploadData::process()
 	{
-		std::vector< BufferDataRange > * pendingBuffers;
-		std::vector< ImageDataRange > * pendingImages;
+		castor::Vector< BufferDataRange > * pendingBuffers;
+		castor::Vector< ImageDataRange > * pendingImages;
 		traceUpload( "Start upload" << std::endl );
 		doPreprocess( pendingBuffers, pendingImages );
 #if C3D_DebugUpload
@@ -150,9 +150,9 @@ namespace castor3d
 		if ( size != ashes::WholeSize
 			&& dstOffset + size > dstBuffer.getSize() )
 		{
-			log::error << "StagedUpload: Trying to copy more than there can be in dst [" << dstBuffer.getName()
-				<< "] buffer: dstOffset = " << dstOffset
-				<< ", size = " << size << std::endl;
+			log::error << cuT( "StagedUpload: Trying to copy more than there can be in dst [" ) << castor::makeString( dstBuffer.getName() )
+				<< cuT( "] buffer: dstOffset = " ) << dstOffset
+				<< cuT( ", size = " ) << size << std::endl;
 			CU_Failure( "Trying to copy more than there can be in dst buffer" );
 		}
 
@@ -171,9 +171,9 @@ namespace castor3d
 
 		if ( dstOffset < mappedOffset )
 		{
-			log::error << "StagedUpload: Mapped offset " << mappedOffset
-				<< " and destination offset " << dstOffset
-				<< " are invalid." << std::endl;
+			log::error << cuT( "StagedUpload: Mapped offset " ) << mappedOffset
+				<< cuT( " and destination offset " ) << dstOffset
+				<< cuT( " are invalid." ) << std::endl;
 			CU_Failure( "Invalid offsets for upload" );
 		}
 
@@ -186,28 +186,28 @@ namespace castor3d
 		if ( mappedSize != ashes::WholeSize
 			&& mappedSize != ashes::getAlignedSize( mappedSize, align ) )
 		{
-			log::error << "StagedUpload: Invalid mapped size alignment: "
-				<< "] mappedSize = " << mappedSize
-				<< ", align = " << align << std::endl;
+			log::error << cuT( "StagedUpload: Invalid mapped size alignment: " )
+				<< cuT( "] mappedSize = " ) << mappedSize
+				<< cuT( ", align = " ) << align << std::endl;
 			CU_Failure( "Invalid mapped size alignment" );
 		}
 
 		if ( mappedOffset != 0u
 			&& mappedOffset != ashes::getAlignedSize( mappedOffset, align ) )
 		{
-			log::error << "StagedUpload: Invalid mapped offset alignment: "
-				<< "] mappedOffset = " << mappedOffset
-				<< ", align = " << align << std::endl;
+			log::error << cuT( "StagedUpload: Invalid mapped offset alignment: " )
+				<< cuT( "] mappedOffset = " ) << mappedOffset
+				<< cuT( ", align = " ) << align << std::endl;
 			CU_Failure( "Invalid mapped offset alignment" );
 		}
 
 		if ( !isFullSizeMap
 			&& mappedOffset + mappedSize > dstBuffer.getSize() )
 		{
-			log::error << "StagedUpload: Mapped destination is bigger that buffer [" << dstBuffer.getName()
-				<< "] size, mappedOffset = " << mappedOffset
-				<< ", mappedSize = " << mappedSize
-				<< ", buffer size = " << dstBuffer.getSize() << std::endl;
+			log::error << cuT( "StagedUpload: Mapped destination is bigger that buffer [" ) << castor::makeString( dstBuffer.getName() )
+				<< cuT( "] size, mappedOffset = " ) << mappedOffset
+				<< cuT( ", mappedSize = " ) << mappedSize
+				<< cuT( ", buffer size = " ) << dstBuffer.getSize() << std::endl;
 			CU_Failure( "Trying to copy more than there can be in dst buffer" );
 		}
 
@@ -241,28 +241,28 @@ namespace castor3d
 
 		if ( dstBuffer.getSize() < data.dstOffset + data.srcSize )
 		{
-			log::error << "StagedUpload: Trying to copy more than there can be in dst [" << dstBuffer.getName()
-				<< "] buffer: dstOffset = " << data.dstOffset
-				<< ", srcSize = " << data.srcSize << std::endl;
+			log::error << cuT( "StagedUpload: Trying to copy more than there can be in dst [" ) << castor::makeString( dstBuffer.getName() )
+				<< cuT( "] buffer: dstOffset = " ) << data.dstOffset
+				<< cuT( ", srcSize = " ) << data.srcSize << std::endl;
 			CU_Failure( "Trying to copy more than there can be in dst buffer" );
 		}
 
 		if ( srcBuffer )
 		{
-			traceUpload( "    Registering buffer upload commands: [" << data.dstBuffer->getName()
-				<< "(" << data.dstBuffer->getSize()
-				<< ")], Offset: " << data.dstOffset
-				<< ", from buffer [" << srcBuffer->getName()
-				<< "(" << srcBuffer->getSize()
-				<< ")], Offset: " << srcOffset
-				<< ", Upload Size: " << data.srcSize
+			traceUpload( cuT( "    Registering buffer upload commands: [" ) << castor::toUtf8( data.dstBuffer->getName() )
+				<< cuT( "(" ) << data.dstBuffer->getSize()
+				<< cuT( ")], Offset: " ) << data.dstOffset
+				<< cuT( ", from buffer [" ) << castor::makeString( srcBuffer->getName() )
+				<< cuT( "(" ) << srcBuffer->getSize()
+				<< cuT( ")], Offset: " ) << srcOffset
+				<< cuT( ", Upload Size: " ) << data.srcSize
 				<< std::endl );
 
 			if ( srcBuffer->getSize() < srcOffset + data.srcSize )
 			{
-				log::error << "StagedUpload: Trying to copy more than there is in src [" << srcBuffer->getName()
-					<< "] buffer: srcOffset = " << srcOffset
-					<< ", srcSize = " << data.srcSize << std::endl;
+				log::error << cuT( "StagedUpload: Trying to copy more than there is in src [" ) << castor::makeString( srcBuffer->getName() )
+					<< cuT( "] buffer: srcOffset = " ) << srcOffset
+					<< cuT( ", srcSize = " ) << data.srcSize << std::endl;
 				CU_Failure( "Trying to copy more than there is in src buffer" );
 			}
 
@@ -274,10 +274,10 @@ namespace castor3d
 		}
 		else
 		{
-			traceUpload( "    Registering buffer upload commands: [" << data.dstBuffer->getName()
-				<< "(" << data.dstBuffer->getSize()
-				<< ")], Offset: " << data.dstOffset
-				<< ", Upload Size: " << data.srcSize
+			traceUpload( cuT( "    Registering buffer upload commands: [" ) << castor::makeString( data.dstBuffer->getName() )
+				<< cuT( "(" ) << data.dstBuffer->getSize()
+				<< cuT( ")], Offset: " ) << data.dstOffset
+				<< cuT( ", Upload Size: " ) << data.srcSize
 				<< std::endl );
 
 			doCopyData( data.srcData
@@ -298,13 +298,13 @@ namespace castor3d
 		, ashes::BufferBase const & srcBuffer
 		, VkDeviceSize srcOffset )const
 	{
-		traceUpload( "    Registering image upload commands: [" << data.dstImage->getName()
-			<< "], Layout: [" << data.dstLayout
-			<< "], Range: [" << data.dstRange
-			<< ", from buffer [" << srcBuffer.getName()
-			<< "(" << srcBuffer.getSize()
-			<< ")], Offset: " << srcOffset
-			<< ", Upload Size: " << data.srcSize
+		traceUpload( cuT( "    Registering image upload commands: [" ) << castor::makeString( data.dstImage->getName() )
+			<< cuT( "], Layout: [" ) << data.dstLayout
+			<< cuT( "], Range: [" ) << data.dstRange
+			<< cuT( ", from buffer [" ) << castor::makeString( srcBuffer.getName() )
+			<< cuT( "(" ) << srcBuffer.getSize()
+			<< cuT( ")], Offset: " ) << srcOffset
+			<< cuT( ", Upload Size: " ) << data.srcSize
 			<< std::endl );
 		bool is3D = data.dstLayout.type == castor::ImageLayout::e3D;
 		auto & dstImage = *data.dstImage;

@@ -30,7 +30,27 @@ namespace castor3d
 		 *\param[in]	function	La fonction
 		 *\param[in]	line		La ligne dans le fichier
 		 */
-		C3D_API PluginException( bool critical, std::string const & description, char const * file, char const * function, uint32_t line );
+		C3D_API PluginException( bool critical, castor::MbString const & description, char const * file, char const * function, uint32_t line );
+		/**
+		 *\~english
+		 *\brief		Constructor
+		 *\param[in]	critical	Tells if the exception is critical
+		 *\param[in]	description	The exception description
+		 *\param[in]	file		The file
+		 *\param[in]	function	The function
+		 *\param[in]	line		The file line
+		 *\~french
+		 *\brief		Constructeur
+		 *\param[in]	critical	Dit si l'exception est critique
+		 *\param[in]	description	La description de l'exception
+		 *\param[in]	file		Le fichier
+		 *\param[in]	function	La fonction
+		 *\param[in]	line		La ligne dans le fichier
+		 */
+		C3D_API PluginException( bool critical, castor::WString const & description, char const * file, char const * function, uint32_t line )
+			: PluginException{ critical, castor::toUtf8( description ), file, function, line }
+		{
+		}
 		/**
 		 *\~english
 		 *\brief		Tells if the exception is critical

@@ -15,76 +15,76 @@ namespace castor3d
 
 	ShaderModule::ShaderModule( ShaderModule && rhs )noexcept
 		: stage{ rhs.stage }
-		, name{ std::move( rhs.name ) }
-		, source{ std::move( rhs.source ) }
-		, shader{ std::move( rhs.shader ) }
-		, compiled{ std::move( rhs.compiled ) }
+		, name{ castor::move( rhs.name ) }
+		, source{ castor::move( rhs.source ) }
+		, shader{ castor::move( rhs.shader ) }
+		, compiled{ castor::move( rhs.compiled ) }
 	{
 	}
 
 	ShaderModule & ShaderModule::operator=( ShaderModule && rhs )noexcept
 	{
 		stage = rhs.stage;
-		name = std::move( rhs.name );
-		source = std::move( rhs.source );
-		shader = std::move( rhs.shader );
-		compiled = std::move( rhs.compiled );
+		name = castor::move( rhs.name );
+		source = castor::move( rhs.source );
+		shader = castor::move( rhs.shader );
+		compiled = castor::move( rhs.compiled );
 
 		return *this;
 	}
 
 	ShaderModule::ShaderModule( VkShaderStageFlagBits stage
-		, std::string const & name )
+		, castor::String const & name )
 		: stage{ stage }
 		, name{ name }
 	{
 	}
 
 	ShaderModule::ShaderModule( VkShaderStageFlagBits stage
-		, std::string const & name
-		, std::string source )
+		, castor::String const & name
+		, castor::MbString source )
 		: stage{ stage }
 		, name{ name }
-		, source{ std::move( source ) }
+		, source{ castor::move( source ) }
 	{
 	}
 
 	ShaderModule::ShaderModule( VkShaderStageFlagBits stage
-		, std::string const & name
+		, castor::String const & name
 		, ShaderPtr shader )
 		: stage{ stage }
 		, name{ name }
-		, shader{ std::move( shader ) }
+		, shader{ castor::move( shader ) }
 	{
 	}
 
 	//*************************************************************************
 
 	ProgramModule::ProgramModule( ProgramModule && rhs )noexcept
-		: name{ std::move( rhs.name ) }
-		, shader{ std::move( rhs.shader ) }
-		, compiled{ std::move( rhs.compiled ) }
+		: name{ castor::move( rhs.name ) }
+		, shader{ castor::move( rhs.shader ) }
+		, compiled{ castor::move( rhs.compiled ) }
 	{
 	}
 
 	ProgramModule & ProgramModule::operator=( ProgramModule && rhs )noexcept
 	{
-		name = std::move( rhs.name );
-		shader = std::move( rhs.shader );
-		compiled = std::move( rhs.compiled );
+		name = castor::move( rhs.name );
+		shader = castor::move( rhs.shader );
+		compiled = castor::move( rhs.compiled );
 
 		return *this;
 	}
 
-	ProgramModule::ProgramModule( std::string const & pname )
+	ProgramModule::ProgramModule( castor::String const & pname )
 		: name{ pname }
 	{
 	}
 
-	ProgramModule::ProgramModule( std::string const & pname
+	ProgramModule::ProgramModule( castor::String const & pname
 		, ShaderPtr pshader )
 		: name{ pname }
-		, shader{ std::move( pshader ) }
+		, shader{ castor::move( pshader ) }
 	{
 	}
 
@@ -113,8 +113,8 @@ namespace castor3d
 		castor::String concatModelNames( castor::String lhs
 			, castor::String rhs )
 		{
-			castor::string::replace( lhs, cuT( "c3d." ), castor::cuEmptyString );
-			castor::string::replace( rhs, cuT( "c3d." ), castor::cuEmptyString );
+			castor::string::replace( lhs, cuT( "c3d." ), cuT( "" ) );
+			castor::string::replace( rhs, cuT( "c3d." ), cuT( "" ) );
 			return cuT( "c3d." ) + lhs + cuT( "." ) + rhs;
 		}
 	}

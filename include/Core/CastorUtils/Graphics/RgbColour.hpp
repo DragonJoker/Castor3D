@@ -43,7 +43,7 @@ namespace castor
 		friend class RgbColourT;
 
 		CU_DeclareArray( float, RgbComponent::eCount, Float4 );
-		using ColourComponentArray = std::array< ComponentType, size_t( RgbComponent::eCount ) >;
+		using ColourComponentArray = Array< ComponentType, size_t( RgbComponent::eCount ) >;
 		using ColourComponentArrayIt = typename ColourComponentArray::iterator;
 		using ColourComponentArrayRIt = typename ColourComponentArray::reverse_iterator;
 		using ColourComponentArrayConstIt = typename ColourComponentArray::const_iterator;

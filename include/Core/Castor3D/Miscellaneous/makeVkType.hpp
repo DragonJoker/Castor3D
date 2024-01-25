@@ -900,7 +900,7 @@ namespace castor3d
 	{
 		return VkStructT{ vkStructureTypeV< VkStructT >
 			, next
-			, std::forward< ParamsT >( params )... };
+			, castor::forward< ParamsT >( params )... };
 	}
 
 	template< typename VkStructT, typename ... ParamsT >
@@ -908,7 +908,7 @@ namespace castor3d
 	{
 		return VkStructT{ vkStructureTypeV< VkStructT >
 			, nullptr
-			, std::forward< ParamsT >( params )... };
+			, castor::forward< ParamsT >( params )... };
 	}
 }
 

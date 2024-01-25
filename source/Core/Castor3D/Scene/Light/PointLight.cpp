@@ -12,7 +12,7 @@ namespace castor3d
 		uint32_t constexpr FaceCount = 20u;
 
 		static void doUpdateShadowMatrices( castor::Point3f const & position
-			, std::array< castor::Matrix4x4f, size_t( CubeMapFace::eCount ) > & matrices )
+			, castor::Array< castor::Matrix4x4f, size_t( CubeMapFace::eCount ) > & matrices )
 		{
 			matrices[0] = castor::matrix::lookAt( position, position + castor::Point3f{ +1.0f, +0.0f, +0.0f }, castor::Point3f{ +0.0f, -1.0f, +0.0f } ); /* Positive X */
 			matrices[1] = castor::matrix::lookAt( position, position + castor::Point3f{ -1.0f, +0.0f, +0.0f }, castor::Point3f{ +0.0f, -1.0f, +0.0f } ); /* Negative X */
@@ -45,7 +45,7 @@ namespace castor3d
 		if ( result.empty() )
 		{
 			castor::Angle const angle = castor::Angle::fromDegrees( 360.0f / lgtpoint::FaceCount );
-			std::vector< castor::Point2f > arc{ lgtpoint::FaceCount + 1 };
+			castor::Vector< castor::Point2f > arc{ lgtpoint::FaceCount + 1 };
 			castor::Angle alpha;
 			castor::Point3fArray data;
 

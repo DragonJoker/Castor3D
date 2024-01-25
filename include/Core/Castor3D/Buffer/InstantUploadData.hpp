@@ -21,7 +21,7 @@ namespace castor3d
 		template< typename ... ParamsT >
 		InstantUploadDataT( ashes::Queue const & queue
 			, ParamsT && ... params )
-			: m_upload{ std::forward< ParamsT >( params )... }
+			: m_upload{ castor::forward< ParamsT >( params )... }
 			, m_queue{ queue }
 		{
 			m_upload.begin();
@@ -31,7 +31,7 @@ namespace castor3d
 		{
 			UploadData & upload = m_upload;
 			RenderDevice const & device = upload.getDevice();
-			auto fence = device->createFence( upload.getName() );
+			auto fence = device->createFence( castor::toUtf8( upload.getName() ) );
 			upload.process();
 			upload.end( m_queue, fence.get(), castor::Milliseconds{ ashes::MaxTimeout } );
 		}

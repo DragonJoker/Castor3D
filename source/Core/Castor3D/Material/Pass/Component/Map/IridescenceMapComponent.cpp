@@ -109,7 +109,7 @@ namespace castor3d
 		, shader::BlendComponents & components
 		, shader::SampleTexture const & sampleTexture )const
 	{
-		applyFloatComponent( "iridescenceFactor"
+		applyFloatComponent( cuT( "iridescenceFactor" )
 			, passShaders
 			, textureConfigs
 			, textureAnims
@@ -123,7 +123,7 @@ namespace castor3d
 	void IridescenceMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		channelFillers.try_emplace( "iridescence"
+		channelFillers.try_emplace( cuT( "iridescence" )
 			, getTextureFlags()
 			, []( TextureContext & blockContext )
 			{
@@ -165,7 +165,7 @@ namespace castor3d
 	}
 
 	void IridescenceMapComponent::Plugin::createMapComponent( Pass & pass
-		, std::vector< PassComponentUPtr > & result )const
+		, castor::Vector< PassComponentUPtr > & result )const
 	{
 		result.push_back( castor::makeUniqueDerived< PassComponent, IridescenceMapComponent >( pass ) );
 	}

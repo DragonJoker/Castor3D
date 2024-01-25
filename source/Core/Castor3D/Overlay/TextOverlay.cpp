@@ -67,7 +67,7 @@ namespace castor3d
 			TextChar( sdw::ShaderWriter & writer
 				, sdw::expr::ExprPtr expr
 				, bool enabled )
-				: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+				: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
 			{
 			}
 
@@ -95,7 +95,7 @@ namespace castor3d
 			TextWord( sdw::ShaderWriter & writer
 				, sdw::expr::ExprPtr expr
 				, bool enabled )
-				: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+				: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
 			{
 			}
 
@@ -121,7 +121,7 @@ namespace castor3d
 			TextLine( sdw::ShaderWriter & writer
 				, sdw::expr::ExprPtr expr
 				, bool enabled )
-				: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+				: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
 			{
 			}
 
@@ -137,7 +137,7 @@ namespace castor3d
 			if ( !fontTexture )
 			{
 				CU_Failure( cuT( "The TextOverlay has no FontTexture. Did you set its font?" ) );
-				CU_Exception( cuT( "The TextOverlay [" ) + overlay.getOverlayName() + cuT( "] has no FontTexture. Did you set its font?" ) );
+				CU_Exception( "The TextOverlay [" + castor::toUtf8( overlay.getOverlayName() ) + "] has no FontTexture. Did you set its font?" );
 			}
 
 			auto pfont = fontTexture->getFont();
@@ -145,7 +145,7 @@ namespace castor3d
 			if ( !pfont )
 			{
 				CU_Failure( cuT( "The TextOverlay has no Font. Did you set its font?" ) );
-				CU_Exception( cuT( "The TextOverlay [" ) + overlay.getOverlayName() + cuT( "] has no Font. Did you set its font?" ) );
+				CU_Exception( "The TextOverlay [" + castor::toUtf8( overlay.getOverlayName() ) + "] has no Font. Did you set its font?" );
 			}
 
 			return *pfont;
@@ -206,7 +206,7 @@ namespace castor3d
 
 	ashes::PipelineShaderStageCreateInfo TextOverlay::createProgram( RenderDevice const & device )
 	{
-		ShaderModule comp{ VK_SHADER_STAGE_COMPUTE_BIT, "TextOverlayCompute" };
+		ShaderModule comp{ VK_SHADER_STAGE_COMPUTE_BIT, cuT( "TextOverlayCompute" ) };
 		sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 		{
 			C3D_Camera( writer
@@ -393,7 +393,7 @@ namespace castor3d
 		else
 		{
 			CU_Failure( cuT( "Font not found" ) );
-			CU_Exception( "Font " + castor::string::stringCast< char >( name ) + "not found" );
+			CU_Exception( "Font " + castor::toUtf8( name ) + "not found" );
 		}
 
 		m_textChanged = true;
@@ -411,7 +411,7 @@ namespace castor3d
 		if ( !fontTexture )
 		{
 			CU_Failure( cuT( "The TextOverlay has no FontTexture. Did you set its font?" ) );
-			CU_Exception( cuT( "The TextOverlay [" ) + getOverlayName() + cuT( "] has no FontTexture. Did you set its font?" ) );
+			CU_Exception( "The TextOverlay [" + castor::toUtf8( getOverlayName() ) + "] has no FontTexture. Did you set its font?" );
 		}
 
 		auto font = fontTexture->getFont();
@@ -420,10 +420,10 @@ namespace castor3d
 		{
 			setVisible( false );
 			CU_Failure( cuT( "The TextOverlay has no Font. Did you set its font?" ) );
-			CU_Exception( cuT( "The TextOverlay [" ) + getOverlayName() + cuT( "] has no Font. Did you set its font?" ) );
+			CU_Exception( "The TextOverlay [" + castor::toUtf8( getOverlayName() ) + "] has no Font. Did you set its font?" );
 		}
 
-		std::vector< char32_t > newCaption;
+		castor::Vector< char32_t > newCaption;
 
 		for ( auto c : m_currentCaption )
 		{

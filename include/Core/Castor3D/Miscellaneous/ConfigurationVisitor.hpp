@@ -26,11 +26,11 @@ namespace castor3d
 			bool allowProgramsVisit{};
 		};
 
-		using Callback = std::function< void() >;
+		using Callback = castor::Function< void() >;
 		template< typename ControlT >
-		using ControlsListT = std::vector< std::pair< ControlT *, Callback > >;
+		using ControlsListT = castor::Vector< castor::Pair< ControlT *, Callback > >;
 		template< typename EnumT >
-		using OnEnumValueChangeT = std::function< void( EnumT oldV, EnumT newV ) >;
+		using OnEnumValueChangeT = castor::Function< void( EnumT oldV, EnumT newV ) >;
 
 		using ControlsList = ControlsListT< bool >;
 		using AtomicControlsList = ControlsListT< std::atomic_bool >;
@@ -56,10 +56,10 @@ namespace castor3d
 		{
 			ConfigurationVisitorBlock( ConfigurationVisitorBase & par
 				, castor::String const & cat
-				, std::unique_ptr< ConfigurationVisitorBase > config )
+				, castor::RawUniquePtr< ConfigurationVisitorBase > config )
 				: parent{ par }
 				, category{ cat }
-				, configuration{ std::move( config ) }
+				, configuration{ castor::move( config ) }
 			{
 			}
 
@@ -85,7 +85,7 @@ namespace castor3d
 				, ValueT & value
 				, ParamsT && ... params )
 			{
-				configuration->visit( name, value, std::forward< ParamsT >( params )... );
+				configuration->visit( name, value, castor::forward< ParamsT >( params )... );
 			}
 
 			template< typename ... ParamsT >
@@ -93,17 +93,17 @@ namespace castor3d
 				, ColourWrapper value
 				, ParamsT && ... params )
 			{
-				configuration->visit( name, value, std::forward< ParamsT >( params )... );
+				configuration->visit( name, value, castor::forward< ParamsT >( params )... );
 			}
 
 			ConfigurationVisitorBase & parent;
 			castor::String category;
-			std::unique_ptr< ConfigurationVisitorBase > configuration;
+			castor::RawUniquePtr< ConfigurationVisitorBase > configuration;
 		};
 
 	protected:
 		explicit ConfigurationVisitorBase( Config config = { false } )
-			: config{ std::move( config ) }
+			: config{ castor::move( config ) }
 		{
 		}
 
@@ -541,7 +541,7 @@ namespace castor3d
 		{
 			ControlsListT< ControlT > controls;
 			controls.push_back( { &value.control(), value.callback() } );
-			visit( name, value.naked(), std::forward< ParamsT >( params )..., std::move( controls ) );
+			visit( name, value.naked(), castor::forward< ParamsT >( params )..., castor::move( controls ) );
 		}
 
 		template< typename TypeT, typename ControlT, typename ... ParamsT >
@@ -551,14 +551,14 @@ namespace castor3d
 		{
 			ControlsListT< ControlT > controls;
 			controls.push_back( { &value.control(), value.callback() } );
-			visit( name, value.naked(), std::forward< ParamsT >( params )..., std::move( controls ) );
+			visit( name, value.naked(), castor::forward< ParamsT >( params )..., castor::move( controls ) );
 		}
 		/**@}*/
 
 	protected:
 		C3D_API virtual bool doFilter( crg::ImageViewId const & viewId
 			, TextureFactors const & factors )const = 0;
-		C3D_API virtual std::unique_ptr< ConfigurationVisitorBase > doGetSubConfiguration( castor::String const & category ) = 0;
+		C3D_API virtual castor::RawUniquePtr< ConfigurationVisitorBase > doGetSubConfiguration( castor::String const & category ) = 0;
 
 	private:
 		C3D_API virtual void doVisit( castor::String const & name
@@ -575,7 +575,7 @@ namespace castor3d
 	{
 	protected:
 		explicit ConfigurationVisitor( Config config = {} )
-			: ConfigurationVisitorBase{ std::move( config ) }
+			: ConfigurationVisitorBase{ castor::move( config ) }
 		{
 		}
 

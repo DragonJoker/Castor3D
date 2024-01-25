@@ -265,7 +265,7 @@ namespace castor3d
 
 			while ( nxt != config.components.end() )
 			{
-				*it = std::move( *nxt );
+				*it = castor::move( *nxt );
 				++it;
 				++nxt;
 			}
@@ -295,7 +295,7 @@ namespace castor3d
 			}
 		}
 
-		*it = std::move( flagConfiguration );
+		*it = castor::move( flagConfiguration );
 	}
 
 	TextureFlagConfiguration & getFlagConfiguration( TextureConfiguration & configuration

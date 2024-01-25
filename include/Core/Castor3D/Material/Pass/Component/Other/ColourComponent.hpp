@@ -65,12 +65,12 @@ namespace castor3d
 
 			shader::PassComponentsShaderPtr createComponentsShader()const override
 			{
-				return std::make_unique< ComponentsShader >( *this );
+				return castor::make_unique< ComponentsShader >( *this );
 			}
 
 			shader::PassMaterialShaderPtr createMaterialShader()const override
 			{
-				return std::make_unique< MaterialShader >();
+				return castor::make_unique< MaterialShader >();
 			}
 		};
 
@@ -96,7 +96,7 @@ namespace castor3d
 
 		void setColour( castor::HdrRgbColour v )override
 		{
-			setData( std::move( v ) );
+			setData( castor::move( v ) );
 		}
 
 		using PassComponent::setColour;

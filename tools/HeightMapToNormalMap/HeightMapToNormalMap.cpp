@@ -13,6 +13,8 @@
 
 namespace
 {
+	using StringArray = castor::Vector< castor::MbString >;
+
 	void printUsage()
 	{
 		std::cout << "HeightMapToNormalMap is a tool used to convert a height map to a normal map." << std::endl;
@@ -32,7 +34,7 @@ namespace
 		, char * argv[]
 		, Options & options )
 	{
-		castor::StringArray args{ argv + 1, argv + argc };
+		StringArray args{ argv + 1, argv + argc };
 
 		if ( args.empty() )
 		{
@@ -73,7 +75,7 @@ namespace
 		if ( it != args.end() )
 		{
 			it = args.erase( it );
-			options.normalStrength = castor::string::toFloat( *it );
+			options.normalStrength = castor::string::toFloat( castor::makeString( *it ) );
 			args.erase( it );
 		}
 
@@ -96,7 +98,7 @@ namespace
 
 		for ( auto & param : args )
 		{
-			options.paths.emplace_back( param );
+			options.paths.emplace_back( castor::makeString( param ) );
 		}
 
 		return true;
@@ -107,29 +109,30 @@ namespace
 		, castor::ImageLoader const & loader
 		, castor::ImageWriter const & writer )
 	{
+		auto mbPath = castor::toUtf8( path );
 		try
 		{
-			std::cout << "Converting " << path << std::endl;
+			std::cout << "Converting " << mbPath << std::endl;
 			auto image = loader.load( path.getFileName(), path, {} );
 
 			if ( castor::convertToNormalMap( strength, image ) )
 			{
 				path = image.getPath();
-				path = path.getPath() / ( "N_" + path.getFileName() + ".png" );
+				path = path.getPath() / ( cuT( "N_" ) + path.getFileName() + cuT( ".png" ) );
 				writer.write( path, image.getPxBuffer() );
 			}
 		}
 		catch ( castor::Exception & exc )
 		{
-			std::cerr << cuT( "Error encountered while loading image file [" ) << path << cuT( "]: " ) << exc.what() << std::endl;
+			std::cerr << "Error encountered while loading image file [" << mbPath << "]: " << exc.what() << std::endl;
 		}
 		catch ( std::exception & exc )
 		{
-			std::cerr << cuT( "Error encountered while loading image file [" ) << path << cuT( "]: " ) << exc.what() << std::endl;
+			std::cerr << "Error encountered while loading image file [" << mbPath << "]: " << exc.what() << std::endl;
 		}
 		catch ( ... )
 		{
-			std::cerr << cuT( "Error encountered while loading image file [" ) << path << cuT( "]: Unknown error" ) << std::endl;
+			std::cerr << "Error encountered while loading image file [" << mbPath << "]: Unknown error" << std::endl;
 		}
 	}
 }

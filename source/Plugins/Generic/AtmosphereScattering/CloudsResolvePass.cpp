@@ -75,10 +75,10 @@ namespace atmosphere_scattering
 				, vec2( sdw::Float{ float( renderSize.width ) }, float( renderSize.height ) ) );
 			auto offsetX = 1.0_f / targetSize.x();
 			auto offsetY = 1.0_f / targetSize.y();
-			auto kernel = std::vector< sdw::Float >{ 1.0_f / 16.0_f, 2.0_f / 16.0_f, 1.0_f / 16.0_f
+			auto kernel = castor::Vector< sdw::Float >{ 1.0_f / 16.0_f, 2.0_f / 16.0_f, 1.0_f / 16.0_f
 					, 2.0_f / 16.0_f, 4.0_f / 16.0_f, 2.0_f / 16.0_f
 					, 1.0_f / 16.0_f, 2.0_f / 16.0_f, 1.0_f / 16.0_f };
-			auto offsets = std::vector< sdw::Vec2 >{ vec2( -offsetX, offsetY ) // top-left
+			auto offsets = castor::Vector< sdw::Vec2 >{ vec2( -offsetX, offsetY ) // top-left
 					, vec2( 0.0_f, offsetY ) // top-center
 					, vec2( offsetX, offsetY ) // top-right
 					, vec2( -offsetX, 0.0_f )   // center-left
@@ -185,12 +185,12 @@ namespace atmosphere_scattering
 		, crg::ImageViewId const & clouds
 		, crg::ImageViewId const & resultView
 		, uint32_t index )
-		: castor::Named{ "Clouds/ResolvePass" + castor::string::toString( index ) }
+		: castor::Named{ cuT( "Clouds/ResolvePass" ) + castor::string::toString( index ) }
 		, m_shader{ getName(), cloudsres::getProgram( *device.renderSystem.getEngine(), getExtent( resultView ) ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
 	{
 		auto renderSize = getExtent( resultView );
-		auto & pass = graph.createPass( getName()
+		auto & pass = graph.createPass( castor::toUtf8( getName() )
 			, [this, &device, renderSize]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
@@ -199,7 +199,7 @@ namespace atmosphere_scattering
 					.renderSize( { renderSize.width, renderSize.height } )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.build( framePass, context, graph );
-				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );

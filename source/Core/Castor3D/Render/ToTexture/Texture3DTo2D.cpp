@@ -69,7 +69,7 @@ namespace castor3d
 		{
 			Texture result{ device
 				, resources
-				, "Texture3DToTexture2DDepth"
+				, cuT( "Texture3DToTexture2DDepth" )
 				, 0u
 				, colourView.getExtent()
 				, 1u
@@ -87,7 +87,7 @@ namespace castor3d
 		{
 			Texture result{ device
 				, resources
-				, "Texture3DToTexture2DColor"
+				, cuT( "Texture3DToTexture2DColor" )
 				, 0u
 				, { size.width, size.height, 1u }
 				, 1u
@@ -149,12 +149,12 @@ namespace castor3d
 			ashes::RenderPassCreateInfo createInfo
 			{
 				0u,
-				std::move( attaches ),
-				std::move( subpasses ),
-				std::move( dependencies ),
+				castor::move( attaches ),
+				castor::move( subpasses ),
+				castor::move( dependencies ),
 			};
-			return device->createRenderPass( name
-				, std::move( createInfo ) );
+			return device->createRenderPass( castor::toUtf8( name )
+				, castor::move( createInfo ) );
 		}
 
 		static ashes::FrameBufferPtr createFramebuffer( ashes::RenderPass const & renderPass
@@ -165,7 +165,7 @@ namespace castor3d
 			ashes::VkImageViewArray fbAttaches;
 			fbAttaches.emplace_back( colour.targetView );
 			fbAttaches.emplace_back( depth.targetView );
-			return renderPass.createFrameBuffer( name
+			return renderPass.createFrameBuffer( castor::toUtf8( name )
 				, makeVkStruct< VkFramebufferCreateInfo >( 0u
 					, renderPass
 					, 2u
@@ -203,7 +203,7 @@ namespace castor3d
 			}
 
 			return device->createDescriptorSetLayout( "Texture3DTo2D"
-				, std::move( bindings ) );
+				, castor::move( bindings ) );
 		}
 
 		static ashes::DescriptorSetPtr createDescriptorSet( RenderDevice const & device
@@ -309,7 +309,7 @@ namespace castor3d
 		{
 			auto & context = device.makeContext();
 			auto textureSize = getExtent( view.viewId ).width;
-			CommandsSemaphore result{ device, queueData, "Texture3DTo2D" };
+			CommandsSemaphore result{ device, queueData, cuT( "Texture3DTo2D" ) };
 			auto const & cmd = *result.commandBuffer;
 			cmd.begin();
 			cmd.beginDebugBlock( { "Texture3D To Texture2D"
@@ -403,7 +403,7 @@ namespace castor3d
 			SurfaceT( sdw::ShaderWriter & writer
 				, sdw::expr::ExprPtr expr
 				, bool enabled = true )
-				: SurfaceStrucT< FlagT >{ writer, std::move( expr ), enabled }
+				: SurfaceStrucT< FlagT >{ writer, castor::move( expr ), enabled }
 			{
 			}
 
@@ -549,9 +549,9 @@ namespace castor3d
 		, m_target{ t3dto2d::createTarget( device, resources, size ) }
 		, m_depthBuffer{ t3dto2d::createDepthBuffer( device, resources, m_target ) }
 		, m_uniformBuffer{ device.uboPool->getBuffer< Texture3DTo2DData >( 0u ) }
-		, m_renderPass{ t3dto2d::createRenderPass( device, "Texture3DTo2D", m_target, m_depthBuffer ) }
-		, m_frameBuffer{ t3dto2d::createFramebuffer( *m_renderPass, "Texture3DTo2D", m_target, m_depthBuffer ) }
-		, m_sampler{ castor::makeUnique< Sampler >( "Slice"
+		, m_renderPass{ t3dto2d::createRenderPass( device, cuT( "Texture3DTo2D" ), m_target, m_depthBuffer ) }
+		, m_frameBuffer{ t3dto2d::createFramebuffer( *m_renderPass, cuT( "Texture3DTo2D" ), m_target, m_depthBuffer ) }
+		, m_sampler{ castor::makeUnique< Sampler >( cuT( "Slice" )
 			, *device.renderSystem.getEngine()
 			, ashes::SamplerCreateInfo{ 0u
 				, VK_FILTER_LINEAR
@@ -570,12 +570,12 @@ namespace castor3d
 
 		, m_descriptorSetLayoutVolume{ t3dto2d::createDescriptorLayout( device, false ) }
 		, m_pipelineLayoutVolume{ t3dto2d::createPipelineLayout( device, *m_descriptorSetLayoutVolume ) }
-		, m_shaderVolume{ "Texture3DTo2D", t3dto2d::getProgramVolume( device.renderSystem ) }
+		, m_shaderVolume{ cuT( "Texture3DTo2D" ), t3dto2d::getProgramVolume( device.renderSystem ) }
 		, m_pipelineVolume{ t3dto2d::createPipelineVolume( device, *m_pipelineLayoutVolume, *m_renderPass, m_shaderVolume, m_target ) }
 
 		, m_descriptorSetLayoutSlice{ t3dto2d::createDescriptorLayout( device, true ) }
 		, m_pipelineLayoutSlice{ t3dto2d::createPipelineLayout( device, *m_descriptorSetLayoutSlice ) }
-		, m_shaderSlice{ "Texture3DTo2D", t3dto2d::getProgramSlice( device.renderSystem ) }
+		, m_shaderSlice{ cuT( "Texture3DTo2D" ), t3dto2d::getProgramSlice( device.renderSystem ) }
 		, m_pipelineSlice{ t3dto2d::createPipelineSlice( device, *m_pipelineLayoutSlice, *m_renderPass, m_shaderSlice, m_target ) }
 	{
 		m_sampler->initialise( device );
@@ -592,7 +592,7 @@ namespace castor3d
 	void Texture3DTo2D::createPasses( QueueData const & queueData
 		, IntermediateViewArray intermediates )
 	{
-		m_textures = std::move( intermediates );
+		m_textures = castor::move( intermediates );
 		initialise( queueData );
 	}
 

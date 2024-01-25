@@ -39,7 +39,7 @@ namespace castor3d
 			, RenderDevice const & device
 			, castor::Size const & size
 			, Texture const & srcTexture );
-		C3D_API ~RadianceComputer()override;
+		C3D_API ~RadianceComputer()noexcept override;
 		/**
 		 *\~english
 		 *\brief		Computes the radiance map.
@@ -86,7 +86,7 @@ namespace castor3d
 			VkImageView dstView;
 			ashes::FrameBufferPtr frameBuffer;
 		};
-		using RenderPasses = std::array< RenderPass, 6 >;
+		using RenderPasses = castor::Array< RenderPass, 6 >;
 
 		Texture m_result;
 		SamplerObs m_sampler{};

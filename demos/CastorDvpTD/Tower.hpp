@@ -129,7 +129,7 @@ namespace castortd
 			castor::Milliseconds m_attackAnimTime;
 		};
 
-		using CategoryPtr = std::unique_ptr< Category >;
+		using CategoryPtr = castor::RawUniquePtr< Category >;
 
 		enum class State
 		{

@@ -19,7 +19,7 @@ namespace castor
 			int32_t y;
 		};
 		Pos position;
-		std::array< int32_t, 2u > buffer;
+		Array< int32_t, 2u > buffer;
 	};
 
 	class Position

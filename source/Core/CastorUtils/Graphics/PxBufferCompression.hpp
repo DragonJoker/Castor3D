@@ -39,7 +39,7 @@ namespace castor
 		cvtt::BC7EncodingPlan encodingPlan;
 	};
 
-	std::vector< cvtt::PixelBlockU8 > createBlocksU8( std::atomic_bool const * interrupt
+	Vector< cvtt::PixelBlockU8 > createBlocksU8( std::atomic_bool const * interrupt
 		, Size const & srcDimensions
 		, uint32_t srcPixelSize
 		, uint8_t const * srcBuffer
@@ -48,7 +48,7 @@ namespace castor
 		, X8UGetter getG
 		, X8UGetter getB
 		, X8UGetter getA );
-	std::vector< cvtt::PixelBlockS8 > createBlocksS8( std::atomic_bool const * interrupt
+	Vector< cvtt::PixelBlockS8 > createBlocksS8( std::atomic_bool const * interrupt
 		, Size const & srcDimensions
 		, uint32_t srcPixelSize
 		, uint8_t const * srcBuffer
@@ -57,7 +57,7 @@ namespace castor
 		, X8SGetter getG
 		, X8SGetter getB
 		, X8SGetter getA );
-	std::vector< cvtt::PixelBlockF16 > createBlocksF16( std::atomic_bool const * interrupt
+	Vector< cvtt::PixelBlockF16 > createBlocksF16( std::atomic_bool const * interrupt
 		, Size const & srcDimensions
 		, uint32_t srcPixelSize
 		, uint8_t const * srcBuffer
@@ -69,19 +69,19 @@ namespace castor
 
 	uint32_t compressBlocks( CVTTOptions  const & options
 		, std::atomic_bool const * interrupt
-		, std::vector< cvtt::PixelBlockU8 > const & blocksCont
+		, Vector< cvtt::PixelBlockU8 > const & blocksCont
 		, PixelFormat dstFormat
 		, uint8_t * dstBuffer
 		, uint32_t dstSize );
 	uint32_t compressBlocks( CVTTOptions  const & options
 		, std::atomic_bool const * interrupt
-		, std::vector< cvtt::PixelBlockS8 > const & blocksCont
+		, Vector< cvtt::PixelBlockS8 > const & blocksCont
 		, PixelFormat dstFormat
 		, uint8_t * dstBuffer
 		, uint32_t dstSize );
 	uint32_t compressBlocks( CVTTOptions  const & options
 		, std::atomic_bool const * interrupt
-		, std::vector< cvtt::PixelBlockF16 > const & blocksCont
+		, Vector< cvtt::PixelBlockF16 > const & blocksCont
 		, PixelFormat dstFormat
 		, uint8_t * dstBuffer
 		, uint32_t dstSize );
@@ -220,8 +220,8 @@ namespace castor
 	struct BC4x4Compressor
 	{
 	protected:
-		using Block = std::array< uint8_t, 64u >;
-		using Color = std::array< uint8_t, 4u >;
+		using Block = Array< uint8_t, 64u >;
+		using Color = Array< uint8_t, 4u >;
 
 		CU_API BC4x4Compressor( uint32_t srcPixelSize
 			, X8UGetter getR

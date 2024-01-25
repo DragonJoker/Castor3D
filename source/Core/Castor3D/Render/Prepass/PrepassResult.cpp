@@ -15,7 +15,7 @@ namespace castor3d
 
 	castor::String getTexName( PpTexture texture )
 	{
-		static std::array< castor::String, size_t( PpTexture::eCount ) > Values
+		static castor::Array< castor::String, size_t( PpTexture::eCount ) > Values
 		{
 			{
 				cuT( "DepthObj" ),
@@ -28,7 +28,7 @@ namespace castor3d
 	
 	VkFormat getFormat( RenderDevice const &, PpTexture texture )
 	{
-		static std::array< VkFormat, size_t( PpTexture::eCount ) > Values
+		static castor::Array< VkFormat, size_t( PpTexture::eCount ) > Values
 		{
 			{
 				VK_FORMAT_R32G32B32A32_SFLOAT,
@@ -40,7 +40,7 @@ namespace castor3d
 
 	VkClearValue getClearValue( PpTexture texture )
 	{
-		static std::array< VkClearValue, size_t( PpTexture::eCount ) > Values
+		static castor::Array< VkClearValue, size_t( PpTexture::eCount ) > Values
 		{
 			{
 				transparentBlackClearColor,
@@ -52,7 +52,7 @@ namespace castor3d
 
 	VkImageUsageFlags getUsageFlags( PpTexture texture )
 	{
-		static std::array< VkImageUsageFlags, size_t( PpTexture::eCount ) > Values
+		static castor::Array< VkImageUsageFlags, size_t( PpTexture::eCount ) > Values
 		{
 			{
 				VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_STORAGE_BIT,
@@ -64,7 +64,7 @@ namespace castor3d
 
 	VkBorderColor getBorderColor( PpTexture texture )
 	{
-		static std::array< VkBorderColor, size_t( PpTexture::eCount ) > Values
+		static castor::Array< VkBorderColor, size_t( PpTexture::eCount ) > Values
 		{
 			{
 				VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE,

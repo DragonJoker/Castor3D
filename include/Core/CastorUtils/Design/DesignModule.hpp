@@ -154,8 +154,8 @@ namespace castor
 	*/
 	template< class ObjT
 		, class KeyT
-		, class PtrTypeT = std::unique_ptr< ObjT >
-		, typename CreatorT = std::function< PtrTypeT() >
+		, class PtrTypeT = castor::RawUniquePtr< ObjT >
+		, typename CreatorT = castor::Function< PtrTypeT() >
 		, class IdT = size_t
 		, class EntryT = FactoryEntryT< KeyT, CreatorT, IdT > >
 	class Factory;
@@ -269,7 +269,7 @@ namespace castor
 	\brief		Pointeur sur une vue sur une ressource.
 	*/
 	template< typename ResT, typename KeyT >
-	using ResourcePtrT = castor::UniquePtr< ResourceT< ResT, KeyT > >;
+	using ResourcePtrT = UniquePtr< ResourceT< ResT, KeyT > >;
 	/**
 	\~english
 	\brief		Pointer to a resource view.
@@ -433,12 +433,12 @@ namespace castor
 		using ElementKeyT = KeyT;
 		using ElementPtrT = ResourcePtrT< ElementT, ElementKeyT >;
 		using ElementObsT = ResourceObsT< ElementT, ElementKeyT >;
-		using ElementContT = std::unordered_map< KeyT, ElementPtrT >;
+		using ElementContT = UnorderedMap< KeyT, ElementPtrT >;
 		using ElementCacheT = ResourceCacheBaseT< ElementT, KeyT, TraitsT >;
 
-		using ElementInitialiserT = std::function< void( ElementT & ) >;
-		using ElementCleanerT = std::function< void( ElementT & ) >;
-		using ElementMergerT = std::function< void( ElementCacheT const &
+		using ElementInitialiserT = castor::Function< void( ElementT & ) >;
+		using ElementCleanerT = castor::Function< void( ElementT & ) >;
+		using ElementMergerT = castor::Function< void( ElementCacheT const &
 			, ElementContT &
 			, ElementPtrT ) >;
 
@@ -448,7 +448,7 @@ namespace castor
 			, ParametersT && ... params )
 		{
 			return makeResource< ElementT, ElementKeyT >( key
-				, std::forward< ParametersT >( params )... );
+				, castor::forward< ParametersT >( params )... );
 		}
 
 		static ElementObsT makeElementObs( ElementPtrT const & element )
@@ -564,9 +564,9 @@ namespace castor
 	template< typename T >
 	static inline bool constexpr isGroupChangeTrackedT = IsGroupChangeTrackedT< T >::value;
 
-	using OnCacheChangedFunction = std::function< void() >;
-	using OnCacheChanged = castor::SignalT< OnCacheChangedFunction >;
-	using OnCacheChangedConnection = castor::ConnectionT< OnCacheChanged >;
+	using OnCacheChangedFunction = castor::Function< void() >;
+	using OnCacheChanged = SignalT< OnCacheChangedFunction >;
+	using OnCacheChangedConnection = ConnectionT< OnCacheChanged >;
 
 	template< typename ResT, typename KeyT, typename TraitsT >
 	using ResourceCachePtrT = UniquePtr< ResourceCacheT< ResT, KeyT, TraitsT > >;

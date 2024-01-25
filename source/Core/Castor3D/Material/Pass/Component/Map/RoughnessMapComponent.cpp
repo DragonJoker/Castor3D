@@ -110,7 +110,7 @@ namespace castor3d
 		, shader::BlendComponents & components
 		, shader::SampleTexture const & sampleTexture )const
 	{
-		applyFloatComponent( "roughness"
+		applyFloatComponent( cuT( "roughness" )
 			, passShaders
 			, textureConfigs
 			, textureAnims
@@ -124,7 +124,7 @@ namespace castor3d
 	void RoughnessMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		channelFillers.try_emplace( "roughness"
+		channelFillers.try_emplace( cuT( "roughness" )
 			, getTextureFlags()
 			, []( TextureContext & blockContext )
 			{
@@ -166,7 +166,7 @@ namespace castor3d
 	}
 
 	void RoughnessMapComponent::Plugin::createMapComponent( Pass & pass
-		, std::vector< PassComponentUPtr > & result )const
+		, castor::Vector< PassComponentUPtr > & result )const
 	{
 		result.push_back( castor::makeUniqueDerived< PassComponent, RoughnessMapComponent >( pass ) );
 	}

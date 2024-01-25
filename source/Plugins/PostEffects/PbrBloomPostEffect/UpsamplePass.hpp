@@ -29,7 +29,7 @@ namespace PbrBloom
 		crg::ImageViewIdArray doCreateResultViews( crg::FramePassGroup & graph
 			, crg::ImageId const & resultImg
 			, uint32_t passesCount );
-		std::vector< crg::FramePass * > doCreatePasses( crg::FramePassGroup & graph
+		castor::Vector< crg::FramePass * > doCreatePasses( crg::FramePassGroup & graph
 			, crg::FramePass const & previousPass
 			, castor3d::RenderDevice const & device
 			, castor3d::UniformBufferOffsetT< castor::Point2f > const & ubo
@@ -41,7 +41,7 @@ namespace PbrBloom
 		castor3d::ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
 		crg::ImageViewIdArray m_resultViews;
-		std::vector< crg::FramePass * > m_passes;
+		castor::Vector< crg::FramePass * > m_passes;
 	};
 }
 

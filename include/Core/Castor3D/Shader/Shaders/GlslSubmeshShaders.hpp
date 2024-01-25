@@ -28,8 +28,8 @@ namespace castor3d::shader
 
 	private:
 		SubmeshComponentRegister const & m_compRegister;
-		std::vector< SubmeshVertexSurfaceShader * > m_vertexShaders;
-		std::vector< SubmeshRasterSurfaceShader * > m_rasterShaders;
+		castor::Vector< SubmeshVertexSurfaceShader * > m_vertexShaders;
+		castor::Vector< SubmeshRasterSurfaceShader * > m_rasterShaders;
 		PipelineFlags const & m_flags;
 	};
 }

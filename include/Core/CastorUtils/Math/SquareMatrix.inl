@@ -9,8 +9,8 @@ namespace castor
 		template< typename Type >
 		struct SqrMtxInverter< Type, 4 >
 		{
-			static inline void inverse( castor::SquareMatrix< Type, 4 > const & input
-				, castor::SquareMatrix< Type, 4 > & result )
+			static inline void inverse( SquareMatrix< Type, 4 > const & input
+				, SquareMatrix< Type, 4 > & result )
 			{
 				auto tS0 = input[0];
 				Type tS00 = input[0][0];
@@ -63,8 +63,8 @@ namespace castor
 				result[3][1] = +1 * ( tS00 * tCoef08 - tS01 * tCoef16 + tS02 * tCoef20 );
 				result[3][2] = -1 * ( tS00 * tCoef10 - tS01 * tCoef18 + tS02 * tCoef22 );
 				result[3][3] = +1 * ( tS00 * tCoef11 - tS01 * tCoef19 + tS02 * tCoef23 );
-				castor::Point< Type, 4 > ptRow0( result[0][0], result[1][0], result[2][0], result[3][0] );
-				Type determinant = castor::point::dot( tS0, ptRow0 );
+				Point< Type, 4 > ptRow0( result[0][0], result[1][0], result[2][0], result[3][0] );
+				Type determinant = point::dot( tS0, ptRow0 );
 				result /= determinant;
 			}
 		};
@@ -72,8 +72,8 @@ namespace castor
 		template< typename Type >
 		struct SqrMtxInverter< Type, 3 >
 		{
-			static inline void inverse( castor::SquareMatrix< Type, 3 > const & input
-				, castor::SquareMatrix< Type, 3 > & result )
+			static inline void inverse( SquareMatrix< Type, 3 > const & input
+				, SquareMatrix< Type, 3 > & result )
 			{
 				Type tS00 = input[0][0];
 				Type tS01 = input[0][1];
@@ -103,8 +103,8 @@ namespace castor
 		template< typename Type >
 		struct SqrMtxInverter< Type, 2 >
 		{
-			static inline void inverse( castor::SquareMatrix< Type, 2 > const & input
-				, castor::SquareMatrix< Type, 2 > & result )
+			static inline void inverse( SquareMatrix< Type, 2 > const & input
+				, SquareMatrix< Type, 2 > & result )
 			{
 				Type determinant = input[0][0] * input[1][1] - input[1][0] * input[0][1];
 				result[0][0] = +input[1][1] / determinant;
@@ -120,7 +120,7 @@ namespace castor
 		template< typename Type >
 		struct SqrMtxDeterminant< Type, 4 >
 		{
-			static inline Type get( castor::SquareMatrix< Type, 4 > const & matrix )
+			static inline Type get( SquareMatrix< Type, 4 > const & matrix )
 			{
 				return matrix[0][0] * matrix[1][1] * matrix[2][2] * matrix[3][3] - matrix[0][0] * matrix[1][1] * matrix[3][2] * matrix[2][3] + matrix[0][0] * matrix[2][1] * matrix[3][2] * matrix[1][3] - matrix[0][0] * matrix[2][1] * matrix[1][2] * matrix[3][3]
 					+ matrix[0][0] * matrix[3][1] * matrix[1][2] * matrix[2][3] - matrix[0][0] * matrix[3][1] * matrix[2][2] * matrix[1][3] - matrix[1][0] * matrix[2][1] * matrix[3][2] * matrix[0][3] + matrix[1][0] * matrix[2][1] * matrix[0][2] * matrix[3][3]
@@ -134,7 +134,7 @@ namespace castor
 		template< typename Type >
 		struct SqrMtxDeterminant< Type, 3 >
 		{
-			static inline Type get( castor::SquareMatrix< Type, 3 > const & matrix )
+			static inline Type get( SquareMatrix< Type, 3 > const & matrix )
 			{
 				return matrix[0][0] * matrix[1][1] * matrix[2][2]
 					- matrix[0][0] * matrix[2][1] * matrix[1][2]
@@ -153,7 +153,7 @@ namespace castor
 		{
 			static const uint32_t Size = sizeof( Type ) * 4;
 
-			static inline void mul( castor::SquareMatrix< Type, 4 > & lhs, castor::SquareMatrix< Type, 4 > const & rhs )
+			static inline void mul( SquareMatrix< Type, 4 > & lhs, SquareMatrix< Type, 4 > const & rhs )
 			{
 				auto const l11 = lhs[0][0];
 				auto const l12 = lhs[0][1];
@@ -215,7 +215,7 @@ namespace castor
 		{
 			static const uint32_t Size = sizeof( Type ) * 3;
 
-			static inline void mul( castor::SquareMatrix< Type, 3 > & lhs, castor::SquareMatrix< Type, 3 > const & rhs )
+			static inline void mul( SquareMatrix< Type, 3 > & lhs, SquareMatrix< Type, 3 > const & rhs )
 			{
 				auto const l11 = lhs[0][0];
 				auto const l12 = lhs[0][1];
@@ -255,7 +255,7 @@ namespace castor
 		{
 			static const uint32_t Size = sizeof( Type ) * 2;
 
-			static inline void mul( castor::SquareMatrix< Type, 2 > const & lhs, castor::SquareMatrix< Type, 2 > const & rhs )
+			static inline void mul( SquareMatrix< Type, 2 > const & lhs, SquareMatrix< Type, 2 > const & rhs )
 			{
 				auto const l11 = lhs[0][0];
 				auto const l12 = lhs[0][1];
@@ -277,9 +277,9 @@ namespace castor
 		template< typename TypeA, typename TypeB, uint32_t Count >
 		struct MtxMultiplicator
 		{
-			static inline castor::Point< TypeB, Count > mul( castor::SquareMatrix< TypeA, 4 > const & lhs, castor::Point< TypeB, Count > const & rhs )
+			static inline Point< TypeB, Count > mul( SquareMatrix< TypeA, 4 > const & lhs, Point< TypeB, Count > const & rhs )
 			{
-				castor::Point< TypeB, Count > result;
+				Point< TypeB, Count > result;
 				result[0] = TypeB( lhs[0][0] * rhs[0] ) + TypeB( lhs[0][1] * rhs[1] ) + TypeB( lhs[0][2] * rhs[2] ) + TypeB( lhs[0][3] * rhs[3] );
 				result[1] = TypeB( lhs[1][0] * rhs[0] ) + TypeB( lhs[1][1] * rhs[1] ) + TypeB( lhs[1][2] * rhs[2] ) + TypeB( lhs[1][3] * rhs[3] );
 				result[2] = TypeB( lhs[2][0] * rhs[0] ) + TypeB( lhs[2][1] * rhs[1] ) + TypeB( lhs[2][2] * rhs[2] ) + TypeB( lhs[2][3] * rhs[3] );
@@ -291,18 +291,18 @@ namespace castor
 		template< typename TypeA, typename TypeB >
 		struct MtxMultiplicator< TypeA, TypeB, 0 >
 		{
-			static inline castor::Point< TypeB, 0 > mul( castor::SquareMatrix< TypeA, 4 > const &, castor::Point< TypeB, 0 > const & )
+			static inline Point< TypeB, 0 > mul( SquareMatrix< TypeA, 4 > const &, Point< TypeB, 0 > const & )
 			{
-				return castor::Point< TypeB, 0 >();
+				return Point< TypeB, 0 >();
 			}
 		};
 
 		template< typename TypeA, typename TypeB >
 		struct MtxMultiplicator< TypeA, TypeB, 1 >
 		{
-			static inline castor::Point< TypeB, 1 > mul( castor::SquareMatrix< TypeA, 4 > const & lhs, castor::Point< TypeB, 1 > const & rhs )
+			static inline Point< TypeB, 1 > mul( SquareMatrix< TypeA, 4 > const & lhs, Point< TypeB, 1 > const & rhs )
 			{
-				castor::Point< TypeB, 1 > result;
+				Point< TypeB, 1 > result;
 				result[0]  = TypeB( lhs[0][0] * rhs[0] );
 				return result;
 			}
@@ -311,9 +311,9 @@ namespace castor
 		template< typename TypeA, typename TypeB >
 		struct MtxMultiplicator< TypeA, TypeB, 2 >
 		{
-			static inline castor::Point< TypeB, 2 > mul( castor::SquareMatrix< TypeA, 4 > const & lhs, castor::Point< TypeB, 2 > const & rhs )
+			static inline Point< TypeB, 2 > mul( SquareMatrix< TypeA, 4 > const & lhs, Point< TypeB, 2 > const & rhs )
 			{
-				castor::Point< TypeB, 2 > result;
+				Point< TypeB, 2 > result;
 				result[0]  = TypeB( lhs[0][0] * rhs[0] ) + TypeB( lhs[0][1] * rhs[1] );
 				result[1]  = TypeB( lhs[1][0] * rhs[0] ) + TypeB( lhs[1][1] * rhs[1] );
 				return result;
@@ -323,9 +323,9 @@ namespace castor
 		template< typename TypeA, typename TypeB >
 		struct MtxMultiplicator< TypeA, TypeB, 3 >
 		{
-			static inline castor::Point< TypeB, 3 > mul( castor::SquareMatrix< TypeA, 4 > const & lhs, castor::Point< TypeB, 3 > const & rhs )
+			static inline Point< TypeB, 3 > mul( SquareMatrix< TypeA, 4 > const & lhs, Point< TypeB, 3 > const & rhs )
 			{
-				castor::Point< TypeB, 3 > result;
+				Point< TypeB, 3 > result;
 				result[0]  = TypeB( lhs[0][0] * rhs[0] ) + TypeB( lhs[0][1] * rhs[1] ) + TypeB( lhs[0][2] * rhs[2] );
 				result[1]  = TypeB( lhs[1][0] * rhs[0] ) + TypeB( lhs[1][1] * rhs[1] ) + TypeB( lhs[1][2] * rhs[2] );
 				result[2]  = TypeB( lhs[2][0] * rhs[0] ) + TypeB( lhs[2][1] * rhs[1] ) + TypeB( lhs[2][2] * rhs[2] );
@@ -334,7 +334,7 @@ namespace castor
 		};
 
 		template< typename T >
-		using Matrix1T = castor::SquareMatrix< T, 1 >;
+		using Matrix1T = SquareMatrix< T, 1 >;
 
 		template< typename T, uint32_t Count > struct CoFactorComputer;
 
@@ -350,10 +350,10 @@ namespace castor
 		template< typename T, uint32_t Count >
 		struct CoFactorComputer
 		{
-			static inline T get( castor::SquareMatrix< T, Count > const & matrix, uint32_t column, uint32_t row )
+			static inline T get( SquareMatrix< T, Count > const & matrix, uint32_t column, uint32_t row )
 			{
 				T tReturn = T();
-				castor::SquareMatrix < T, Count - 1 > mtxTmp = matrix.getMinor( column, row );
+				SquareMatrix < T, Count - 1 > mtxTmp = matrix.getMinor( column, row );
 
 				if ( ( row + column ) % 2 == 0 )
 				{
@@ -397,7 +397,7 @@ namespace castor
 
 	template< typename T, uint32_t Count >
 	inline SquareMatrix< T, Count >::SquareMatrix( SquareMatrix< T, Count > && rhs )noexcept
-		: matrix_type( std::move( rhs ) )
+		: matrix_type( castor::move( rhs ) )
 	{
 	}
 
@@ -438,7 +438,7 @@ namespace castor
 
 	template< typename T, uint32_t Count >
 	template< typename Type >
-	inline SquareMatrix< T, Count >::SquareMatrix( std::array< Type, Count * Count > const & rhs )
+	inline SquareMatrix< T, Count >::SquareMatrix( Array< Type, Count * Count > const & rhs )
 		: matrix_type( rhs )
 	{
 	}
@@ -452,7 +452,7 @@ namespace castor
 
 	template< typename T, uint32_t Count >
 	inline SquareMatrix< T, Count >::SquareMatrix( std::initializer_list< T > rhs )
-		: matrix_type( std::move( rhs ) )
+		: matrix_type( castor::move( rhs ) )
 	{
 	}
 
@@ -587,7 +587,7 @@ namespace castor
 		{
 			for ( uint32_t j = 0; j < i; j++ )
 			{
-				std::swap( ( *this )[j][i], ( *this )[i][j] );
+				castor::swap( ( *this )[j][i], ( *this )[i][j] );
 			}
 		}
 
@@ -612,7 +612,7 @@ namespace castor
 	template< typename T, uint32_t Count >
 	inline SquareMatrix< T, Count > & SquareMatrix< T, Count >::operator=( SquareMatrix< T, Count > && rhs )noexcept
 	{
-		matrix_type::operator=( std::move( rhs ) );
+		matrix_type::operator=( castor::move( rhs ) );
 		return * this;
 	}
 
@@ -846,7 +846,7 @@ namespace castor
 //*************************************************************************************************
 
 	template< typename CharT, typename T, uint32_t Count >
-	inline std::basic_ostream< CharT > & operator<<( std::basic_ostream< CharT > & stream, castor::SquareMatrix< T, Count > const & rhs )
+	inline std::basic_ostream< CharT > & operator<<( std::basic_ostream< CharT > & stream, SquareMatrix< T, Count > const & rhs )
 	{
 		auto precision = stream.precision( 10 );
 
@@ -866,7 +866,7 @@ namespace castor
 	}
 
 	template< typename CharT, typename T, uint32_t Count >
-	inline std::basic_istream< CharT > & operator>>( std::basic_istream< CharT > & stream, castor::SquareMatrix< T, Count > & rhs )
+	inline std::basic_istream< CharT > & operator>>( std::basic_istream< CharT > & stream, SquareMatrix< T, Count > & rhs )
 	{
 		for ( uint32_t i = 0; i < Count; i++ )
 		{

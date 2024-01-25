@@ -25,10 +25,10 @@ namespace castor3d
 		};
 
 		using KeyFrame = KeyFrameT< float >;
-		using KeyFramed = std::array< double, 17 >;
+		using KeyFramed = castor::Array< double, 17 >;
 
-		static void doConvert( std::vector< KeyFramed > const & in
-			, std::vector< KeyFrame > & out )
+		static void doConvert( castor::Vector< KeyFramed > const & in
+			, castor::Vector< KeyFrame > & out )
 		{
 			out.resize( in.size() );
 			auto it = out.begin();
@@ -88,7 +88,7 @@ namespace castor3d
 				{
 					auto bone = castor::makeUnique< SkeletonAnimationBone >( *obj.getOwner() );
 					result = createBinaryParser< SkeletonAnimationBone >().parse( *bone, chunk );
-					checkError( result, "Couldn't parse animation bone." );
+					checkError( result, cuT( "Couldn't parse animation bone." ) );
 
 					if ( result )
 					{
@@ -103,7 +103,7 @@ namespace castor3d
 				{
 					auto node = castor::makeUnique< SkeletonAnimationNode >( *obj.getOwner() );
 					result = createBinaryParser< SkeletonAnimationNode >().parse( *node, chunk );
-					checkError( result, "Couldn't parse animation node." );
+					checkError( result, cuT( "Couldn't parse animation node." ) );
 
 					if ( result )
 					{
@@ -124,8 +124,8 @@ namespace castor3d
 	bool BinaryParser< SkeletonAnimationObject >::doParse_v1_1( SkeletonAnimationObject & obj )
 	{
 		bool result = true;
-		std::vector< binsklanmobj::KeyFrame > keyframes;
-		std::vector< binsklanmobj::KeyFramed > keyframesd;
+		castor::Vector< binsklanmobj::KeyFrame > keyframes;
+		castor::Vector< binsklanmobj::KeyFramed > keyframesd;
 		BinaryChunk chunk{ doIsLittleEndian() };
 		uint32_t count{ 0 };
 		float length{ 0.0f };
@@ -142,7 +142,7 @@ namespace castor3d
 #pragma GCC diagnostic pop
 #pragma warning( pop )
 				result = doParseChunk( count, chunk );
-				checkError( result, "Couldn't parse keyframes count." );
+				checkError( result, cuT( "Couldn't parse keyframes count." ) );
 				if ( result )
 				{
 					keyframesd.resize( count );
@@ -157,7 +157,7 @@ namespace castor3d
 #pragma GCC diagnostic pop
 #pragma warning( pop )
 				result = doParseChunk( keyframesd, chunk );
-				checkError( result, "Couldn't parse keyframes." );
+				checkError( result, cuT( "Couldn't parse keyframes." ) );
 				if ( result )
 				{
 					doConvert( keyframesd, keyframes );
@@ -193,7 +193,7 @@ namespace castor3d
 				break;
 			case ChunkType::eAnimLength:
 				result = doParseChunk( length, chunk );
-				checkError( result, "Couldn't parse animation length." );
+				checkError( result, cuT( "Couldn't parse animation length." ) );
 				break;
 			default:
 				break;
@@ -223,7 +223,7 @@ namespace castor3d
 				{
 					auto bone = castor::makeUnique< SkeletonAnimationBone >( *obj.getOwner() );
 					result = createBinaryParser< SkeletonAnimationBone >().parse( *bone, chunk );
-					checkError( result, "Couldn't parse animation bone." );
+					checkError( result, cuT( "Couldn't parse animation bone." ) );
 
 					if ( result )
 					{
@@ -244,7 +244,7 @@ namespace castor3d
 				{
 					auto node = castor::makeUnique< SkeletonAnimationNode >( *obj.getOwner() );
 					result = createBinaryParser< SkeletonAnimationNode >().parse( *node, chunk );
-					checkError( result, "Couldn't parse animation node." );
+					checkError( result, cuT( "Couldn't parse animation node." ) );
 
 					if ( result )
 					{

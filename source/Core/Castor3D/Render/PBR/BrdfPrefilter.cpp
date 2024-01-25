@@ -34,13 +34,13 @@ namespace castor3d
 		, Texture const & dstTexture )
 		: m_renderSystem{ *engine.getRenderSystem() }
 		, m_device{ device }
-		, m_image{ std::make_unique< ashes::Image >( *m_device
+		, m_image{ castor::make_unique< ashes::Image >( *m_device
 			, *dstTexture.image
 			, ashes::ImageCreateInfo{ dstTexture.imageId.data->info } ) }
 		, m_view{ dstTexture.targetViewId.data->info
 			, dstTexture.targetView
 			, m_image.get() }
-		, m_commands{ m_device, *m_device.graphicsData(), "BrdfPrefilter" }
+		, m_commands{ m_device, *m_device.graphicsData(), cuT( "BrdfPrefilter" ) }
 	{
 		// Initialise the vertex buffer.
 		auto queueData = m_device.graphicsData();
@@ -55,7 +55,7 @@ namespace castor3d
 		{
 			InstantDirectUploadData uploader{ *queueData->queue
 				, m_device
-				, "BrdfPrefilter"
+				, cuT( "BrdfPrefilter" )
 				, *queueData->commandPool };
 			uploader->pushUpload( &data
 				, sizeof( TexturedQuad )
@@ -66,7 +66,7 @@ namespace castor3d
 		}
 
 		// Initialise the vertex layout.
-		m_vertexLayout = std::make_unique< ashes::PipelineVertexInputStateCreateInfo >( 0u
+		m_vertexLayout = castor::make_unique< ashes::PipelineVertexInputStateCreateInfo >( 0u
 			, ashes::VkVertexInputBindingDescriptionArray
 			{
 				{ 0u, sizeof( TexturedQuad::Vertex ), VK_VERTEX_INPUT_RATE_VERTEX },
@@ -127,19 +127,19 @@ namespace castor3d
 		ashes::RenderPassCreateInfo createInfo
 		{
 			0u,
-			std::move( attaches ),
-			std::move( subpasses ),
-			std::move( dependencies ),
+			castor::move( attaches ),
+			castor::move( subpasses ),
+			castor::move( dependencies ),
 		};
 		m_renderPass = m_device->createRenderPass( "BrdfPrefilter"
-			, std::move( createInfo ) );
+			, castor::move( createInfo ) );
 
 		// Initialise the frame buffer.
 		ashes::ImageViewCRefArray views;
 		views.emplace_back( m_view );
 		m_frameBuffer = m_renderPass->createFrameBuffer( "BrdfPrefilter"
 			, VkExtent2D{ size.getWidth(), size.getHeight() }
-			, std::move( views ) );
+			, castor::move( views ) );
 
 		// Initialise the pipeline.
 		m_pipelineLayout = m_device->createPipelineLayout( "BrdfPrefilter" );
@@ -148,7 +148,7 @@ namespace castor3d
 			{
 				0u,
 				doCreateProgram(),
-				std::move( *m_vertexLayout ),
+				castor::move( *m_vertexLayout ),
 				ashes::PipelineInputAssemblyStateCreateInfo{ 0u, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST },
 				ashes::nullopt,
 				ashes::PipelineViewportStateCreateInfo{ 0u, 1u, { VkViewport{ 0.0f, 0.0f, float( size.getWidth() ), float( size.getHeight() ), 0.0f, 1.0f } }, 1u, { VkRect2D{ 0, 0, size.getWidth(), size.getHeight() } } },
@@ -186,7 +186,7 @@ namespace castor3d
 
 	ashes::PipelineShaderStageCreateInfoArray BrdfPrefilter::doCreateProgram()
 	{
-		ProgramModule programModule{ "BRDFPrefilter" };
+		ProgramModule programModule{ cuT( "BRDFPrefilter" ) };
 		{
 			sdw::TraditionalGraphicsWriter writer{ &m_renderSystem.getEngine()->getShaderAllocator() };
 
@@ -294,14 +294,14 @@ namespace castor3d
 				, sdw::InFloat( writer, "NdotV" )
 				, sdw::InFloat( writer, "roughness" ) );
 
-			writer.implementEntryPointT< sdw::VoidT, sdw::VoidT >( [&]( sdw::VertexIn const & in
+			writer.implementEntryPointT< sdw::VoidT, sdw::VoidT >( [&]( sdw::VertexIn const &
 				, sdw::VertexOut out )
 				{
 					outTexture = inUv;
 					out.vtx.position = vec4( inPosition, 0.0_f, 1.0_f );
 				} );
 
-			writer.implementEntryPointT< sdw::VoidT, sdw::VoidT >( [&]( sdw::FragmentIn const & in
+			writer.implementEntryPointT< sdw::VoidT, sdw::VoidT >( [&]( sdw::FragmentIn const &
 				, sdw::FragmentOut const & )
 				{
 					outColour = vec4( integrateBRDF( inTexture.x(), inTexture.y() ), 1.0_f );

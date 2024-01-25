@@ -62,8 +62,8 @@ namespace castor3d
 			m_lightBuffer = castor::makeUnique< LightBuffer >( m_engine
 				, device
 				, MaxLightsCount );
-			std::vector< Light * > pending;
-			std::swap( pending, m_pendingLights );
+			castor::Vector< Light * > pending;
+			castor::swap( pending, m_pendingLights );
 
 			for ( auto light : pending )
 			{
@@ -91,7 +91,7 @@ namespace castor3d
 		auto lock( castor::makeUniqueLock( *this ) );
 		auto & sceneObjs = updater.dirtyScenes[getScene()];
 		LightsRefArray dirty;
-		std::swap( m_dirtyLights, dirty );
+		castor::swap( m_dirtyLights, dirty );
 		dirty.insert( dirty.end()
 			, sceneObjs.dirtyLights.begin()
 			, sceneObjs.dirtyLights.end() );

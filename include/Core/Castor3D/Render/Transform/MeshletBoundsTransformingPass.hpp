@@ -30,13 +30,12 @@ namespace castor3d
 
 	private:
 		void doRecordInto( crg::RecordContext & context
-			, VkCommandBuffer commandBuffer
-			, uint32_t index )const;
+			, VkCommandBuffer commandBuffer )const;
 		bool doIsComputePass()const noexcept;
 
 	private:
 		RenderDevice const & m_device;
-		std::unordered_map< size_t, MeshletBoundsTransformPassUPtr > m_transformPasses;
+		castor::UnorderedMap< size_t, MeshletBoundsTransformPassUPtr > m_transformPasses;
 	};
 }
 

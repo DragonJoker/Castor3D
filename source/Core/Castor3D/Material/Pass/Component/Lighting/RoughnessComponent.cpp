@@ -30,7 +30,7 @@ namespace castor
 		bool operator()( castor3d::RoughnessComponent const & object
 			, StringStream & file )override
 		{
-			return write( file, "roughness", object.getRoughness() );
+			return write( file, cuT( "roughness" ), object.getRoughness() );
 		}
 	};
 }

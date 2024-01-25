@@ -178,7 +178,7 @@ namespace castor3d
 			void setRenderPass( VkRenderPass renderPass
 				, VkExtent2D const & renderSize );
 			void setTarget( ashes::FrameBuffer const & framebuffer
-				, std::vector< VkClearValue > clearValues );
+				, castor::Vector< VkClearValue > clearValues );
 
 			crg::Fence & getFence()
 			{
@@ -197,13 +197,13 @@ namespace castor3d
 			ashes::PipelineShaderStageCreateInfoArray m_stages;
 			crg::RenderQuadHolder m_renderQuad;
 			VkFramebuffer m_framebuffer{};
-			std::vector< VkClearValue > m_clearValues;
+			castor::Vector< VkClearValue > m_clearValues;
 		};
 
 	private:
 		RenderDevice const & m_device;
 		ProgressBar & m_progressBar;
-		std::unique_ptr< crg::FrameGraph > m_graph;
+		castor::RawUniquePtr< crg::FrameGraph > m_graph;
 		std::atomic_bool m_enabled{};
 		std::atomic_bool m_needsRecreate{};
 		SceneRPtr m_scene;

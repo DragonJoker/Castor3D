@@ -78,12 +78,12 @@ namespace castor3d
 		}
 
 	public:
-		static castor::String const Config;
-		static castor::String const Step;
-		static castor::String const Correction;
-		static castor::String const PixelSize;
-		static castor::String const Weights;
-		static castor::String const Offsets;
+		static castor::MbString const Config;
+		static castor::MbString const Step;
+		static castor::MbString const Correction;
+		static castor::MbString const PixelSize;
+		static castor::MbString const Weights;
+		static castor::MbString const Offsets;
 
 		struct BlurConfiguration
 		{
@@ -110,7 +110,7 @@ namespace castor3d
 		bool m_enabled;
 		castor::Size m_size;
 		Texture m_intermediate;
-		std::array< Texture, 3u > m_blurImages;
+		castor::Array< Texture, 3u > m_blurImages;
 		Texture m_result;
 		UniformBufferOffsetT< BlurConfiguration > m_blurCfgUbo;
 		UniformBufferOffsetT< BlurWeights > m_blurWgtUbo;

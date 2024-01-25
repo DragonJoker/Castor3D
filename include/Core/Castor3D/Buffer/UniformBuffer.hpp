@@ -224,7 +224,7 @@ namespace castor3d
 		*\return
 		*	Les données.
 		*/
-		std::vector< DataT > const & getDatas()const
+		castor::Vector< DataT > const & getDatas()const
 		{
 			return m_data;
 		}
@@ -236,13 +236,13 @@ namespace castor3d
 		*\return
 		*	Les données.
 		*/
-		std::vector< DataT > & getDatas()
+		castor::Vector< DataT > & getDatas()
 		{
 			return m_data;
 		}
 
 	private:
-		std::vector< DataT > m_data;
+		castor::Vector< DataT > m_data;
 	};
 
 	template< typename DataT >
@@ -250,15 +250,15 @@ namespace castor3d
 		, VkDeviceSize count
 		, VkBufferUsageFlags usage
 		, VkMemoryPropertyFlags flags
-		, std::string name
+		, castor::String name
 		, ashes::QueueShare sharingMode = {} )
 	{
 		return castor::makeUnique< UniformBufferT< DataT > >( renderSystem
 			, uint32_t( count )
 			, usage
 			, flags
-			, std::move( name )
-			, std::move( sharingMode ) );
+			, castor::move( name )
+			, castor::move( sharingMode ) );
 	}
 }
 

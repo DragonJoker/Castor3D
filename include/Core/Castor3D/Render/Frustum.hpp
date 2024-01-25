@@ -14,7 +14,7 @@ namespace castor3d
 	class Frustum
 	{
 	public:
-		using Planes = std::array< castor::PlaneEquation, size_t( FrustumPlane::eCount ) >;
+		using Planes = castor::Array< castor::PlaneEquation, size_t( FrustumPlane::eCount ) >;
 
 	public:
 		/**
@@ -92,7 +92,7 @@ namespace castor3d
 		 */
 		C3D_API bool isVisible( castor::Point3f const & point )const;
 
-		std::array< InterleavedVertex, 8u > const & getPoints()const noexcept
+		castor::Array< InterleavedVertex, 8u > const & getPoints()const noexcept
 		{
 			return m_points;
 		}
@@ -110,7 +110,7 @@ namespace castor3d
 	private:
 		Viewport * m_viewport;
 		Planes m_planes;
-		std::array< InterleavedVertex, 8u > m_points;
+		castor::Array< InterleavedVertex, 8u > m_points;
 		castor::BoundingBox m_boundingBox;
 	};
 }

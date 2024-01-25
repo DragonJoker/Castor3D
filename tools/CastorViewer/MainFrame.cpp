@@ -80,15 +80,15 @@ namespace CastorViewer
 
 		static void updateLog( LogContainer & log )
 		{
-			std::vector< std::pair< wxString, bool > > flush;
+			castor::Vector< castor::Pair< wxString, bool > > flush;
 			{
-				std::lock_guard< std::mutex > lock( log.mutex );
-				std::swap( flush, log.queue );
+				auto lock = castor::makeUniqueLock( log.mutex );
+				castor::swap( flush, log.queue );
 			}
 
 			if ( !flush.empty() )
 			{
-				for ( auto & message : flush )
+				for ( auto const & message : flush )
 				{
 					if ( message.second )
 					{
@@ -131,7 +131,7 @@ namespace CastorViewer
 
 	bool MainFrame::initialise( GuiCommon::SplashScreen & splashScreen )
 	{
-		castor::Logger::registerCallback( [this]( castor::String const & logText
+		castor::Logger::registerCallback( [this]( castor::MbString const & logText
 			, castor::LogType logType, bool newLine )
 			{
 				doLogCallback( logText, logType, newLine );
@@ -174,7 +174,7 @@ namespace CastorViewer
 				{
 					engine->getRenderLoop().beginRendering();
 					GuiCommon::loadScene( *engine
-						, "Castor3D"
+						, cuT( "Castor3D" )
 						, m_filePath
 						, &window.getProgressBar()
 						, this
@@ -183,7 +183,7 @@ namespace CastorViewer
 				else
 				{
 					doSceneLoadEnd( GuiCommon::loadScene( *engine
-						, "Castor3D"
+						, cuT( "Castor3D" )
 						, m_filePath
 						, nullptr ) );
 				}
@@ -508,7 +508,7 @@ namespace CastorViewer
 #endif
 	}
 
-	void MainFrame::doLogCallback( castor::String const & log, castor::LogType logType, bool newLine )
+	void MainFrame::doLogCallback( castor::MbString const & log, castor::LogType logType, bool newLine )
 	{
 		switch ( logType )
 		{
@@ -516,14 +516,14 @@ namespace CastorViewer
 		case castor::LogType::eTrace:
 		case castor::LogType::eDebug:
 			{
-				std::lock_guard< std::mutex > lock( m_debugLog.mutex );
+				auto lock = castor::makeUniqueLock( m_debugLog.mutex );
 				m_debugLog.queue.emplace_back( GuiCommon::make_wxString( log ), newLine );
 			}
 			break;
 #endif
 		case castor::LogType::eInfo:
 			{
-				std::lock_guard< std::mutex > lock( m_messageLog.mutex );
+				auto lock = castor::makeUniqueLock( m_messageLog.mutex );
 				m_messageLog.queue.emplace_back( GuiCommon::make_wxString( log ), newLine );
 			}
 			break;
@@ -531,7 +531,7 @@ namespace CastorViewer
 		case castor::LogType::eWarning:
 		case castor::LogType::eError:
 			{
-				std::lock_guard< std::mutex > lock( m_errorLog.mutex );
+				auto lock = castor::makeUniqueLock( m_errorLog.mutex );
 				m_errorLog.queue.emplace_back( GuiCommon::make_wxString( log ), newLine );
 			}
 			break;

@@ -83,16 +83,16 @@ namespace castor3d
 		ElementTypeTraits m_traits;
 		//!\~english	The current elements.
 		//!\~french		Les éléments actuels.
-		std::vector< ashes::AttributeFormat * > m_elements;
+		castor::Vector< ashes::AttributeFormat * > m_elements;
 		//!\~english	The modified elements.
 		//!\~french		Les éléments modifiés.
-		std::vector< ashes::AttributeFormat const * > m_dirty;
+		castor::Vector< ashes::AttributeFormat const * > m_dirty;
 		//!\~english	The maximum element count.
 		//!\~french		Le nombre maximal d'éléments.
 		uint32_t const m_maxElemCount;
 		//!\~english	The connections to change signal for current elements.
 		//!\~french		Les connexions aux signaux de changement des éléments actuels.
-		std::vector< typename ElementType::OnChangedConnection > m_connections;
+		castor::Vector< typename ElementType::OnChangedConnection > m_connections;
 	};
 }
 

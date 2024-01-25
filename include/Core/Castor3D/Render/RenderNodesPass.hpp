@@ -37,7 +37,7 @@ namespace castor3d
 			, RenderFilters filters
 			, bool oit
 			, bool forceTwoSided )
-			: m_size{ std::move( size ) }
+			: m_size{ castor::move( size ) }
 			, m_cameraUbo{ cameraUbo }
 			, m_sceneUbo{ sceneUbo }
 			, m_culler{ culler }
@@ -55,7 +55,7 @@ namespace castor3d
 			, RenderFilters filters
 			, bool oit
 			, bool forceTwoSided )
-			: RenderNodesPassDesc{ std::move( size )
+			: RenderNodesPassDesc{ castor::move( size )
 				, cameraUbo
 				, & sceneUbo
 				, culler
@@ -79,7 +79,7 @@ namespace castor3d
 		RenderNodesPassDesc( VkExtent3D size
 			, CameraUbo const & cameraUbo
 			, SceneCuller & culler )
-			: RenderNodesPassDesc{ std::move( size )
+			: RenderNodesPassDesc{ castor::move( size )
 				, cameraUbo
 				, nullptr
 				, culler
@@ -106,7 +106,7 @@ namespace castor3d
 			, CameraUbo const & cameraUbo
 			, SceneUbo const & sceneUbo
 			, SceneCuller & culler )
-			: RenderNodesPassDesc{ std::move( size )
+			: RenderNodesPassDesc{ castor::move( size )
 				, cameraUbo
 				, sceneUbo
 				, culler
@@ -136,7 +136,7 @@ namespace castor3d
 			, SceneUbo const & sceneUbo
 			, SceneCuller & culler
 			, bool oit )
-			: RenderNodesPassDesc{ std::move( size )
+			: RenderNodesPassDesc{ castor::move( size )
 				, cameraUbo
 				, sceneUbo
 				, culler
@@ -211,7 +211,7 @@ namespace castor3d
 		RenderNodesPassDesc & implicitAction( crg::ImageViewId view
 			, crg::RecordContext::ImplicitAction action )
 		{
-			m_ruConfig.implicitAction( view, std::move( action ) );
+			m_ruConfig.implicitAction( view, castor::move( action ) );
 			return *this;
 		}
 		/**
@@ -233,7 +233,7 @@ namespace castor3d
 		 */
 		RenderNodesPassDesc & componentModeFlags( ComponentModeFlags value )
 		{
-			m_componentModeFlags = std::move( value );
+			m_componentModeFlags = castor::move( value );
 			return *this;
 		}
 		/**
@@ -827,8 +827,8 @@ namespace castor3d
 		mutable RenderNodesPassChangeSignal onSortNodes;
 
 	private:
-		void doSubInitialise();
-		void doSubRecordInto( VkCommandBuffer commandBuffer );
+		void doSubInitialise()const;
+		void doSubRecordInto( VkCommandBuffer commandBuffer )const;
 
 	protected:
 		/**
@@ -908,10 +908,10 @@ namespace castor3d
 
 	private:
 		ashes::VkDescriptorSetLayoutBindingArray doCreateAdditionalBindings( PipelineFlags const & flags )const;
-		std::vector< RenderPipelineUPtr > & doGetFrontPipelines();
-		std::vector< RenderPipelineUPtr > & doGetBackPipelines();
-		std::vector< RenderPipelineUPtr > const & doGetFrontPipelines()const;
-		std::vector< RenderPipelineUPtr > const & doGetBackPipelines()const;
+		castor::Vector< RenderPipelineUPtr > & doGetFrontPipelines();
+		castor::Vector< RenderPipelineUPtr > & doGetBackPipelines();
+		castor::Vector< RenderPipelineUPtr > const & doGetFrontPipelines()const;
+		castor::Vector< RenderPipelineUPtr > const & doGetBackPipelines()const;
 		PipelineAndID doPreparePipeline( ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
 			, ashes::DescriptorSetLayout const * meshletDescriptorLayout
 			, PipelineFlags const & flags
@@ -1037,11 +1037,11 @@ namespace castor3d
 			ashes::DescriptorSetLayoutPtr layout{};
 			ashes::DescriptorSetPtr set{};
 		};
-		using PassDescriptorsMap = std::unordered_map< size_t, PassDescriptors >;
+		using PassDescriptorsMap = castor::UnorderedMap< size_t, PassDescriptors >;
 
 		PassDescriptorsMap m_additionalDescriptors;
-		std::vector< RenderPipelineUPtr > m_frontPipelines;
-		std::vector< RenderPipelineUPtr > m_backPipelines;
+		castor::Vector< RenderPipelineUPtr > m_frontPipelines;
+		castor::Vector< RenderPipelineUPtr > m_backPipelines;
 	};
 
 	struct IsRenderPassEnabled

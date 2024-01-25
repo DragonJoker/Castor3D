@@ -200,14 +200,14 @@ namespace test_launcher
 		{
 #if defined( CU_PlatformWindows )
 
-			return ashes::WindowHandle( std::make_unique< ashes::IMswWindowHandle >( ::GetModuleHandle( nullptr )
+			return ashes::WindowHandle( castor::make_unique< ashes::IMswWindowHandle >( ::GetModuleHandle( nullptr )
 				, window->GetHandle() ) );
 
 #elif defined( CU_PlatformApple )
 
 			auto handle = window->GetHandle();
 			makeViewMetalCompatible( handle );
-			return ashes::WindowHandle( std::make_unique< ashes::IMacOsWindowHandle >( handle ) );
+			return ashes::WindowHandle( castor::make_unique< ashes::IMacOsWindowHandle >( handle ) );
 
 #elif defined( CU_PlatformLinux )
 
@@ -229,7 +229,7 @@ namespace test_launcher
 						auto surface = gdkWindow
 							? gdk_wayland_window_get_wl_surface( gdkWindow )
 							: nullptr;
-						return ashes::WindowHandle( std::make_unique< ashes::IWaylandWindowHandle >( display, surface ) );
+						return ashes::WindowHandle( castor::make_unique< ashes::IWaylandWindowHandle >( display, surface ) );
 					}
 #	endif
 #endif
@@ -242,7 +242,7 @@ namespace test_launcher
 						GLXDrawable drawable = gdkWindow
 							? gdk_x11_window_get_xid( gdkWindow )
 							: 0;
-						return ashes::WindowHandle( std::make_unique< ashes::IXWindowHandle >( drawable, display ) );
+						return ashes::WindowHandle( castor::make_unique< ashes::IXWindowHandle >( drawable, display ) );
 					}
 #	endif
 #endif
@@ -302,7 +302,7 @@ namespace test_launcher
 		{
 			auto sizewx = GetClientSize();
 			castor::Size sizeWnd{ uint32_t( sizewx.GetWidth() ), uint32_t( sizewx.GetHeight() ) };
-			m_renderWindow = castor::makeUnique< castor3d::RenderWindow >( "CastorTest"
+			m_renderWindow = castor::makeUnique< castor3d::RenderWindow >( cuT( "CastorTest" )
 				, m_engine
 				, sizeWnd
 				, makeWindowHandle( this ) );
@@ -373,10 +373,10 @@ namespace test_launcher
 		auto stop = Clock::now();
 		auto totalTime = std::chrono::duration_cast< castor::Microseconds >( stop - times.start );
 		castor::Nanoseconds avg{};
-		castor::Nanoseconds last{};
 
-		if ( times.params.get( "Average", avg )
-			&& times.params.get( "Last", last ) )
+		if ( castor::Nanoseconds last{};
+			times.params.get( cuT( "Average" ), avg )
+				&& times.params.get( cuT( "Last" ), last ) )
 		{
 			std::ofstream stream{ m_filePath.getPath() / cuT( "Compare" ) / ( m_filePath.getFileName() + cuT( "_" ) + suffix + cuT( ".times" ) ) };
 

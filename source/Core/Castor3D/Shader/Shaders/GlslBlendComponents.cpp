@@ -15,7 +15,7 @@ namespace castor3d::shader
 	BlendComponents::BlendComponents( sdw::ShaderWriter & writer
 		, sdw::expr::ExprPtr expr
 		, bool enabled )
-		: sdw::StructInstance{ writer, std::move( expr ), enabled }
+		: sdw::StructInstance{ writer, castor::move( expr ), enabled }
 		, f0{ getMember( "f0", vec3( 0.04_f ) ) }
 		, f90{ getMember( "f90", vec3( 1.0_f ) ) }
 		, normal{ getMember( "normal", vec3( 0.0_f ) ) }
@@ -210,7 +210,7 @@ namespace castor3d::shader
 			BlendComponents::fillInit( *type, materials, initializers );
 		}
 
-		return sdw::makeAggrInit( type, std::move( initializers ) );
+		return sdw::makeAggrInit( type, castor::move( initializers ) );
 	}
 
 	sdw::expr::ExprPtr BlendComponents::makeInit( Materials const & materials
@@ -227,7 +227,7 @@ namespace castor3d::shader
 			BlendComponents::fillInit( *type, materials, material, surface, clrCot, initializers );
 		}
 
-		return sdw::makeAggrInit( type, std::move( initializers ) );
+		return sdw::makeAggrInit( type, castor::move( initializers ) );
 	}
 
 	//*********************************************************************************************

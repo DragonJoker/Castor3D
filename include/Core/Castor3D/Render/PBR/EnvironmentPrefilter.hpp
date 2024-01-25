@@ -49,8 +49,8 @@ namespace castor3d
 				ashes::FrameBufferPtr frameBuffer;
 			};
 			ashes::RenderPass const & m_renderPass;
-			std::string m_prefix;
-			std::array< FrameBuffer, 6u > m_frameBuffers;
+			castor::String m_prefix;
+			castor::Array< FrameBuffer, 6u > m_frameBuffers;
 			CommandsSemaphore m_commands;
 		};
 
@@ -127,13 +127,13 @@ namespace castor3d
 	private:
 		RenderDevice const & m_device;
 		Texture const & m_srcView;
-		std::string m_prefix;
+		castor::String m_prefix;
 		ashes::Image * m_srcImage;
 		ashes::ImageView m_srcImageView;
 		Texture m_result;
 		SamplerObs m_sampler{};
 		ashes::RenderPassPtr m_renderPass;
-		std::vector< std::unique_ptr< MipRenderCube > > m_renderPasses;
+		castor::Vector< castor::RawUniquePtr< MipRenderCube > > m_renderPasses;
 	};
 }
 

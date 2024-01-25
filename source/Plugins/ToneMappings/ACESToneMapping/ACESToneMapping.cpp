@@ -14,7 +14,7 @@ namespace aces
 {
 	namespace c3d = castor3d::shader;
 	castor::String ToneMapping::Type = cuT( "aces" );
-	castor::String ToneMapping::Name = cuT( "ACES Tone Mapping" );
+	castor::MbString ToneMapping::Name = "ACES Tone Mapping";
 
 	void ToneMapping::create( ast::ShaderBuilder & builder )
 	{

@@ -45,8 +45,8 @@ namespace castor
 	{
 		return makeResource< Image, String >( name
 			, path
-			, std::move( layout )
-			, std::move( buffer ) );
+			, castor::move( layout )
+			, castor::move( buffer ) );
 	}
 
 	//*********************************************************************************************

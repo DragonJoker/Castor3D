@@ -41,7 +41,7 @@ namespace castor3d
 		castor::Point3f tan;
 		castor::Point3f tex;
 	};
-	using InterleavedVertexNoMikkArray = std::vector< InterleavedVertexNoMikk >;
+	using InterleavedVertexNoMikkArray = castor::Vector< InterleavedVertexNoMikk >;
 	/**
 	 *\~english
 	 *\brief		Retrieves the beginning of the buffer for given value.
@@ -404,7 +404,7 @@ namespace castor3d
 	 *\return		Le tampon (&value pour les types basiques).
 	 */
 	template< typename T >
-	static inline uint8_t const * getBuffer( std::vector< T > const & value )
+	static inline uint8_t const * getBuffer( castor::Vector< T > const & value )
 	{
 		return ByteCPtr( value.data() );
 	}
@@ -419,7 +419,7 @@ namespace castor3d
 	 *\return		Le tampon (&value pour les types basiques).
 	 */
 	template< typename T >
-	static inline uint8_t * getBuffer( std::vector< T > & value )
+	static inline uint8_t * getBuffer( castor::Vector< T > & value )
 	{
 		return BytePtr( value.data() );
 	}
@@ -434,7 +434,7 @@ namespace castor3d
 	 *\return		La taille (sizeof( value ) pour les types basiques).
 	 */
 	template< typename T >
-	static inline size_t getDataSize( std::vector< T > const & value )
+	static inline size_t getDataSize( castor::Vector< T > const & value )
 	{
 		return value.size() * sizeof( T );
 	}
@@ -449,7 +449,7 @@ namespace castor3d
 	 *\return		Le tampon (&value pour les types basiques).
 	 */
 	template< typename T, size_t Count >
-	static inline uint8_t const * getBuffer( std::array< T, Count > const & value )
+	static inline uint8_t const * getBuffer( castor::Array< T, Count > const & value )
 	{
 		return ByteCPtr( value.data() );
 	}
@@ -464,7 +464,7 @@ namespace castor3d
 	 *\return		Le tampon (&value pour les types basiques).
 	 */
 	template< typename T, size_t Count >
-	static inline uint8_t * getBuffer( std::array< T, Count > & value )
+	static inline uint8_t * getBuffer( castor::Array< T, Count > & value )
 	{
 		return BytePtr( value.data() );
 	}
@@ -479,7 +479,7 @@ namespace castor3d
 	 *\return		La taille (sizeof( value ) pour les types basiques).
 	 */
 	template< typename T, size_t Count >
-	static inline size_t getDataSize( std::array< T, Count > const & /*value*/ )
+	static inline size_t getDataSize( castor::Array< T, Count > const & /*value*/ )
 	{
 		return Count * sizeof( T );
 	}
@@ -1029,7 +1029,7 @@ namespace castor3d
 	 *\param[in,out]	values	La valeur.
 	 */
 	template< typename T >
-	static inline void prepareChunkData( std::vector< T > & values )
+	static inline void prepareChunkData( castor::Vector< T > & values )
 	{
 		for ( auto & value : values )
 		{
@@ -1045,7 +1045,7 @@ namespace castor3d
 	 *\param[in,out]	values	La valeur.
 	 */
 	template< typename T, size_t Count >
-	static inline void prepareChunkData( std::array< T, Count > & values )
+	static inline void prepareChunkData( castor::Array< T, Count > & values )
 	{
 		for ( auto & value : values )
 		{

@@ -22,7 +22,7 @@ namespace castor3d
 		using MyBufferIndex = OverlayTextBufferIndex;
 
 		C3D_API OverlayTextBuffer( Engine & engine
-			, std::string const & debugName
+			, castor::String const & debugName
 			, RenderDevice const & device );
 
 		C3D_API OverlayTextBufferIndex fill( uint32_t overlayIndex
@@ -33,7 +33,7 @@ namespace castor3d
 
 		Engine & engine;
 		RenderDevice const & device;
-		std::string name;
+		castor::String name;
 
 		template< typename DataT >
 		struct DataBufferT
@@ -46,14 +46,14 @@ namespace castor3d
 		DataBufferT< TextWord > wordsBuffer;
 		DataBufferT< TextLine > linesBuffer;
 	};
-	using OverlayTextBufferPtr = std::unique_ptr< OverlayTextBuffer >;
+	using OverlayTextBufferPtr = castor::RawUniquePtr< OverlayTextBuffer >;
 
 	struct OverlayTextBufferPool
 	{
 		using MyBufferIndex = OverlayTextBufferIndex;
 
 		C3D_API OverlayTextBufferPool( Engine & engine
-			, std::string const & debugName
+			, castor::String const & debugName
 			, RenderDevice const & device );
 
 		C3D_API OverlayTextBufferIndex fill( uint32_t overlayIndex
@@ -68,8 +68,8 @@ namespace castor3d
 	private:
 		Engine & m_engine;
 		RenderDevice const & m_device;
-		std::string m_name;
-		std::map< FontTexture const *, OverlayTextBufferPtr > m_buffers;
+		castor::String m_name;
+		castor::Map< FontTexture const *, OverlayTextBufferPtr > m_buffers;
 	};
 }
 

@@ -82,10 +82,10 @@ namespace GuiCommon
 			return result;
 		}
 
-		using onMaskChange = std::function< void ( wxVariant const & var
+		using onMaskChange = castor::Function< void ( wxVariant const & var
 				, castor3d::PassComponentTextureFlag flag
 				, uint32_t componentsCount ) >;
-		using onEnabledChange = std::function< void( wxVariant const & var
+		using onEnabledChange = castor::Function< void( wxVariant const & var
 			, castor3d::Pass & pass
 			, castor::String const & compName ) >;
 
@@ -131,9 +131,9 @@ namespace GuiCommon
 							castor3d::TextureConfiguration configuration;
 							configuration.components[0].flag = component->getTextureFlags();
 							configuration.components[0].startIndex = 0u;
-							auto passCompProps = std::make_unique< TextureTreeItemProperty::Properties >( component->getTextureFlags()
+							auto passCompProps = castor::make_unique< TextureTreeItemProperty::Properties >( component->getTextureFlags()
 								, configuration.components[0]
-								, std::move( ownComponent )
+								, castor::move( ownComponent )
 								, component );
 							auto compProps = passCompProps.get();
 							compProps->container = mainContainer;
@@ -157,7 +157,7 @@ namespace GuiCommon
 								compProps->container->SetExpanded( false );
 							}
 
-							result.emplace_back( std::move( passCompProps ) );
+							result.emplace_back( castor::move( passCompProps ) );
 						}
 					}
 				}
@@ -186,105 +186,105 @@ namespace GuiCommon
 				, bool & value
 				, ConfigurationVisitor::ControlsList controls )override
 			{
-				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, std::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, castor::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
 				, int16_t & value
 				, ConfigurationVisitor::ControlsList controls )override
 			{
-				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, std::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, castor::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
 				, uint16_t & value
 				, ConfigurationVisitor::ControlsList controls )override
 			{
-				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, std::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, castor::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
 				, int32_t & value
 				, ConfigurationVisitor::ControlsList controls )override
 			{
-				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, std::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, castor::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
 				, uint32_t & value
 				, ConfigurationVisitor::ControlsList controls )override
 			{
-				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, std::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, castor::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
 				, int64_t & value
 				, ConfigurationVisitor::ControlsList controls )override
 			{
-				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, std::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, castor::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
 				, uint64_t & value
 				, ConfigurationVisitor::ControlsList controls )override
 			{
-				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, std::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, castor::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
 				, float & value
 				, ConfigurationVisitor::ControlsList controls )override
 			{
-				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, std::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, castor::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
 				, double & value
 				, ConfigurationVisitor::ControlsList controls )override
 			{
-				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, std::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, castor::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::Angle & value
 				, ConfigurationVisitor::ControlsList controls )override
 			{
-				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, std::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, castor::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::RgbColour & value
 				, ConfigurationVisitor::ControlsList controls )override
 			{
-				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, std::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, castor::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::RgbaColour & value
 				, ConfigurationVisitor::ControlsList controls )override
 			{
-				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, std::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, castor::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::RangedValue< float > & value
 				, ConfigurationVisitor::ControlsList controls )override
 			{
-				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, std::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, castor::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::RangedValue< int32_t > & value
 				, ConfigurationVisitor::ControlsList controls )override
 			{
-				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, std::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, castor::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::RangedValue< uint32_t > & value
 				, ConfigurationVisitor::ControlsList controls )override
 			{
-				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, std::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, castor::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
@@ -302,10 +302,10 @@ namespace GuiCommon
 			}
 
 		private:
-			std::unique_ptr< ConfigurationVisitorBase > doGetSubConfiguration( castor::String const & category )override
+			castor::RawUniquePtr< ConfigurationVisitorBase > doGetSubConfiguration( castor::String const & category )override
 			{
 				doVisit( category );
-				return std::unique_ptr< ConfigurationVisitorBase >( new UnitTreeGatherer{ m_pass
+				return castor::RawUniquePtr< ConfigurationVisitorBase >( new UnitTreeGatherer{ m_pass
 					, m_format
 					, m_properties
 					, m_grid
@@ -647,7 +647,7 @@ namespace GuiCommon
 						compProps.ownComponent = castor::ptrRefCast< castor3d::PassMapComponent >( removed.back() );
 						removeFlagConfiguration( m_configuration, compProps.configuration );
 						removed.pop_back();
-						moveComponentsToProps( std::move( removed ) );
+						moveComponentsToProps( castor::move( removed ) );
 					}
 
 					CU_Require( compProps.ownComponent );
@@ -707,10 +707,10 @@ namespace GuiCommon
 			}
 		}
 
-		pass.addComponent( std::move( component ) );
+		pass.addComponent( castor::move( component ) );
 	}
 
-	void TextureTreeItemProperty::moveComponentsToProps( std::vector< castor3d::PassComponentUPtr > removed )
+	void TextureTreeItemProperty::moveComponentsToProps( castor::Vector< castor3d::PassComponentUPtr > removed )
 	{
 		for ( auto & rem : removed )
 		{

@@ -55,8 +55,8 @@ namespace PbrBloom
 
 	//*********************************************************************************************
 
-	castor::String const CombinePass::CombineMapPasses = cuT( "c3d_mapPasses" );
-	castor::String const CombinePass::CombineMapScene = cuT( "c3d_mapScene" );
+	castor::MbString const CombinePass::CombineMapPasses = "c3d_mapPasses";
+	castor::MbString const CombinePass::CombineMapScene = "c3d_mapScene";
 
 	CombinePass::CombinePass( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
@@ -67,7 +67,7 @@ namespace PbrBloom
 		, castor3d::UniformBufferOffsetT< castor::Point2f > const & ubo
 		, bool const * enabled
 		, uint32_t const * passIndex )
-		: m_shader{ "PbrBloomCombine", combine::getProgram( device ) }
+		: m_shader{ cuT( "PbrBloomCombine" ), combine::getProgram( device ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
 		, m_pass{ graph.createPass( "Combine"
 			, [this, &device, lhs, enabled, passIndex]( crg::FramePass const & framePass
@@ -85,7 +85,7 @@ namespace PbrBloom
 						, context
 						, graph
 						, crg::ru::Config{ uint32_t( lhs.size() ) } );
-				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 							, result->getTimer() );
 				return result;
 			} ) }
@@ -103,7 +103,7 @@ namespace PbrBloom
 		m_pass.addSampledView( lhs
 			, 1u );
 		ubo.createPassBinding( m_pass
-			, std::string{ "PbrBloomUbo" }
+			, "PbrBloomUbo"
 			, 2u );
 		m_pass.addOutputColourView( result );
 	}

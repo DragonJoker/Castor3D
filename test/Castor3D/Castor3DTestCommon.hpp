@@ -59,7 +59,7 @@ namespace Testing
 		static std::string get( castor3d::Scene const & value )
 		{
 			std::stringstream stream;
-			stream << value.getName();
+			stream << castor::toUtf8( value.getName() );
 			return stream.str();
 		}
 	};
@@ -70,7 +70,7 @@ namespace Testing
 		static std::string get( castor3d::SceneNode const & value )
 		{
 			std::stringstream stream;
-			stream << value.getName();
+			stream << castor::toUtf8( value.getName() );
 			return stream.str();
 		}
 	};
@@ -81,7 +81,7 @@ namespace Testing
 		static std::string get( castor3d::MovableObject const & value )
 		{
 			std::stringstream stream;
-			stream << value.getName();
+			stream << castor::toUtf8( value.getName() );
 			return stream.str();
 		}
 	};
@@ -92,7 +92,7 @@ namespace Testing
 		static std::string get( castor3d::Geometry const & value )
 		{
 			std::stringstream stream;
-			stream << value.getName();
+			stream << castor::toUtf8( value.getName() );
 			return stream.str();
 		}
 	};
@@ -103,7 +103,7 @@ namespace Testing
 		static std::string get( castor3d::Light const & value )
 		{
 			std::stringstream stream;
-			stream << value.getName();
+			stream << castor::toUtf8( value.getName() );
 			return stream.str();
 		}
 	};
@@ -114,7 +114,7 @@ namespace Testing
 		static std::string get( castor3d::Camera const & value )
 		{
 			std::stringstream stream;
-			stream << value.getName();
+			stream << castor::toUtf8( value.getName() );
 			return stream.str();
 		}
 	};
@@ -125,7 +125,7 @@ namespace Testing
 		static std::string get( castor3d::Material const & value )
 		{
 			std::stringstream stream;
-			stream << value.getName();
+			stream << castor::toUtf8( value.getName() );
 			return stream.str();
 		}
 	};
@@ -136,7 +136,7 @@ namespace Testing
 		static std::string get( castor3d::Mesh const & value )
 		{
 			std::stringstream stream;
-			stream << value.getName();
+			stream << castor::toUtf8( value.getName() );
 			return stream.str();
 		}
 	};
@@ -147,7 +147,7 @@ namespace Testing
 		static std::string get( castor3d::BoneNode const & value )
 		{
 			std::stringstream stream;
-			stream << value.getName();
+			stream << castor::toUtf8( value.getName() );
 			return stream.str();
 		}
 	};
@@ -158,7 +158,7 @@ namespace Testing
 		static std::string get( castor3d::SkeletonNode const & value )
 		{
 			std::stringstream stream;
-			stream << value.getName();
+			stream << castor::toUtf8( value.getName() );
 			return stream.str();
 		}
 	};
@@ -191,7 +191,7 @@ namespace Testing
 		static std::string get( castor3d::Animation const & value )
 		{
 			std::stringstream stream;
-			stream << value.getName();
+			stream << castor::toUtf8( value.getName() );
 			return stream.str();
 		}
 	};
@@ -202,7 +202,7 @@ namespace Testing
 		static std::string get( castor3d::SkeletonAnimation const & value )
 		{
 			std::stringstream stream;
-			stream << value.getName();
+			stream << castor::toUtf8( value.getName() );
 			return stream.str();
 		}
 	};
@@ -213,7 +213,7 @@ namespace Testing
 		static std::string get( castor3d::SkeletonAnimationObject const & value )
 		{
 			std::stringstream stream;
-			stream << value.getName();
+			stream << castor::toUtf8( value.getName() );
 			return stream.str();
 		}
 	};
@@ -224,7 +224,7 @@ namespace Testing
 		static std::string get( castor3d::AnimatedObjectGroup const & value )
 		{
 			std::stringstream stream;
-			stream << value.getName();
+			stream << castor::toUtf8( value.getName() );
 			return stream.str();
 		}
 	};
@@ -235,7 +235,7 @@ namespace Testing
 		static std::string get( castor3d::AnimatedObject const & value )
 		{
 			std::stringstream stream;
-			stream << value.getName();
+			stream << castor::toUtf8( value.getName() );
 			return stream.str();
 		}
 	};
@@ -246,7 +246,7 @@ namespace Testing
 		static std::string get( castor3d::AnimationInstance const & value )
 		{
 			std::stringstream stream;
-			stream << value.getAnimation().getName();
+			stream << castor::toUtf8( value.getAnimation().getName() );
 			return stream.str();
 		}
 	};
@@ -256,7 +256,7 @@ namespace Testing
 	{
 		static std::string get( castor3d::InterpolatorType const & value )
 		{
-			static std::map< castor3d::InterpolatorType, std::string > Names
+			static castor::Map< castor3d::InterpolatorType, std::string > Names
 			{
 				{ castor3d::InterpolatorType::eNearest, "Nearest" },
 				{ castor3d::InterpolatorType::eLinear, "Linear" },
@@ -270,7 +270,7 @@ namespace Testing
 	{
 		static std::string get( castor3d::AnimationType const & value )
 		{
-			static std::map< castor3d::AnimationType, std::string > Names
+			static castor::Map< castor3d::AnimationType, std::string > Names
 			{
 				{ castor3d::AnimationType::eSceneNode, "SceneNode" },
 				{ castor3d::AnimationType::eMesh, "Mesh" },
@@ -285,7 +285,7 @@ namespace Testing
 	{
 		static std::string get( castor3d::SkeletonNodeType const & value )
 		{
-			static std::map< castor3d::SkeletonNodeType, std::string > Names
+			static castor::Map< castor3d::SkeletonNodeType, std::string > Names
 			{
 				{ castor3d::SkeletonNodeType::eBone, "Bone" },
 				{ castor3d::SkeletonNodeType::eNode, "Node" },
@@ -299,7 +299,7 @@ namespace Testing
 	{
 		static std::string get( castor3d::AnimationState const & value )
 		{
-			static std::map< castor3d::AnimationState, std::string > Names
+			static castor::Map< castor3d::AnimationState, std::string > Names
 			{
 				{ castor3d::AnimationState::ePlaying, "Playing" },
 				{ castor3d::AnimationState::eStopped, "Stopped" },
@@ -314,7 +314,7 @@ namespace Testing
 	{
 		static std::string get( castor3d::ViewportType const & value )
 		{
-			static std::map< castor3d::ViewportType, std::string > Names
+			static castor::Map< castor3d::ViewportType, std::string > Names
 			{
 				{ castor3d::ViewportType::eOrtho, "Ortho" },
 				{ castor3d::ViewportType::ePerspective, "Perspective" },
@@ -330,7 +330,7 @@ namespace Testing
 	{
 		static std::string get( castor3d::SubmeshData const & value )
 		{
-			static std::map< castor3d::SubmeshData, std::string > Names
+			static castor::Map< castor3d::SubmeshData, std::string > Names
 			{
 				{ castor3d::SubmeshData::eIndex, "eIndex" },
 				{ castor3d::SubmeshData::ePositions, "ePositions" },
@@ -356,7 +356,7 @@ namespace Testing
 	{
 		static std::string get( castor3d::MorphFlag const & value )
 		{
-			static std::map< castor3d::MorphFlag, std::string > Names
+			static castor::Map< castor3d::MorphFlag, std::string > Names
 			{
 				{ castor3d::MorphFlag::ePositions, "ePositions" },
 				{ castor3d::MorphFlag::eNormals, "eNormals" },
@@ -377,7 +377,7 @@ namespace Testing
 	{
 		static std::string get( castor3d::ShaderFlag const & value )
 		{
-			static std::map< castor3d::ShaderFlag, std::string > Names
+			static castor::Map< castor3d::ShaderFlag, std::string > Names
 			{
 				{ castor3d::ShaderFlag::eNormal, "eNormal" },
 				{ castor3d::ShaderFlag::eTangentSpace, "eTangentSpace" },
@@ -408,7 +408,7 @@ namespace Testing
 	{
 		static std::string get( castor3d::ProgramFlag const & value )
 		{
-			static std::map< castor3d::ProgramFlag, std::string > Names
+			static castor::Map< castor3d::ProgramFlag, std::string > Names
 			{
 				{ castor3d::ProgramFlag::eInstantiation, "eInstantiation" },
 				{ castor3d::ProgramFlag::eBillboards, "eBillboards" },
@@ -425,7 +425,7 @@ namespace Testing
 	{
 		static std::string get( castor3d::SubmeshComponent const & value )
 		{
-			return castor::string::stringCast< char >( value.getType() );
+			return castor::toUtf8( value.getType() );
 		}
 	};
 
@@ -944,7 +944,7 @@ namespace Testing
 		}
 
 		template< typename Value >
-		inline bool compare( std::vector< Value > const & lhs, std::vector< Value > const & rhs )
+		inline bool compare( castor::Vector< Value > const & lhs, castor::Vector< Value > const & rhs )
 		{
 			auto result = ( lhs.size() == rhs.size() );
 
@@ -957,7 +957,7 @@ namespace Testing
 		}
 
 		template< typename Value, size_t N, size_t M >
-		inline bool compare( std::array< Value, N > const & lhs, std::array< Value, M > const & rhs )
+		inline bool compare( castor::Array< Value, N > const & lhs, castor::Array< Value, M > const & rhs )
 		{
 			auto result = ( lhs.size() == rhs.size() );
 

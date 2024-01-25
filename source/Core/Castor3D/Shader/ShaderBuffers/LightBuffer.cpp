@@ -90,8 +90,8 @@ namespace castor3d
 
 		if ( !m_dirty.empty() )
 		{
-			std::vector< Light * > dirty;
-			std::swap( m_dirty, dirty );
+			castor::Vector< Light * > dirty;
+			castor::swap( m_dirty, dirty );
 
 			for ( auto light : castor::makeArrayView( dirty.begin(), std::unique( dirty.begin(), dirty.end() ) ) )
 			{
@@ -127,7 +127,7 @@ namespace castor3d
 
 	void LightBuffer::createPassBinding( crg::FramePass & pass, uint32_t binding )const
 	{
-		return m_buffer.createPassBinding( pass, cuT( "Lights" ), binding );
+		return m_buffer.createPassBinding( pass, binding );
 	}
 
 	void LightBuffer::createBinding( ashes::DescriptorSet & descriptorSet
@@ -164,7 +164,7 @@ namespace castor3d
 			: ( MaxLightsCount - result ) );
 	}
 
-	std::pair< uint32_t, uint32_t > LightBuffer::doGetOffsetIndex( Light const & light )const
+	castor::Pair< uint32_t, uint32_t > LightBuffer::doGetOffsetIndex( Light const & light )const
 	{
 		uint32_t index{};
 		uint32_t result{};

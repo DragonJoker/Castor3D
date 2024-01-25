@@ -30,7 +30,7 @@ namespace castor3d
 		 *\param[in]	index	L'index du vertex concerné
 		 *\return		L'indice
 		 */
-		inline uint32_t operator[]( uint32_t index )const
+		uint32_t operator[]( uint32_t index )const
 		{
 			CU_Require( index < 2 );
 			return m_line.m_index[index];
@@ -43,7 +43,7 @@ namespace castor3d
 	};
 	//!\~english	An array of Lines.
 	//!\~french		Un tableau de Lines.
-	using LineArray = std::vector< Line >;
+	using LineArray = castor::Vector< Line >;
 }
 
 #endif

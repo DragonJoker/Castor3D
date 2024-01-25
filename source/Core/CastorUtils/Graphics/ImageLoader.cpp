@@ -57,7 +57,7 @@ namespace castor
 			return Image{ name
 				, path
 				, newLayout
-				, std::move( buffer ) };
+				, castor::move( buffer ) };
 		}
 	}
 
@@ -71,7 +71,7 @@ namespace castor
 	{
 		PxBufferBaseUPtr buffer;
 		auto layout = load( imageFormat, data, size, buffer );
-		return Image{ name, imagePath, layout, std::move( buffer ) };
+		return Image{ name, imagePath, layout, castor::move( buffer ) };
 	}
 
 	Image ImageLoaderImpl::load( String const & name
@@ -101,20 +101,20 @@ namespace castor
 	//*********************************************************************************************
 
 	ImageLoader::ImageLoader( PxCompressionSupport support )
-		: m_options{ std::move( support ) }
+		: m_options{ castor::move( support ) }
 	{
 	}
 
 	void ImageLoader::registerLoader( String const & extension, ImageLoaderPtr loader )
 	{
-		m_loaders.emplace_back( std::move( loader ) );
+		m_loaders.emplace_back( castor::move( loader ) );
 		auto ptr = m_loaders.back().get();
 		m_extLoaders[string::lowerCase( extension )] = ptr;
 	}
 
 	void ImageLoader::registerLoader( StringArray const & extensions, ImageLoaderPtr loader )
 	{
-		m_loaders.emplace_back( std::move( loader ) );
+		m_loaders.emplace_back( castor::move( loader ) );
 		auto ptr = m_loaders.back().get();
 
 		for ( auto & extension : extensions )
@@ -179,7 +179,7 @@ namespace castor
 		}
 		catch ( std::exception & exc )
 		{
-			std::cerr << exc.what() << "\n" << path << std::endl;
+			std::cerr << exc.what() << "\n" << toUtf8( path ) << std::endl;
 			throw;
 		}
 	}

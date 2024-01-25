@@ -127,11 +127,11 @@ namespace castor3d
 
 	private:
 		ShaderBuffer m_buffer;
-		std::vector< TextureConfiguration > m_configurations;
-		std::vector< TextureUnit const * > m_dirty;
-		std::vector< OnTextureUnitChangedConnection > m_connections;
+		castor::Vector< TextureConfiguration > m_configurations;
+		castor::Vector< TextureUnit const * > m_dirty;
+		castor::Vector< OnTextureUnitChangedConnection > m_connections;
 		TextureConfigurationsData m_data;
-		std::mutex m_mutex;
+		castor::Mutex m_mutex;
 	};
 }
 

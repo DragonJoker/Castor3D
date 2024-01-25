@@ -62,7 +62,7 @@ namespace castor3d
 		registerSubmeshComponentCombine( m_defaultComponents );
 	}
 
-	SubmeshComponentRegister::~SubmeshComponentRegister()
+	SubmeshComponentRegister::~SubmeshComponentRegister()noexcept
 	{
 		while ( !m_registered.empty() )
 		{
@@ -244,9 +244,9 @@ namespace castor3d
 		return SubmeshData::eCount;
 	}
 
-	std::vector< shader::SubmeshVertexSurfaceShader * > SubmeshComponentRegister::getVertexSurfaceShaders( PipelineFlags const & flags )const
+	castor::Vector< shader::SubmeshVertexSurfaceShader * > SubmeshComponentRegister::getVertexSurfaceShaders( PipelineFlags const & flags )const
 	{
-		std::vector< shader::SubmeshVertexSurfaceShader * > result;
+		castor::Vector< shader::SubmeshVertexSurfaceShader * > result;
 
 		for ( auto & [componentId, surfaceShader] : m_vertexSurfaceShaders )
 		{
@@ -259,9 +259,9 @@ namespace castor3d
 		return result;
 	}
 
-	std::vector< shader::SubmeshRasterSurfaceShader * > SubmeshComponentRegister::getRasterSurfaceShaders( PipelineFlags const & flags )const
+	castor::Vector< shader::SubmeshRasterSurfaceShader * > SubmeshComponentRegister::getRasterSurfaceShaders( PipelineFlags const & flags )const
 	{
-		std::vector< shader::SubmeshRasterSurfaceShader * > result;
+		castor::Vector< shader::SubmeshRasterSurfaceShader * > result;
 
 		for ( auto & [componentId, surfaceShader] : m_rasterSurfaceShaders )
 		{
@@ -352,7 +352,7 @@ namespace castor3d
 		auto & componentDesc = getNextId();
 		registerComponent( componentDesc
 			, componentType
-			, std::move( componentPlugin ) );
+			, castor::move( componentPlugin ) );
 		return componentDesc.id;
 	}
 
@@ -422,7 +422,7 @@ namespace castor3d
 	{
 		componentPlugin->setId( componentDesc.id );
 		componentDesc.name = componentType;
-		componentDesc.plugin = std::move( componentPlugin );
+		componentDesc.plugin = castor::move( componentPlugin );
 
 		if ( componentDesc.plugin->getLineIndexFlag() != 0u )
 		{
@@ -511,17 +511,17 @@ namespace castor3d
 
 		if ( auto shader = componentDesc.plugin->createVertexSurfaceShader() )
 		{
-			m_vertexSurfaceShaders.emplace( componentDesc.id, std::move( shader ) );
+			m_vertexSurfaceShaders.emplace( componentDesc.id, castor::move( shader ) );
 		}
 
 		if ( auto shader = componentDesc.plugin->createRasterSurfaceShader() )
 		{
-			m_rasterSurfaceShaders.emplace( componentDesc.id, std::move( shader ) );
+			m_rasterSurfaceShaders.emplace( componentDesc.id, castor::move( shader ) );
 		}
 
 		if ( auto shader = componentDesc.plugin->createRenderShader() )
 		{
-			m_renderShaders.emplace( componentDesc.id, std::move( shader ) );
+			m_renderShaders.emplace( componentDesc.id, castor::move( shader ) );
 			m_renderShaderFlags.emplace_back( componentDesc.plugin->getComponentFlags() );
 		}
 

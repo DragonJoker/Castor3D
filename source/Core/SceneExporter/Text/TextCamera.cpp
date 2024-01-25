@@ -24,7 +24,7 @@ namespace castor
 		
 		if ( auto block{ beginBlock( file, cuT( "camera" ), camera.getName() ) } )
 		{
-			result = writeName( file, "parent", camera.getParent()->getName() )
+			result = writeName( file, cuT( "parent" ), camera.getParent()->getName() )
 				&& writeSub( file, camera.getViewport() )
 				&& writeSubOpt( file, camera.getHdrConfig(), HdrConfig{} )
 				&& writeSubOpt( file, camera.getColourGradingConfig(), ColourGradingConfig{} );

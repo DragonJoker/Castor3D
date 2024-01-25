@@ -215,7 +215,7 @@ namespace castor3d
 				if ( res )
 				{
 					auto & program = it->second;
-					program.shaderModule = ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, "AssignLightsToClusters", createShader( device, clustersConfig ) };
+					program.shaderModule = ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, cuT( "AssignLightsToClusters" ), createShader( device, clustersConfig ) };
 					program.stages = ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, program.shaderModule ) };
 				}
 
@@ -247,7 +247,7 @@ namespace castor3d
 			}
 
 		private:
-			std::map< uint32_t, ProgramData > m_programs;
+			castor::Map< uint32_t, ProgramData > m_programs;
 		};
 	}
 
@@ -264,7 +264,7 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = std::make_unique< cptlgtb::FramePass >( framePass
+				auto result = castor::make_unique< cptlgtb::FramePass >( framePass
 					, context
 					, graph
 					, device
@@ -272,7 +272,7 @@ namespace castor3d
 						.groupCountX( MaxLightsCount / 1024u )
 						.enabled( &clusters.needsClustersUpdate() )
 					, clusters.getConfig() );
-				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			});
@@ -281,7 +281,7 @@ namespace castor3d
 		clusters.getClustersUbo().createPassBinding( pass, cptlgtb::eClusters );
 		auto const & lights = clusters.getCamera().getScene()->getLightCache();
 		lights.createPassBinding( pass, cptlgtb::eLights );
-		createClearableOutputStorageBinding( pass, uint32_t( cptlgtb::eAllLightsAABB ), "C3D_AllLightsAABB", clusters.getAllLightsAABBBuffer(), 0u, ashes::WholeSize );
+		createClearableOutputStorageBinding( pass, uint32_t( cptlgtb::eAllLightsAABB ), cuT( "C3D_AllLightsAABB" ), clusters.getAllLightsAABBBuffer(), 0u, ashes::WholeSize );
 		return pass;
 	}
 

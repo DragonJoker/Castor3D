@@ -18,7 +18,7 @@ namespace castor3d
 	{
 		struct SkinningData
 		{
-			std::unique_ptr< sdw::ArrayStorageBufferT< sdw::Mat4 > > transforms;
+			castor::RawUniquePtr< sdw::ArrayStorageBufferT< sdw::Mat4 > > transforms;
 		};
 	}
 
@@ -127,10 +127,7 @@ namespace castor3d
 	public:
 		//!\~english	Name of the skinning animation frame variable buffer.
 		//!\~french		Nom du frame variable buffer contenant les données d'animation de skinning.
-		C3D_API static castor::String const BufferSkinning;
-		//!\~english	Name of the bones matrices attribute.
-		//!\~french		Nom de l'attribut de de matrices d'os.
-		C3D_API static castor::String const Bones;
+		C3D_API static castor::MbString const BufferSkinning;
 	};
 }
 

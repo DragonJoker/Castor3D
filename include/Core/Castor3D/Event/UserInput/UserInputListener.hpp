@@ -13,21 +13,21 @@ namespace castor3d
 		: public castor::OwnedBy< Engine >
 	{
 	public:
-		using OnClickActionFunction = std::function< void() >;
-		using OnMouseMoveActionFunction = std::function< void( castor::Position const & ) >;
-		using OnSelectActionFunction = std::function< void( int ) >;
-		using OnTextActionFunction = std::function< void( castor::U32String const & ) >;
-		using OnExpandActionFunction = std::function< void( bool ) >;
-		using OnClipboardTextActionFunction = std::function< castor::U32String( bool, castor::U32String ) >;
-		using OnCursorActionFunction = std::function< void( MouseCursor ) >;
+		using OnClickActionFunction = castor::Function< void() >;
+		using OnMouseMoveActionFunction = castor::Function< void( castor::Position const & ) >;
+		using OnSelectActionFunction = castor::Function< void( int ) >;
+		using OnTextActionFunction = castor::Function< void( castor::U32String const & ) >;
+		using OnExpandActionFunction = castor::Function< void( bool ) >;
+		using OnClipboardTextActionFunction = castor::Function< castor::U32String( bool, castor::U32String ) >;
+		using OnCursorActionFunction = castor::Function< void( MouseCursor ) >;
 
 	public:
 		/**@name General */
 		//@{
 		UserInputListener( UserInputListener const & ) = delete;
-		UserInputListener( UserInputListener && )noexcept = default;
+		UserInputListener( UserInputListener && )noexcept = delete;
 		UserInputListener & operator=( UserInputListener const & ) = delete;
-		UserInputListener & operator=( UserInputListener && )noexcept = default;
+		UserInputListener & operator=( UserInputListener && )noexcept = delete;
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -485,10 +485,10 @@ namespace castor3d
 		 *\~french
 		 *\return		Les gestionnaires, de manière thread-safe.
 		 */
-		inline std::vector< EventHandlerRPtr > doGetHandlers()const
+		inline castor::Vector< EventHandlerRPtr > doGetHandlers()const
 		{
 			auto lock( castor::makeUniqueLock( m_mutexHandlers ) );
-			std::vector< EventHandlerRPtr > result;
+			castor::Vector< EventHandlerRPtr > result;
 
 			for ( auto & h : m_handlers )
 			{
@@ -528,7 +528,7 @@ namespace castor3d
 			}
 
 			auto result = handler.get();
-			m_handlers.push_back( std::move( handler ) );
+			m_handlers.push_back( castor::move( handler ) );
 			return result;
 		}
 		/**
@@ -550,7 +550,7 @@ namespace castor3d
 
 			if ( it != m_handlers.end() )
 			{
-				auto h = std::move( *it );
+				auto h = castor::move( *it );
 				m_handlers.erase( it );
 			}
 		}
@@ -598,10 +598,10 @@ namespace castor3d
 	protected:
 		//!\~english	The mutex used to protect the handlers array.
 		//!\~french		Le mutex de protection du tableau de gestionnaires.
-		mutable std::mutex m_mutexHandlers;
+		mutable castor::Mutex m_mutexHandlers;
 		//!\~english	The handlers array.
 		//!\~french		Le tableau de gestionnaires.
-		std::vector< EventHandlerUPtr > m_handlers;
+		castor::Vector< EventHandlerUPtr > m_handlers;
 		//!\~english	The associated frame listener.
 		//!\~french		Le frame listener associé.
 		FrameListenerRPtr m_frameListener;

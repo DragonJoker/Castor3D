@@ -46,7 +46,7 @@ namespace castor
 
 		if ( auto block{ beginBlock( file, cuT( "theme" ), theme.getName() ) } )
 		{
-			result = TextWriter< StylesHolder >{ tabs(), m_scene, "" }( theme, file );
+			result = TextWriter< StylesHolder >{ tabs(), m_scene, cuT( "" ) }( theme, file );
 		}
 
 		return result;

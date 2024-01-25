@@ -88,7 +88,7 @@ namespace castor
 		}
 
 	private:
-		std::vector< uint8_t > m_memory;
+		Vector< uint8_t > m_memory;
 	};
 
 	template< typename Traits >
@@ -163,14 +163,14 @@ namespace castor
 			, uint32_t level );
 
 	private:
-		using FreeList = std::list< Block >;
-		using PointerLevel = std::pair< size_t, uint32_t >;
+		using FreeList = List< Block >;
+		using PointerLevel = Pair< size_t, uint32_t >;
 
 	private:
 		uint32_t m_numLevels;
 		uint32_t m_minBlockSize;
-		std::vector< FreeList > m_freeLists;
-		std::vector< PointerLevel > m_allocated;
+		Vector< FreeList > m_freeLists;
+		Vector< PointerLevel > m_allocated;
 	};
 
 	using BuddyAllocator = BuddyAllocatorT< BuddyAllocatorTraits >;

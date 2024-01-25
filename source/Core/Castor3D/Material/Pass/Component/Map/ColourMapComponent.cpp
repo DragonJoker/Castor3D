@@ -110,7 +110,7 @@ namespace castor3d
 		, shader::BlendComponents & components
 		, shader::SampleTexture const & sampleTexture )const
 	{
-		applyVec3Component( "colour"
+		applyVec3Component( cuT( "colour" )
 			, passShaders
 			, textureConfigs
 			, textureAnims
@@ -124,7 +124,7 @@ namespace castor3d
 	void ColourMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		channelFillers.try_emplace( "diffuse"
+		channelFillers.try_emplace( cuT( "diffuse" )
 			, getTextureFlags()
 			, []( TextureContext & blockContext )
 			{
@@ -132,7 +132,7 @@ namespace castor3d
 				component.fillChannel( blockContext.configuration
 					, 0x00FFFFFF );
 			} );
-		channelFillers.try_emplace( "albedo"
+		channelFillers.try_emplace( cuT( "albedo" )
 			, getTextureFlags()
 			, []( TextureContext & blockContext )
 			{
@@ -140,7 +140,7 @@ namespace castor3d
 				component.fillChannel( blockContext.configuration
 					, 0x00FFFFFF );
 			} );
-		channelFillers.try_emplace( "colour"
+		channelFillers.try_emplace( cuT( "colour" )
 			, getTextureFlags()
 			, []( TextureContext & blockContext )
 			{
@@ -227,7 +227,7 @@ namespace castor3d
 	}
 
 	void ColourMapComponent::Plugin::createMapComponent( Pass & pass
-		, std::vector< PassComponentUPtr > & result )const
+		, castor::Vector< PassComponentUPtr > & result )const
 	{
 		result.push_back( castor::makeUniqueDerived< PassComponent, ColourMapComponent >( pass ) );
 	}

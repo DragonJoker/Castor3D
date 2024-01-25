@@ -7,7 +7,7 @@ namespace castor3d::shader
 	CullData::CullData( sdw::ShaderWriter & writer
 		, sdw::expr::ExprPtr expr
 		, bool enabled )
-		: sdw::StructInstance{ writer, std::move( expr ), enabled }
+		: sdw::StructInstance{ writer, castor::move( expr ), enabled }
 		, sphere{ getMember< sdw::Vec4 >( "sphere" ) }
 		, cone{ getMember< sdw::Vec4 >( "cone" ) }
 	{

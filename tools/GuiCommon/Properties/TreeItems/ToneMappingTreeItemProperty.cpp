@@ -83,13 +83,13 @@ namespace GuiCommon
 				UniformBufferValues ubo{ make_String( wxT( "HdrConfig" ) ), VK_SHADER_STAGE_FRAGMENT_BIT };
 				ubo.uniforms.emplace_back( makeUniformValue( wxT( "Exposure" ), value.exposure ) );
 				ubo.uniforms.emplace_back( makeUniformValue( wxT( "Gamma" ), value.gamma ) );
-				source.ubos.emplace_back( std::move( ubo ) );
+				source.ubos.emplace_back( castor::move( ubo ) );
 			}
 
 		private:
-			std::unique_ptr< ConfigurationVisitorBase > doGetSubConfiguration( castor::String const & category )override
+			castor::RawUniquePtr< ConfigurationVisitorBase > doGetSubConfiguration( castor::String const & category )override
 			{
-				return std::unique_ptr< ConfigurationVisitorBase >( new ToneMappingShaderGatherer{ m_device, m_sources } );
+				return castor::RawUniquePtr< ConfigurationVisitorBase >( new ToneMappingShaderGatherer{ m_device, m_sources } );
 			}
 
 			ShaderSource & doGetSource( castor::String const & name )
@@ -107,7 +107,7 @@ namespace GuiCommon
 				}
 
 				ShaderSource source{ name };
-				m_sources.emplace_back( std::move( source ) );
+				m_sources.emplace_back( castor::move( source ) );
 				return m_sources.back();
 			}
 
@@ -180,7 +180,7 @@ namespace GuiCommon
 		{
 			ShaderSources sources = ToneMappingShaderGatherer::submit( *toneMapping );
 			ShaderDialog * editor = new ShaderDialog{ toneMapping->getEngine()
-				, std::move( sources )
+				, castor::move( sources )
 				, toneMapping->getFullName()
 				, m_parent };
 			editor->Show();

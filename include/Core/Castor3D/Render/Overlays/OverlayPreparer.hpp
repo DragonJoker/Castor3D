@@ -76,13 +76,13 @@ namespace castor3d
 		OverlayRenderer & m_renderer;
 		RenderDevice const & m_device;
 		crg::Fence & m_fence;
-		using OverlayDataArray = std::vector< OverlayDrawData >;
-		using OverlayDatasMap = std::map< OverlayPipelineData *, OverlayDataArray >;
-		std::map< uint32_t, OverlayDatasMap > m_levelsOverlays;
+		using OverlayDataArray = castor::Vector< OverlayDrawData >;
+		using OverlayDatasMap = castor::Map< OverlayPipelineData *, OverlayDataArray >;
+		castor::Map< uint32_t, OverlayDatasMap > m_levelsOverlays;
 		VkRenderPass m_renderPass;
 		VkFramebuffer m_framebuffer;
-		std::vector< OverlayDrawData > m_overlays;
-		std::map< size_t, uint32_t > m_descriptorsCounts{};
+		castor::Vector< OverlayDrawData > m_overlays;
+		castor::Map< size_t, uint32_t > m_descriptorsCounts{};
 		uint32_t * m_drawCounts{};
 	};
 }

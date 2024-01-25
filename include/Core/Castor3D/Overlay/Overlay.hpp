@@ -342,7 +342,7 @@ namespace castor3d
 		SceneContext * scene{};
 		RootContext * root{};
 		OverlayPtr overlay;
-		std::vector< OverlayPtr > parentOverlays{};
+		castor::Vector< OverlayPtr > parentOverlays{};
 	};
 
 	C3D_API Engine * getEngine( OverlayContext const & context );
@@ -353,7 +353,7 @@ namespace castor
 	template<>
 	struct ParserEnumTraits< castor3d::TextWrappingMode >
 	{
-		static inline StringView constexpr Name = cuT( "TextWrappingMode" );
+		static StringView constexpr Name = cuT( "TextWrappingMode" );
 		static inline UInt32StrMap const Values = []()
 			{
 				UInt32StrMap result;
@@ -365,7 +365,7 @@ namespace castor
 	template<>
 	struct ParserEnumTraits< castor3d::BorderPosition >
 	{
-		static inline StringView constexpr Name = cuT( "BorderPosition" );
+		static StringView constexpr Name = cuT( "BorderPosition" );
 		static inline UInt32StrMap const Values = []()
 			{
 				UInt32StrMap result;
@@ -377,7 +377,7 @@ namespace castor
 	template<>
 	struct ParserEnumTraits< castor3d::VAlign >
 	{
-		static inline StringView constexpr Name = cuT( "VAlign" );
+		static StringView constexpr Name = cuT( "VAlign" );
 		static inline UInt32StrMap const Values = []()
 			{
 				UInt32StrMap result;
@@ -389,7 +389,7 @@ namespace castor
 	template<>
 	struct ParserEnumTraits< castor3d::HAlign >
 	{
-		static inline StringView constexpr Name = cuT( "HAlign" );
+		static StringView constexpr Name = cuT( "HAlign" );
 		static inline UInt32StrMap const Values = []()
 			{
 				UInt32StrMap result;
@@ -401,7 +401,7 @@ namespace castor
 	template<>
 	struct ParserEnumTraits< castor3d::TextTexturingMode >
 	{
-		static inline StringView constexpr Name = cuT( "TextTexturingMode" );
+		static StringView constexpr Name = cuT( "TextTexturingMode" );
 		static inline UInt32StrMap const Values = []()
 			{
 				UInt32StrMap result;
@@ -413,7 +413,7 @@ namespace castor
 	template<>
 	struct ParserEnumTraits< castor3d::TextLineSpacingMode >
 	{
-		static inline StringView constexpr Name = cuT( "TextLineSpacingMode" );
+		static StringView constexpr Name = cuT( "TextLineSpacingMode" );
 		static inline UInt32StrMap const Values = []()
 			{
 				UInt32StrMap result;

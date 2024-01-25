@@ -34,7 +34,7 @@ namespace castor3d
 		, m_renderSystem{ *engine.getRenderSystem() }
 		, m_wantedFPS{ wantedFPS }
 		, m_frameTime{ 1000ULL / wantedFPS }
-		, m_debugOverlays{ std::make_unique< DebugOverlays >( engine ) }
+		, m_debugOverlays{ castor::make_unique< DebugOverlays >( engine ) }
 		, m_timerCpuEvents{ castor::makeUnique< crg::FramePassTimer >( m_renderSystem.getRenderDevice().makeContext(), "Events/CPU/PreRender", crg::TimerScope::eUpdate )
 			, castor::makeUnique< crg::FramePassTimer >( m_renderSystem.getRenderDevice().makeContext(), "Events/CPU/QueueRender", crg::TimerScope::eUpdate )
 			, castor::makeUnique< crg::FramePassTimer >( m_renderSystem.getRenderDevice().makeContext(), "Events/CPU/PostRender", crg::TimerScope::eUpdate ) }
@@ -61,13 +61,13 @@ namespace castor3d
 
 	void RenderLoop::cleanup()
 	{
-		unregisterTimer( "Events/CPU/PreRender", *m_timerCpuEvents[0] );
-		unregisterTimer( "Events/CPU/QueueRender", *m_timerCpuEvents[1] );
-		unregisterTimer( "Events/CPU/PostRender", *m_timerCpuEvents[2] );
+		unregisterTimer( cuT( "Events/CPU/PreRender" ), *m_timerCpuEvents[0] );
+		unregisterTimer( cuT( "Events/CPU/QueueRender" ), *m_timerCpuEvents[1] );
+		unregisterTimer( cuT( "Events/CPU/PostRender" ), *m_timerCpuEvents[2] );
 
-		unregisterTimer( "Events/GPU/PreRender", *m_timerGpuEvents[0] );
-		unregisterTimer( "Events/GPU/QueueRender", *m_timerGpuEvents[1] );
-		unregisterTimer( "Events/GPU/PostRender", *m_timerGpuEvents[2] );
+		unregisterTimer( cuT( "Events/GPU/PreRender" ), *m_timerGpuEvents[0] );
+		unregisterTimer( cuT( "Events/GPU/QueueRender" ), *m_timerGpuEvents[1] );
+		unregisterTimer( cuT( "Events/GPU/PostRender" ), *m_timerGpuEvents[2] );
 
 		if ( m_uploadData )
 		{
@@ -174,7 +174,7 @@ namespace castor3d
 
 	void RenderLoop::dumpFrameTimes( Parameters & params )const
 	{
-		params.add( "Last", std::chrono::duration_cast< castor::Nanoseconds >( getLastFrameTime() ) );
+		params.add( cuT( "Last" ), std::chrono::duration_cast< castor::Nanoseconds >( getLastFrameTime() ) );
 		m_debugOverlays->dumpFrameTimes( params );
 	}
 
@@ -249,17 +249,17 @@ namespace castor3d
 			}
 
 			m_uploadData = castor::makeUniqueDerived< UploadData, StagedUploadData >( device
-				, "RenderLoop"
+				, cuT( "RenderLoop" )
 				, data->commandPool->createCommandBuffer( "RenderLoopUpload" ) );
 			m_uploadFence = device->createFence( "RenderLoopUpload" );
 
-			registerTimer( "Events/CPU/PreRender", *m_timerCpuEvents[0] );
-			registerTimer( "Events/CPU/QueueRender", *m_timerCpuEvents[1] );
-			registerTimer( "Events/CPU/PostRender", *m_timerCpuEvents[2] );
+			registerTimer( cuT( "Events/CPU/PreRender" ), *m_timerCpuEvents[0] );
+			registerTimer( cuT( "Events/CPU/QueueRender" ), *m_timerCpuEvents[1] );
+			registerTimer( cuT( "Events/CPU/PostRender" ), *m_timerCpuEvents[2] );
 
-			registerTimer( "Events/GPU/PreRender", *m_timerGpuEvents[0] );
-			registerTimer( "Events/GPU/QueueRender", *m_timerGpuEvents[1] );
-			registerTimer( "Events/GPU/PostRender", *m_timerGpuEvents[2] );
+			registerTimer( cuT( "Events/GPU/PreRender" ), *m_timerGpuEvents[0] );
+			registerTimer( cuT( "Events/GPU/QueueRender" ), *m_timerGpuEvents[1] );
+			registerTimer( cuT( "Events/GPU/PostRender" ), *m_timerGpuEvents[2] );
 		}
 
 		if ( !data )

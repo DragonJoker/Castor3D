@@ -116,7 +116,7 @@ namespace castor3d
 		, shader::BlendComponents & components
 		, shader::SampleTexture const & sampleTexture )const
 	{
-		std::string mapName = "glossiness";
+		castor::MbString mapName = "glossiness";
 		auto textureName = mapName + "MapAndMask";
 
 		if ( !material.hasMember( textureName )
@@ -153,7 +153,7 @@ namespace castor3d
 	void GlossinessMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		channelFillers.try_emplace( "glossiness"
+		channelFillers.try_emplace( cuT( "glossiness" )
 			, getTextureFlags()
 			, []( TextureContext & blockContext )
 			{
@@ -161,7 +161,7 @@ namespace castor3d
 				component.fillChannel( blockContext.configuration
 					, 0x00FF0000 );
 			} );
-		channelFillers.try_emplace( "shininess"
+		channelFillers.try_emplace( cuT( "shininess" )
 			, getTextureFlags()
 			, []( TextureContext & blockContext )
 			{
@@ -218,7 +218,7 @@ namespace castor3d
 	}
 
 	void GlossinessMapComponent::Plugin::createMapComponent( Pass & pass
-		, std::vector< PassComponentUPtr > & result )const
+		, castor::Vector< PassComponentUPtr > & result )const
 	{
 		result.push_back( castor::makeUniqueDerived< PassComponent, GlossinessMapComponent >( pass ) );
 	}

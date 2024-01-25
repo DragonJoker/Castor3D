@@ -15,7 +15,7 @@ namespace castor
 	{
 #define CHECK_FT_ERR( func, ... ) CheckErr( func( __VA_ARGS__ ), #func )
 
-		static std::map< FT_Error, std::string > const MapErrors
+		static Map< FT_Error, MbString > const MapErrors
 		{
 			{ 0x0000, "Success" },
 			{ 0x0001, "Invalid face handle" },
@@ -91,8 +91,8 @@ namespace castor
 
 			if ( !result )
 			{
-				std::map< FT_Error, std::string >::const_iterator it = MapErrors.find( error );
-				std::string err = "ERROR : " + std::string( name ) + " failed - " + string::stringCast< char >( string::toString( error ) );
+				auto it = MapErrors.find( error );
+				auto err = "ERROR : " + MbString( name ) + " failed - " + toUtf8( string::toString( error ) );
 
 				if ( it != MapErrors.end() )
 				{
@@ -117,7 +117,7 @@ namespace castor
 			void initialise()override
 			{
 				CHECK_FT_ERR( FT_Init_FreeType, &m_library );
-				CHECK_FT_ERR( FT_New_Face, m_library, string::stringCast< char >( m_path ).c_str(), 0, &m_face );
+				CHECK_FT_ERR( FT_New_Face, m_library, toUtf8( m_path ).c_str(), 0, &m_face );
 				CHECK_FT_ERR( FT_Select_Charmap, m_face, FT_ENCODING_UNICODE );
 				CHECK_FT_ERR( FT_Set_Pixel_Sizes, m_face, 0, m_height );
 			}
@@ -208,7 +208,7 @@ namespace castor
 			{
 				if ( !font.hasGlyphLoader() )
 				{
-					font.setGlyphLoader( std::make_unique< ft::SFreeTypeFontImpl >( pathFile, m_height ) );
+					font.setGlyphLoader( castor::make_unique< ft::SFreeTypeFontImpl >( pathFile, m_height ) );
 				}
 
 				font.setFaceName( pathFile.getFileName() );
@@ -219,8 +219,8 @@ namespace castor
 				// We load the glyphs
 				for ( uint8_t c = min; c < max; c++ )
 				{
-					std::array< char, 4u > tmp{ char( c ), 0, 0, 0 };
-					font.doLoadGlyph( string::utf8::toUtf8( tmp.data() ) );
+					Array< char, 4u > tmp{ char( c ), 0, 0, 0 };
+					font.doLoadGlyph( string::utf8::toUtf8( tmp.data(), tmp.data() + tmp.size() ) );
 				}
 
 				font.getGlyphLoader().cleanup();
@@ -228,7 +228,7 @@ namespace castor
 			}
 			catch ( std::runtime_error & exc )
 			{
-				CU_LoaderError( "Font loading failed : " + std::string( exc.what() ) );
+				CU_LoaderError( "Font loading failed : " + MbString( exc.what() ) );
 			}
 		}
 
@@ -247,7 +247,7 @@ namespace castor
 		: Named{ name }
 		, m_height{ height }
 		, m_pathFile{ path }
-		, m_glyphLoader{ std::make_unique< ft::SFreeTypeFontImpl >( path, height ) }
+		, m_glyphLoader{ castor::make_unique< ft::SFreeTypeFontImpl >( path, height ) }
 	{
 		BinaryLoader{}( *this, path, height );
 	}
@@ -324,8 +324,8 @@ namespace castor
 			}
 		};
 
-		auto addChar = [&]( castor::Size const & charSize
-			, castor::Point2i const & bearing
+		auto addChar = [&]( Size const & charSize
+			, Point2i const & bearing
 			, int32_t advance )
 		{
 			auto xMin = bearing->x;

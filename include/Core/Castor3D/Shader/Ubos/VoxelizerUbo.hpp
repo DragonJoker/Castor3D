@@ -25,7 +25,7 @@ namespace castor3d
 			SDW_DeclStructInstance( C3D_API, VoxelData );
 
 			C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
-			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
+			C3D_API static castor::RawUniquePtr< sdw::Struct > declare( sdw::ShaderWriter & writer );
 
 			C3D_API sdw::Vec3 worldToTex( sdw::Vec3 const & wsPosition )const;
 			C3D_API sdw::IVec3 worldToImg( sdw::Vec3 const & wsPosition )const;

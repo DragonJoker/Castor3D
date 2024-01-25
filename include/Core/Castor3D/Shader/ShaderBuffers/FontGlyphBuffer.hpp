@@ -130,8 +130,8 @@ namespace castor3d
 		FontTexture const & m_texture;
 		ShaderBuffer m_buffer;
 		FontGlyphsData m_data;
-		std::vector< castor::Glyph const * > m_glyphs;
-		std::mutex m_mutex;
+		castor::Vector< castor::Glyph const * > m_glyphs;
+		castor::Mutex m_mutex;
 		std::atomic_uint32_t m_count{ 0u };
 		std::atomic_bool m_dirty{};
 	};

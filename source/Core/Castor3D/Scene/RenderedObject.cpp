@@ -40,7 +40,7 @@ namespace castor3d
 		modelData.scale = scale;
 		modelData.meshletCount = meshletCount;
 		auto it = m_modelsDataOffsets.try_emplace( nodeId, &modelData, Offsets{} ).first;
-		auto & offsets = it->second.second;
+		auto const & offsets = it->second.second;
 
 		if ( offsets.vertexOffset || offsets.indexOffset )
 		{

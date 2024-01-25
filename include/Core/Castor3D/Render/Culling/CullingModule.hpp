@@ -46,19 +46,19 @@ namespace castor3d
 
 	CU_DeclareSmartPtr( castor3d, SceneCuller, C3D_API );
 
-	using SceneCullerSignalFunction = std::function< void( SceneCuller const & ) >;
+	using SceneCullerSignalFunction = castor::Function< void( SceneCuller const & ) >;
 	using SceneCullerSignal = castor::SignalT< SceneCullerSignalFunction >;
 	using SceneCullerSignalConnection = castor::ConnectionT< SceneCullerSignal >;
 
-	using SceneCullerSubmeshSignalFunction = std::function< void( SceneCuller const &, CulledNodeT< SubmeshRenderNode > const &, bool ) >;
+	using SceneCullerSubmeshSignalFunction = castor::Function< void( SceneCuller const &, CulledNodeT< SubmeshRenderNode > const &, bool ) >;
 	using SceneCullerSubmeshSignal = castor::SignalT< SceneCullerSubmeshSignalFunction >;
 	using SceneCullerSubmeshSignalConnection = castor::ConnectionT< SceneCullerSubmeshSignal >;
 
-	using SceneCullerBillboardSignalFunction = std::function< void( SceneCuller const &, CulledNodeT< BillboardRenderNode > const &, bool ) >;
+	using SceneCullerBillboardSignalFunction = castor::Function< void( SceneCuller const &, CulledNodeT< BillboardRenderNode > const &, bool ) >;
 	using SceneCullerBillboardSignal = castor::SignalT< SceneCullerBillboardSignalFunction >;
 	using SceneCullerBillboardSignalConnection = castor::ConnectionT< SceneCullerBillboardSignal >;
 
-	using PipelineNodes = std::array< uint32_t, MaxNodesPerPipeline >;
+	using PipelineNodes = castor::Array< uint32_t, MaxNodesPerPipeline >;
 
 	//@}
 	//@}

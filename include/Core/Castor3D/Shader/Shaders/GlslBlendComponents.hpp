@@ -23,7 +23,7 @@ namespace castor3d::shader
 	struct BlendComponentT
 	{
 		BlendComponentT( T v, bool e = true )
-			: value{ std::move( v ) }
+			: value{ castor::move( v ) }
 			, enabled{ e }
 		{
 		}

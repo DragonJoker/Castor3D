@@ -21,12 +21,12 @@ namespace castor
 		{
 			bool result = false;
 
-			if ( auto block{ beginBlock( file, "animation", group.name ) } )
+			if ( auto block{ beginBlock( file, cuT( "animation" ), group.name ) } )
 			{
-				result = write( file, "looped", group.looped )
-					&& writeOpt( file, "scale", group.scale, 1.0f )
-					&& writeOpt( file, "start_at", double( group.startingPoint.count() ) / 1000.0, 0.0 )
-					&& writeOpt( file, "stop_at", double( group.stoppingPoint.count() ) / 1000.0, 0.0 );
+				result = write( file, cuT( "looped" ), group.looped )
+					&& writeOpt( file, cuT( "scale" ), group.scale, 1.0f )
+					&& writeOpt( file, cuT( "start_at" ), double( group.startingPoint.count() ) / 1000.0, 0.0 )
+					&& writeOpt( file, cuT( "stop_at" ), double( group.stoppingPoint.count() ) / 1000.0, 0.0 );
 			}
 
 			return result;
@@ -44,7 +44,7 @@ namespace castor
 		log::info << tabs() << cuT( "Writing AnimatedObjectGroup " ) << group.getName() << std::endl;
 		bool result = false;
 
-		if ( auto block{ beginBlock( file, "animated_object_group", group.getName() ) } )
+		if ( auto block{ beginBlock( file, cuT( "animated_object_group" ), group.getName() ) } )
 		{
 			result = true;
 
@@ -58,19 +58,19 @@ namespace castor
 				if ( skel != String::npos )
 				{
 					name = name.substr( 0, skel );
-					result = result && writeName( file, "animated_skeleton", name );
+					result = result && writeName( file, cuT( "animated_skeleton" ), name );
 				}
 
 				if ( mesh != String::npos )
 				{
 					name = name.substr( 0, mesh );
-					result = result && writeName( file, "animated_mesh", name );
+					result = result && writeName( file, cuT( "animated_mesh" ), name );
 				}
 
 				if ( node != String::npos )
 				{
 					name = name.substr( 0, node );
-					result = result && writeName( file, "animated_node", name );
+					result = result && writeName( file, cuT( "animated_node" ), name );
 				}
 			}
 

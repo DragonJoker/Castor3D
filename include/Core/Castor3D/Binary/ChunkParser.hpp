@@ -139,14 +139,14 @@ namespace castor3d
 
 			if ( result )
 			{
-				std::vector< char > buffer( size + 1ULL, 0 );
+				castor::Vector< char > buffer( size + 1ULL, 0 );
 				result = ChunkParserBase::parse( BytePtr( buffer.data() )
 					, size
 					, chunk );
 
 				if ( result )
 				{
-					value = castor::string::stringCast< xchar >( buffer.data() );
+					value = castor::makeString( buffer.data() );
 				}
 			}
 
@@ -184,14 +184,14 @@ namespace castor3d
 
 			if ( result )
 			{
-				std::vector< char > buffer( size + 1ULL, 0 );
+				castor::Vector< char > buffer( size + 1ULL, 0 );
 				result = ChunkParserBase::parse( BytePtr( buffer.data() )
 					, size
 					, chunk );
 
 				if ( result )
 				{
-					value = castor::Path{ castor::string::stringCast< xchar >( buffer.data() ) };
+					value = castor::Path{ castor::makeString( buffer.data() ) };
 				}
 			}
 

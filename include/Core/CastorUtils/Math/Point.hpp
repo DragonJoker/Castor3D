@@ -215,7 +215,7 @@ namespace castor
 	private:
 		union
 		{
-			std::array< T, TCount > coords;
+			Array< T, TCount > coords;
 			PointData< T, TCount > data;
 		} m_data{};
 	};
@@ -751,13 +751,13 @@ namespace castor
 	**/
 	/**@{*/
 	template< typename T, uint32_t TCount >
-	castor::String & operator<<( castor::String & out, castor::Point< T, TCount > const & in );
+	String & operator<<( String & out, Point< T, TCount > const & in );
 	template< typename T, uint32_t TCount >
-	castor::String & operator>>( castor::String & in, castor::Point< T, TCount > & out );
+	String & operator>>( String & in, Point< T, TCount > & out );
 	template< typename T, uint32_t TCount, typename CharType >
-	std::basic_ostream< CharType > & operator<<( std::basic_ostream< CharType > & out, castor::Point< T, TCount > const & in );
+	std::basic_ostream< CharType > & operator<<( std::basic_ostream< CharType > & out, Point< T, TCount > const & in );
 	template< typename T, uint32_t TCount, typename CharType >
-	std::basic_istream< CharType > & operator>>( std::basic_istream< CharType > & in, castor::Point< T, TCount > & out );
+	std::basic_istream< CharType > & operator>>( std::basic_istream< CharType > & in, Point< T, TCount > & out );
 	/**@}*/
 }
 #include "Point.inl"

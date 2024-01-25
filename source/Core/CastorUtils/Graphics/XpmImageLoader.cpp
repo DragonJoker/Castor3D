@@ -20,11 +20,11 @@ namespace castor
 
 		using R8G8B8Pixel = Pixel< PixelFormat::eR8G8B8_UNORM >;
 
-		void parseColour( char const * line
+		static void parseColour( char const * line
 			, uint32_t charCount
-			, std::map< std::string, xpml::R8G8B8Pixel, std::less<> > & colours )
+			, Map< MbString, xpml::R8G8B8Pixel, std::less<> > & colours )
 		{
-			std::string code( &line[0], &line[charCount] );
+			MbString code( &line[0], &line[charCount] );
 			char const * it = std::strstr( line, "c " );
 
 			if ( !it )
@@ -37,10 +37,10 @@ namespace castor
 				}
 			}
 
-			std::string value( it + 2, &line[std::strlen( line )] );
+			MbString value( it + 2, &line[std::strlen( line )] );
 			xpml::R8G8B8Pixel pixel{ true };
 
-			if ( value.find( '#' ) != std::string::npos )
+			if ( value.find( '#' ) != MbString::npos )
 			{
 				uint32_t r{};
 				uint32_t g{};
@@ -51,7 +51,7 @@ namespace castor
 					CU_LoaderError( "Can't load XPM image: Invalid image data" );
 				}
 
-				std::array< uint8_t, 3u > components{ { uint8_t( r ), uint8_t( g ), uint8_t( b ) } };
+				Array< uint8_t, 3u > components{ { uint8_t( r ), uint8_t( g ), uint8_t( b ) } };
 				std::memcpy( pixel.ptr(), components.data(), 3 );
 			}
 
@@ -62,7 +62,7 @@ namespace castor
 	void XpmImageLoader::registerLoader( ImageLoader & reg )
 	{
 		reg.registerLoader( xpml::listExtensions()
-			, std::make_unique< XpmImageLoader >() );
+			, castor::make_unique< XpmImageLoader >() );
 	}
 
 	void XpmImageLoader::unregisterLoader( ImageLoader & reg )
@@ -76,7 +76,7 @@ namespace castor
 		, PxBufferBaseUPtr & outbuffer )const
 	{
 		using CharCPtrPtr = char * const *;
-		auto data = CharCPtrPtr( input );
+		auto data = reinterpret_cast< CharCPtrPtr >( input );
 		uint32_t coloursCount = 0;
 		uint32_t charCount = 0;
 		std::stringstream stream( data[0] );
@@ -99,7 +99,7 @@ namespace castor
 		}
 
 		// Parse colours
-		std::map< std::string, xpml::R8G8B8Pixel, std::less<> > colours;
+		Map< MbString, xpml::R8G8B8Pixel, std::less<> > colours;
 		for ( auto line : castor::makeArrayView( &data[1], &data[1 + coloursCount] ) )
 		{
 			xpml::parseColour( line, charCount, colours );
@@ -116,7 +116,7 @@ namespace castor
 
 			for ( uint32_t x = 0; x < w; ++x )
 			{
-				buffer->set( colours[std::string( line, line + charCount )] );
+				buffer->set( colours[MbString( line, line + charCount )] );
 				line += charCount;
 				buffer++;
 			}

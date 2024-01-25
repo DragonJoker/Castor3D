@@ -22,7 +22,7 @@ namespace castor
 	void WorkerThread::feed( Job job )
 	{
 		CU_Require( m_start == false );
-		m_currentJob = std::move( job );
+		m_currentJob = castor::move( job );
 		m_start = true;
 	}
 

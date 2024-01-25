@@ -32,8 +32,7 @@ namespace GuiCommon
 		 *\param[in]	editable	Dit si les propriétés sont modifiables
 		 *\param[in]	scene		L'objet cible
 		 */
-		BackgroundTreeItemProperty( wxWindow * parent
-			, bool editable
+		BackgroundTreeItemProperty( bool editable
 			, castor3d::SceneBackground & background );
 
 	private:
@@ -48,7 +47,6 @@ namespace GuiCommon
 
 	private:
 		castor3d::SceneBackground & m_background;
-		wxWindow * m_parent;
 	};
 }
 

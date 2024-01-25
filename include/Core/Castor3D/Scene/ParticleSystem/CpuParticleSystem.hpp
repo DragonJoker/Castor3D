@@ -123,7 +123,7 @@ namespace castor3d
 		uint32_t m_firstUnused{ 1u };
 
 	private:
-		std::vector< ParticleEmitter::OnEmitConnection > m_onEmits;
+		castor::Vector< ParticleEmitter::OnEmitConnection > m_onEmits;
 	};
 }
 

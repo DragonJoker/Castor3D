@@ -120,7 +120,7 @@ namespace castor3d
 		bool m_dirtyData{ false };
 		castor::GroupChangeTracked< float > m_range;
 		castor::GroupChangeTracked< castor::Point3f > m_position;
-		std::array< castor::Matrix4x4f, size_t( CubeMapFace::eCount ) > m_lightViews;
+		castor::Array< castor::Matrix4x4f, size_t( CubeMapFace::eCount ) > m_lightViews;
 	};
 }
 

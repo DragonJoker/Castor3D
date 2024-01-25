@@ -224,7 +224,7 @@ namespace GuiCommon
 		castor3d::EngineUPtr m_castor;
 
 	private:
-		std::unique_ptr< wxLocale > m_locale;
+		castor::RawUniquePtr< wxLocale > m_locale;
 		uint32_t m_steps;
 		SplashScreen * m_splashScreen;
 		castor3d::Version m_version;

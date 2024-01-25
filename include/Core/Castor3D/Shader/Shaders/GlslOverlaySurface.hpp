@@ -18,7 +18,7 @@ namespace castor3d::shader
 		OverlaySurfaceT( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstance{ writer, std::move( expr ), enabled }
+			: StructInstance{ writer, castor::move( expr ), enabled }
 			, position{ this->getMember< sdw::Vec2 >( "position", true ) }
 			, texUV{ this->getMember< sdw::Vec2 >( "texture", true ) }
 			, fontUV{ this->getMember< sdw::Vec2 >( "fontUV", true ) }
@@ -52,7 +52,7 @@ namespace castor3d::shader
 			params.emplace_back( sdw::makeExpr( pos ) );
 			params.emplace_back( sdw::makeExpr( uv ) );
 			return sdw::makeAggrInit( makeType( sdw::findTypesCache( pos, uv ), false, true )
-				, std::move( params ) );
+				, castor::move( params ) );
 		}
 
 		static ast::expr::ExprPtr makeInitExpr( sdw::Vec2 const pos
@@ -64,7 +64,7 @@ namespace castor3d::shader
 			params.emplace_back( sdw::makeExpr( uv ) );
 			params.emplace_back( sdw::makeExpr( text ) );
 			return sdw::makeAggrInit( makeType( sdw::findTypesCache( pos, uv ), true, true )
-				, std::move( params ) );
+				, castor::move( params ) );
 		}
 
 		static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache

@@ -11,8 +11,7 @@
 
 namespace GuiCommon
 {
-	SceneTreeItemProperty::SceneTreeItemProperty( wxWindow * parent
-		, bool editable
+	SceneTreeItemProperty::SceneTreeItemProperty( bool editable
 		, castor3d::Scene & scene )
 		: TreeItemProperty{ scene.getEngine(), editable }
 		, m_scene( scene )

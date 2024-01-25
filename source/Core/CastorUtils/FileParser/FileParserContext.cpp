@@ -28,7 +28,7 @@ namespace castor
 
 		if ( !res )
 		{
-			CU_Exception( "A user context with name [" + string::stringCast< char >( name ) + "] already exists." );
+			CU_Exception( "A user context with name [" + toUtf8( name ) + "] already exists." );
 		}
 	}
 
@@ -38,7 +38,7 @@ namespace castor
 
 		if ( it == userContexts.end() )
 		{
-			CU_Exception( "No user context with name [" + string::stringCast< char >( name ) + "]." );
+			CU_Exception( "No user context with name [" + toUtf8( name ) + "]." );
 		}
 
 		void * result = it->second;
@@ -57,7 +57,7 @@ namespace castor
 
 		if ( it == userContexts.end() )
 		{
-			CU_Exception( "No user context with name [" + string::stringCast< char >( name ) + "]." );
+			CU_Exception( "No user context with name [" + toUtf8( name ) + "]." );
 		}
 
 		return it->second;

@@ -14,6 +14,44 @@ See LICENSE file in root folder
 
 namespace castor::string
 {
+	namespace details
+	{
+		template< typename CharT >
+		struct TrimDefaultArgsT;
+
+		template<>
+		struct TrimDefaultArgsT< char >
+		{
+			static std::string_view constexpr value = " \t\r";
+		};
+
+		template<>
+		struct TrimDefaultArgsT< wchar_t >
+		{
+			static std::wstring_view constexpr value = L" \t\r";
+		};
+
+		template<>
+		struct TrimDefaultArgsT< char8_t >
+		{
+			static std::u8string_view constexpr value = u8" \t\r";
+		};
+
+		template<>
+		struct TrimDefaultArgsT< char16_t >
+		{
+			static std::u16string_view constexpr value = u" \t\r";
+		};
+
+		template<>
+		struct TrimDefaultArgsT< char32_t >
+		{
+			static std::u32string_view constexpr value = U" \t\r";
+		};
+
+		template< typename CharT >
+		std::basic_string_view< CharT > constexpr trimDefaultArgs = TrimDefaultArgsT< CharT >::value;
+	}
 	/**
 	 *\~english
 	 *\brief		Tests if the given String represents an integer
@@ -272,7 +310,11 @@ namespace castor::string
 	 *\param[in]	keepEmpty	Dit si la fonction garde les sous-chaînes vides ou pas
 	 *\return		Le tableau contenant les sous-chaînes
 	 */
-	CU_API StringArray split( String const & str, StringView delims, uint32_t maxSplits = 10, bool keepEmpty = true );
+	template< typename CharT >
+	Vector< std::basic_string< CharT > > split( std::basic_string< CharT > const & str
+		, std::basic_string_view< CharT > delims
+		, uint32_t maxSplits = 10
+		, bool keepEmpty = true );
 	/**
 	 *\~english
 	 *\brief		Cuts a String into substrings, using delimiter(s)
@@ -289,7 +331,95 @@ namespace castor::string
 	 *\param[in]	keepEmpty	Dit si la fonction garde les sous-chaînes vides ou pas
 	 *\return		Le tableau contenant les sous-chaînes
 	 */
-	CU_API StringViewArray split( StringView str, StringView delims, uint32_t maxSplits = 10, bool keepEmpty = true );
+	template< typename CharT >
+	Vector< std::basic_string< CharT > > split( std::basic_string< CharT > const & str
+		, std::basic_string< CharT > delims
+		, uint32_t maxSplits = 10
+		, bool keepEmpty = true );
+	/**
+	 *\~english
+	 *\brief		Cuts a String into substrings, using delimiter(s)
+	 *\param[in]	str			The String to cut
+	 *\param[in]	delims		The delimiter(s)
+	 *\param[in]	maxSplits	The max splits count (the return will contain 0 < x < maxSplits substrings)
+	 *\param[in]	keepEmpty	Tells if the function keeps empty substrings or not
+	 *\return		The array containing the substrings
+	 *\~french
+	 *\brief		Découpe une chaîne en plusieurs sous-chaînes, en utilisant un/des délimiteur(s)
+	 *\param[in]	str			Le String à découper
+	 *\param[in]	delims		Le(s) délimiteur(s)
+	 *\param[in]	maxSplits	Le nombre maximal de découpes (le retour contiendra 0 < x < maxSplits sous-chaînes)
+	 *\param[in]	keepEmpty	Dit si la fonction garde les sous-chaînes vides ou pas
+	 *\return		Le tableau contenant les sous-chaînes
+	 */
+	template< typename CharT >
+	Vector< std::basic_string< CharT > > split( std::basic_string< CharT > const & str
+		, CharT const * delims
+		, uint32_t maxSplits = 10
+		, bool keepEmpty = true );
+	/**
+	 *\~english
+	 *\brief		Cuts a String into substrings, using delimiter(s)
+	 *\param[in]	str			The String to cut
+	 *\param[in]	delims		The delimiter(s)
+	 *\param[in]	maxSplits	The max splits count (the return will contain 0 < x < maxSplits substrings)
+	 *\param[in]	keepEmpty	Tells if the function keeps empty substrings or not
+	 *\return		The array containing the substrings
+	 *\~french
+	 *\brief		Découpe une chaîne en plusieurs sous-chaînes, en utilisant un/des délimiteur(s)
+	 *\param[in]	str			Le String à découper
+	 *\param[in]	delims		Le(s) délimiteur(s)
+	 *\param[in]	maxSplits	Le nombre maximal de découpes (le retour contiendra 0 < x < maxSplits sous-chaînes)
+	 *\param[in]	keepEmpty	Dit si la fonction garde les sous-chaînes vides ou pas
+	 *\return		Le tableau contenant les sous-chaînes
+	 */
+	template< typename CharT >
+	Vector< std::basic_string_view< CharT > > split( std::basic_string_view< CharT > str
+		, std::basic_string_view< CharT > delims
+		, uint32_t maxSplits = 10
+		, bool keepEmpty = true );
+	/**
+	 *\~english
+	 *\brief		Cuts a String into substrings, using delimiter(s)
+	 *\param[in]	str			The String to cut
+	 *\param[in]	delims		The delimiter(s)
+	 *\param[in]	maxSplits	The max splits count (the return will contain 0 < x < maxSplits substrings)
+	 *\param[in]	keepEmpty	Tells if the function keeps empty substrings or not
+	 *\return		The array containing the substrings
+	 *\~french
+	 *\brief		Découpe une chaîne en plusieurs sous-chaînes, en utilisant un/des délimiteur(s)
+	 *\param[in]	str			Le String à découper
+	 *\param[in]	delims		Le(s) délimiteur(s)
+	 *\param[in]	maxSplits	Le nombre maximal de découpes (le retour contiendra 0 < x < maxSplits sous-chaînes)
+	 *\param[in]	keepEmpty	Dit si la fonction garde les sous-chaînes vides ou pas
+	 *\return		Le tableau contenant les sous-chaînes
+	 */
+	template< typename CharT >
+	Vector< std::basic_string_view< CharT > > split( std::basic_string_view< CharT > str
+		, std::basic_string< CharT > delims
+		, uint32_t maxSplits = 10
+		, bool keepEmpty = true );
+	/**
+	 *\~english
+	 *\brief		Cuts a String into substrings, using delimiter(s)
+	 *\param[in]	str			The String to cut
+	 *\param[in]	delims		The delimiter(s)
+	 *\param[in]	maxSplits	The max splits count (the return will contain 0 < x < maxSplits substrings)
+	 *\param[in]	keepEmpty	Tells if the function keeps empty substrings or not
+	 *\return		The array containing the substrings
+	 *\~french
+	 *\brief		Découpe une chaîne en plusieurs sous-chaînes, en utilisant un/des délimiteur(s)
+	 *\param[in]	str			Le String à découper
+	 *\param[in]	delims		Le(s) délimiteur(s)
+	 *\param[in]	maxSplits	Le nombre maximal de découpes (le retour contiendra 0 < x < maxSplits sous-chaînes)
+	 *\param[in]	keepEmpty	Dit si la fonction garde les sous-chaînes vides ou pas
+	 *\return		Le tableau contenant les sous-chaînes
+	 */
+	template< typename CharT >
+	Vector< std::basic_string_view< CharT > > split( std::basic_string_view< CharT > str
+		, CharT const * delims
+		, uint32_t maxSplits = 10
+		, bool keepEmpty = true );
 	/**
 	 *\~english
 	 *\brief			Replaces all occurences of a xchar by another one in a String
@@ -304,7 +434,28 @@ namespace castor::string
 	 *\param[in]		replacement	Le xchar de remplacement
 	 *\return			Une référence sur la chaîne modifiée
 	 */
-	CU_API String & replace( String & str, xchar toFind, xchar replacement );
+	template< typename CharT >
+	std::basic_string< CharT > & replace( std::basic_string< CharT > & str
+		, CharT toFind
+		, CharT replacement );
+	/**
+	 *\~english
+	 *\brief			Replaces all occurences of a xchar by another one in a String
+	 *\param[in,out]	str			The String to modify
+	 *\param[in]		toFind		The xchar to replace
+	 *\param[in]		replacement	The replacement xchar
+	 *\return			A reference on the modified string
+	 *\~french
+	 *\brief			Remplace toutes les occurences d'un xchar par un autre dans un String
+	 *\param[in,out]	str			Le String à modifier
+	 *\param[in]		toFind		Le xchar à remplacer
+	 *\param[in]		replacement	Le xchar de remplacement
+	 *\return			Une référence sur la chaîne modifiée
+	 */
+	template< typename CharT >
+	std::basic_string< CharT > & replace( std::basic_string< CharT > & str
+		, CharT const * toFind
+		, CharT const * replacement );
 	/**
 	 *\~english
 	 *\brief			Replaces all occurences of a String by a xchar in a String
@@ -319,7 +470,10 @@ namespace castor::string
 	 *\param[in]		replacement	Le xchar de remplacement
 	 *\return			Une référence sur la chaîne modifiée
 	 */
-	CU_API String & replace( String & str, StringView toFind, xchar replacement );
+	template< typename CharT >
+	std::basic_string< CharT > & replace( std::basic_string< CharT > & str
+		, std::basic_string_view< CharT > toFind
+		, CharT replacement );
 	/**
 	 *\~english
 	 *\brief			Replaces all occurences of a xchar by a String in a String
@@ -334,7 +488,10 @@ namespace castor::string
 	 *\param[in]		replacement	Le String de remplacement
 	 *\return			Une référence sur la chaîne modifiée
 	 */
-	CU_API String & replace( String & str, xchar toFind, StringView replacement );
+	template< typename CharT >
+	std::basic_string< CharT > & replace( std::basic_string< CharT > & str
+		, CharT toFind
+		, std::basic_string_view< CharT > replacement );
 	/**
 	 *\~english
 	 *\brief			Replaces all occurences of a String in another one by a third one
@@ -349,7 +506,70 @@ namespace castor::string
 	 *\param[in]		replacement	Le String de remplacement
 	 *\return			Une référence sur la chaîne modifiée
 	 */
-	CU_API String & replace( String & str, StringView toFind, StringView replacement );
+	template< typename CharT >
+	std::basic_string< CharT > & replace( std::basic_string< CharT > & str
+		, std::basic_string< CharT > toFind
+		, std::basic_string< CharT > replacement );
+	/**
+	 *\~english
+	 *\brief			Replaces all occurences of a String in another one by a third one
+	 *\param[in,out]	str			The String to modify
+	 *\param[in]		toFind		The String to replace
+	 *\param[in]		replacement	The replacement String
+	 *\return			A reference on the modified string
+	 *\~french
+	 *\brief			Remplace toutes les occurences d'un String par un autre dans un troisième
+	 *\param[in,out]	str			Le String à modifier
+	 *\param[in]		toFind		Le String à remplacer
+	 *\param[in]		replacement	Le String de remplacement
+	 *\return			Une référence sur la chaîne modifiée
+	 */
+	template< typename CharT >
+	std::basic_string< CharT > & replace( std::basic_string< CharT > & str
+		, std::basic_string_view< CharT > toFind
+		, std::basic_string_view< CharT > replacement );
+	/**
+	 *\~english
+	 *\brief			Removes spaces on the left and/or on the right of the given String
+	 *\param[in,out]	str		The String to trim, receives the trimmed string
+	 *\param[in]		left	Tells if we remove the left spaces
+	 *\param[in]		right	Tells if we remove the right spaces
+	 *\param[in]		seps	The characters to trim
+	 *\return			The trimmed String
+	 *\~french
+	 *\brief			Supprime les espaces à gauche et/ou à droite dans la chaîne donnée
+	 *\param[in,out]	str		La chaîne à modifier, reçoit la chaîne modifiée
+	 *\param[in]		left	Dit si on enlève les espaces à gauche
+	 *\param[in]		right	Dit si on enlève les espaces à droite
+	 *\param[in]		seps	Les caractères à supprimer
+	 *\return			La chaîne sans espaces
+	 */
+	template< typename CharT >
+	std::basic_string< CharT > & trim( std::basic_string< CharT > & text
+		, bool left = true
+		, bool right = true
+		, std::basic_string_view< CharT > seps = details::trimDefaultArgs< CharT > );
+	/**
+	 *\~english
+	 *\brief			Removes spaces on the left and/or on the right of the given String
+	 *\param[in,out]	str		The String to trim, receives the trimmed string
+	 *\param[in]		left	Tells if we remove the left spaces
+	 *\param[in]		right	Tells if we remove the right spaces
+	 *\param[in]		seps	The characters to trim
+	 *\return			The trimmed String
+	 *\~french
+	 *\brief			Supprime les espaces à gauche et/ou à droite dans la chaîne donnée
+	 *\param[in,out]	str		La chaîne à modifier, reçoit la chaîne modifiée
+	 *\param[in]		left	Dit si on enlève les espaces à gauche
+	 *\param[in]		right	Dit si on enlève les espaces à droite
+	 *\param[in]		seps	Les caractères à supprimer
+	 *\return			La chaîne sans espaces
+	 */
+	template< typename CharT >
+	std::basic_string_view< CharT > & trim( std::basic_string_view< CharT > & text
+		, bool left = true
+		, bool right = true
+		, std::basic_string_view< CharT > seps = details::trimDefaultArgs< CharT > );
 	/**
 	 *\~english
 	 *\param[in]		lhs, rhs	The input strings.
@@ -358,42 +578,9 @@ namespace castor::string
 	 *\param[in]		lhs, rhs	Les chaînes d'entrée.
 	 *\return			La plus longue chaîne commune aux chaînes d'entrée.
 	 */
-	CU_API String getLongestCommonSubstring( String const & lhs
-		, String const & rhs );
-	/**
-	 *\~english
-	 *\brief			Removes spaces on the left and/or on the right of the given String
-	 *\param[in,out]	str		The String to trim, receives the trimmed string
-	 *\param[in]		left	Tells if we remove the left spaces
-	 *\param[in]		right	Tells if we remove the right spaces
-	 *\param[in]		seps	The characters to trim
-	 *\return			The trimmed String
-	 *\~french
-	 *\brief			Supprime les espaces à gauche et/ou à droite dans la chaîne donnée
-	 *\param[in,out]	str		La chaîne à modifier, reçoit la chaîne modifiée
-	 *\param[in]		left	Dit si on enlève les espaces à gauche
-	 *\param[in]		right	Dit si on enlève les espaces à droite
-	 *\param[in]		seps	Les caractères à supprimer
-	 *\return			La chaîne sans espaces
-	 */
-	CU_API String & trim( String & str, bool left = true, bool right = true, StringView seps = " \t\r" );
-	/**
-	 *\~english
-	 *\brief			Removes spaces on the left and/or on the right of the given String
-	 *\param[in,out]	str		The String to trim, receives the trimmed string
-	 *\param[in]		left	Tells if we remove the left spaces
-	 *\param[in]		right	Tells if we remove the right spaces
-	 *\param[in]		seps	The characters to trim
-	 *\return			The trimmed String
-	 *\~french
-	 *\brief			Supprime les espaces à gauche et/ou à droite dans la chaîne donnée
-	 *\param[in,out]	str		La chaîne à modifier, reçoit la chaîne modifiée
-	 *\param[in]		left	Dit si on enlève les espaces à gauche
-	 *\param[in]		right	Dit si on enlève les espaces à droite
-	 *\param[in]		seps	Les caractères à supprimer
-	 *\return			La chaîne sans espaces
-	 */
-	CU_API StringView & trim( StringView & str, bool left = true, bool right = true, StringView seps = " \t\r" );
+	template< typename CharT >
+	std::basic_string< CharT > getLongestCommonSubstring( std::basic_string< CharT > const & lhs
+		, std::basic_string< CharT > const & rhs );
 	/**
 	 *\~english
 	 *\brief		Puts a value into a String
@@ -419,7 +606,7 @@ namespace castor::string
 	 *\param[in]	locale	La locale utilisée dans la conversion
 	 *\return		Le String contenant la valeur
 	 */
-	CU_API String toString( uint8_t value, int base = 10, std::locale const & locale = std::locale( std::locale( "C" ), new manip::BaseNumPut< xchar >() ) );
+	CU_API String toString( uint8_t value, int base = 10, std::locale const & locale = std::locale( std::locale( "C" ), new manip::BaseNumPut< char >() ) );
 	/**
 	 *\~english
 	 *\brief		Puts a value into a String
@@ -434,7 +621,7 @@ namespace castor::string
 	 *\param[in]	locale	La locale utilisée dans la conversion
 	 *\return		Le String contenant la valeur
 	 */
-	CU_API String toString( int16_t value, int base = 10, std::locale const & locale = std::locale( std::locale( "C" ), new manip::BaseNumPut< xchar >() ) );
+	CU_API String toString( int16_t value, int base = 10, std::locale const & locale = std::locale( std::locale( "C" ), new manip::BaseNumPut< char >() ) );
 	/**
 	 *\~english
 	 *\brief		Puts a value into a String
@@ -449,7 +636,7 @@ namespace castor::string
 	 *\param[in]	locale	La locale utilisée dans la conversion
 	 *\return		Le String contenant la valeur
 	 */
-	CU_API String toString( uint16_t value, int base = 10, std::locale const & locale = std::locale( std::locale( "C" ), new manip::BaseNumPut< xchar >() ) );
+	CU_API String toString( uint16_t value, int base = 10, std::locale const & locale = std::locale( std::locale( "C" ), new manip::BaseNumPut< char >() ) );
 	/**
 	 *\~english
 	 *\brief		Puts a value into a String
@@ -464,7 +651,7 @@ namespace castor::string
 	 *\param[in]	locale	La locale utilisée dans la conversion
 	 *\return		Le String contenant la valeur
 	 */
-	CU_API String toString( int32_t value, int base = 10, std::locale const & locale = std::locale( std::locale( "C" ), new manip::BaseNumPut< xchar >() ) );
+	CU_API String toString( int32_t value, int base = 10, std::locale const & locale = std::locale( std::locale( "C" ), new manip::BaseNumPut< char >() ) );
 	/**
 	 *\~english
 	 *\brief		Puts a value into a String
@@ -479,7 +666,7 @@ namespace castor::string
 	 *\param[in]	locale	La locale utilisée dans la conversion
 	 *\return		Le String contenant la valeur
 	 */
-	CU_API String toString( uint32_t value, int base = 10, std::locale const & locale = std::locale( std::locale( "C" ), new manip::BaseNumPut< xchar >() ) );
+	CU_API String toString( uint32_t value, int base = 10, std::locale const & locale = std::locale( std::locale( "C" ), new manip::BaseNumPut< char >() ) );
 	/**
 	 *\~english
 	 *\brief		Puts a value into a String
@@ -494,7 +681,7 @@ namespace castor::string
 	 *\param[in]	locale	La locale utilisée dans la conversion
 	 *\return		Le String contenant la valeur
 	 */
-	CU_API String toString( int64_t value, int base = 10, std::locale const & locale = std::locale( std::locale( "C" ), new manip::BaseNumPut< xchar >() ) );
+	CU_API String toString( int64_t value, int base = 10, std::locale const & locale = std::locale( std::locale( "C" ), new manip::BaseNumPut< char >() ) );
 	/**
 	 *\~english
 	 *\brief		Puts a value into a String
@@ -509,16 +696,123 @@ namespace castor::string
 	 *\param[in]	locale	La locale utilisée dans la conversion
 	 *\return		Le String contenant la valeur
 	 */
-	CU_API String toString( uint64_t value, int base = 10, std::locale const & locale = std::locale( std::locale( "C" ), new manip::BaseNumPut< xchar >() ) );
+	CU_API String toString( uint64_t value, int base = 10, std::locale const & locale = std::locale( std::locale( "C" ), new manip::BaseNumPut< char >() ) );
 	/**
 	 *\~english
-	 *\param[in]	text	The castor::String
-	 *\return		The U32String.
+	 *\brief		Puts a value into a String
+	 *\param[in]	value	The value
+	 *\return		The String containing the value
 	 *\~french
-	 *\param[in]	text	Le castor::String
-	 *\return		Le U32String.
+	 *\brief		Met une valeur dans un String
+	 *\param[in]	value	La valeur
+	 *\return		Le String contenant la valeur
 	 */
-	CU_API U32String toU32String( String const & text );
+	CU_API MbString toMbString( char32_t value );
+	/**
+	 *\~english
+	 *\brief		Puts a value into a String
+	 *\param[in]	value	The value
+	 *\param[in]	base	The numeric base
+	 *\param[in]	locale	The locale used in the conversion
+	 *\return		The String containing the value
+	 *\~french
+	 *\brief		Met une valeur dans un String
+	 *\param[in]	value	La valeur
+	 *\param[in]	base	La base numérique
+	 *\param[in]	locale	La locale utilisée dans la conversion
+	 *\return		Le String contenant la valeur
+	 */
+	CU_API MbString toMbString( uint8_t value, int base = 10, std::locale const & locale = std::locale( std::locale( "C" ), new manip::BaseNumPut< char >() ) );
+	/**
+	 *\~english
+	 *\brief		Puts a value into a String
+	 *\param[in]	value	The value
+	 *\param[in]	base	The numeric base
+	 *\param[in]	locale	The locale used in the conversion
+	 *\return		The String containing the value
+	 *\~french
+	 *\brief		Met une valeur dans un String
+	 *\param[in]	value	La valeur
+	 *\param[in]	base	La base numérique
+	 *\param[in]	locale	La locale utilisée dans la conversion
+	 *\return		Le String contenant la valeur
+	 */
+	CU_API MbString toMbString( int16_t value, int base = 10, std::locale const & locale = std::locale( std::locale( "C" ), new manip::BaseNumPut< char >() ) );
+	/**
+	 *\~english
+	 *\brief		Puts a value into a String
+	 *\param[in]	value	The value
+	 *\param[in]	base	The numeric base
+	 *\param[in]	locale	The locale used in the conversion
+	 *\return		The String containing the value
+	 *\~french
+	 *\brief		Met une valeur dans un String
+	 *\param[in]	value	La valeur
+	 *\param[in]	base	La base numérique
+	 *\param[in]	locale	La locale utilisée dans la conversion
+	 *\return		Le String contenant la valeur
+	 */
+	CU_API MbString toMbString( uint16_t value, int base = 10, std::locale const & locale = std::locale( std::locale( "C" ), new manip::BaseNumPut< char >() ) );
+	/**
+	 *\~english
+	 *\brief		Puts a value into a String
+	 *\param[in]	value	The value
+	 *\param[in]	base	The numeric base
+	 *\param[in]	locale	The locale used in the conversion
+	 *\return		The String containing the value
+	 *\~french
+	 *\brief		Met une valeur dans un String
+	 *\param[in]	value	La valeur
+	 *\param[in]	base	La base numérique
+	 *\param[in]	locale	La locale utilisée dans la conversion
+	 *\return		Le String contenant la valeur
+	 */
+	CU_API MbString toMbString( int32_t value, int base = 10, std::locale const & locale = std::locale( std::locale( "C" ), new manip::BaseNumPut< char >() ) );
+	/**
+	 *\~english
+	 *\brief		Puts a value into a String
+	 *\param[in]	value	The value
+	 *\param[in]	base	The numeric base
+	 *\param[in]	locale	The locale used in the conversion
+	 *\return		The String containing the value
+	 *\~french
+	 *\brief		Met une valeur dans un String
+	 *\param[in]	value	La valeur
+	 *\param[in]	base	La base numérique
+	 *\param[in]	locale	La locale utilisée dans la conversion
+	 *\return		Le String contenant la valeur
+	 */
+	CU_API MbString toMbString( uint32_t value, int base = 10, std::locale const & locale = std::locale( std::locale( "C" ), new manip::BaseNumPut< char >() ) );
+	/**
+	 *\~english
+	 *\brief		Puts a value into a String
+	 *\param[in]	value	The value
+	 *\param[in]	base	The numeric base
+	 *\param[in]	locale	The locale used in the conversion
+	 *\return		The String containing the value
+	 *\~french
+	 *\brief		Met une valeur dans un String
+	 *\param[in]	value	La valeur
+	 *\param[in]	base	La base numérique
+	 *\param[in]	locale	La locale utilisée dans la conversion
+	 *\return		Le String contenant la valeur
+	 */
+	CU_API MbString toMbString( int64_t value, int base = 10, std::locale const & locale = std::locale( std::locale( "C" ), new manip::BaseNumPut< char >() ) );
+	/**
+	 *\~english
+	 *\brief		Puts a value into a String
+	 *\param[in]	value	The value
+	 *\param[in]	base	The numeric base
+	 *\param[in]	locale	The locale used in the conversion
+	 *\return		The String containing the value
+	 *\~french
+	 *\brief		Met une valeur dans un String
+	 *\param[in]	value	La valeur
+	 *\param[in]	base	La base numérique
+	 *\param[in]	locale	La locale utilisée dans la conversion
+	 *\return		Le String contenant la valeur
+	 */
+	CU_API MbString toMbString( uint64_t value, int base = 10, std::locale const & locale = std::locale( std::locale( "C" ), new manip::BaseNumPut< char >() ) );
 	/**
 	 *\~english
 	 *\param[in]	value	The value.
@@ -600,79 +894,32 @@ namespace castor::string
 	 *\return		Le String contenant la valeur
 	 */
 	template< typename T >
-	inline U32String toU32String( T const & value, std::locale const & locale = std::locale( std::locale( "C" ), new manip::BaseNumPut< xchar >() ) );
-	/**
-	 *\~english
-	 *\brief		Casts a string value in another string type
-	 *\param[in]	src	The source value
-	 *\return		The cast string
-	 *\~french
-	 *\brief		Convertit une chaîne dans un autre type de chaîne
-	 *\param[in]	src	La valeur source
-	 *\return		La chaîne convertie
-	 */
-	template< typename T, typename U >
-	std::basic_string< T > stringCast( std::basic_string< U > const & src );
-	/**
-	 *\~english
-	 *\brief		Casts a string value in another string type
-	 *\param[in]	src	The source value
-	 *\return		The cast string
-	 *\~french
-	 *\brief		Convertit une chaîne dans un autre type de chaîne
-	 *\param[in]	src	La valeur source
-	 *\return		La chaîne convertie
-	 */
-	template< typename T, typename U >
-	std::basic_string< T > stringCast( U const * src );
-	/**
-	 *\~english
-	 *\brief		Casts a string value in another string type.
-	 *\param[in]	begin	The source value.
-	 *\param[in]	end		The source end.
-	 *\return		The cast string.
-	 *\~french
-	 *\brief		Convertit une chaîne dans un autre type de chaîne.
-	 *\param[in]	begin	La valeur source.
-	 *\param[in]	end		La fin de la source.
-	 *\return		La chaîne convertie.
-	 */
-	template< typename T, typename U >
-	std::basic_string< T > stringCast( U const * begin, U const * end );
-	/**
-	 *\~english
-	 *\brief		Casts a string value in another string type
-	 *\param[in]	src	The source value
-	 *\return		The cast string
-	 *\~french
-	 *\brief		Convertit une chaîne dans un autre type de chaîne
-	 *\param[in]	src	La valeur source
-	 *\return		La chaîne convertie
-	 */
-	template< typename T, typename U >
-	std::basic_string< T > stringCast( std::initializer_list<  U > const & src );
+	inline MbString toMbString( T const & value, std::locale const & locale = std::locale( std::locale( "C" ), new manip::BaseNumPut< xchar >() ) );
 
 	namespace utf8
 	{
 		/**
 		 *\~english
 		 *\brief		Retrieves an UTF-8 char32_t from a char array iterator.
-		 *\param[in]	value	The char iterator.
+		 *\param[in]	first	The char iterator.
 		 *\return		The UTF-8 char32_t character.
 		 *\~french
 		 *\brief		Récupère un char32_t encodé en UTF-8 à partir d'un itérateur sur une chaîne.
-		 *\param[in]	value	L'itérateur sur la chaîne.
+		 *\param[in]	first	L'itérateur sur la chaîne.
 		 *\return		Le caractère char32_t en UTF-8.
 		 */
 		template< typename IteratorType >
-		inline char32_t toUtf8( IteratorType value );
+		inline char32_t toUtf8( IteratorType first, IteratorType end );
 
+		template< typename CharT, typename StringT >
 		class iterator
 		{
 		public:
+			using string_type = StringT;
+			using iterator_type = typename string_type::iterator;
 			using iterator_category = std::bidirectional_iterator_tag;
 			using value_type = char32_t;
-			using difference_type = std::string::difference_type;
+			using difference_type = typename string_type::difference_type;
 			using pointer = const char32_t *;
 			using reference = const char32_t &;
 
@@ -690,7 +937,7 @@ namespace castor::string
 			 *\brief		Constructeur.
 			 *\param[in]	it	L'itérateur sur la chaîne.
 			 */
-			explicit iterator( std::string::iterator const & it );
+			explicit iterator( iterator_type const & it );
 			/**
 			 *\~english
 			 *\brief		Assignment operator.
@@ -701,7 +948,7 @@ namespace castor::string
 			 *\param[in]	it	L'itérateur sur la chaîne originale.
 			 *\return		Une référence sur cet objet.
 			 */
-			iterator & operator=( std::string::iterator const & it );
+			iterator & operator=( iterator_type const & it );
 			/**
 			 *\~english
 			 *\brief		Assigment addition operator.
@@ -782,7 +1029,7 @@ namespace castor::string
 			 *\~french
 			 *\brief		Opérateur d'égalité.
 			 */
-			bool operator==( const std::string::iterator & it )const;
+			bool operator==( const iterator_type & it )const;
 			/**
 			 *\~english
 			 *\brief		Difference operator.
@@ -796,14 +1043,14 @@ namespace castor::string
 			 *\~french
 			 *\brief		Opérateur de différence.
 			 */
-			bool operator!=( const std::string::iterator & it )const;
+			bool operator!=( const iterator_type & it )const;
 			/**
 			 *\~english
 			 *\brief		Retrieves the internal iterator.
 			 *\~french
 			 *\brief		Récupère la'itérateur interne.
 			 */
-			std::string::iterator internal()const;
+			iterator_type internal()const;
 
 		private:
 			/**
@@ -816,7 +1063,7 @@ namespace castor::string
 
 		private:
 			//!\~english The internal iterator.
-			std::string::iterator m_it;
+			iterator_type m_it;
 			//!\~english The last computed codepoint.
 			mutable char32_t m_lastCodePoint;
 			//!\~english Tells the codepoint needs recomputing.
@@ -834,7 +1081,8 @@ namespace castor::string
 		 *\param[in]	offset	The offset to add.
 		 *\return		A reference to this object.
 		 */
-		inline iterator operator+( iterator it, size_t offset );
+		template< typename CharT, typename StringT >
+		inline iterator< CharT, StringT > operator+( iterator< CharT, StringT > it, size_t offset );
 		/**
 		 *\~english
 		 *\brief		Subtraction operator.
@@ -847,14 +1095,42 @@ namespace castor::string
 		 *\param[in]	offset	The offset to subtract.
 		 *\return		A reference to this object.
 		 */
-		inline iterator operator-( iterator it, size_t offset );
+		template< typename CharT, typename StringT >
+		inline iterator< CharT, StringT > operator-( iterator< CharT, StringT > it, size_t offset );
 
+		template< typename CharT >
+		inline iterator< CharT, std::basic_string< CharT > > begin( std::basic_string< CharT > const & str )
+		{
+			return iterator< CharT, std::basic_string< CharT > >{ str.begin() };
+		}
+
+		template< typename CharT >
+		inline iterator< CharT, std::basic_string_view< CharT > > begin( std::basic_string_view< CharT > const & str )
+		{
+			return iterator< CharT, std::basic_string_view< CharT > >{ str.begin() };
+		}
+
+		template< typename CharT >
+		inline iterator< CharT, std::basic_string< CharT > > end( std::basic_string< CharT > const & str )
+		{
+			return iterator< CharT, std::basic_string< CharT > >{ str.end() };
+		}
+
+		template< typename CharT >
+		inline iterator< CharT, std::basic_string_view< CharT > > end( std::basic_string_view< CharT > const & str )
+		{
+			return iterator< CharT, std::basic_string_view< CharT > >{ str.end() };
+		}
+
+		template< typename CharT, typename StringT >
 		class const_iterator
 		{
 		public:
+			using string_type = StringT;
+			using iterator_type = typename string_type::const_iterator;
 			using iterator_category = std::bidirectional_iterator_tag;
 			using value_type = char32_t;
-			using difference_type = std::string::difference_type;
+			using difference_type = String::difference_type;
 			using pointer = const char32_t *;
 			using reference = const char32_t &;
 
@@ -872,7 +1148,7 @@ namespace castor::string
 			 *\brief		Constructeur.
 			 *\param[in]	it	L'itérateur sur la chaîne.
 			 */
-			explicit const_iterator( std::string::const_iterator const & it );
+			explicit const_iterator( iterator_type const & it );
 			/**
 			 *\~english
 			 *\brief		Assignment operator.
@@ -883,7 +1159,7 @@ namespace castor::string
 			 *\param[in]	it	L'itérateur sur la chaîne originale.
 			*\return		Une référence sur cet objet.
 			 */
-			const_iterator & operator=( std::string::const_iterator const & it );
+			const_iterator & operator=( iterator_type const & it );
 			/**
 			 *\~english
 			 *\brief		Assigment addition operator.
@@ -964,7 +1240,7 @@ namespace castor::string
 			 *\~french
 			 *\brief		Opérateur d'égalité.
 			 */
-			bool operator==( const std::string::const_iterator & it )const;
+			bool operator==( const iterator_type & it )const;
 			/**
 			 *\~english
 			 *\brief		Difference operator.
@@ -978,14 +1254,14 @@ namespace castor::string
 			 *\~french
 			 *\brief		Opérateur de différence.
 			 */
-			bool operator!=( const std::string::const_iterator & it )const;
+			bool operator!=( const iterator_type & it )const;
 			/**
 			 *\~english
 			 *\brief		Retrieves the internal iterator.
 			 *\~french
 			 *\brief		Récupère la'itérateur interne.
 			 */
-			std::string::const_iterator internal()const;
+			iterator_type internal()const;
 
 		private:
 			/**
@@ -998,7 +1274,7 @@ namespace castor::string
 
 		private:
 			//!\~english The internal iterator.
-			std::string::const_iterator m_it;
+			iterator_type m_it;
 			//!\~english The last computed codepoint.
 			mutable char32_t m_lastCodePoint;
 			//!\~english Tells the codepoint needs recomputing.
@@ -1016,7 +1292,8 @@ namespace castor::string
 		 *\param[in]	offset	The offset to add.
 		 *\return		A reference to this object.
 		 */
-		inline const_iterator operator+( const_iterator it, size_t offset );
+		template< typename CharT, typename StringT >
+		inline const_iterator< CharT, StringT > operator+( const_iterator< CharT, StringT > it, size_t offset );
 		/**
 		 *\~english
 		 *\brief		Subtraction operator.
@@ -1029,7 +1306,32 @@ namespace castor::string
 		 *\param[in]	offset	The offset to subtract.
 		 *\return		A reference to this object.
 		 */
-		inline const_iterator operator-( const_iterator it, size_t offset );
+		template< typename CharT, typename StringT >
+		inline const_iterator< CharT, StringT > operator-( const_iterator< CharT, StringT > it, size_t offset );
+
+		template< typename CharT >
+		inline const_iterator< CharT, std::basic_string< CharT > > cbegin( std::basic_string< CharT > const & str )
+		{
+			return const_iterator< CharT, std::basic_string< CharT > >{ str.begin() };
+		}
+
+		template< typename CharT >
+		inline const_iterator< CharT, std::basic_string_view< CharT > > cbegin( std::basic_string_view< CharT > const & str )
+		{
+			return const_iterator< CharT, std::basic_string_view< CharT > >{ str.begin() };
+		}
+
+		template< typename CharT >
+		inline const_iterator< CharT, std::basic_string< CharT > > cend( std::basic_string< CharT > const & str )
+		{
+			return const_iterator< CharT, std::basic_string< CharT > >{ str.end() };
+		}
+
+		template< typename CharT >
+		inline const_iterator< CharT, std::basic_string_view< CharT > > cend( std::basic_string_view< CharT > const & str )
+		{
+			return const_iterator< CharT, std::basic_string_view< CharT > >{ str.end() };
+		}
 	}
 }
 

@@ -32,12 +32,19 @@ namespace castor3d
 
 	struct ExtensionStruct
 	{
-		std::string extName;
+		ExtensionStruct( castor::MbString extName
+			, VkStructure * extStruct )
+			: extName{ castor::move( extName ) }
+			, extStruct{ extStruct }
+		{
+		}
+
+		castor::MbString extName;
 		VkStructure * extStruct;
 	};
 
-	using FeatureArray = std::vector< ExtensionStruct >;
-	using PropertyArray = std::vector< ExtensionStruct >;
+	using FeatureArray = castor::Vector< ExtensionStruct >;
+	using PropertyArray = castor::Vector< ExtensionStruct >;
 
 	struct Extensions
 	{
@@ -50,7 +57,7 @@ namespace castor3d
 		*\brief
 		*	Ajoute une extension.
 		*/
-		C3D_API void addExtension( std::string const & extName );
+		C3D_API void addExtension( castor::MbString const & extName );
 		/**
 		*\~english
 		*\brief
@@ -59,7 +66,7 @@ namespace castor3d
 		*\brief
 		*	Ajoute une extension, et sa feature structure optionnelle, qui sera remplie via le physical device.
 		*/
-		C3D_API void addExtension( std::string const & extName
+		C3D_API void addExtension( castor::MbString const & extName
 			, VkStructure * featureStruct
 			, VkStructure * propertyStruct = nullptr );
 		/**
@@ -71,7 +78,7 @@ namespace castor3d
 		*	Ajoute une feature structure, qui sera remplie via le physical device.
 		*/
 		template< typename StructT >
-		void addFeature( std::string const & extName
+		void addFeature( castor::MbString const & extName
 			, StructT * featureStruct )
 		{
 			if ( featureStruct )
@@ -91,7 +98,7 @@ namespace castor3d
 		template< typename StructT >
 		void addFeature( StructT * featureStruct )
 		{
-			addFeature( std::string{}, featureStruct );
+			addFeature( castor::MbString{}, featureStruct );
 		}
 		/**
 		*\~english
@@ -102,7 +109,7 @@ namespace castor3d
 		*	Ajoute une feature structure, qui sera remplie via le physical device.
 		*/
 		template< typename StructT >
-		void addProperty( std::string const & extName
+		void addProperty( castor::MbString const & extName
 			, StructT * propStruct )
 		{
 			if ( propStruct )
@@ -122,7 +129,7 @@ namespace castor3d
 		template< typename StructT >
 		void addProperty( StructT * propStruct )
 		{
-			addProperty( std::string{}, propStruct );
+			addProperty( castor::MbString{}, propStruct );
 		}
 
 		ashes::StringArray const & getExtensionsNames()const noexcept
@@ -182,7 +189,7 @@ namespace castor3d
 		ashes::QueuePtr queue;
 		ashes::CommandPoolPtr commandPool;
 	};
-	using QueueDataPtr = std::unique_ptr< QueueData >;
+	using QueueDataPtr = castor::RawUniquePtr< QueueData >;
 
 	struct QueueDataWrapper
 	{
@@ -268,17 +275,17 @@ namespace castor3d
 			QueueData const * data{};
 			uint32_t count{};
 #ifndef NDEBUG
-			std::string callstack{};
+			castor::String callstack{};
 #endif
 		};
 
-		std::vector< QueueDataPtr > m_allQueuesData;
+		castor::Vector< QueueDataPtr > m_allQueuesData;
 
-		mutable std::mutex m_mutex;
-		mutable std::vector< QueueData const * > m_remainingQueuesData;
-		std::map< std::thread::id, QueueThreadData > m_busyQueues;
+		mutable castor::Mutex m_mutex;
+		mutable castor::Vector< QueueData const * > m_remainingQueuesData;
+		castor::Map< std::thread::id, QueueThreadData > m_busyQueues;
 	};
-	using QueueFamilies = std::vector< QueuesData >;
+	using QueueFamilies = castor::Vector< QueuesData >;
 
 	struct RenderDevice
 	{
@@ -295,7 +302,7 @@ namespace castor3d
 		C3D_API VkFormat selectSmallestFormatRGSFloatFormat( VkFormatFeatureFlags requiredFeatures )const;
 		C3D_API VkFormat selectSmallestFormatRGBUFloatFormat( VkFormatFeatureFlags requiredFeatures )const;
 		C3D_API VkFormat selectSmallestFormatRGBSFloatFormat( VkFormatFeatureFlags requiredFeatures )const;
-		C3D_API VkFormat selectSuitableFormat( std::vector< VkFormat > const & formats
+		C3D_API VkFormat selectSuitableFormat( castor::Vector< VkFormat > const & formats
 			, VkFormatFeatureFlags requiredFeatures )const;
 		C3D_API QueueDataWrapper graphicsData()const noexcept;
 		C3D_API size_t graphicsQueueSize()const noexcept;
@@ -303,7 +310,7 @@ namespace castor3d
 		C3D_API void unreserveGraphicsData( QueueData const * queueData )const noexcept;
 		C3D_API void putGraphicsData( QueueData const * queueData )const noexcept;
 		C3D_API crg::GraphContext & makeContext()const noexcept;
-		C3D_API bool hasExtension( std::string_view const & name )const noexcept;
+		C3D_API bool hasExtension( castor::MbStringView name )const noexcept;
 		C3D_API bool hasTerminateInvocation()const noexcept;
 		C3D_API bool hasDemoteToHelperInvocation()const noexcept;
 		C3D_API bool hasMeshAndTaskShaders()const noexcept;
@@ -400,7 +407,7 @@ namespace castor3d
 		UniformBufferPoolUPtr uboPool;
 
 	private:
-		bool doTryAddExtension( std::string const & name
+		bool doTryAddExtension( castor::MbString const & name
 			, void * pFeature = nullptr
 			, void * pProperty = nullptr );
 
@@ -483,17 +490,21 @@ namespace castor3d
 			, {} };
 #endif
 #if VK_NV_mesh_shader
+#if C3D_UseMeshShaders
 		VkPhysicalDeviceMeshShaderFeaturesNV m_meshShaderFeaturesNV{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MESH_SHADER_FEATURES_NV
 			, nullptr
 			, {} };
+#endif
 		VkPhysicalDeviceMeshShaderPropertiesNV m_meshShaderPropertiesNV{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MESH_SHADER_PROPERTIES_NV
 			, nullptr
 			, {} };
 #endif
 #if VK_EXT_mesh_shader
+#if C3D_UseMeshShaders
 		VkPhysicalDeviceMeshShaderFeaturesEXT m_meshShaderFeaturesEXT{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MESH_SHADER_FEATURES_EXT
 			, nullptr
 			, {} };
+#endif
 		VkPhysicalDeviceMeshShaderPropertiesEXT m_meshShaderPropertiesEXT{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MESH_SHADER_PROPERTIES_EXT
 			, nullptr
 			, {} };
@@ -524,9 +535,9 @@ namespace castor3d
 		bool m_hasFeatures12{};
 		bool m_hasFeatures13{};
 
-		using GraphContextPtr = std::unique_ptr< crg::GraphContext >;
-		using ThreadGraphContexts = std::map< std::thread::id, GraphContextPtr >;
-		mutable std::mutex m_mutex;
+		using GraphContextPtr = castor::RawUniquePtr< crg::GraphContext >;
+		using ThreadGraphContexts = castor::Map< std::thread::id, GraphContextPtr >;
+		mutable castor::Mutex m_mutex;
 		mutable ThreadGraphContexts m_contexts;
 	};
 }

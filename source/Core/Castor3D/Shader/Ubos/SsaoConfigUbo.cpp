@@ -42,7 +42,7 @@ namespace castor3d
 		SsaoConfigData::SsaoConfigData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstance{ writer, std::move( expr ), enabled }
+			: StructInstance{ writer, castor::move( expr ), enabled }
 			, projInfo{ getMember< sdw::Vec4 >( "projInfo" ) }
 			, numSamples{ getMember< sdw::Int >( "numSamples" ) }
 			, numSpiralTurns{ getMember< sdw::Int >( "numSpiralTurns" ) }
@@ -104,9 +104,9 @@ namespace castor3d
 			return result;
 		}
 
-		std::unique_ptr< sdw::Struct > SsaoConfigData::declare( sdw::ShaderWriter & writer )
+		castor::RawUniquePtr< sdw::Struct > SsaoConfigData::declare( sdw::ShaderWriter & writer )
 		{
-			return std::make_unique< sdw::Struct >( writer
+			return castor::make_unique< sdw::Struct >( writer
 				, makeType( writer.getTypesCache() ) );
 		}
 	}

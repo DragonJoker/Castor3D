@@ -108,7 +108,7 @@ namespace castor3d
 		{
 			if ( auto title = m_title )
 			{
-				title->setCaption( std::move( value ) );
+				title->setCaption( castor::move( value ) );
 			}
 		}
 	}
@@ -125,7 +125,7 @@ namespace castor3d
 		doUpdateProgress();
 	}
 
-	void ProgressCtrl::setContainerBorderSize( castor::Point4ui value )
+	void ProgressCtrl::setContainerBorderSize( castor::Point4ui const & value )
 	{
 		if ( m_container )
 		{
@@ -133,7 +133,7 @@ namespace castor3d
 		}
 	}
 
-	void ProgressCtrl::setBarBorderSize( castor::Point4ui value )
+	void ProgressCtrl::setBarBorderSize( castor::Point4ui const & value )
 	{
 		if ( m_progress )
 		{

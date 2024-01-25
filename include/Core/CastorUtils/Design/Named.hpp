@@ -21,7 +21,7 @@ namespace castor
 		 *\param[in]	name	Le nom
 		 */
 		explicit NamedBaseT( T name )noexcept
-			: m_name{ std::move( name ) }
+			: m_name{ castor::move( name ) }
 		{
 		}
 		/**
@@ -39,7 +39,7 @@ namespace castor
 
 		void rename( T name )noexcept
 		{
-			m_name = std::move( name );
+			m_name = castor::move( name );
 		}
 
 	protected:

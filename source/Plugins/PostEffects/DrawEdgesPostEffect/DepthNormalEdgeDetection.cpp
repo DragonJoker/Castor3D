@@ -204,7 +204,7 @@ namespace draw_edges
 		, m_extent{ castor3d::getSafeBandedExtent3D( renderTarget.getSize() ) }
 		, m_result{ m_device
 			, renderTarget.getResources()
-			, "DNEdges"
+			, cuT( "DNEdges" )
 			, 0u
 			, m_extent
 			, 1u
@@ -213,7 +213,7 @@ namespace draw_edges
 			, ( VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) }
-		, m_shader{ "DNEdgesDetection", dned::getProgram( device, m_extent ) }
+		, m_shader{ cuT( "DNEdgesDetection" ), dned::getProgram( device, m_extent ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
 		, m_pass{ m_graph.createPass( "EdgesDetection"
 			, [this, &device, enabled]( crg::FramePass const & framePass
@@ -233,7 +233,7 @@ namespace draw_edges
 					.depthStencilState( dsState )
 					.enabled( enabled )
 					.build( framePass, context, graph );
-				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} ) }
@@ -263,7 +263,7 @@ namespace draw_edges
 	void DepthNormalEdgeDetection::accept( castor3d::ConfigurationVisitorBase & visitor )
 	{
 		visitor.visit( m_shader );
-		visitor.visit( "Depth Normal Edge Detection Result"
+		visitor.visit( cuT( "Depth Normal Edge Detection Result" )
 			, m_result
 			, m_graph.getFinalLayoutState( m_result.sampledViewId ).layout
 			, castor3d::TextureFactors{}.invert( true ) );

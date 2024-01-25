@@ -110,8 +110,8 @@ namespace castor3d
 		, shader::BlendComponents & components
 		, shader::SampleTexture const & sampleTexture )const
 	{
-		std::string valueName = "clearcoatNormal";
-		std::string mapName = "clearcoatNormal";
+		castor::MbString valueName = "clearcoatNormal";
+		castor::MbString mapName = "clearcoatNormal";
 		auto textureName = mapName + "MapAndMask";
 
 		if ( !material.hasMember( textureName )
@@ -144,7 +144,7 @@ namespace castor3d
 	void ClearcoatNormalMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		channelFillers.try_emplace( "clearcoat_normal"
+		channelFillers.try_emplace( cuT( "clearcoat_normal" )
 			, getTextureFlags()
 			, []( TextureContext & blockContext )
 			{
@@ -185,7 +185,7 @@ namespace castor3d
 	}
 
 	void ClearcoatNormalMapComponent::Plugin::createMapComponent( Pass & pass
-		, std::vector< PassComponentUPtr > & result )const
+		, castor::Vector< PassComponentUPtr > & result )const
 	{
 		result.push_back( castor::makeUniqueDerived< PassComponent, ClearcoatNormalMapComponent >( pass ) );
 	}

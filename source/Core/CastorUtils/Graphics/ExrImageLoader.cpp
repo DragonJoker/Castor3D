@@ -31,9 +31,9 @@ namespace castor
 
 			if ( error )
 			{
-				auto msg = string::stringCast< xchar >( error );
+				MbString msg = error;
 				FreeEXRErrorMessage( error );
-				CU_LoaderError( String( cuT( "Can't load image:\n" ) ) + msg );
+				CU_LoaderError( "Can't load image:\n" + msg );
 			}
 
 			using ByteCPtr = uint8_t const *;
@@ -63,7 +63,7 @@ namespace castor
 	void ExrImageLoader::registerLoader( ImageLoader & reg )
 	{
 		reg.registerLoader( exrl::listExtensions()
-			, std::make_unique< ExrImageLoader >() );
+			, castor::make_unique< ExrImageLoader >() );
 	}
 
 	void ExrImageLoader::unregisterLoader( ImageLoader & reg )

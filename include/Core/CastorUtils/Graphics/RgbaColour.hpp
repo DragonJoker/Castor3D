@@ -40,7 +40,7 @@ namespace castor
 	{
 	private:
 		CU_DeclareArray( float, RgbaComponent::eCount, Float4 );
-		using ColourComponentArray = std::array< ComponentType, size_t( RgbaComponent::eCount ) >;
+		using ColourComponentArray = Array< ComponentType, size_t( RgbaComponent::eCount ) >;
 		using ColourComponentArrayIt = typename ColourComponentArray::iterator;
 		using ColourComponentArrayRIt = typename ColourComponentArray::reverse_iterator;
 		using ColourComponentArrayConstIt = typename ColourComponentArray::const_iterator;

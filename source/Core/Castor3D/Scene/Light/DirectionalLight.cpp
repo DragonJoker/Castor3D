@@ -24,13 +24,13 @@ namespace castor3d
 
 	namespace lgtdirectional
 	{
-		static std::vector< DirectionalLight::Cascade > doComputeCascades( Camera const & camera
+		static castor::Vector< DirectionalLight::Cascade > doComputeCascades( Camera const & camera
 			, DirectionalLight const & light
 			, uint32_t cascades )
 		{
 			auto const & scene = *light.getLight().getScene();
 			auto const & renderSystem = *scene.getEngine()->getRenderSystem();
-			std::vector< DirectionalLight::Cascade > result( cascades );
+			castor::Vector< DirectionalLight::Cascade > result( cascades );
 			castor::Point3f lightDirection = light.getDirection();
 
 			castor::Point3f up{ 0.0f, 1.0f, 0.0f };
@@ -51,7 +51,7 @@ namespace castor3d
 
 			// Calculate split depths based on view camera frustum
 			// Based on method presented in https://developer.nvidia.com/gpugems/GPUGems3/gpugems3_ch10.html
-			std::vector< float > cascadeSplits( cascades, 0.0f );
+			castor::Vector< float > cascadeSplits( cascades, 0.0f );
 			float constexpr lambda = 0.95f;
 
 			for ( uint32_t i = 0; i < cascades; i++ )
@@ -63,7 +63,7 @@ namespace castor3d
 				cascadeSplits[i] = ( d - nearClip ) / clipRange;
 			}
 
-			std::array< castor::Point3f, 8u > frustumCorners
+			castor::Array< castor::Point3f, 8u > frustumCorners
 			{
 				castor::Point3f( -1.0f, +1.0f, -1.0f ),
 				castor::Point3f( +1.0f, +1.0f, -1.0f ),

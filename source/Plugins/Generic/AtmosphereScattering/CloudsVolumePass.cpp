@@ -257,12 +257,12 @@ namespace atmosphere_scattering
 		, crg::ImageViewId const & sunResult
 		, crg::ImageViewId const & cloudsResult
 		, uint32_t index )
-		: castor::Named{ "Clouds/VolumePass" + castor::string::toString( index ) }
+		: castor::Named{ cuT( "Clouds/VolumePass" ) + castor::string::toString( index ) }
 		, m_shader{ getName(), volclouds::getProgram( *device.renderSystem.getEngine(), getExtent( skyResult ), getExtent( transmittance ), depthObj != nullptr ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
 	{
 		auto renderSize = getExtent( skyResult );
-		auto & pass = graph.createPass( getName()
+		auto & pass = graph.createPass( castor::toUtf8( getName() )
 			, [this, &device, renderSize]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
@@ -271,7 +271,7 @@ namespace atmosphere_scattering
 
 				if constexpr ( volclouds::useCompute )
 				{
-					result = std::make_unique< crg::ComputePass >( framePass
+					result = castor::make_unique< crg::ComputePass >( framePass
 						, context
 						, graph
 						, crg::ru::Config{}
@@ -288,7 +288,7 @@ namespace atmosphere_scattering
 						.build( framePass, context, graph );
 				}
 
-				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );

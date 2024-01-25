@@ -11,7 +11,7 @@ namespace castor3d
 {
 	namespace lgtmdlfct
 	{
-		static const castor::String TOO_MANY_OBJECTS = cuT( "Too many lighting models declared" );
+		static const castor::MbString TOO_MANY_OBJECTS = "Too many lighting models declared";
 	}
 
 	LightingModelID LightingModelFactory::registerType( Key const & key
@@ -42,7 +42,7 @@ namespace castor3d
 
 		auto & entry = m_registered.emplace_back();
 		entry.name = key;
-		entry.create = std::move( create );
+		entry.create = castor::move( create );
 		entry.lightingModelId = lightingModelId;
 		entry.backgroundModelId = backgroundModelId;
 		return lightingModelId;
@@ -110,9 +110,9 @@ namespace castor3d
 		: it->name;
 	}
 
-	std::vector< LightingModelID > LightingModelFactory::getLightingModelsID()const
+	castor::Vector< LightingModelID > LightingModelFactory::getLightingModelsID()const
 	{
-		std::unordered_set< LightingModelID > result;
+		castor::UnorderedSet< LightingModelID > result;
 
 		for ( auto & entry : m_registered )
 		{
@@ -122,9 +122,9 @@ namespace castor3d
 		return { result.begin(), result.end() };
 	}
 
-	std::vector< LightingModelID > LightingModelFactory::getLightingModelsID( BackgroundModelID backgroundModelId )const
+	castor::Vector< LightingModelID > LightingModelFactory::getLightingModelsID( BackgroundModelID backgroundModelId )const
 	{
-		std::vector< LightingModelID > result;
+		castor::Vector< LightingModelID > result;
 
 		for ( auto & entry : m_registered )
 		{
@@ -139,11 +139,11 @@ namespace castor3d
 
 	castor::String LightingModelFactory::normaliseName( castor::String name )
 	{
-		if ( name == "blinn_phong" || name == "phong" )
+		if ( name == cuT( "blinn_phong" ) || name == cuT( "phong" ) )
 		{
 			name = castor3d::PhongPass::LightingModel;
 		}
-		else if ( name == "pbr" )
+		else if ( name == cuT( "pbr" ) )
 		{
 			name = castor3d::PbrPass::LightingModel;
 		}

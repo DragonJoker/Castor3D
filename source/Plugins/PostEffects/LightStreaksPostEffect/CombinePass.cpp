@@ -58,8 +58,8 @@ namespace light_streaks
 
 	//*********************************************************************************************
 
-	castor::String const CombinePass::CombineMapScene = cuT( "c3d_mapScene" );
-	castor::String const CombinePass::CombineMapKawase = cuT( "c3d_mapKawase" );
+	castor::MbString const CombinePass::CombineMapScene = "c3d_mapScene";
+	castor::MbString const CombinePass::CombineMapKawase = "c3d_mapKawase";
 
 	CombinePass::CombinePass( crg::FramePassGroup & graph
 		, crg::FramePassArray const & previousPasses
@@ -70,7 +70,7 @@ namespace light_streaks
 		, VkExtent2D const & size
 		, bool const * enabled
 		, uint32_t const * passIndex )
-		: m_shader{ "LightStreaksCombine", combine::getProgram( device ) }
+		: m_shader{ cuT( "LightStreaksCombine" ), combine::getProgram( device ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
 		, m_pass{ graph.createPass( "Combine"
 			, [this, &device, size, enabled, passIndex]( crg::FramePass const & framePass
@@ -88,7 +88,7 @@ namespace light_streaks
 						, context
 						, graph
 						, crg::ru::Config{ 2u } );
-				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} ) }

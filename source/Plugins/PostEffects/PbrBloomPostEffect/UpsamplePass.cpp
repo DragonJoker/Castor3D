@@ -99,7 +99,7 @@ namespace PbrBloom
 		, uint32_t passesCount
 		, bool const * enabled )
 		: m_graph{ graph }
-		, m_shader{ "PbrBloomUpsample", up::getProgram( device ) }
+		, m_shader{ cuT( "PbrBloomUpsample" ), up::getProgram( device ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
 		, m_resultViews{ doCreateResultViews( graph, image, passesCount ) }
 		, m_passes{ doCreatePasses( graph, previousPass, device, ubo, passesCount, enabled ) }
@@ -113,7 +113,7 @@ namespace PbrBloom
 
 		for ( auto & view : m_resultViews )
 		{
-			visitor.visit( "PostFX: PBRB - Up " + std::to_string( view.data->info.subresourceRange.baseMipLevel )
+			visitor.visit( cuT( "PostFX: PBRB - Up " ) + castor::string::toString( view.data->info.subresourceRange.baseMipLevel )
 				, view
 				, m_graph.getFinalLayoutState( view ).layout
 				, castor3d::TextureFactors{}.invert( true ) );
@@ -128,7 +128,7 @@ namespace PbrBloom
 
 		for ( uint32_t i = 0u; i < passesCount; ++i )
 		{
-			result.push_back( graph.createView( crg::ImageViewData{ resultImg.data->name + castor::string::toString( i )
+			result.push_back( graph.createView( crg::ImageViewData{ resultImg.data->name + castor::string::toMbString( i )
 				, resultImg
 				, 0u
 				, VK_IMAGE_VIEW_TYPE_2D
@@ -139,21 +139,21 @@ namespace PbrBloom
 		return result;
 	}
 
-	std::vector< crg::FramePass * > UpsamplePass::doCreatePasses( crg::FramePassGroup & graph
+	castor::Vector< crg::FramePass * > UpsamplePass::doCreatePasses( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
 		, castor3d::RenderDevice const & device
 		, castor3d::UniformBufferOffsetT< castor::Point2f > const & ubo
 		, uint32_t passesCount
 		, bool const * enabled )
 	{
-		std::vector< crg::FramePass * > result;
+		castor::Vector< crg::FramePass * > result;
 		auto prev = &previousPass;
 		auto src = &m_resultViews.back();
 
 		for ( auto i = int32_t( passesCount - 2u ); i >= 0; --i )
 		{
 			auto dstExtent = castor3d::makeExtent2D( getMipExtent( m_resultViews[uint32_t( i )] ) );
-			auto & pass = graph.createPass( "Upsample" + std::to_string( i )
+			auto & pass = graph.createPass( "Upsample" + castor::string::toMbString( i )
 				, [this, &device, enabled, dstExtent]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
@@ -164,7 +164,7 @@ namespace PbrBloom
 						.renderSize( dstExtent )
 						.texcoordConfig( {} )
 						.build( framePass, context, graph, crg::ru::Config{} );
-					device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+					device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 						, result->getTimer() );
 					return result;
 				} );
@@ -182,7 +182,7 @@ namespace PbrBloom
 					, float( i )
 					, float( i + 1u ) } );
 			ubo.createPassBinding( pass
-				, std::string{ "PbrBloomUbo" }
+				, "PbrBloomUbo"
 				, 1u );
 			pass.addOutputColourView( m_resultViews[uint32_t( i )] );
 			result.push_back( &pass );

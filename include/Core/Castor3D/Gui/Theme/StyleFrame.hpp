@@ -25,8 +25,8 @@ namespace castor3d
 				, name
 				, scene
 				, engine }
-			, m_headerStyle{ name + "/Header", scene, engine, fontName }
-			, m_contentStyle{ name + "/Content", scene, engine }
+			, m_headerStyle{ name + cuT( "/Header" ), scene, engine, fontName }
+			, m_contentStyle{ name + cuT( "/Content" ), scene, engine }
 		{
 			m_headerStyle.setBackgroundInvisible( true );
 			m_contentStyle.setBackgroundInvisible( true );

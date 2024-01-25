@@ -27,7 +27,7 @@ namespace castor3d
 		: public RenderedObject
 	{
 	public:
-		using IdRenderNode = std::pair< uint32_t, BillboardRenderNode const * >;
+		using IdRenderNode = castor::Pair< uint32_t, BillboardRenderNode const * >;
 
 	public:
 		/**
@@ -218,7 +218,7 @@ namespace castor3d
 			return m_billboardSize;
 		}
 
-		std::unordered_map< Pass const *, IdRenderNode > const & getIds()const
+		castor::UnorderedMap< Pass const *, IdRenderNode > const & getIds()const
 		{
 			return m_ids;
 		}
@@ -268,11 +268,11 @@ namespace castor3d
 
 	private:
 		void doGatherBuffers( ashes::BufferCRefArray & buffers
-			, std::vector< uint64_t > & offsets
+			, castor::Vector< uint64_t > & offsets
 			, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts );
 
 	public:
-		using Quad = std::array< BillboardVertex, 4u >;
+		using Quad = castor::Array< BillboardVertex, 4u >;
 
 	protected:
 		Scene & m_scene;
@@ -293,7 +293,7 @@ namespace castor3d
 		uint32_t m_centerOffset{ 0u };
 		BillboardType m_billboardType{ BillboardType::eCylindrical };
 		BillboardSize m_billboardSize{ BillboardSize::eDynamic };
-		std::unordered_map< Pass const *, IdRenderNode > m_ids{};
+		castor::UnorderedMap< Pass const *, IdRenderNode > m_ids{};
 		SubmeshComponentCombine m_proxyCombine;
 	};
 

@@ -11,9 +11,6 @@ See LICENSE file in root folder
 namespace castor
 {
 	/**
-	\author		Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		03/01/2011
 	\~english
 	\brief		Resource loading exception
 	\remark		Thrown if the resource loader has encountered an error
@@ -22,10 +19,10 @@ namespace castor
 	\remark		Lancée si un Loader rencontre un erreur
 	*/
 	class LoaderException
-		: public castor::Exception
+		: public Exception
 	{
 	public:
-		using castor::Exception::Exception;
+		using Exception::Exception;
 	};
 }
 //!\~english	Helper macro to use LoaderException.

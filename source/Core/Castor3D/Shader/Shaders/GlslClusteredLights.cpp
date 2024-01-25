@@ -22,21 +22,21 @@ namespace castor3d::shader
 	{
 		static bool constexpr C3D_UseWaveIntrinsics = false;
 
-		void printDebug( sdw::ShaderWriter & writer
+		static void printDebug( sdw::ShaderWriter & writer
 			, ClustersData const & clusterData
 			, DebugOutput & debugOutput
 			, sdw::UVec3 const & clusterIndex3D
 			, sdw::UInt const & pointLightCount
 			, sdw::UInt const & spotLightCount )
 		{
-			debugOutput.registerOutput( "Clustered"
-				, "PointErrors"
+			debugOutput.registerOutput( cuT( "Clustered" )
+				, cuT( "PointErrors" )
 				, vec3( writer.ternary( pointLightCount > MaxLightsPerCluster, 1.0_f, 0.0_f ), 0.0_f, 0.0_f ) );
-			debugOutput.registerOutput( "Clustered"
-				, "SpotErrors"
+			debugOutput.registerOutput( cuT( "Clustered" )
+				, cuT( "SpotErrors" )
 				, vec3( writer.ternary( spotLightCount > MaxLightsPerCluster, 1.0_f, 0.0_f ), 0.0_f, 0.0_f ) );
-			debugOutput.registerOutput( "Clustered"
-				, "ClusterIndex"
+			debugOutput.registerOutput( cuT( "Clustered" )
+				, cuT( "ClusterIndex" )
 				, vec3( writer.cast< sdw::Float >( clusterIndex3D.x() ) / writer.cast< sdw::Float >( clusterData.dimensions().x() - 1u )
 					, writer.cast< sdw::Float >( clusterIndex3D.y() ) / writer.cast< sdw::Float >( clusterData.dimensions().y() - 1u )
 					, writer.cast< sdw::Float >( clusterIndex3D.z() ) / writer.cast< sdw::Float >( clusterData.dimensions().z() - 1u ) ) );
@@ -50,20 +50,20 @@ namespace castor3d::shader
 					, 2.0_f * writer.cast< sdw::Float >( pointLightCount ) / sdw::Float( float( MaxLightsPerCluster ) ) );
 				auto spotFactor = writer.declLocale( "spotFactor"
 					, 2.0_f * writer.cast< sdw::Float >( spotLightCount ) / sdw::Float( float( MaxLightsPerCluster ) ) );
-				debugOutput.registerOutput( "Clustered"
-					, "PointLightsCount"
+				debugOutput.registerOutput( cuT( "Clustered" )
+					, cuT( "PointLightsCount" )
 					, writer.ternary( pointLightCount > 0u
 						, writer.ternary( pointFactor > 1.0_f, mix( M, E, vec3( pointFactor - 1.0_f ) ), mix( I, M, vec3( pointFactor ) ) )
 						, vec3( 0.0_f ) ) );
-				debugOutput.registerOutput( "Clustered"
-					, "SpotLightsCount"
+				debugOutput.registerOutput( cuT( "Clustered" )
+					, cuT( "SpotLightsCount" )
 					, writer.ternary( spotLightCount > 0u
 						, writer.ternary( spotFactor > 1.0_f, mix( M, E, vec3( spotFactor - 1.0_f ) ), mix( I, M, vec3( spotFactor ) ) )
 						, vec3( 0.0_f ) ) );
 			}
 		}
 
-		void computeLightingFastPath( sdw::ShaderWriter & writer
+		static void computeLightingFastPath( sdw::ShaderWriter & writer
 			, ClustersData const & clusterData
 			, sdw::UInt32 const & clusterIndex1D
 			, sdw::U32Vec3 const & clusterIndex3D
@@ -77,8 +77,8 @@ namespace castor3d::shader
 			, LightSurface const & lightSurface
 			, sdw::UInt const receivesShadows
 			, DebugOutput & debugOutput
-			, std::function< void( PointLight const & ) > computePointLight
-			, std::function< void( SpotLight const & ) > computeSpotLight )
+			, castor::Function< void( PointLight const & ) > computePointLight
+			, castor::Function< void( SpotLight const & ) > computeSpotLight )
 		{
 			auto pointClusterLights = writer.declLocale( "pointClusterLights"
 				, pointLightClusters[clusterIndex1D] );
@@ -113,7 +113,7 @@ namespace castor3d::shader
 			printDebug( writer, clusterData, debugOutput, clusterIndex3D, pointLightCount, spotLightCount );
 		}
 
-		void computeLightingMediumPath( sdw::ShaderWriter & writer
+		static void computeLightingMediumPath( sdw::ShaderWriter & writer
 			, ClustersData const & clusterData
 			, sdw::UInt32 const & clusterIndex1D
 			, sdw::U32Vec3 const & clusterIndex3D
@@ -127,8 +127,8 @@ namespace castor3d::shader
 			, LightSurface const & lightSurface
 			, sdw::UInt const receivesShadows
 			, DebugOutput & debugOutput
-			, std::function< void( PointLight const & ) > computePointLight
-			, std::function< void( SpotLight const & ) > computeSpotLight )
+			, castor::Function< void( PointLight const & ) > computePointLight
+			, castor::Function< void( SpotLight const & ) > computeSpotLight )
 		{
 			auto pointClusterLights = writer.declLocale( "pointClusterLights"
 				, pointLightClusters[clusterIndex1D] );
@@ -195,7 +195,7 @@ namespace castor3d::shader
 			printDebug( writer, clusterData, debugOutput, clusterIndex3D, pointLightCount, spotLightCount );
 		}
 
-		void computeLighting( sdw::ShaderWriter & writer
+		static void computeLighting( sdw::ShaderWriter & writer
 			, ClustersData const & clusterData
 			, sdw::UInt32 const & clusterIndex1D
 			, sdw::U32Vec3 const & clusterIndex3D
@@ -209,8 +209,8 @@ namespace castor3d::shader
 			, LightSurface const & lightSurface
 			, sdw::UInt const receivesShadows
 			, DebugOutput & debugOutput
-			, std::function< void( PointLight const & ) > computePointLight
-			, std::function< void( SpotLight const & ) > computeSpotLight )
+			, castor::Function< void( PointLight const & ) > computePointLight
+			, castor::Function< void( SpotLight const & ) > computeSpotLight )
 		{
 			if constexpr ( C3D_UseWaveIntrinsics )
 			{
@@ -343,11 +343,11 @@ namespace castor3d::shader
 			, m_enabled );
 
 		m_clusterData = castor::makeUnique< shader::ClustersData >( c3d_clustersData );
-		m_clustersLightsData = std::make_unique< sdw::Vec4 >( c3d_clustersLightsData );
-		m_pointLightIndices = std::make_unique< sdw::UInt32Array >( c3d_pointLightClusterIndex );
-		m_pointLightClusters = std::make_unique< sdw::U32Vec2Array >( c3d_pointLightClusterGrid );
-		m_spotLightIndices = std::make_unique< sdw::UInt32Array >( c3d_spotLightClusterIndex );
-		m_spotLightClusters = std::make_unique< sdw::U32Vec2Array >( c3d_spotLightClusterGrid );
+		m_clustersLightsData = castor::make_unique< sdw::Vec4 >( c3d_clustersLightsData );
+		m_pointLightIndices = castor::make_unique< sdw::UInt32Array >( c3d_pointLightClusterIndex );
+		m_pointLightClusters = castor::make_unique< sdw::U32Vec2Array >( c3d_pointLightClusterGrid );
+		m_spotLightIndices = castor::make_unique< sdw::UInt32Array >( c3d_spotLightClusterIndex );
+		m_spotLightClusters = castor::make_unique< sdw::U32Vec2Array >( c3d_spotLightClusterGrid );
 	}
 
 	void ClusteredLights::computeCombinedDifSpec( shader::Lights & lights

@@ -55,7 +55,7 @@ namespace castor
 			static float constexpr coeffN = 5.0f;
 
 			float sampleCount = 0;
-			std::array< MyLargerTypeT, 4u > totalBlock{};
+			Array< MyLargerTypeT, 4u > totalBlock{};
 			auto radius = int32_t( coeffN );
 
 			for ( int32_t j = -radius + 1; j <= radius; j++ )

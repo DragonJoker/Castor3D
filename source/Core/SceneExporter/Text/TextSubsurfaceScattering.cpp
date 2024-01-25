@@ -19,7 +19,7 @@ namespace castor
 		auto result = false;
 		log::info << tabs() << cuT( "Writing SubsurfaceScattering" ) << std::endl;
 
-		if ( auto block{ beginBlock( file, "subsurface_scattering" ) } )
+		if ( auto block{ beginBlock( file, cuT( "subsurface_scattering" ) ) } )
 		{
 			result = write( file, cuT( "strength" ), obj.getStrength() )
 				&& write( file, cuT( "gaussian_width" ), obj.getGaussianWidth() )

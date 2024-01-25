@@ -77,7 +77,7 @@ namespace atmosphere_scattering
 		AtmosphereData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+			: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
 		{
 		}
 
@@ -142,7 +142,7 @@ namespace atmosphere_scattering
 		AtmosphereScatteringUbo( castor3d::RenderDevice const & device
 			, bool & dirty );
 		~AtmosphereScatteringUbo();
-		std::pair< castor::Point3f, castor::Vector3f > cpuUpdate( Configuration const & config
+		castor::Pair< castor::Point3f, castor::Vector3f > cpuUpdate( Configuration const & config
 			, castor3d::SceneNode const & sunNode
 			, castor3d::SceneNode const & planetNode );
 
@@ -185,8 +185,8 @@ namespace atmosphere_scattering
 		}
 
 	public:
-		static const castor::String Buffer;
-		static const castor::String Data;
+		static const castor::MbString Buffer;
+		static const castor::MbString Data;
 
 	private:
 		castor3d::RenderDevice const & m_device;

@@ -211,7 +211,7 @@ namespace castor3d
 
 	ColourComponent::ColourComponent( Pass & pass
 		, castor::HdrRgbColour defaultValue )
-		: BaseDataPassComponentT{ pass, TypeName, {}, std::move( defaultValue ) }
+		: BaseDataPassComponentT{ pass, TypeName, {}, castor::move( defaultValue ) }
 	{
 	}
 

@@ -38,27 +38,27 @@ namespace castor
 				, Path pglobalControlsFile = {}
 				, String psubfolder = {}
 				, float pscale = 1.0f )
-				: rootFolder{ std::move( prootFolder ) }
-				, sceneTexturesFile{ std::move( psceneTexturesFile ) }
-				, sceneSamplersFile{ std::move( psceneSamplersFile ) }
-				, globalSamplersFile{ std::move( pglobalSamplersFile ) }
-				, sceneMaterialsFile{ std::move( psceneMaterialsFile ) }
-				, globalMaterialsFile{ std::move( pglobalMaterialsFile ) }
-				, skeletonsFile{ std::move( pskeletonsFile ) }
-				, meshesFile{ std::move( pmeshesFile ) }
-				, nodesFile{ std::move( pnodesFile ) }
-				, objectsFile{ std::move( pobjectsFile ) }
-				, lightsFile{ std::move( plightsFile ) }
-				, sceneFontsFile{ std::move( psceneFontsFile ) }
-				, globalFontsFile{ std::move( pglobalFontsFile ) }
-				, sceneThemesFile{ std::move( psceneThemesFile ) }
-				, globalThemesFile{ std::move( pglobalThemesFile ) }
-				, sceneStylesFile{ std::move( psceneStylesFile ) }
-				, globalStylesFile{ std::move( pglobalStylesFile ) }
-				, sceneControlsFile{ std::move( psceneControlsFile ) }
-				, globalControlsFile{ std::move( pglobalControlsFile ) }
-				, subfolder{ std::move( psubfolder ) }
-				, scale{ std::move( pscale ) }
+				: rootFolder{ castor::move( prootFolder ) }
+				, sceneTexturesFile{ castor::move( psceneTexturesFile ) }
+				, sceneSamplersFile{ castor::move( psceneSamplersFile ) }
+				, globalSamplersFile{ castor::move( pglobalSamplersFile ) }
+				, sceneMaterialsFile{ castor::move( psceneMaterialsFile ) }
+				, globalMaterialsFile{ castor::move( pglobalMaterialsFile ) }
+				, skeletonsFile{ castor::move( pskeletonsFile ) }
+				, meshesFile{ castor::move( pmeshesFile ) }
+				, nodesFile{ castor::move( pnodesFile ) }
+				, objectsFile{ castor::move( pobjectsFile ) }
+				, lightsFile{ castor::move( plightsFile ) }
+				, sceneFontsFile{ castor::move( psceneFontsFile ) }
+				, globalFontsFile{ castor::move( pglobalFontsFile ) }
+				, sceneThemesFile{ castor::move( psceneThemesFile ) }
+				, globalThemesFile{ castor::move( pglobalThemesFile ) }
+				, sceneStylesFile{ castor::move( psceneStylesFile ) }
+				, globalStylesFile{ castor::move( pglobalStylesFile ) }
+				, sceneControlsFile{ castor::move( psceneControlsFile ) }
+				, globalControlsFile{ castor::move( pglobalControlsFile ) }
+				, subfolder{ castor::move( psubfolder ) }
+				, scale{ pscale }
 			{
 			}
 

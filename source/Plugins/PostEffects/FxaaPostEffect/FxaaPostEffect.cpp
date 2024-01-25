@@ -131,19 +131,19 @@ namespace fxaa
 	//*********************************************************************************************
 
 	castor::String PostEffect::Type = cuT( "fxaa" );
-	castor::String PostEffect::Name = cuT( "FXAA PostEffect" );
+	castor::MbString PostEffect::Name = "FXAA PostEffect";
 
 	PostEffect::PostEffect( castor3d::RenderTarget & renderTarget
 		, castor3d::RenderSystem & renderSystem
 		, castor3d::Parameters const & parameters )
 		: castor3d::PostEffect{ PostEffect::Type
-			, "FXAA"
-			, PostEffect::Name
+			, cuT( "FXAA" )
+			, castor::makeString( PostEffect::Name )
 			, renderTarget
 			, renderSystem
 			, parameters
 			, 1u }
-		, m_shader{ "Fxaa", postfx::getProgram( *renderTarget.getEngine() ) }
+		, m_shader{ cuT( "Fxaa" ), postfx::getProgram( *renderTarget.getEngine() ) }
 		, m_stages{ makeProgramStates( renderSystem.getRenderDevice(), m_shader ) }
 		, m_fxaaUbo{ renderSystem.getRenderDevice(), m_renderTarget.getSize() }
 	{
@@ -216,7 +216,7 @@ namespace fxaa
 						, context
 						, graph
 						, crg::ru::Config{ 2u } );
-				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );

@@ -13,7 +13,7 @@ namespace castor3d
 		GpuPackedBufferUPtr createBuffer( RenderDevice const & device
 			, VkDeviceSize count
 			, VkBufferUsageFlags usage
-			, std::string debugName
+			, castor::String debugName
 			, bool smallData
 			, uint32_t alignSize )
 		{
@@ -38,7 +38,7 @@ namespace castor3d
 			, VkDeviceSize count
 			, VkBufferUsageFlags usage
 			, VkMemoryPropertyFlags memory
-			, std::string debugName
+			, castor::String debugName
 			, uint32_t alignSize )
 		{
 			VkDeviceSize maxCount = BaseObjectPoolBufferCount;
@@ -72,9 +72,9 @@ namespace castor3d
 				, size
 				, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-				, m_debugName + "Vertex" + std::to_string( m_buffers.size() )
+				, m_debugName + cuT( "Vertex" ) + castor::string::toString( m_buffers.size() )
 				, 1u ) };
-			m_buffers.emplace_back( std::move( buffers ) );
+			m_buffers.emplace_back( castor::move( buffers ) );
 			it = std::next( m_buffers.begin()
 				, ptrdiff_t( m_buffers.size() - 1u ) );
 		}
@@ -99,9 +99,9 @@ namespace castor3d
 				, size
 				, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-				, m_debugName + "Index" + std::to_string( m_buffers.size() )
+				, m_debugName + cuT( "Index" ) + castor::string::toString( m_buffers.size() )
 				, 1u ) };
-			m_buffers.emplace_back( std::move( buffers ) );
+			m_buffers.emplace_back( castor::move( buffers ) );
 			it = std::next( m_buffers.begin()
 				, ptrdiff_t( m_buffers.size() - 1u ) );
 		}

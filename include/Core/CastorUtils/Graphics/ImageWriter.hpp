@@ -91,7 +91,7 @@ namespace castor
 			, PxBufferBase const & buffer )const;
 
 	private:
-		std::vector< ImageWriterPtr > m_writers;
+		Vector< ImageWriterPtr > m_writers;
 		StringMap< ImageWriterImpl * > m_extWriters;
 	};
 }

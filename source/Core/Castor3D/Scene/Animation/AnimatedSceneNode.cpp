@@ -29,14 +29,11 @@ namespace castor3d
 	void AnimatedSceneNode::doAddAnimation( castor::String const & name )
 	{
 		if ( auto it = m_animations.find( name );
-			it == m_animations.end() )
+			it == m_animations.end() && m_node.hasAnimation( name ) )
 		{
-			if ( m_node.hasAnimation( name ) )
-			{
-				auto & animation = static_cast< SceneNodeAnimation & >( m_node.getAnimation( name ) );
-				auto instance = castor::makeUniqueDerived< AnimationInstance, SceneNodeAnimationInstance >( *this, animation );
-				m_animations.emplace( name, std::move( instance ) );
-			}
+			auto & animation = static_cast< SceneNodeAnimation & >( m_node.getAnimation( name ) );
+			auto instance = castor::makeUniqueDerived< AnimationInstance, SceneNodeAnimationInstance >( *this, animation );
+			m_animations.try_emplace( name, castor::move( instance ) );
 		}
 	}
 

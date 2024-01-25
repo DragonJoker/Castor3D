@@ -31,12 +31,12 @@ namespace diamond_square_terrain
 	{
 		castor::String name{};
 		castor::Range< float > heightRange{ 0.0f, 1.0f };
-		std::vector< SlopeBiome > steepnessBiomes{ 3u, SlopeBiome{} };
-		std::vector< BlendRange > steepnessRanges{};
+		castor::Vector< SlopeBiome > steepnessBiomes{ 3u, SlopeBiome{} };
+		castor::Vector< BlendRange > steepnessRanges{};
 	};
 
-	using Biomes = std::vector< Biome >;
-	using BlendRanges = std::vector< BlendRange >;
+	using Biomes = castor::Vector< Biome >;
+	using BlendRanges = castor::Vector< BlendRange >;
 
 	struct Matrix
 	{
@@ -89,7 +89,7 @@ namespace diamond_square_terrain
 		}
 
 	private:
-		std::vector< float > m_map;
+		castor::Vector< float > m_map;
 		uint32_t m_size;
 	};
 }

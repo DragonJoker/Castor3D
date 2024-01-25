@@ -35,7 +35,7 @@ namespace castor3d
 			{
 			case ChunkType::eName:
 				result = doParseChunk( name, chunk );
-				checkError( result, "Couldn't parse name." );
+				checkError( result, cuT( "Couldn't parse name." ) );
 				if ( result )
 				{
 					obj.rename( name );
@@ -43,7 +43,7 @@ namespace castor3d
 				break;
 			case ChunkType::eBoneParentName:
 				result = doParseChunk( parentName, chunk );
-				checkError( result, "Couldn't parse parent name." );
+				checkError( result, cuT( "Couldn't parse parent name." ) );
 				break;
 			default:
 				break;

@@ -7,7 +7,7 @@ CU_ImplementSmartPtr( castor3d, PostFxPlugin )
 namespace castor3d
 {
 	PostFxPlugin::PostFxPlugin( castor::DynamicLibraryUPtr library, Engine * engine )
-		: Plugin( PluginType::ePostEffect, std::move( library ), *engine )
+		: Plugin( PluginType::ePostEffect, castor::move( library ), *engine )
 	{
 		load();
 	}

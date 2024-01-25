@@ -8,7 +8,7 @@ namespace castor3d::shader
 	MeshVertexT< FlagT >::MeshVertexT( sdw::ShaderWriter & writer
 		, sdw::expr::ExprPtr expr
 		, bool enabled )
-		: MeshVertexBase{ writer, std::move( expr ), enabled }
+		: MeshVertexBase{ writer, castor::move( expr ), enabled }
 	{
 	}
 

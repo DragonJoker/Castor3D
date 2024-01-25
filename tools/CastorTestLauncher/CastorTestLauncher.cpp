@@ -160,7 +160,7 @@ namespace test_launcher
 				{
 					if ( parser.Found( wxString{ plugin.name } ) )
 					{
-						m_config.renderer = plugin.name;
+						m_config.renderer = castor::makeString( plugin.name );
 						m_outputFileSuffix = m_config.renderer;
 					}
 				}
@@ -194,7 +194,7 @@ namespace test_launcher
 			, m_config.validate
 			, !m_config.disableRandom
 			, !m_config.disableUpdateOptimisations };
-		auto castor = castor::makeUnique< castor3d::Engine >( std::move( config )
+		auto castor = castor::makeUnique< castor3d::Engine >( castor::move( config )
 			, * castor::Logger::getSingleton().getInstance() );
 		castor::PathArray arrayFiles;
 		castor::File::listDirectoryFiles( castor3d::Engine::getPluginsDirectory(), arrayFiles );
@@ -269,11 +269,11 @@ namespace test_launcher
 			}
 			catch ( castor::Exception & exc )
 			{
-				castor::Logger::logError( std::stringstream() << "Initialisation failed : " << exc.getFullDescription() );
+				castor::Logger::logError( castor::makeStringStream() << "Initialisation failed : " << castor::makeString( exc.getFullDescription() ) );
 			}
 			catch ( std::exception & exc )
 			{
-				castor::Logger::logError( std::stringstream() << "Initialisation failed : " << exc.what() );
+				castor::Logger::logError( castor::makeStringStream() << "Initialisation failed : " << castor::makeString( exc.what() ) );
 			}
 
 			castor::Logger::logInfo( cuT( "Stop" ) );

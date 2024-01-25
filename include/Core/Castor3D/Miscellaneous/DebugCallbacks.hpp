@@ -13,6 +13,10 @@ namespace castor3d
 	class DebugCallbacks
 	{
 	public:
+		DebugCallbacks( DebugCallbacks const & ) = delete;
+		DebugCallbacks( DebugCallbacks && )noexcept = delete;
+		DebugCallbacks & operator=( DebugCallbacks const & ) = delete;
+		DebugCallbacks & operator=( DebugCallbacks && )noexcept = delete;
 		DebugCallbacks( ashes::Instance const & instance
 			, void * userData );
 		~DebugCallbacks()noexcept;
@@ -26,7 +30,7 @@ namespace castor3d
 		VkDebugReportCallbackEXT m_callback{};
 #endif
 	};
-	using DebugCallbacksPtr = std::unique_ptr< DebugCallbacks >;
+	using DebugCallbacksPtr = castor::RawUniquePtr< DebugCallbacks >;
 }
 
 #endif

@@ -13,7 +13,7 @@ See LICENSE file in root folder
 
 namespace GuiCommon
 {
-	using Angles = std::array< castor::Angle, 3u >;
+	using Angles = castor::Array< castor::Angle, 3u >;
 	static float constexpr MaxAngularSpeed = 5.0f;
 	static float constexpr MaxScalarSpeed = 20.0f;
 	/**
@@ -154,7 +154,7 @@ namespace GuiCommon
 		//! Si l'état est pour le noeud d'une caméra.
 		bool m_isCamera{};
 	};
-	using NodeStatePtr = std::unique_ptr< NodeState >;
+	using NodeStatePtr = castor::RawUniquePtr< NodeState >;
 }
 
 #endif

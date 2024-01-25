@@ -38,8 +38,8 @@ namespace toon::shader
 			, c3d::BlendComponents const & components );
 
 	private:
-		std::unique_ptr< sdw::Float > m_NdotL;
-		std::unique_ptr< sdw::Float > m_NdotH;
+		castor::RawUniquePtr< sdw::Float > m_NdotL;
+		castor::RawUniquePtr< sdw::Float > m_NdotH;
 	};
 
 	class ToonPhongLightingModel

@@ -36,7 +36,7 @@ namespace ocean_fft
 			 */
 			crg::FramePassArray record( castor3d::RenderDevice const & device
 				, crg::ResourcesCache & resources
-				, crg::FrameGraph & graph
+				, crg::FramePassGroup & graph
 				, crg::FramePassArray previousPasses )override;
 			/**
 			 *\copydoc	castor3d::shader::SubmeshRenderShader::registerDependencies
@@ -91,8 +91,8 @@ namespace ocean_fft
 		private:
 			FFTWavesComponent const & m_component;
 			OceanUboConfiguration m_config;
-			std::unique_ptr< OceanUbo > m_ubo;
-			std::unique_ptr< OceanFFT > m_oceanFFT;
+			castor::RawUniquePtr< OceanUbo > m_ubo;
+			castor::RawUniquePtr< OceanFFT > m_oceanFFT;
 			ashes::SamplerPtr m_linearWrapSampler;
 			ashes::SamplerPtr m_pointClampSampler;
 			castor::PreciseTimer m_timer;
@@ -103,7 +103,7 @@ namespace ocean_fft
 		{
 			castor3d::SubmeshRenderDataPtr createData( castor3d::SubmeshComponent const & component )override
 			{
-				return std::make_unique< RenderData >( component );
+				return castor::make_unique< RenderData >( component );
 			}
 			/**
 			 *\copydoc	castor3d::shader::SubmeshRenderShader::getShaderSource
@@ -127,12 +127,12 @@ namespace ocean_fft
 
 			castor3d::shader::SubmeshRasterSurfaceShaderPtr createRasterSurfaceShader()const override
 			{
-				return std::make_unique< SurfaceShader >();
+				return castor::make_unique< SurfaceShader >();
 			}
 
 			castor3d::SubmeshRenderShaderPtr createRenderShader()const override
 			{
-				return std::make_unique< RenderShader >();
+				return castor::make_unique< RenderShader >();
 			}
 
 			castor3d::SubmeshComponentFlag getRenderFlag()const noexcept override
@@ -168,7 +168,7 @@ namespace ocean_fft
 
 		void setFftConfig( OceanFFTConfig config )noexcept
 		{
-			m_fftConfig = std::move( config );
+			m_fftConfig = castor::move( config );
 		}
 
 		OceanFFTConfig const & getFftConfig()const noexcept
@@ -178,11 +178,10 @@ namespace ocean_fft
 
 	public:
 		static castor::String const TypeName;
-		static castor::String const FullName;
+		static castor::MbString const FullName;
 
 	private:
 		OceanFFTConfig m_fftConfig;
-		std::unique_ptr< RenderData > m_data;
 	};
 
 	CU_DeclareSmartPtr( ocean_fft, FFTWavesComponent, );

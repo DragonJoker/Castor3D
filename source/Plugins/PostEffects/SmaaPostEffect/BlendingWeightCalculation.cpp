@@ -53,7 +53,7 @@ namespace smaa
 			VertexT( sdw::ShaderWriter & writer
 				, sdw::expr::ExprPtr expr
 				, bool enabled )
-				: VertexStructT< FlagT >{ writer, std::move( expr ), enabled }
+				: VertexStructT< FlagT >{ writer, castor::move( expr ), enabled }
 			{
 			}
 
@@ -809,27 +809,28 @@ namespace smaa
 		static crg::ImageViewId createImage( crg::FramePassGroup & graph
 			, crg::ResourcesCache & resources
 			, castor3d::RenderDevice const & device
-			, std::string const & name
+			, castor::String const & name
 			, VkFormat format
 			, VkExtent3D const & dimensions
 			, castor::ArrayView< const unsigned char > const & bytes )
 		{
 			auto & context = device.makeContext();
-			auto imageId = graph.createImage( crg::ImageData{ name
+			auto mbName = castor::toUtf8( name );
+			auto imageId = graph.createImage( crg::ImageData{ mbName
 				, 0u
 				, VK_IMAGE_TYPE_2D
 				, format
 				, dimensions
 				, ( VK_IMAGE_USAGE_SAMPLED_BIT
 					| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) } );
-			auto result = graph.createView( crg::ImageViewData{ name
+			auto result = graph.createView( crg::ImageViewData{ mbName
 				, imageId
 				, 0u
 				, VK_IMAGE_VIEW_TYPE_2D
 				, imageId.data->info.format
 				, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } );
 			auto staging = device->createStagingTexture( format, dimensions );
-			auto image = std::make_unique< ashes::Image >( *device
+			auto image = castor::make_unique< ashes::Image >( *device
 				, resources.createImage( context, imageId )
 				, ashes::ImageCreateInfo{ imageId.data->info } );
 			ashes::ImageView view{ ashes::ImageViewCreateInfo{ result.data->info }
@@ -869,20 +870,20 @@ namespace smaa
 		, m_areaView{ bwcalc::createImage( m_graph
 			, m_resources
 			, m_device
-			, "SMBWArea"
+			, cuT( "SMBWArea" )
 			, VK_FORMAT_R8G8_UNORM
 			, { AREATEX_WIDTH, AREATEX_HEIGHT, 1u }
 			, castor::makeArrayView( std::begin( areaTexBytes ), std::end( areaTexBytes ) ) ) }
 		, m_searchView{ bwcalc::createImage( m_graph
 			, m_resources
 			, m_device
-			, "SMBWSearch"
+			, cuT( "SMBWSearch" )
 			, VK_FORMAT_R8_UNORM
 			, { SEARCHTEX_WIDTH, SEARCHTEX_HEIGHT, 1u }
 			, castor::makeArrayView( std::begin( searchTexBytes ), std::end( searchTexBytes ) ) ) }
 		, m_result{ m_device
 			, m_resources
-			, "SMBWRes"
+			, cuT( "SMBWRes" )
 			, 0u
 			, m_extent
 			, 1u
@@ -891,7 +892,7 @@ namespace smaa
 			, ( VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) }
-		, m_shader{ "SmaaBlendingWeight", bwcalc::getProgram( device ) }
+		, m_shader{ cuT( "SmaaBlendingWeight" ), bwcalc::getProgram( device ) }
 		, m_stages{ makeProgramStates( m_device, m_shader ) }
 		, m_pass{ m_graph.createPass( "BlendingWeight"
 			, [this, &device, enabled]( crg::FramePass const & framePass
@@ -911,7 +912,7 @@ namespace smaa
 					.depthStencilState( dsState )
 					.enabled( enabled )
 					.build( framePass, context, graph );
-				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} ) }
@@ -955,7 +956,7 @@ namespace smaa
 	void BlendingWeightCalculation::accept( castor3d::ConfigurationVisitorBase & visitor )
 	{
 		visitor.visit( m_shader );
-		visitor.visit( "SMAA BlendingWeight Result"
+		visitor.visit( cuT( "SMAA BlendingWeight Result" )
 			, m_result
 			, m_graph.getFinalLayoutState( m_result.sampledViewId ).layout
 			, castor3d::TextureFactors{}.invert( true ) );

@@ -86,7 +86,7 @@
  * classes based loosely on STL versions. These were difficult to 
  * maintain and very rarely used. For the 2.0 header we now assume
  * the presence of the standard library unless requested otherwise.
- * We use std::array, std::vector, std::shared_ptr and std::string 
+ * We use std::array, std::vector, castor::SharedPtr and std::string 
  * throughout to safely manage memory and reduce the chance of a 
  * recurrance of earlier memory management bugs.
  *
@@ -522,15 +522,15 @@ namespace cl {
     // Replace shared_ptr and allocate_ptr for internal use
     // to allow user to replace them
     template<class T>
-    using pointer = std::shared_ptr<T>;
+    using pointer = castor::SharedPtr<T>;
 
     template <class T, class allocate, class... Args>
     auto allocate_pointer(const allocate &alloc, Args&&... args) -> 
         decltype(std::allocate_shared<T>(
-            alloc, std::forward<Args>(args)...))
+            alloc, castor::forward<Args>(args)...))
     {
         return std::allocate_shared<T>(
-            alloc, std::forward<Args>(args)...);
+            alloc, castor::forward<Args>(args)...);
     }
 } // namespace cl
 #endif 
@@ -923,7 +923,7 @@ inline cl_int getInfoHelper(Func f, cl_uint name, vector<T>* param, long)
         return err;
     }
     if (param) {
-        *param = std::move(localData);
+        *param = castor::move(localData);
     }
 
     return CL_SUCCESS;
@@ -1985,14 +1985,14 @@ public:
     /*! \brief Move constructor to forward move to the superclass correctly.
     * Required for MSVC.
     */
-    Device(Device&& dev) CL_HPP_NOEXCEPT_ : detail::Wrapper<cl_type>(std::move(dev)) {}
+    Device(Device&& dev) CL_HPP_NOEXCEPT_ : detail::Wrapper<cl_type>(castor::move(dev)) {}
 
     /*! \brief Move assignment to forward move to the superclass correctly.
     * Required for MSVC.
     */
     Device& operator = (Device &&dev)
     {
-        detail::Wrapper<cl_type>::operator=(std::move(dev));
+        detail::Wrapper<cl_type>::operator=(castor::move(dev));
         return *this;
     }
 
@@ -2726,14 +2726,14 @@ public:
     /*! \brief Move constructor to forward move to the superclass correctly.
      * Required for MSVC.
      */
-    Context(Context&& ctx) CL_HPP_NOEXCEPT_ : detail::Wrapper<cl_type>(std::move(ctx)) {}
+    Context(Context&& ctx) CL_HPP_NOEXCEPT_ : detail::Wrapper<cl_type>(castor::move(ctx)) {}
 
     /*! \brief Move assignment to forward move to the superclass correctly.
      * Required for MSVC.
      */
     Context& operator = (Context &&ctx)
     {
-        detail::Wrapper<cl_type>::operator=(std::move(ctx));
+        detail::Wrapper<cl_type>::operator=(castor::move(ctx));
         return *this;
     }
 
@@ -3133,14 +3133,14 @@ public:
     /*! \brief Move constructor to forward move to the superclass correctly.
      * Required for MSVC.
      */
-    Memory(Memory&& mem) CL_HPP_NOEXCEPT_ : detail::Wrapper<cl_type>(std::move(mem)) {}
+    Memory(Memory&& mem) CL_HPP_NOEXCEPT_ : detail::Wrapper<cl_type>(castor::move(mem)) {}
 
     /*! \brief Move assignment to forward move to the superclass correctly.
      * Required for MSVC.
      */
     Memory& operator = (Memory &&mem)
     {
-        detail::Wrapper<cl_type>::operator=(std::move(mem));
+        detail::Wrapper<cl_type>::operator=(castor::move(mem));
         return *this;
     }
 
@@ -3644,14 +3644,14 @@ public:
     /*! \brief Move constructor to forward move to the superclass correctly.
      * Required for MSVC.
      */
-    Buffer(Buffer&& buf) CL_HPP_NOEXCEPT_ : Memory(std::move(buf)) {}
+    Buffer(Buffer&& buf) CL_HPP_NOEXCEPT_ : Memory(castor::move(buf)) {}
 
     /*! \brief Move assignment to forward move to the superclass correctly.
      * Required for MSVC.
      */
     Buffer& operator = (Buffer &&buf)
     {
-        Memory::operator=(std::move(buf));
+        Memory::operator=(castor::move(buf));
         return *this;
     }
 
@@ -3781,14 +3781,14 @@ public:
     /*! \brief Move constructor to forward move to the superclass correctly.
      * Required for MSVC.
      */
-    BufferD3D10(BufferD3D10&& buf) CL_HPP_NOEXCEPT_ : Buffer(std::move(buf)) {}
+    BufferD3D10(BufferD3D10&& buf) CL_HPP_NOEXCEPT_ : Buffer(castor::move(buf)) {}
 
     /*! \brief Move assignment to forward move to the superclass correctly.
      * Required for MSVC.
      */
     BufferD3D10& operator = (BufferD3D10 &&buf)
     {
-        Buffer::operator=(std::move(buf));
+        Buffer::operator=(castor::move(buf));
         return *this;
     }
 };
@@ -3869,14 +3869,14 @@ public:
     /*! \brief Move constructor to forward move to the superclass correctly.
      * Required for MSVC.
      */
-    BufferGL(BufferGL&& buf) CL_HPP_NOEXCEPT_ : Buffer(std::move(buf)) {}
+    BufferGL(BufferGL&& buf) CL_HPP_NOEXCEPT_ : Buffer(castor::move(buf)) {}
 
     /*! \brief Move assignment to forward move to the superclass correctly.
      * Required for MSVC.
      */
     BufferGL& operator = (BufferGL &&buf)
     {
-        Buffer::operator=(std::move(buf));
+        Buffer::operator=(castor::move(buf));
         return *this;
     }
 
@@ -3966,14 +3966,14 @@ public:
     /*! \brief Move constructor to forward move to the superclass correctly.
      * Required for MSVC.
      */
-    BufferRenderGL(BufferRenderGL&& buf) CL_HPP_NOEXCEPT_ : Buffer(std::move(buf)) {}
+    BufferRenderGL(BufferRenderGL&& buf) CL_HPP_NOEXCEPT_ : Buffer(castor::move(buf)) {}
 
     /*! \brief Move assignment to forward move to the superclass correctly.
      * Required for MSVC.
      */
     BufferRenderGL& operator = (BufferRenderGL &&buf)
     {
-        Buffer::operator=(std::move(buf));
+        Buffer::operator=(castor::move(buf));
         return *this;
     }
 
@@ -4037,14 +4037,14 @@ protected:
     /*! \brief Move constructor to forward move to the superclass correctly.
      * Required for MSVC.
      */
-    Image(Image&& img) CL_HPP_NOEXCEPT_ : Memory(std::move(img)) {}
+    Image(Image&& img) CL_HPP_NOEXCEPT_ : Memory(castor::move(img)) {}
 
     /*! \brief Move assignment to forward move to the superclass correctly.
      * Required for MSVC.
      */
     Image& operator = (Image &&img)
     {
-        Memory::operator=(std::move(img));
+        Memory::operator=(castor::move(img));
         return *this;
     }
 
@@ -4157,14 +4157,14 @@ public:
     /*! \brief Move constructor to forward move to the superclass correctly.
      * Required for MSVC.
      */
-    Image1D(Image1D&& img) CL_HPP_NOEXCEPT_ : Image(std::move(img)) {}
+    Image1D(Image1D&& img) CL_HPP_NOEXCEPT_ : Image(castor::move(img)) {}
 
     /*! \brief Move assignment to forward move to the superclass correctly.
      * Required for MSVC.
      */
     Image1D& operator = (Image1D &&img)
     {
-        Image::operator=(std::move(img));
+        Image::operator=(castor::move(img));
         return *this;
     }
 
@@ -4241,14 +4241,14 @@ public:
     /*! \brief Move constructor to forward move to the superclass correctly.
      * Required for MSVC.
      */
-    Image1DBuffer(Image1DBuffer&& img) CL_HPP_NOEXCEPT_ : Image(std::move(img)) {}
+    Image1DBuffer(Image1DBuffer&& img) CL_HPP_NOEXCEPT_ : Image(castor::move(img)) {}
 
     /*! \brief Move assignment to forward move to the superclass correctly.
      * Required for MSVC.
      */
     Image1DBuffer& operator = (Image1DBuffer &&img)
     {
-        Image::operator=(std::move(img));
+        Image::operator=(castor::move(img));
         return *this;
     }
 
@@ -4330,14 +4330,14 @@ public:
     /*! \brief Move constructor to forward move to the superclass correctly.
      * Required for MSVC.
      */
-    Image1DArray(Image1DArray&& img) CL_HPP_NOEXCEPT_ : Image(std::move(img)) {}
+    Image1DArray(Image1DArray&& img) CL_HPP_NOEXCEPT_ : Image(castor::move(img)) {}
 
     /*! \brief Move assignment to forward move to the superclass correctly.
      * Required for MSVC.
      */
     Image1DArray& operator = (Image1DArray &&img)
     {
-        Image::operator=(std::move(img));
+        Image::operator=(castor::move(img));
         return *this;
     }
 
@@ -4572,14 +4572,14 @@ public:
     /*! \brief Move constructor to forward move to the superclass correctly.
      * Required for MSVC.
      */
-    Image2D(Image2D&& img) CL_HPP_NOEXCEPT_ : Image(std::move(img)) {}
+    Image2D(Image2D&& img) CL_HPP_NOEXCEPT_ : Image(castor::move(img)) {}
 
     /*! \brief Move assignment to forward move to the superclass correctly.
      * Required for MSVC.
      */
     Image2D& operator = (Image2D &&img)
     {
-        Image::operator=(std::move(img));
+        Image::operator=(castor::move(img));
         return *this;
     }
 
@@ -4668,14 +4668,14 @@ public:
     /*! \brief Move constructor to forward move to the superclass correctly.
      * Required for MSVC.
      */
-    Image2DGL(Image2DGL&& img) CL_HPP_NOEXCEPT_ : Image2D(std::move(img)) {}
+    Image2DGL(Image2DGL&& img) CL_HPP_NOEXCEPT_ : Image2D(castor::move(img)) {}
 
     /*! \brief Move assignment to forward move to the superclass correctly.
      * Required for MSVC.
      */
     Image2DGL& operator = (Image2DGL &&img)
     {
-        Image2D::operator=(std::move(img));
+        Image2D::operator=(castor::move(img));
         return *this;
     }
 
@@ -4761,14 +4761,14 @@ public:
     /*! \brief Move constructor to forward move to the superclass correctly.
      * Required for MSVC.
      */
-    Image2DArray(Image2DArray&& img) CL_HPP_NOEXCEPT_ : Image(std::move(img)) {}
+    Image2DArray(Image2DArray&& img) CL_HPP_NOEXCEPT_ : Image(castor::move(img)) {}
 
     /*! \brief Move assignment to forward move to the superclass correctly.
      * Required for MSVC.
      */
     Image2DArray& operator = (Image2DArray &&img)
     {
-        Image::operator=(std::move(img));
+        Image::operator=(castor::move(img));
         return *this;
     }
 };
@@ -4897,14 +4897,14 @@ public:
     /*! \brief Move constructor to forward move to the superclass correctly.
      * Required for MSVC.
      */
-    Image3D(Image3D&& img) CL_HPP_NOEXCEPT_ : Image(std::move(img)) {}
+    Image3D(Image3D&& img) CL_HPP_NOEXCEPT_ : Image(castor::move(img)) {}
 
     /*! \brief Move assignment to forward move to the superclass correctly.
      * Required for MSVC.
      */
     Image3D& operator = (Image3D &&img)
     {
-        Image::operator=(std::move(img));
+        Image::operator=(castor::move(img));
         return *this;
     }
 };
@@ -4989,14 +4989,14 @@ public:
     /*! \brief Move constructor to forward move to the superclass correctly.
      * Required for MSVC.
      */
-    Image3DGL(Image3DGL&& img) CL_HPP_NOEXCEPT_ : Image3D(std::move(img)) {}
+    Image3DGL(Image3DGL&& img) CL_HPP_NOEXCEPT_ : Image3D(castor::move(img)) {}
 
     /*! \brief Move assignment to forward move to the superclass correctly.
      * Required for MSVC.
      */
     Image3DGL& operator = (Image3DGL &&img)
     {
-        Image3D::operator=(std::move(img));
+        Image3D::operator=(castor::move(img));
         return *this;
     }
 };
@@ -5070,14 +5070,14 @@ public:
     /*! \brief Move constructor to forward move to the superclass correctly.
      * Required for MSVC.
      */
-    ImageGL(ImageGL&& img) CL_HPP_NOEXCEPT_ : Image(std::move(img)) {}
+    ImageGL(ImageGL&& img) CL_HPP_NOEXCEPT_ : Image(castor::move(img)) {}
 
     /*! \brief Move assignment to forward move to the superclass correctly.
      * Required for MSVC.
      */
     ImageGL& operator = (ImageGL &&img)
     {
-        Image::operator=(std::move(img));
+        Image::operator=(castor::move(img));
         return *this;
     }
 };
@@ -5188,14 +5188,14 @@ public:
     /*! \brief Move constructor to forward move to the superclass correctly.
      * Required for MSVC.
      */
-    Pipe(Pipe&& pipe) CL_HPP_NOEXCEPT_ : Memory(std::move(pipe)) {}
+    Pipe(Pipe&& pipe) CL_HPP_NOEXCEPT_ : Memory(castor::move(pipe)) {}
 
     /*! \brief Move assignment to forward move to the superclass correctly.
      * Required for MSVC.
      */
     Pipe& operator = (Pipe &&pipe)
     {
-        Memory::operator=(std::move(pipe));
+        Memory::operator=(castor::move(pipe));
         return *this;
     }
 
@@ -5321,14 +5321,14 @@ public:
     /*! \brief Move constructor to forward move to the superclass correctly.
      * Required for MSVC.
      */
-    Sampler(Sampler&& sam) CL_HPP_NOEXCEPT_ : detail::Wrapper<cl_type>(std::move(sam)) {}
+    Sampler(Sampler&& sam) CL_HPP_NOEXCEPT_ : detail::Wrapper<cl_type>(castor::move(sam)) {}
 
     /*! \brief Move assignment to forward move to the superclass correctly.
      * Required for MSVC.
      */
     Sampler& operator = (Sampler &&sam)
     {
-        detail::Wrapper<cl_type>::operator=(std::move(sam));
+        detail::Wrapper<cl_type>::operator=(castor::move(sam));
         return *this;
     }
 
@@ -5546,14 +5546,14 @@ public:
     /*! \brief Move constructor to forward move to the superclass correctly.
      * Required for MSVC.
      */
-    Kernel(Kernel&& kernel) CL_HPP_NOEXCEPT_ : detail::Wrapper<cl_type>(std::move(kernel)) {}
+    Kernel(Kernel&& kernel) CL_HPP_NOEXCEPT_ : detail::Wrapper<cl_type>(castor::move(kernel)) {}
 
     /*! \brief Move assignment to forward move to the superclass correctly.
      * Required for MSVC.
      */
     Kernel& operator = (Kernel &&kernel)
     {
-        detail::Wrapper<cl_type>::operator=(std::move(kernel));
+        detail::Wrapper<cl_type>::operator=(castor::move(kernel));
         return *this;
     }
 
@@ -6112,14 +6112,14 @@ public:
     /*! \brief Move constructor to forward move to the superclass correctly.
      * Required for MSVC.
      */
-    Program(Program&& program) CL_HPP_NOEXCEPT_ : detail::Wrapper<cl_type>(std::move(program)) {}
+    Program(Program&& program) CL_HPP_NOEXCEPT_ : detail::Wrapper<cl_type>(castor::move(program)) {}
 
     /*! \brief Move assignment to forward move to the superclass correctly.
      * Required for MSVC.
      */
     Program& operator = (Program &&program)
     {
-        detail::Wrapper<cl_type>::operator=(std::move(program));
+        detail::Wrapper<cl_type>::operator=(castor::move(program));
         return *this;
     }
 
@@ -6699,14 +6699,14 @@ public:
     /*! \brief Move constructor to forward move to the superclass correctly.
      * Required for MSVC.
      */
-    CommandQueue(CommandQueue&& queue) CL_HPP_NOEXCEPT_ : detail::Wrapper<cl_type>(std::move(queue)) {}
+    CommandQueue(CommandQueue&& queue) CL_HPP_NOEXCEPT_ : detail::Wrapper<cl_type>(castor::move(queue)) {}
 
     /*! \brief Move assignment to forward move to the superclass correctly.
      * Required for MSVC.
      */
     CommandQueue& operator = (CommandQueue &&queue)
     {
-        detail::Wrapper<cl_type>::operator=(std::move(queue));
+        detail::Wrapper<cl_type>::operator=(castor::move(queue));
         return *this;
     }
 
@@ -7777,14 +7777,14 @@ public:
     /*! \brief Move constructor to forward move to the superclass correctly.
      * Required for MSVC.
      */
-    DeviceCommandQueue(DeviceCommandQueue&& queue) CL_HPP_NOEXCEPT_ : detail::Wrapper<cl_type>(std::move(queue)) {}
+    DeviceCommandQueue(DeviceCommandQueue&& queue) CL_HPP_NOEXCEPT_ : detail::Wrapper<cl_type>(castor::move(queue)) {}
 
     /*! \brief Move assignment to forward move to the superclass correctly.
      * Required for MSVC.
      */
     DeviceCommandQueue& operator = (DeviceCommandQueue &&queue)
     {
-        detail::Wrapper<cl_type>::operator=(std::move(queue));
+        detail::Wrapper<cl_type>::operator=(castor::move(queue));
         return *this;
     }
 
@@ -8701,7 +8701,7 @@ private:
     void setArgs(T0&& t0, T1s&&... t1s)
     {
         kernel_.setArg(index, t0);
-        setArgs<index + 1, T1s...>(std::forward<T1s>(t1s)...);
+        setArgs<index + 1, T1s...>(castor::forward<T1s>(t1s)...);
     }
 
     template<int index, typename T0>
@@ -8740,7 +8740,7 @@ public:
         Ts... ts)
     {
         Event event;
-        setArgs<0>(std::forward<Ts>(ts)...);
+        setArgs<0>(castor::forward<Ts>(ts)...);
         
         args.queue_.enqueueNDRangeKernel(
             kernel_,
@@ -8765,7 +8765,7 @@ public:
         cl_int &error)
     {
         Event event;
-        setArgs<0>(std::forward<Ts>(ts)...);
+        setArgs<0>(castor::forward<Ts>(ts)...);
 
         error = args.queue_.enqueueNDRangeKernel(
             kernel_,

@@ -70,7 +70,7 @@ namespace light_streaks
 			return writer.getBuilder().releaseShader();
 		}
 
-		static std::vector< KawasePass::Subpass > doCreateSubpasses( crg::FramePassGroup & graph
+		static castor::Vector< KawasePass::Subpass > doCreateSubpasses( crg::FramePassGroup & graph
 			, crg::FramePassArray const & previousPasses
 			, castor3d::RenderDevice const & device
 			, crg::ImageViewIdArray const & srcImages
@@ -81,7 +81,7 @@ namespace light_streaks
 			, bool const * enabled
 			, crg::FramePassArray & lastPasses )
 		{
-			std::vector< KawasePass::Subpass > result;
+			castor::Vector< KawasePass::Subpass > result;
 			assert( srcImages.size() == dstImages.size() + 1u
 				&& dstImages.size() == PostEffect::Count );
 			uint32_t index = 0u;
@@ -106,7 +106,7 @@ namespace light_streaks
 
 				for ( auto j = 1u; j < 3u; ++j )
 				{
-					std::swap( source, destination );
+					castor::swap( source, destination );
 					result.emplace_back( graph
 						, *previousPass
 						, device
@@ -140,7 +140,7 @@ namespace light_streaks
 		, KawaseUbo const & kawaseUbo
 		, uint32_t index
 		, bool const * enabled )
-		: pass{ graph.createPass( "Kawase" + std::to_string( index )
+		: pass{ graph.createPass( "Kawase" + castor::string::toMbString( index )
 			, [&device, &stages, dimensions, enabled]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
@@ -152,7 +152,7 @@ namespace light_streaks
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( stages ) )
 					.enabled( enabled )
 					.build( framePass, context, graph );
-				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} ) }
@@ -185,7 +185,7 @@ namespace light_streaks
 		, bool const * enabled )
 		: m_device{ device }
 		, m_kawaseUbo{ kawaseUbo }
-		, m_shader{ "LightStreaksKawasePass", kawase::getProgram( device ) }
+		, m_shader{ cuT( "LightStreaksKawasePass" ), kawase::getProgram( device ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
 		, m_subpasses{ kawase::doCreateSubpasses( graph
 			, previousPasses

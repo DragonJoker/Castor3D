@@ -302,7 +302,7 @@ namespace castor
 		 *\brief		Récupère la hauteur maximale des glyphes
 		 *\return		La hauteur maximale des glyphes
 		 */
-		castor::Point2i getMaxRange()const noexcept
+		Point2i getMaxRange()const noexcept
 		{
 			return m_maxRange;
 		}
@@ -326,9 +326,9 @@ namespace castor
 		 *\brief		Définit le chargeur de glyphes
 		 *\param[in]	loader	La valeur
 		 */
-		void setGlyphLoader( std::unique_ptr< SFontImpl > loader )noexcept
+		void setGlyphLoader( castor::RawUniquePtr< SFontImpl > loader )noexcept
 		{
-			m_glyphLoader = std::move( loader );
+			m_glyphLoader = castor::move( loader );
 		}
 		/**
 		 *\~english
@@ -412,7 +412,7 @@ namespace castor
 		 */
 		void setFaceName( String name )noexcept
 		{
-			m_faceName = std::move( name );
+			m_faceName = castor::move( name );
 		}
 		/**
 		 *\~english
@@ -482,16 +482,16 @@ namespace castor
 		GlyphArray m_loadedGlyphs{};
 		//!\~english	The max size of the glyphs.
 		//!\~french		La dimension maximale des glyphes.
-		castor::Point2i m_maxSize{};
+		Point2i m_maxSize{};
 		//!\~english	The max bearing range of the glyphs.
 		//!\~french		L'intervalle maximal de bearing des glyphes.
-		castor::Point2i m_maxRange{ 100, 0 };
+		Point2i m_maxRange{ 100, 0 };
 		//!\~english	The font face name.
 		//!\~french		Le nom de la police.
 		String m_faceName{};
 		//!\~english	The glyph loader.
 		//!\~french		Le chargeur de glyphes.
-		std::unique_ptr< SFontImpl > m_glyphLoader{};
+		castor::RawUniquePtr< SFontImpl > m_glyphLoader{};
 		bool m_serialisable{ true };
 	};
 }

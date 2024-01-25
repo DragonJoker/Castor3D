@@ -22,7 +22,7 @@ namespace castor3d
 		{
 			OverlaysCounts result{};
 			auto lock( castor::makeUniqueLock( cache ) );
-			std::vector< OverlayCategory * > categories;
+			castor::Vector< OverlayCategory * > categories;
 			categories.reserve( cache.getCategories().size() );
 
 			for ( auto category : cache.getCategories() )

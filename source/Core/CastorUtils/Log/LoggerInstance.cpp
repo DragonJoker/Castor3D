@@ -8,11 +8,11 @@
 namespace castor
 {
 	LoggerInstance::LoggerInstance( LoggerInstance && rhs )noexcept
-		: m_logLevel{ std::move( rhs.m_logLevel ) }
-		, m_impl{ std::move( rhs.m_impl ) }
-		, m_headers{ std::move( rhs.m_headers ) }
-		, m_queue{ std::move( rhs.m_queue ) }
-		, m_logThread{ std::move( rhs.m_logThread ) }
+		: m_logLevel{ castor::move( rhs.m_logLevel ) }
+		, m_impl{ castor::move( rhs.m_impl ) }
+		, m_headers{ castor::move( rhs.m_headers ) }
+		, m_queue{ castor::move( rhs.m_queue ) }
+		, m_logThread{ castor::move( rhs.m_logThread ) }
 		, m_initialised{ rhs.m_initialised.load() }
 		, m_stopped{ rhs.m_stopped.load() }
 		, m_threadEnded{ rhs.m_threadEnded.load() }
@@ -24,11 +24,11 @@ namespace castor
 
 	LoggerInstance & LoggerInstance::operator=( LoggerInstance && rhs )noexcept
 	{
-		m_logLevel = std::move( rhs.m_logLevel );
-		m_impl = std::move( rhs.m_impl );
-		m_headers = std::move( rhs.m_headers );
-		m_queue = std::move( rhs.m_queue );
-		m_logThread = std::move( rhs.m_logThread );
+		m_logLevel = castor::move( rhs.m_logLevel );
+		m_impl = castor::move( rhs.m_impl );
+		m_headers = castor::move( rhs.m_headers );
+		m_queue = castor::move( rhs.m_queue );
+		m_logThread = castor::move( rhs.m_logThread );
 		m_initialised = rhs.m_initialised.load();
 		m_stopped = rhs.m_stopped.load();
 		m_threadEnded = rhs.m_threadEnded.load();
@@ -73,193 +73,13 @@ namespace castor
 		return m_logLevel;
 	}
 
-	void LoggerInstance::lockedLogTrace( LoggerInstance::my_string const & msg )
-	{
-		doLockedPushMessage( LogType::eTrace, msg, true );
-	}
-
-	void LoggerInstance::logTrace( LoggerInstance::my_string const & msg )
-	{
-		pushMessage( LogType::eTrace, msg, true );
-	}
-
-	void LoggerInstance::logTrace( LoggerInstance::my_ostream const & msg )
-	{
-		auto sbuf = msg.rdbuf();
-		std::stringstream ss;
-		ss << sbuf;
-		logTrace( ss.str() );
-	}
-
-	void LoggerInstance::lockedLogTraceNoLF( LoggerInstance::my_string const & msg )
-	{
-		doLockedPushMessage( LogType::eTrace, msg, false );
-	}
-
-	void LoggerInstance::logTraceNoLF( LoggerInstance::my_string const & msg )
-	{
-		pushMessage( LogType::eTrace, msg, false );
-	}
-
-	void LoggerInstance::logTraceNoLF( LoggerInstance::my_ostream const & msg )
-	{
-		auto sbuf = msg.rdbuf();
-		std::stringstream ss;
-		ss << sbuf;
-		logTraceNoLF( ss.str() );
-	}
-	
-	void LoggerInstance::lockedLogDebugNoLF( LoggerInstance::my_string const & msg )
-	{
-		doLockedPushMessage( LogType::eDebug, msg, false );
-	}
-	
-	void LoggerInstance::logDebugNoLF( LoggerInstance::my_string const & msg )
-	{
-		pushMessage( LogType::eDebug, msg, false );
-	}
-
-	void LoggerInstance::logDebugNoLF( LoggerInstance::my_ostream const & msg )
-	{
-		auto sbuf = msg.rdbuf();
-		std::stringstream ss;
-		ss << sbuf;
-		logDebugNoLF( ss.str() );
-	}
-
-	void LoggerInstance::lockedLogDebug( LoggerInstance::my_string const & msg )
-	{
-		doLockedPushMessage( LogType::eDebug, msg, true );
-	}
-
-	void LoggerInstance::logDebug( LoggerInstance::my_string const & msg )
-	{
-		pushMessage( LogType::eDebug, msg, true );
-	}
-
-	void LoggerInstance::logDebug( LoggerInstance::my_ostream const & msg )
-	{
-		auto sbuf = msg.rdbuf();
-		std::stringstream ss;
-		ss << sbuf;
-		logDebug( ss.str() );
-	}
-
-	void LoggerInstance::lockedLogInfoNoLF( LoggerInstance::my_string const & msg )
-	{
-		doLockedPushMessage( LogType::eInfo, msg, false );
-	}
-
-	void LoggerInstance::logInfoNoLF( LoggerInstance::my_string const & msg )
-	{
-		pushMessage( LogType::eInfo, msg, false );
-	}
-
-	void LoggerInstance::logInfoNoLF( LoggerInstance::my_ostream const & msg )
-	{
-		std::stringstream ss;
-		ss << msg.rdbuf();
-		logInfoNoLF( ss.str() );
-	}
-
-	void LoggerInstance::lockedLogInfo( LoggerInstance::my_string const & msg )
-	{
-		doLockedPushMessage( LogType::eInfo, msg, true );
-	}
-
-	void LoggerInstance::logInfo( LoggerInstance::my_string const & msg )
-	{
-		pushMessage( LogType::eInfo, msg, true );
-	}
-
-	void LoggerInstance::logInfo( LoggerInstance::my_ostream const & msg )
-	{
-		std::stringstream ss;
-		ss << msg.rdbuf();
-		logInfo( ss.str() );
-	}
-
-	void LoggerInstance::lockedLogWarningNoLF( LoggerInstance::my_string const & msg )
-	{
-		doLockedPushMessage( LogType::eWarning, msg, false );
-	}
-
-	void LoggerInstance::logWarningNoLF( LoggerInstance::my_string const & msg )
-	{
-		pushMessage( LogType::eWarning, msg, false );
-	}
-
-	void LoggerInstance::logWarningNoLF( LoggerInstance::my_ostream const & msg )
-	{
-		std::stringstream ss;
-		ss << msg.rdbuf();
-		logWarningNoLF( ss.str() );
-	}
-
-	void LoggerInstance::lockedLogWarning( LoggerInstance::my_string const & msg )
-	{
-		doLockedPushMessage( LogType::eWarning, msg, true );
-	}
-
-	void LoggerInstance::logWarning( LoggerInstance::my_string const & msg )
-	{
-		pushMessage( LogType::eWarning, msg, true );
-	}
-
-	void LoggerInstance::logWarning( LoggerInstance::my_ostream const & msg )
-	{
-		std::stringstream ss;
-		ss << msg.rdbuf();
-		logWarning( ss.str() );
-	}
-
-	void LoggerInstance::lockedLogErrorNoLF( LoggerInstance::my_string const & msg )
-	{
-		doLockedPushMessage( LogType::eError, msg, false );
-	}
-
-	void LoggerInstance::logErrorNoLF( LoggerInstance::my_string const & msg )
-	{
-		pushMessage( LogType::eError, msg, false );
-	}
-
-	void LoggerInstance::logErrorNoLF( LoggerInstance::my_ostream const & msg )
-	{
-		std::stringstream ss;
-		ss << msg.rdbuf();
-		logErrorNoLF( ss.str() );
-	}
-
-	void LoggerInstance::lockedLogError( LoggerInstance::my_string const & msg )
-	{
-		doLockedPushMessage( LogType::eError, msg );
-	}
-
-	void LoggerInstance::logError( LoggerInstance::my_string const & msg )
-	{
-		pushMessage( LogType::eError, msg );
-	}
-
-	void LoggerInstance::logError( LoggerInstance::my_ostream const & msg )
-	{
-		std::stringstream ss;
-		ss << msg.rdbuf();
-		logError( ss.str() );
-	}
-
-	void LoggerInstance::pushMessage( LogType logLevel, std::string const & message, bool newLine )
-	{
-		auto lock( makeUniqueLock( m_mutexQueue ) );
-		doLockedPushMessage( logLevel, message, newLine );
-	}
-
 	void LoggerInstance::flushQueue()
 	{
 		MessageQueue queue;
 		[&queue, this]()
 		{
 			auto lock( makeUniqueLock( m_mutexQueue ) );
-			std::swap( queue, m_queue );
+			castor::swap( queue, m_queue );
 		}();
 
 		if ( !queue.empty() )
@@ -307,7 +127,7 @@ namespace castor
 		}
 	}
 
-	void LoggerInstance::doLockedPushMessage( LogType logLevel, std::string const & message, bool newLine )
+	void LoggerInstance::doLockedPushMessage( LogType logLevel, MbString const & message, bool newLine )
 	{
 		if ( logLevel >= m_logLevel )
 		{

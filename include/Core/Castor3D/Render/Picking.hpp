@@ -149,7 +149,7 @@ namespace castor3d
 		ashes::ImagePtr m_colourTexture;
 		ashes::ImageView m_colourView;
 		VkBufferImageCopy m_copyRegion;
-		std::vector< VkBufferImageCopy > m_pickDisplayRegions;
+		castor::Vector< VkBufferImageCopy > m_pickDisplayRegions;
 		ashes::CommandBufferPtr m_commandBuffer;
 		ashes::BufferPtr< castor::Point4ui > m_pickBuffer;
 		castor::ArrayView< castor::Point4ui > m_pickData;
@@ -157,7 +157,7 @@ namespace castor3d
 		Submesh const * m_submesh{};
 		BillboardBase const * m_billboard{};
 		uint32_t m_face{ 0u };
-		std::vector< castor::Point4ui > m_buffer;
+		castor::Vector< castor::Point4ui > m_buffer;
 		ashes::FencePtr m_transferFence;
 		PickNodeType m_pickNodeType{ PickNodeType::eNone };
 		std::atomic_bool m_picking{ false };

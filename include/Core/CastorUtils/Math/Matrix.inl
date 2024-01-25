@@ -48,7 +48,7 @@ namespace castor
 
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	template< typename Type >
-	Matrix< T, Columns, Rows >::Matrix( std::array< Type, Columns * Rows > const & rhs )
+	Matrix< T, Columns, Rows >::Matrix( Array< Type, Columns * Rows > const & rhs )
 		: Matrix{ noInit }
 	{
 		for ( size_t i = 0; i < count; i++ )
@@ -630,9 +630,9 @@ namespace castor
 //*************************************************************************************************
 
 	template< typename T, uint32_t Columns, uint32_t Rows >
-	inline castor::String & operator<<( castor::String & text, castor::Matrix< T, Columns, Rows > const & matrix )
+	inline String & operator<<( String & text, Matrix< T, Columns, Rows > const & matrix )
 	{
-		castor::StringStream stream{ castor::makeStringStream() };
+		StringStream stream{ makeStringStream() };
 		stream.precision( 10 );
 		stream << matrix;
 		text += stream.str();
@@ -640,16 +640,16 @@ namespace castor
 	}
 
 	template< typename T, uint32_t Columns, uint32_t Rows >
-	inline castor::String & operator>>( castor::String & text, castor::Matrix< T, Columns, Rows > & matrix )
+	inline String & operator>>( String & text, Matrix< T, Columns, Rows > & matrix )
 	{
-		castor::StringStream stream( text );
+		StringStream stream( text );
 		stream >> matrix;
 		text = stream.str();
 		return text;
 	}
 
 	template< typename CharT, typename T, uint32_t Columns, uint32_t Rows >
-	inline std::basic_ostream< CharT > & operator<<( std::basic_ostream< CharT > & stream, castor::Matrix< T, Columns, Rows > const & matrix )
+	inline std::basic_ostream< CharT > & operator<<( std::basic_ostream< CharT > & stream, Matrix< T, Columns, Rows > const & matrix )
 	{
 		auto precision = stream.precision( 10 );
 
@@ -669,7 +669,7 @@ namespace castor
 	}
 
 	template< typename CharT, typename T, uint32_t Columns, uint32_t Rows >
-	inline std::basic_istream< CharT > & operator>>( std::basic_istream< CharT > & stream, castor::Matrix< T, Columns, Rows > & matrix )
+	inline std::basic_istream< CharT > & operator>>( std::basic_istream< CharT > & stream, Matrix< T, Columns, Rows > & matrix )
 	{
 		for ( uint32_t i = 0; i < Columns; i++ )
 		{

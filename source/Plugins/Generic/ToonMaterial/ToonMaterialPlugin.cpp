@@ -69,7 +69,7 @@ extern "C"
 			, toon::ToonPbrPass::create
 			, &toon::shader::ToonPbrLightingModel::create
 			, true } );
-		engine->registerSpecificsBuffer( toon::shader::ToonProfile::getName()
+		engine->registerSpecificsBuffer( castor::String{ toon::shader::ToonProfile::getName() }
 			, { &toon::shader::ToonProfiles::create
 				, &toon::shader::ToonProfiles::update
 				, &toon::shader::ToonProfiles::declare } );
@@ -77,7 +77,7 @@ extern "C"
 
 	C3D_ToonMaterial_API void OnUnload( castor3d::Engine * engine )
 	{
-		engine->unregisterSpecificsBuffer( toon::shader::ToonProfile::getName() );
+		engine->unregisterSpecificsBuffer( castor::String{ toon::shader::ToonProfile::getName() } );
 		engine->unregisterPassModels( toon::shader::ToonPbrLightingModel::getName() );
 		engine->unregisterPassModels( toon::shader::ToonPhongLightingModel::getName() );
 		engine->unregisterPassComponent( toon::EdgesComponent::TypeName );

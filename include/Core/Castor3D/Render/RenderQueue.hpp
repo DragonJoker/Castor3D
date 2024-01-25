@@ -179,10 +179,10 @@ namespace castor3d
 			PassData & operator=( PassData const & ) = delete;
 
 			PassData( PassData && rhs )noexcept
-				: initEvent{ std::move( rhs.initEvent ) }
+				: initEvent{ castor::move( rhs.initEvent ) }
 				, initialised{ rhs.initialised }
-				, commandBuffer{ std::move( rhs.commandBuffer ) }
-				, renderPassAtInit{ std::move( rhs.renderPassAtInit ) }
+				, commandBuffer{ castor::move( rhs.commandBuffer ) }
+				, renderPassAtInit{ castor::move( rhs.renderPassAtInit ) }
 			{
 				rhs.initEvent = {};
 				rhs.initialised = {};
@@ -211,9 +211,9 @@ namespace castor3d
 		SceneCullerSignalConnection m_onCullerCompute;
 		SceneNode const * m_ignoredNode{ nullptr };
 		QueueRenderNodesUPtr m_renderNodes;
-		std::unique_ptr< PassData > m_pass;
+		castor::RawUniquePtr< PassData > m_pass;
 		PassData * m_currentPass;
-		std::unique_ptr< PassData > m_toDelete;
+		castor::RawUniquePtr< PassData > m_toDelete;
 		bool m_culledChanged{};
 		bool m_fullSort{ true };
 		bool m_commandsChanged{};

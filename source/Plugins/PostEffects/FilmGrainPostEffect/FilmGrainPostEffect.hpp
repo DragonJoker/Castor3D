@@ -76,7 +76,7 @@ namespace film_grain
 
 	public:
 		static castor::String Type;
-		static castor::String Name;
+		static castor::MbString Name;
 		static uint32_t constexpr NoiseMapCount = 6u;
 
 	private:
@@ -87,7 +87,7 @@ namespace film_grain
 		uint32_t m_timeIndex{ 0u };
 		Configuration m_config;
 		castor3d::UniformBufferOffsetT< Configuration > m_configUbo;
-		std::array< castor::Image, NoiseMapCount > m_noiseImages;
+		castor::Array< castor::Image, NoiseMapCount > m_noiseImages;
 		crg::ImageId m_noiseImg;
 		crg::ImageViewId m_noiseView;
 		crg::FramePass * m_pass{};

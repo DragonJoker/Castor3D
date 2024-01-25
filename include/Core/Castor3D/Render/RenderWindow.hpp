@@ -53,10 +53,10 @@ namespace castor3d
 				, ashes::FencePtr fence
 				, ashes::CommandBufferPtr commandBuffer
 				, uint32_t imageIndex )
-				: imageAvailableSemaphore{ std::move( imageAvailableSemaphore ) }
-				, finishedRenderingSemaphore{ std::move( finishedRenderingSemaphore ) }
-				, fence{ std::move( fence ) }
-				, commandBuffer{ std::move( commandBuffer ) }
+				: imageAvailableSemaphore{ castor::move( imageAvailableSemaphore ) }
+				, finishedRenderingSemaphore{ castor::move( finishedRenderingSemaphore ) }
+				, fence{ castor::move( fence ) }
+				, commandBuffer{ castor::move( commandBuffer ) }
 				, imageIndex{ imageIndex }
 			{
 			}
@@ -75,8 +75,8 @@ namespace castor3d
 			ashes::CommandBufferPtr commandBuffer;
 			uint32_t imageIndex{ 0u };
 		};
-		using RenderingResourcesPtr = std::unique_ptr< RenderingResources >;
-		using RenderingResourcesArray = std::vector< RenderingResourcesPtr >;
+		using RenderingResourcesPtr = castor::RawUniquePtr< RenderingResources >;
+		using RenderingResourcesArray = castor::Vector< RenderingResourcesPtr >;
 
 	public:
 		class EvtHandler
@@ -102,7 +102,7 @@ namespace castor3d
 		public:
 			InputListener( Engine & engine
 				, RenderWindow & window )
-				: UserInputListener{ engine, window.getName() + "UIListener" }
+				: UserInputListener{ engine, window.getName() + cuT( "UIListener" ) }
 				, m_window{ &window }
 			{
 			}
@@ -521,7 +521,7 @@ namespace castor3d
 
 	private:
 		static uint32_t s_nbRenderWindows;
-		std::unique_ptr< EvtHandler > m_evtHandler;
+		castor::RawUniquePtr< EvtHandler > m_evtHandler;
 		uint32_t m_index{};
 		RenderDevice & m_device;
 		ashes::SurfacePtr m_surface;
@@ -529,7 +529,7 @@ namespace castor3d
 		QueueData const * m_reservedQueue{};
 		ashes::CommandPoolPtr m_commandBufferPool;
 		ashes::SwapChainPtr m_swapChain;
-		std::vector< ashes::ImageViewArray > m_swapchainViews;
+		castor::Vector< ashes::ImageViewArray > m_swapchainViews;
 		VkFormat m_swapchainFormat;
 		RenderingResourcesArray m_renderingResources;
 		size_t m_resourceIndex{ 0u };
@@ -537,9 +537,9 @@ namespace castor3d
 		ashes::RenderPassPtr m_renderPass;
 		ashes::BufferBasePtr m_snapshotBuffer;
 		castor::ByteArrayView m_snapshotData;
-		std::vector< CommandsSemaphore > m_transferCommands;
-		std::vector< ashes::FrameBufferPtr > m_frameBuffers;
-		std::vector< ashes::CommandBufferPtrArray > m_commandBuffers;
+		castor::Vector< CommandsSemaphore > m_transferCommands;
+		castor::Vector< ashes::FrameBufferPtr > m_frameBuffers;
+		castor::Vector< ashes::CommandBufferPtrArray > m_commandBuffers;
 		ashes::PipelineShaderStageCreateInfoArray m_program;
 		RenderQuadUPtr m_renderQuad;
 		RenderTargetRPtr m_renderTarget{};
@@ -562,7 +562,7 @@ namespace castor3d
 		UniformBufferOffsetT< Configuration > m_configUbo;
 		ProgressBarUPtr m_progressBar;
 		LoadingScreenUPtr m_loadingScreen;
-		std::mutex m_renderMutex;
+		castor::Mutex m_renderMutex;
 		bool m_allowHdrSwapchain{};
 		bool m_hasHdrSupport{};
 	};

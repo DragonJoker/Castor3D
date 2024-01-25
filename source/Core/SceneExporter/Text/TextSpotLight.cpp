@@ -24,9 +24,9 @@ namespace castor
 		log::info << tabs() << cuT( "Writing SpotLight " ) << light.getLight().getName() << std::endl;
 		bool result{ false };
 
-		if ( auto block{ beginBlock( file, "light", light.getLight().getName() ) } )
+		if ( auto block{ beginBlock( file, cuT( "light" ), light.getLight().getName() ) } )
 		{
-			result = writeName( file, "parent", light.getLight().getParent()->getName() )
+			result = writeName( file, cuT( "parent" ), light.getLight().getParent()->getName() )
 				&& write( file, cuT( "type" ), castor3d::getName( light.getLightType() ) )
 				&& writeNamedSub( file, cuT( "colour" ), light.getColour() )
 				&& writeNamedSub( file, cuT( "intensity" ), light.getIntensity() )

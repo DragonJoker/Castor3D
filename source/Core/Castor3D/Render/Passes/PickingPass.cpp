@@ -52,7 +52,7 @@ CU_ImplementSmartPtr( castor3d, PickingPass )
 namespace castor3d
 {
 	uint32_t const PickingPass::UboBindingPoint = 7u;
-	castor::String const PickingPass::Type = "c3d.pick";
+	castor::String const PickingPass::Type = cuT( "c3d.pick" );
 
 	PickingPass::PickingPass( crg::FramePass const & pass
 		, crg::GraphContext & context

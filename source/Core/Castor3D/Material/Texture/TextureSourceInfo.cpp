@@ -13,7 +13,7 @@ namespace castor3d
 	TextureSourceInfo::TextureSourceInfo( TextureSourceInfo const & rhs
 		, TextureConfiguration textureConfig )
 		: m_name{ rhs.m_name }
-		, m_textureConfig{ std::move( textureConfig ) }
+		, m_textureConfig{ castor::move( textureConfig ) }
 		, m_renderTarget{ rhs.m_renderTarget }
 		, m_folder{ rhs.m_folder }
 		, m_relative{ rhs.m_relative }
@@ -29,11 +29,11 @@ namespace castor3d
 		, castor::Path folder
 		, castor::Path relative
 		, castor::ImageLoaderConfig loadConfig )
-		: m_name{ std::move( name ) }
-		, m_textureConfig{ std::move( textureConfig ) }
-		, m_folder{ std::move( folder ) }
-		, m_relative{ std::move( relative ) }
-		, m_loadConfig{ std::move( loadConfig ) }
+		: m_name{ castor::move( name ) }
+		, m_textureConfig{ castor::move( textureConfig ) }
+		, m_folder{ castor::move( folder ) }
+		, m_relative{ castor::move( relative ) }
+		, m_loadConfig{ castor::move( loadConfig ) }
 	{
 	}
 
@@ -42,28 +42,28 @@ namespace castor3d
 		, castor::String type
 		, castor::ByteArray data
 		, castor::ImageLoaderConfig loadConfig )
-		: m_name{ std::move( name ) }
-		, m_textureConfig{ std::move( textureConfig ) }
-		, m_loadConfig{ std::move( loadConfig ) }
-		, m_type{ std::move( type ) }
-		, m_data{ std::move( data ) }
+		: m_name{ castor::move( name ) }
+		, m_textureConfig{ castor::move( textureConfig ) }
+		, m_loadConfig{ castor::move( loadConfig ) }
+		, m_type{ castor::move( type ) }
+		, m_data{ castor::move( data ) }
 	{
 	}
 
 	TextureSourceInfo::TextureSourceInfo( castor::String name
 		, TextureConfiguration textureConfig
 		, RenderTargetRPtr renderTarget )
-		: m_name{ std::move( name ) }
-		, m_textureConfig{ std::move( textureConfig ) }
-		, m_renderTarget{ std::move( renderTarget ) }
+		: m_name{ castor::move( name ) }
+		, m_textureConfig{ castor::move( textureConfig ) }
+		, m_renderTarget{ castor::move( renderTarget ) }
 	{
 	}
 
 	TextureSourceInfo::TextureSourceInfo( castor::String name
 		, TextureConfiguration textureConfig
 		, ashes::ImageCreateInfo const & createInfo )
-		: m_name{ std::move( name ) }
-		, m_textureConfig{ std::move( textureConfig ) }
+		: m_name{ castor::move( name ) }
+		, m_textureConfig{ castor::move( textureConfig ) }
 		, m_createInfo{ static_cast< VkImageCreateInfo  const & >( createInfo ) }
 	{
 	}

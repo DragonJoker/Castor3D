@@ -14,7 +14,7 @@ namespace castor3d
 		: public castor::OwnedBy< RenderSystem >
 	{
 	public:
-		using BufferArray = std::vector< std::unique_ptr< GpuBuddyBuffer > >;
+		using BufferArray = castor::Vector< castor::RawUniquePtr< GpuBuddyBuffer > >;
 
 	public:
 		/**
@@ -90,7 +90,7 @@ namespace castor3d
 
 	private:
 		castor::String m_debugName;
-		std::map< uint32_t, BufferArray > m_buffers;
+		castor::Map< uint32_t, BufferArray > m_buffers;
 		BufferArray m_nonSharedBuffers;
 		uint32_t m_minBlockSize{};
 	};

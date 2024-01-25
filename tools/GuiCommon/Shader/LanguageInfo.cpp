@@ -13,8 +13,7 @@ namespace GuiCommon
 	static wxColour const PreprocColour{ wxT( "SIENNA" ) };
 
 	LanguageInfo::LanguageInfo()
-		: name( DEFAULT_LANGUAGE )
-		, m_styles
+		: m_styles
 		{
 			{ wxSTC_C_DEFAULT, StyleInfo{ PANEL_FOREGROUND_COLOUR, PANEL_BACKGROUND_COLOUR, 0, 0 } },
 			{ wxSTC_C_COMMENT, StyleInfo{ CommentColour, PANEL_BACKGROUND_COLOUR, 0, 0 } },
@@ -62,7 +61,7 @@ namespace GuiCommon
 			for ( auto keyword : keywords )
 			{
 				toAdd += sep + keyword;
-				sep = " ";
+				sep = cuT( " " );
 			}
 		}
 		else
@@ -70,7 +69,7 @@ namespace GuiCommon
 			for ( auto keyword : keywords )
 			{
 				toAdd += sep + castor::string::toLowerCase( keyword );
-				sep = " ";
+				sep = cuT( " " );
 			}
 		}
 	}

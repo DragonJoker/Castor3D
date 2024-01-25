@@ -12,63 +12,65 @@ namespace castor3d
 {
 	namespace dbg
 	{
-		static std::string formatMessage( std::string_view prefix
-			, std::string_view message )
+		static castor::String formatMessage( castor::StringView prefix
+			, castor::MbStringView message )
 		{
+			auto mbPrefix = castor::toUtf8( prefix );
+
 			if ( message.find_first_of( "|\n" ) == message.find( "\n" ) )
 			{
-				auto split = castor::string::split( castor::StringView{ message.data() }, "\n", ~0u, false );
-				std::stringstream stream;
+				auto split = castor::string::split( castor::MbStringView{ message.data() }, "\n", ~0u, false );
+				castor::MbStringStream stream;
 
 				for ( auto const & str : split )
 				{
-					stream << "\n" << prefix << str;
+					stream << "\n" << mbPrefix << str;
 				}
 
-				return stream.str();
+				return castor::makeString( stream.str() );
 			}
 
-			auto split = castor::string::split( castor::StringView{ message.data() }, "|", ~0u, false );
-			std::stringstream stream;
+			auto split = castor::string::split( castor::MbStringView{ message.data() }, "|", ~0u, false );
+			castor::MbStringStream stream;
 
 			if ( !split.empty() )
 			{
 				auto first = split[0];
 				auto end = first.find( "]" );
-				stream << "\n" << prefix << first.substr( 0, end );
+				stream << "\n" << mbPrefix << first.substr( 0, end );
 
 				if ( split.size() > 1u )
 				{
 					for ( auto & str : castor::makeArrayView( split.begin() + 1u, split.end() ) )
 					{
-						stream << "\n" << prefix << castor::string::trim( str );
+						stream << "\n" << mbPrefix << castor::string::trim( str );
 					}
 				}
 			}
 
-			return stream.str();
+			return castor::makeString( stream.str() );
 		}
 
 #if VK_EXT_debug_utils
 
-		static std::ostream & operator<<( std::ostream & stream, VkDebugUtilsObjectNameInfoEXT const & value )
+		static castor::OutputStream & operator<<( castor::OutputStream & stream, VkDebugUtilsObjectNameInfoEXT const & value )
 		{
-			stream << "(" << std::hex << value.objectHandle << ") " << ashes::getName( value.objectType );
+			stream << cuT( "(" ) << std::hex << value.objectHandle << cuT( ") " ) << castor::makeString( ashes::getName( value.objectType ) );
 
 			if ( value.pObjectName )
 			{
-				stream << " " << value.pObjectName;
+				stream << cuT( " " ) << value.pObjectName;
 			}
 
 			return stream;
 		}
 
-		static std::ostream & operator<<( std::ostream & stream, VkDebugUtilsLabelEXT const & value )
+		static castor::OutputStream & operator<<( castor::OutputStream & stream, VkDebugUtilsLabelEXT const & value )
 		{
-			stream << "(" << value.color[0]
-				<< ", " << value.color[1]
-				<< ", " << value.color[2]
-				<< ", " << value.color[3] << ")";
+			stream << cuT( "(" ) << value.color[0]
+				<< cuT( ", " ) << value.color[1]
+				<< cuT( ", " ) << value.color[2]
+				<< cuT( ", " ) << value.color[3] << cuT( ")" );
 
 			if ( value.pLabelName )
 			{
@@ -79,14 +81,14 @@ namespace castor3d
 		}
 
 		template< typename ObjectT >
-		static void print( std::ostream & stream
-			, std::string const & name
+		static void print( castor::OutputStream & stream
+			, castor::String const & name
 			, uint32_t count
 			, ObjectT const * objects
-			, std::string const & lineEnd
-			, std::string const & lineBegin )
+			, castor::String const & lineEnd
+			, castor::String const & lineBegin )
 		{
-			stream << lineBegin << name << ": " << count << lineEnd;
+			stream << lineBegin << name << cuT( ": " ) << count << lineEnd;
 
 			for ( uint32_t i = 0u; i < count; ++i, ++objects )
 			{
@@ -108,31 +110,29 @@ namespace castor3d
 
 			// Select prefix depending on flags passed to the callback
 			// Note that multiple flags may be set for a single validation message
-			std::locale loc{ "C" };
-			std::stringstream stream;
-			stream.imbue( loc );
-			stream << "Vulkan ";
-			std::string lineEnd;
-			std::string lineBegin = ", ";
+			auto stream = castor::makeStringStream();
+			stream << cuT( "Vulkan " );
+			castor::String lineEnd;
+			castor::String lineBegin = cuT( ", " );
 
 			// Error that may result in undefined behaviour
 			switch ( messageSeverity )
 			{
 			case VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT:
-				stream << "Error";
-				lineEnd = "\n";
-				lineBegin = "    ";
+				stream << cuT( "Error" );
+				lineEnd = cuT( "\n" );
+				lineBegin = cuT( "    " );
 				break;
 			case VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT:
-				stream << "Warning";
-				lineEnd = "\n";
-				lineBegin = "    ";
+				stream << cuT( "Warning" );
+				lineEnd = cuT( "\n" );
+				lineBegin = cuT( "    " );
 				break;
 			case VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT:
-				stream << "Info";
+				stream << cuT( "Info" );
 				break;
 			case VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT:
-				stream << "Verbose";
+				stream << cuT( "Verbose" );
 				break;
 			default:
 				break;
@@ -140,29 +140,29 @@ namespace castor3d
 
 			if ( ashes::checkFlag( messageTypes, VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT ) )
 			{
-				stream << " - General";
+				stream << cuT( " - General" );
 			}
 			if ( ashes::checkFlag( messageTypes, VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT ) )
 			{
-				stream << " - Validation";
+				stream << cuT( " - Validation" );
 			}
 			if ( ashes::checkFlag( messageTypes, VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT ) )
 			{
-				stream << " - Performance";
+				stream << cuT( " - Performance" );
 			}
 
 			stream << lineEnd;
 
 			if ( pCallbackData->pMessageIdName )
 			{
-				stream << lineBegin << "Message ID: " << pCallbackData->pMessageIdName << lineEnd;
+				stream << lineBegin << cuT( "Message ID: " ) << pCallbackData->pMessageIdName << lineEnd;
 			}
 
-			stream << lineBegin << "Code: 0x" << std::hex << pCallbackData->messageIdNumber << lineEnd;
-			stream << lineBegin << "Message: " << formatMessage( lineBegin + "  ", pCallbackData->pMessage ) << lineEnd;
-			print( stream, "Objects", pCallbackData->objectCount, pCallbackData->pObjects, lineEnd, lineBegin );
-			print( stream, "Queue Labels", pCallbackData->queueLabelCount, pCallbackData->pQueueLabels, lineEnd, lineBegin );
-			print( stream, "CommmandBuffer Labels", pCallbackData->cmdBufLabelCount, pCallbackData->pCmdBufLabels, lineEnd, lineBegin );
+			stream << lineBegin << cuT( "Code: 0x" ) << std::hex << pCallbackData->messageIdNumber << lineEnd;
+			stream << lineBegin << cuT( "Message: " ) << formatMessage( lineBegin + cuT( "  " ), pCallbackData->pMessage ) << lineEnd;
+			print( stream, cuT( "Objects" ), pCallbackData->objectCount, pCallbackData->pObjects, lineEnd, lineBegin );
+			print( stream, cuT( "Queue Labels" ), pCallbackData->queueLabelCount, pCallbackData->pQueueLabels, lineEnd, lineBegin );
+			print( stream, cuT( "CommmandBuffer Labels" ), pCallbackData->cmdBufLabelCount, pCallbackData->pCmdBufLabels, lineEnd, lineBegin );
 
 			switch ( messageSeverity )
 			{
@@ -225,51 +225,49 @@ namespace castor3d
 		{
 			// Select prefix depending on flags passed to the callback
 			// Note that multiple flags may be set for a single validation message
-			std::locale loc{ "C" };
-			std::stringstream stream;
-			stream.imbue( loc );
-			stream << "Vulkan ";
-			std::string lineEnd;
-			std::string lineBegin = ", ";
+			auto stream = castor::makeStringStream();
+			stream << cuT( "Vulkan " );
+			castor::String lineEnd;
+			castor::String lineBegin = cuT( ", " );
 
 			// Error that may result in undefined behaviour
 			if ( ashes::checkFlag( flags, VK_DEBUG_REPORT_ERROR_BIT_EXT ) )
 			{
-				lineEnd = "\n";
-				lineBegin = "    ";
-				stream << "Error:" << lineEnd << lineBegin;
+				lineEnd = cuT( "\n" );
+				lineBegin = cuT( "    " );
+				stream << cuT( "Error:" ) << lineEnd << lineBegin;
 			}
 			// Warnings may hint at unexpected / non-spec API usage
 			if ( ashes::checkFlag( flags, VK_DEBUG_REPORT_WARNING_BIT_EXT ) )
 			{
-				lineEnd = "\n";
-				lineBegin = "    ";
-				stream << "Warning:" << lineEnd << lineBegin;
+				lineEnd = cuT( "\n" );
+				lineBegin = cuT( "    " );
+				stream << cuT( "Warning:" ) << lineEnd << lineBegin;
 			}
 			// May indicate sub-optimal usage of the API
 			if ( ashes::checkFlag( flags, VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT ) )
 			{
-				lineEnd = "\n";
-				lineBegin = "    ";
-				stream << "Performance:" << lineEnd << lineBegin;
+				lineEnd = cuT( "\n" );
+				lineBegin = cuT( "    " );
+				stream << cuT( "Performance:" ) << lineEnd << lineBegin;
 			}
 			// Informal messages that may become handy during debugging
 			if ( ashes::checkFlag( flags, VK_DEBUG_REPORT_INFORMATION_BIT_EXT ) )
 			{
-				stream << "Info:" << lineEnd;
+				stream << cuT( "Info:" ) << lineEnd;
 			}
 			// Diagnostic info from the Vulkan loader and layers
 			// Usually not helpful in terms of API usage, but may help to debug layer and loader problems 
 			if ( ashes::checkFlag( flags, VK_DEBUG_REPORT_DEBUG_BIT_EXT ) )
 			{
-				stream << "Debug:" << lineEnd;
+				stream << cuT( "Debug:" ) << lineEnd;
 			}
 
 			// Display message to default output (console/logcat)
-			stream << "Layer: " << pLayerPrefix << lineEnd;
-			stream << lineBegin << "Code: 0x" << std::hex << messageCode << lineEnd;
-			stream << lineBegin << "Object: (" << std::hex << object << ") " << ashes::getName( objectType ) << lineEnd;
-			stream << lineBegin << "Message: " << formatMessage( lineBegin + "  ", pMessage );
+			stream << cuT( "Layer: " ) << pLayerPrefix << lineEnd;
+			stream << lineBegin << cuT( "Code: 0x" ) << std::hex << messageCode << lineEnd;
+			stream << lineBegin << cuT( "Object: (" ) << std::hex << object << cuT( ") " ) << castor::makeString( ashes::getName( objectType ) ) << lineEnd;
+			stream << lineBegin << cuT( "Message: " ) << formatMessage( lineBegin + cuT( "  " ), pMessage );
 
 			VkBool32 result = VK_FALSE;
 

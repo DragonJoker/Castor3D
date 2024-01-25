@@ -70,7 +70,7 @@ extern "C"
 		engine->registerPassComponent< water::WaterFoamMapComponent >();
 		engine->registerPassComponent< water::WaterComponent >();
 		engine->registerPassComponent< water::WaterReflRefrComponent >();
-		engine->registerSpecificsBuffer( water::shader::WaterProfile::getName()
+		engine->registerSpecificsBuffer( castor::String{ water::shader::WaterProfile::getName() }
 			, { &water::shader::WaterProfiles::create
 				, &water::shader::WaterProfiles::update
 				, &water::shader::WaterProfiles::declare } );
@@ -78,7 +78,7 @@ extern "C"
 
 	C3D_WaterMaterial_API void OnUnload( castor3d::Engine * engine )
 	{
-		engine->unregisterSpecificsBuffer( water::shader::WaterProfile::getName() );
+		engine->unregisterSpecificsBuffer( castor::String{ water::shader::WaterProfile::getName() } );
 		engine->unregisterPassComponent( water::WaterReflRefrComponent::TypeName );
 		engine->unregisterPassComponent( water::WaterComponent::TypeName );
 		engine->unregisterPassComponent( water::WaterFoamMapComponent::TypeName );

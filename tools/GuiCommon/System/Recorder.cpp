@@ -125,7 +125,7 @@ namespace GuiCommon
 						strMsg += wxT( ":\n" );
 						strMsg += wxString( exc.what(), wxMBConvLibc() );
 						strMsg += wxT( ")" );
-						throw std::runtime_error( castor::string::stringCast< char >( make_String( strMsg ) ) );
+						throw std::runtime_error( castor::toUtf8( make_String( strMsg ) ) );
 					}
 				}
 
@@ -434,7 +434,7 @@ namespace GuiCommon
 						auto outputHeight = libffmpeg::sws_scale( m_swsContext, &buffer, lineSize, 0, inbuffer->getHeight(), m_frame->data, m_frame->linesize );
 						libffmpeg::AVPacket packet{ 0 };
 						libffmpeg::av_init_packet( &packet );
-						std::vector< uint8_t > outbuf( packet.size );
+						castor::Vector< uint8_t > outbuf( packet.size );
 						packet.pts = m_recordedCount;
 						packet.dts = m_recordedCount;
 #	if LIBAVUTIL_VERSION_INT > AV_VERSION_INT(54, 6, 0)
@@ -467,7 +467,7 @@ namespace GuiCommon
 			int const m_bitRate{ 600000 };
 			libffmpeg::AVPixelFormat const m_pixelFmt{ libffmpeg::AV_PIX_FMT_YUV420P };// or PIX_FMT_YUV420P
 			libffmpeg::SwsContext * m_swsContext{ nullptr };
-			std::array< ByteArray, AV_NUM_DATA_POINTERS > m_frameBuffers;
+			castor::Array< ByteArray, AV_NUM_DATA_POINTERS > m_frameBuffers;
 		};
 
 #else
@@ -507,7 +507,7 @@ namespace GuiCommon
 	//*************************************************************************************************
 
 	Recorder::Recorder()
-		: m_impl( std::make_unique< RecorderImpl >() )
+		: m_impl( castor::make_unique< RecorderImpl >() )
 	{
 	}
 }

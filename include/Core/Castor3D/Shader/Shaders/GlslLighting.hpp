@@ -30,7 +30,7 @@ namespace castor3d::shader
 			, Lights & lights
 			, bool hasIblSupport
 			, bool enableVolumetric
-			, std::string prefix );
+			, castor::String prefix );
 		C3D_API virtual ~LightingModel() = default;
 
 		inline LightingModelID getLightingModelId()const
@@ -288,11 +288,11 @@ namespace castor3d::shader
 		Lights & m_lights;
 		bool m_hasIblSupport;
 		bool m_enableVolumetric;
-		std::string m_prefix;
-		std::unique_ptr< sdw::Struct > m_type;
-		std::unique_ptr< sdw::UInt > m_directionalCascadeIndex;
-		std::unique_ptr< sdw::UInt > m_directionalCascadeCount;
-		std::unique_ptr< sdw::Mat4 > m_directionalTransform;
+		castor::String m_prefix;
+		castor::RawUniquePtr< sdw::Struct > m_type;
+		castor::RawUniquePtr< sdw::UInt > m_directionalCascadeIndex;
+		castor::RawUniquePtr< sdw::UInt > m_directionalCascadeCount;
+		castor::RawUniquePtr< sdw::Mat4 > m_directionalTransform;
 		sdw::Function< sdw::Void
 			, PDirectionalLight
 			, InBlendComponents

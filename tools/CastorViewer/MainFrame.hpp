@@ -34,8 +34,8 @@ namespace CastorViewer
 
 	struct LogContainer
 	{
-		std::vector< std::pair< wxString, bool > > queue;
-		std::mutex mutex;
+		castor::Vector< castor::Pair< wxString, bool > > queue;
+		castor::Mutex mutex;
 		wxListBox * listBox{ nullptr };
 	};
 
@@ -68,7 +68,7 @@ namespace CastorViewer
 		void doPopulateStatusBar();
 		void doPopulateToolBar( GuiCommon::SplashScreen & splashScreen );
 		void doInitialisePerspectives();
-		void doLogCallback( castor::String const & log, castor::LogType type, bool newLine );
+		void doLogCallback( castor::MbString const & log, castor::LogType type, bool newLine );
 		void doCleanupScene();
 		void doSaveFrame();
 		bool doStartRecord();

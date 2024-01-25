@@ -114,7 +114,7 @@ namespace castor3d
 		, shader::BlendComponents & components
 		, shader::SampleTexture const & sampleTexture )const
 	{
-		applyVec3Component( "specular"
+		applyVec3Component( cuT( "specular" )
 			, passShaders
 			, textureConfigs
 			, textureAnims
@@ -128,7 +128,7 @@ namespace castor3d
 	void SpecularMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		channelFillers.try_emplace( "specular"
+		channelFillers.try_emplace( cuT( "specular" )
 			, getTextureFlags()
 			, []( TextureContext & blockContext )
 			{
@@ -169,7 +169,7 @@ namespace castor3d
 	}
 
 	void SpecularMapComponent::Plugin::createMapComponent( Pass & pass
-		, std::vector< PassComponentUPtr > & result )const
+		, castor::Vector< PassComponentUPtr > & result )const
 	{
 		result.push_back( castor::makeUniqueDerived< PassComponent, SpecularMapComponent >( pass ) );
 	}

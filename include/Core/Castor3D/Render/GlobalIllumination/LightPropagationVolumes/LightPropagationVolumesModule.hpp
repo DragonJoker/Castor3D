@@ -38,7 +38,7 @@ namespace castor3d
 		CU_ScopedEnumBounds( eR, eB ),
 	};
 	C3D_API castor::String getTextureName( LpvTexture texture
-		, std::string const & infix );
+		, castor::String const & infix );
 	C3D_API castor::String getTexName( LpvTexture texture );
 	C3D_API VkFormat getFormat( RenderDevice const & device, LpvTexture texture );
 	C3D_API VkClearValue getClearValue( LpvTexture texture );
@@ -132,10 +132,10 @@ namespace castor3d
 	CU_DeclareSmartPtr( castor3d, LightPropagationVolumes, C3D_API );
 	CU_DeclareSmartPtr( castor3d, LightPropagationVolumesG, C3D_API );
 
-	using LightPropagationVolumesLightType = std::array< LightPropagationVolumesUPtr, size_t( LightType::eCount ) >;
-	using LayeredLightPropagationVolumesLightType = std::array< LayeredLightPropagationVolumesUPtr, size_t( LightType::eCount ) >;
-	using LightPropagationVolumesGLightType = std::array< LightPropagationVolumesGUPtr, size_t( LightType::eCount ) >;
-	using LayeredLightPropagationVolumesGLightType = std::array< LayeredLightPropagationVolumesGUPtr, size_t( LightType::eCount ) >;
+	using LightPropagationVolumesLightType = castor::Array< LightPropagationVolumesUPtr, size_t( LightType::eCount ) >;
+	using LayeredLightPropagationVolumesLightType = castor::Array< LayeredLightPropagationVolumesUPtr, size_t( LightType::eCount ) >;
+	using LightPropagationVolumesGLightType = castor::Array< LightPropagationVolumesGUPtr, size_t( LightType::eCount ) >;
+	using LayeredLightPropagationVolumesGLightType = castor::Array< LayeredLightPropagationVolumesGUPtr, size_t( LightType::eCount ) >;
 
 	CU_DeclareVector( GeometryInjectionPass, GeometryInjectionPass );
 	CU_DeclareVector( LightInjectionPass, LightInjectionPass );

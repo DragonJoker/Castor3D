@@ -89,9 +89,9 @@ namespace castor3d
 	struct Meshlet
 	{
 		// Meshlets vertices indices.
-		std::array< uint32_t, MaxMeshletVertexCount > vertices;
+		castor::Array< uint32_t, MaxMeshletVertexCount > vertices;
 		// Meshlets triangles indices.
-		std::array< uint8_t, MaxMeshletTriangleCount * 3u > primitives;
+		castor::Array< uint8_t, MaxMeshletTriangleCount * 3u > primitives;
 		// Number of vertices used in the meshlet.
 		uint32_t vertexCount;
 		// Number of triangles used in the meshlet.

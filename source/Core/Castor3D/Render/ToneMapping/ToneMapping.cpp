@@ -29,7 +29,7 @@ namespace castor3d
 	}
 
 	ToneMapping::ToneMapping( Engine & engine
-		, crg::FrameGraph & graph
+		, crg::FramePassGroup & graph
 		, crg::ImageViewIdArray const & source
 		, crg::ImageViewId const & target
 		, crg::FramePass const & previousPass
@@ -78,7 +78,7 @@ namespace castor3d
 		visitor.visit( m_shader );
 	}
 
-	crg::FramePass & ToneMapping::doCreatePass( crg::FrameGraph & graph
+	crg::FramePass & ToneMapping::doCreatePass( crg::FramePassGroup & graph
 		, crg::ImageViewIdArray const & source
 		, crg::ImageViewId const & target
 		, crg::FramePass const & previousPass
@@ -89,7 +89,7 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				stepProgressBarLocal( progress, "Initialising tone mapping pass" );
+				stepProgressBarLocal( progress, cuT( "Initialising tone mapping pass" ) );
 				auto result = crg::RenderQuadBuilder{}
 					.renderPosition( {} )
 					.renderSize( makeExtent2D( getExtent( target ) ) )
@@ -97,7 +97,7 @@ namespace castor3d
 					.passIndex( &m_passIndex )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_program ) )
 					.build( framePass, context, graph, crg::ru::Config{ 2u } );
-				getEngine()->registerTimer( framePass.getFullName()
+				getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				m_quad = result.get();
 				return result;

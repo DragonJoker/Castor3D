@@ -13,7 +13,7 @@ namespace smaa
 	SmaaData::SmaaData( sdw::ShaderWriter & writer
 		, ast::expr::ExprPtr expr
 		, bool enabled )
-		: sdw::StructInstance{ writer, std::move( expr ), enabled }
+		: sdw::StructInstance{ writer, castor::move( expr ), enabled }
 		, rtMetrics{ getMember< sdw::Vec4 >( "rtMetrics" ) }
 		, predication{ getMember< sdw::Vec4 >( "predication" ) }
 		, subsampleIndices{ getMember< sdw::Vec4 >( "subsampleIndices" ) }
@@ -67,8 +67,8 @@ namespace smaa
 
 	//*********************************************************************************************
 
-	castor::String const SmaaUbo::Buffer = cuT( "SmaaBuffer" );
-	castor::String const SmaaUbo::Data = cuT( "c3d_smaaData" );
+	castor::MbString const SmaaUbo::Buffer = "SmaaBuffer";
+	castor::MbString const SmaaUbo::Data = "c3d_smaaData";
 
 	SmaaUbo::SmaaUbo( castor3d::RenderDevice const & device )
 		: m_device{ device }

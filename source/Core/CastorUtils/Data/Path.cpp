@@ -16,13 +16,13 @@ namespace castor
 #endif
 
 	Path::Path( char const * rhs )
-		: String{ string::stringCast< xchar >( rhs ) }
+		: String{ makeString( rhs ) }
 	{
 		doNormalise();
 	}
 
 	Path::Path( wchar_t const * rhs )
-		: String{ string::stringCast< xchar >( rhs ) }
+		: String{ makeString( rhs ) }
 	{
 		doNormalise();
 	}
@@ -46,20 +46,20 @@ namespace castor
 	}
 
 	Path::Path( Path && rhs )noexcept
-		: String{ std::move( rhs ) }
+		: String{ rhs }
 	{
 	}
 
 	Path & Path::operator=( Path const & rhs )
 	{
 		Path path( rhs );
-		std::swap( *this, path );
+		castor::swap( *this, path );
 		return *this;
 	}
 
 	Path & Path::operator=( Path && rhs )noexcept
 	{
-		String::operator=( std::move( rhs ) );
+		String::operator=( rhs );
 		return *this;
 	}
 
@@ -82,7 +82,7 @@ namespace castor
 	Path & Path::operator/=( char const * rhs )
 	{
 		push_back( NativeSeparator );
-		String::operator+=( string::stringCast< xchar >( rhs ) );
+		String::operator+=( makeString( rhs ) );
 		doNormalise();
 		return *this;
 	}
@@ -90,7 +90,7 @@ namespace castor
 	Path & Path::operator/=( wchar_t const * rhs )
 	{
 		push_back( NativeSeparator );
-		String::operator+=( string::stringCast< xchar >( rhs ) );
+		String::operator+=( makeString( rhs ) );
 		doNormalise();
 		return *this;
 	}
@@ -110,14 +110,14 @@ namespace castor
 
 	Path & Path::operator+=( char const * rhs )
 	{
-		String::operator+=( string::stringCast< xchar >( rhs ) );
+		String::operator+=( makeString( rhs ) );
 		doNormalise();
 		return *this;
 	}
 
 	Path & Path::operator+=( wchar_t const * rhs )
 	{
-		String::operator+=( string::stringCast< xchar >( rhs ) );
+		String::operator+=( makeString( rhs ) );
 		doNormalise();
 		return *this;
 	}
@@ -196,7 +196,7 @@ namespace castor
 	{
 #if defined( CU_PlatformWindows )
 		String copy{ *this };
-		return string::replace( copy, String{ NativeSeparator }, String{ GenericSeparator } );
+		return string::replace( copy, NativeSeparator, GenericSeparator );
 #else
 		return *this;
 #endif
@@ -225,7 +225,7 @@ namespace castor
 				assign( substr( 1 ) );
 			}
 
-			std::array< xchar, 3 > sep{ NativeSeparator, 0, 0 };
+			Array< xchar, 3 > sep{ NativeSeparator, 0, 0 };
 			String tmp( *this );
 			string::replace( tmp, cuT( "/" ), sep.data() );
 			string::replace( tmp, cuT( "\\" ), sep.data() );
@@ -236,7 +236,7 @@ namespace castor
 			}
 
 			StringArray folders = string::split( tmp, sep.data(), 1000, false);
-			std::list< String > list( folders.begin(), folders.end() );
+			List< String > list( folders.begin(), folders.end() );
 			tmp.clear();
 			auto it = std::find( list.begin(), list.end(), cuT( ".." ) );
 
@@ -250,7 +250,7 @@ namespace castor
 				else
 				{
 					// The folder looks like <something>/../<something else> remove the previous folder
-					std::list< String >::iterator itPrv = it;
+					auto itPrv = it;
 					--itPrv;
 					list.erase( it );
 					list.erase( itPrv );
@@ -263,7 +263,7 @@ namespace castor
 			for ( auto const & folder : list )
 			{
 				if ( !tmp.empty()
-					&& ( tmp.size() > 1 || tmp != "/" ) )
+					&& ( tmp.size() > 1 || tmp != cuT( "/" ) ) )
 				{
 					tmp += NativeSeparator;
 				}
@@ -324,8 +324,15 @@ namespace castor
 		return path;
 	}
 
-	std::filesystem::path makePath( castor::StringView str )
+	std::filesystem::path makePath( StringView str )
 	{
-		return std::filesystem::u8path( str.begin(), str.end() );
+		if constexpr ( std::is_same_v< xchar, wchar_t > )
+		{
+			return std::filesystem::path{ str };
+		}
+		else
+		{
+			return std::filesystem::u8path( str.begin(), str.end() );
+		}
 	}
 }

@@ -150,7 +150,7 @@ namespace castor3d
 
 				if ( item )
 				{
-					item->setCaption( castor::string::toU32String( text ) );
+					item->setCaption( castor::toUtf8U32String( text ) );
 				}
 			}
 		}
@@ -248,7 +248,7 @@ namespace castor3d
 			, getName() + cuT( "_Item" ) + castor::string::toString( itemIndex )
 			, &style.getItemStyle()
 			, this
-			, castor::string::toU32String( value )
+			, castor::toUtf8U32String( value )
 			, castor::Position{}
 			, castor::Size{ getClientSize()->x, DefaultHeight }
 			, uint32_t( StaticFlag::eVAlignCenter ) ) );

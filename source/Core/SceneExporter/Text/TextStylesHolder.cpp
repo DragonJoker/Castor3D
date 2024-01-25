@@ -51,7 +51,7 @@ namespace castor
 			if ( auto block{ writer.beginBlock( file, sectionName, name ) } )
 			{
 				TextWriter< StyleT > subWriter{ writer.tabs()
-					, std::forward< ParamsT >( params )... };
+					, castor::forward< ParamsT >( params )... };
 				return subWriter( style, file );
 			}
 
@@ -77,7 +77,7 @@ namespace castor
 						, sub.first
 						, sectionName
 						, file
-						, std::forward< ParamsT >( params )... );
+						, castor::forward< ParamsT >( params )... );
 			}
 
 			return result;
@@ -107,19 +107,19 @@ namespace castor
 
 		if ( !result )
 		{
-			result = writeName( file, "default_font", fontName );
+			result = writeName( file, cuT( "default_font" ), fontName );
 		}
 
 		return result
-			&& stlhdrwrtr::write( *this, m_scene, style.getButtonStyles(), "button_style", file, fontName )
-			&& stlhdrwrtr::write( *this, m_scene, style.getComboBoxStyles(), "combobox_style", file, fontName )
-			&& stlhdrwrtr::write( *this, m_scene, style.getEditStyles(), "edit_style", file, fontName )
-			&& stlhdrwrtr::write( *this, m_scene, style.getExpandablePanelStyles(), "expandable_panel_style", file, fontName )
-			&& stlhdrwrtr::write( *this, m_scene, style.getFrameStyles(), "frame_style", file, fontName )
-			&& stlhdrwrtr::write( *this, m_scene, style.getListBoxStyles(), "listbox_style", file, fontName )
-			&& stlhdrwrtr::write( *this, m_scene, style.getPanelStyles(), "panel_style", file, fontName )
-			&& stlhdrwrtr::write( *this, m_scene, style.getSliderStyles(), "slider_style", file, fontName )
-			&& stlhdrwrtr::write( *this, m_scene, style.getStaticStyles(), "static_style", file, fontName );
+			&& stlhdrwrtr::write( *this, m_scene, style.getButtonStyles(), cuT( "button_style" ), file, fontName )
+			&& stlhdrwrtr::write( *this, m_scene, style.getComboBoxStyles(), cuT( "combobox_style" ), file, fontName )
+			&& stlhdrwrtr::write( *this, m_scene, style.getEditStyles(), cuT( "edit_style" ), file, fontName )
+			&& stlhdrwrtr::write( *this, m_scene, style.getExpandablePanelStyles(), cuT( "expandable_panel_style" ), file, fontName )
+			&& stlhdrwrtr::write( *this, m_scene, style.getFrameStyles(), cuT( "frame_style" ), file, fontName )
+			&& stlhdrwrtr::write( *this, m_scene, style.getListBoxStyles(), cuT( "listbox_style" ), file, fontName )
+			&& stlhdrwrtr::write( *this, m_scene, style.getPanelStyles(), cuT( "panel_style" ), file, fontName )
+			&& stlhdrwrtr::write( *this, m_scene, style.getSliderStyles(), cuT( "slider_style" ), file, fontName )
+			&& stlhdrwrtr::write( *this, m_scene, style.getStaticStyles(), cuT( "static_style" ), file, fontName );
 	}
 
 	//*********************************************************************************************

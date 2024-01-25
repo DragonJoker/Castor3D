@@ -20,8 +20,8 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	using TextureViewCRef = std::reference_wrapper< TextureView const >;
-	using TextureViewCRefArray = std::vector< TextureViewCRef >;
+	using TextureViewCRef = castor::ReferenceWrapper< TextureView const >;
+	using TextureViewCRefArray = castor::Vector< TextureViewCRef >;
 
 	class GaussianBlur
 		: public castor::OwnedBy< Engine >
@@ -162,10 +162,10 @@ namespace castor3d
 		/**@}*/
 
 	public:
-		C3D_API static castor::String const Config;
-		C3D_API static castor::String const Coefficients;
-		C3D_API static castor::String const CoefficientsCount;
-		C3D_API static castor::String const TextureSize;
+		C3D_API static castor::MbString const Config;
+		C3D_API static castor::MbString const Coefficients;
+		C3D_API static castor::MbString const CoefficientsCount;
+		C3D_API static castor::MbString const TextureSize;
 		C3D_API static constexpr uint32_t MaxCoefficients{ 60u };
 
 		struct Configuration
@@ -173,7 +173,7 @@ namespace castor3d
 			castor::Point2f textureSize;
 			uint32_t blurCoeffsCount;
 			uint32_t dump; // to keep a 16 byte alignment.
-			std::array< castor::Point4f, GaussianBlur::MaxCoefficients / 4u > blurCoeffs; // We then allow for 60 coeffs max, to have a 256 bytes struct.
+			castor::Array< castor::Point4f, GaussianBlur::MaxCoefficients / 4u > blurCoeffs; // We then allow for 60 coeffs max, to have a 256 bytes struct.
 		};
 
 	private:
@@ -185,7 +185,7 @@ namespace castor3d
 		VkFormat m_format;
 		crg::ImageViewId m_intermediateView;
 		UniformBufferOffsetT< Configuration > m_blurUbo;
-		std::vector< float > m_kernel;
+		castor::Vector< float > m_kernel;
 		ProgramModule m_shaderX;
 		ProgramModule m_shaderY;
 		ashes::PipelineShaderStageCreateInfoArray m_stagesX;

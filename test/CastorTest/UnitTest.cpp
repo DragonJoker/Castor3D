@@ -1,6 +1,7 @@
 #include "UnitTest.hpp"
 
 #include <CastorUtils/Log/Logger.hpp>
+#include <CastorUtils/Miscellaneous/StringUtils.hpp>
 
 #include <CastorUtils/Config/BeginExternHeaderGuard.hpp>
 #include <sstream>
@@ -11,13 +12,33 @@ namespace Testing
 	//*************************************************************************************************
 
 	TestBlock::TestBlock( TestCase & testCase
-		, std::string const & text )
+		, std::string text
+		, bool indent )
 		: testCase{ testCase }
-		, text{ text }
+		, text{ castor::move( text ) }
+		, indent{ indent }
 	{
 	}
 
-	TestBlock::~TestBlock()
+	TestBlock::TestBlock( TestCase & testCase
+		, std::wstring text
+		, bool indent )
+		: testCase{ testCase }
+		, wtext{ castor::move( text ) }
+		, indent{ indent }
+	{
+	}
+
+	TestBlock::TestBlock( TestCase & testCase
+		, std::u32string text
+		, bool indent )
+		: testCase{ testCase }
+		, u32text{ castor::move( text ) }
+		, indent{ indent }
+	{
+	}
+
+	TestBlock::~TestBlock()noexcept
 	{
 		testCase.doPopBlock( this );
 	}
@@ -26,10 +47,6 @@ namespace Testing
 
 	TestCase::TestCase( std::string const & name )
 		: m_name( name )
-	{
-	}
-
-	TestCase::~TestCase()
 	{
 	}
 
@@ -58,17 +75,17 @@ namespace Testing
 			catch ( TestFailed & exc )
 			{
 				errCount++;
-				std::cerr << "*	Test " << test.first << " failed (" << exc.what() << ")" << std::endl;
+				std::cerr << "*\tTest " << test.first << " failed (" << exc.what() << ")" << std::endl;
 			}
 			catch ( std::exception & exc )
 			{
 				errCount++;
-				std::cerr << "*	Test " << test.first << " execution failed (" << exc.what() << ")" << std::endl;
+				std::cerr << "*\tTest " << test.first << " execution failed (" << exc.what() << ")" << std::endl;
 			}
 			catch ( ... )
 			{
 				errCount++;
-				std::cerr << "*	Test " << test.first << " execution failed (Unknown reason)" << std::endl;
+				std::cerr << "*\tTest " << test.first << " execution failed (Unknown reason)" << std::endl;
 			}
 
 			std::stringstream end;
@@ -82,13 +99,27 @@ namespace Testing
 	void TestCase::doRegisterTest( std::string const & name
 		, TestFunction test )
 	{
-		m_tests.push_back( { name, test } );
+		m_tests.emplace_back( name, castor::move( test ) );
 	}
 
-	TestBlockPtr TestCase::doPushBlock( std::string const & text )
+	TestBlockPtr TestCase::doPushBlock( std::string const & text, bool indent )
 	{
-		auto result = std::make_unique< TestBlock >( *this, text );
-		m_blocks.push_back( result.get() );
+		auto result = castor::make_unique< TestBlock >( *this, text, indent );
+		m_blocks.emplace_back( result.get() );
+		return result;
+	}
+
+	TestBlockPtr TestCase::doPushBlock( std::wstring const & text, bool indent )
+	{
+		auto result = castor::make_unique< TestBlock >( *this, text, indent );
+		m_blocks.emplace_back( result.get() );
+		return result;
+	}
+
+	TestBlockPtr TestCase::doPushBlock( std::u32string const & text, bool indent )
+	{
+		auto result = castor::make_unique< TestBlock >( *this, text, indent );
+		m_blocks.emplace_back( result.get() );
 		return result;
 	}
 
@@ -98,14 +129,43 @@ namespace Testing
 		m_blocks.erase( it );
 	}
 
-	void TestCase::doPrintError( std::string const & error )
+	void TestCase::doPrintError( std::string const & error )const
 	{
+		std::string oldPrefix;
+		std::wstring woldPrefix;
 		std::string prefix;
+		std::wstring wprefix;
 
 		for ( auto block : m_blocks )
 		{
-			std::cerr << prefix << block->text << std::endl;
-			prefix += "  ";
+			if ( !block->wtext.empty() )
+			{
+				std::wcerr << ( block->indent ? wprefix : woldPrefix ) << block->wtext << std::endl;
+			}
+			else if ( !block->u32text.empty() )
+			{
+				std::cerr << ( block->indent ? prefix : oldPrefix );
+
+				for ( auto c : block->u32text )
+				{
+					auto buffer = castor::string::utf8::fromUtf8( c );
+					std::cerr << buffer.data();
+				}
+
+				std::cerr << std::endl;
+			}
+			else
+			{
+				std::cerr << ( block->indent ? prefix : oldPrefix ) << block->text << std::endl;
+			}
+
+			if ( block->indent )
+			{
+				oldPrefix += prefix;
+				woldPrefix += wprefix;
+				prefix += "  ";
+				wprefix += L"  ";
+			}
 		}
 
 		std::cerr << prefix << error << std::endl;

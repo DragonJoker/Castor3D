@@ -84,7 +84,7 @@ namespace castor3d
 			VertexT( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr
 				, bool enabled = true )
-				: VertexStructT< FlagT >{ writer, std::move( expr ), enabled }
+				: VertexStructT< FlagT >{ writer, castor::move( expr ), enabled }
 			{
 			}
 
@@ -194,10 +194,10 @@ namespace castor3d
 					//   -3 -2 -1 +1 +2 +3
 					auto w = writer.declLocaleArray( "w"
 						, 6u
-						, std::vector< sdw::Float >{ { 0.006_f, 0.061_f, 0.242_f, 0.242_f, 0.061_f, 0.006_f } } );
+						, castor::Vector< sdw::Float >{ { 0.006_f, 0.061_f, 0.242_f, 0.242_f, 0.061_f, 0.006_f } } );
 					auto o = writer.declLocaleArray( "o"
 						, 6u
-						, std::vector< sdw::Float >{ { -1.0_f, -0.666666667_f, -0.333333333_f, 0.333333333_f, 0.666666667_f, 1.0_f } } );
+						, castor::Vector< sdw::Float >{ { -1.0_f, -0.666666667_f, -0.333333333_f, 0.333333333_f, 0.666666667_f, 1.0_f } } );
 
 					// Accumulate the other samples:
 					FOR( writer, sdw::Int, i, 0_i, i < 6_i, ++i )
@@ -218,7 +218,7 @@ namespace castor3d
 					}
 					ROF
 				} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return castor::make_unique< sdw::Shader >( castor::move( writer.getShader() ) );
 		}
 
 		static ShaderPtr getCombineProgram( Engine & engine )
@@ -315,7 +315,7 @@ namespace castor3d
 			, RenderDevice const & device
 			, castor::Size const & size
 			, VkFormat format
-			, std::string const & name )
+			, castor::String const & name )
 		{
 			return { device
 				, resources
@@ -348,12 +348,12 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const SubsurfaceScatteringPass::Config = "Config";
-	castor::String const SubsurfaceScatteringPass::Step = "c3d_step";
-	castor::String const SubsurfaceScatteringPass::Correction = "c3d_correction";
-	castor::String const SubsurfaceScatteringPass::PixelSize = "c3d_pixelSize";
-	castor::String const SubsurfaceScatteringPass::Weights = "c3d_weights";
-	castor::String const SubsurfaceScatteringPass::Offsets = "c3d_offsets";
+	castor::MbString const SubsurfaceScatteringPass::Config = "Config";
+	castor::MbString const SubsurfaceScatteringPass::Step = "c3d_step";
+	castor::MbString const SubsurfaceScatteringPass::Correction = "c3d_correction";
+	castor::MbString const SubsurfaceScatteringPass::PixelSize = "c3d_pixelSize";
+	castor::MbString const SubsurfaceScatteringPass::Weights = "c3d_weights";
+	castor::MbString const SubsurfaceScatteringPass::Offsets = "c3d_offsets";
 
 	SubsurfaceScatteringPass::SubsurfaceScatteringPass( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
@@ -372,18 +372,18 @@ namespace castor3d
 		, m_group{ graph.createPassGroup( "SSSSS" ) }
 		, m_enabled{ m_scene.needsSubsurfaceScattering() }
 		, m_size{ makeSize( m_diffuse.getExtent() ) }
-		, m_intermediate{ sssss::doCreateImage( *depthObj.resources, m_device, m_size, m_diffuse.getFormat(), "SSSIntermediate" ) }
-		, m_blurImages{ sssss::doCreateImage( *depthObj.resources, m_device, m_size, m_intermediate.getFormat(), "SSSBlur0" )
-			, sssss::doCreateImage( *depthObj.resources, m_device, m_size, m_intermediate.getFormat(), "SSSBlur1" )
-			, sssss::doCreateImage( *depthObj.resources, m_device, m_size, m_intermediate.getFormat(), "SSSBlur2" ) }
-		, m_result{ sssss::doCreateImage( *depthObj.resources, m_device, m_size, m_intermediate.getFormat(), "SSSResult" ) }
+		, m_intermediate{ sssss::doCreateImage( *depthObj.resources, m_device, m_size, m_diffuse.getFormat(), cuT( "SSSIntermediate" ) ) }
+		, m_blurImages{ sssss::doCreateImage( *depthObj.resources, m_device, m_size, m_intermediate.getFormat(),cuT( "SSSBlur0" ) )
+			, sssss::doCreateImage( *depthObj.resources, m_device, m_size, m_intermediate.getFormat(),cuT( "SSSBlur1" ) )
+			, sssss::doCreateImage( *depthObj.resources, m_device, m_size, m_intermediate.getFormat(), cuT( "SSSBlur2" ) ) }
+		, m_result{ sssss::doCreateImage( *depthObj.resources, m_device, m_size, m_intermediate.getFormat(), cuT( "SSSResult" ) ) }
 		, m_blurCfgUbo{ m_device.uboPool->getBuffer< BlurConfiguration >( 0u ) }
 		, m_blurWgtUbo{ m_device.uboPool->getBuffer< BlurWeights >( 0u ) }
-		, m_blurHorizProgram{ "SSSBlurX", sssss::getBlurProgram( *device.renderSystem.getEngine(), false ) }
+		, m_blurHorizProgram{ cuT( "SSSBlurX" ), sssss::getBlurProgram( *device.renderSystem.getEngine(), false ) }
 		, m_blurXShader{ makeProgramStates( m_device, m_blurHorizProgram ) }
-		, m_blurVerticProgram{ "SSSBlurY", sssss::getBlurProgram( *device.renderSystem.getEngine(), true ) }
+		, m_blurVerticProgram{ cuT( "SSSBlurY" ), sssss::getBlurProgram( *device.renderSystem.getEngine(), true ) }
 		, m_blurYShader{ makeProgramStates( m_device, m_blurVerticProgram ) }
-		, m_combineProgram{ "SSSCombine", sssss::getCombineProgram( *device.renderSystem.getEngine() ) }
+		, m_combineProgram{ cuT( "SSSCombine" ), sssss::getCombineProgram( *device.renderSystem.getEngine() ) }
 		, m_combineShader{ makeProgramStates( m_device, m_combineProgram ) }
 		, m_lastPass{ &previousPass }
 	{
@@ -398,23 +398,23 @@ namespace castor3d
 		weights.blurWeights[2] = castor::Point4f{ 0.46, 0.0, 0.0402, 0.25 };
 		weights.blurVariance = castor::Point4f{ 0.0516, 0.2719, 2.0062 };
 		auto blurXSource = &m_diffuse;
-		stepProgressBarLocal( progress, "Creating SSSSS Blur passes" );
+		stepProgressBarLocal( progress, cuT( "Creating SSSSS Blur passes" ) );
 		auto & modelBuffer = scene.getModelBuffer().getBuffer();
 
 		for ( uint32_t i = 0u; i < PassCount; ++i )
 		{
 			auto blurYDestination = &m_blurImages[i];
-			auto & blurX = m_group.createPass( "BlurX" + std::to_string( i )
+			auto & blurX = m_group.createPass( "BlurX" + castor::string::toMbString( i )
 				, [this, &isEnabled]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{
-					auto result = std::make_unique< crg::RenderQuad >( framePass
+					auto result = castor::make_unique< crg::RenderQuad >( framePass
 						, context
 						, graph
 						, crg::ru::Config{}
 						, sssss::createConfig( m_size, m_blurXShader, &m_enabled, isEnabled ) );
-					getEngine()->registerTimer( framePass.getFullName()
+					getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 						, result->getTimer() );
 					return result;
 				} );
@@ -439,17 +439,17 @@ namespace castor3d
 				, sssss::BlurLgtDiffImgId );
 			blurX.addOutputColourView( m_intermediate.targetViewId );
 
-			auto & blurY = m_group.createPass( "BlurY" + std::to_string( i )
+			auto & blurY = m_group.createPass( "BlurY" + castor::string::toMbString( i )
 				, [this, &isEnabled]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{
-					auto result = std::make_unique< crg::RenderQuad >( framePass
+					auto result = castor::make_unique< crg::RenderQuad >( framePass
 						, context
 						, graph
 						, crg::ru::Config{}
 						, sssss::createConfig( m_size, m_blurYShader, &m_enabled, isEnabled ) );
-					getEngine()->registerTimer( framePass.getFullName()
+					getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 						, result->getTimer() );
 					return result;
 				} );
@@ -477,13 +477,13 @@ namespace castor3d
 			blurXSource = blurYDestination;
 		}
 
-		stepProgressBarLocal( progress, "Creating SSSSS combine pass" );
+		stepProgressBarLocal( progress, cuT( "Creating SSSSS combine pass" ) );
 		auto & pass = m_group.createPass("Combine"
 			, [this, progress, &isEnabled]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				stepProgressBarLocal( progress, "Initialising SSSSS combine pass" );
+				stepProgressBarLocal( progress, cuT( "Initialising SSSSS combine pass" ) );
 				auto extent = m_result.getExtent();
 				auto ruConfig = crg::ru::Config{}
 					.implicitAction( m_result.wholeViewId
@@ -491,12 +491,12 @@ namespace castor3d
 							, m_result.wholeViewId
 							, { extent.width, extent.height } ) );
 				auto rqConfig = sssss::createConfig( m_size, m_combineShader, &m_enabled, isEnabled );
-				auto result = std::make_unique< crg::RenderQuad >( framePass
+				auto result = castor::make_unique< crg::RenderQuad >( framePass
 					, context
 					, graph
 					, ruConfig
 					, rqConfig );
-				getEngine()->registerTimer( framePass.getFullName()
+				getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
@@ -549,13 +549,13 @@ namespace castor3d
 	{
 		for ( size_t i{ 0u }; i < m_blurImages.size(); ++i )
 		{
-			visitor.visit( "SSSSS Blur " + castor::string::toString( i )
+			visitor.visit( cuT( "SSSSS Blur " ) + castor::string::toString( i )
 				, m_blurImages[i]
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 				, TextureFactors{}.invert( true ) );
 		}
 
-		visitor.visit( "SSSSS Result"
+		visitor.visit( cuT( "SSSSS Result" )
 			, m_result
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) );

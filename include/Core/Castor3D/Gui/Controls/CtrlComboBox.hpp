@@ -135,7 +135,7 @@ namespace castor3d
 		OnComboEventConnection connect( ComboBoxEvent event
 			, OnComboEventFunction function )
 		{
-			return m_signals[size_t( event )].connect( std::move( function ) );
+			return m_signals[size_t( event )].connect( castor::move( function ) );
 		}
 
 		/**
@@ -219,7 +219,7 @@ namespace castor3d
 		ListBoxCtrlRPtr m_choices;
 		castor::StringArray m_values;
 		int m_selected;
-		std::array< OnComboEvent, size_t( ComboBoxEvent::eCount ) > m_signals;
+		castor::Array< OnComboEvent, size_t( ComboBoxEvent::eCount ) > m_signals;
 		OnButtonEventConnection m_expandClickedConnection;
 		OnListEventConnection m_choicesSelectedConnection;
 	};

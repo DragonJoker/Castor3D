@@ -36,7 +36,7 @@ namespace ocean_fft
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 					, VK_SHADER_STAGE_COMPUTE_BIT ) };
 			return device->createDescriptorSetLayout( GenerateNormalPass::Name 
-				, std::move( bindings ) );
+				, castor::move( bindings ) );
 		}
 
 		static ashes::DescriptorSetPtr createDescriptorSet( crg::RunnableGraph & graph
@@ -176,7 +176,7 @@ namespace ocean_fft
 
 	//************************************************************************************************
 
-	castor::String const GenerateNormalPass::Name{ "GenerateHeightmap" };
+	castor::MbString const GenerateNormalPass::Name{ "GenerateHeightmap" };
 
 	GenerateNormalPass::GenerateNormalPass( crg::FramePass const & pass
 		, crg::GraphContext & context
@@ -197,7 +197,7 @@ namespace ocean_fft
 		, m_device{ device }
 		, m_descriptorSetLayout{ gennml::createDescriptorLayout( m_device ) }
 		, m_pipelineLayout{ gennml::createPipelineLayout( m_device, *m_descriptorSetLayout ) }
-		, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, Name, gennml::createShader( device ) }
+		, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, castor::makeString( Name ), gennml::createShader( device ) }
 		, m_pipeline{ gennml::createPipeline( device, *m_pipelineLayout, m_shader ) }
 		, m_descriptorSetPool{ m_descriptorSetLayout->createPool( 1u ) }
 		, m_descriptorSet{ gennml::createDescriptorSet( m_graph, *m_descriptorSetPool, m_pass ) }

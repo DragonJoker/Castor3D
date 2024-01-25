@@ -139,8 +139,8 @@ namespace castor3d
 
 	private:
 		castor::Point3f m_direction;
-		std::vector< Cascade > m_cascades;
-		std::vector< Cascade > m_prvCascades;
+		castor::Vector< Cascade > m_cascades;
+		castor::Vector< Cascade > m_prvCascades;
 	};
 }
 

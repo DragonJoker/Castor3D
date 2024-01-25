@@ -108,19 +108,19 @@ namespace c3d_assimp
 
 		static castor::String decodeUri( castor::String uri )
 		{
-			castor::String escaped{ uri };
+			castor::MbString escaped{ castor::toUtf8( uri ) };
 
 			for ( auto i = escaped.begin(); i != escaped.end(); i++ )
 			{
 				if ( *i == '%' )
 				{
-					std::array< char, 3 > chars = { *( i + 1 ), *( i + 2 ), 0 };
+					castor::Array< char, 3 > chars = { *( i + 1 ), *( i + 2 ), 0 };
 					*i = static_cast< char >( std::strtoul( chars.data(), nullptr, 16 ) );
 					escaped.erase( i + 1, i + 3 );
 				}
 			}
 
-			return escaped;
+			return castor::makeString( escaped );
 		}
 
 		struct TextureInfo
@@ -140,7 +140,7 @@ namespace c3d_assimp
 				, castor3d::SamplerObs sampler
 				, AssimpMaterialImporter const & importer
 				, float emissiveMult
-				, std::map< castor3d::PassComponentTextureFlag, castor3d::TextureConfiguration > const & textureRemaps
+				, castor::Map< castor3d::PassComponentTextureFlag, castor3d::TextureConfiguration > const & textureRemaps
 				, castor3d::Pass & result )
 				: m_material{ material }
 				, m_scene{ scene }
@@ -223,7 +223,7 @@ namespace c3d_assimp
 				, castor3d::SamplerObs sampler
 				, AssimpMaterialImporter const & importer
 				, float emissiveMult
-				, std::map< castor3d::PassComponentTextureFlag, castor3d::TextureConfiguration > const & textureRemaps
+				, castor::Map< castor3d::PassComponentTextureFlag, castor3d::TextureConfiguration > const & textureRemaps
 				, castor3d::Pass & pass )
 			{
 				MaterialParser parser{ material, scene, shadingMode, sampler, importer, emissiveMult, textureRemaps, pass };
@@ -645,7 +645,7 @@ namespace c3d_assimp
 					{
 						auto mode = makeString( value );
 
-						if ( mode == "MASK" )
+						if ( mode == cuT( "MASK" ) )
 						{
 							auto alphaTest = m_result.createComponent< castor3d::AlphaTestComponent >();
 							alphaTest->setAlphaRefValue( ref );
@@ -699,20 +699,17 @@ namespace c3d_assimp
 				if ( source.isBufferImage() )
 				{
 					result = m_importer.loadImage( source.name()
-						, castor::ImageCreateParams{ source.type()
-						, source.buffer()
-						, { false, false, false } } );
+						, castor::ImageCreateParams{ source.type(), source.buffer() } );
 				}
 				else if ( source.isFileImage() )
 				{
 					result = m_importer.loadImage( source.name()
-						, castor::ImageCreateParams{ source.folder() / source.relative()
-						, { false, false, false } } );
+						, castor::ImageCreateParams{ source.folder() / source.relative() } );
 				}
 
 				if ( !result )
 				{
-					CU_LoaderError( "Couldn't load image" + source.name() + "." );
+					CU_LoaderError( "Couldn't load image" + castor::toUtf8( source.name() ) + "." );
 				}
 
 				return *result;
@@ -726,12 +723,12 @@ namespace c3d_assimp
 				{
 					try
 					{
-						std::unique_ptr< castor3d::TextureSourceInfo > sourceInfo;
+						castor::RawUniquePtr< castor3d::TextureSourceInfo > sourceInfo;
 						texConfig.transform = castor3d::TextureTransform{ { info.transform.mTranslation.x, info.transform.mTranslation.y, 0.0f }
 							, castor::Angle::fromRadians( info.transform.mRotation )
 							, { info.transform.mScaling.x, info.transform.mScaling.y, 1.0f } };
 
-						if ( info.name[0] == '*' )
+						if ( info.name[0] == cuT( '*' ) )
 						{
 							auto id = uint32_t( castor::string::toInt( info.name.substr( 1u ) ) );
 
@@ -741,26 +738,26 @@ namespace c3d_assimp
 								castor::ByteArray data;
 								data.resize( texture->mWidth );
 								std::memcpy( data.data(), texture->pcData, data.size() );
-								sourceInfo = std::make_unique< castor3d::TextureSourceInfo >( m_importer.loadTexture( "Image" + castor::string::toString( id )
-									, texture->achFormatHint
-									, std::move( data )
+								sourceInfo = castor::make_unique< castor3d::TextureSourceInfo >( m_importer.loadTexture( cuT( "Image" ) + castor::string::toString( id )
+									, castor::makeString( texture->achFormatHint )
+									, castor::move( data )
 									, texConfig ) );
 							}
 						}
-						else if ( auto texture = m_scene.GetEmbeddedTexture( info.name.c_str() ) )
+						else if ( auto texture = m_scene.GetEmbeddedTexture( castor::toUtf8( info.name ).c_str() ) )
 						{
 							castor::ByteArray data;
 							data.resize( texture->mWidth );
 							std::memcpy( data.data(), texture->pcData, data.size() );
-							sourceInfo = std::make_unique< castor3d::TextureSourceInfo >( m_importer.loadTexture( info.name
-								, texture->achFormatHint
-								, std::move( data )
+							sourceInfo = castor::make_unique< castor3d::TextureSourceInfo >( m_importer.loadTexture( info.name
+								, castor::makeString( texture->achFormatHint )
+								, castor::move( data )
 								, texConfig ) );
 						}
 						else
 						{
 							auto name = decodeUri( info.name );
-							sourceInfo = std::make_unique< castor3d::TextureSourceInfo >( m_importer.loadTexture( castor::Path{ name }
+							sourceInfo = castor::make_unique< castor3d::TextureSourceInfo >( m_importer.loadTexture( castor::Path{ name }
 								, texConfig ) );
 						}
 
@@ -800,7 +797,7 @@ namespace c3d_assimp
 								*sourceInfo = castor3d::TextureSourceInfo{ *sourceInfo, texConfig };
 							}
 
-							m_result.registerTexture( std::move( *sourceInfo )
+							m_result.registerTexture( castor::move( *sourceInfo )
 								, { info.sampler, info.texcoordSet } );
 						}
 					}
@@ -870,8 +867,8 @@ namespace c3d_assimp
 						else
 						{
 							samplerName = m_result.getOwner()->getName()
-								+ "_" + castor::string::toString( m_result.getIndex() )
-								+ "_" + result.name;
+								+ cuT( "_" ) + castor::string::toString( m_result.getIndex() )
+								+ cuT( "_" ) + result.name;
 						}
 
 						if ( !cache.has( samplerName ) )
@@ -1008,8 +1005,8 @@ namespace c3d_assimp
 				{
 					colInfo = getTextureInfo( aiTextureType_DIFFUSE );
 					isCollada = !colInfo.name.empty()
-						&& colInfo.name.find( "_Cine_" ) != castor::String::npos
-						&& colInfo.name.find( "/MI_CH_" ) != castor::String::npos;
+						&& colInfo.name.find( cuT( "_Cine_" ) ) != castor::String::npos
+						&& colInfo.name.find( cuT( "/MI_CH_" ) ) != castor::String::npos;
 
 					if ( isCollada )
 					{
@@ -1119,13 +1116,13 @@ namespace c3d_assimp
 					{
 						auto mode = makeString( value );
 
-						if ( mode != "OPAQUE" )
+						if ( mode != cuT( "OPAQUE" ) )
 						{
 							auto config = getRemap( m_colourMapFlags, m_colourBaseConfiguration );
 							addFlagConfiguration( config, { m_opacityMapFlags, 0xFF000000 } );
 							m_textureRemaps.emplace( m_colourMapFlags, config );
 							hasOpacityTex = true;
-							mixedInterpolative( mode == "BLEND" );
+							mixedInterpolative( mode == cuT( "BLEND" ) );
 						}
 					}
 				}
@@ -1180,7 +1177,7 @@ namespace c3d_assimp
 			castor3d::SamplerObs m_sampler;
 			AssimpMaterialImporter const & m_importer;
 			float m_emissiveMult;
-			std::map< castor3d::PassComponentTextureFlag, castor3d::TextureConfiguration > m_textureRemaps;
+			castor::Map< castor3d::PassComponentTextureFlag, castor3d::TextureConfiguration > m_textureRemaps;
 			aiShadingMode m_shadingModel{};
 			bool m_isPbr;
 			bool m_hasRefr{};

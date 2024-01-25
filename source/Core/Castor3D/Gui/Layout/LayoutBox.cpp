@@ -15,12 +15,12 @@ namespace castor3d
 	}
 
 	LayoutBox::LayoutBox( ControlsManager & manager )
-		: Layout{ "c3d.layout.box", manager }
+		: Layout{ cuT( "c3d.layout.box" ), manager }
 	{
 	}
 
 	LayoutBox::LayoutBox( LayoutControl & container )
-		: Layout{ "c3d.layout.box", container }
+		: Layout{ cuT( "c3d.layout.box" ), container }
 	{
 	}
 
@@ -141,7 +141,7 @@ namespace castor3d
 			: ( maxComponentValue - accum ) / count;
 	}
 
-	std::pair< int32_t, uint32_t > LayoutBox::doGetFixedPosSize( Item const & item
+	castor::Pair< int32_t, uint32_t > LayoutBox::doGetFixedPosSize( Item const & item
 		, uint32_t limit
 		, uint32_t component )const
 	{

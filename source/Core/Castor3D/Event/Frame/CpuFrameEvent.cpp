@@ -21,7 +21,7 @@ namespace castor3d
 		: m_type{ rhs.m_type }
 		, m_skip{ rhs.m_skip.load() }
 #if !defined( NDEBUG )
-		, m_stackTrace{ std::move( rhs.m_stackTrace ) }
+		, m_stackTrace{ castor::move( rhs.m_stackTrace ) }
 #endif
 	{
 		rhs.m_skip = true;
@@ -48,7 +48,7 @@ namespace castor3d
 #if !defined( NDEBUG )
 		if constexpr ( C3D_UseCpuEventsStack )
 		{
-			m_stackTrace = std::move( rhs.m_stackTrace );
+			m_stackTrace = castor::move( rhs.m_stackTrace );
 		}
 #endif
 		rhs.m_skip = true;
@@ -63,7 +63,7 @@ namespace castor3d
 		if constexpr ( C3D_UseCpuEventsStack )
 		{
 			castor::StringStream stream = castor::makeStringStream();
-			stream << castor::Debug::Backtrace{ 20 };
+			stream << castor::debug::Backtrace{ 20 };
 			m_stackTrace = stream.str();
 		}
 #endif

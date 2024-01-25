@@ -41,7 +41,7 @@ namespace castor3d
 				if ( m_fileVersion > Version{ 1, 5, 0 } )
 				{
 					result = doParseChunk( name, chunk );
-					checkError( result, "Couldn't parse name." );
+					checkError( result, cuT( "Couldn't parse name." ) );
 
 					if ( result )
 					{
@@ -69,7 +69,7 @@ namespace castor3d
 				break;
 			case ChunkType::eAnimationObject:
 				result = createBinaryParser< SkeletonAnimationObject >().parse( obj, chunk );
-				checkError( result, "Couldn't parse animation object." );
+				checkError( result, cuT( "Couldn't parse animation object." ) );
 				break;
 			default:
 				break;
@@ -91,7 +91,7 @@ namespace castor3d
 				&& chunk.getChunkType() == ChunkType::eName )
 			{
 				result = doParseChunk( name, chunk );
-				checkError( result, "Couldn't parse name." );
+				checkError( result, cuT( "Couldn't parse name." ) );
 
 				if ( result )
 				{

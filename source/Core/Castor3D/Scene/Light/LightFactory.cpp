@@ -9,7 +9,7 @@ CU_ImplementSmartPtr( castor3d, LightFactory )
 namespace castor3d
 {
 	LightFactory::LightFactory()
-		: Factory< LightCategory, LightType, LightCategoryUPtr, std::function< LightCategoryUPtr( Light & ) > >()
+		: Factory< LightCategory, LightType, LightCategoryUPtr, castor::Function< LightCategoryUPtr( Light & ) > >()
 	{
 		registerType( LightType::eDirectional, DirectionalLight::create );
 		registerType( LightType::ePoint, PointLight::create );

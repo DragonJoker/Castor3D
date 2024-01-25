@@ -18,7 +18,7 @@ namespace castor3d::shader
 	SurfaceBase::SurfaceBase( sdw::ShaderWriter & writer
 		, ast::expr::ExprPtr expr
 		, bool enabled )
-		: StructInstance{ writer, std::move( expr ), enabled }
+		: StructInstance{ writer, castor::move( expr ), enabled }
 		, clipPosition{ this->getMember< sdw::Vec3 >( "clipPosition", true ) }
 		, viewPosition{ this->getMember< sdw::Vec4 >( "viewPosition", true ) }
 		, worldPosition{ this->getMember< sdw::Vec4 >( "worldPosition", true ) }
@@ -116,7 +116,7 @@ namespace castor3d::shader
 	Surface::Surface( sdw::ShaderWriter & writer
 		, ast::expr::ExprPtr expr
 		, bool enabled )
-		: SurfaceBase{ writer, std::move( expr ), enabled }
+		: SurfaceBase{ writer, castor::move( expr ), enabled }
 		, texCoord{ this->getMember< sdw::Vec3 >( "texture0" ) }
 	{
 	}
@@ -143,10 +143,10 @@ namespace castor3d::shader
 		, sdw::Vec3 world
 		, sdw::Vec3 normal
 		, sdw::Vec3 coord )
-		: Surface{ std::move( clip )
+		: Surface{ castor::move( clip )
 			, vec4( view, 1.0_f )
 			, vec4( world, 1.0_f )
-			, std::move( normal )
+			, castor::move( normal )
 			, vec3( 0.0_f ) }
 	{
 	}
@@ -155,10 +155,10 @@ namespace castor3d::shader
 		, sdw::Vec4 view
 		, sdw::Vec4 world
 		, sdw::Vec3 normal )
-		: Surface{ std::move( clip )
-			, std::move( view )
-			, std::move( world )
-			, std::move( normal )
+		: Surface{ castor::move( clip )
+			, castor::move( view )
+			, castor::move( world )
+			, castor::move( normal )
 			, vec3( 0.0_f ) }
 	{
 	}
@@ -167,10 +167,10 @@ namespace castor3d::shader
 		, sdw::Vec3 view
 		, sdw::Vec3 world
 		, sdw::Vec3 normal )
-		: Surface{ std::move( clip )
-			, std::move( view )
-			, std::move( world )
-			, std::move( normal )
+		: Surface{ castor::move( clip )
+			, castor::move( view )
+			, castor::move( world )
+			, castor::move( normal )
 			, vec3( 0.0_f ) }
 	{
 	}
@@ -180,7 +180,7 @@ namespace castor3d::shader
 		: Surface{ vec3( 0.0_f )
 			, vec4( 0.0_f )
 			, vec4( world, 1.0_f )
-			, std::move( normal )
+			, castor::move( normal )
 			, vec3( 0.0_f ) }
 	{
 	}
@@ -246,7 +246,7 @@ namespace castor3d::shader
 	RasterizerSurfaceBase::RasterizerSurfaceBase( sdw::ShaderWriter & writer
 		, sdw::expr::ExprPtr expr
 		, bool enabled )
-		: SurfaceBase{ writer, std::move( expr ), enabled }
+		: SurfaceBase{ writer, castor::move( expr ), enabled }
 		, curPosition{ this->getMember< sdw::Vec4 >( "curPosition", true ) }
 		, prvPosition{ this->getMember< sdw::Vec4 >( "prvPosition", true ) }
 		, tangentSpaceFragPosition{ this->getMember< sdw::Vec3 >( "tangentSpaceFragPosition", true ) }

@@ -23,14 +23,11 @@
 
 #include <CastorUtils/Data/BinaryFile.hpp>
 
-using namespace castor;
-using namespace castor3d;
-
 namespace Testing
 {
 	namespace
 	{
-		bool exportScene( Scene const & scene, Path const & fileName )
+		bool exportScene( castor3d::Scene const & scene, castor::Path const & fileName )
 		{
 			castor3d::exporter::CscnSceneExporter exporter{ castor3d::exporter::ExportOptions{} };
 			return exporter.exportScene( scene, fileName );
@@ -45,7 +42,7 @@ namespace Testing
 			cache.add( object->getName(), object );
 		}
 
-		void cleanup( SceneRPtr scene )
+		void cleanup( castor3d::SceneRPtr scene )
 		{
 			auto & engine = *scene->getEngine();
 			engine.getRenderLoop().renderSyncFrame();
@@ -55,7 +52,7 @@ namespace Testing
 		}
 	}
 
-	SceneExportTest::SceneExportTest( Engine & engine )
+	SceneExportTest::SceneExportTest( castor3d::Engine & engine )
 		: C3DTestCase{ "SceneExportTest", engine }
 	{
 	}
@@ -103,10 +100,10 @@ namespace Testing
 		cleanup( doParseScene( m_testDataFolder / cuT( "Anim.zip" ), true ) );
 	}
 
-	SceneRPtr SceneExportTest::doParseScene( Path const & path
+	castor3d::SceneRPtr SceneExportTest::doParseScene( castor::Path const & path
 		, bool initialise )
 	{
-		SceneFileParser dstParser{ m_engine };
+		castor3d::SceneFileParser dstParser{ m_engine };
 		CT_REQUIRE( dstParser.parseFile( path ) );
 		CT_REQUIRE( dstParser.scenesBegin() != dstParser.scenesEnd() );
 		auto result = dstParser.scenesBegin()->second;
@@ -119,16 +116,16 @@ namespace Testing
 		return result;
 	}
 
-	void SceneExportTest::doTestScene( String const & name )
+	void SceneExportTest::doTestScene( castor::String const & name )
 	{
-		SceneRPtr src{ doParseScene( m_testDataFolder / name ) };
-		Path path = Path{ cuT( "TestScene" ) } / cuT( "TestScene.cscn" );
+		castor3d::SceneRPtr src{ doParseScene( m_testDataFolder / name ) };
+		castor::Path path = castor::Path{ cuT( "TestScene" ) } / cuT( "TestScene.cscn" );
 		CT_CHECK( exportScene( *src, path ) );
 		m_engine.getSceneCache().rename( src->getName()
 			, src->getName() + cuT( "_ren" ) );
-		SceneRPtr dst{ doParseScene( path ) };
+		castor3d::SceneRPtr dst{ doParseScene( path ) };
 		CT_EQUAL( *src, *dst );
-		File::directoryDelete( Path{ cuT( "TestScene" ) } );
+		castor::File::directoryDelete( castor::Path{ cuT( "TestScene" ) } );
 		cleanup( dst );
 		cleanup( src );
 	}

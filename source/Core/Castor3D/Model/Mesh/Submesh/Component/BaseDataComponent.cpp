@@ -87,11 +87,11 @@ namespace castor3d
 		, ObjectBufferOffset const & bufferOffsets
 		, PipelineFlags const & flags
 		, ashes::BufferCRefArray & buffers
-		, std::vector< uint64_t > & offsets
+		, castor::Vector< uint64_t > & offsets
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
 		, uint32_t & currentBinding
 		, uint32_t & currentLocation
-		, std::unordered_map< size_t, ashes::PipelineVertexInputStateCreateInfo > & cache )
+		, castor::UnorderedMap< size_t, ashes::PipelineVertexInputStateCreateInfo > & cache )
 	{
 		auto & bufferChunk = bufferOffsets.getBufferChunk( submeshData );
 
@@ -214,6 +214,6 @@ namespace castor3d
 
 	castor::String getBaseDataComponentName( SubmeshData submeshData )
 	{
-		return "c3d.submesh." + castor::string::lowerCase( getName( submeshData ) );
+		return cuT( "c3d.submesh." ) + castor::string::lowerCase( getName( submeshData ) );
 	}
 }

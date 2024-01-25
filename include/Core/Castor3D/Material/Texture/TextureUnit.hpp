@@ -27,8 +27,8 @@ namespace castor3d
 		explicit TextureData( TextureSourceInfo psourceInfo
 			, castor::ImageRPtr pimage = {}
 			, VkImageUsageFlags pusage = VkImageUsageFlags{ VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT } )
-			: sourceInfo{ std::move( psourceInfo ) }
-			, image{ std::move( pimage ) }
+			: sourceInfo{ castor::move( psourceInfo ) }
+			, image{ castor::move( pimage ) }
 			, usage{ pusage }
 		{
 		}
@@ -43,9 +43,9 @@ namespace castor3d
 		explicit TextureUnitData( TextureData * pbase = {}
 			, PassTextureConfig ppassConfig = {}
 			, TextureAnimationUPtr panimation = {} )
-			: base{ std::move( pbase ) }
-			, passConfig{ std::move( ppassConfig ) }
-			, animation{ std::move( panimation ) }
+			: base{ castor::move( pbase ) }
+			, passConfig{ castor::move( ppassConfig ) }
+			, animation{ castor::move( panimation ) }
 		{
 		}
 
@@ -229,7 +229,7 @@ namespace castor3d
 
 		bool hasAnimation()const noexcept
 		{
-			return m_animated || hasAnimation( "Default" );
+			return m_animated || hasAnimation( cuT( "Default" ) );
 		}
 
 		TextureTransform const & getTransform()const noexcept

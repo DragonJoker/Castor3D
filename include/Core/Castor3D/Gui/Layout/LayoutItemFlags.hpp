@@ -66,7 +66,7 @@ namespace castor3d
 
 		LayoutItemFlags & padding( castor::Point4ui v )noexcept
 		{
-			m_padding = std::move( v );
+			m_padding = castor::move( v );
 			return *this;
 		}
 

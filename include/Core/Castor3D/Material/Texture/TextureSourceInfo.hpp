@@ -151,7 +151,7 @@ namespace castor3d
 		void setBuffer( castor::ByteArray data )noexcept
 		{
 			CU_Require( !isRenderTarget() );
-			m_data = std::move( data );
+			m_data = castor::move( data );
 		}
 
 		void setSerialisable( bool v )noexcept

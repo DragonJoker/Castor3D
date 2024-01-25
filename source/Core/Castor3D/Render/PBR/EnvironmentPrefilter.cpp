@@ -33,11 +33,11 @@ namespace castor3d
 		static Texture doCreatePrefilteredTexture( RenderDevice const & device
 			, crg::ResourcesCache & resources
 			, castor::Size const & size
-			, std::string const & prefix )
+			, castor::String const & prefix )
 		{
 			Texture result{ device
 				, resources
-				, prefix + "EnvironmentPrefilterResult"
+				, prefix + cuT( "EnvironmentPrefilterResult" )
 				, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT
 				, { size[0], size[1], 1u }
 				, 6u
@@ -50,7 +50,7 @@ namespace castor3d
 
 		static SamplerObs doCreateSampler( Engine & engine
 			, RenderDevice const & device
-			, std::string const & prefix
+			, castor::String const & prefix
 			, uint32_t maxLod )
 		{
 			SamplerObs result{};
@@ -92,7 +92,7 @@ namespace castor3d
 			PosColT( sdw::ShaderWriter & writer
 				, sdw::expr::ExprPtr expr
 				, bool enabled = true )
-				: PosColStructT< FlagT >{ writer, std::move( expr ), enabled }
+				: PosColStructT< FlagT >{ writer, castor::move( expr ), enabled }
 			{
 			}
 
@@ -105,8 +105,8 @@ namespace castor3d
 			, uint32_t mipLevel
 			, bool isCharlie )
 		{
-			std::string prefix = isCharlie ? std::string{ "Sheen" } : std::string{};
-			ProgramModule program{ prefix + "EnvironmentPrefilter" };
+			castor::String prefix = isCharlie ? castor::String{ cuT( "Sheen" ) } : castor::String{};
+			ProgramModule program{ prefix + cuT( "EnvironmentPrefilter" ) };
 			{
 				sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
@@ -202,7 +202,7 @@ namespace castor3d
 		}
 
 		static ashes::RenderPassPtr doCreateRenderPass( RenderDevice const & device
-			, std::string const & prefix
+			, castor::String const & prefix
 			, VkFormat format )
 		{
 			ashes::VkAttachmentDescriptionArray attaches
@@ -245,12 +245,12 @@ namespace castor3d
 			ashes::RenderPassCreateInfo createInfo
 			{
 				0u,
-				std::move( attaches ),
-				std::move( subpasses ),
-				std::move( dependencies ),
+				castor::move( attaches ),
+				castor::move( subpasses ),
+				castor::move( dependencies ),
 			};
-			auto result = device->createRenderPass( prefix + "EnvironmentPrefilter"
-				, std::move( createInfo ) );
+			auto result = device->createRenderPass( castor::toUtf8( prefix + cuT( "EnvironmentPrefilter" ) )
+				, castor::move( createInfo ) );
 			return result;
 		}
 	}
@@ -268,17 +268,17 @@ namespace castor3d
 		, Texture const & dstTexture
 		, SamplerObs sampler
 		, bool isCharlie )
-		: RenderCube{ device, false, std::move( sampler ) }
+		: RenderCube{ device, false, castor::move( sampler ) }
 		, m_renderPass{ renderPass }
-		, m_prefix{ isCharlie ? std::string{ "Sheen" } : std::string{} }
-		, m_commands{ m_device, queueData, m_prefix + "EnvironmentPrefilter" }
+		, m_prefix{ isCharlie ? castor::String{ cuT( "Sheen" ) } : castor::String{} }
+		, m_commands{ m_device, queueData, m_prefix + cuT( "EnvironmentPrefilter" ) }
 	{
 		auto & handler = resources.getHandler();
 		auto & context = m_device.makeContext();
 
 		for ( auto face = 0u; face < 6u; ++face )
 		{
-			auto name = m_prefix + "EnvironmentPrefilterL" + castor::string::toString( face ) + "M" + castor::string::toString( mipLevel );
+			auto name = castor::toUtf8( m_prefix + cuT( "EnvironmentPrefilterL" ) + castor::string::toString( face ) + cuT( "M" ) + castor::string::toString( mipLevel ) );
 			auto & facePass = m_frameBuffers[face];
 			// Create the views.
 			auto data = *dstTexture.wholeViewId.data;
@@ -299,7 +299,7 @@ namespace castor3d
 				, size.height
 				, 1u );
 			facePass.frameBuffer = renderPass.createFrameBuffer( name
-				, std::move( createInfo ) );
+				, castor::move( createInfo ) );
 		}
 
 		createPipelines( size
@@ -313,7 +313,7 @@ namespace castor3d
 	{
 		auto const & cmd = *m_commands.commandBuffer;
 		cmd.begin();
-		cmd.beginDebugBlock( { "Prefiltering " + m_prefix + " Environment map"
+		cmd.beginDebugBlock( { "Prefiltering " + castor::toUtf8( m_prefix ) + " Environment map"
 			, makeFloatArray( m_device.renderSystem.getEngine()->getNextRainbowColour() ) } );
 
 		for ( uint32_t face = 0u; face < 6u; ++face )
@@ -354,9 +354,9 @@ namespace castor3d
 		, bool isCharlie )
 		: m_device{ device }
 		, m_srcView{ srcTexture }
-		, m_prefix{ isCharlie ? std::string{ "Sheen" } : std::string{} }
+		, m_prefix{ isCharlie ? castor::String{ cuT( "Sheen" ) } : castor::String{} }
 		, m_srcImage{ m_srcView.image.get() }
-		, m_srcImageView{ m_srcImage->createView( m_prefix + "EnvironmentPrefilterSrc", VK_IMAGE_VIEW_TYPE_CUBE, m_srcView.getFormat(), 0u, m_srcView.getMipLevels(), 0u, 6u ) }
+		, m_srcImageView{ m_srcImage->createView( castor::toUtf8( m_prefix ) + "EnvironmentPrefilterSrc", VK_IMAGE_VIEW_TYPE_CUBE, m_srcView.getFormat(), 0u, m_srcView.getMipLevels(), 0u, 6u ) }
 		, m_result{ envpref::doCreatePrefilteredTexture( m_device, *m_srcView.resources, size, m_prefix ) }
 		, m_sampler{ envpref::doCreateSampler( engine, m_device, m_prefix, m_result.getMipLevels() - 1u ) }
 		, m_renderPass{ envpref::doCreateRenderPass( m_device, m_prefix, m_result.getFormat() ) }
@@ -368,7 +368,7 @@ namespace castor3d
 		{
 			VkExtent2D mipSize{ originalSize.width >> mipLevel
 				, originalSize.height >> mipLevel };
-			m_renderPasses.emplace_back( std::make_unique< MipRenderCube >( m_device
+			m_renderPasses.emplace_back( castor::make_unique< MipRenderCube >( m_device
 				, *data
 				, *m_srcView.resources
 				, *m_renderPass

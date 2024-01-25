@@ -77,13 +77,12 @@ namespace castor3d
 
 	void AnimatedSkeleton::doAddAnimation( castor::String const & name )
 	{
-		auto it = m_animations.find( name );
-
-		if ( it == m_animations.end() )
+		if ( auto it = m_animations.find( name );
+			it == m_animations.end() )
 		{
 			auto & animation = static_cast< SkeletonAnimation & >( m_skeleton.getAnimation( name ) );
 			auto instance = castor::makeUniqueDerived< AnimationInstance, SkeletonAnimationInstance >( *this, animation );
-			m_animations.emplace( name, std::move( instance ) );
+			m_animations.try_emplace( name, castor::move( instance ) );
 		}
 	}
 

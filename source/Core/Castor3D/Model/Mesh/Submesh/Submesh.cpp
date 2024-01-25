@@ -321,7 +321,7 @@ namespace castor3d
 	}
 
 	crg::FramePassArray Submesh::record( crg::ResourcesCache & resources
-		, crg::FrameGraph & graph
+		, crg::FramePassGroup & graph
 		, crg::FramePassArray previousPasses )
 	{
 		auto & device = *getParent().getOwner()->getRenderDevice();
@@ -330,7 +330,7 @@ namespace castor3d
 		{
 			if( auto data = component->getRenderData() )
 			{
-				previousPasses = data->record( device, resources, graph, std::move( previousPasses ) );
+				previousPasses = data->record( device, resources, graph, castor::move( previousPasses ) );
 			}
 		}
 
@@ -629,28 +629,28 @@ namespace castor3d
 		switch ( submeshData )
 		{
 		case castor3d::SubmeshData::ePositions:
-			getPositions() = std::move( data );
+			getPositions() = castor::move( data );
 			break;
 		case castor3d::SubmeshData::eNormals:
-			getNormals() = std::move( data );
+			getNormals() = castor::move( data );
 			break;
 		case castor3d::SubmeshData::eTexcoords0:
-			getTexcoords0() = std::move( data );
+			getTexcoords0() = castor::move( data );
 			break;
 		case castor3d::SubmeshData::eTexcoords1:
-			getTexcoords1() = std::move( data );
+			getTexcoords1() = castor::move( data );
 			break;
 		case castor3d::SubmeshData::eTexcoords2:
-			getTexcoords2() = std::move( data );
+			getTexcoords2() = castor::move( data );
 			break;
 		case castor3d::SubmeshData::eTexcoords3:
-			getTexcoords3() = std::move( data );
+			getTexcoords3() = castor::move( data );
 			break;
 		case castor3d::SubmeshData::eColours:
-			getColours() = std::move( data );
+			getColours() = castor::move( data );
 			break;
 		case castor3d::SubmeshData::eBitangents:
-			getBitangents() = std::move( data );
+			getBitangents() = castor::move( data );
 			break;
 		case castor3d::SubmeshData::eTangents:
 			CU_Failure( "setBaseData: Can't set tangent data this way, use the Point4f variant" );
@@ -687,7 +687,7 @@ namespace castor3d
 			CU_Failure( "setBaseData: Can't set normals data this way, use the Point3f variant" );
 			break;
 		case castor3d::SubmeshData::eTangents:
-			getTangents() = std::move( data );
+			getTangents() = castor::move( data );
 			break;
 		case castor3d::SubmeshData::eBitangents:
 			CU_Failure( "setBaseData: Can't set bitangents data this way, use the Point3f variant" );
@@ -763,7 +763,7 @@ namespace castor3d
 		}
 
 		auto id = component->getId();
-		m_components.emplace( id, std::move( component ) );
+		m_components.emplace( id, castor::move( component ) );
 	}
 
 	InterleavedVertex Submesh::getInterleavedPoint( uint32_t index )const
@@ -1074,18 +1074,18 @@ namespace castor3d
 		return 0u;
 	}
 
-	std::vector< Meshlet > const & Submesh::getMeshlets()const
+	castor::Vector< Meshlet > const & Submesh::getMeshlets()const
 	{
 		if ( auto component = getComponent< MeshletComponent >() )
 		{
 			return component->getData().getMeshletsData();
 		}
 
-		static std::vector< Meshlet > const dummy{};
+		static castor::Vector< Meshlet > const dummy{};
 		return dummy;
 	}
 
-	std::vector< Meshlet > & Submesh::getMeshlets()
+	castor::Vector< Meshlet > & Submesh::getMeshlets()
 	{
 		m_dirty = true;
 		auto component = getComponent< MeshletComponent >();

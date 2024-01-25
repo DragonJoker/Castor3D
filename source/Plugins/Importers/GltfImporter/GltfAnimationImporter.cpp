@@ -44,7 +44,7 @@ namespace c3d_gltf
 		template< typename KeyFrameT, typename AnimationT >
 		static KeyFrameT & getKeyFrame( castor::Milliseconds const & time
 			, AnimationT & animation
-			, std::map< castor::Milliseconds, castor::UniquePtr< KeyFrameT > > & keyframes )
+			, castor::Map< castor::Milliseconds, castor::UniquePtr< KeyFrameT > > & keyframes )
 		{
 			auto it = keyframes.find( time );
 
@@ -59,9 +59,9 @@ namespace c3d_gltf
 
 		template< typename T >
 		static void findValue( castor::Milliseconds time
-			, typename std::map< castor::Milliseconds, T > const & map
-			, typename std::map< castor::Milliseconds, T >::const_iterator & prv
-			, typename std::map< castor::Milliseconds, T >::const_iterator & cur )
+			, typename castor::Map< castor::Milliseconds, T > const & map
+			, typename castor::Map< castor::Milliseconds, T >::const_iterator & prv
+			, typename castor::Map< castor::Milliseconds, T >::const_iterator & cur )
 		{
 			if ( map.empty() )
 			{
@@ -72,7 +72,7 @@ namespace c3d_gltf
 			{
 				cur = std::find_if( map.begin()
 					, map.end()
-					, [&time]( std::pair< castor::Milliseconds, T > const & pair )
+					, [&time]( castor::Pair< castor::Milliseconds, T > const & pair )
 					{
 						return pair.first > time;
 					} );
@@ -94,7 +94,7 @@ namespace c3d_gltf
 		template< typename T >
 		static T interpolate( castor::Milliseconds const & time
 			, castor3d::Interpolator< T > const & interpolator
-			, std::map< castor::Milliseconds, T > const & values
+			, castor::Map< castor::Milliseconds, T > const & values
 			, T const & defaultValue )
 		{
 			T result;
@@ -129,14 +129,14 @@ namespace c3d_gltf
 		}
 
 		template< typename AnimationT, typename KeyFrameT, typename FuncT >
-		static void synchroniseKeys( std::map< castor::Milliseconds, castor::Point3f > & translates
-			, std::map< castor::Milliseconds, castor::Quaternion > & rotates
-			, std::map< castor::Milliseconds, castor::Point3f > & scales
-			, std::set< castor::Milliseconds > const & times
+		static void synchroniseKeys( castor::Map< castor::Milliseconds, castor::Point3f > const & translates
+			, castor::Map< castor::Milliseconds, castor::Quaternion > const & rotates
+			, castor::Map< castor::Milliseconds, castor::Point3f > const & scales
+			, [[maybe_unused]] castor::Set< castor::Milliseconds > const & times
 			, uint32_t fps
 			, castor::Milliseconds maxTime
 			, AnimationT & animation
-			, std::map< castor::Milliseconds, castor::UniquePtr< KeyFrameT > > & keyframes
+			, castor::Map< castor::Milliseconds, castor::UniquePtr< KeyFrameT > > & keyframes
 			, FuncT fillKeyFrame )
 		{
 			castor3d::InterpolatorT< castor::Point3f, castor3d::InterpolatorType::eLinear > pointInterpolator;
@@ -162,8 +162,8 @@ namespace c3d_gltf
 		static castor::Milliseconds processKeys( fastgltf::Asset const & impAsset
 			, NodeAnimationChannelSampler const & animChannels
 			, fastgltf::AnimationPath channel
-			, std::map< castor::Milliseconds, KeyT > & result
-			, std::set< castor::Milliseconds > & allTimes )
+			, castor::Map< castor::Milliseconds, KeyT > & result
+			, castor::Set< castor::Milliseconds > & allTimes )
 		{
 			auto it = std::find_if( animChannels.begin()
 				, animChannels.end()
@@ -176,19 +176,19 @@ namespace c3d_gltf
 			if ( it != animChannels.end() )
 			{
 				AnimationChannelSampler const & channelSampler = *it;
-				std::vector< float > times;
+				castor::Vector< float > times;
 				fastgltf::iterateAccessor< float >( impAsset
 					, impAsset.accessors[channelSampler.second.inputAccessor]
 					, [&times]( float value )
 					{
 						times.push_back( value );
 					} );
-				std::vector< KeyT > values;
+				castor::Vector< KeyT > values;
 				fastgltf::iterateAccessor< KeyDataTypeT< KeyT > >( impAsset
 					, impAsset.accessors[channelSampler.second.outputAccessor]
 					, [&values]( KeyDataTypeT< KeyT > value )
 					{
-						values.push_back( KeyT{ std::move( value ) } );
+						values.push_back( KeyT{ castor::move( value ) } );
 					} );
 					// for AnimationInterpolation::CubicSpline can have more outputs
 				uint32_t weightStride = uint32_t( values.size() / times.size() );
@@ -216,13 +216,13 @@ namespace c3d_gltf
 			, NodeAnimationChannelSampler const & animChannels
 			, uint32_t wantedFps
 			, AnimationT & animation
-			, std::map< castor::Milliseconds, castor::UniquePtr< KeyFrameT > > & keyframes
+			, castor::Map< castor::Milliseconds, castor::UniquePtr< KeyFrameT > > & keyframes
 			, FuncT fillKeyFrame )
 		{
-			std::set< castor::Milliseconds > times;
-			std::map< castor::Milliseconds, castor::Point3f > translates;
-			std::map< castor::Milliseconds, castor::Quaternion > rotates;
-			std::map< castor::Milliseconds, castor::Point3f > scales;
+			castor::Set< castor::Milliseconds > times;
+			castor::Map< castor::Milliseconds, castor::Point3f > translates;
+			castor::Map< castor::Milliseconds, castor::Quaternion > rotates;
+			castor::Map< castor::Milliseconds, castor::Point3f > scales;
 			auto maxTranslateTime = processKeys( impAsset, animChannels, fastgltf::AnimationPath::Translation, translates, times );
 			auto maxRotateTime = processKeys( impAsset, animChannels, fastgltf::AnimationPath::Rotation, rotates, times );
 			auto maxScaleTime = processKeys( impAsset, animChannels, fastgltf::AnimationPath::Scale, scales, times );
@@ -356,7 +356,7 @@ namespace c3d_gltf
 		}
 	}
 
-	using SceneNodeAnimationKeyFrameMap = std::map< castor::Milliseconds, castor3d::SceneNodeAnimationKeyFrameUPtr >;
+	using SceneNodeAnimationKeyFrameMap = castor::Map< castor::Milliseconds, castor3d::SceneNodeAnimationKeyFrameUPtr >;
 
 	GltfAnimationImporter::GltfAnimationImporter( castor3d::Engine & engine )
 		: castor3d::AnimationImporter{ engine }
@@ -443,14 +443,14 @@ namespace c3d_gltf
 
 				for ( AnimationChannelSampler & channelSampler : impNodeAnim )
 				{
-					std::vector< float > times;
+					castor::Vector< float > times;
 					fastgltf::iterateAccessor< float >( impAsset
 						, impAsset.accessors[channelSampler.second.inputAccessor]
 						, [&times]( float value )
 						{
 							times.push_back( value );
 						} );
-					std::vector< float > values;
+					castor::Vector< float > values;
 					fastgltf::iterateAccessor< float >( impAsset
 						, impAsset.accessors[channelSampler.second.outputAccessor]
 						, [&values]( float value )
@@ -488,7 +488,7 @@ namespace c3d_gltf
 								kf = &static_cast< castor3d::MeshMorphTarget & >( **kfit );
 							}
 
-							std::vector< float > res;
+							castor::Vector< float > res;
 							res.resize( submesh->getMorphTargetsCount() );
 							uint32_t k = weightStride * i + ii;
 							CU_Require( numMorphs <= submesh->getMorphTargetsCount() );
@@ -506,7 +506,7 @@ namespace c3d_gltf
 				if ( hasKeyframes )
 				{
 					hasAnyKeyframes = true;
-					animation.addChild( std::move( animSubmesh ) );
+					animation.addChild( castor::move( animSubmesh ) );
 				}
 			}
 		}

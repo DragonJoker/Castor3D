@@ -80,7 +80,7 @@ namespace castor3d
 		OnButtonEventConnection connect( ButtonEvent event
 			, OnButtonEventFunction function )
 		{
-			return m_signals[size_t( event )].connect( std::move( function ) );
+			return m_signals[size_t( event )].connect( castor::move( function ) );
 		}
 
 		/**
@@ -169,7 +169,7 @@ namespace castor3d
 	private:
 		castor::U32String m_caption;
 		TextOverlayRPtr m_text{};
-		std::array< OnButtonEvent, size_t( ButtonEvent::eCount ) > m_signals;
+		castor::Array< OnButtonEvent, size_t( ButtonEvent::eCount ) > m_signals;
 		OnEnableConnection m_onEnable;
 	};
 }

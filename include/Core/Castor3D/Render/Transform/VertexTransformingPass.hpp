@@ -40,7 +40,7 @@ namespace castor3d
 	private:
 		RenderDevice const & m_device;
 		ashes::Buffer< ModelBufferConfiguration > const & m_modelsBuffer;
-		std::unordered_map< size_t, VertexTransformPassUPtr > m_transformPasses;
+		castor::UnorderedMap< size_t, VertexTransformPassUPtr > m_transformPasses;
 	};
 }
 

@@ -107,21 +107,6 @@ namespace castor
 		 *\return		Le nombre d'octets écrits
 		 */
 		CU_API uint64_t writeText( String const & text );
-		/**
-		 *\~english
-		 *\brief		Writes a formatted text into the file
-		 *\param[in]	maxSize	The maximum text size
-		 *\param[in]	format	The text format
-		 *\param[in]	...		POD arguments (cf. printf)
-		 *\return		The bytes written
-		 *\~french
-		 *\brief		Ecrit un texte formaté dans le fichier
-		 *\param[in]	maxSize	La taille maximale du texte
-		 *\param[in]	format	Le format du texte
-		 *\param[in]	...		Paramètres POD (cf. printf)
-		 *\return		Le nombre d'octets écrits
-		 */
-		CU_API uint64_t print( uint64_t maxSize, xchar const * format, ... );
 	};
 	/**
 	 *\~english

@@ -14,22 +14,22 @@ See LICENSE file in root folder
 
 #include <ShaderWriter/ShaderWriterPrerequisites.hpp>
 
-#define C3D_PluginMakePassComponentName( p, x ) C3D_Join3Strings( p, "pass", x )
+#define C3D_PluginMakePassComponentName( p, x ) C3D_Join3Strings( cuT( p ), cuT( "pass" ), cuT( x ) )
 #define C3D_MakePassComponentName( x ) C3D_PluginMakePassComponentName( "c3d", x )
 
-#define C3D_PluginMakePassBaseComponentName( p, x ) C3D_Join4Strings( p, "pass", "base", x )
+#define C3D_PluginMakePassBaseComponentName( p, x ) C3D_Join4Strings( cuT( p ), cuT( "pass" ), cuT( "base" ), cuT( x ) )
 #define C3D_MakePassBaseComponentName( x ) C3D_PluginMakePassBaseComponentName( "c3d", x )
 
-#define C3D_PluginMakePassLightingComponentName( p, x ) C3D_Join4Strings( p, "pass", "lighting", x )
+#define C3D_PluginMakePassLightingComponentName( p, x ) C3D_Join4Strings( cuT( p ), cuT( "pass" ), cuT( "lighting" ), cuT( x ) )
 #define C3D_MakePassLightingComponentName( x ) C3D_PluginMakePassLightingComponentName( "c3d", x )
 
-#define C3D_PluginMakePassReflectionComponentName( p, x ) C3D_Join4Strings( p, "pass", "reflection", x )
+#define C3D_PluginMakePassReflectionComponentName( p, x ) C3D_Join4Strings( cuT( p ), cuT( "pass" ), cuT( "reflection" ), cuT( x ) )
 #define C3D_MakePassReflectionComponentName( x ) C3D_PluginMakePassReflectionComponentName( "c3d", x )
 
-#define C3D_PluginMakePassMapComponentName( p, x ) C3D_Join4Strings( p, "pass", "map", x )
+#define C3D_PluginMakePassMapComponentName( p, x ) C3D_Join4Strings( cuT( p ), cuT( "pass" ), cuT( "map" ), cuT( x ) )
 #define C3D_MakePassMapComponentName( x ) C3D_PluginMakePassMapComponentName( "c3d", x )
 
-#define C3D_PluginMakePassOtherComponentName( p, x ) C3D_Join4Strings( p, "pass", "other", x )
+#define C3D_PluginMakePassOtherComponentName( p, x ) C3D_Join4Strings( cuT( p ), cuT( "pass" ), cuT( "other" ), cuT( x ) )
 #define C3D_MakePassOtherComponentName( x ) C3D_PluginMakePassOtherComponentName( "c3d", x )
 
 namespace castor3d
@@ -592,9 +592,9 @@ namespace castor3d
 		*/
 		class PassShaders;
 
-		using PassComponentsShaderPtr = std::unique_ptr< PassComponentsShader >;
-		using PassReflRefrShaderPtr = std::unique_ptr< PassReflRefrShader >;
-		using PassMaterialShaderPtr = std::unique_ptr< PassMaterialShader >;
+		using PassComponentsShaderPtr = castor::RawUniquePtr< PassComponentsShader >;
+		using PassReflRefrShaderPtr = castor::RawUniquePtr< PassReflRefrShader >;
+		using PassMaterialShaderPtr = castor::RawUniquePtr< PassMaterialShader >;
 	}
 	//@}
 
@@ -616,7 +616,7 @@ namespace castor3d
 	C3D_API bool hasAny( PassComponentCombine const & lhs
 		, PassComponentFlag rhs )noexcept;
 	C3D_API bool hasAny( PassComponentCombine const & lhs
-		, std::vector< PassComponentFlag > const & rhs )noexcept;
+		, castor::Vector< PassComponentFlag > const & rhs )noexcept;
 	C3D_API void remFlags( PassComponentCombine & lhs
 		, PassComponentFlag rhs )noexcept;
 	C3D_API void remFlags( PassComponentCombine & lhs
@@ -634,26 +634,26 @@ namespace castor3d
 	CU_DeclareSmartPtr( castor3d, PassComponentPlugin, C3D_API );
 	CU_DeclareSmartPtr( castor3d, PassMapComponent, C3D_API );
 
-	using SssProfileChangedFunc = std::function< void( SubsurfaceScatteringComponent const & ) >;
+	using SssProfileChangedFunc = castor::Function< void( SubsurfaceScatteringComponent const & ) >;
 	using OnSssProfileChanged = castor::SignalT< SssProfileChangedFunc >;
 	using OnSssProfileChangedConnection = castor::ConnectionT< OnSssProfileChanged >;
 
 	using PassComponentsBitset = castor::DynamicBitsetT< uint16_t >;
 
-	using ComponentConfigFiller = std::function< void( TextureContext & context ) >;
-	using ChannelFiller = std::pair< PassComponentTextureFlag, ComponentConfigFiller >;
+	using ComponentConfigFiller = castor::Function< void( TextureContext & context ) >;
+	using ChannelFiller = castor::Pair< PassComponentTextureFlag, ComponentConfigFiller >;
 	using ChannelFillers = castor::StringMap< ChannelFiller >;
 
-	using UpdateComponent = std::function< void( PassComponentRegister const & passComponents
+	using UpdateComponent = castor::Function< void( PassComponentRegister const & passComponents
 		, TextureCombine const & combine
 		, shader::BlendComponents & components
 		, bool isFrontCulled ) >;
-	using FinishComponent = std::function< void( shader::SurfaceBase const & surface
+	using FinishComponent = castor::Function< void( shader::SurfaceBase const & surface
 		, sdw::Vec3 const worldEye
 		, shader::Utils & utils
 		, shader::BlendComponents & components ) >;
 
-	using CreatePassComponentPlugin = std::function< PassComponentPluginUPtr( PassComponentRegister const & ) >;
+	using CreatePassComponentPlugin = castor::Function< PassComponentPluginUPtr( PassComponentRegister const & ) >;
 	//@}
 	//@}
 	//@}

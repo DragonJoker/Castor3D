@@ -254,7 +254,7 @@ namespace GuiCommon
 
 		if ( ownGeometry )
 		{
-			m_scene.addGeometry( std::move( ownGeometry ) );
+			m_scene.addGeometry( castor::move( ownGeometry ) );
 		}
 
 		return result;

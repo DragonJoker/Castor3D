@@ -125,12 +125,16 @@ namespace castor
 		CU_API bool write( StringStream & file, StringView name, uint64_t value )const;
 		CU_API bool write( StringStream & file, StringView name, int64_t value )const;
 		CU_API bool write( StringStream & file, StringView name, bool value )const;
-		CU_API bool write( StringStream & file, StringView name, String const & value )const;
+		CU_API bool write( StringStream & file, StringView name, WString const & value )const;
+		CU_API bool write( StringStream & file, StringView name, MbString const & value )const;
 
 		CU_API bool writeOpt( StringStream & file, StringView name, bool value )const;
-		CU_API bool writeText( StringStream & file, String const & value )const;
-		CU_API bool writeName( StringStream & file, StringView name, String const & value )const;
-		CU_API bool writeNameOpt( StringStream & file, StringView name, String const & value, String const & comp )const;
+		CU_API bool writeText( StringStream & file, WString const & value )const;
+		CU_API bool writeText( StringStream & file, MbString const & value )const;
+		CU_API bool writeName( StringStream & file, StringView name, WString const & value )const;
+		CU_API bool writeName( StringStream & file, StringView name, MbString const & value )const;
+		CU_API bool writeNameOpt( StringStream & file, StringView name, WString const & value, WString const & comp )const;
+		CU_API bool writeNameOpt( StringStream & file, StringView name, MbString const & value, MbString const & comp )const;
 		CU_API bool writePath( StringStream & file, StringView name, Path const & value )const;
 		CU_API bool writeFile( StringStream & file, StringView name, Path const & source, Path const & folder, String const & subfolder )const;
 
@@ -139,15 +143,15 @@ namespace castor
 		template< typename Value1T, typename Value2T >
 		bool write( StringStream & file, StringView name, Value1T const & value1, Value2T const & value2 )const;
 		template< typename ValueT >
-		bool write( StringStream & file, StringView name, castor::RangedValue< ValueT > const & value )const;
+		bool write( StringStream & file, StringView name, RangedValue< ValueT > const & value )const;
 		template< typename ValueT >
-		bool write( StringStream & file, StringView name, castor::ChangeTracked< ValueT > const & value )const;
+		bool write( StringStream & file, StringView name, ChangeTracked< ValueT > const & value )const;
 		template< typename ValueT >
-		bool write( StringStream & file, StringView name, castor::Point2< ValueT > const & value )const;
+		bool write( StringStream & file, StringView name, Point2< ValueT > const & value )const;
 		template< typename ValueT >
-		bool write( StringStream & file, StringView name, castor::Point3< ValueT > const & value )const;
+		bool write( StringStream & file, StringView name, Point3< ValueT > const & value )const;
 		template< typename ValueT >
-		bool write( StringStream & file, StringView name, castor::Point4< ValueT > const & value )const;
+		bool write( StringStream & file, StringView name, Point4< ValueT > const & value )const;
 		template< typename ValueT >
 		bool writeOpt( StringStream & file, StringView name, ValueT const & value, ValueT const & comp )const;
 		template< typename ValueT, typename ... ParamsT >
@@ -176,7 +180,7 @@ namespace castor
 	public:
 		explicit TextWriterT( String tabs
 			, StringView name = String{} )
-			: TextWriterBase{ std::move( tabs ), name }
+			: TextWriterBase{ castor::move( tabs ), name }
 		{
 		}
 	};
@@ -191,7 +195,7 @@ namespace castor
 	public:
 		CU_API explicit TextWriter( String tabs );
 		CU_API bool operator()( int8_t const & value
-			, castor::StringStream & file )override;
+			, StringStream & file )override;
 	};
 
 	template<>
@@ -201,7 +205,7 @@ namespace castor
 	public:
 		CU_API explicit TextWriter( String tabs );
 		CU_API bool operator()( uint8_t const & value
-			, castor::StringStream & file )override;
+			, StringStream & file )override;
 	};
 
 	template<>
@@ -211,7 +215,7 @@ namespace castor
 	public:
 		CU_API explicit TextWriter( String tabs );
 		CU_API bool operator()( int16_t const & value
-			, castor::StringStream & file )override;
+			, StringStream & file )override;
 	};
 
 	template<>
@@ -221,7 +225,7 @@ namespace castor
 	public:
 		CU_API explicit TextWriter( String tabs );
 		CU_API bool operator()( uint16_t const & value
-			, castor::StringStream & file )override;
+			, StringStream & file )override;
 	};
 
 	template<>
@@ -231,7 +235,7 @@ namespace castor
 	public:
 		CU_API explicit TextWriter( String tabs );
 		CU_API bool operator()( int32_t const & value
-			, castor::StringStream & file )override;
+			, StringStream & file )override;
 	};
 
 	template<>
@@ -241,7 +245,7 @@ namespace castor
 	public:
 		CU_API explicit TextWriter( String tabs );
 		CU_API bool operator()( uint32_t const & value
-			, castor::StringStream & file )override;
+			, StringStream & file )override;
 	};
 
 	template<>
@@ -251,7 +255,7 @@ namespace castor
 	public:
 		CU_API explicit TextWriter( String tabs );
 		CU_API bool operator()( int64_t const & value
-			, castor::StringStream & file )override;
+			, StringStream & file )override;
 	};
 
 	template<>
@@ -261,7 +265,7 @@ namespace castor
 	public:
 		CU_API explicit TextWriter( String tabs );
 		CU_API bool operator()( uint64_t const & value
-			, castor::StringStream & file )override;
+			, StringStream & file )override;
 	};
 
 	template<>
@@ -271,7 +275,7 @@ namespace castor
 	public:
 		CU_API explicit TextWriter( String tabs );
 		CU_API bool operator()( float const & value
-			, castor::StringStream & file )override;
+			, StringStream & file )override;
 	};
 
 	template<>
@@ -281,7 +285,7 @@ namespace castor
 	public:
 		CU_API explicit TextWriter( String tabs );
 		CU_API bool operator()( double const & value
-			, castor::StringStream & file )override;
+			, StringStream & file )override;
 	};
 
 	template<>
@@ -291,7 +295,7 @@ namespace castor
 	public:
 		CU_API explicit TextWriter( String tabs );
 		CU_API bool operator()( String const & value
-			, castor::StringStream & file )override;
+			, StringStream & file )override;
 	};
 }
 

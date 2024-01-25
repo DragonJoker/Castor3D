@@ -1,5 +1,7 @@
 #include "Animable.hpp"
 
+#include <CastorUtils/Miscellaneous/StringUtils.hpp>
+
 namespace castor3d
 {
 	//*************************************************************************************************
@@ -35,7 +37,7 @@ namespace castor3d
 
 		if ( it == m_animations.end() )
 		{
-			CU_Exception( cuT( "No animation named [" ) + name + "]" );
+			CU_Exception( "No animation named [" + castor::toUtf8( name ) + "]" );
 		}
 
 		return *it->second;
@@ -48,7 +50,7 @@ namespace castor3d
 
 		if ( it == m_animations.end() )
 		{
-			CU_Exception( cuT( "No animation named [" ) + name + "]" );
+			CU_Exception( "No animation named [" + castor::toUtf8( name ) + "]" );
 		}
 
 		return *it->second;
@@ -72,7 +74,7 @@ namespace castor3d
 			}
 		}
 
-		it->second = std::move( animation );
+		it->second = castor::move( animation );
 	}
 
 	template< typename AnimableHandlerT >
@@ -82,7 +84,7 @@ namespace castor3d
 
 		if ( it == m_animations.end() )
 		{
-			CU_Exception( cuT( "No animation named [" ) + name + "]" );
+			CU_Exception( "No animation named [" + castor::toUtf8( name ) + "]" );
 		}
 
 		m_animations.erase( it );

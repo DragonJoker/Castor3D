@@ -3,6 +3,7 @@
 #if defined( CU_PlatformLinux )
 
 #include "CastorUtils/Miscellaneous/Utils.hpp"
+#include "CastorUtils/Miscellaneous/StringUtils.hpp"
 #include "CastorUtils/Graphics/Size.hpp"
 
 #include <X11/Xlib.h>
@@ -16,7 +17,7 @@ namespace castor
 	{
 #	if CU_HasXinerama
 
-		bool getScreenSize( uint32_t p_screen, castor::Size & p_size )
+		bool getScreenSize( uint32_t /*p_screen*/, Size & p_size )
 		{
 			bool result = false;
 			auto display = XOpenDisplay( nullptr );
@@ -82,7 +83,7 @@ namespace castor
 
 #	else
 
-		bool getScreenSize( uint32_t p_screen, castor::Size & p_size )
+		bool getScreenSize( uint32_t /*p_screen*/, Size & p_size )
 		{
 			bool result = false;
 			auto display = XOpenDisplay( nullptr );
@@ -115,28 +116,28 @@ namespace castor
 
 		String getLastErrorText()
 		{
-			String strReturn;
+			String result;
 			int error = errno;
 			char * szError = nullptr;
 
 			if ( error != 0 && ( szError = strerror( error ) ) != nullptr )
 			{
-				strReturn = string::toString( error ) + cuT( " (" ) + string::stringCast< xchar >( szError ) + cuT( ")" );
-				string::replace( strReturn, cuT( "\n" ), cuT( "" ) );
+				result = string::toString( error ) + cuT( " (" ) + makeString( szError ) + cuT( ")" );
+				string::replace( result, cuT( "\n" ), cuT( "" ) );
 			}
 
-			return strReturn;
+			return result;
 		}
 
 		String getOSName()
 		{
-			std::string line;
+			MbString line;
 			std::ifstream finfo( "/etc/os-release" );
-			std::string result;
+			MbString result;
 
 			while ( std::getline( finfo, line ) )
 			{
-				std::stringstream str( line );
+				MbStringStream str( line );
 
 				if ( line.substr( 0, 11 ) == "PRETTY_NAME" )
 				{
@@ -146,7 +147,7 @@ namespace castor
 				}
 			}
 
-			return result;
+			return makeString( result );
 		}
 	}
 

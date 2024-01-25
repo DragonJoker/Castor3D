@@ -9,16 +9,6 @@ namespace Testing
 	std::vector< BenchCasePtr > BenchManager::m_benchs;
 	std::vector< TestCasePtr > BenchManager::m_cases;
 
-	BenchManager::BenchManager()
-	{
-	}
-
-	BenchManager::~BenchManager()
-	{
-		m_benchs.clear();
-		m_cases.clear();
-	}
-
 	void BenchManager::registerType( BenchCasePtr bench )
 	{
 		m_benchs.push_back( std::move( bench ) );

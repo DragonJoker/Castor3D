@@ -88,7 +88,7 @@ namespace castor3d
 	template< typename EventT, typename ... ParamsT >
 	inline CpuFrameEventUPtr makeCpuFrameEvent( ParamsT && ... params )
 	{
-		return castor::makeUniqueDerived< CpuFrameEvent, EventT >( std::forward< ParamsT >( params )... );
+		return castor::makeUniqueDerived< CpuFrameEvent, EventT >( castor::forward< ParamsT >( params )... );
 	}
 }
 

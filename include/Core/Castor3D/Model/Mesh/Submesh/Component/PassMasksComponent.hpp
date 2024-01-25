@@ -34,7 +34,7 @@ namespace castor3d
 				, Pass const & pass
 				, ObjectBufferOffset const & bufferOffsets
 				, ashes::BufferCRefArray & buffers
-				, std::vector< uint64_t > & offsets
+				, castor::Vector< uint64_t > & offsets
 				, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
 				, uint32_t & currentBinding
 				, uint32_t & currentLocation )override;
@@ -62,7 +62,7 @@ namespace castor3d
 			 *\brief		Ajoute des données de masques.
 			 *\param[in]	data	Les données de masques.
 			 */
-			C3D_API void addDatas( std::vector< PassMasks > const & data );
+			C3D_API void addDatas( castor::Vector< PassMasks > const & data );
 			/**
 			 *\~english
 			 *\brief		Adds masks datas.
@@ -72,7 +72,7 @@ namespace castor3d
 			 *\param[in]	data	Les données de masques.
 			 */
 			template< size_t Count >
-			void addDatas( std::array< PassMasks, Count > const & data )
+			void addDatas( castor::Array< PassMasks, Count > const & data )
 			{
 				addDatas( data.data(), data.data() + data.size() );
 			}
@@ -82,17 +82,17 @@ namespace castor3d
 				return !m_data.empty();
 			}
 
-			void setData( std::vector< PassMasks > data )
+			void setData( castor::Vector< PassMasks > data )
 			{
-				m_data = std::move( data );
+				m_data = castor::move( data );
 			}
 
-			std::vector< PassMasks > & getData()
+			castor::Vector< PassMasks > & getData()
 			{
 				return m_data;
 			}
 
-			std::vector< PassMasks > const & getData()const
+			castor::Vector< PassMasks > const & getData()const
 			{
 				return m_data;
 			}
@@ -103,9 +103,9 @@ namespace castor3d
 			void doUpload( UploadData & uploader )override;
 
 		private:
-			std::unordered_map< size_t, ashes::PipelineVertexInputStateCreateInfo > m_layouts;
-			std::vector< PassMasks > m_data;
-			std::vector< castor::Point4ui > m_up;
+			castor::UnorderedMap< size_t, ashes::PipelineVertexInputStateCreateInfo > m_layouts;
+			castor::Vector< PassMasks > m_data;
+			castor::Vector< castor::Point4ui > m_up;
 		};
 
 		class Plugin
@@ -126,7 +126,7 @@ namespace castor3d
 
 			shader::SubmeshVertexSurfaceShaderPtr createVertexSurfaceShader()const override
 			{
-				return std::make_unique< SurfaceShader >();
+				return castor::make_unique< SurfaceShader >();
 			}
 		};
 

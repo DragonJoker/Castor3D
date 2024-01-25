@@ -75,9 +75,9 @@ namespace castor3d
 			}
 		}
 
-		inline std::vector< VkBufferImageCopy > createPickDisplayRegions()
+		inline castor::Vector< VkBufferImageCopy > createPickDisplayRegions()
 		{
-			std::vector< VkBufferImageCopy > result;
+			castor::Vector< VkBufferImageCopy > result;
 
 			for ( int i = 0; i < int( PickingAreaWidth ); ++i )
 			{
@@ -154,16 +154,16 @@ namespace castor3d
 			, ( VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				| VK_BUFFER_USAGE_TRANSFER_SRC_BIT )
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-			, "PickingBuffer" ) }
+			, cuT( "PickingBuffer" ) ) }
 		, m_pickData{ castor::makeArrayView( m_pickBuffer->lock( 0u, ashes::WholeSize, 0u ), PickingAreaWidth * PickingAreaWidth ) }
 		, m_buffer{ PickingAreaWidth * PickingAreaWidth }
 		, m_transferFence{ m_device->createFence( "PickingPass" ) }
 	{
 		m_runnable = m_graph.compile( device.makeContext() );
-		getEngine()->registerTimer( m_runnable->getName() + "/Graph"
+		getEngine()->registerTimer( castor::makeString( m_runnable->getName() + "/Graph" )
 			, m_runnable->getTimer() );
 		printGraph( *m_runnable );
-		m_colourTexture = std::make_unique< ashes::Image >( *m_device
+		m_colourTexture = castor::make_unique< ashes::Image >( *m_device
 			, m_runnable->createImage( m_colourImage )
 			, ashes::ImageCreateInfo{ m_colourImage.data->info } );
 		m_colourView = ashes::ImageView{ m_colourImageView.data->info
@@ -173,7 +173,7 @@ namespace castor3d
 
 	Picking::~Picking()noexcept
 	{
-		getEngine()->unregisterTimer( m_runnable->getName() + "/Graph"
+		getEngine()->unregisterTimer( castor::makeString( m_runnable->getName() + "/Graph" )
 			, m_runnable->getTimer() );
 		m_commandBuffer.reset();
 		m_pickBuffer->unlock();
@@ -228,7 +228,7 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto res = std::make_unique< PickingPass >( pass
+				auto res = castor::make_unique< PickingPass >( pass
 					, context
 					, graph
 					, m_device
@@ -316,8 +316,8 @@ namespace castor3d
 		m_commandBuffer->endDebugBlock();
 		m_commandBuffer->end();
 
-		std::vector< VkSemaphore > semaphores;
-		std::vector< VkPipelineStageFlags > dstStageMasks;
+		castor::Vector< VkSemaphore > semaphores;
+		castor::Vector< VkPipelineStageFlags > dstStageMasks;
 		convert( m_toWait, semaphores, dstStageMasks );
 		queueData->queue->submit( { *m_commandBuffer }
 			, semaphores

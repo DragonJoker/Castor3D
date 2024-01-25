@@ -64,7 +64,7 @@ namespace motion_blur
 
 	public:
 		static castor::String Type;
-		static castor::String Name;
+		static castor::MbString Name;
 
 	private:
 		using Clock = std::chrono::high_resolution_clock;

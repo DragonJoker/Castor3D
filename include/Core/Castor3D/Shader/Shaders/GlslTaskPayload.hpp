@@ -24,7 +24,7 @@ namespace castor3d::shader
 		PayloadT( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
 			, bool enabled = true )
-			: PayloadStructT< FlagT >{ writer, std::move( expr ), enabled }
+			: PayloadStructT< FlagT >{ writer, castor::move( expr ), enabled }
 		{
 		}
 

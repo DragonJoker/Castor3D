@@ -246,12 +246,12 @@ namespace castor3d::shader
 		}
 	}
 
-	std::map< uint32_t, PassComponentTextureFlag > PassShaders::getTexcoordModifs( PipelineFlags const & flags )const
+	castor::Map< uint32_t, PassComponentTextureFlag > PassShaders::getTexcoordModifs( PipelineFlags const & flags )const
 	{
 		return m_compRegister.getTexcoordModifs( flags );
 	}
 
-	std::map< uint32_t, PassComponentTextureFlag > PassShaders::getTexcoordModifs( TextureCombine const & combine )const
+	castor::Map< uint32_t, PassComponentTextureFlag > PassShaders::getTexcoordModifs( TextureCombine const & combine )const
 	{
 		return m_compRegister.getTexcoordModifs( combine );
 	}

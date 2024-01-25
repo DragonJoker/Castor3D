@@ -155,7 +155,7 @@ namespace castor
 				file << ( cuT( "\n" ) + writer.tabs() + cuT( "//" ) + elemsName + cuT( "\n" ) );
 				log::info << writer.tabs() << cuT( "Scene::write - " ) << elemsName << std::endl;
 				castor::TextWriter< ObjType > subWriter{ writer.tabs()
-					, std::forward< Params >( params )... };
+					, castor::forward< Params >( params )... };
 				auto lock( castor::makeUniqueLock( cache ) );
 
 				for ( auto const & it : cache )
@@ -177,7 +177,7 @@ namespace castor
 			, CacheTypeT const & cache
 			, String const & elemsName
 			, TextWriterBase const & writer
-			, std::function< bool( ObjType const & ) > filter = []( ObjType const & )
+			, castor::Function< bool( ObjType const & ) > filter = []( ObjType const & )
 			{
 				return true;
 			}
@@ -190,7 +190,7 @@ namespace castor
 				file << ( cuT( "\n" ) + writer.tabs() + cuT( "//" ) + elemsName + cuT( "\n" ) );
 				log::info << writer.tabs() << cuT( "Scene::write - " ) << elemsName << std::endl;
 				castor::TextWriter< ObjType > subWriter{ writer.tabs()
-					, std::forward< Params >( params )... };
+					, castor::forward< Params >( params )... };
 
 				for ( auto const & it : cache )
 				{
@@ -225,7 +225,7 @@ namespace castor
 
 			return writeCache( file, cache, elemsName, writer
 				, filter
-				, std::forward< Params >( params )... );
+				, castor::forward< Params >( params )... );
 		}
 
 		template< typename ObjType
@@ -248,7 +248,7 @@ namespace castor
 				file << ( cuT( "\n" ) + writer.tabs() + cuT( "//" ) + elemsName + cuT( "\n" ) );
 				log::info << writer.tabs() << cuT( "Scene::write - " ) << elemsName << std::endl;
 				castor::TextWriter< ObjType > subWriter{ writer.tabs()
-					, std::forward< Params >( params )... };
+					, castor::forward< Params >( params )... };
 
 				for ( auto const & name : view )
 				{
@@ -291,7 +291,7 @@ namespace castor
 
 			return writeView( file, view, elemsName, writer
 				, filter
-				, std::forward< Params >( params )... );
+				, castor::forward< Params >( params )... );
 		}
 
 		static bool writeInclude( StringStream & file
@@ -364,9 +364,9 @@ namespace castor
 	{
 		log::info << cuT( "Scene::write - Scene Name" ) << std::endl;
 		bool result = writeComment( file, cuT( "Global configuration" ) )
-			&& writeOpt( file, "debug_overlays", scene.getEngine()->getRenderLoop().hasDebugOverlays() )
-			&& writeOpt( file, "lpv_grid_size", scene.getEngine()->getLpvGridSize(), 32u )
-			&& write( file, "materials", scene.getDefaultLightingModelName() )
+			&& writeOpt( file, cuT( "debug_overlays" ), scene.getEngine()->getRenderLoop().hasDebugOverlays() )
+			&& writeOpt( file, cuT( "lpv_grid_size" ), scene.getEngine()->getLpvGridSize(), 32u )
+			&& write( file, cuT( "materials" ), scene.getDefaultLightingModelName() )
 			&& txtscn::writeInclude( file, m_options.globalFontsFile, *this )
 			&& txtscn::writeInclude( file, m_options.globalSamplersFile, *this )
 			&& txtscn::writeInclude( file, m_options.globalMaterialsFile, *this )
@@ -378,7 +378,7 @@ namespace castor
 		{
 			result = false;
 
-			if ( auto block{ beginBlock( file, "scene", scene.getName() ) } )
+			if ( auto block{ beginBlock( file, cuT( "scene" ), scene.getName() ) } )
 			{
 				result = writeComment( file, cuT( "Scene configuration" ) );
 

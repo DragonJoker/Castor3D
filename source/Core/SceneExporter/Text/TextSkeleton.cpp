@@ -19,26 +19,26 @@ namespace castor
 		log::info << tabs() << cuT( "Writing Skeleton " ) << object.getName() << std::endl;
 		bool result{ false };
 
-		if ( auto block{ beginBlock( file, "skeleton", object.getName() ) } )
+		if ( auto block{ beginBlock( file, cuT( "skeleton" ), object.getName() ) } )
 		{
 			if ( !m_subfolder.empty() )
 			{
-				result = writeName( file, "import", "Skeletons/" + m_subfolder + "/" + object.getName() + ".cskl" );
+				result = writeName( file, cuT( "import" ), cuT( "Skeletons/" ) + m_subfolder + cuT( "/" ) + object.getName() + cuT( ".cskl" ) );
 			}
 			else
 			{
-				result = writeName( file, "import", "Skeletons/" + object.getName() + ".cskl" );
+				result = writeName( file, cuT( "import" ), cuT( "Skeletons/" ) + object.getName() + cuT( ".cskl" ) );
 			}
 
 			for ( auto & animation : object.getAnimations() )
 			{
 				if ( !m_subfolder.empty() )
 				{
-					result = result && writeName( file, "import_anim", "Skeletons/" + m_subfolder + "/" + object.getName() + "-" + animation.first + ".cska" );
+					result = result && writeName( file, cuT( "import_anim" ), cuT( "Skeletons/" ) + m_subfolder + cuT( "/" ) + object.getName() + cuT( "-" ) + animation.first + cuT( ".cska" ) );
 				}
 				else
 				{
-					result = result && writeName( file, "import_anim", "Skeletons/" + object.getName() + "-" + animation.first + ".cska" );
+					result = result && writeName( file, cuT( "import_anim" ), cuT( "Skeletons/" ) + object.getName() + cuT( "-" ) + animation.first + cuT( ".cska" ) );
 				}
 			}
 		}

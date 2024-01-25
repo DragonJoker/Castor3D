@@ -53,8 +53,8 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	C3D_API std::string print( castor::Point3f const & obj );
-	C3D_API std::string print( castor::BoundingBox const & obj );
+	C3D_API castor::String print( castor::Point3f const & obj );
+	C3D_API castor::String print( castor::BoundingBox const & obj );
 
 	class Scene
 		: public castor::OwnedBy< Engine >
@@ -238,7 +238,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Les noms des modèles d'éclairage pour le modèle de fond actuel.
 		 */
-		C3D_API std::vector< LightingModelID > getLightingModelsID()const;
+		C3D_API castor::Vector< LightingModelID > getLightingModelsID()const;
 		/**
 		 *\~english
 		 *\brief		Creates an animated texture and adds it to animated textures group.
@@ -446,14 +446,14 @@ namespace castor3d
 		GeometryCache::ElementObsT addGeometry( GeometryCache::ElementPtrT element )
 		{
 			auto result = element.get();
-			m_geometryCache->add( std::move( element ) );
+			m_geometryCache->add( castor::move( element ) );
 			return result;
 		}
 		/**@}*/
 
 	private:
 		void doGatherDirty( CpuUpdater::DirtyObjects & sceneObjs );
-		void doUpdateSceneNodes( CpuUpdater::DirtyObjects const & sceneObjs );
+		void doUpdateSceneNodes( CpuUpdater::DirtyObjects const & sceneObjs )const;
 		void doUpdateMovables( CpuUpdater & updater
 			, CpuUpdater::DirtyObjects & sceneObjs );
 		void doUpdateLights( CpuUpdater & updater
@@ -478,9 +478,9 @@ namespace castor3d
 	private:
 		bool m_initialised{ false };
 		crg::ResourcesCache m_resources;
-		std::vector< SceneNode * > m_dirtyNodes;
-		std::vector< BillboardBase * > m_dirtyBillboards;
-		std::vector< MovableObject * > m_dirtyObjects;
+		castor::Vector< SceneNode * > m_dirtyNodes;
+		castor::Vector< BillboardBase * > m_dirtyBillboards;
+		castor::Vector< MovableObject * > m_dirtyObjects;
 		DECLARE_OBJECT_CACHE_MEMBER( sceneNode, SceneNode );
 		SceneNodeRPtr m_rootNode;
 		SceneNodeRPtr m_rootCameraNode;
@@ -508,13 +508,13 @@ namespace castor3d
 		bool m_needsSubsurfaceScattering{ false };
 		bool m_hasOpaqueObjects{ false };
 		bool m_hasTransparentObjects{ false };
-		std::map< Material *, OnMaterialChangedConnection > m_materialsListeners;
+		castor::Map< Material *, OnMaterialChangedConnection > m_materialsListeners;
 		bool m_dirtyMaterials{ true };
 		uint32_t m_directionalShadowCascades{ MaxDirectionalCascadesCount };
 		castor::BoundingBox m_boundingBox;
 		std::atomic_bool m_needsGlobalIllumination;
-		std::array< std::atomic_bool, size_t( LightType::eCount ) > m_hasShadows;
-		std::array< std::set< GlobalIlluminationType >, size_t( LightType::eCount ) > m_giTypes;
+		castor::Array< std::atomic_bool, size_t( LightType::eCount ) > m_hasShadows;
+		castor::Array< castor::Set< GlobalIlluminationType >, size_t( LightType::eCount ) > m_giTypes;
 		std::atomic_bool m_hasAnyShadows;
 		float m_lpvIndirectAttenuation{ 1.7f };
 		VctConfig m_voxelConfig;

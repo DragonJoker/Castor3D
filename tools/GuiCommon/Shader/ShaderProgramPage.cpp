@@ -74,7 +74,7 @@ namespace GuiCommon
 
 	void ShaderProgramPage::doLoadPages( ShaderLanguage language )
 	{
-		std::map< ast::EntryPoint, wxString > const texts
+		castor::Map< ast::EntryPoint, wxString > const texts
 		{
 			{ ast::EntryPoint::eVertex, _( "Vertex" ) },
 			{ ast::EntryPoint::eTessellationControl, _( "Tessellation Control" ) },

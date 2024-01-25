@@ -26,13 +26,13 @@ See LICENSE file in root folder
 
 namespace CastorViewer
 {
-	typedef enum eTIMER_ID
+	enum class eTIMER_ID
 	{
-		eTIMER_ID_MOUSE = 1,
-		eTIMER_ID_MOVEMENT,
-		eTIMER_ID_COUNT,
-		eCLIPBOARD_CHANGE,
-	}	eTIMER_ID;
+		MOUSE = 1,
+		MOVEMENT,
+		COUNT,
+		CLIPBOARD_CHANGE,
+	};
 
 	class MouseNodeEvent;
 	class TranslateNodeEvent;
@@ -55,17 +55,17 @@ namespace CastorViewer
 		void updateWindow( castor3d::RenderWindowDesc const & window );
 		void onKeyUp( wxKeyEvent & event );
 
-		inline castor3d::RenderWindow & getRenderWindow()const
+		castor3d::RenderWindow & getRenderWindow()const
 		{
 			return *m_renderWindow;
 		}
 
-		inline void disableWindowResize()
+		void disableWindowResize()
 		{
 			m_resizeWindow = false;
 		}
 
-		inline void enableWindowResize()
+		void enableWindowResize()
 		{
 			m_resizeWindow = true;
 		}
@@ -73,9 +73,9 @@ namespace CastorViewer
 	private:
 		void doResetTimers();
 		void doStartMovement();
-		void doStartTimer( int id );
+		void doStartTimer( eTIMER_ID id );
 		void doStopMovement();
-		void doStopTimer( int id );
+		void doStopTimer( eTIMER_ID id );
 		float doGetRealSpeed()const noexcept;
 		void doResetNode();
 		void doTurnCameraHoriz();
@@ -146,12 +146,12 @@ namespace CastorViewer
 		bool m_extraSpeed{};
 		std::atomic_bool m_movementStarted{};
 		castor3d::RenderWindowUPtr m_renderWindow{};
-		std::array< wxTimer *, eTIMER_ID_COUNT > m_timers{};
+		castor::Array< wxTimer *, size_t( eTIMER_ID::COUNT ) > m_timers{};
 
 		castor3d::SceneNodeRPtr m_lightsNode{};
 		castor3d::SceneNodeRPtr m_currentNode{};
 		castor::RangedValue< float > m_camSpeed;
-		std::unique_ptr< GuiCommon::CubeBoxManager > m_cubeManager{};
+		castor::RawUniquePtr< GuiCommon::CubeBoxManager > m_cubeManager{};
 
 		castor::StringMap< GuiCommon::NodeStatePtr > m_nodesStates{};
 		GuiCommon::NodeState * m_currentState{};
@@ -163,10 +163,10 @@ namespace CastorViewer
 		castor3d::FrameListenerRPtr m_listener{};
 
 		castor3d::MouseCursor m_cursor{};
-		std::unique_ptr< wxClipboard > m_clipboard{};
+		castor::RawUniquePtr< wxClipboard > m_clipboard{};
 		std::atomic_bool m_setClipboardText;
 		std::promise< castor::U32String > m_clipGet{};
-		std::mutex m_mtxClipSet{};
+		castor::Mutex m_mtxClipSet{};
 		castor::U32String m_clipSet{};
 
 		GuiCommon::I3DControllerUPtr m_3dController{};

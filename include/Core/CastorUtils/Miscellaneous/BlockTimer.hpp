@@ -27,7 +27,7 @@ namespace castor
 		 */
 		CU_API BlockTimer( char const * file
 			, char const * function
-			, std::string name
+			, String name
 			, uint32_t line );
 		/**
 		 *\~english
@@ -40,7 +40,7 @@ namespace castor
 	private:
 		std::string_view m_file;
 		std::string_view m_function;
-		std::string m_name;
+		String m_name;
 		uint32_t m_line;
 		PreciseTimer m_timer;
 	};

@@ -52,7 +52,7 @@ namespace castor3d
 			registerParsers( name, parsers );
 		}
 
-		registerParsers( "c3d.scene", createSceneFileParsers( engine ) );
+		registerParsers( cuT( "c3d.scene" ), createSceneFileParsers( engine ) );
 
 		if constexpr ( scnfile::C3D_PrintParsers )
 		{
@@ -141,7 +141,7 @@ namespace castor3d
 
 		for ( auto const & fileName : context.files )
 		{
-			if ( fileName.getExtension() == "csna" )
+			if ( fileName.getExtension() == cuT( "csna" ) )
 			{
 				context.csnaFiles.push_back( fileName );
 			}
@@ -188,9 +188,9 @@ namespace castor3d
 		return cuT( "unknown" );
 	}
 
-	std::unique_ptr< castor::FileParser > SceneFileParser::doCreateParser()const
+	castor::RawUniquePtr< castor::FileParser > SceneFileParser::doCreateParser()const
 	{
-		return std::make_unique< SceneFileParser >( *getEngine() );
+		return castor::make_unique< SceneFileParser >( *getEngine() );
 	}
 }
 //****************************************************************************************************

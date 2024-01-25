@@ -80,7 +80,7 @@ namespace castor
 		cacheanmgrp::doInitialiseBuffer( m_skinningTransformsData );
 	}
 
-	ResourceCacheT< AnimatedObjectGroup, castor::String, AnimatedObjectGroupCacheTraits >::~ResourceCacheT()
+	ResourceCacheT< AnimatedObjectGroup, castor::String, AnimatedObjectGroupCacheTraits >::~ResourceCacheT()noexcept
 	{
 #if C3D_DebugTimers
 		m_engine.unregisterTimer( getScene()->getName() + "/Animations", *m_timerAnimations );
@@ -197,9 +197,9 @@ namespace castor
 		m_skeletonEntries.clear();
 	}
 
-	std::vector< AnimatedObject * > ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::findObject( castor::String const & name )const
+	castor::Vector< AnimatedObject * > ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::findObject( castor::String const & name )const
 	{
-		std::vector< AnimatedObject * > result;
+		castor::Vector< AnimatedObject * > result;
 		auto lock( castor::makeUniqueLock( *this ) );
 
 		for ( auto const & [_, group] : *this )
@@ -216,7 +216,7 @@ namespace castor
 	ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::MeshPoolsEntry ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::doCreateEntry( RenderDevice const &
 		, AnimatedObjectGroup const & group
 		, AnimatedMesh const & mesh
-		, castor3d::Submesh const & submesh )
+		, castor3d::Submesh const & submesh )const
 	{
 		return
 		{
@@ -228,7 +228,7 @@ namespace castor
 
 	ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::SkeletonPoolsEntry ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::doCreateEntry( RenderDevice const &
 		, AnimatedObjectGroup const & group
-		, AnimatedSkeleton const & skeleton )
+		, AnimatedSkeleton const & skeleton )const
 	{
 		return
 		{
@@ -251,7 +251,7 @@ namespace castor
 	}
 
 	void ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::doRemoveEntry( castor3d::RenderDevice const &
-		, castor3d::AnimatedTexture const & texture )
+		, castor3d::AnimatedTexture const & texture )const
 	{
 		getOwner()->getEngine()->getMaterialCache().unregisterTexture( texture );
 	}
@@ -351,7 +351,7 @@ namespace castor
 					switch ( object->getKind() )
 					{
 					case AnimationType::eMesh:
-						for ( auto & submesh : static_cast< AnimatedMesh const & >( *object ).getMesh() )
+						for ( auto const & submesh : static_cast< AnimatedMesh const & >( *object ).getMesh() )
 						{
 							doRemoveEntry( device
 								, static_cast< AnimatedMesh const & >( *object )

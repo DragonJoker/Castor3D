@@ -10,8 +10,8 @@
 
 namespace atmosphere_scattering
 {
-	castor::String const CloudsUbo::Buffer = cuT( "C3D_ATM_Clouds" );
-	castor::String const CloudsUbo::Data = cuT( "d" );
+	castor::MbString const CloudsUbo::Buffer = "C3D_ATM_Clouds";
+	castor::MbString const CloudsUbo::Data = "d";
 
 	CloudsUbo::CloudsUbo( castor3d::RenderDevice const & device
 		, bool & dirty )

@@ -11,7 +11,7 @@ namespace castor
 	template< typename T, uint32_t TCount >
 	struct PointData
 	{
-		std::array< T, TCount > data;
+		Array< T, TCount > data;
 	};
 
 	template< typename T >

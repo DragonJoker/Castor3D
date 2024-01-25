@@ -15,9 +15,9 @@ namespace castor3d
 		static bool constexpr C3D_DisableFrustumCulling = false;
 
 		static void updatePoints( castor::Matrix4x4f const & viewProj
-			, std::array< InterleavedVertex, 8u > & points )
+			, castor::Array< InterleavedVertex, 8u > & points )
 		{
-			std::array< castor::Point3f, 8u > corners;
+			castor::Array< castor::Point3f, 8u > corners;
 			auto constexpr neg1 = -1.0f;
 			auto constexpr pos1 = +1.0f;
 			corners[size_t( FrustumCorner::eFarLeftBottom )] = { neg1, neg1, pos1 };
@@ -58,7 +58,7 @@ namespace castor3d
 		if constexpr ( !rendfrust::C3D_DisableFrustumCulling )
 		{
 			auto const vp = projection * view;
-			std::array< castor::Point4f, size_t( FrustumPlane::eCount ) > points;
+			castor::Array< castor::Point4f, size_t( FrustumPlane::eCount ) > points;
 
 			const castor::Point4f x{ vp[0][0], vp[1][0], vp[2][0], vp[3][0] };
 			const castor::Point4f y{ vp[0][1], vp[1][1], vp[2][1], vp[3][1] };

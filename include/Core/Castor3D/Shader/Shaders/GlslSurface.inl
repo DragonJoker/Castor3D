@@ -14,7 +14,7 @@ namespace castor3d::shader
 	BillboardSurfaceT< FlagT >::BillboardSurfaceT( sdw::ShaderWriter & writer
 		, sdw::expr::ExprPtr expr
 		, bool enabled )
-		: StructInstance{ writer, std::move( expr ), enabled }
+		: StructInstance{ writer, castor::move( expr ), enabled }
 		, position{ this->getMember< sdw::Vec4 >( "position" ) }
 		, texture0{ this->getMember< sdw::Vec2 >( "texture0", true ) }
 		, center{ this->getMember< sdw::Vec3 >( "center" ) }
@@ -72,7 +72,7 @@ namespace castor3d::shader
 	RasterizerSurfaceT< TexcoordT, FlagT >::RasterizerSurfaceT( sdw::ShaderWriter & writer
 		, sdw::expr::ExprPtr expr
 		, bool enabled )
-		: RasterizerSurfaceBase{ writer, std::move( expr ), enabled }
+		: RasterizerSurfaceBase{ writer, castor::move( expr ), enabled }
 		, texture0{ this->getMember< TexcoordT >( "texture0", true ) }
 		, texture1{ this->getMember< TexcoordT >( "texture1", true ) }
 		, texture2{ this->getMember< TexcoordT >( "texture2", true ) }
@@ -204,7 +204,7 @@ namespace castor3d::shader
 	VoxelSurfaceT< FlagT >::VoxelSurfaceT( sdw::ShaderWriter & writer
 		, sdw::expr::ExprPtr expr
 		, bool enabled )
-		: SurfaceBase{ writer, std::move( expr ), enabled }
+		: SurfaceBase{ writer, castor::move( expr ), enabled }
 		, texture0{ getMember< sdw::Vec3 >( "texture0", true ) }
 		, texture1{ getMember< sdw::Vec3 >( "texture1", true ) }
 		, texture2{ getMember< sdw::Vec3 >( "texture2", true ) }

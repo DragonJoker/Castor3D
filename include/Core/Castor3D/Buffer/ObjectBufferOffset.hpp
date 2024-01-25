@@ -69,7 +69,7 @@ namespace castor3d
 
 			void createUniformPassBinding( crg::FramePass & pass
 				, uint32_t binding
-				, std::string const & name )const
+				, castor::String const & name )const
 			{
 				castor3d::createUniformPassBinding( pass
 					, binding
@@ -81,7 +81,7 @@ namespace castor3d
 
 			void createInputStoragePassBinding( crg::FramePass & pass
 				, uint32_t binding
-				, std::string const & name )const
+				, castor::String const & name )const
 			{
 				castor3d::createInputStoragePassBinding( pass
 					, binding
@@ -93,7 +93,7 @@ namespace castor3d
 
 			void createInOutStoragePassBinding( crg::FramePass & pass
 				, uint32_t binding
-				, std::string const & name )const
+				, castor::String const & name )const
 			{
 				castor3d::createInOutStoragePassBinding( pass
 					, binding
@@ -105,7 +105,7 @@ namespace castor3d
 
 			void createOutputStoragePassBinding( crg::FramePass & pass
 				, uint32_t binding
-				, std::string const & name )const
+				, castor::String const & name )const
 			{
 				castor3d::createOutputStoragePassBinding( pass
 					, binding
@@ -138,13 +138,13 @@ namespace castor3d
 
 		ObjectBufferOffset() = default;
 
-		ObjectBufferOffset( size_t hash )
+		explicit ObjectBufferOffset( size_t hash )
 			: hash{ hash }
 		{
 		}
 
 		size_t hash{};
-		std::array< GpuBufferChunk, size_t( SubmeshData::eCount ) > buffers{};
+		castor::Array< GpuBufferChunk, size_t( SubmeshData::eCount ) > buffers{};
 		uint16_t id{};
 
 		explicit operator bool()const
@@ -222,7 +222,7 @@ namespace castor3d
 		void createUniformPassBinding( SubmeshData data
 			, crg::FramePass & pass
 			, uint32_t binding
-			, std::string const & name )const
+			, castor::String const & name )const
 		{
 			getBufferChunk( data ).createUniformPassBinding( pass
 				, binding
@@ -232,7 +232,7 @@ namespace castor3d
 		void createInputStoragePassBinding( SubmeshData data
 			, crg::FramePass & pass
 			, uint32_t binding
-			, std::string const & name )const
+			, castor::String const & name )const
 		{
 			getBufferChunk( data ).createInputStoragePassBinding( pass
 				, binding
@@ -242,7 +242,7 @@ namespace castor3d
 		void createInOutStoragePassBinding( SubmeshData data
 			, crg::FramePass & pass
 			, uint32_t binding
-			, std::string const & name )const
+			, castor::String const & name )const
 		{
 			getBufferChunk( data ).createInOutStoragePassBinding( pass
 				, binding
@@ -252,7 +252,7 @@ namespace castor3d
 		void createOutputStoragePassBinding( SubmeshData data
 			, crg::FramePass & pass
 			, uint32_t binding
-			, std::string const & name )const
+			, castor::String const & name )const
 		{
 			getBufferChunk( data ).createOutputStoragePassBinding( pass
 				, binding

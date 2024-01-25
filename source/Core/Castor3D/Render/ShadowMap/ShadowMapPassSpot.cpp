@@ -37,7 +37,7 @@
 
 namespace castor3d
 {
-	castor::String const ShadowMapPassSpot::Type = "c3d.shadows.spot";
+	castor::String const ShadowMapPassSpot::Type = cuT( "c3d.shadows.spot" );
 
 	ShadowMapPassSpot::ShadowMapPassSpot( crg::FramePass const & pass
 		, crg::GraphContext & context
@@ -64,7 +64,7 @@ namespace castor3d
 		log::trace << "Created " << getName() << std::endl;
 	}
 
-	ShadowMapPassSpot::~ShadowMapPassSpot()
+	ShadowMapPassSpot::~ShadowMapPassSpot()noexcept
 	{
 		getCuller().getCamera().detach();
 	}

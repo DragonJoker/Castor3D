@@ -74,8 +74,8 @@ namespace fxaa
 		}
 
 	public:
-		static const castor::String Buffer;
-		static const castor::String Data;
+		static const castor::MbString Buffer;
+		static const castor::MbString Data;
 
 	private:
 		castor3d::RenderDevice const & m_device;

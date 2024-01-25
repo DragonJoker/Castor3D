@@ -27,7 +27,7 @@ namespace castor3d
 			SDW_DeclStructInstance( C3D_API, SsaoConfigData );
 
 			C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
-			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
+			C3D_API static castor::RawUniquePtr< sdw::Struct > declare( sdw::ShaderWriter & writer );
 
 			sdw::Vec4 projInfo;
 			sdw::Int numSamples;

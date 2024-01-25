@@ -1,4 +1,4 @@
-﻿#include "AtmosphereScattering/CloudsModel.hpp"
+#include "AtmosphereScattering/CloudsModel.hpp"
 
 #include "AtmosphereScattering/AtmosphereCameraUbo.hpp"
 #include "AtmosphereScattering/AtmosphereModel.hpp"
@@ -597,7 +597,7 @@ namespace atmosphere_scattering
 				{
 					auto coneStep = 1.0_f / 6.0_f;
 					auto noiseKernel = writer.declConstantArray( "noiseKernel"
-						, std::vector< sdw::Vec3 >{ vec3( 0.38051305_f, 0.92453449_f, -0.02111345_f )
+						, castor::Vector< sdw::Vec3 >{ vec3( 0.38051305_f, 0.92453449_f, -0.02111345_f )
 						, vec3( -0.50625799_f, -0.03590792_f, -0.86163418_f )
 						, vec3( -0.32509218_f, -0.94557439_f, 0.01428793_f )
 						, vec3( 0.09026238_f, -0.27376545_f, 0.95755165_f )
@@ -706,7 +706,7 @@ namespace atmosphere_scattering
 					auto cloudsMinTransmittance = 1e-1_f;
 					auto bayerFactor = 1.0_f / 16.0_f;
 					auto bayerFilter = writer.declConstantArray( "bayerFilter"
-						, std::vector< sdw::Float >{ 0.0_f * bayerFactor, 8.0_f * bayerFactor, 2.0_f * bayerFactor, 10.0_f * bayerFactor
+						, castor::Vector< sdw::Float >{ 0.0_f * bayerFactor, 8.0_f * bayerFactor, 2.0_f * bayerFactor, 10.0_f * bayerFactor
 							, 12.0_f * bayerFactor, 4.0_f * bayerFactor, 14.0_f * bayerFactor, 6.0_f * bayerFactor
 							, 3.0_f * bayerFactor, 11.0_f * bayerFactor, 1.0_f * bayerFactor, 9.0_f * bayerFactor
 							, 15.0_f * bayerFactor, 7.0_f * bayerFactor, 13.0_f * bayerFactor, 5.0_f * bayerFactor } );

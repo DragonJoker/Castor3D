@@ -28,7 +28,7 @@ namespace GuiCommon
 		, castor3d::ConfigurationVisitorBase::ControlsListT< ControlT > controls )
 	{
 		using ValueT = std::remove_cv_t< std::remove_reference_t< MyValueT > >;
-		m_handlers.emplace( m_prefix + name, doGetHandler( handler, std::move( controls ) ) );
+		m_handlers.emplace( m_prefix + name, doGetHandler( handler, castor::move( controls ) ) );
 
 		if constexpr ( std::is_same_v< ValueT, bool > )
 		{
@@ -257,13 +257,13 @@ namespace GuiCommon
 		}
 		else if constexpr ( castor::isSpeedT< ValueT > )
 		{
-			wxPGProperty * prop = createProperty( parent, name, value.getValue(), handler, std::move( controls ) );
+			wxPGProperty * prop = createProperty( parent, name, value.getValue(), handler, castor::move( controls ) );
 			prop->SetAttribute( wxPG_ATTR_UNITS, ValueTraitsT< ValueT >::getUnit() );
 			return prop;
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::Angle > )
 		{
-			wxPGProperty * prop = createProperty( parent, name, value.degrees(), handler, std::move( controls ) );
+			wxPGProperty * prop = createProperty( parent, name, value.degrees(), handler, castor::move( controls ) );
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_STEP, WXVARIANT( 1.0 ) );
 			prop->SetAttribute( wxPG_ATTR_UNITS, ValueTraitsT< ValueT >::getUnit() );
 			prop->SetAttribute( wxPG_ATTR_MIN, WXVARIANT( 0.0 ) );
@@ -278,15 +278,15 @@ namespace GuiCommon
 		}
 		else if constexpr ( castor::isGroupChangeTrackedT< ValueT > )
 		{
-			return createProperty( parent, name, value.value(), handler, std::move( controls ) );
+			return createProperty( parent, name, value.value(), handler, castor::move( controls ) );
 		}
 		else if constexpr ( castor::isChangeTrackedT< ValueT > )
 		{
-			return createProperty( parent, name, value.value(), handler, std::move( controls ) );
+			return createProperty( parent, name, value.value(), handler, castor::move( controls ) );
 		}
 		else if constexpr ( castor::isRangedValueT< ValueT > )
 		{
-			wxPGProperty * prop = createProperty( parent, name, value.value(), handler, std::move( controls ) );
+			wxPGProperty * prop = createProperty( parent, name, value.value(), handler, castor::move( controls ) );
 			prop->SetAttribute( wxPG_ATTR_MIN, getVariant< castor::UnRangedValueT< ValueT > >( value.range().getMin() ) );
 			prop->SetAttribute( wxPG_ATTR_MAX, getVariant< castor::UnRangedValueT< ValueT > >( value.range().getMax() ) );
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_WRAP, WXVARIANT( true ) );
@@ -305,7 +305,7 @@ namespace GuiCommon
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::U32String > )
 		{
-			return appendProp( parent, new wxStringProperty( name, m_prefix + name, castor::string::stringCast< castor::xchar >( value ) ) );
+			return appendProp( parent, new wxStringProperty( name, m_prefix + name, castor::makeString( value ) ) );
 		}
 		else
 		{
@@ -328,7 +328,7 @@ namespace GuiCommon
 			{
 				func( EnumT( variantCast< uint32_t >( var ) ) );
 			}
-			, std::move( controls ) );
+			, castor::move( controls ) );
 		return prop;
 	}
 
@@ -344,7 +344,7 @@ namespace GuiCommon
 			, name
 			, choices
 			, func
-			, std::move( controls ) );
+			, castor::move( controls ) );
 		prop->SetValue( choices[uint32_t( selected )] );
 		return prop;
 	}
@@ -360,7 +360,7 @@ namespace GuiCommon
 			, name
 			, value
 			, handler
-			, std::move( controls ) );
+			, castor::move( controls ) );
 		return prop;
 	}
 
@@ -376,7 +376,7 @@ namespace GuiCommon
 			, name
 			, value
 			, handler
-			, std::move( controls ) );
+			, castor::move( controls ) );
 		prop->SetAttribute( wxPG_ATTR_MIN, getVariant< ValueT >( range.getMin() ) );
 		prop->SetAttribute( wxPG_ATTR_MAX, getVariant< ValueT >( range.getMax() ) );
 		prop->SetAttribute( wxPG_ATTR_SPINCTRL_WRAP, WXVARIANT( true ) );
@@ -416,7 +416,7 @@ namespace GuiCommon
 				( *value.value )->y = float( ( ( col.GetRGB() & 0x0000FF00 ) >> 8 ) ) / 255.0f;
 				( *value.value )->z = float( ( ( col.GetRGB() & 0x000000FF ) >> 0 ) ) / 255.0f;
 			}
-			, std::move( controls ) );
+			, castor::move( controls ) );
 		return prop;
 	}
 
@@ -433,7 +433,7 @@ namespace GuiCommon
 			{
 				*value = variantCast< ValueT >( var );
 			}
-			, std::move( controls ) );
+			, castor::move( controls ) );
 	}
 
 	template< typename ParentT, typename ValueT, typename ControlT >
@@ -451,7 +451,7 @@ namespace GuiCommon
 			{
 				*value = variantCast< ValueT >( var );
 			}
-			, std::move( controls ) );
+			, castor::move( controls ) );
 	}
 
 	template< typename ParentT, typename ValueT, typename ControlT >
@@ -469,7 +469,7 @@ namespace GuiCommon
 				ranged = variantCast< ValueT >( var );
 				*value = ranged;
 			}
-			, std::move( controls ) );
+			, castor::move( controls ) );
 	}
 
 	template< typename ParentT, typename ValueT, typename ControlT >
@@ -485,7 +485,7 @@ namespace GuiCommon
 			{
 				*value = variantCast< ValueT >( var );
 			}
-			, std::move( controls ) );
+			, castor::move( controls ) );
 	}
 
 	template< typename ParentT, typename ValueT, typename ControlT >
@@ -503,7 +503,7 @@ namespace GuiCommon
 			{
 				*value = variantCast< ValueT >( var );
 			}
-			, std::move( controls ) );
+			, castor::move( controls ) );
 	}
 
 	template< typename ParentT, typename ObjectT, typename ObjectU, typename ValueT, typename ControlT >
@@ -522,7 +522,7 @@ namespace GuiCommon
 			{
 				( object->*setter )( variantCast< ValueT >( var ) );
 			}
-			, std::move( controls ) );
+			, castor::move( controls ) );
 	}
 
 	template< typename ParentT, typename ObjectT, typename ObjectU, typename ValueT, typename ControlT >
@@ -543,7 +543,7 @@ namespace GuiCommon
 			{
 				( object->*setter )( variantCast< ValueT >( var ) );
 			}
-			, std::move( controls ) );
+			, castor::move( controls ) );
 	}
 
 	template< typename ParentT, typename ObjectT, typename ObjectU, typename ValueT, typename ControlT >
@@ -562,7 +562,7 @@ namespace GuiCommon
 			{
 				( object->*setter )( variantCast< ValueT >( var ) );
 			}
-			, std::move( controls ) );
+			, castor::move( controls ) );
 	}
 
 	template< typename ParentT, typename ObjectT, typename ObjectU, typename ValueT, typename ControlT >
@@ -581,7 +581,7 @@ namespace GuiCommon
 			{
 				( object->*setter )( variantCast< ValueT >( var ) );
 			}
-			, std::move( controls ) );
+			, castor::move( controls ) );
 	}
 
 	template< typename ParentT, typename ObjectT, typename ObjectU, typename EnumT, typename ControlT >
@@ -600,7 +600,7 @@ namespace GuiCommon
 			{
 				( object->*setter )( type );
 			}
-			, std::move( controls ) );
+			, castor::move( controls ) );
 	}
 
 	template< typename ParentT, typename ObjectT, typename ObjectU, typename EnumT, typename ControlT >
@@ -621,7 +621,7 @@ namespace GuiCommon
 			{
 				( object->*setter )( type );
 			}
-			, std::move( controls ) );
+			, castor::move( controls ) );
 	}
 
 	template< typename ParentT, typename EnumT, typename ControlT >
@@ -642,7 +642,7 @@ namespace GuiCommon
 				*value = type;
 				onChange( save, *value );
 			}
-			, std::move( controls ) );
+			, castor::move( controls ) );
 	}
 
 	template< typename ParentT, typename ObjectT, typename ObjectU, typename EnumT, typename ControlT >
@@ -663,7 +663,7 @@ namespace GuiCommon
 			{
 				( object->*setter )( type );
 			}
-			, std::move( controls ) );
+			, castor::move( controls ) );
 	}
 }
 

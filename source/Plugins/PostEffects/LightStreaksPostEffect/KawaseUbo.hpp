@@ -87,16 +87,16 @@ namespace light_streaks
 			, uint32_t binding
 			, uint32_t index )const
 		{
-			return m_ubo[index].createPassBinding( pass, "KawaseCfg" + std::to_string( index ), binding );
+			return m_ubo[index].createPassBinding( pass, "KawaseCfg" + castor::string::toMbString( index ), binding );
 		}
 
 	public:
-		static castor::String const Buffer;
-		static castor::String const Data;
+		static castor::MbString const Buffer;
+		static castor::MbString const Data;
 
 	private:
 		castor3d::RenderDevice const & m_device;
-		std::vector< castor3d::UniformBufferOffsetT< Configuration > > m_ubo;
+		castor::Vector< castor3d::UniformBufferOffsetT< Configuration > > m_ubo;
 	};
 }
 

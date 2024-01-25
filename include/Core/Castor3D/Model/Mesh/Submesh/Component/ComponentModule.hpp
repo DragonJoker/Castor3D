@@ -49,14 +49,14 @@ namespace castor3d
 		bool hasRenderFlag{};
 	};
 
-	using SubmeshComponentCombines = std::vector< SubmeshComponentCombine >;
+	using SubmeshComponentCombines = castor::Vector< SubmeshComponentCombine >;
 
 	C3D_API bool operator==( SubmeshComponentCombine const & lhs, SubmeshComponentCombine const & rhs )noexcept;
 
 	C3D_API bool hasAny( SubmeshComponentCombine const & lhs
 		, SubmeshComponentFlag rhs )noexcept;
 	C3D_API bool hasAny( SubmeshComponentCombine const & lhs
-		, std::vector< SubmeshComponentFlag > const & rhs )noexcept;
+		, castor::Vector< SubmeshComponentFlag > const & rhs )noexcept;
 	C3D_API void remFlags( SubmeshComponentCombine & lhs
 		, SubmeshComponentFlag rhs )noexcept;
 	C3D_API void remFlags( SubmeshComponentCombine & lhs
@@ -296,25 +296,25 @@ namespace castor3d
 	CU_DeclareSmartPtr( castor3d, SubmeshComponentRegister, C3D_API );
 	CU_DeclareSmartPtr( castor3d, TriFaceMapping, C3D_API );
 
-	using SubmeshComponentDataUPtr = std::unique_ptr< SubmeshComponentData >;
+	using SubmeshComponentDataUPtr = castor::RawUniquePtr< SubmeshComponentData >;
 	using SubmeshComponentDataRPtr = SubmeshComponentData *;
-	using SubmeshRenderDataPtr = std::unique_ptr< SubmeshRenderData >;
-	using SubmeshRenderShaderPtr = std::unique_ptr< SubmeshRenderShader >;
+	using SubmeshRenderDataPtr = castor::RawUniquePtr< SubmeshRenderData >;
+	using SubmeshRenderShaderPtr = castor::RawUniquePtr< SubmeshRenderShader >;
 
 	//! Face array
 	CU_DeclareVector( Face, Face );
 
 	CU_DeclareMap( SubmeshComponentID, SubmeshComponentUPtr, SubmeshComponentID );
 
-	using CreateSubmeshComponentPlugin = std::function< SubmeshComponentPluginUPtr( SubmeshComponentRegister const & ) >;
+	using CreateSubmeshComponentPlugin = castor::Function< SubmeshComponentPluginUPtr( SubmeshComponentRegister const & ) >;
 
 	namespace shader
 	{
 		struct SubmeshVertexSurfaceShader;
 		struct SubmeshRasterSurfaceShader;
 
-		using SubmeshVertexSurfaceShaderPtr = std::unique_ptr< SubmeshVertexSurfaceShader >;
-		using SubmeshRasterSurfaceShaderPtr = std::unique_ptr< SubmeshRasterSurfaceShader >;
+		using SubmeshVertexSurfaceShaderPtr = castor::RawUniquePtr< SubmeshVertexSurfaceShader >;
+		using SubmeshRasterSurfaceShaderPtr = castor::RawUniquePtr< SubmeshRasterSurfaceShader >;
 	}
 
 	//@}

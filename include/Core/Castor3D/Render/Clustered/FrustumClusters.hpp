@@ -177,25 +177,25 @@ namespace castor3d
 			return getSpotLightIndicesBuffer( m_spotLightMortonIndicesInput );
 		}
 
-		std::vector< ashes::BufferBase const * > getOutputPointLightIndicesBuffers()const noexcept
+		castor::Vector< ashes::BufferBase const * > getOutputPointLightIndicesBuffers()const noexcept
 		{
 			return { &getPointLightIndicesBuffer( 1u - m_pointLightMortonIndicesInput )
 				, &getPointLightIndicesBuffer( m_pointLightMortonIndicesInput ) };
 		}
 
-		std::vector< ashes::BufferBase const * > getOutputSpotLightIndicesBuffers()const noexcept
+		castor::Vector< ashes::BufferBase const * > getOutputSpotLightIndicesBuffers()const noexcept
 		{
 			return { &getSpotLightIndicesBuffer( 1u - m_spotLightMortonIndicesInput )
 				, &getSpotLightIndicesBuffer( m_spotLightMortonIndicesInput ) };
 		}
 
-		std::vector< ashes::BufferBase const * > getInputPointLightIndicesBuffers()const noexcept
+		castor::Vector< ashes::BufferBase const * > getInputPointLightIndicesBuffers()const noexcept
 		{
 			return { &getPointLightIndicesBuffer( m_pointLightMortonIndicesInput )
 				, &getPointLightIndicesBuffer( 1u - m_pointLightMortonIndicesInput ) };
 		}
 
-		std::vector< ashes::BufferBase const * > getInputSpotLightIndicesBuffers()const noexcept
+		castor::Vector< ashes::BufferBase const * > getInputSpotLightIndicesBuffers()const noexcept
 		{
 			return { &getSpotLightIndicesBuffer( m_spotLightMortonIndicesInput )
 				, &getSpotLightIndicesBuffer( 1u - m_spotLightMortonIndicesInput ) };
@@ -221,25 +221,25 @@ namespace castor3d
 			return getSpotLightMortonCodesBuffer( m_spotLightMortonIndicesInput );
 		}
 
-		std::vector< ashes::BufferBase const * > getOutputPointLightMortonCodesBuffers()const noexcept
+		castor::Vector< ashes::BufferBase const * > getOutputPointLightMortonCodesBuffers()const noexcept
 		{
 			return { &getPointLightMortonCodesBuffer( 1u - m_pointLightMortonIndicesInput )
 				, &getPointLightMortonCodesBuffer( m_pointLightMortonIndicesInput ) };
 		}
 
-		std::vector< ashes::BufferBase const * > getOutputSpotLightMortonCodesBuffers()const noexcept
+		castor::Vector< ashes::BufferBase const * > getOutputSpotLightMortonCodesBuffers()const noexcept
 		{
 			return { &getSpotLightMortonCodesBuffer( 1u - m_spotLightMortonIndicesInput )
 				, &getSpotLightMortonCodesBuffer( m_spotLightMortonIndicesInput ) };
 		}
 
-		std::vector< ashes::BufferBase const * > getInputPointLightMortonCodesBuffers()const noexcept
+		castor::Vector< ashes::BufferBase const * > getInputPointLightMortonCodesBuffers()const noexcept
 		{
 			return { &getPointLightMortonCodesBuffer( m_pointLightMortonIndicesInput )
 				, &getPointLightMortonCodesBuffer( 1u - m_pointLightMortonIndicesInput ) };
 		}
 
-		std::vector< ashes::BufferBase const * > getInputSpotLightMortonCodesBuffers()const noexcept
+		castor::Vector< ashes::BufferBase const * > getInputSpotLightMortonCodesBuffers()const noexcept
 		{
 			return { &getSpotLightMortonCodesBuffer( m_spotLightMortonIndicesInput )
 				, &getSpotLightMortonCodesBuffer( 1u - m_spotLightMortonIndicesInput ) };
@@ -316,10 +316,10 @@ namespace castor3d
 		// Fixed size buffers, related to lights
 		ashes::BufferPtr< AABB > m_allLightsAABBBuffer;
 		ashes::BufferPtr< AABB > m_reducedLightsAABBBuffer;
-		std::array< ashes::BufferPtr< u32 >, 2u > m_pointMortonCodesBuffers;
-		std::array< ashes::BufferPtr< u32 >, 2u > m_spotMortonCodesBuffers;
-		std::array< ashes::BufferPtr< u32 >, 2u > m_pointIndicesBuffers;
-		std::array< ashes::BufferPtr< u32 >, 2u > m_spotIndicesBuffers;
+		castor::Array< ashes::BufferPtr< u32 >, 2u > m_pointMortonCodesBuffers;
+		castor::Array< ashes::BufferPtr< u32 >, 2u > m_spotMortonCodesBuffers;
+		castor::Array< ashes::BufferPtr< u32 >, 2u > m_pointIndicesBuffers;
+		castor::Array< ashes::BufferPtr< u32 >, 2u > m_spotIndicesBuffers;
 		ashes::BufferPtr< AABB > m_pointBVHBuffer;
 		ashes::BufferPtr< AABB > m_spotBVHBuffer;
 		ashes::BufferPtr< s32 > m_mergePathPartitionsBuffer;
@@ -332,7 +332,7 @@ namespace castor3d
 		ashes::BufferBasePtr m_spotLightClusterIndexBuffer;
 		ashes::BufferBasePtr m_clusterFlags;
 		ashes::BufferBasePtr m_uniqueClusters;
-		std::vector< ashes::BufferBasePtr > m_toDelete;
+		castor::Vector< ashes::BufferBasePtr > m_toDelete;
 	};
 }
 

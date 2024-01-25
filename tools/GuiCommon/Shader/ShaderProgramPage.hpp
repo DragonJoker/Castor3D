@@ -45,7 +45,7 @@ namespace GuiCommon
 		wxAuiManager m_auiManager;
 		bool m_canEdit;
 		wxAuiNotebook * m_editors{};
-		std::vector< ShaderEditor * > m_pages;
+		castor::Vector< ShaderEditor * > m_pages;
 	};
 }
 

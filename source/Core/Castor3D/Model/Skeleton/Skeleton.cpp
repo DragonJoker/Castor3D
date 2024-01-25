@@ -28,18 +28,18 @@ namespace castor3d
 
 	SkeletonNode * Skeleton::createNode( castor::String name )
 	{
-		auto node = castor::makeUnique< SkeletonNode >( std::move( name ), *this );
+		auto node = castor::makeUnique< SkeletonNode >( castor::move( name ), *this );
 		auto result = node.get();
-		m_nodes.emplace_back( std::move( node ) );
+		m_nodes.emplace_back( castor::move( node ) );
 		return result;
 	}
 
 	BoneNode * Skeleton::createBone( castor::String name
 		, castor::Matrix4x4f const & offset )
 	{
-		auto node = castor::makeUniqueDerived< SkeletonNode, BoneNode >( std::move( name ), *this, offset, uint32_t( m_bones.size() ) );
+		auto node = castor::makeUniqueDerived< SkeletonNode, BoneNode >( castor::move( name ), *this, offset, uint32_t( m_bones.size() ) );
 		auto result = &static_cast< BoneNode & >( *node );
-		m_nodes.emplace_back( std::move( node ) );
+		m_nodes.emplace_back( castor::move( node ) );
 		m_bones.emplace_back( result );
 		return result;
 	}
@@ -109,9 +109,9 @@ namespace castor3d
 
 		if ( parentDist > nodeDist )
 		{
-			auto parentNode = std::move( *parentIt );
+			auto parentNode = castor::move( *parentIt );
 			m_nodes.erase( parentIt );
-			m_nodes.emplace( std::next( m_nodes.begin(), nodeDist ), std::move( parentNode ) );
+			m_nodes.emplace( std::next( m_nodes.begin(), nodeDist ), castor::move( parentNode ) );
 		}
 	}
 

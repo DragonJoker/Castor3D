@@ -110,13 +110,8 @@ namespace castor3d
 			submeshBase.addPoints( baseVertex );
 			submeshSide.addPoints( sideVertex );
 
-			//RECONSTITION DES FACES
-			if ( height < 0 )
-			{
-				height = -height;
-			}
 
-			//Composition des extràmitàs
+			//Composition des extrémités
 			for ( uint32_t i = 0; i < nbFaces - 1; i++ )
 			{
 				//Composition du bas

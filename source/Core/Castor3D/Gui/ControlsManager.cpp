@@ -35,7 +35,7 @@ namespace castor3d
 {
 	namespace ctrlmgr
 	{
-		using LockType = std::unique_lock< std::mutex >;
+		using LockType = castor::UniqueLock< castor::Mutex >;
 
 		template< typename StyleT >
 		StyleT * getThemeStyle( castor::String const & name
@@ -46,7 +46,7 @@ namespace castor3d
 				, themes.end()
 				, [&name, &style]( auto const & lookup )
 				{
-					if ( name.find( lookup.first + "/" ) == 0u )
+					if ( name.find( lookup.first + cuT( "/" ) ) == 0u )
 					{
 						style = lookup.second->template getStyle< StyleT >( name.substr( lookup.first.size() + 1u ) );
 					}
@@ -60,7 +60,7 @@ namespace castor3d
 
 		template< typename ConnectionT >
 		void removeElem( Control const & control
-			, std::map< Control const *, ConnectionT > & map )
+			, castor::Map< Control const *, ConnectionT > & map )
 		{
 			if ( auto it = map.find( &control );
 				it != map.end() )
@@ -70,7 +70,7 @@ namespace castor3d
 		}
 	}
 
-	castor::String ControlsManager::Name = "c3d.gui";
+	castor::String ControlsManager::Name = cuT( "c3d.gui" );
 
 	ControlsManager::ControlsManager( Engine & engine )
 		: UserInputListener{ engine, Name }
@@ -90,7 +90,7 @@ namespace castor3d
 
 	void ControlsManager::setLayout( LayoutUPtr layout )
 	{
-		m_layout = std::move( layout );
+		m_layout = castor::move( layout );
 	}
 
 	ThemeRPtr ControlsManager::createTheme( castor::String const & name
@@ -256,7 +256,7 @@ namespace castor3d
 
 			if ( m_controlsById.find( control->getId() ) != m_controlsById.end() )
 			{
-				CU_Exception( "A control with ID " + castor::string::toString( control->getId() ) + " [" + control->getName() + "] already exists in the manager" );
+				CU_Exception( "A control with ID " + castor::string::toMbString( control->getId() ) + " [" + castor::toUtf8( control->getName() ) + "] already exists in the manager" );
 			}
 
 			m_controlsById.insert( std::make_pair( control->getId(), control ) );
@@ -365,7 +365,7 @@ namespace castor3d
 		return true;
 	}
 
-	std::vector< ControlRPtr > ControlsManager::getRootControls()const
+	castor::Vector< ControlRPtr > ControlsManager::getRootControls()const
 	{
 		ctrlmgr::LockType lock{ castor::makeUniqueLock( m_mutexControlsById ) };
 		return m_rootControls;
@@ -621,8 +621,8 @@ namespace castor3d
 
 	void ControlsManager::doUpdate()
 	{
-		std::vector< ControlRPtr > result;
-		std::vector< ControlRPtr > top;
+		castor::Vector< ControlRPtr > result;
+		castor::Vector< ControlRPtr > top;
 		auto controls = getRootControls();
 		result.reserve( controls.size() );
 		top.reserve( controls.size() );
@@ -644,22 +644,22 @@ namespace castor3d
 		result.insert( result.end()
 			, top.begin()
 			, top.end() );
-		doSetControlsByZIndex( std::move( result ) );
+		doSetControlsByZIndex( castor::move( result ) );
 	}
 
-	void ControlsManager::doSetControlsByZIndex( std::vector< ControlRPtr > v )
+	void ControlsManager::doSetControlsByZIndex( castor::Vector< ControlRPtr > v )
 	{
 		ctrlmgr::LockType lock{ castor::makeUniqueLock( m_mutexControlsByZIndex ) };
-		m_controlsByZIndex = std::move( v );
+		m_controlsByZIndex = castor::move( v );
 	}
 
-	std::vector< ControlRPtr > ControlsManager::doGetControlsByZIndex()const
+	castor::Vector< ControlRPtr > ControlsManager::doGetControlsByZIndex()const
 	{
 		ctrlmgr::LockType lock{ castor::makeUniqueLock( m_mutexControlsByZIndex ) };
 		return m_controlsByZIndex;
 	}
 
-	std::map< ControlID, ControlRPtr > ControlsManager::doGetControlsById()const
+	castor::Map< ControlID, ControlRPtr > ControlsManager::doGetControlsById()const
 	{
 		ctrlmgr::LockType lock{ castor::makeUniqueLock( m_mutexControlsById ) };
 		return m_controlsById;

@@ -37,7 +37,7 @@ namespace castor3d
 			, ProgressBar * progress );
 
 	private:
-		crg::FramePassArray doCreatePass( crg::FrameGraph & graph
+		crg::FramePassArray doCreatePass( crg::FramePassGroup & graph
 			, crg::FramePassArray const & previousPasses
 			, uint32_t index
 			, bool vsm
@@ -63,7 +63,7 @@ namespace castor3d
 		crg::ImageViewId m_blurIntermediateView;
 		ShadowType m_shadowType{ ShadowType::eRaw };
 		uint32_t m_cascades;
-		std::vector< MeshResPtr > m_frustumMeshes;
+		castor::Vector< MeshResPtr > m_frustumMeshes;
 	};
 }
 

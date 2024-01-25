@@ -113,14 +113,14 @@ namespace castor3d
 		void doUpdateChanged( CpuUpdater::DirtyObjects & sceneObjs );
 		void doUpdateCulled( CpuUpdater::DirtyObjects const & sceneObjs );
 		void doMarkDirty( CpuUpdater::DirtyObjects const & sceneObjs
-			, std::vector< SubmeshRenderNode const * > & dirtySubmeshes
-			, std::vector< BillboardRenderNode const * > & dirtyBillboards )const;
-		void duUpdateCulledSubmeshes( std::vector< SubmeshRenderNode const * > const & dirtySubmeshes );
-		void duUpdateCulledBillboards( std::vector< BillboardRenderNode const * > const & dirtyBillboards );
+			, castor::Vector< SubmeshRenderNode const * > & dirtySubmeshes
+			, castor::Vector< BillboardRenderNode const * > & dirtyBillboards )const;
+		void duUpdateCulledSubmeshes( castor::Vector< SubmeshRenderNode const * > const & dirtySubmeshes );
+		void duUpdateCulledBillboards( castor::Vector< BillboardRenderNode const * > const & dirtyBillboards );
 		void doMakeDirty( Geometry const & object
-			, std::vector< SubmeshRenderNode const * > & dirtySubmeshes )const;
+			, castor::Vector< SubmeshRenderNode const * > & dirtySubmeshes )const;
 		void doMakeDirty( BillboardBase const & object
-			, std::vector< BillboardRenderNode const * > & dirtyBillboards )const;
+			, castor::Vector< BillboardRenderNode const * > & dirtyBillboards )const;
 		virtual bool isSubmeshVisible( SubmeshRenderNode const & node )const = 0;
 		virtual bool isBillboardVisible( BillboardRenderNode const & node )const = 0;
 

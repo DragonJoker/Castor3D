@@ -19,7 +19,7 @@ namespace GuiCommon
 			, bool canEdit
 			, StcContext & stcContext
 			, ShaderEntryPoint const & shader
-			, std::vector< UniformBufferValues > & ubos
+			, castor::Vector< UniformBufferValues > & ubos
 			, ShaderLanguage language
 			, wxWindow * parent
 			, wxPoint const & position = wxDefaultPosition
@@ -46,8 +46,8 @@ namespace GuiCommon
 		wxWindowPtr< FrameVariablesList > m_frameVariablesList;
 		wxWindowPtr< PropertiesContainer > m_frameVariablesProperties;
 		ShaderEntryPoint const & m_shader;
-		std::vector< UniformBufferValues > & m_ubos;
-		std::map< ShaderLanguage, wxString > m_sources;
+		castor::Vector< UniformBufferValues > & m_ubos;
+		castor::Map< ShaderLanguage, wxString > m_sources;
 		bool m_canEdit;
 	};
 }

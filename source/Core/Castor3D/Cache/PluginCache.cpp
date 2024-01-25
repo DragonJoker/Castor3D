@@ -64,7 +64,7 @@ namespace castor
 		}
 		catch ( VersionException & exc )
 		{
-			log::warn << "loadPlugin - Fail - " << exc.getFullDescription() << std::endl;
+			log::warn << cuT( "loadPlugin - Fail - " ) << makeString( exc.getFullDescription() ) << std::endl;
 		}
 		catch ( PluginException & exc )
 		{
@@ -74,12 +74,12 @@ namespace castor
 			}
 			else
 			{
-				log::warn << "loadPlugin - Fail - " + exc.getFullDescription() << std::endl;
+				log::warn << cuT( "loadPlugin - Fail - " ) << makeString( exc.getFullDescription() ) << std::endl;
 			}
 		}
 		catch ( std::exception & exc )
 		{
-			log::warn << cuT( "loadPlugin - Fail - " ) + string::stringCast< xchar >( exc.what() ) << std::endl;
+			log::warn << cuT( "loadPlugin - Fail - " ) << makeString( exc.what() ) << std::endl;
 		}
 		catch ( ... )
 		{
@@ -99,15 +99,15 @@ namespace castor
 		}
 		catch ( VersionException & exc )
 		{
-			log::warn << "loadPlugin - Fail - " + exc.getFullDescription() << std::endl;
+			log::warn << cuT( "loadPlugin - Fail - " ) << makeString( exc.getFullDescription() ) << std::endl;
 		}
 		catch ( PluginException & exc )
 		{
-			log::warn << "loadPlugin - Fail - " + exc.getFullDescription() << std::endl;
+			log::warn << cuT( "loadPlugin - Fail - " ) << makeString( exc.getFullDescription() ) << std::endl;
 		}
 		catch ( std::exception & exc )
 		{
-			log::warn << cuT( "loadPlugin - Fail - " ) + string::stringCast< xchar >( exc.what() ) << std::endl;
+			log::warn << cuT( "loadPlugin - Fail - " ) << makeString( exc.what() ) << std::endl;
 		}
 		catch ( ... )
 		{
@@ -147,7 +147,7 @@ namespace castor
 					}
 					catch ( ... )
 					{
-						log::warn << cuT( "Can't load plug-in : " ) + file << std::endl;
+						log::warn << cuT( "Can't load plug-in : " ) << file << std::endl;
 					}
 				}
 			}
@@ -164,7 +164,7 @@ namespace castor
 		{
 			if ( !File::fileExists( pathFile ) )
 			{
-				CU_Exception( string::stringCast< char >( cuT( "File [" ) + pathFile + cuT( "] does not exist" ) ) );
+				CU_Exception( cuT( "File [" ) + pathFile + cuT( "] does not exist" ) );
 			}
 
 			DynamicLibraryUPtr library{ castor::makeUnique< DynamicLibrary >( pathFile ) };
@@ -173,7 +173,7 @@ namespace castor
 			if ( !library->getFunction( pfnGetType, cacheplgn::getTypeFunctionABIName ) )
 			{
 				String strError = cuT( "Error encountered while loading file [" ) + pathFile.getFileName( true ) + cuT( "] getType plug-in function => Not a Castor3D plug-in" );
-				C3D_PluginException( string::stringCast< char >( strError ), true );
+				C3D_PluginException( strError, true );
 			}
 
 			PluginType type{ PluginType::eCount };
@@ -183,38 +183,38 @@ namespace castor
 			switch ( type )
 			{
 			case PluginType::eDivider:
-				plugin = castor::makeUniqueDerived< Plugin, DividerPlugin >( std::move( library ), &m_engine );
+				plugin = castor::makeUniqueDerived< Plugin, DividerPlugin >( castor::move( library ), &m_engine );
 				break;
 
 			case PluginType::eImporter:
-				plugin = castor::makeUniqueDerived< Plugin, ImporterPlugin >( std::move( library ), &m_engine );
+				plugin = castor::makeUniqueDerived< Plugin, ImporterPlugin >( castor::move( library ), &m_engine );
 				break;
 
 			case PluginType::eGeneric:
-				plugin = castor::makeUniqueDerived< Plugin, GenericPlugin >( std::move( library ), &m_engine );
+				plugin = castor::makeUniqueDerived< Plugin, GenericPlugin >( castor::move( library ), &m_engine );
 				break;
 
 			case PluginType::eToneMapping:
-				plugin = castor::makeUniqueDerived< Plugin, ToneMappingPlugin >( std::move( library ), &m_engine );
+				plugin = castor::makeUniqueDerived< Plugin, ToneMappingPlugin >( castor::move( library ), &m_engine );
 				break;
 
 			case PluginType::ePostEffect:
-				plugin = castor::makeUniqueDerived< Plugin, PostFxPlugin >( std::move( library ), &m_engine );
+				plugin = castor::makeUniqueDerived< Plugin, PostFxPlugin >( castor::move( library ), &m_engine );
 				break;
 
 			case PluginType::eParticle:
-				plugin = castor::makeUniqueDerived< Plugin, ParticlePlugin >( std::move( library ), &m_engine );
+				plugin = castor::makeUniqueDerived< Plugin, ParticlePlugin >( castor::move( library ), &m_engine );
 				break;
 
 			case PluginType::eGenerator:
-				plugin = castor::makeUniqueDerived< Plugin, GeneratorPlugin >( std::move( library ), &m_engine );
+				plugin = castor::makeUniqueDerived< Plugin, GeneratorPlugin >( castor::move( library ), &m_engine );
 				break;
 
 			default:
 				CU_Failure( "Unknown plug-in type" );
 				{
 					String strError = cuT( "Error encountered while loading plug-in [" ) + pathFile.getFileName() + cuT( "] Unknown plug-in type" );
-					C3D_PluginException( string::stringCast< char >( strError ), true );
+					C3D_PluginException( strError, true );
 				}
 			}
 
@@ -227,7 +227,7 @@ namespace castor
 				m_loadedPluginTypes.try_emplace( pathFile, type );
 				{
 					auto lockPlugins( makeUniqueLock( m_mutexLoadedPlugins ) );
-					result = m_loadedPlugins[size_t( type )].try_emplace( pathFile, std::move( plugin ) ).first->second.get();
+					result = m_loadedPlugins[size_t( type )].try_emplace( pathFile, castor::move( plugin ) ).first->second.get();
 				}
 				log::info << cuT( "Plug-in [" ) << result->getName() << cuT( "] - Required engine version : " ) << toCheck << cuT( ", loaded" ) << std::endl;
 			}
