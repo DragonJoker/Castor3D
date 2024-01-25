@@ -87,7 +87,7 @@ namespace castor3d
 					, GetPipelineStateCallback( []() { return crg::getPipelineState( VK_PIPELINE_STAGE_TRANSFER_BIT ); } )
 					, [this]( crg::RecordContext &, VkCommandBuffer cb, uint32_t i ) { doRecordInto( cb, i ); }
 					, crg::defaultV< GetPassIndexCallback >
-					, std::move( isEnabled ) } }
+					, castor::move( isEnabled ) } }
 			{
 			}
 
@@ -125,13 +125,13 @@ namespace castor3d
 		, m_camera{ camera }
 		, m_staticsCuller{ castor::makeUniqueDerived< SceneCuller, DummyCuller >( m_scene, nullptr, true ) }
 		, m_dynamicsCuller{ castor::makeUniqueDerived< SceneCuller, DummyCuller >( m_scene, nullptr, false ) }
-		, m_graph{ resources.getHandler(), prefix + "/Voxelizer" }
+		, m_graph{ resources.getHandler(), castor::toUtf8( prefix ) + "/Voxelizer" }
 		, m_cameraUbo{ device }
 		, m_sceneUbo{ device }
-		, m_firstBounce{ vxlsr::createTexture( device, resources, "VoxelizedSceneFirstBounce", { m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value() } ) }
-		, m_secondaryBounce{ vxlsr::createTexture( device, resources, "VoxelizedSceneSecondaryBounce", { m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value() } ) }
-		, m_staticsVoxels{ vxlsr::createSsbo( device, "VoxelizedStaticSceneBuffer", m_voxelConfig.gridSize.value() ) }
-		, m_dynamicsVoxels{ vxlsr::createSsbo( device, "VoxelizedSceneBuffer", m_voxelConfig.gridSize.value() ) }
+		, m_firstBounce{ vxlsr::createTexture( device, resources, cuT( "VoxelizedSceneFirstBounce" ), { m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value() } ) }
+		, m_secondaryBounce{ vxlsr::createTexture( device, resources, cuT( "VoxelizedSceneSecondaryBounce" ), { m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value() } ) }
+		, m_staticsVoxels{ vxlsr::createSsbo( device, cuT( "VoxelizedStaticSceneBuffer" ), m_voxelConfig.gridSize.value() ) }
+		, m_dynamicsVoxels{ vxlsr::createSsbo( device, cuT( "VoxelizedSceneBuffer" ), m_voxelConfig.gridSize.value() ) }
 		, m_voxelizerUbo{ voxelizerUbo }
 		, m_clearStatics{ doCreateClearStaticsPass( previousPasses, progress ) }
 		, m_staticsVoxelizePassDesc{ doCreateVoxelizePass( { &m_clearStatics }, progress, *m_staticsVoxels, *m_staticsCuller, true ) }
@@ -139,19 +139,19 @@ namespace castor3d
 		, m_dynamicsVoxelizePassDesc{ doCreateVoxelizePass( { &m_mergeStaticsDesc }, progress, *m_dynamicsVoxels, *m_dynamicsCuller, false ) }
 		, m_voxelToTextureDesc{ doCreateVoxelToTexture( m_dynamicsVoxelizePassDesc, progress ) }
 		, m_voxelMipGen{ doCreateVoxelMipGen( m_voxelToTextureDesc
-			, "FirstBounceMip"
+			, cuT( "FirstBounceMip" )
 			, m_firstBounce.wholeViewId
 			, crg::RunnablePass::IsEnabledCallback( [this](){ return doEnableFirstBounceMipGen(); } )
 			, progress ) }
 		, m_voxelSecondaryBounceDesc{ doCreateVoxelSecondaryBounce( m_voxelMipGen, progress ) }
 		, m_voxelSecondaryMipGen{ doCreateVoxelMipGen( m_voxelSecondaryBounceDesc
-			, "SecondaryBounceMip"
+			, cuT( "SecondaryBounceMip" )
 			, m_secondaryBounce.wholeViewId
 			, crg::RunnablePass::IsEnabledCallback( [this](){ return doEnableSecondaryBounceMipGen(); } )
 			, progress ) }
 		, m_runnable{ m_graph.compile( m_device.makeContext() ) }
 	{
-		m_scene.getEngine()->registerTimer( m_runnable->getName() + "/Graph"
+		m_scene.getEngine()->registerTimer( castor::makeString( m_runnable->getName() + "/Graph" )
 			, m_runnable->getTimer() );
 		printGraph( *m_runnable );
 		m_graph.addOutput( m_firstBounce.wholeViewId
@@ -169,7 +169,7 @@ namespace castor3d
 
 	Voxelizer::~Voxelizer()noexcept
 	{
-		m_scene.getEngine()->unregisterTimer( m_runnable->getName() + "/Graph"
+		m_scene.getEngine()->unregisterTimer( castor::makeString( m_runnable->getName() + "/Graph" )
 			, m_runnable->getTimer() );
 		m_runnable.reset();
 		m_firstBounce.destroy();
@@ -229,11 +229,11 @@ namespace castor3d
 
 	void Voxelizer::accept( RenderTechniqueVisitor & visitor )
 	{
-		visitor.visit( "Voxelisation First Bounce"
+		visitor.visit( cuT( "Voxelisation First Bounce" )
 			, m_firstBounce
 			, m_graph.getFinalLayoutState( m_firstBounce.wholeViewId ).layout
 			, TextureFactors::tex3D( &m_grid ) );
-		visitor.visit( "Voxelisation Secondary Bounce"
+		visitor.visit( cuT( "Voxelisation Secondary Bounce" )
 			, m_secondaryBounce
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors::tex3D( &m_grid ) );
@@ -281,21 +281,21 @@ namespace castor3d
 		, SceneCuller & culler
 		, bool isStatic )
 	{
-		std::string name = "NodesPass";
+		castor::MbString name = "NodesPass";
 
 		if ( isStatic )
 		{
 			name = "Static" + name;
 		}
 
-		stepProgressBarLocal( progress, "Creating voxelize pass" );
+		stepProgressBarLocal( progress, cuT( "Creating voxelize pass" ) );
 		auto & result = m_graph.createPass( name
 			, [this, progress, isStatic, &outVoxels, &culler]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
-				stepProgressBarLocal( progress, "Initialising voxelize pass" );
-				auto res = std::make_unique< VoxelizePass >( framePass
+				stepProgressBarLocal( progress, cuT( "Initialising voxelize pass" ) );
+				auto res = castor::make_unique< VoxelizePass >( framePass
 					, context
 					, runnableGraph
 					, m_device
@@ -317,7 +317,7 @@ namespace castor3d
 					m_dynamicsVoxelizePass = res.get();
 				}
 
-				m_device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+				m_device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );
@@ -327,7 +327,7 @@ namespace castor3d
 			result.addDependencies( previousPasses );
 		}
 
-		std::string bufName = "Voxels";
+		castor::MbString bufName = "Voxels";
 
 		if ( isStatic )
 		{
@@ -344,18 +344,18 @@ namespace castor3d
 	crg::FramePass & Voxelizer::doCreateClearStaticsPass( crg::FramePassArray const & previousPasses
 		, ProgressBar * progress )
 	{
-		stepProgressBarLocal( progress, "Creating clear static pass" );
+		stepProgressBarLocal( progress, cuT( "Creating clear static pass" ) );
 		auto & result = m_graph.createPass( "StaticsClearPass"
 			, [this, progress]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
-				stepProgressBarLocal( progress, "Initialising clear static pass" );
-				auto res = std::make_unique< vxlsr::VoxelsClear >( framePass
+				stepProgressBarLocal( progress, cuT( "Initialising clear static pass" ) );
+				auto res = castor::make_unique< vxlsr::VoxelsClear >( framePass
 					, context
 					, runnableGraph
 					, crg::BufferCopy::IsEnabledCallback( [this]() { return doEnableClearStatic(); } ) );
-				m_device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+				m_device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );
@@ -370,14 +370,14 @@ namespace castor3d
 	crg::FramePass & Voxelizer::doCreateMergeStaticsPass( crg::FramePass const & previousPass
 		, ProgressBar * progress )
 	{
-		stepProgressBarLocal( progress, "Creating copy static to dynamic pass" );
+		stepProgressBarLocal( progress, cuT( "Creating copy static to dynamic pass" ) );
 		auto & result = m_graph.createPass( "StaticsCopyPass"
 			, [this, progress]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
-				stepProgressBarLocal( progress, "Initialising copy static to dynamic pass" );
-				auto res = std::make_unique< crg::BufferCopy >( framePass
+				stepProgressBarLocal( progress, cuT( "Initialising copy static to dynamic pass" ) );
+				auto res = castor::make_unique< crg::BufferCopy >( framePass
 					, context
 					, runnableGraph
 					, 0u
@@ -385,7 +385,7 @@ namespace castor3d
 					, crg::ru::Config{}
 					, crg::BufferCopy::GetPassIndexCallback( []() { return 0u; } )
 					, crg::BufferCopy::IsEnabledCallback( [this]() { return doEnableCopyStatic(); } ) );
-				m_device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+				m_device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );
@@ -405,21 +405,21 @@ namespace castor3d
 		, ProgressBar * progress )
 	{
 		m_firstBounce.create();
-		stepProgressBarLocal( progress, "Creating voxel buffer to texture pass" );
+		stepProgressBarLocal( progress, cuT( "Creating voxel buffer to texture pass" ) );
 		auto & result = m_graph.createPass( "VoxelBufferToTexture"
 			, [this, progress]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
-				stepProgressBarLocal( progress, "Initialising voxel buffer to texture pass" );
-				auto res = std::make_unique< VoxelBufferToTexture >( framePass
+				stepProgressBarLocal( progress, cuT( "Initialising voxel buffer to texture pass" ) );
+				auto res = castor::make_unique< VoxelBufferToTexture >( framePass
 					, context
 					, runnableGraph
 					, m_device
 					, m_voxelConfig
 					, crg::RunnablePass::IsEnabledCallback( [this]() { return doEnableVoxelToTexture(); } ) );
 				m_voxelToTexture = res.get();
-				m_device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+				m_device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );
@@ -434,26 +434,26 @@ namespace castor3d
 	}
 
 	crg::FramePass & Voxelizer::doCreateVoxelMipGen( crg::FramePass const & previousPass
-		, std::string const & name
+		, castor::String const & name
 		, crg::ImageViewId const & view
 		, crg::RunnablePass::IsEnabledCallback isEnabled
 		, ProgressBar * progress )
 	{
-		stepProgressBarLocal( progress, "Creating voxel mipmap generation pass" );
-		auto & result = m_graph.createPass( name
-			, [this, progress, enable = std::move( isEnabled )]( crg::FramePass const & framePass
+		stepProgressBarLocal( progress, cuT( "Creating voxel mipmap generation pass" ) );
+		auto & result = m_graph.createPass( castor::toUtf8( name )
+			, [this, progress, enable = castor::move( isEnabled )]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
-				stepProgressBarLocal( progress, "Initialising voxel mipmap generation pass" );
-				auto res = std::make_unique< crg::GenerateMipmaps >( framePass
+				stepProgressBarLocal( progress, cuT( "Initialising voxel mipmap generation pass" ) );
+				auto res = castor::make_unique< crg::GenerateMipmaps >( framePass
 					, context
 					, runnableGraph
 					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 					, crg::ru::Config{}
 					, crg::defaultV< crg::RunnablePass::GetPassIndexCallback >
 					, enable );
-				m_device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+				m_device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );
@@ -466,21 +466,21 @@ namespace castor3d
 		, ProgressBar * progress )
 	{
 		m_secondaryBounce.create();
-		stepProgressBarLocal( progress, "Creating voxel secondary bounce pass" );
+		stepProgressBarLocal( progress, cuT( "Creating voxel secondary bounce pass" ) );
 		auto & result = m_graph.createPass( "SecondaryBounce"
 			, [this, progress]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
-				stepProgressBarLocal( progress, "Initialising voxel secondary bounce pass" );
-				auto res = std::make_unique< VoxelSecondaryBounce >( framePass
+				stepProgressBarLocal( progress, cuT( "Initialising voxel secondary bounce pass" ) );
+				auto res = castor::make_unique< VoxelSecondaryBounce >( framePass
 					, context
 					, runnableGraph
 					, m_device
 					, m_voxelConfig
 					, crg::RunnablePass::IsEnabledCallback( [this]() { return doEnableSecondaryBounce(); } ) );
 				m_voxelSecondaryBounce = res.get();
-				m_device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+				m_device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );

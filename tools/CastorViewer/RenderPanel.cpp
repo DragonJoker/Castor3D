@@ -70,12 +70,12 @@ namespace CastorViewer
 			return result;
 		}
 
-		static std::array< wxTimer *, eTIMER_ID_COUNT > createTimers( wxWindow * window )
+		static castor::Array< wxTimer *, size_t( eTIMER_ID::COUNT ) > createTimers( wxWindow * window )
 		{
-			std::array< wxTimer *, eTIMER_ID_COUNT > result;
+			castor::Array< wxTimer *, size_t( eTIMER_ID::COUNT ) > result;
 			result[0] = nullptr;
 
-			for ( int i = 1; i < eTIMER_ID_COUNT; i++ )
+			for ( int i = 1; i < int( eTIMER_ID::COUNT ); i++ )
 			{
 				result[size_t( i )] = new wxTimer( window, i );
 			}
@@ -102,7 +102,7 @@ namespace CastorViewer
 			, castor::U32String text )
 			{
 				m_setClipboardText = set;
-				wxMenuEvent event{ wxEVT_MENU, eCLIPBOARD_CHANGE };
+				wxMenuEvent event{ wxEVT_MENU, int( eTIMER_ID::CLIPBOARD_CHANGE ) };
 				event.SetEventObject( this );
 
 				if ( set )
@@ -168,7 +168,7 @@ namespace CastorViewer
 	{
 		m_3dController.reset();
 
-		for ( size_t i = 1; i <= size_t( eTIMER_ID_MOVEMENT ); i++ )
+		for ( size_t i = 1; i <= size_t( eTIMER_ID::MOVEMENT ); i++ )
 		{
 			delete m_timers[i];
 			m_timers[i] = nullptr;
@@ -219,7 +219,7 @@ namespace CastorViewer
 
 		if ( auto scene = target->getScene() )
 		{
-			m_cubeManager = std::make_unique< GuiCommon::CubeBoxManager >( *scene );
+			m_cubeManager = castor::make_unique< GuiCommon::CubeBoxManager >( *scene );
 
 			if ( scene->hasSceneNode( cuT( "PointLightsNode" ) ) )
 			{
@@ -241,7 +241,7 @@ namespace CastorViewer
 
 	void RenderPanel::doResetTimers()
 	{
-		doStopTimer( eTIMER_ID_COUNT );
+		doStopTimer( eTIMER_ID::COUNT );
 		m_camSpeed = castor::makeRangedValue( panel::DEF_CAM_SPEED
 			, panel::MIN_CAM_SPEED
 			, panel::MAX_CAM_SPEED );
@@ -260,7 +260,7 @@ namespace CastorViewer
 	{
 		if ( !m_movementStarted )
 		{
-			m_timers[eTIMER_ID_MOVEMENT]->Start( 30 );
+			m_timers[size_t( eTIMER_ID::MOVEMENT )]->Start( 30 );
 			m_movementStarted = true;
 		}
 	}
@@ -270,11 +270,11 @@ namespace CastorViewer
 		if ( m_movementStarted )
 		{
 			m_movementStarted = false;
-			m_timers[eTIMER_ID_MOVEMENT]->Stop();
+			m_timers[size_t( eTIMER_ID::MOVEMENT )]->Stop();
 		}
 	}
 
-	void RenderPanel::doStartTimer( int id )
+	void RenderPanel::doStartTimer( eTIMER_ID id )
 	{
 		if ( !m_timers[size_t( id )]->Start( 10 ) )
 		{
@@ -282,15 +282,15 @@ namespace CastorViewer
 		}
 	}
 
-	void RenderPanel::doStopTimer( int id )
+	void RenderPanel::doStopTimer( eTIMER_ID id )
 	{
-		if ( id != eTIMER_ID_COUNT )
+		if ( id != eTIMER_ID::COUNT )
 		{
 			m_timers[size_t( id )]->Stop();
 		}
 		else
 		{
-			for ( size_t i = 1; i < size_t( eTIMER_ID_MOVEMENT ); i++ )
+			for ( size_t i = 1; i < size_t( eTIMER_ID::MOVEMENT ); i++ )
 			{
 				m_timers[i]->Stop();
 			}
@@ -485,8 +485,8 @@ namespace CastorViewer
 
 		if ( it == m_nodesStates.end() )
 		{
-			it = m_nodesStates.emplace( node->getName()
-				, std::make_unique< GuiCommon::NodeState >( *m_listener, node, camera ) ).first;
+			it = m_nodesStates.try_emplace( node->getName()
+				, castor::make_unique< GuiCommon::NodeState >( *m_listener, node, camera ) ).first;
 		}
 
 		doUpdateSpeed();
@@ -534,8 +534,8 @@ namespace CastorViewer
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
 	BEGIN_EVENT_TABLE( RenderPanel, wxPanel )
-		EVT_TIMER( eTIMER_ID_MOUSE, RenderPanel::onTimerMouse )
-		EVT_TIMER( eTIMER_ID_MOVEMENT, RenderPanel::onTimerMovement )
+		EVT_TIMER( int( eTIMER_ID::MOUSE ), RenderPanel::onTimerMouse )
+		EVT_TIMER( int( eTIMER_ID::MOVEMENT ), RenderPanel::onTimerMovement )
 		EVT_SIZE( RenderPanel::onSize )
 		EVT_MOVE( RenderPanel::onMove )
 		EVT_PAINT( RenderPanel::onPaint )
@@ -557,7 +557,7 @@ namespace CastorViewer
 		EVT_MOTION( RenderPanel::onMouseMove )
 		EVT_MOUSEWHEEL( RenderPanel::onMouseWheel )
 		EVT_MENU( wxID_EXIT, RenderPanel::onMenuClose )
-		EVT_MENU( eCLIPBOARD_CHANGE, RenderPanel::onClipboardText )
+		EVT_MENU( int( eTIMER_ID::CLIPBOARD_CHANGE ), RenderPanel::onClipboardText )
 	END_EVENT_TABLE()
 #pragma GCC diagnostic pop
 
@@ -656,7 +656,7 @@ namespace CastorViewer
 
 	void RenderPanel::onKillFocus( wxFocusEvent & event )
 	{
-		doStopTimer( eTIMER_ID_COUNT );
+		doStopTimer( eTIMER_ID::COUNT );
 		event.Skip();
 	}
 
@@ -831,7 +831,7 @@ namespace CastorViewer
 			wxString tmp;
 			tmp << key;
 			inputListener->fireChar( panel::doConvertKeyCode( event.GetKeyCode() )
-				, castor::String( tmp.mb_str( wxConvUTF8 ) ) );
+				, GuiCommon::make_String( tmp ) );
 		}
 
 		event.Skip();
@@ -875,7 +875,7 @@ namespace CastorViewer
 		{
 			if ( m_currentState )
 			{
-				doStartTimer( eTIMER_ID_MOUSE );
+				doStartTimer( eTIMER_ID::MOUSE );
 			}
 		}
 
@@ -895,7 +895,7 @@ namespace CastorViewer
 		if ( !inputListener || !inputListener->fireMouseButtonReleased( castor3d::MouseButton::eLeft
 			, event.ControlDown(), event.AltDown(), event.ShiftDown() ) )
 		{
-			doStopTimer( eTIMER_ID_MOUSE );
+			doStopTimer( eTIMER_ID::MOUSE );
 		}
 
 		event.Skip();

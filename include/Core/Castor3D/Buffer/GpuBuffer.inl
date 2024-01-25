@@ -13,9 +13,9 @@ namespace castor3d
 			, usage
 			, memoryFlags
 			, debugName
-			, std::move( sharingMode )
+			, castor::move( sharingMode )
 			, allocator.getTotalSize() }
-		, m_allocator{ std::move( allocator ) }
+		, m_allocator{ castor::move( allocator ) }
 	{
 	}
 
@@ -62,7 +62,7 @@ namespace castor3d
 		: m_device{ device }
 		, m_usage{ usage }
 		, m_memoryFlags{ memoryFlags }
-		, m_sharingMode{ std::move( sharingMode ) }
+		, m_sharingMode{ castor::move( sharingMode ) }
 		, m_allocatedSize{ allocator.getTotalSize() }
 		, m_buffer{ makeBufferBase( device
 			, uint32_t( m_allocatedSize )
@@ -70,7 +70,7 @@ namespace castor3d
 			, m_memoryFlags
 			, debugName
 			, m_sharingMode ) }
-		, m_allocator{ std::move( allocator ) }
+		, m_allocator{ castor::move( allocator ) }
 	{
 	}
 

@@ -111,7 +111,7 @@ namespace atmosphere_scattering
 		, castor3d::RenderDevice const & device
 		, crg::ImageViewId const & resultView
 		, bool & enabled )
-		: m_computeShader{ VK_SHADER_STAGE_COMPUTE_BIT, "Clouds/CurlPass", curl::getProgram( device, getExtent( resultView ).width ) }
+		: m_computeShader{ VK_SHADER_STAGE_COMPUTE_BIT, cuT( "Clouds/CurlPass" ), curl::getProgram( device, getExtent( resultView ).width ) }
 		, m_stages{ makeShaderState( device, m_computeShader ) }
 	{
 		auto renderSize = getExtent( resultView );
@@ -120,7 +120,7 @@ namespace atmosphere_scattering
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = std::make_unique< crg::ComputePass >( framePass
+				auto result = castor::make_unique< crg::ComputePass >( framePass
 					, context
 					, graph
 					, crg::ru::Config{}
@@ -129,7 +129,7 @@ namespace atmosphere_scattering
 						.groupCountY( renderSize.height / 4u )
 						.enabled( &enabled )
 						.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) ) );
-				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );

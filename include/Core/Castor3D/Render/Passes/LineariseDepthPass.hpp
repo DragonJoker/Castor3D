@@ -132,7 +132,7 @@ namespace castor3d
 		*	Minification.
 		*/
 		/**@{*/
-		std::vector< UniformBufferOffsetT< castor::Point2i > > m_previousLevel;
+		castor::Vector< UniformBufferOffsetT< castor::Point2i > > m_previousLevel;
 		ProgramModule m_minifyShader;
 		ashes::PipelineShaderStageCreateInfoArray m_minifyStages;
 		/**@}*/

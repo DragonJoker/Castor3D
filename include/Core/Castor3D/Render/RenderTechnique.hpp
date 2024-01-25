@@ -48,11 +48,8 @@ namespace castor3d
 		 *\param[in]	name			The technique name.
 		 *\param[in]	renderTarget	The render target for this technique.
 		 *\param[in]	device			The GPU device.
-		 *\param[in]	queueData		The queue receiving the GPU commands.
-		 *\param[in]	parameters		The technique parameters.
 		 *\param[in]	colour			The result colour image.
 		 *\param[in]	intermediate	The intermediate colour image.
-		 *\param[in]	ssaoConfig		The SSAO configuration.
 		 *\param[in]	progress		The optional progress bar.
 		 *\param[in]	visbuffer		\p true to enable visibility buffer.
 		 *\param[in]	weightedBlended	\p true to enable weighted blended rendering.
@@ -61,11 +58,8 @@ namespace castor3d
 		 *\param[in]	name			Le nom de la technique.
 		 *\param[in]	renderTarget	La render target pour cette technique.
 		 *\param[in]	device			Le device GPU.
-		 *\param[in]	queueData		La queue recevant les commandes GPU.
-		 *\param[in]	parameters		Les paramètres de la technique.
 		 *\param[in]	colour			L'image couleur résultat.
 		 *\param[in]	intermediate	L'image couleur intermédiaire.
-		 *\param[in]	ssaoConfig		La configuration du SSAO.
 		 *\param[in]	progress		La barre de progression optionnelle.
 		 *\param[in]	visbuffer		\p true pour activer le visibility buffer.
 		 *\param[in]	weightedBlended	\p true pour activer le weighed blended rendering.
@@ -73,11 +67,8 @@ namespace castor3d
 		C3D_API RenderTechnique( castor::String const & name
 			, RenderTarget & renderTarget
 			, RenderDevice const & device
-			, QueueData const & queueData
-			, Parameters const & parameters
 			, Texture const & colour
 			, Texture const & intermediate
-			, SsaoConfig const & ssaoConfig
 			, crg::FramePassArray previousPasses
 			, ProgressBar * progress
 			, bool visbuffer
@@ -104,7 +95,7 @@ namespace castor3d
 		 *\brief		Liste les vues intermédiaires utilisées par toute la technique.
 		 *\param[out]	intermediates	Reçoit les vues intermédiaires.
 		 */
-		C3D_API void listIntermediates( std::vector< IntermediateView > & intermediates );
+		C3D_API void listIntermediates( castor::Vector< IntermediateView > & intermediates );
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, CPU wise.
@@ -384,7 +375,7 @@ namespace castor3d
 		/**@}*/
 
 	public:
-		using ShadowMapArray = std::vector< ShadowMapUPtr >;
+		using ShadowMapArray = castor::Vector< ShadowMapUPtr >;
 
 	private:
 		crg::FramePassArray doCreateRenderPasses( TechniquePassEvent event

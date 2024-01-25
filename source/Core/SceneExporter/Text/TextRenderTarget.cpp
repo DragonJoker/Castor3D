@@ -30,7 +30,7 @@ namespace castor
 		log::info << tabs() << cuT( "Writing RenderTarget" ) << std::endl;
 		bool result = false;
 
-		if ( auto block{ beginBlock( file, "render_target" ) } )
+		if ( auto block{ beginBlock( file, cuT( "render_target" ) ) } )
 		{
 			result = writeNamedSub( file, cuT( "size" ), target.getSize() )
 				&& write( file, cuT( "format" ), getFormatName( convert( target.getPixelFormat() ) ) )

@@ -24,6 +24,10 @@ namespace castor3d
 		 *	Construction / Destruction.
 		 */
 		/**@{*/
+		SubmeshComponentRegister( SubmeshComponentRegister const & ) = delete;
+		SubmeshComponentRegister( SubmeshComponentRegister && )noexcept = delete;
+		SubmeshComponentRegister & operator=( SubmeshComponentRegister const & ) = delete;
+		SubmeshComponentRegister & operator=( SubmeshComponentRegister && )noexcept = delete;
 		C3D_API explicit SubmeshComponentRegister( Engine & engine );
 		C3D_API ~SubmeshComponentRegister()noexcept;
 		/**@}*/
@@ -56,8 +60,8 @@ namespace castor3d
 		 *	Gestion des composants de sortie des shaders.
 		 */
 		/**@{*/
-		C3D_API std::vector< shader::SubmeshVertexSurfaceShader * > getVertexSurfaceShaders( PipelineFlags const & flags )const;
-		C3D_API std::vector< shader::SubmeshRasterSurfaceShader * > getRasterSurfaceShaders( PipelineFlags const & flags )const;
+		C3D_API castor::Vector< shader::SubmeshVertexSurfaceShader * > getVertexSurfaceShaders( PipelineFlags const & flags )const;
+		C3D_API castor::Vector< shader::SubmeshRasterSurfaceShader * > getRasterSurfaceShaders( PipelineFlags const & flags )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the shader source matching the given flags.
@@ -209,16 +213,16 @@ namespace castor3d
 		struct Component
 		{
 			Component()noexcept = default;
-			Component( SubmeshComponentID id )noexcept
+			explicit Component( SubmeshComponentID id )noexcept
 				: id{ id }
 			{
 			}
 
 			SubmeshComponentID id{};
-			std::string name{};
+			castor::String name{};
 			SubmeshComponentPluginUPtr plugin{};
 		};
-		using Components = std::vector< Component >;
+		using Components = castor::Vector< Component >;
 
 	private:
 		Component & getNextId();
@@ -230,13 +234,13 @@ namespace castor3d
 
 	private:
 		Components m_registered;
-		std::map< SubmeshComponentID, shader::SubmeshVertexSurfaceShaderPtr > m_vertexSurfaceShaders;
-		std::map< SubmeshComponentID, shader::SubmeshRasterSurfaceShaderPtr > m_rasterSurfaceShaders;
-		std::map< SubmeshComponentID, SubmeshRenderShaderPtr > m_renderShaders;
-		std::vector< SubmeshComponentFlag > m_renderShaderFlags;
-		std::vector< SubmeshRenderData const * > m_renderDatas;
+		castor::Map< SubmeshComponentID, shader::SubmeshVertexSurfaceShaderPtr > m_vertexSurfaceShaders;
+		castor::Map< SubmeshComponentID, shader::SubmeshRasterSurfaceShaderPtr > m_rasterSurfaceShaders;
+		castor::Map< SubmeshComponentID, SubmeshRenderShaderPtr > m_renderShaders;
+		castor::Vector< SubmeshComponentFlag > m_renderShaderFlags;
+		castor::Vector< SubmeshRenderData const * > m_renderDatas;
 		SubmeshComponentCombine m_defaultComponents;
-		mutable std::vector< SubmeshComponentCombine > m_componentCombines{};
+		mutable castor::Vector< SubmeshComponentCombine > m_componentCombines{};
 		SubmeshComponentFlag m_lineIndexFlag{};
 		SubmeshComponentFlag m_triangleIndexFlag{};
 		SubmeshComponentFlag m_positionFlag{};

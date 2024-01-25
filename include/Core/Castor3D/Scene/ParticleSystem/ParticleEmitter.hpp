@@ -28,7 +28,7 @@ namespace castor3d
 		 */
 		C3D_API castor3d::Particle emit( ParticleValues const & value )const;
 
-		using OnEmitFunction = std::function< void( Particle const & particle ) >;
+		using OnEmitFunction = castor::Function< void( Particle const & particle ) >;
 		using OnEmitSignal = castor::SignalT< OnEmitFunction >;
 		using OnEmitConnection = OnEmitSignal::connection;
 

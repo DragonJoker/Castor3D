@@ -39,7 +39,7 @@ namespace castor
 	bool TextWriter< Coords< ValueT, 1u > >::operator()( Coords< ValueT, 1u > const & object, StringStream & file )
 	{
 		auto result = details::CoordsTextT< ValueT, 1u >::write( object, file );
-		this->checkError( result, "Coords value" );
+		this->checkError( result, cuT( "Coords value" ) );
 		return result;
 	}
 
@@ -55,7 +55,7 @@ namespace castor
 	bool TextWriter< Coords< ValueT, 2u > >::operator()( Coords< ValueT, 2u > const & object, StringStream & file )
 	{
 		auto result = details::CoordsTextT< ValueT, 2u >::write( object, file );
-		this->checkError( result, "Coords value" );
+		this->checkError( result, cuT( "Coords value" ) );
 		return result;
 	}
 
@@ -71,7 +71,7 @@ namespace castor
 	bool TextWriter< Coords< ValueT, 3u > >::operator()( Coords< ValueT, 3u > const & object, StringStream & file )
 	{
 		auto result = details::CoordsTextT< ValueT, 3u >::write( object, file );
-		this->checkError( result, "Coords value" );
+		this->checkError( result, cuT( "Coords value" ) );
 		return result;
 	}
 
@@ -87,7 +87,7 @@ namespace castor
 	bool TextWriter< Coords< ValueT, 4u > >::operator()( Coords< ValueT, 4u > const & object, StringStream & file )
 	{
 		auto result = details::CoordsTextT< ValueT, 4u >::write( object, file );
-		this->checkError( result, "Coords value" );
+		this->checkError( result, cuT( "Coords value" ) );
 		return result;
 	}
 

@@ -44,7 +44,7 @@ namespace castor3d
 		SkeletonNodeUPtr node;
 		BinaryChunk chunk{ doIsLittleEndian() };
 		SkeletonAnimationUPtr animation;
-		std::map< SkeletonNode *, castor::String > hierarchy;
+		castor::Map< SkeletonNode *, castor::String > hierarchy;
 
 		while ( result && doGetSubChunk( chunk ) )
 		{
@@ -52,7 +52,7 @@ namespace castor3d
 			{
 			case ChunkType::eSkeletonGlobalInverse:
 				result = doParseChunk( obj.m_globalInverse, chunk );
-				checkError( result, "Couldn't parse global inverse matrix." );
+				checkError( result, cuT( "Couldn't parse global inverse matrix." ) );
 				break;
 			case ChunkType::eSkeletonBone:
 				{
@@ -60,7 +60,7 @@ namespace castor3d
 					auto & bone = static_cast< BoneNode & >( *node );
 					auto parser = createBinaryParser< BoneNode >();
 					result = parser.parse( bone, chunk );
-					checkError( result, "Couldn't parse bone." );
+					checkError( result, cuT( "Couldn't parse bone." ) );
 
 					if ( result )
 					{
@@ -77,7 +77,7 @@ namespace castor3d
 						}
 
 						obj.m_bones.emplace_back( &bone );
-						obj.m_nodes.emplace_back( std::move( node ) );
+						obj.m_nodes.emplace_back( castor::move( node ) );
 					}
 				}
 				break;
@@ -86,7 +86,7 @@ namespace castor3d
 					node = castor::makeUnique< SkeletonNode >( castor::cuEmptyString, obj );
 					auto parser = createBinaryParser< SkeletonNode >();
 					result = parser.parse( *node, chunk );
-					checkError( result, "Couldn't parse bone." );
+					checkError( result, cuT( "Couldn't parse bone." ) );
 
 					if ( result )
 					{
@@ -96,14 +96,14 @@ namespace castor3d
 							hierarchy.try_emplace( node.get(), parser.parentName );
 						}
 
-						obj.m_nodes.emplace_back( std::move( node ) );
+						obj.m_nodes.emplace_back( castor::move( node ) );
 					}
 				}
 				break;
 			case ChunkType::eAnimation:
 				animation = castor::makeUnique< SkeletonAnimation >( obj );
 				result = createBinaryParser< Animation >().parse( *animation, chunk );
-				checkError( result, "Couldn't parse animation." );
+				checkError( result, cuT( "Couldn't parse animation." ) );
 				if ( result )
 				{
 					auto name = animation->getName();
@@ -125,7 +125,7 @@ namespace castor3d
 				{
 					auto parent = obj.findNode( name );
 					result = parent != nullptr;
-					checkError( result, "Couldn't find parent node." );
+					checkError( result, cuT( "Couldn't find parent node." ) );
 
 					if ( result )
 					{

@@ -85,404 +85,594 @@ namespace castor
 		CU_API static LogType getLevel();
 		/**
 		 *\~english
-		 *\brief		Logs a trace message, from a std::string
+		 *\brief		Logs a trace message.
 		 *\param[in]	msg	The line to log
 		 *\~french
-		 *\brief		Log un message trace, à partir d'un std::string
+		 *\brief		Log un message trace.
 		 *\param[in]	msg	La ligne a logger
 		 */
-		CU_API static void logTrace( std::string const & msg );
+		template< typename CharT >
+		static void logTrace( CharT const * msg )
+		{
+			doLogMessage( LogType::eTrace, toUtf8( msg ), true );
+		}
 		/**
 		 *\~english
-		 *\brief		Logs a trace message, from a std::ostream
+		 *\brief		Logs a trace message.
 		 *\param[in]	msg	The line to log
 		 *\~french
-		 *\brief		Log un message trace, à partir d'un std::ostream
+		 *\brief		Log un message trace.
 		 *\param[in]	msg	La ligne a logger
 		 */
-		CU_API static void logTrace( std::ostream const & msg );
+		template< typename CharT >
+		static void logTrace( std::basic_string_view< CharT > msg )
+		{
+			doLogMessage( LogType::eTrace, toUtf8( msg ), true );
+		}
 		/**
 		 *\~english
-		 *\brief		Logs a unicode trace message, from a std::wstring
+		 *\brief		Logs a trace message.
 		 *\param[in]	msg	The line to log
 		 *\~french
-		 *\brief		Log un message trace, à partir d'un std::wstring
+		 *\brief		Log un message trace.
 		 *\param[in]	msg	La ligne a logger
 		 */
-		CU_API static void logTrace( std::wstring const & msg );
+		template< typename CharT >
+		static void logTrace( std::basic_string< CharT > const & msg )
+		{
+			doLogMessage( LogType::eTrace, toUtf8( msg ), true );
+		}
 		/**
 		 *\~english
-		 *\brief		Logs a trace message, from a std::wostream
+		 *\brief		Logs a trace message.
 		 *\param[in]	msg	The line to log
 		 *\~french
-		 *\brief		Log un message trace, à partir d'un std::wostream
-		 *\param[in]	msg	The line to log
-		 */
-		CU_API static void logTrace( std::wostream const & msg );
-		/**
-		 *\~english
-		 *\brief		Logs a debug message, from a std::string
-		 *\param[in]	msg	The line to log
-		 *\~french
-		 *\brief		Log un message debug, à partir d'un std::string
+		 *\brief		Log un message trace.
 		 *\param[in]	msg	La ligne a logger
 		 */
-		CU_API static void logDebug( std::string const & msg );
+		template< typename CharT >
+		static void logTrace( std::basic_ostream< CharT > const & msg )
+		{
+			auto sbuf = msg.rdbuf();
+			std::basic_stringstream< CharT > ss;
+			ss << sbuf;
+			logTrace( ss.str() );
+		}
 		/**
 		 *\~english
-		 *\brief		Logs a debug message, from a std::ostream
+		 *\brief		Logs a trace message.
+		 *\remarks		Doesn't print the new line character.
 		 *\param[in]	msg	The line to log
 		 *\~french
-		 *\brief		Log un message debug, à partir d'un std::ostream
+		 *\brief		Log un message trace.
+		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
 		 *\param[in]	msg	La ligne a logger
 		 */
-		CU_API static void logDebug( std::ostream const & msg );
+		template< typename CharT >
+		static void logTraceNoNL( CharT const * msg )
+		{
+			doLogMessage( LogType::eTrace, toUtf8( msg ), false );
+		}
 		/**
 		 *\~english
-		 *\brief		Logs a unicode debug message, from a std::wstring
+		 *\brief		Logs a trace message.
+		 *\remarks		Doesn't print the new line character.
 		 *\param[in]	msg	The line to log
 		 *\~french
-		 *\brief		Log un message debug, à partir d'un std::wstring
+		 *\brief		Log un message trace.
+		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
 		 *\param[in]	msg	La ligne a logger
 		 */
-		CU_API static void logDebug( std::wstring const & msg );
+		template< typename CharT >
+		static void logTraceNoNL( std::basic_string_view< CharT > msg )
+		{
+			doLogMessage( LogType::eTrace, toUtf8( msg ), false );
+		}
 		/**
 		 *\~english
-		 *\brief		Logs a debug message, from a std::wostream
+		 *\brief		Logs a trace message.
+		 *\remarks		Doesn't print the new line character.
 		 *\param[in]	msg	The line to log
 		 *\~french
-		 *\brief		Log un message debug, à partir d'un std::wostream
-		 *\param[in]	msg	The line to log
-		 */
-		CU_API static void logDebug( std::wostream const & msg );
-		/**
-		 *\~english
-		 *\brief		Logs a message, from a std::string
-		 *\param[in]	msg	The line to log
-		 *\~french
-		 *\brief		Log un message, à partir d'un std::string
+		 *\brief		Log un message trace.
+		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
 		 *\param[in]	msg	La ligne a logger
 		 */
-		CU_API static void logInfo( std::string const & msg );
+		template< typename CharT >
+		static void logTraceNoNL( std::basic_string< CharT > const & msg )
+		{
+			doLogMessage( LogType::eTrace, toUtf8( msg ), false );
+		}
 		/**
 		 *\~english
-		 *\brief		Logs a message, from a std::ostream
+		 *\brief		Logs a trace message.
+		 *\remarks		Doesn't print the new line character.
 		 *\param[in]	msg	The line to log
 		 *\~french
-		 *\brief		Log un message, à partir d'un std::ostream
-		 *\param[in]	msg	The line to log
+		 *\brief		Log un message trace.
+		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
+		 *\param[in]	msg	La ligne a logger
 		 */
-		CU_API static void logInfo( std::ostream const & msg );
+		template< typename CharT >
+		static void logTraceNoNL( std::basic_ostream< CharT > const & msg )
+		{
+			auto sbuf = msg.rdbuf();
+			std::basic_stringstream< CharT > ss;
+			ss << sbuf;
+			logTraceNoNL( ss.str() );
+		}
 		/**
 		 *\~english
-		 *\brief		Logs a message, from a std::wstring
+		 *\brief		Logs a debug message.
 		 *\param[in]	msg	The line to log
 		 *\~french
-		 *\brief		Log un message, à partir d'un std::wstring
-		 *\param[in]	msg	The line to log
+		 *\brief		Log un message debug.
+		 *\param[in]	msg	La ligne a logger
 		 */
-		CU_API static void logInfo( std::wstring const & msg );
+		template< typename CharT >
+		static void logDebug( CharT const * msg )
+		{
+			doLogMessage( LogType::eDebug, toUtf8( msg ), true );
+		}
 		/**
 		 *\~english
-		 *\brief		Logs a message, from a std::wostream
+		 *\brief		Logs a debug message.
 		 *\param[in]	msg	The line to log
 		 *\~french
-		 *\brief		Log un message, à partir d'un std::wostream
-		 *\param[in]	msg	The line to log
+		 *\brief		Log un message debug.
+		 *\param[in]	msg	La ligne a logger
 		 */
-		CU_API static void logInfo( std::wostream const & msg );
+		template< typename CharT >
+		static void logDebug( std::basic_string_view< CharT > msg )
+		{
+			doLogMessage( LogType::eDebug, toUtf8( msg ), true );
+		}
 		/**
 		 *\~english
-		 *\brief		Logs a warning, from a std::string
+		 *\brief		Logs a debug message.
 		 *\param[in]	msg	The line to log
 		 *\~french
-		 *\brief		Log un avertissement, à partir d'un std::string
-		 *\param[in]	msg	The line to log
+		 *\brief		Log un message debug.
+		 *\param[in]	msg	La ligne a logger
 		 */
-		CU_API static void logWarning( std::string const & msg );
+		template< typename CharT >
+		static void logDebug( std::basic_string< CharT > const & msg )
+		{
+			doLogMessage( LogType::eDebug, toUtf8( msg ), true );
+		}
 		/**
 		 *\~english
-		 *\brief		Logs a warning, from a std::ostream
+		 *\brief		Logs a debug message.
 		 *\param[in]	msg	The line to log
 		 *\~french
-		 *\brief		Log un avertissement, à partir d'un std::ostream
-		 *\param[in]	msg	The line to log
+		 *\brief		Log un message debug.
+		 *\param[in]	msg	La ligne a logger
 		 */
-		CU_API static void logWarning( std::ostream const & msg );
+		template< typename CharT >
+		static void logDebug( std::basic_ostream< CharT > const & msg )
+		{
+			auto sbuf = msg.rdbuf();
+			std::basic_stringstream< CharT > ss;
+			ss << sbuf;
+			logDebug( ss.str() );
+		}
 		/**
 		 *\~english
-		 *\brief		Logs a warning, from a std::wstring
+		 *\brief		Logs a debug message.
+		 *\remarks		Doesn't print the new line character.
 		 *\param[in]	msg	The line to log
 		 *\~french
-		 *\brief		Log un avertissement, à partir d'un std::wstring
-		 *\param[in]	msg	The line to log
+		 *\brief		Log un message debug.
+		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
+		 *\param[in]	msg	La ligne a logger
 		 */
-		CU_API static void logWarning( std::wstring const & msg );
+		template< typename CharT >
+		static void logDebugNoNL( CharT const * msg )
+		{
+			doLogMessage( LogType::eDebug, toUtf8( msg ), false );
+		}
 		/**
 		 *\~english
-		 *\brief		Logs a warning, from a std::wostream
+		 *\brief		Logs a debug message.
+		 *\remarks		Doesn't print the new line character.
 		 *\param[in]	msg	The line to log
 		 *\~french
-		 *\brief		Log un avertissement, à partir d'un std::wostream
-		 *\param[in]	msg	The line to log
+		 *\brief		Log un message debug.
+		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
+		 *\param[in]	msg	La ligne a logger
 		 */
-		CU_API static void logWarning( std::wostream const & msg );
+		template< typename CharT >
+		static void logDebugNoNL( std::basic_string_view< CharT > msg )
+		{
+			doLogMessage( LogType::eDebug, toUtf8( msg ), false );
+		}
 		/**
 		 *\~english
-		 *\brief		Logs an error, from a std::string
+		 *\brief		Logs a debug message.
+		 *\remarks		Doesn't print the new line character.
+		 *\param[in]	msg	The line to log
+		 *\~french
+		 *\brief		Log un message debug.
+		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
+		 *\param[in]	msg	La ligne a logger
+		 */
+		template< typename CharT >
+		static void logDebugNoNL( std::basic_string< CharT > const & msg )
+		{
+			doLogMessage( LogType::eDebug, toUtf8( msg ), false );
+		}
+		/**
+		 *\~english
+		 *\brief		Logs a debug message.
+		 *\remarks		Doesn't print the new line character.
+		 *\param[in]	msg	The line to log
+		 *\~french
+		 *\brief		Log un message debug.
+		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
+		 *\param[in]	msg	La ligne a logger
+		 */
+		template< typename CharT >
+		static void logDebugNoNL( std::basic_ostream< CharT > const & msg )
+		{
+			auto sbuf = msg.rdbuf();
+			std::basic_stringstream< CharT > ss;
+			ss << sbuf;
+			logDebugNoNL( ss.str() );
+		}
+		/**
+		 *\~english
+		 *\brief		Logs a message.
+		 *\param[in]	msg	The line to log
+		 *\~french
+		 *\brief		Log un message.
+		 *\param[in]	msg	La ligne a logger
+		 */
+		template< typename CharT >
+		static void logInfo( CharT const * msg )
+		{
+			doLogMessage( LogType::eInfo, toUtf8( msg ), true );
+		}
+		/**
+		 *\~english
+		 *\brief		Logs a message.
+		 *\param[in]	msg	The line to log
+		 *\~french
+		 *\brief		Log un message.
+		 *\param[in]	msg	La ligne a logger
+		 */
+		template< typename CharT >
+		static void logInfo( std::basic_string_view< CharT > msg )
+		{
+			doLogMessage( LogType::eInfo, toUtf8( msg ), true );
+		}
+		/**
+		 *\~english
+		 *\brief		Logs a message.
+		 *\param[in]	msg	The line to log
+		 *\~french
+		 *\brief		Log un message.
+		 *\param[in]	msg	La ligne a logger
+		 */
+		template< typename CharT >
+		static void logInfo( std::basic_string< CharT > const & msg )
+		{
+			doLogMessage( LogType::eInfo, toUtf8( msg ), true );
+		}
+		/**
+		 *\~english
+		 *\brief		Logs a message.
+		 *\param[in]	msg	The line to log
+		 *\~french
+		 *\brief		Log un message.
+		 *\param[in]	msg	The line to log
+		 */
+		template< typename CharT >
+		static void logInfo( std::basic_ostream< CharT > const & msg )
+		{
+			auto sbuf = msg.rdbuf();
+			std::basic_stringstream< CharT > ss;
+			ss << sbuf;
+			logInfo( ss.str() );
+		}
+		/**
+		 *\~english
+		 *\brief		Logs a message.
+		 *\remarks		Doesn't print the new line character.
+		 *\param[in]	msg	The line to log
+		 *\~french
+		 *\brief		Log un message.
+		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
+		 *\param[in]	msg	La ligne a logger
+		 */
+		template< typename CharT >
+		static void logInfoNoNL( CharT const * msg )
+		{
+			doLogMessage( LogType::eInfo, toUtf8( msg ), false );
+		}
+		/**
+		 *\~english
+		 *\brief		Logs a message.
+		 *\remarks		Doesn't print the new line character.
+		 *\param[in]	msg	The line to log
+		 *\~french
+		 *\brief		Log un message.
+		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
+		 *\param[in]	msg	La ligne a logger
+		 */
+		template< typename CharT >
+		static void logInfoNoNL( std::basic_string_view< CharT > msg )
+		{
+			doLogMessage( LogType::eInfo, toUtf8( msg ), false );
+		}
+		/**
+		 *\~english
+		 *\brief		Logs a message.
+		 *\remarks		Doesn't print the new line character.
+		 *\param[in]	msg	The line to log
+		 *\~french
+		 *\brief		Log un message.
+		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
+		 *\param[in]	msg	La ligne a logger
+		 */
+		template< typename CharT >
+		static void logInfoNoNL( std::basic_string< CharT > const & msg )
+		{
+			doLogMessage( LogType::eInfo, toUtf8( msg ), false );
+		}
+		/**
+		 *\~english
+		 *\brief		Logs a message.
+		 *\remarks		Doesn't print the new line character.
+		 *\param[in]	msg	The line to log
+		 *\~french
+		 *\brief		Log un message.
+		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
+		 *\param[in]	msg	The line to log
+		 */
+		template< typename CharT >
+		static void logInfoNoNL( std::basic_ostream< CharT > const & msg )
+		{
+			auto sbuf = msg.rdbuf();
+			std::basic_stringstream< CharT > ss;
+			ss << sbuf;
+			logInfoNoNL( ss.str() );
+		}
+		/**
+		 *\~english
+		 *\brief		Logs a warning.
+		 *\param[in]	msg	The line to log
+		 *\~french
+		 *\brief		Log un avertissement.
+		 *\param[in]	msg	The line to log
+		 */
+		template< typename CharT >
+		static void logWarning( CharT const * msg )
+		{
+			doLogMessage( LogType::eWarning, toUtf8( msg ), true );
+		}
+		/**
+		 *\~english
+		 *\brief		Logs a warning.
+		 *\param[in]	msg	The line to log
+		 *\~french
+		 *\brief		Log un avertissement.
+		 *\param[in]	msg	The line to log
+		 */
+		template< typename CharT >
+		static void logWarning( std::basic_string_view< CharT > msg )
+		{
+			doLogMessage( LogType::eWarning, toUtf8( msg ), true );
+		}
+		/**
+		 *\~english
+		 *\brief		Logs a warning.
+		 *\param[in]	msg	The line to log
+		 *\~french
+		 *\brief		Log un avertissement.
+		 *\param[in]	msg	The line to log
+		 */
+		template< typename CharT >
+		static void logWarning( std::basic_string< CharT > const & msg )
+		{
+			doLogMessage( LogType::eWarning, toUtf8( msg ), true );
+		}
+		/**
+		 *\~english
+		 *\brief		Logs a warning.
+		 *\param[in]	msg	The line to log
+		 *\~french
+		 *\brief		Log un avertissement.
+		 *\param[in]	msg	The line to log
+		 */
+		template< typename CharT >
+		static void logWarning( std::basic_ostream< CharT > const & msg )
+		{
+			auto sbuf = msg.rdbuf();
+			std::basic_stringstream< CharT > ss;
+			ss << sbuf;
+			logWarning( ss.str() );
+		}
+		/**
+		 *\~english
+		 *\brief		Logs a warning.
+		 *\remarks		Doesn't print the new line character.
+		 *\param[in]	msg	The line to log
+		 *\~french
+		 *\brief		Log un avertissement.
+		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
+		 *\param[in]	msg	The line to log
+		 */
+		template< typename CharT >
+		static void logWarningNoNL( CharT const * msg )
+		{
+			doLogMessage( LogType::eWarning, toUtf8( msg ), false );
+		}
+		/**
+		 *\~english
+		 *\brief		Logs a warning.
+		 *\remarks		Doesn't print the new line character.
+		 *\param[in]	msg	The line to log
+		 *\~french
+		 *\brief		Log un avertissement.
+		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
+		 *\param[in]	msg	The line to log
+		 */
+		template< typename CharT >
+		static void logWarningNoNL( std::basic_string_view< CharT > msg )
+		{
+			doLogMessage( LogType::eWarning, toUtf8( msg ), false );
+		}
+		/**
+		 *\~english
+		 *\brief		Logs a warning.
+		 *\remarks		Doesn't print the new line character.
+		 *\param[in]	msg	The line to log
+		 *\~french
+		 *\brief		Log un avertissement.
+		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
+		 *\param[in]	msg	The line to log
+		 */
+		template< typename CharT >
+		static void logWarningNoNL( std::basic_string< CharT > const & msg )
+		{
+			doLogMessage( LogType::eWarning, toUtf8( msg ), false );
+		}
+		/**
+		 *\~english
+		 *\brief		Logs a warning.
+		 *\remarks		Doesn't print the new line character.
+		 *\param[in]	msg	The line to log
+		 *\~french
+		 *\brief		Log un avertissement.
+		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
+		 *\param[in]	msg	The line to log
+		 */
+		template< typename CharT >
+		static void logWarningNoNL( std::basic_ostream< CharT > const & msg )
+		{
+			auto sbuf = msg.rdbuf();
+			std::basic_stringstream< CharT > ss;
+			ss << sbuf;
+			logWarningNoNL( ss.str() );
+		}
+		/**
+		 *\~english
+		 *\brief		Logs an error.
 		 *\param[in]	msg		The line to log
 		 *\~french
-		 *\brief		Log une erreur, à partir d'un std::string
+		 *\brief		Log une erreur.
 		 *\param[in]	msg		The line to log
 		 */
-		CU_API static void logError( std::string const & msg );
+		template< typename CharT >
+		static void logError( CharT const * msg )
+		{
+			doLogMessage( LogType::eError, toUtf8( msg ), true );
+		}
 		/**
 		 *\~english
-		 *\brief		Logs an error, from a std::ostream
-		 *\param[in]	msg	The line to log
-		 *\~french
-		 *\brief		Log une erreur, à partir d'un std::ostream
-		 *\param[in]	msg	The line to log
-		 */
-		CU_API static void logError( std::ostream const & msg );
-		/**
-		 *\~english
-		 *\brief		Logs an error, from a std::wstring
+		 *\brief		Logs an error.
 		 *\param[in]	msg		The line to log
 		 *\~french
-		 *\brief		Log une erreur, à partir d'un std::wstring
+		 *\brief		Log une erreur.
 		 *\param[in]	msg		The line to log
 		 */
-		CU_API static void logError( std::wstring const & msg );
+		template< typename CharT >
+		static void logError( std::basic_string_view< CharT > msg )
+		{
+			doLogMessage( LogType::eError, toUtf8( msg ), true );
+		}
 		/**
 		 *\~english
-		 *\brief		Logs an error, from a std::wostream
+		 *\brief		Logs an error.
+		 *\param[in]	msg		The line to log
+		 *\~french
+		 *\brief		Log une erreur.
+		 *\param[in]	msg		The line to log
+		 */
+		template< typename CharT >
+		static void logError( std::basic_string< CharT > const & msg )
+		{
+			doLogMessage( LogType::eError, toUtf8( msg ), true );
+		}
+		/**
+		 *\~english
+		 *\brief		Logs an error.
 		 *\param[in]	msg	The line to log
 		 *\~french
-		 *\brief		Log une erreur, à partir d'un std::wostream
+		 *\brief		Log une erreur.
 		 *\param[in]	msg	The line to log
 		 */
-		CU_API static void logError( std::wostream const & msg );
+		template< typename CharT >
+		static void logError( std::basic_ostream< CharT > const & msg )
+		{
+			auto sbuf = msg.rdbuf();
+			std::basic_stringstream< CharT > ss;
+			ss << sbuf;
+			logError( ss.str() );
+		}
 		/**
 		 *\~english
-		 *\brief		Logs a trace message, from a std::string
-		 *\remarks		Doesn't print the new line character.
-		 *\param[in]	msg	The line to log
-		 *\~french
-		 *\brief		Log un message trace, à partir d'un std::string
-		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
-		 *\param[in]	msg	La ligne a logger
-		 */
-		CU_API static void logTraceNoNL( std::string const & msg );
-		/**
-		 *\~english
-		 *\brief		Logs a trace message, from a std::ostream
-		 *\remarks		Doesn't print the new line character.
-		 *\param[in]	msg	The line to log
-		 *\~french
-		 *\brief		Log un message trace, à partir d'un std::ostream
-		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
-		 *\param[in]	msg	La ligne a logger
-		 */
-		CU_API static void logTraceNoNL( std::ostream const & msg );
-		/**
-		 *\~english
-		 *\brief		Logs a unicode trace message, from a std::wstring
-		 *\remarks		Doesn't print the new line character.
-		 *\param[in]	msg	The line to log
-		 *\~french
-		 *\brief		Log un message trace, à partir d'un std::wstring
-		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
-		 *\param[in]	msg	La ligne a logger
-		 */
-		CU_API static void logTraceNoNL( std::wstring const & msg );
-		/**
-		 *\~english
-		 *\brief		Logs a trace message, from a std::wostream
-		 *\remarks		Doesn't print the new line character.
-		 *\param[in]	msg	The line to log
-		 *\~french
-		 *\brief		Log un message trace, à partir d'un std::wostream
-		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
-		 *\param[in]	msg	The line to log
-		 */
-		CU_API static void logTraceNoNL( std::wostream const & msg );
-		/**
-		 *\~english
-		 *\brief		Logs a debug message, from a std::string
-		 *\remarks		Doesn't print the new line character.
-		 *\param[in]	msg	The line to log
-		 *\~french
-		 *\brief		Log un message debug, à partir d'un std::string
-		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
-		 *\param[in]	msg	La ligne a logger
-		 */
-		CU_API static void logDebugNoNL( std::string const & msg );
-		/**
-		 *\~english
-		 *\brief		Logs a debug message, from a std::ostream
-		 *\remarks		Doesn't print the new line character.
-		 *\param[in]	msg	The line to log
-		 *\~french
-		 *\brief		Log un message debug, à partir d'un std::ostream
-		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
-		 *\param[in]	msg	La ligne a logger
-		 */
-		CU_API static void logDebugNoNL( std::ostream const & msg );
-		/**
-		 *\~english
-		 *\brief		Logs a unicode debug message, from a std::wstring
-		 *\remarks		Doesn't print the new line character.
-		 *\param[in]	msg	The line to log
-		 *\~french
-		 *\brief		Log un message debug, à partir d'un std::wstring
-		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
-		 *\param[in]	msg	La ligne a logger
-		 */
-		CU_API static void logDebugNoNL( std::wstring const & msg );
-		/**
-		 *\~english
-		 *\brief		Logs a debug message, from a std::wostream
-		 *\remarks		Doesn't print the new line character.
-		 *\param[in]	msg	The line to log
-		 *\~french
-		 *\brief		Log un message debug, à partir d'un std::wostream
-		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
-		 *\param[in]	msg	The line to log
-		 */
-		CU_API static void logDebugNoNL( std::wostream const & msg );
-		/**
-		 *\~english
-		 *\brief		Logs a message, from a std::string
-		 *\remarks		Doesn't print the new line character.
-		 *\param[in]	msg	The line to log
-		 *\~french
-		 *\brief		Log un message, à partir d'un std::string
-		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
-		 *\param[in]	msg	La ligne a logger
-		 */
-		CU_API static void logInfoNoNL( std::string const & msg );
-		/**
-		 *\~english
-		 *\brief		Logs a message, from a std::ostream
-		 *\remarks		Doesn't print the new line character.
-		 *\param[in]	msg	The line to log
-		 *\~french
-		 *\brief		Log un message, à partir d'un std::ostream
-		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
-		 *\param[in]	msg	The line to log
-		 */
-		CU_API static void logInfoNoNL( std::ostream const & msg );
-		/**
-		 *\~english
-		 *\brief		Logs a message, from a std::wstring
-		 *\remarks		Doesn't print the new line character.
-		 *\param[in]	msg	The line to log
-		 *\~french
-		 *\brief		Log un message, à partir d'un std::wstring
-		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
-		 *\param[in]	msg	The line to log
-		 */
-		CU_API static void logInfoNoNL( std::wstring const & msg );
-		/**
-		 *\~english
-		 *\brief		Logs a message, from a std::wostream
-		 *\remarks		Doesn't print the new line character.
-		 *\param[in]	msg	The line to log
-		 *\~french
-		 *\brief		Log un message, à partir d'un std::wostream
-		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
-		 *\param[in]	msg	The line to log
-		 */
-		CU_API static void logInfoNoNL( std::wostream const & msg );
-		/**
-		 *\~english
-		 *\brief		Logs a warning, from a std::string
-		 *\remarks		Doesn't print the new line character.
-		 *\param[in]	msg	The line to log
-		 *\~french
-		 *\brief		Log un avertissement, à partir d'un std::string
-		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
-		 *\param[in]	msg	The line to log
-		 */
-		CU_API static void logWarningNoNL( std::string const & msg );
-		/**
-		 *\~english
-		 *\brief		Logs a warning, from a std::ostream
-		 *\remarks		Doesn't print the new line character.
-		 *\param[in]	msg	The line to log
-		 *\~french
-		 *\brief		Log un avertissement, à partir d'un std::ostream
-		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
-		 *\param[in]	msg	The line to log
-		 */
-		CU_API static void logWarningNoNL( std::ostream const & msg );
-		/**
-		 *\~english
-		 *\brief		Logs a warning, from a std::wstring
-		 *\remarks		Doesn't print the new line character.
-		 *\param[in]	msg	The line to log
-		 *\~french
-		 *\brief		Log un avertissement, à partir d'un std::wstring
-		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
-		 *\param[in]	msg	The line to log
-		 */
-		CU_API static void logWarningNoNL( std::wstring const & msg );
-		/**
-		 *\~english
-		 *\brief		Logs a warning, from a std::wostream
-		 *\remarks		Doesn't print the new line character.
-		 *\param[in]	msg	The line to log
-		 *\~french
-		 *\brief		Log un avertissement, à partir d'un std::wostream
-		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
-		 *\param[in]	msg	The line to log
-		 */
-		CU_API static void logWarningNoNL( std::wostream const & msg );
-		/**
-		 *\~english
-		 *\brief		Logs an error, from a std::string
+		 *\brief		Logs an error.
 		 *\remarks		Doesn't print the new line character.
 		 *\param[in]	msg		The line to log
 		 *\~french
-		 *\brief		Log une erreur, à partir d'un std::string
+		 *\brief		Log une erreur.
 		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
 		 *\param[in]	msg		The line to log
 		 */
-		CU_API static void logErrorNoNL( std::string const & msg );
+		template< typename CharT >
+		static void logErrorNoNL( CharT const * msg )
+		{
+			doLogMessage( LogType::eError, toUtf8( msg ), false );
+		}
 		/**
 		 *\~english
-		 *\brief		Logs an error, from a std::ostream
-		 *\remarks		Doesn't print the new line character.
-		 *\param[in]	msg	The line to log
-		 *\~french
-		 *\brief		Log une erreur, à partir d'un std::ostream
-		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
-		 *\param[in]	msg	The line to log
-		 */
-		CU_API static void logErrorNoNL( std::ostream const & msg );
-		/**
-		 *\~english
-		 *\brief		Logs an error, from a std::wstring
+		 *\brief		Logs an error.
 		 *\remarks		Doesn't print the new line character.
 		 *\param[in]	msg		The line to log
 		 *\~french
-		 *\brief		Log une erreur, à partir d'un std::wstring
+		 *\brief		Log une erreur.
 		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
 		 *\param[in]	msg		The line to log
 		 */
-		CU_API static void logErrorNoNL( std::wstring const & msg );
+		template< typename CharT >
+		static void logErrorNoNL( std::basic_string_view< CharT > msg )
+		{
+			doLogMessage( LogType::eError, toUtf8( msg ), false );
+		}
 		/**
 		 *\~english
-		 *\brief		Logs an error, from a std::wostream
+		 *\brief		Logs an error.
+		 *\remarks		Doesn't print the new line character.
+		 *\param[in]	msg		The line to log
+		 *\~french
+		 *\brief		Log une erreur.
+		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
+		 *\param[in]	msg		The line to log
+		 */
+		template< typename CharT >
+		static void logErrorNoNL( std::basic_string< CharT > const & msg )
+		{
+			doLogMessage( LogType::eError, toUtf8( msg ), false );
+		}
+		/**
+		 *\~english
+		 *\brief		Logs an error.
 		 *\remarks		Doesn't print the new line character.
 		 *\param[in]	msg	The line to log
 		 *\~french
-		 *\brief		Log une erreur, à partir d'un std::wostream
+		 *\brief		Log une erreur.
 		 *\remarks		N'affiche pas le caractère de nouvelle ligne.
 		 *\param[in]	msg	The line to log
 		 */
-		CU_API static void logErrorNoNL( std::wostream const & msg );
+		template< typename CharT >
+		static void logErrorNoNL( std::basic_ostream< CharT > const & msg )
+		{
+			auto sbuf = msg.rdbuf();
+			std::basic_stringstream< CharT > ss;
+			ss << sbuf;
+			logErrorNoNL( ss.str() );
+		}
 		/**
 		 *\~english
 		 *\brief		Returns a reference over the instance
@@ -515,16 +705,19 @@ namespace castor
 		}
 
 	private:
-		static std::unique_ptr< Logger > m_singleton;
+		static void CU_API doLogMessage( LogType type, MbString const & msg, bool addNL );
 
-		std::unique_ptr< ProgramConsole > m_console;
-		std::unique_ptr< LoggerInstance > m_instance;
-		std::unique_ptr< std::streambuf > m_cout{};
-		std::unique_ptr< std::streambuf > m_cerr{};
-		std::unique_ptr< std::streambuf > m_clog{};
-		std::unique_ptr< std::wstreambuf > m_wcout{};
-		std::unique_ptr< std::wstreambuf > m_wcerr{};
-		std::unique_ptr< std::wstreambuf > m_wclog{};
+	private:
+		static castor::RawUniquePtr< Logger > m_singleton;
+
+		castor::RawUniquePtr< ProgramConsole > m_console;
+		castor::RawUniquePtr< LoggerInstance > m_instance;
+		castor::RawUniquePtr< std::streambuf > m_cout{};
+		castor::RawUniquePtr< std::streambuf > m_cerr{};
+		castor::RawUniquePtr< std::streambuf > m_clog{};
+		castor::RawUniquePtr< std::wstreambuf > m_wcout{};
+		castor::RawUniquePtr< std::wstreambuf > m_wcerr{};
+		castor::RawUniquePtr< std::wstreambuf > m_wclog{};
 	};
 }
 

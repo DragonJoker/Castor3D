@@ -14,7 +14,7 @@ namespace Linear
 {
 	namespace c3d = castor3d::shader;
 	castor::String ToneMapping::Type = cuT( "linear" );
-	castor::String ToneMapping::Name = cuT( "Linear Tone Mapping" );
+	castor::MbString ToneMapping::Name = "Linear Tone Mapping";
 
 	void ToneMapping::create( ast::ShaderBuilder & builder )
 	{

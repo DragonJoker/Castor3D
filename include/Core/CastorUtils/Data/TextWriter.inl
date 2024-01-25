@@ -13,19 +13,19 @@ namespace castor
 	}
 
 	template< typename ValueT >
-	bool TextWriterBase::write( StringStream & file, StringView name, castor::RangedValue< ValueT > const & value )const
+	bool TextWriterBase::write( StringStream & file, StringView name, RangedValue< ValueT > const & value )const
 	{
 		return write( file, name, value.value() );
 	}
 
 	template< typename ValueT >
-	bool TextWriterBase::write( StringStream & file, StringView name, castor::ChangeTracked< ValueT > const & value )const
+	bool TextWriterBase::write( StringStream & file, StringView name, ChangeTracked< ValueT > const & value )const
 	{
 		return write( file, name, value.value() );
 	}
 
 	template< typename ValueT >
-	bool TextWriterBase::write( StringStream & file, StringView name, castor::Point2< ValueT > const & value )const
+	bool TextWriterBase::write( StringStream & file, StringView name, Point2< ValueT > const & value )const
 	{
 		auto writer = TextWriter< ValueT >{ tabs() };
 		auto result = writeText( file, tabs() + String{ name } + cuT( " " ) )
@@ -38,7 +38,7 @@ namespace castor
 	}
 
 	template< typename ValueT >
-	bool TextWriterBase::write( StringStream & file, StringView name, castor::Point3< ValueT > const & value )const
+	bool TextWriterBase::write( StringStream & file, StringView name, Point3< ValueT > const & value )const
 	{
 		auto writer = TextWriter< ValueT >{ tabs() };
 		auto result = writeText( file, tabs() + String{ name } + cuT( " " ) )
@@ -53,7 +53,7 @@ namespace castor
 	}
 
 	template< typename ValueT >
-	bool TextWriterBase::write( StringStream & file, StringView name, castor::Point4< ValueT > const & value )const
+	bool TextWriterBase::write( StringStream & file, StringView name, Point4< ValueT > const & value )const
 	{
 		auto writer = TextWriter< ValueT >{ tabs() };
 		auto result = writeText( file, tabs() + String{ name } + cuT( " " ) )

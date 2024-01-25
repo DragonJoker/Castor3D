@@ -21,11 +21,11 @@ namespace castor3d
 			, nullptr
 			, nullptr
 			, nullptr
-			, std::move( initialise )
-			, std::move( clean )
-			, std::move( merge )
-			, std::move( attach )
-			, std::move( detach ) }
+			, castor::move( initialise )
+			, castor::move( clean )
+			, castor::move( merge )
+			, castor::move( attach )
+			, castor::move( detach ) }
 	{
 		auto node = castor::makeUnique< SceneNode >( Scene::RootNode, scene );
 		m_rootNode = add( Scene::RootNode, node, false );

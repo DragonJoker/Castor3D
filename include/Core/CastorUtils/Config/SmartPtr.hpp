@@ -18,19 +18,35 @@ namespace castor
 		void operator()( TypeT * pointer )noexcept;
 	};
 
+	using std::forward;
+	using std::move;
+	using std::swap;
+	using std::make_unique;
+	using std::make_shared;
+	using std::ref;
+
+	template< class DataT >
+	using ReferenceWrapper = std::reference_wrapper< DataT >;
+
+	template< class DataT >
+	using SharedPtr = std::shared_ptr< DataT >;
+
+	template< typename TypeT, class DelT = std::default_delete< TypeT > >
+	using RawUniquePtr = std::unique_ptr< TypeT, DelT >;
+
 	template< typename TypeT >
-	using UniquePtr = std::unique_ptr< TypeT, Deleter< TypeT > >;
+	using UniquePtr = RawUniquePtr< TypeT, Deleter< TypeT > >;
 
 	template< typename TypeT, typename TypeU, typename ... ParamsT >
 	UniquePtr< TypeT > makeUniqueDerived( ParamsT && ... params )
 	{
-		return UniquePtr< TypeT >( new TypeU( std::forward< ParamsT >( params )... ) );
+		return UniquePtr< TypeT >( new TypeU( castor::forward< ParamsT >( params )... ) );
 	}
 
 	template< typename TypeT, typename ... ParamsT >
 	UniquePtr< TypeT > makeUnique( ParamsT && ... params )
 	{
-		return UniquePtr< TypeT >( new TypeT( std::forward< ParamsT >( params )... ) );
+		return UniquePtr< TypeT >( new TypeT( castor::forward< ParamsT >( params )... ) );
 	}
 
 	template< typename TypeU, typename TypeT >
@@ -46,15 +62,15 @@ namespace castor
 	}
 
 	template< typename TypeU, typename TypeT >
-	std::unique_ptr< TypeU > ptrCast( std::unique_ptr< TypeT > ptr )
+	RawUniquePtr< TypeU > ptrCast( RawUniquePtr< TypeT > ptr )
 	{
-		return std::unique_ptr< TypeU >( &static_cast< TypeU & >( *ptr.release() ) );
+		return RawUniquePtr< TypeU >( &static_cast< TypeU & >( *ptr.release() ) );
 	}
 
 	template< typename TypeU, typename TypeT >
-	std::unique_ptr< TypeU > ptrRefCast( std::unique_ptr< TypeT > & ptr )
+	RawUniquePtr< TypeU > ptrRefCast( RawUniquePtr< TypeT > & ptr )
 	{
-		return std::unique_ptr< TypeU >( &static_cast< TypeU & >( *ptr.release() ) );
+		return RawUniquePtr< TypeU >( &static_cast< TypeU & >( *ptr.release() ) );
 	}
 }
 

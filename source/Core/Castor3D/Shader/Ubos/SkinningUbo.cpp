@@ -12,7 +12,7 @@ namespace castor3d
 {
 	//*********************************************************************************************
 
-	castor::String const SkinningUbo::BufferSkinning = cuT( "C3D_Skinning" );
+	castor::MbString const SkinningUbo::BufferSkinning = "C3D_Skinning";
 
 	shader::SkinningData SkinningUbo::declare( sdw::ShaderWriter & writer
 		, uint32_t transformsBinding
@@ -23,7 +23,7 @@ namespace castor3d
 
 		if ( hasSkin )
 		{
-			result.transforms = std::make_unique< sdw::ArrayStorageBufferT< sdw::Mat4 > >( writer
+			result.transforms = castor::make_unique< sdw::ArrayStorageBufferT< sdw::Mat4 > >( writer
 				, SkinningUbo::BufferSkinning
 				, writer.getTypesCache().getMat4x4F()
 				, ast::type::MemoryLayout::eStd430

@@ -27,7 +27,7 @@ namespace castor3d::shader
 		Meshlet( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
 			, bool enabled = true )
-			: StructInstanceHelperT{ writer, std::move( expr ), enabled  }
+			: StructInstanceHelperT{ writer, castor::move( expr ), enabled  }
 		{
 		}
 

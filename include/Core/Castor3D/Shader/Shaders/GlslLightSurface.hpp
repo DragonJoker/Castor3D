@@ -34,7 +34,7 @@ namespace castor3d::shader
 			, bool enableIridescence );
 
 		C3D_API static LightSurface create( sdw::ShaderWriter & writer
-			, std::string const & name
+			, castor::MbString const & name
 			, sdw::Vec3 const eye
 			, sdw::Vec4 const world
 			, sdw::Vec3 const view
@@ -44,7 +44,7 @@ namespace castor3d::shader
 			, bool enableFresnel = true
 			, bool enableIridescence = true );
 		C3D_API static LightSurface create( sdw::ShaderWriter & writer
-			, std::string const & name
+			, castor::MbString const & name
 			, sdw::Vec4 const world
 			, sdw::Vec3 const clip
 			, sdw::Vec3 const normal
@@ -53,7 +53,7 @@ namespace castor3d::shader
 			, bool enableIridescence = false );
 		C3D_API static LightSurface create( sdw::ShaderWriter & writer
 			, Utils & utils
-			, std::string const & name
+			, castor::MbString const & name
 			, sdw::Vec3 const eye
 			, sdw::Vec4 const world
 			, sdw::Vec3 const view

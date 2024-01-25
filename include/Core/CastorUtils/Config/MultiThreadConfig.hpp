@@ -17,9 +17,15 @@ See LICENSE file in root folder
 namespace castor
 {
 	template< typename Lockable >
-	std::unique_lock< Lockable > makeUniqueLock( Lockable & lockable )
+	using UniqueLock = std::unique_lock< Lockable >;
+
+	using Mutex = std::mutex;
+	using RecursiveMutex = std::recursive_mutex;
+
+	template< typename Lockable >
+	UniqueLock< Lockable > makeUniqueLock( Lockable & lockable )
 	{
-		return std::unique_lock< Lockable >( lockable );
+		return UniqueLock< Lockable >( lockable );
 	}
 
 	template< typename MutexT >
@@ -63,7 +69,7 @@ namespace castor
 		mutable MutexT m_mutex;
 	};
 
-	using CheckedMutex = CheckedMutexT< std::mutex >;
+	using CheckedMutex = CheckedMutexT< castor::Mutex >;
 }
 
 #endif

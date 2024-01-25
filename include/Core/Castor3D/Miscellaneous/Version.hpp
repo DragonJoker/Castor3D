@@ -147,9 +147,12 @@ namespace castor3d
 	 */
 	C3D_API bool operator>=( castor3d::Version const & a, castor3d::Version const & b );
 
-	C3D_API std::ostream & operator<<( std::ostream & stream, castor3d::Version const & version );
-	C3D_API std::wostream & operator<<( std::wostream & stream, castor3d::Version const & version );
-	C3D_API castor::String & operator<<( castor::String & stream, castor3d::Version const & version );
+	template< typename CharT >
+	inline std::basic_ostream< CharT > & operator<<( std::basic_ostream< CharT > & stream, castor3d::Version const & version )
+	{
+		stream << version.getMajor() << "." << version.getMinor() << "." << version.getBuild();
+		return stream;
+	}
 }
 
 #endif

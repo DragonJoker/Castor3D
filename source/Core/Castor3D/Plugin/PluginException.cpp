@@ -5,7 +5,7 @@
 namespace castor3d
 {
 	PluginException::PluginException( bool critical
-		, std::string const & description
+		, castor::MbString const & description
 		, char const * file
 		, char const * function
 		, uint32_t line )

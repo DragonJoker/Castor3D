@@ -44,7 +44,7 @@ extern "C"
 		engine->getToneMappingFactory().registerType( Linear::ToneMapping::Type
 			, &Linear::ToneMapping::create );
 		engine->getRenderTargetCache().registerToneMappingName( Linear::ToneMapping::Type
-			, Linear::ToneMapping::Name );
+			, castor::makeString( Linear::ToneMapping::Name ) );
 	}
 
 	C3D_LinearToneMapping_API void OnUnload( castor3d::Engine * engine )

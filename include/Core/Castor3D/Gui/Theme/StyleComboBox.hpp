@@ -23,8 +23,8 @@ namespace castor3d
 				, name
 				, scene
 				, engine }
-			, m_buttonStyle{ name + "/Expand", scene, engine, fontName }
-			, m_listBoxStyle{ name + "/Elements", scene, engine, fontName }
+			, m_buttonStyle{ name + cuT( "/Expand" ), scene, engine, fontName }
+			, m_listBoxStyle{ name + cuT( "/Elements" ), scene, engine, fontName }
 		{
 		}
 

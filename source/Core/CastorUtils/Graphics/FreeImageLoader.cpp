@@ -42,7 +42,7 @@ namespace castor
 
 			for ( uint32_t i = 0; i < count; i++ )
 			{
-				std::swap( *r, *b );
+				castor::swap( *r, *b );
 				r += bpp;
 				b += bpp;
 			}
@@ -79,7 +79,7 @@ namespace castor
 		static void outputMessageFunction( FREE_IMAGE_FORMAT fif
 			, const char * msg )
 		{
-			std::string format;
+			String format;
 			std::cerr << "FreeImage error: " << msg;
 
 			if ( fif != FIF_UNKNOWN )
@@ -113,7 +113,7 @@ namespace castor
 	void FreeImageLoader::registerLoader( ImageLoader & reg )
 	{
 		reg.registerLoader( freeimgl::listExtensions()
-			, std::make_unique< FreeImageLoader >() );
+			, castor::make_unique< FreeImageLoader >() );
 	}
 
 	void FreeImageLoader::unregisterLoader( ImageLoader & reg )

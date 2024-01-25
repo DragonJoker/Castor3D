@@ -76,17 +76,17 @@ namespace castor3d
 
 		void setTranslateSpeed( TextureTranslateSpeed translate )noexcept
 		{
-			m_translate = std::move( translate );
+			m_translate = castor::move( translate );
 		}
 
 		void setRotateSpeed( TextureRotateSpeed rotate )noexcept
 		{
-			m_rotate = std::move( rotate );
+			m_rotate = castor::move( rotate );
 		}
 
 		void setScaleSpeed( TextureScaleSpeed scale )noexcept
 		{
-			m_scale = std::move( scale );
+			m_scale = castor::move( scale );
 		}
 
 		void enableTileAnim()noexcept
@@ -103,9 +103,9 @@ namespace castor3d
 			, TextureRotateSpeed rotate
 			, TextureScaleSpeed scale )noexcept
 		{
-			setTranslateSpeed( std::move( translate ) );
-			setRotateSpeed( std::move( rotate ) );
-			setScaleSpeed( std::move( scale ) );
+			setTranslateSpeed( castor::move( translate ) );
+			setRotateSpeed( castor::move( rotate ) );
+			setScaleSpeed( castor::move( scale ) );
 		}
 
 	protected:

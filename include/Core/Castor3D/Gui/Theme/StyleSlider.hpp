@@ -24,8 +24,8 @@ namespace castor3d
 				, name
 				, scene
 				, engine }
-			, m_lineStyle{ name + "/Tick", scene, engine, fontName }
-			, m_tickStyle{ name + "/Line", scene, engine, fontName }
+			, m_lineStyle{ name + cuT( "/Tick" ), scene, engine, fontName }
+			, m_tickStyle{ name + cuT( "/Line" ), scene, engine, fontName }
 		{
 		}
 

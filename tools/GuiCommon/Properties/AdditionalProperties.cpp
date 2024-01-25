@@ -159,7 +159,7 @@ namespace GuiCommon
 			if ( !m_bitmap )
 			{
 				m_image->resample( { uint32_t( rect.width ), uint32_t( rect.height ) } );
-				m_bitmap = std::make_unique< wxBitmap >();
+				m_bitmap = castor::make_unique< wxBitmap >();
 				createBitmapFromBuffer( *m_image->getPixels()
 					, false
 					, *m_bitmap );
@@ -204,7 +204,7 @@ namespace GuiCommon
 						, buffer->getFormat() );
 				}
 
-				m_image = std::make_unique< castor::Image >( name, *buffer );
+				m_image = castor::make_unique< castor::Image >( name, *buffer );
 			}
 			catch ( std::exception & exc )
 			{

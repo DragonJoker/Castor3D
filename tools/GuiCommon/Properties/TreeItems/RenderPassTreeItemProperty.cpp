@@ -26,7 +26,7 @@ namespace GuiCommon
 				, castor3d::Scene const & scene
 				, wxPropertyGrid * grid
 				, TreeItemProperty & prop )
-				: castor3d::RenderTechniqueVisitor{ std::move( flags ), scene, { false } }
+				: castor3d::RenderTechniqueVisitor{ castor::move( flags ), scene, { false } }
 				, m_grid{ grid }
 				, m_prop{ prop }
 			{
@@ -67,21 +67,21 @@ namespace GuiCommon
 				, float & value
 				, ControlsList controls )override
 			{
-				m_prop.addPropertyT( m_grid, name, &value, std::move( controls ) );
+				m_prop.addPropertyT( m_grid, name, &value, castor::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, int32_t & value
 				, ControlsList controls )override
 			{
-				m_prop.addPropertyT( m_grid, name, &value, std::move( controls ) );
+				m_prop.addPropertyT( m_grid, name, &value, castor::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, uint32_t & value
 				, ControlsList controls )override
 			{
-				m_prop.addPropertyT( m_grid, name, &value, std::move( controls ) );
+				m_prop.addPropertyT( m_grid, name, &value, castor::move( controls ) );
 			}
 
 			void visit( castor::String const & name
@@ -90,7 +90,7 @@ namespace GuiCommon
 				, OnSEnumValueChange onChange
 				, ControlsList controls )override
 			{
-				m_prop.addPropertyET( m_grid, name, make_wxArrayString( enumNames ), &enumValue, std::move( controls ), onChange );
+				m_prop.addPropertyET( m_grid, name, make_wxArrayString( enumNames ), &enumValue, castor::move( controls ), onChange );
 			}
 
 			void visit( castor::String const & name
@@ -99,104 +99,104 @@ namespace GuiCommon
 				, OnUEnumValueChange onChange
 				, ControlsList controls )override
 			{
-				m_prop.addPropertyET( m_grid, name, make_wxArrayString( enumNames ), &enumValue, std::move( controls ), onChange );
+				m_prop.addPropertyET( m_grid, name, make_wxArrayString( enumNames ), &enumValue, castor::move( controls ), onChange );
 			}
 
 			void visit( castor::String const & name
 				, castor::Point2f & value
 				, ControlsList controls )override
 			{
-				m_prop.addPropertyT( m_grid, name, &value, std::move( controls ) );
+				m_prop.addPropertyT( m_grid, name, &value, castor::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::Point2i & value
 				, ControlsList controls )override
 			{
-				m_prop.addPropertyT( m_grid, name, &value, std::move( controls ) );
+				m_prop.addPropertyT( m_grid, name, &value, castor::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::Point2ui & value
 				, ControlsList controls )override
 			{
-				m_prop.addPropertyT( m_grid, name, &value, std::move( controls ) );
+				m_prop.addPropertyT( m_grid, name, &value, castor::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::Point3f & value
 				, ControlsList controls )override
 			{
-				m_prop.addPropertyT( m_grid, name, &value, std::move( controls ) );
+				m_prop.addPropertyT( m_grid, name, &value, castor::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::Point3i & value
 				, ControlsList controls )override
 			{
-				m_prop.addPropertyT( m_grid, name, &value, std::move( controls ) );
+				m_prop.addPropertyT( m_grid, name, &value, castor::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::Point3ui & value
 				, ControlsList controls )override
 			{
-				m_prop.addPropertyT( m_grid, name, &value, std::move( controls ) );
+				m_prop.addPropertyT( m_grid, name, &value, castor::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::Point4f & value
 				, ControlsList controls )override
 			{
-				m_prop.addPropertyT( m_grid, name, &value, std::move( controls ) );
+				m_prop.addPropertyT( m_grid, name, &value, castor::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::Point4i & value
 				, ControlsList controls )override
 			{
-				m_prop.addPropertyT( m_grid, name, &value, std::move( controls ) );
+				m_prop.addPropertyT( m_grid, name, &value, castor::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::Point4ui & value
 				, ControlsList controls )override
 			{
-				m_prop.addPropertyT( m_grid, name, &value, std::move( controls ) );
+				m_prop.addPropertyT( m_grid, name, &value, castor::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::Matrix4x4f & value
 				, ControlsList controls )override
 			{
-				m_prop.addPropertyT( m_grid, name, &value, std::move( controls ) );
+				m_prop.addPropertyT( m_grid, name, &value, castor::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::RangedValue< float > & value
 				, ControlsList controls )override
 			{
-				m_prop.addPropertyT( m_grid, name, &value, std::move( controls ) );
+				m_prop.addPropertyT( m_grid, name, &value, castor::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::RangedValue< int32_t > & value
 				, ControlsList controls )override
 			{
-				m_prop.addPropertyT( m_grid, name, &value, std::move( controls ) );
+				m_prop.addPropertyT( m_grid, name, &value, castor::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::RangedValue< uint32_t > & value
 				, ControlsList controls )override
 			{
-				m_prop.addPropertyT( m_grid, name, &value, std::move( controls ) );
+				m_prop.addPropertyT( m_grid, name, &value, castor::move( controls ) );
 			}
 
 		private:
-			std::unique_ptr< ConfigurationVisitorBase > doGetSubConfiguration( castor::String const & category )override
+			castor::RawUniquePtr< ConfigurationVisitorBase > doGetSubConfiguration( castor::String const & category )override
 			{
-				return std::unique_ptr< ConfigurationVisitorBase >( new RenderPassConfigurationBuilder{ getFlags(), getScene(), m_grid, m_prop } );
+				return castor::RawUniquePtr< ConfigurationVisitorBase >( new RenderPassConfigurationBuilder{ getFlags(), getScene(), m_grid, m_prop } );
 			}
 
 		private:

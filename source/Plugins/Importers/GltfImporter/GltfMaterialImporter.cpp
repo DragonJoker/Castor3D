@@ -90,7 +90,7 @@ namespace c3d_gltf
 		{
 			auto component = pass.createComponent< ComponentT >();
 			auto data = component->getData();
-			*data = std::move( value );
+			*data = castor::move( value );
 			component->setData( *data );
 		}
 
@@ -99,27 +99,27 @@ namespace c3d_gltf
 		{
 			auto component = pass.createComponent< ComponentT >();
 			auto data = component->getData();
-			*data = std::move( value );
+			*data = value;
 			component->setData( *data );
 		}
 
-		static std::string getFormatName( fastgltf::MimeType mimeType )
+		static castor::String getFormatName( fastgltf::MimeType mimeType )
 		{
 			switch ( mimeType )
 			{
 			case fastgltf::MimeType::JPEG:
-				return "jpg";
+				return cuT( "jpg" );
 			case fastgltf::MimeType::PNG:
 			case fastgltf::MimeType::GltfBuffer:
 			case fastgltf::MimeType::OctetStream:
-				return "png";
+				return cuT( "png" );
 			case fastgltf::MimeType::KTX2:
-				return "ktx";
+				return cuT( "ktx" );
 			case fastgltf::MimeType::DDS:
-				return "dds";
+				return cuT( "dds" );
 			case fastgltf::MimeType::None:
 			default:
-				return "";
+				return cuT( "" );
 			}
 		}
 
@@ -178,8 +178,8 @@ namespace c3d_gltf
 			, size_t imageIndex
 			, fastgltf::Image const & impImage )
 		{
-			auto texName = castor::String( impTexture.name );
-			auto imgName = castor::String( impImage.name );
+			auto texName = castor::makeString( impTexture.name );
+			auto imgName = castor::makeString( impImage.name );
 
 			if ( texName.empty() )
 			{
@@ -191,10 +191,10 @@ namespace c3d_gltf
 				imgName = castor::string::toString( imageIndex );
 			}
 
-			return "Image_" + texName + "_" + imgName;
+			return cuT( "Image_" ) + texName + cuT( "_" ) + imgName;
 		}
 
-		static std::unique_ptr< castor3d::TextureSourceInfo > loadTexture( fastgltf::Asset const & impAsset
+		static castor::RawUniquePtr< castor3d::TextureSourceInfo > loadTexture( fastgltf::Asset const & impAsset
 			, castor::String const & name
 			, fastgltf::Texture const & impTexture
 			, fastgltf::Image const & impImage
@@ -238,9 +238,9 @@ namespace c3d_gltf
 
 			if ( !data.empty() )
 			{
-				return std::make_unique< castor3d::TextureSourceInfo >( importer.loadTexture( name
+				return castor::make_unique< castor3d::TextureSourceInfo >( importer.loadTexture( name
 					, getFormatName( mimeType )
-					, std::move( data )
+					, castor::move( data )
 					, texConfig ) );
 			}
 
@@ -279,13 +279,13 @@ namespace c3d_gltf
 			return engine.getDefaultSampler();
 		}
 
-		static std::unique_ptr< castor3d::TextureSourceInfo > loadTexture( GltfImporterFile const & file
+		static castor::RawUniquePtr< castor3d::TextureSourceInfo > loadTexture( GltfImporterFile const & file
 			, fastgltf::Asset const & impAsset
 			, fastgltf::TextureInfo const & texInfo
 			, castor3d::TextureConfiguration const & texConfig
 			, castor3d::MaterialImporter & importer )
 		{
-			std::unique_ptr< castor3d::TextureSourceInfo > result;
+			castor::RawUniquePtr< castor3d::TextureSourceInfo > result;
 
 			if ( texInfo.textureIndex < impAsset.textures.size()
 				&& impAsset.textures[texInfo.textureIndex].imageIndex
@@ -326,13 +326,13 @@ namespace c3d_gltf
 
 			if ( !result )
 			{
-				CU_LoaderError( "Couldn't load image" + source.name() + "." );
+				CU_LoaderError( "Couldn't load image" + castor::toUtf8( source.name() ) + "." );
 			}
 
 			return *result;
 		}
 
-		static void parseTransform( std::unique_ptr< fastgltf::TextureTransform > const & transform
+		static void parseTransform( castor::RawUniquePtr< fastgltf::TextureTransform > const & transform
 			, castor3d::TextureTransform & result
 			, uint32_t & texCoordIndex )
 		{
@@ -359,7 +359,7 @@ namespace c3d_gltf
 		static void parseColOpaTexture( GltfImporterFile const & file
 			, castor3d::Pass & pass
 			, fastgltf::Asset const & impAsset
-			, std::map< castor3d::PassComponentTextureFlag, castor3d::TextureConfiguration > const & textureRemaps
+			, castor::Map< castor3d::PassComponentTextureFlag, castor3d::TextureConfiguration > const & textureRemaps
 			, std::optional< fastgltf::TextureInfo > const & texInfo
 			, castor3d::MaterialImporter & importer )
 		{
@@ -387,7 +387,7 @@ namespace c3d_gltf
 					}
 
 					castor3d::PassTextureConfig passTexConfig{ loadSampler( file, impAsset, impTexture.samplerIndex ), texCoordIndex };
-					pass.registerTexture( std::move( *sourceInfo ), passTexConfig );
+					pass.registerTexture( castor::move( *sourceInfo ), passTexConfig );
 				}
 			}
 		}
@@ -395,7 +395,7 @@ namespace c3d_gltf
 		static void parseRghMetTexture( GltfImporterFile const & file
 			, castor3d::Pass & pass
 			, fastgltf::Asset const & impAsset
-			, std::map< castor3d::PassComponentTextureFlag, castor3d::TextureConfiguration > const & textureRemaps
+			, castor::Map< castor3d::PassComponentTextureFlag, castor3d::TextureConfiguration > const & textureRemaps
 			, std::optional< fastgltf::TextureInfo > const & texInfo
 			, castor3d::MaterialImporter & importer )
 		{
@@ -418,7 +418,7 @@ namespace c3d_gltf
 					}
 
 					castor3d::PassTextureConfig passTexConfig{ loadSampler( file, impAsset, impTexture.samplerIndex ), texCoordIndex };
-					pass.registerTexture( std::move( *sourceInfo ), passTexConfig );
+					pass.registerTexture( castor::move( *sourceInfo ), passTexConfig );
 				}
 			}
 		}
@@ -426,7 +426,7 @@ namespace c3d_gltf
 		static void parseSpcGlsTexture( GltfImporterFile const & file
 			, castor3d::Pass & pass
 			, fastgltf::Asset const & impAsset
-			, std::map< castor3d::PassComponentTextureFlag, castor3d::TextureConfiguration > const & textureRemaps
+			, castor::Map< castor3d::PassComponentTextureFlag, castor3d::TextureConfiguration > const & textureRemaps
 			, std::optional< fastgltf::TextureInfo > const & texInfo
 			, castor3d::MaterialImporter & importer )
 		{
@@ -449,7 +449,7 @@ namespace c3d_gltf
 					}
 
 					castor3d::PassTextureConfig passTexConfig{ loadSampler( file, impAsset, impTexture.samplerIndex ), texCoordIndex };
-					pass.registerTexture( std::move( *sourceInfo ), passTexConfig );
+					pass.registerTexture( castor::move( *sourceInfo ), passTexConfig );
 				}
 			}
 		}
@@ -458,7 +458,7 @@ namespace c3d_gltf
 		static void parseTexture( GltfImporterFile const & file
 			, castor3d::Pass & pass
 			, fastgltf::Asset const & impAsset
-			, std::map< castor3d::PassComponentTextureFlag, castor3d::TextureConfiguration > const & textureRemaps
+			, castor::Map< castor3d::PassComponentTextureFlag, castor3d::TextureConfiguration > const & textureRemaps
 			, std::optional< fastgltf::TextureInfo > const & texInfo
 			, castor3d::MaterialImporter & importer )
 		{
@@ -478,7 +478,7 @@ namespace c3d_gltf
 					}
 
 					castor3d::PassTextureConfig passTexConfig{ loadSampler( file, impAsset, impTexture.samplerIndex ), texCoordIndex };
-					pass.registerTexture( std::move( *sourceInfo ), passTexConfig );
+					pass.registerTexture( castor::move( *sourceInfo ), passTexConfig );
 				}
 			}
 		}

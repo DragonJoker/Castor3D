@@ -28,11 +28,11 @@ namespace castor3d
 		, ObjectBufferOffset const & bufferOffsets
 		, PipelineFlags const & flags
 		, ashes::BufferCRefArray & buffers
-		, std::vector< uint64_t > & offsets
+		, castor::Vector< uint64_t > & offsets
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
 		, uint32_t & currentBinding
 		, uint32_t & currentLocation
-		, std::unordered_map< size_t, ashes::PipelineVertexInputStateCreateInfo > & cache );
+		, castor::UnorderedMap< size_t, ashes::PipelineVertexInputStateCreateInfo > & cache );
 	C3D_API void fillBaseSurfaceType( SubmeshData submeshData
 		, sdw::type::IOStruct & type
 		, uint32_t & index );
@@ -73,7 +73,7 @@ namespace castor3d
 				, Pass const & pass
 				, ObjectBufferOffset const & bufferOffsets
 				, ashes::BufferCRefArray & buffers
-				, std::vector< uint64_t > & offsets
+				, castor::Vector< uint64_t > & offsets
 				, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
 				, uint32_t & currentBinding
 				, uint32_t & currentLocation )override
@@ -96,17 +96,17 @@ namespace castor3d
 				static_cast< ComponentData * >( data )->m_data = m_data;
 			}
 
-			void setData( std::vector< DataT > const & data )
+			void setData( castor::Vector< DataT > const & data )
 			{
 				m_data = data;
 			}
 
-			std::vector< DataT > & getData()
+			castor::Vector< DataT > & getData()
 			{
 				return m_data;
 			}
 
-			std::vector< DataT > const & getData()const
+			castor::Vector< DataT > const & getData()const
 			{
 				return m_data;
 			}
@@ -128,9 +128,9 @@ namespace castor3d
 			}
 
 		private:
-			std::vector< DataT > m_data;
+			castor::Vector< DataT > m_data;
 			castor::Point4fArray m_up;
-			std::unordered_map< size_t, ashes::PipelineVertexInputStateCreateInfo > m_layouts;
+			castor::UnorderedMap< size_t, ashes::PipelineVertexInputStateCreateInfo > m_layouts;
 		};
 
 		class Plugin
@@ -196,7 +196,7 @@ namespace castor3d
 
 			shader::SubmeshVertexSurfaceShaderPtr createVertexSurfaceShader()const override
 			{
-				return std::make_unique< SurfaceShader >();
+				return castor::make_unique< SurfaceShader >();
 			}
 		};
 
@@ -214,7 +214,7 @@ namespace castor3d
 		 */
 		explicit BaseDataComponentT( Submesh & submesh )
 			: SubmeshComponent{ submesh, TypeName
-				, std::make_unique< ComponentData >( submesh ) }
+				, castor::make_unique< ComponentData >( submesh ) }
 		{
 		}
 		/**

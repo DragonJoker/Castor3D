@@ -93,20 +93,20 @@ namespace motion_blur
 	//*********************************************************************************************
 
 	castor::String PostEffect::Type = cuT( "linear_motion_blur" );
-	castor::String PostEffect::Name = cuT( "LinearMotionBlur PostEffect" );
+	castor::MbString PostEffect::Name = "LinearMotionBlur PostEffect";
 
 	PostEffect::PostEffect( castor3d::RenderTarget & renderTarget
 		, castor3d::RenderSystem & renderSystem
 		, castor3d::Parameters const & parameters )
 		: castor3d::PostEffect{ PostEffect::Type
-			, "LinearMotionBlur"
-			, PostEffect::Name
+			, cuT( "LinearMotionBlur" )
+			, castor::makeString( PostEffect::Name )
 			, renderTarget
 			, renderSystem
 			, parameters
 			, 1u }
 		, m_ubo{ renderSystem.getRenderDevice().uboPool->getBuffer< Configuration >( 0u ) }
-		, m_shader{ "LinearMotionBlur", postfx::getProgram( renderSystem.getRenderDevice() ) }
+		, m_shader{ cuT( "LinearMotionBlur" ), postfx::getProgram( renderSystem.getRenderDevice() ) }
 		, m_stages{ makeProgramStates( renderSystem.getRenderDevice(), m_shader ) }
 	{
 		setParameters( parameters );
@@ -158,7 +158,7 @@ namespace motion_blur
 						, context
 						, graph
 						, crg::ru::Config{ 2u } );
-				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );

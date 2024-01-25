@@ -79,8 +79,8 @@ namespace castor3d
 
 		if ( !m_dirty.empty() )
 		{
-			std::vector< SubsurfaceScatteringComponent const * > dirty;
-			std::swap( m_dirty, dirty );
+			castor::Vector< SubsurfaceScatteringComponent const * > dirty;
+			castor::swap( m_dirty, dirty );
 			auto end = std::unique( dirty.begin(), dirty.end() );
 			uint32_t index{};
 
@@ -111,7 +111,7 @@ namespace castor3d
 
 	void SssProfileBuffer::createPassBinding( crg::FramePass & pass, uint32_t binding )const
 	{
-		return m_buffer.createPassBinding( pass, cuT( "C3D_SssProfiles" ), binding );
+		return m_buffer.createPassBinding( pass, binding );
 	}
 
 	void SssProfileBuffer::createBinding( ashes::DescriptorSet & descriptorSet

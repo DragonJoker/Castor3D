@@ -33,14 +33,14 @@ namespace ocean_fft
 					, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
 					, VK_SHADER_STAGE_COMPUTE_BIT ) };
 			return device->createDescriptorSetLayout( GenerateMipmapsPass::Name
-				, std::move( bindings ) );
+				, castor::move( bindings ) );
 		}
 
-		static std::vector< ashes::DescriptorSetPtr > createDescriptorSets( crg::RunnableGraph & graph
+		static castor::Vector< ashes::DescriptorSetPtr > createDescriptorSets( crg::RunnableGraph & graph
 			, ashes::DescriptorSetPool const & pool
 			, crg::FramePass const & pass )
 		{
-			std::vector< ashes::DescriptorSetPtr > result;
+			castor::Vector< ashes::DescriptorSetPtr > result;
 			auto & srcAttach = pass.images.front();
 			auto & dstAttach = pass.images.back();
 			auto inViewId = srcAttach.view();
@@ -64,7 +64,7 @@ namespace ocean_fft
 					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } );
 
 				data.info.subresourceRange.baseMipLevel++;
-				data.name = imageId.data->name + "_L" + std::to_string( data.info.subresourceRange.baseMipLevel );
+				data.name = imageId.data->name + "_L" + castor::string::toMbString( data.info.subresourceRange.baseMipLevel );
 				auto outViewId = graph.createView( data );
 				auto outView = graph.createImageView( outViewId );
 				writes.push_back( ashes::WriteDescriptorSet{ GenerateMipmapsPass::eOutput
@@ -79,7 +79,7 @@ namespace ocean_fft
 				descriptorSet->setBindings( writes );
 				descriptorSet->update();
 
-				result.emplace_back( std::move( descriptorSet ) );
+				result.emplace_back( castor::move( descriptorSet ) );
 				inView = outView;
 			}
 
@@ -140,7 +140,7 @@ namespace ocean_fft
 
 	//************************************************************************************************
 
-	castor::String const GenerateMipmapsPass::Name{ "GenerateMipmaps" };
+	castor::MbString const GenerateMipmapsPass::Name{ "GenerateMipmaps" };
 
 	GenerateMipmapsPass::GenerateMipmapsPass( crg::FramePass const & pass
 		, crg::GraphContext & context
@@ -162,7 +162,7 @@ namespace ocean_fft
 		, m_device{ device }
 		, m_descriptorSetLayout{ genmips::createDescriptorLayout( m_device ) }
 		, m_pipelineLayout{ genmips::createPipelineLayout( m_device, *m_descriptorSetLayout ) }
-		, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, Name, genmips::createShader( device ) }
+		, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, castor::makeString( Name ), genmips::createShader( device ) }
 		, m_pipeline{ genmips::createPipeline( device, *m_pipelineLayout, m_shader ) }
 		, m_descriptorSetPool{ m_descriptorSetLayout->createPool( crg::getMipLevels( m_pass.images.front().image.view() ) + crg::getMipLevels( m_pass.images.back().image.view() ) ) }
 		, m_descriptorSets{ genmips::createDescriptorSets( m_graph, *m_descriptorSetPool, m_pass ) }

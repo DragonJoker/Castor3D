@@ -14,7 +14,7 @@ namespace castor3d
 
 	castor::String getTexName( SmTexture texture )
 	{
-		static std::array< castor::String, size_t( SmTexture::eCount ) > Values
+		static castor::Array< castor::String, size_t( SmTexture::eCount ) > Values
 		{
 			{
 				cuT( "Depth" ),
@@ -31,7 +31,7 @@ namespace castor3d
 
 	VkFormat getFormat( RenderDevice const & device, SmTexture texture )
 	{
-		static std::array< VkFormat, size_t( SmTexture::eCount ) > Values
+		static castor::Array< VkFormat, size_t( SmTexture::eCount ) > Values
 		{
 			{
 				VK_FORMAT_D16_UNORM,							// Depth
@@ -47,7 +47,7 @@ namespace castor3d
 
 	VkClearValue getClearValue( SmTexture texture )
 	{
-		static std::array< VkClearValue, size_t( SmTexture::eCount ) > Values
+		static castor::Array< VkClearValue, size_t( SmTexture::eCount ) > Values
 		{
 			{
 				defaultClearDepthStencil,		// Depth
@@ -63,7 +63,7 @@ namespace castor3d
 
 	VkImageUsageFlags getUsageFlags( SmTexture texture )
 	{
-		static std::array< VkImageUsageFlags, size_t( SmTexture::eCount ) > Values
+		static castor::Array< VkImageUsageFlags, size_t( SmTexture::eCount ) > Values
 		{
 			{
 				VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,	// Depth
@@ -79,7 +79,7 @@ namespace castor3d
 
 	VkBorderColor getBorderColor( SmTexture texture )
 	{
-		static std::array< VkBorderColor, size_t( SmTexture::eCount ) > Values
+		static castor::Array< VkBorderColor, size_t( SmTexture::eCount ) > Values
 		{
 			{
 				VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE,			// Depth
@@ -95,7 +95,7 @@ namespace castor3d
 
 	inline VkCompareOp getCompareOp( SmTexture texture )
 	{
-		static std::array< VkCompareOp, size_t( SmTexture::eCount ) > Values
+		static castor::Array< VkCompareOp, size_t( SmTexture::eCount ) > Values
 		{
 			{
 				VK_COMPARE_OP_NEVER,			// Depth

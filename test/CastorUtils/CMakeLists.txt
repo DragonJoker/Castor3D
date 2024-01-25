@@ -25,7 +25,6 @@ set( ${PROJECT_NAME}_HDR_FILES
 	${CASTOR_SOURCE_DIR}/test/CastorUtils/CastorUtilsChangeTrackedTest.hpp
 	${CASTOR_SOURCE_DIR}/test/CastorUtils/CastorUtilsDynamicBitsetTest.hpp
 	${CASTOR_SOURCE_DIR}/test/CastorUtils/CastorUtilsMatrixTest.hpp
-	${CASTOR_SOURCE_DIR}/test/CastorUtils/CastorUtilsObjectsPoolTest.hpp
 	${CASTOR_SOURCE_DIR}/test/CastorUtils/CastorUtilsPixelBufferExtractTest.hpp
 	${CASTOR_SOURCE_DIR}/test/CastorUtils/CastorUtilsPixelFormatTest.hpp
 	${CASTOR_SOURCE_DIR}/test/CastorUtils/CastorUtilsQuaternionTest.hpp
@@ -42,8 +41,6 @@ set( ${PROJECT_NAME}_HDR_FILES
 	${CASTOR_SOURCE_DIR}/test/CastorUtils/OpenClBench.hpp
 	${CASTOR_SOURCE_DIR}/test/CastorUtils/Point.hpp
 	${CASTOR_SOURCE_DIR}/test/CastorUtils/Point.inl
-	${CASTOR_SOURCE_DIR}/test/CastorUtils/PoolTestPrerequisites.hpp
-	${CASTOR_SOURCE_DIR}/test/CastorUtils/TestObjectPool.hpp
 )
 set( ${PROJECT_NAME}_SRC_FILES
 	${CASTOR_SOURCE_DIR}/test/CastorUtils/CastorUtilsArrayViewTest.cpp
@@ -51,7 +48,6 @@ set( ${PROJECT_NAME}_SRC_FILES
 	${CASTOR_SOURCE_DIR}/test/CastorUtils/CastorUtilsChangeTrackedTest.cpp
 	${CASTOR_SOURCE_DIR}/test/CastorUtils/CastorUtilsDynamicBitsetTest.cpp
 	${CASTOR_SOURCE_DIR}/test/CastorUtils/CastorUtilsMatrixTest.cpp
-	${CASTOR_SOURCE_DIR}/test/CastorUtils/CastorUtilsObjectsPoolTest.cpp
 	${CASTOR_SOURCE_DIR}/test/CastorUtils/CastorUtilsPixelBufferExtractTest.cpp
 	${CASTOR_SOURCE_DIR}/test/CastorUtils/CastorUtilsPixelFormatTest.cpp
 	${CASTOR_SOURCE_DIR}/test/CastorUtils/CastorUtilsQuaternionTest.cpp
@@ -99,26 +95,26 @@ target_include_directories( ${PROJECT_NAME}
 		${CMAKE_BINARY_DIR}/test/CastorUtils
 )
 target_link_libraries( ${PROJECT_NAME}
-	PRIVATE
+	PUBLIC
 		castor::CastorTest
 )
 if( GLM_FOUND )
 	target_compile_definitions( ${PROJECT_NAME}
-		PRIVATE 
+		PUBLIC 
 			CASTOR_USE_GLM
 	)
 	target_link_libraries( ${PROJECT_NAME}
-		PRIVATE
+		PUBLIC
 			glm::glm
 	)
 endif()
 if( OPENCL_FOUND )
 	target_compile_definitions( ${PROJECT_NAME}
-		PRIVATE 
+		PUBLIC 
 			CASTOR_USE_OCL
 	)
 	target_link_libraries( ${PROJECT_NAME}
-		PRIVATE
+		PUBLIC
 			OpenCL::OpenCL
 	)
 endif()
@@ -141,6 +137,10 @@ set_target_properties( ${PROJECT_NAME}
 )
 add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )
 copy_target_files( ${PROJECT_NAME} "" ${CMAKE_CURRENT_SOURCE_DIR}/mtx_ope.cl )
+if ( WIN32 )
+	find_rsc_file( ${PROJECT_NAME} bin_dos )
+	target_add_manifest( ${PROJECT_NAME} )
+endif ()
 
 add_test( NAME ${PROJECT_NAME} COMMAND ${PROJECT_NAME} )
 

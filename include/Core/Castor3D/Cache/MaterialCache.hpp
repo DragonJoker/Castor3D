@@ -112,7 +112,7 @@ namespace castor
 		 *\param[in,out]	name	Le nom du shader buffer.
 		 *\param[out]		buffer	Le shader buffer.
 		 */
-		C3D_API void registerSpecificsBuffer( std::string const & name
+		C3D_API void registerSpecificsBuffer( castor::String const & name
 			, castor3d::SpecificsBuffer buffer );
 		/**
 		 *\~english
@@ -122,7 +122,7 @@ namespace castor
 		 *\brief			Désenregistre un shader buffer de données spécifiques.
 		 *\param[in,out]	name	Le nom du shader buffer.
 		 */
-		C3D_API void unregisterSpecificsBuffer( std::string const & name )noexcept;
+		C3D_API void unregisterSpecificsBuffer( castor::String const & name )noexcept;
 		/**
 		 *\~english
 		 *\brief			Addw the pass' specific data buffer into the given descriptor layout bindings array.
@@ -274,9 +274,9 @@ namespace castor
 			*	Enregistrement.
 			*/
 			/**@{*/
-			void registerBuffer( std::string const & name
+			void registerBuffer( castor::String const & name
 				, castor3d::SpecificsBuffer buffer );
-			void unregisterBuffer( std::string const & name );
+			void unregisterBuffer( castor::String const & name );
 			/**@}*/
 			/**
 			*\name
@@ -315,9 +315,9 @@ namespace castor
 		castor3d::SssProfileBufferUPtr m_sssProfileBuffer;
 		castor3d::TextureConfigurationBufferUPtr m_texConfigBuffer;
 		castor3d::TextureAnimationBufferUPtr m_texAnimBuffer;
-		std::vector< castor3d::Pass * > m_pendingPasses;
-		std::vector< castor3d::TextureUnit * > m_pendingUnits;
-		std::vector< castor3d::AnimatedTexture const * > m_pendingTextures;
+		castor::Vector< castor3d::Pass * > m_pendingPasses;
+		castor::Vector< castor3d::TextureUnit * > m_pendingUnits;
+		castor::Vector< castor3d::AnimatedTexture const * > m_pendingTextures;
 		PassDataBuffers m_specificsBuffers;
 	};
 }

@@ -43,7 +43,7 @@ namespace castortd
 		: m_node{ node }
 		, m_anim{ anim }
 		, m_cell{ cell }
-		, m_category( std::move( category ) )
+		, m_category( castor::move( category ) )
 	{
 	}
 

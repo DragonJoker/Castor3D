@@ -82,7 +82,7 @@ namespace castor3d
 	bool MaterialImporter::import( Material & material
 		, ImporterFile * file
 		, Parameters const & parameters
-		, std::map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps )
+		, castor::Map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps )
 	{
 		if ( !m_file )
 		{
@@ -97,7 +97,7 @@ namespace castor3d
 	bool MaterialImporter::import( Material & material
 		, castor::Path const & path
 		, Parameters const & parameters
-		, std::map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps )
+		, castor::Map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps )
 	{
 		auto & engine = *material.getEngine();
 		auto extension = castor::string::lowerCase( path.getExtension() );
@@ -178,8 +178,8 @@ namespace castor3d
 		, castor::ByteArray data )const
 	{
 		return loadImage( name
-			, castor::ImageCreateParams{ std::move( type )
-				, std::move( data )
+			, castor::ImageCreateParams{ castor::move( type )
+				, castor::move( data )
 				, { false, false, false } } );
 	}
 
@@ -190,7 +190,7 @@ namespace castor3d
 
 		if ( !image )
 		{
-			CU_Exception( "Couldn't find image at path [" + path + "]" );
+			CU_Exception( "Couldn't find image at path [" + castor::toUtf8( path ) + "]" );
 		}
 
 		bool allowCompression = !checkFlag( config.textureSpace, TextureSpace::eTangentSpace );
@@ -209,14 +209,14 @@ namespace castor3d
 		if ( auto image = loadImage( name, type, data );
 			!image )
 		{
-			CU_Exception( "Couldn't load image [" + name + "]" );
+			CU_Exception( "Couldn't load image [" + castor::toUtf8( name ) + "]" );
 		}
 
 		bool allowCompression = !checkFlag( config.textureSpace, TextureSpace::eTangentSpace );
-		return TextureSourceInfo{ std::move( name )
+		return TextureSourceInfo{ castor::move( name )
 			, config
-			, std::move( type )
-			, std::move( data )
+			, castor::move( type )
+			, castor::move( data )
 			, { allowCompression, true, true } };
 	}
 
@@ -245,9 +245,9 @@ namespace castor3d
 	{
 		try
 		{
-			pass.registerTexture( loadTexture( std::move( name )
-					, std::move( type )
-					, std::move( data )
+			pass.registerTexture( loadTexture( castor::move( name )
+					, castor::move( type )
+					, castor::move( data )
 					, config )
 				, passConfig );
 		}
@@ -277,7 +277,7 @@ namespace castor3d
 						, { getEngine()->getPassComponentsRegister().getHeightMapFlags()
 							, 0xFF000000 } );
 					path = image->getPath();
-					path = path.getPath() / ( "N_" + path.getFileName() + ".png" );
+					path = path.getPath() / ( cuT( "N_" ) + path.getFileName() + cuT( ".png" ) );
 					getEngine()->getImageWriter().write( path, image->getPxBuffer() );
 				}
 			}

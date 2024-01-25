@@ -239,7 +239,7 @@ namespace castor3d
 	private:
 		mutable std::atomic_bool m_locked;
 		TargetTypeArray m_renderTargets;
-		mutable std::mutex m_mutex;
+		mutable castor::Mutex m_mutex;
 		ToneMappingFactory m_toneMappingFactory;
 		PostEffectFactory m_postEffectFactory;
 		castor::StrStrMap m_toneMappings;

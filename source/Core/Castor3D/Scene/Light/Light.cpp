@@ -19,7 +19,7 @@ namespace castor3d
 		, LightType lightType )
 		: MovableObject{ name, scene, MovableType::eLight, node }
 	{
-		m_category = factory.create( lightType, std::ref( *this ) );
+		m_category = factory.create( lightType, castor::ref( *this ) );
 	}
 
 	void Light::update( CpuUpdater & /*updater*/ )

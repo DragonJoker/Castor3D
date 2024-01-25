@@ -31,7 +31,7 @@ namespace castor3d
 	{
 		bool result = true;
 		castor::String name;
-		std::vector< VertexBoneData > bones;
+		castor::Vector< VertexBoneData > bones;
 		uint32_t count{ 0u };
 		uint32_t boneCount{ 0u };
 		BinaryChunk chunk{ doIsLittleEndian() };
@@ -42,7 +42,7 @@ namespace castor3d
 			{
 			case ChunkType::eSubmeshBoneCount:
 				result = doParseChunk( count, chunk );
-				checkError( result, "Couldn't parse bone count." );
+				checkError( result, cuT( "Couldn't parse bone count." ) );
 
 				if ( result )
 				{
@@ -54,7 +54,7 @@ namespace castor3d
 
 			case ChunkType::eSubmeshBones:
 				result = doParseChunk( bones, chunk );
-				checkError( result, "Couldn't parse bones data." );
+				checkError( result, cuT( "Couldn't parse bones data." ) );
 
 				if ( result && boneCount > 0 )
 				{

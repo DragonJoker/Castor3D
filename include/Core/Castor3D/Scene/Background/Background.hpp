@@ -456,7 +456,7 @@ namespace castor3d
 		Texture m_textureId;
 		TextureLayoutUPtr m_texture;
 		SamplerObs m_sampler{};
-		std::unique_ptr< IblTextures > m_ibl;
+		castor::RawUniquePtr< IblTextures > m_ibl;
 		bool m_hasIBLSupport;
 		bool m_visible{ true };
 		uint32_t m_passIndex{ 0u };

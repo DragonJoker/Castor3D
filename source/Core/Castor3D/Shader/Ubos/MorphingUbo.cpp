@@ -12,7 +12,7 @@ namespace castor3d
 		MorphTargetData::MorphTargetData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstance{ writer, std::move( expr ), enabled }
+			: StructInstance{ writer, castor::move( expr ), enabled }
 			, morphPosition{ this->getMember< sdw::Vec4 >( "morphPosition", true ) }
 			, morphNormal{ this->getMember< sdw::Vec4 >( "morphNormal", true ) }
 			, morphTangent{ this->getMember< sdw::Vec4 >( "morphTangent", true ) }
@@ -169,7 +169,7 @@ namespace castor3d
 		MorphTargetsData::MorphTargetsData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstance{ writer, std::move( expr ), enabled }
+			: StructInstance{ writer, castor::move( expr ), enabled }
 			, m_data{ getMemberArray< MorphTargetData >( "targets" ) }
 		{
 		}
@@ -195,7 +195,7 @@ namespace castor3d
 		MorphingWeightsData::MorphingWeightsData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstance{ writer, std::move( expr ), enabled }
+			: StructInstance{ writer, castor::move( expr ), enabled }
 			, m_limits{ getMember< sdw::UVec4 >( "limits" ) }
 			, m_indices{ getMemberArray< sdw::UVec4 >( "indices" ) }
 			, m_weights{ getMemberArray< sdw::Vec4 >( "weights" ) }

@@ -45,7 +45,7 @@ namespace ocean_fft
 					, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
 					, VK_SHADER_STAGE_COMPUTE_BIT ) };
 			return device->createDescriptorSetLayout( BakeHeightGradientPass::Name 
-				, std::move( bindings ) );
+				, castor::move( bindings ) );
 		}
 
 		static ashes::DescriptorSetPtr createDescriptorSet( crg::RunnableGraph & graph
@@ -228,7 +228,7 @@ namespace ocean_fft
 
 	//************************************************************************************************
 
-	castor::String const BakeHeightGradientPass::Name{ "BakeHeightGradient" };
+	castor::MbString const BakeHeightGradientPass::Name{ "BakeHeightGradient" };
 
 	BakeHeightGradientPass::BakeHeightGradientPass( crg::FramePass const & pass
 		, crg::GraphContext & context
@@ -251,7 +251,7 @@ namespace ocean_fft
 		, m_device{ device }
 		, m_descriptorSetLayout{ bakehg::createDescriptorLayout( m_device ) }
 		, m_pipelineLayout{ bakehg::createPipelineLayout( m_device, *m_descriptorSetLayout ) }
-		, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, Name, bakehg::createShader( device ) }
+		, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, castor::makeString( Name ), bakehg::createShader( device ) }
 		, m_pipeline{ bakehg::createPipeline( device, *m_pipelineLayout, m_shader ) }
 		, m_descriptorSetPool{ m_descriptorSetLayout->createPool( 1u ) }
 		, m_descriptorSet{ bakehg::createDescriptorSet( m_graph, *m_descriptorSetPool, m_pass ) }
@@ -325,15 +325,15 @@ namespace ocean_fft
 		, OceanUbo const & ubo
 		, ashes::BufferBase const & height
 		, ashes::BufferBase const & displacement
-		, std::array< castor3d::Texture, 2u > const & heightDisp
-		, std::array< castor3d::Texture, 2u > const & gradJacob )
+		, castor::Array< castor3d::Texture, 2u > const & heightDisp
+		, castor::Array< castor3d::Texture, 2u > const & gradJacob )
 	{
 		auto & result = graph.createPass( "BakeHeightGradient"
 			, [&device, extent, heightMapSize, displacementDownsample]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
-				auto res = std::make_unique< BakeHeightGradientPass >( framePass
+				auto res = castor::make_unique< BakeHeightGradientPass >( framePass
 					, context
 					, runnableGraph
 					, device
@@ -341,7 +341,7 @@ namespace ocean_fft
 					, heightMapSize
 					, displacementDownsample
 					, crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
-				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );

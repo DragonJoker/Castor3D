@@ -30,7 +30,7 @@ namespace castor
 	\~french
 	\brief		Textes des erreurs d'unicité
 	*/
-	static std::array< StringView, size_t( UnicityError::eCount ) > const STR_UNICITY_ERROR
+	static Array< MbStringView, size_t( UnicityError::eCount ) > const STR_UNICITY_ERROR
 	{
 		"No instance for Unique class ",
 		"Duplicate instance for Unique class ",
@@ -41,14 +41,14 @@ namespace castor
 	{
 	public:
 		UnicityException( UnicityError error
-			, std::string const & description
+			, MbString const & description
 			, char const * file
 			, char const * function
 			, uint32_t line )
-			: Exception( String{ STR_UNICITY_ERROR[uint32_t( error )] } + description
+			: Exception{ MbString{ STR_UNICITY_ERROR[uint32_t( error )] } + description
 				, file
 				, function
-				, line )
+				, line }
 		{
 		}
 	};

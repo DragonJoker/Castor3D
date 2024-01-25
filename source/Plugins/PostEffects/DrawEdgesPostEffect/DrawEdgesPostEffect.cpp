@@ -162,8 +162,8 @@ namespace draw_edges
 
 	//*********************************************************************************************
 
+	const castor::MbString PostEffect::Name = "Draw Edges PostEffect";
 	const castor::String PostEffect::Type = cuT( "draw_edges" );
-	const castor::String PostEffect::Name = cuT( "Draw Edges PostEffect" );
 	const castor::String PostEffect::NormalDepthWidth = cuT( "normalDepthWidth" );
 	const castor::String PostEffect::ObjectWidth = cuT( "objectWidth" );
 
@@ -171,13 +171,13 @@ namespace draw_edges
 		, castor3d::RenderSystem & renderSystem
 		, castor3d::Parameters const & parameters )
 		: castor3d::PostEffect{ PostEffect::Type
-			, "DrawEdges"
-			, PostEffect::Name
+			, cuT( "DrawEdges" )
+			, castor::makeString( PostEffect::Name )
 			, renderTarget
 			, renderSystem
 			, parameters
 			, 1u }
-		, m_shader{ "DECombine", px::getProgram( *renderTarget.getEngine()
+		, m_shader{ cuT( "DECombine" ), px::getProgram( *renderTarget.getEngine()
 			, castor3d::getSafeBandedExtent3D( m_renderTarget.getSize() ) ) }
 		, m_stages{ makeProgramStates( renderSystem.getRenderDevice(), m_shader ) }
 		, m_ubo{ renderSystem.getRenderDevice() }
@@ -245,7 +245,7 @@ namespace draw_edges
 		auto & depthRange = technique.getDepthRange();
 		auto previous = &previousPass;
 
-		m_depthNormal = std::make_unique< DepthNormalEdgeDetection >( m_graph
+		m_depthNormal = castor::make_unique< DepthNormalEdgeDetection >( m_graph
 			, crg::FramePassArray{ previous, &m_renderTarget.getTechnique().getDepthRangePass() }
 			, m_renderTarget
 			, device
@@ -254,7 +254,7 @@ namespace draw_edges
 			, nmlOcc
 			, depthRange
 			, &isEnabled() );
-		m_objectID = std::make_unique< ObjectIDEdgeDetection >( m_graph
+		m_objectID = castor::make_unique< ObjectIDEdgeDetection >( m_graph
 			, *previous
 			, m_renderTarget
 			, device
@@ -280,7 +280,7 @@ namespace draw_edges
 						, context
 						, graph
 						, crg::ru::Config{ 2u } );
-				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );

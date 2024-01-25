@@ -119,7 +119,7 @@ namespace castor3d
 		 *\param[in]	position	The position to check for.
 		 *\return		One bool per direction.
 		 */
-		C3D_API std::array< bool, 4u > isInResizeRange( castor::Position const & position )const;
+		C3D_API castor::Array< bool, 4u > isInResizeRange( castor::Position const & position )const;
 
 		/** Adds a flag.
 		 */
@@ -221,7 +221,7 @@ namespace castor3d
 			return *m_style;
 		}
 
-		std::vector< ControlRPtr > const & getChildren()const noexcept
+		castor::Vector< ControlRPtr > const & getChildren()const noexcept
 		{
 			return m_children;
 		}
@@ -349,8 +349,8 @@ namespace castor3d
 
 	private:
 		void updateZIndex( uint32_t & index
-			, std::vector< Control * > & controls
-			, std::vector< Control * > & topControls );
+			, castor::Vector< Control * > & controls
+			, castor::Vector< Control * > & topControls );
 		void adjustZIndex( uint32_t offset );
 
 		/** Event when mouse enters the control
@@ -611,8 +611,8 @@ namespace castor3d
 		castor::Size m_size{};
 		castor::Point4ui m_borders{};
 		BorderPanelOverlayRPtr m_background{};
-		mutable std::mutex m_mutexChildren;
-		std::vector< ControlRPtr > m_children{};
+		mutable castor::Mutex m_mutexChildren;
+		castor::Vector< ControlRPtr > m_children{};
 		ControlsManagerRPtr m_ctrlManager{};
 		bool m_moving{};
 		bool m_resizingN{};

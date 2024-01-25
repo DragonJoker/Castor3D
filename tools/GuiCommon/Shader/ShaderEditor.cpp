@@ -100,7 +100,7 @@ namespace GuiCommon
 			, spirv_cross::CompilerGLSL & compiler )
 		{
 			auto model = getExecutionModel( stage );
-			std::string entryPoint;
+			castor::MbString entryPoint;
 
 			for ( auto & e : compiler.get_entry_points_and_stages() )
 			{
@@ -132,12 +132,12 @@ namespace GuiCommon
 			compiler.set_common_options( options );
 		}
 
-		static std::string compileSpvToGlsl( castor3d::RenderDevice const & device
+		static castor::MbString compileSpvToGlsl( castor3d::RenderDevice const & device
 			, ashes::UInt32Array const & spv
 			, VkShaderStageFlagBits stage )
 		{
 			BlockLocale guard;
-			auto compiler = std::make_unique< spirv_cross::CompilerGLSL >( spv );
+			auto compiler = castor::make_unique< spirv_cross::CompilerGLSL >( spv );
 			doSetEntryPoint( stage, *compiler );
 			doSetupOptions( device, *compiler );
 			return compiler->compile();
@@ -223,7 +223,7 @@ namespace GuiCommon
 		, bool canEdit
 		, StcContext & stcContext
 		, ShaderEntryPoint const & shader
-		, std::vector< UniformBufferValues > & ubos
+		, castor::Vector< UniformBufferValues > & ubos
 		, ShaderLanguage language
 		, wxWindow * parent
 		, wxPoint const & position
@@ -449,7 +449,7 @@ namespace GuiCommon
 
 		if ( auto glslIndex = m_shader.source.text.find( '#' );
 			glslIndex == 0u
-				&& spirvIndex != std::string::npos
+				&& spirvIndex != castor::MbString::npos
 				&& spirvIndex > glslIndex )
 		{
 #if GC_HasGLSL

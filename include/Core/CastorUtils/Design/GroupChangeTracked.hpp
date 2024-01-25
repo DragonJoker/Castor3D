@@ -18,17 +18,17 @@ namespace castor
 
 	public:
 		explicit GroupChangeTrackedT( ControlT & dirty
-			, std::function< void() > callback = {} )noexcept
+			, castor::Function< void() > callback = {} )noexcept
 			: m_value{}
 			, m_dirty{ dirty }
-			, m_callback{ std::move( callback ) }
+			, m_callback{ castor::move( callback ) }
 		{
 		}
 
 		GroupChangeTrackedT( GroupChangeTrackedT && rhs )noexcept
-			: m_value{ std::move( rhs.m_value ) }
+			: m_value{ castor::move( rhs.m_value ) }
 			, m_dirty{ rhs.m_dirty }
-			, m_callback{ std::move( rhs.m_callback ) }
+			, m_callback{ castor::move( rhs.m_callback ) }
 		{
 		}
 
@@ -41,10 +41,10 @@ namespace castor
 
 		GroupChangeTrackedT( ControlT & dirty
 			, ValueT rhs
-			, std::function< void() > callback = {} )noexcept
-			: m_value{ std::move( rhs ) }
+			, castor::Function< void() > callback = {} )noexcept
+			: m_value{ castor::move( rhs ) }
 			, m_dirty{ dirty }
-			, m_callback{ std::move( callback ) }
+			, m_callback{ castor::move( callback ) }
 		{
 		}
 
@@ -67,7 +67,7 @@ namespace castor
 		GroupChangeTrackedT & operator=( GroupChangeTrackedT && rhs )noexcept
 		{
 			this->doCopy( m_dirty, rhs.m_dirty );
-			m_value = std::move( rhs.m_value );
+			m_value = castor::move( rhs.m_value );
 			return *this;
 		}
 
@@ -91,7 +91,7 @@ namespace castor
 			return m_dirty;
 		}
 
-		std::function< void() > callback()const noexcept
+		castor::Function< void() > callback()const noexcept
 		{
 			return m_callback;
 		}
@@ -170,7 +170,7 @@ namespace castor
 	private:
 		ValueT m_value;
 		ControlT & m_dirty;
-		std::function< void() > m_callback;
+		castor::Function< void() > m_callback;
 	};
 
 	template< typename ValueT, typename ControlT >

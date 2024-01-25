@@ -21,7 +21,7 @@ namespace castor3d::shader
 		C3D_API Intersection( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+			: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
 		{
 		}
 
@@ -63,7 +63,7 @@ namespace castor3d::shader
 		C3D_API Ray( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+			: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
 			, origin{ getMember< "origin" >() }
 			, direction{ getMember< "direction" >() }
 		{

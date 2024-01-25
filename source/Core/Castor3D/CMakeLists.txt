@@ -1803,7 +1803,6 @@ source_group( "Source Files\\Scene\\Animation\\Texture" FILES ${${PROJECT_NAME}_
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Background/Background.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Background/BackgroundModule.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Background/BackgroundTextWriter.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Background/Colour.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Background/Image.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Background/PipelineCreator.cpp
@@ -1813,7 +1812,6 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/Background/Background.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/Background/BackgroundModule.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/Background/BackgroundTextWriter.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/Background/Colour.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/Background/Image.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/Background/Skybox.hpp

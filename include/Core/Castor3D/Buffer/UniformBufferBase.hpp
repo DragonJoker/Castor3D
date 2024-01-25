@@ -520,7 +520,7 @@ namespace castor3d
 		uint32_t m_elemCount;
 		uint32_t m_elemSize;
 		ashes::QueueShare m_sharingMode;
-		std::set< uint32_t > m_available;
+		castor::Set< uint32_t > m_available;
 		ashes::UniformBufferPtr m_buffer;
 		castor::String m_debugName;
 		ashes::FencePtr m_transferFence;
@@ -531,7 +531,7 @@ namespace castor3d
 		, VkDeviceSize size
 		, VkBufferUsageFlags usage
 		, VkMemoryPropertyFlags flags
-		, std::string name
+		, castor::String name
 		, ashes::QueueShare sharingMode = {} )
 	{
 		return castor::makeUnique< UniformBufferBase >( renderSystem
@@ -539,8 +539,8 @@ namespace castor3d
 			, uint32_t( size )
 			, usage
 			, flags
-			, std::move( name )
-			, std::move( sharingMode ) );
+			, castor::move( name )
+			, castor::move( sharingMode ) );
 	}
 }
 

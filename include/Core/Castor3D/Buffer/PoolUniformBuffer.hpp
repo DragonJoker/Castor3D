@@ -118,7 +118,7 @@ namespace castor3d
 		DataT const & getData( VkDeviceSize offset )const noexcept
 		{
 			using DataCPtr = DataT const *;
-			return *DataCPtr( m_data.data() + offset );
+			return *reinterpret_cast< DataCPtr >( m_data.data() + offset );
 		}
 		/**
 		*\~english
@@ -136,7 +136,7 @@ namespace castor3d
 		DataT & getData( VkDeviceSize offset )noexcept
 		{
 			using DataPtr = DataT *;
-			return *DataPtr( m_data.data() + offset );
+			return *reinterpret_cast< DataPtr >( m_data.data() + offset );
 		}
 		/**
 		*\~english
@@ -248,7 +248,7 @@ namespace castor3d
 		VkBufferUsageFlags m_usage;
 		VkMemoryPropertyFlags m_flags;
 		ashes::QueueShare m_sharingMode;
-		std::set< MemChunk > m_allocated;
+		castor::Set< MemChunk > m_allocated;
 		ashes::UniformBufferPtr m_buffer;
 		castor::String m_debugName;
 		castor::ByteArrayView m_data;
@@ -257,14 +257,14 @@ namespace castor3d
 	inline PoolUniformBufferUPtr makePoolUniformBuffer( RenderSystem const & renderSystem
 		, VkBufferUsageFlags usage
 		, VkMemoryPropertyFlags flags
-		, std::string name
+		, castor::String name
 		, ashes::QueueShare sharingMode = {} )
 	{
 		return castor::makeUnique< PoolUniformBuffer >( renderSystem
 			, usage
 			, flags
-			, std::move( name )
-			, std::move( sharingMode ) );
+			, castor::move( name )
+			, castor::move( sharingMode ) );
 	}
 }
 

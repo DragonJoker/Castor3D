@@ -8,7 +8,7 @@ namespace diamond_square_terrain
 		, uint32_t size
 		, Matrix & heightMap )
 	{
-		std::function< void( uint32_t, uint32_t, uint32_t, uint32_t, float, uint32_t ) > divide = [&heightMap
+		castor::Function< void( uint32_t, uint32_t, uint32_t, uint32_t, float, uint32_t ) > divide = [&heightMap
 			, &engine
 			, &divide]( uint32_t x1
 				, uint32_t y1

@@ -43,7 +43,7 @@
 
 namespace castor3d
 {
-	castor::String const ShadowMapPassDirectional::Type = "c3d.shadows.directional";
+	castor::String const ShadowMapPassDirectional::Type = cuT( "c3d.shadows.directional" );
 
 	ShadowMapPassDirectional::ShadowMapPassDirectional( crg::FramePass const & pass
 		, crg::GraphContext & context

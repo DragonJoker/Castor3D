@@ -36,7 +36,7 @@ namespace castor3d
 		static ashes::PipelineShaderStageCreateInfoArray doCreateProgram( RenderDevice const & device )
 		{
 			auto & engine = *device.renderSystem.getEngine();
-			ProgramModule programModule{ "EquirectangularToCube" };
+			ProgramModule programModule{ cuT( "EquirectangularToCube" ) };
 			{
 				sdw::TraditionalGraphicsWriter writer{ &engine.getShaderAllocator() };
 
@@ -129,12 +129,12 @@ namespace castor3d
 			ashes::RenderPassCreateInfo createInfo
 			{
 				0u,
-				std::move( attaches ),
-				std::move( subpasses ),
-				std::move( dependencies ),
+				castor::move( attaches ),
+				castor::move( subpasses ),
+				castor::move( dependencies ),
 			};
 			return device->createRenderPass( "EquirectangularToCube"
-				, std::move( createInfo ) );
+				, castor::move( createInfo ) );
 		}
 	}
 
@@ -155,7 +155,7 @@ namespace castor3d
 		for ( auto & facePipeline : m_frameBuffers )
 		{
 			ashes::ImageViewCRefArray attaches;
-			facePipeline.view = target.getTexture().createView( "EquirectangularToCube" + castor::string::toString( face )
+			facePipeline.view = target.getTexture().createView( "EquirectangularToCube" + castor::string::toMbString( face )
 				, VK_IMAGE_VIEW_TYPE_2D
 				, target.getPixelFormat()
 				, 0u
@@ -165,7 +165,7 @@ namespace castor3d
 			attaches.emplace_back( facePipeline.view );
 			facePipeline.frameBuffer = m_renderPass->createFrameBuffer( "EquirectangularToCube"
 				, size
-				, std::move( attaches ) );
+				, castor::move( attaches ) );
 			++face;
 		}
 

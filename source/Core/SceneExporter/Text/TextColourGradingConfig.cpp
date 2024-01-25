@@ -17,7 +17,7 @@ namespace castor
 		bool result{ false };
 		log::info << tabs() << cuT( "Writing ColourGradingConfig" ) << std::endl;
 
-		if ( auto block{ beginBlock( file, "colour_grading" ) } )
+		if ( auto block{ beginBlock( file, cuT( "colour_grading" ) ) } )
 		{
 			result = writeOpt( file, cuT( "enabled" ), object.enabled, true )
 				&& writeOpt( file, cuT( "post_exposure" ), object.postExposure, 1.0f )

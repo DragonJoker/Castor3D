@@ -79,14 +79,13 @@ namespace water::shader
 		WaterProfile( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+			: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
 		{
 		}
 
-		static std::string const & getName()
+		static castor::StringView constexpr getName()noexcept
 		{
-			static std::string const name{ "WaterProfile" };
-			return name;
+			return cuT( "WaterProfile" );
 		}
 
 	public:

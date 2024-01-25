@@ -46,11 +46,11 @@ namespace castor3d
 			, Parameters const & parameters )override;
 
 	private:
-		Pattern< castor::Point3f > m_pattern{};
-		castor::Point3f m_axis{};
-		float m_depth{};
-		bool m_closed{};
-		uint32_t m_nbFaces{};
+		//Pattern< castor::Point3f > m_pattern{};
+		//castor::Point3f m_axis{};
+		//float m_depth{};
+		//bool m_closed{};
+		//uint32_t m_nbFaces{};
 	};
 }
 

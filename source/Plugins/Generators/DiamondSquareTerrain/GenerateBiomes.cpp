@@ -72,11 +72,11 @@ namespace diamond_square_terrain
 			return result;
 		}
 
-		static std::map< uint32_t, float > getPassWeights( float steepness
+		static castor::Map< uint32_t, float > getPassWeights( float steepness
 			, Biome const & biome )
 		{
 			auto & steepnessRange = findBlendRange( steepness, biome.steepnessRanges );
-			std::map< uint32_t, float > result{};
+			castor::Map< uint32_t, float > result{};
 
 			if ( steepnessRange.beginIndex == steepnessRange.endIndex )
 			{
@@ -92,11 +92,11 @@ namespace diamond_square_terrain
 			return result;
 		}
 
-		static std::map< uint32_t, float > mergeWeights( std::map< uint32_t, float > const & lhs
-			, std::map< uint32_t, float > const & rhs
+		static castor::Map< uint32_t, float > mergeWeights( castor::Map< uint32_t, float > const & lhs
+			, castor::Map< uint32_t, float > const & rhs
 			, float weight )
 		{
-			std::map< uint32_t, float > result;
+			castor::Map< uint32_t, float > result;
 
 			for ( auto & pair : lhs )
 			{
@@ -111,13 +111,13 @@ namespace diamond_square_terrain
 			return result;
 		}
 
-		static std::map< uint32_t, float > getPassWeights( float height
+		static castor::Map< uint32_t, float > getPassWeights( float height
 			, float steepness
 			, BlendRanges const & ranges
 			, Biomes const & biomes )
 		{
 			auto & heightRange = findBlendRange( height, ranges );
-			std::map< uint32_t, float > result;
+			castor::Map< uint32_t, float > result;
 
 			if ( heightRange.beginIndex == heightRange.endIndex )
 			{
@@ -205,7 +205,7 @@ namespace diamond_square_terrain
 		, Matrix const & heightMap
 		, Biomes biomes
 		, castor3d::FaceArray const & faces
-		, std::map< uint32_t, uint32_t > const & vertexMap
+		, castor::Map< uint32_t, uint32_t > const & vertexMap
 		, castor3d::SubmeshAnimationBuffer & submesh )
 	{
 		bool areMaterial = !biomes.empty();
@@ -245,10 +245,10 @@ namespace diamond_square_terrain
 				grassLow = 0.27f;
 				forestLow = 0.6f;
 				snowLow = 0.85f;
-				biomes.push_back( { "Sea"
+				biomes.push_back( { cuT( "Sea" )
 					, { 0.0f, 0.2f }
 					, { sandSea, sandSeaDirt, rockSea } } );
-				biomes.push_back( { "Sand"
+				biomes.push_back( { cuT( "Sand" )
 					, { 0.2f, grassLow }
 					, { sand, sandDirt, rock } } );
 			}
@@ -273,13 +273,13 @@ namespace diamond_square_terrain
 				, false
 				, {}
 				, { 80.0 / 255.0, 40.0 / 255.0, 16.0 / 255.0 } };
-			biomes.push_back( { "Grass"
+			biomes.push_back( { cuT( "Grass" )
 				, { grassLow, forestLow }
 				, { grass, dirt, rock } } );
-			biomes.push_back( { "Forest"
+			biomes.push_back( { cuT( "Forest" )
 				, { forestLow, snowLow }
 				, { forest, darkDirt, rock } } );
-			biomes.push_back( { "Snow"
+			biomes.push_back( { cuT( "Snow" )
 				, { snowLow, 1.0f }
 				, { snow, snow, rock } } );
 		}

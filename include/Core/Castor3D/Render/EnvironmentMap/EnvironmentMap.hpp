@@ -29,7 +29,7 @@ namespace castor3d
 		: public castor::OwnedBy< Engine >
 	{
 	public:
-		using EnvironmentMapPasses = std::array< EnvironmentMapPassUPtr, size_t( CubeMapFace::eCount ) >;
+		using EnvironmentMapPasses = castor::Array< EnvironmentMapPassUPtr, size_t( CubeMapFace::eCount ) >;
 
 	public:
 		/**

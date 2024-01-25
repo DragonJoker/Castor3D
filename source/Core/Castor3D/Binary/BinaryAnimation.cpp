@@ -57,7 +57,7 @@ namespace castor3d
 			{
 			case ChunkType::eName:
 				result = doParseChunk( name, chunk );
-				checkError( result, "Couldn't parse name." );
+				checkError( result, cuT( "Couldn't parse name." ) );
 
 				if ( result )
 				{
@@ -68,7 +68,7 @@ namespace castor3d
 
 			case ChunkType::eAnimLength:
 				result = doParseChunk( length, chunk );
-				checkError( result, "Couldn't parse length." );
+				checkError( result, cuT( "Couldn't parse length." ) );
 				obj.m_length = castor::Milliseconds( uint64_t( length ) * 1000u );
 				break;
 

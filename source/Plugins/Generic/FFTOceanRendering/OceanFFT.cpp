@@ -30,19 +30,19 @@ namespace ocean_fft
 			, crg::FramePass const * previousPass
 			, crg::ImageViewId imageView )
 		{
-			auto & result = graph.createPass( "GenMips" + name
+			auto & result = graph.createPass( "GenMips" + castor::toUtf8( name )
 				, [&device]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{
-						auto res = std::make_unique< crg::GenerateMipmaps >( framePass
+						auto res = castor::make_unique< crg::GenerateMipmaps >( framePass
 							, context
 							, graph
 							, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 							, crg::ru::Config{}
 							, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
 							, crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
-						device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+						device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 							, res->getTimer() );
 						return res;
 				} );
@@ -57,19 +57,19 @@ namespace ocean_fft
 			, crg::FramePass const * previousPass
 			, crg::ImageViewId imageView )
 		{
-			auto & result = graph.createPass( "GenMips" + name
+			auto & result = graph.createPass( "GenMips" + castor::toUtf8( name )
 				, [&device]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{
-						auto res = std::make_unique< GenerateMipmapsPass >( framePass
+						auto res = castor::make_unique< GenerateMipmapsPass >( framePass
 							, context
 							, graph
 							, device
 							, crg::ru::Config{}
 							, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
 							, crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
-						device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+						device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 							, res->getTimer() );
 						return res;
 				} );
@@ -86,17 +86,18 @@ namespace ocean_fft
 			, ashes::BufferBase const & srcBuffer
 			, crg::ImageViewId dstImageView )
 		{
+			auto mbName = castor::toUtf8( name );
 			auto data = *dstImageView.data;
 			data.name = data.image.data->name + "_L0";
 			data.info.subresourceRange.levelCount = 1u;
 			auto viewId = graph.createView( data );
 			auto extent = getExtent( viewId );
-			auto & copy = graph.createPass( "CopyTo" + name
+			auto & copy = graph.createPass( "CopyTo" + mbName
 				, [&device, extent]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{
-					auto res = std::make_unique< crg::BufferToImageCopy >( framePass
+					auto res = castor::make_unique< crg::BufferToImageCopy >( framePass
 						, context
 						, graph
 						, VkOffset3D{}
@@ -104,27 +105,27 @@ namespace ocean_fft
 						, crg::ru::Config{}
 						, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
 						, crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
-					device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+					device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 						, res->getTimer() );
 					return res;
 				} );
 			copy.addDependency( previousPass );
-			copy.addInputStorageBuffer( { srcBuffer, name + "FFTResult" }, 0u, 0u, ashes::WholeSize );
+			copy.addInputStorageBuffer( { srcBuffer, mbName + "FFTResult" }, 0u, 0u, ashes::WholeSize );
 			copy.addTransferOutputView( dstImageView );
 
-			auto & result = graph.createPass( "GenMips" + name
+			auto & result = graph.createPass( "GenMips" + mbName
 				, [&device]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{
-						auto res = std::make_unique< crg::GenerateMipmaps >( framePass
+						auto res = castor::make_unique< crg::GenerateMipmaps >( framePass
 							, context
 							, graph
 							, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 							, crg::ru::Config{}
 							, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
 							, crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
-						device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+						device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 							, res->getTimer() );
 						return res;
 				} );
@@ -136,7 +137,7 @@ namespace ocean_fft
 		castor3d::Texture createTexture( castor3d::RenderDevice const & device
 			, crg::ResourcesCache & resources
 			, VkExtent2D heightMapSamples
-			, std::string const & name
+			, castor::String const & name
 			, VkFormat format
 			, VkSamplerMipmapMode mipMode )
 		{
@@ -194,14 +195,14 @@ namespace ocean_fft
 			, m_heightMapSamples.width * m_heightMapSamples.height
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-			, Name + "HeightSeeds" ) }
+			, Name + cuT( "HeightSeeds" ) ) }
 		, m_heightDistribution{ castor3d::makeBuffer< cfloat >( device
 			, m_heightMapSamples.width * m_heightMapSamples.height
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-			, Name + "HeightDistribution" ) }
+			, Name + cuT( "HeightDistribution" ) ) }
 		, m_generateHeightDistribution{ &createGenerateDistributionPass( Name
-			, "Height"
+			, cuT( "Height" )
 			, device
 			, m_group
 			, previousPasses
@@ -211,7 +212,7 @@ namespace ocean_fft
 			, m_heightSeeds->getBuffer()
 			, m_heightDistribution->getBuffer() ) }
 		, m_height{ Name
-			, "Height"
+			, cuT( "Height" )
 			, m_group
 			, { m_generateHeightDistribution }
 			, ubo
@@ -223,9 +224,9 @@ namespace ocean_fft
 			, ( m_heightMapSamples.width >> m_displacementDownsample ) * ( m_heightMapSamples.height >> m_displacementDownsample )
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-			, Name + "NormalsDistribution" ) }
+			, Name + cuT( "NormalsDistribution" ) ) }
 		, m_generateDisplacementDistribution{ &createDownsampleDistributionPass( Name
-			, "Displacement"
+			, cuT( "Displacement" )
 			, device
 			, m_group
 			, { m_generateHeightDistribution }
@@ -235,7 +236,7 @@ namespace ocean_fft
 			, m_heightDistribution->getBuffer()
 			, m_displacementDistribution->getBuffer() ) }
 		, m_displacement{ Name
-			, "Displacement"
+			, cuT( "Displacement" )
 			, m_group
 			, { m_generateDisplacementDistribution }
 			, ubo
@@ -246,25 +247,25 @@ namespace ocean_fft
 		, m_heightDisplacement{ createTexture( device
 				, resources
 				, m_heightMapSamples
-				, "OceanFFTHeightDisplacement0"
+				, cuT( "OceanFFTHeightDisplacement0" )
 				, VK_FORMAT_R16G16B16A16_SFLOAT
 				, VK_SAMPLER_MIPMAP_MODE_NEAREST )
 			, createTexture( device
 				, resources
 				, m_heightMapSamples
-				, "OceanFFTHeightDisplacement1"
+				, cuT( "OceanFFTHeightDisplacement1" )
 				, VK_FORMAT_R16G16B16A16_SFLOAT
 				, VK_SAMPLER_MIPMAP_MODE_NEAREST ) }
 		, m_gradientJacobian{ createTexture( device
 				, resources
 				, m_heightMapSamples
-				, "OceanFFTGradientJacobian0"
+				, cuT( "OceanFFTGradientJacobian0" )
 				, VK_FORMAT_R16G16B16A16_SFLOAT
 				, VK_SAMPLER_MIPMAP_MODE_LINEAR )
 			, createTexture( device
 				, resources
 				, m_heightMapSamples
-				, "OceanFFTGradientJacobian1"
+				, cuT( "OceanFFTGradientJacobian1" )
 				, VK_FORMAT_R16G16B16A16_SFLOAT
 				, VK_SAMPLER_MIPMAP_MODE_LINEAR ) }
 		, m_bakeHeightGradient{ &createBakeHeightGradientPass( m_fftConfig.device
@@ -278,12 +279,12 @@ namespace ocean_fft
 			, m_displacement.getResult()
 			, m_heightDisplacement
 			, m_gradientJacobian ) }
-		, m_generateHeightDispMips{ &createGenerateSpecMipmapsPass( "HeightDisplacement"
+		, m_generateHeightDispMips{ &createGenerateSpecMipmapsPass( cuT( "HeightDisplacement" )
 			, device
 			, m_group
 			, m_bakeHeightGradient
 			, m_heightDisplacement.front().sampledViewId ) }
-		, m_generateGradJacobMips{ &createGenerateMipmapsPass( "GradientJacobian"
+		, m_generateGradJacobMips{ &createGenerateMipmapsPass( cuT( "GradientJacobian" )
 			, device
 			, m_group
 			, m_bakeHeightGradient
@@ -292,14 +293,14 @@ namespace ocean_fft
 			, m_heightMapSamples.width * m_heightMapSamples.height
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-			, Name + "NormalsSeeds" ) }
+			, Name + cuT( "NormalsSeeds" ) ) }
 		, m_normalDistribution{ castor3d::makeBuffer< cfloat >( device
 			, m_heightMapSamples.width * m_heightMapSamples.height
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-			, Name + "NormalsDistribution" ) }
+			, Name + cuT( "NormalsDistribution" ) ) }
 		, m_generateNormalDistribution{ &createGenerateDistributionPass( Name
-			, "Normals"
+			, cuT( "Normals" )
 			, device
 			, m_group
 			, previousPasses
@@ -309,7 +310,7 @@ namespace ocean_fft
 			, m_normalSeeds->getBuffer()
 			, m_normalDistribution->getBuffer() ) }
 		, m_normal{ Name
-			, "Normals"
+			, cuT( "Normals" )
 			, m_group
 			, { m_generateNormalDistribution }
 			, ubo
@@ -320,10 +321,10 @@ namespace ocean_fft
 		, m_normals{ createTexture( device
 			, resources
 			, m_heightMapSamples
-			, "OceanFFTNormals"
+			, cuT( "OceanFFTNormals" )
 			, VK_FORMAT_R32G32_SFLOAT
 			, VK_SAMPLER_MIPMAP_MODE_LINEAR ) }
-		, m_generateNormalsMips{ &createCopyAndGenerateMipmapsPass( "Normals"
+		, m_generateNormalsMips{ &createCopyAndGenerateMipmapsPass( cuT( "Normals" )
 			, device
 			, m_group
 			, m_normal.getLastPass()
@@ -376,7 +377,7 @@ namespace ocean_fft
 	{
 		auto Nx = int32_t( m_heightMapSamples.width );
 		auto Nz = int32_t( m_heightMapSamples.height );
-		std::vector< cfloat > distribution;
+		castor::Vector< cfloat > distribution;
 		distribution.resize( distribBuffer.getCount() );
 
 		for ( int32_t z = 0; z < Nz; z++ )
@@ -390,7 +391,7 @@ namespace ocean_fft
 			auto queueData = m_device.graphicsData();
 			castor3d::InstantDirectUploadData uploader{ *queueData->queue
 				, m_device
-				, "OceanFFTDistributionSeeds"
+				, cuT( "OceanFFTDistributionSeeds" )
 				, *queueData->commandPool};
 			uploader->pushUpload( distribution.data()
 				, distribution.size() * sizeof( cfloat )

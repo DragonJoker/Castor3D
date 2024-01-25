@@ -47,7 +47,7 @@ namespace ocean_fft
 		{
 			castor3d::MeshRPtr mesh{};
 			OceanFFTConfig fftConfig{};
-			std::vector< castor3d::MaterialObs > materials;
+			castor::Vector< castor3d::MaterialObs > materials;
 		};
 
 		enum class FFTWavesSection
@@ -60,7 +60,7 @@ namespace ocean_fft
 		{
 			if ( !blockContext->mesh )
 			{
-				CU_ParsingError( "Mesh not initialised" );
+				CU_ParsingError( cuT( "Mesh not initialised" ) );
 			}
 			else
 			{
@@ -73,7 +73,7 @@ namespace ocean_fft
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -86,7 +86,7 @@ namespace ocean_fft
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -99,7 +99,7 @@ namespace ocean_fft
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -112,7 +112,7 @@ namespace ocean_fft
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -125,7 +125,7 @@ namespace ocean_fft
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -138,7 +138,7 @@ namespace ocean_fft
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -151,7 +151,7 @@ namespace ocean_fft
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -164,7 +164,7 @@ namespace ocean_fft
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -177,7 +177,7 @@ namespace ocean_fft
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -190,7 +190,7 @@ namespace ocean_fft
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -203,7 +203,7 @@ namespace ocean_fft
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -214,23 +214,23 @@ namespace ocean_fft
 
 		static CU_ImplementAttributeParserBlock( parserFftWavesComponentEnd, OceanContext )
 		{
-			auto & factory = blockContext->mesh->getOwner()->getMeshFactory();
+			auto const & factory = blockContext->mesh->getOwner()->getMeshFactory();
 			castor3d::Parameters parameters;
-			parameters.add( "width_subdiv"
+			parameters.add( cuT( "width_subdiv" )
 				, castor::string::toString( blockContext->fftConfig.blocksCount->x - 1u ) );
-			parameters.add( "depth_subdiv"
+			parameters.add( cuT( "depth_subdiv" )
 				, castor::string::toString( blockContext->fftConfig.blocksCount->y - 1u ) );
-			parameters.add( "width"
+			parameters.add( cuT( "width" )
 				, castor::string::toString( float( blockContext->fftConfig.blocksCount->x ) * blockContext->fftConfig.patchSize->x ) );
-			parameters.add( "depth"
+			parameters.add( cuT( "depth" )
 				, castor::string::toString( float( blockContext->fftConfig.blocksCount->y ) * blockContext->fftConfig.patchSize->y ) );
 			parameters.add( cuT( "flipYZ" ), true );
 			parameters.add( cuT( "sort_around_center" ), true );
-			factory.create( "plane" )->generate( *blockContext->mesh, parameters );
+			factory.create( cuT( "plane" ) )->generate( *blockContext->mesh, parameters );
 
 			auto submesh = blockContext->mesh->getSubmesh( 0u );
 			auto & component = *submesh->createComponent< FFTWavesComponent >();
-			component.setFftConfig( std::move( blockContext->fftConfig ) );
+			component.setFftConfig( castor::move( blockContext->fftConfig ) );
 		}
 		CU_EndAttributePop()
 	}
@@ -248,7 +248,7 @@ namespace ocean_fft
 			PatchT( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr
 				, bool enabled )
-				: StructInstance{ writer, std::move( expr ), enabled }
+				: StructInstance{ writer, castor::move( expr ), enabled }
 			{
 			}
 
@@ -358,15 +358,15 @@ namespace ocean_fft
 			return true;
 		}
 
-		m_ubo = std::make_unique< OceanUbo >( device );
-		m_linearWrapSampler = device->createSampler( m_component.getOwner()->getParent().getName()
+		m_ubo = castor::make_unique< OceanUbo >( device );
+		m_linearWrapSampler = device->createSampler( castor::toUtf8( m_component.getOwner()->getParent().getName() )
 			, VK_SAMPLER_ADDRESS_MODE_REPEAT
 			, VK_SAMPLER_ADDRESS_MODE_REPEAT
 			, VK_SAMPLER_ADDRESS_MODE_REPEAT
 			, VK_FILTER_LINEAR
 			, VK_FILTER_LINEAR
 			, VK_SAMPLER_MIPMAP_MODE_LINEAR );
-		m_pointClampSampler = device->createSampler( m_component.getOwner()->getParent().getName()
+		m_pointClampSampler = device->createSampler( castor::toUtf8( m_component.getOwner()->getParent().getName() )
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
@@ -378,7 +378,7 @@ namespace ocean_fft
 
 	crg::FramePassArray FFTWavesComponent::RenderData::record( RenderDevice const & device
 		, crg::ResourcesCache & resources
-		, crg::FrameGraph & graph
+		, crg::FramePassGroup & graph
 		, crg::FramePassArray previousPasses )
 	{
 		if ( !m_ubo )
@@ -388,10 +388,10 @@ namespace ocean_fft
 
 		if ( !m_oceanFFT )
 		{
-			m_oceanFFT = std::make_unique< OceanFFT >( device
+			m_oceanFFT = castor::make_unique< OceanFFT >( device
 				, resources
-				, graph.createPassGroup( m_component.getOwner()->getParent().getName() + "/FFTWaves" )
-				, std::move( previousPasses )
+				, graph.createPassGroup( castor::toUtf8( m_component.getOwner()->getParent().getName() ) + "/FFTWaves" )
+				, castor::move( previousPasses )
 				, *m_ubo
 				, m_component.getFftConfig() );
 			graph.addInput( m_oceanFFT->getHeightDisplacement().sampledViewId
@@ -438,26 +438,26 @@ namespace ocean_fft
 		, ashes::VkDescriptorSetLayoutBindingArray & bindings
 		, uint32_t & index )const
 	{
-		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+		addDescriptorSetLayoutBinding( bindings, index
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, VK_SHADER_STAGE_ALL_GRAPHICS ) );
-		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+			, VK_SHADER_STAGE_ALL_GRAPHICS );
+		addDescriptorSetLayoutBinding( bindings, index
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, ( VK_SHADER_STAGE_FRAGMENT_BIT
-				| VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT ) ) );
-		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				| VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT ) );
+		addDescriptorSetLayoutBinding( bindings, index
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+			, VK_SHADER_STAGE_FRAGMENT_BIT );
+		addDescriptorSetLayoutBinding( bindings, index
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+			, VK_SHADER_STAGE_FRAGMENT_BIT );
 	}
 
 	void FFTWavesComponent::RenderData::fillDescriptor( castor3d::PipelineFlags const & flags
 		, ashes::WriteDescriptorSetArray & descriptorWrites
 		, uint32_t & index )const
 	{
-		descriptorWrites.push_back( m_ubo->getDescriptorWrite( index++ ) );
+		m_ubo->addDescriptorWrite( descriptorWrites, index );
 		bindTexture( m_oceanFFT->getHeightDisplacement().sampledView, *m_linearWrapSampler, descriptorWrites, index );
 		bindTexture( m_oceanFFT->getGradientJacobian().sampledView, *m_linearWrapSampler, descriptorWrites, index );
 		bindTexture( m_oceanFFT->getNormals().sampledView, *m_linearWrapSampler, descriptorWrites, index );
@@ -869,7 +869,7 @@ namespace ocean_fft
 	//*********************************************************************************************
 
 	castor::String const FFTWavesComponent::TypeName = C3D_PluginMakeSubmeshRenderComponentName( "fft_ocean", "waves" );
-	castor::String const FFTWavesComponent::FullName = "FFT Waves Rendering";
+	castor::MbString const FFTWavesComponent::FullName = "FFT Waves Rendering";
 
 	FFTWavesComponent::FFTWavesComponent( Submesh & submesh )
 		: SubmeshComponent{ submesh, TypeName }

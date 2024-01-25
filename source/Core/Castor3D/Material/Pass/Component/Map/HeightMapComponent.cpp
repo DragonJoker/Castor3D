@@ -142,8 +142,8 @@ namespace castor3d
 		, shader::BlendComponents & components
 		, shader::SampleTexture const & sampleTexture )const
 	{
-		std::string valueName = "height";
-		std::string mapName = "height";
+		castor::MbString valueName = "height";
+		castor::MbString mapName = "height";
 		auto textureName = mapName + "MapAndMask";
 
 		if ( !material.hasMember( textureName )
@@ -603,7 +603,7 @@ namespace castor3d
 	{
 		static UInt32StrMap const parallaxOcclusionModes{ getEnumMapT< ParallaxOcclusionMode >() };
 
-		channelFillers.try_emplace( "height"
+		channelFillers.try_emplace( cuT( "height" )
 			, getTextureFlags()
 			, []( TextureContext & blockContext )
 			{
@@ -654,7 +654,7 @@ namespace castor3d
 	}
 
 	void HeightMapComponent::Plugin::createMapComponent( Pass & pass
-		, std::vector< PassComponentUPtr > & result )const
+		, castor::Vector< PassComponentUPtr > & result )const
 	{
 		result.push_back( castor::makeUniqueDerived< PassComponent, HeightMapComponent >( pass ) );
 	}

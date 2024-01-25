@@ -6,8 +6,8 @@
 namespace castor
 {
 	BlockTracker::BlockTracker( char const * szFunction, char const * szFile, uint32_t uiLine )
-		: m_strFile( string::stringCast< xchar >( szFile ) )
-		, m_strFunction( string::stringCast< xchar >( szFunction ) )
+		: m_strFile( makeString( szFile ) )
+		, m_strFunction( makeString( szFunction ) )
 		, m_uiLine( uiLine )
 	{
 		Logger::logDebug( makeStringStream() << cuT( "BlockTracker::Entered Block : " ) << m_strFunction << cuT( " in " ) << m_strFile << cuT( ", line " ) << m_uiLine );

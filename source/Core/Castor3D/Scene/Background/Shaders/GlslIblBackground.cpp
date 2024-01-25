@@ -28,7 +28,7 @@ namespace castor3d::shader
 		, VkExtent2D targetSize
 		, uint32_t & binding
 		, uint32_t set )
-		: BackgroundModel{ writer, utils, std::move( targetSize ) }
+		: BackgroundModel{ writer, utils, castor::move( targetSize ) }
 	{
 		m_writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapBackground"
 			, binding
@@ -56,9 +56,9 @@ namespace castor3d::shader
 		, uint32_t & binding
 		, uint32_t set )
 	{
-		return std::make_unique< IblBackgroundModel >( writer
+		return castor::make_unique< IblBackgroundModel >( writer
 			, utils
-			, std::move( targetSize )
+			, castor::move( targetSize )
 			, binding
 			, set );
 	}

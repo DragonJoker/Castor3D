@@ -189,7 +189,7 @@ namespace castor3d
 	private:
 		LightsRefArray m_dirtyLights;
 		LightBufferUPtr m_lightBuffer;
-		std::vector< Light * > m_pendingLights;
+		castor::Vector< Light * > m_pendingLights;
 		bool m_dirty{ true };
 	};
 }

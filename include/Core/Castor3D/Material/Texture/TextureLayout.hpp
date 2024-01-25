@@ -19,7 +19,7 @@ namespace castor3d
 	struct MipView
 	{
 		TextureViewUPtr view;
-		std::vector< TextureViewUPtr > levels;
+		castor::Vector< TextureViewUPtr > levels;
 
 		template< typename FuncT >
 		void forEachView( FuncT function )const
@@ -39,7 +39,7 @@ namespace castor3d
 	struct CubeView
 	{
 		MipView view;
-		std::vector< MipView > faces;
+		castor::Vector< MipView > faces;
 
 		template< typename FuncT >
 		void forEachView( FuncT function )const
@@ -57,7 +57,7 @@ namespace castor3d
 	struct ArrayView
 	{
 		MipView * view;
-		std::vector< ViewT > layers{};
+		castor::Vector< ViewT > layers{};
 
 		template< typename FuncT >
 		void forEachView( FuncT function )const
@@ -73,7 +73,7 @@ namespace castor3d
 	struct SliceView
 	{
 		MipView * view;
-		std::vector< ViewT > slices{};
+		castor::Vector< ViewT > slices{};
 
 		template< typename FuncT >
 		void forEachView( FuncT function )const
@@ -143,13 +143,6 @@ namespace castor3d
 		C3D_API TextureLayout( RenderSystem & renderSystem
 			, ashes::ImagePtr image
 			, VkImageCreateInfo const & createInfo );
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		C3D_API ~TextureLayout();
 		/**
 		 *\~english
 		 *\brief		Initialises the texture and all its views.
@@ -378,15 +371,16 @@ namespace castor3d
 	inline ashes::ImagePtr makeImage( RenderDevice const & device
 		, ashes::ImageCreateInfo createInfo
 		, VkMemoryPropertyFlags flags
-		, std::string const & name )
+		, castor::String const & name )
 	{
-		auto result = device->createImage( name + "Map", std::move( createInfo ) );
+		auto mbName = castor::toUtf8( name );
+		auto result = device->createImage( mbName + "Map", castor::move( createInfo ) );
 		auto requirements = result->getMemoryRequirements();
 		uint32_t deduced = device->deduceMemoryType( requirements.memoryTypeBits
 			, flags );
-		auto memory = device->allocateMemory( name + "MapMem"
+		auto memory = device->allocateMemory( mbName + "MapMem"
 			, VkMemoryAllocateInfo{ VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO, nullptr, requirements.size, deduced } );
-		result->bindMemory( std::move( memory ) );
+		result->bindMemory( castor::move( memory ) );
 		return result;
 	}
 }

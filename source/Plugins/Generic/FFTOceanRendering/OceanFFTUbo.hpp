@@ -41,7 +41,7 @@ namespace ocean_fft
 		OceanUboData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+			: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
 		{
 		}
 
@@ -95,6 +95,14 @@ namespace ocean_fft
 			return m_ubo.getDescriptorWrite( dstBinding, dstArrayElement );
 		}
 
+		void addDescriptorWrite( ashes::WriteDescriptorSetArray & bindings
+			, uint32_t & dstBinding
+			, uint32_t dstArrayElement = 0u )const
+		{
+			bindings.emplace_back( getDescriptorWrite( dstBinding, dstArrayElement ) );
+			++dstBinding;
+		}
+
 		castor3d::UniformBufferOffsetT< Configuration > const & getUbo()const
 		{
 			return m_ubo;
@@ -106,8 +114,8 @@ namespace ocean_fft
 		}
 
 	public:
-		static const castor::String Buffer;
-		static const castor::String Data;
+		static const castor::MbString Buffer;
+		static const castor::MbString Data;
 
 	private:
 		castor3d::RenderDevice const & m_device;

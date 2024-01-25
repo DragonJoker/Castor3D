@@ -205,7 +205,7 @@ namespace castor3d
 	private:
 		PassPtrArray m_passes;
 		LightingModelID m_lightingModelId;
-		std::map< PassRPtr, OnPassChangedConnection > m_passListeners;
+		castor::Map< PassRPtr, OnPassChangedConnection > m_passListeners;
 		RenderPassRegisterInfo * m_renderPassInfo{};
 		bool m_serialisable{ true };
 		bool m_initialised{};

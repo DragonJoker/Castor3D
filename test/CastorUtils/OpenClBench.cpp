@@ -1,4 +1,4 @@
-﻿#include "OpenClBench.hpp"
+#include "OpenClBench.hpp"
 
 #include "Point.hpp"
 
@@ -22,7 +22,7 @@ namespace Testing
 	bool CheckErr( cl_int iErr, const char * szName )
 	{
 		bool result = true;
-		static std::map< cl_int, std::string > MapErrors;
+		static castor::Map< cl_int, std::string > MapErrors;
 
 		if ( MapErrors.empty() )
 		{
@@ -107,7 +107,7 @@ namespace Testing
 
 		if ( iErr != CL_SUCCESS )
 		{
-			std::map< cl_int, std::string >::const_iterator it = MapErrors.find( iErr );
+			auto it = MapErrors.find( iErr );
 
 			if ( it != MapErrors.end() )
 			{
@@ -181,7 +181,7 @@ namespace Testing
 		if ( bContinue )
 		{
 			castor::Path filePath = castor::File::getExecutableDirectory().getPath() / cuT( "share" ) / cuT( "CastorUtilsTest" );
-			std::string path = castor::string::stringCast< char >( filePath / cuT( "mtx_ope.cl" ) );
+			std::string path = castor::toUtf8( filePath / cuT( "mtx_ope.cl" ) );
 			std::ifstream file( path );
 			bContinue = CheckErr( file ? CL_SUCCESS : -1, path.c_str() );
 

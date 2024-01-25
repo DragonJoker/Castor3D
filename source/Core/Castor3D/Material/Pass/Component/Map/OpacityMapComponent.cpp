@@ -111,7 +111,7 @@ namespace castor3d
 		, shader::BlendComponents & components
 		, shader::SampleTexture const & sampleTexture )const
 	{
-		applyFloatComponent( "opacity"
+		applyFloatComponent( cuT( "opacity" )
 			, passShaders
 			, textureConfigs
 			, textureAnims
@@ -125,7 +125,7 @@ namespace castor3d
 	void OpacityMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		channelFillers.try_emplace( "opacity"
+		channelFillers.try_emplace( cuT( "opacity" )
 			, getTextureFlags()
 			, []( TextureContext & blockContext )
 			{
@@ -166,7 +166,7 @@ namespace castor3d
 	}
 
 	void OpacityMapComponent::Plugin::createMapComponent( Pass & pass
-		, std::vector< PassComponentUPtr > & result )const
+		, castor::Vector< PassComponentUPtr > & result )const
 	{
 		result.push_back( castor::makeUniqueDerived< PassComponent, OpacityMapComponent >( pass ) );
 	}

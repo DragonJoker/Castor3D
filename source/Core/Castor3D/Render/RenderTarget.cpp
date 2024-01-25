@@ -67,7 +67,7 @@ namespace castor3d
 			{
 				ImageViewSlice( VkImageViewCreateInfo info
 					, uint32_t slice )
-					: info{ std::move( info ) }
+					: info{ castor::move( info ) }
 					, slice{ slice }
 				{
 				}
@@ -99,7 +99,7 @@ namespace castor3d
 
 				}
 			};
-			using ImageViewCache = std::set< ImageViewSlice, ImageViewSliceComp >;
+			using ImageViewCache = castor::Set< ImageViewSlice, ImageViewSliceComp >;
 
 		public:
 			static void submit( Scene const & scene
@@ -146,9 +146,9 @@ namespace castor3d
 			}
 
 		protected:
-			std::unique_ptr< ConfigurationVisitorBase > doGetSubConfiguration( castor::String const & category )override
+			castor::RawUniquePtr< ConfigurationVisitorBase > doGetSubConfiguration( castor::String const & category )override
 			{
-				return std::unique_ptr< ConfigurationVisitorBase >( new IntermediatesLister{ getFlags(), getScene(), m_cache, m_result } );
+				return castor::RawUniquePtr< ConfigurationVisitorBase >( new IntermediatesLister{ getFlags(), getScene(), m_cache, m_result } );
 			}
 
 		private:
@@ -209,7 +209,7 @@ namespace castor3d
 					{
 						auto layer = layerIdx + info.subresourceRange.baseArrayLayer;
 
-						if ( auto layerViewId = m_handler.createViewId( crg::ImageViewData{ viewId.data->name + std::to_string( layer )
+						if ( auto layerViewId = m_handler.createViewId( crg::ImageViewData{ viewId.data->name + castor::string::toMbString( layer )
 								, viewId.data->image
 								, layerInfo.flags
 								, layerInfo.viewType
@@ -217,7 +217,7 @@ namespace castor3d
 								, layerInfo.subresourceRange } );
 							doFilter( layerViewId, {} ) )
 						{
-							doVisit( name + std::to_string( layer )
+							doVisit( name + castor::string::toString( layer )
 								, layerViewId
 								, layout
 								, factors );
@@ -272,7 +272,7 @@ namespace castor3d
 					for ( uint32_t layerIdx = 0u; layerIdx < info.subresourceRange.layerCount; ++layerIdx )
 					{
 						auto layer = layerIdx + info.subresourceRange.baseArrayLayer;
-						result = doFilter( m_handler.createViewId( crg::ImageViewData{ viewId.data->name + std::to_string( layer )
+						result = doFilter( m_handler.createViewId( crg::ImageViewData{ viewId.data->name + castor::string::toMbString( layer )
 								, viewId.data->image
 								, layerInfo.flags
 								, layerInfo.viewType
@@ -347,10 +347,10 @@ namespace castor3d
 		, m_toneMappingName{ ( castor::isFloatingPoint( m_pixelFormat )
 			? castor::String{ cuT( "none" ) }
 			: castor::String{ cuT( "linear" ) } ) }
-		, m_graph{ m_resources.getHandler(), m_name }
+		, m_graph{ m_resources.getHandler(), castor::toUtf8( m_name ) }
 		, m_velocity{ m_device
 			, m_resources
-			, "Velocity"
+			, cuT( "Velocity" )
 			, 0u
 			, makeExtent3D( m_safeBandedSize )
 			, 1u
@@ -364,7 +364,7 @@ namespace castor3d
 			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
 		, m_srgbObjects{ Texture{ m_device
 				, m_resources
-				, "SRGBResult0"
+				, cuT( "SRGBResult0" )
 				, 0u
 				, makeExtent3D( m_safeBandedSize )
 				, 1u
@@ -374,7 +374,7 @@ namespace castor3d
 				, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
 			, Texture{ m_device
 				, m_resources
-				, "SRGBResult1"
+				, cuT( "SRGBResult1" )
 				, 0u
 				, makeExtent3D( m_safeBandedSize )
 				, 1u
@@ -384,7 +384,7 @@ namespace castor3d
 				, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK } }
 		, m_hdrObjects{ Texture{ m_device
 				, m_resources
-				, "HDRResult0"
+				, cuT( "HDRResult0" )
 				, 0u
 				, makeExtent3D( m_safeBandedSize )
 				, 1u
@@ -394,7 +394,7 @@ namespace castor3d
 				, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
 			, Texture{ m_device
 				, m_resources
-				, "HDRResult1"
+				, cuT( "HDRResult1" )
 				, 0u
 				, makeExtent3D( m_safeBandedSize )
 				, 1u
@@ -404,7 +404,7 @@ namespace castor3d
 				, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK } }
 		, m_overlays{ m_device
 			, m_resources
-			, "Overlays"
+			, cuT( "Overlays" )
 			, 0u
 			, makeExtent3D( m_size )
 			, 1u
@@ -416,7 +416,7 @@ namespace castor3d
 			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
 		, m_combined{ m_device
 			, m_resources
-			, "Target"
+			, cuT( "Target" )
 			, 0u
 			, makeExtent3D( m_size )
 			, 1u
@@ -451,11 +451,11 @@ namespace castor3d
 
 			if ( effect->isAfterToneMapping() )
 			{
-				m_srgbPostEffects.push_back( std::move( effect ) );
+				m_srgbPostEffects.push_back( castor::move( effect ) );
 			}
 			else
 			{
-				m_hdrPostEffects.push_back( std::move( effect ) );
+				m_hdrPostEffects.push_back( castor::move( effect ) );
 			}
 		}
 
@@ -574,7 +574,7 @@ namespace castor3d
 			getEngine()->unregisterTimer( getName() + cuT( "/Overlays" ), *m_overlaysTimer );
 			m_overlaysTimer.reset();
 			m_intermediates.clear();
-			getEngine()->unregisterTimer( m_runnable->getName() + "/Graph"
+			getEngine()->unregisterTimer( castor::makeString( m_runnable->getName() + "/Graph" )
 				, m_runnable->getTimer() );
 			m_runnable.reset();
 			m_debugDrawer.reset();
@@ -724,7 +724,7 @@ namespace castor3d
 
 			if ( m_debugDrawer )
 			{
-				result = m_debugDrawer->render( queue, std::move( result ) );
+				result = m_debugDrawer->render( queue, castor::move( result ) );
 			}
 		}
 
@@ -912,11 +912,6 @@ namespace castor3d
 		return getEngine()->areDebugTargetsEnabled();
 	}
 
-	void RenderTarget::addTechniqueParameters( Parameters const & parameters )
-	{
-		m_techniqueParameters.add( parameters );
-	}
-
 	void RenderTarget::resetSemaphore()
 	{
 		m_signalFinished.clear();
@@ -932,9 +927,9 @@ namespace castor3d
 		, ProgressBar * progress )
 	{
 		setProgressBarGlobalTitle( progress
-			, "Initialising: Render Target" );
-		m_hdrConfigUbo = std::make_unique< HdrConfigUbo >( device );
-		m_colourGradingUbo = std::make_unique< ColourGradingUbo >( device );
+			, cuT( "Initialising: Render Target" ) );
+		m_hdrConfigUbo = castor::make_unique< HdrConfigUbo >( device );
+		m_colourGradingUbo = castor::make_unique< ColourGradingUbo >( device );
 		m_culler = castor::makeUniqueDerived< SceneCuller, FrustumCuller >( *getScene(), *getCamera() );
 
 		if ( m_clustersConfig.enabled || isFullLoadingEnabled() )
@@ -946,17 +941,19 @@ namespace castor3d
 		crg::FramePassArray passes;
 
 		stepProgressBarGlobalStartLocal( progress
-			, "Initialising: Meshes"
+			, cuT( "Initialising: Meshes" )
 			, getScene()->getMeshCache().getObjectCount() );
-		for ( auto & [name, mesh] : getScene()->getMeshCache() )
+		auto & group = m_graph.createPassGroup( "Meshes" );
+
+		for ( auto const & [name, mesh] : getScene()->getMeshCache() )
 		{
 			stepProgressBarLocal( progress, name );
 			passes = mesh->record( m_resources
-				, m_graph
+				, group
 				, passes );
 		}
 
-		auto result = doInitialiseTechnique( device, queueData, progress, std::move( passes ) );
+		auto result = doInitialiseTechnique( device, queueData, progress, castor::move( passes ) );
 
 		if ( !result )
 		{
@@ -971,7 +968,7 @@ namespace castor3d
 		if ( !m_hdrPostEffects.empty() )
 		{
 			stepProgressBarGlobalStartLocal( progress
-				, "Creating: HDR Post effects"
+				, cuT( "Creating: HDR Post effects" )
 				, uint32_t( m_hdrPostEffects.size() ) );
 			for ( auto & effect : m_hdrPostEffects )
 			{
@@ -983,7 +980,7 @@ namespace castor3d
 						, *hdrSource
 						, *hdrTarget
 						, *previousPass );
-					std::swap( hdrSource, hdrTarget );
+					castor::swap( hdrSource, hdrTarget );
 					previousPass = &effect->getPass();
 				}
 			}
@@ -993,10 +990,10 @@ namespace castor3d
 		{
 			m_hdrLastPass = previousPass;
 			stepProgressBarGlobalStartLocal( progress
-				, "Creating: Tone Mapping"
+				, cuT( "Creating: Tone Mapping" )
 				, uint32_t( m_hdrPostEffects.size() ) );
 			m_toneMapping = castor::makeUnique< ToneMapping >( *getEngine()
-				, m_graph
+				, m_graph.getDefaultGroup()
 				, crg::ImageViewIdArray{ hdrSource->sampledViewId, hdrTarget->sampledViewId }
 				, m_srgbObjects.front().wholeViewId
 				, *m_hdrLastPass
@@ -1014,7 +1011,7 @@ namespace castor3d
 		if ( !m_srgbPostEffects.empty() )
 		{
 			stepProgressBarGlobalStartLocal( progress
-				, "Creating: SRGB Post effects"
+				, cuT( "Creating: SRGB Post effects" )
 				, uint32_t( m_srgbPostEffects.size() ) );
 			for ( auto & effect : m_srgbPostEffects )
 			{
@@ -1026,14 +1023,14 @@ namespace castor3d
 						, *srgbSource
 						, *srgbTarget
 						, *previousPass );
-					std::swap( srgbSource, srgbTarget );
+					castor::swap( srgbSource, srgbTarget );
 					previousPass = &effect->getPass();
 				}
 			}
 		}
 
 		stepProgressBarGlobalStartLocal( progress
-			, "Creating: Other Passes"
+			, cuT( "Creating: Other Passes" )
 			, 2u );
 
 		if ( result )
@@ -1044,10 +1041,10 @@ namespace castor3d
 			m_combinePass->addDependency( *previousPass );
 
 			stepProgressBarGlobalStartLocal( progress
-				, "Compiling render graph"
+				, cuT( "Compiling render graph" )
 				, RenderTechnique::countInitialisationSteps() );
 			m_runnable = m_graph.compile( device.makeContext() );
-			getEngine()->registerTimer( m_runnable->getName() + "/Graph"
+			getEngine()->registerTimer( castor::makeString( m_runnable->getName() + "/Graph" )
 				, m_runnable->getTimer() );
 			printGraph( *m_runnable );
 			doListIntermediateViews( m_intermediates );
@@ -1072,30 +1069,31 @@ namespace castor3d
 			m_debugDrawer = castor::makeUnique< DebugDrawer >(*this, device, m_combined, m_renderTechnique->getDepth() );
 		}
 
-		m_overlaysTimer = castor::makeUnique< FramePassTimer >( device.makeContext(), getName() + cuT( "/Overlays" ), crg::TimerScope::eUpdate );
+		auto mbName = castor::toUtf8( getName() );
+		m_overlaysTimer = castor::makeUnique< FramePassTimer >( device.makeContext(), mbName + "/Overlays", crg::TimerScope::eUpdate );
 		getEngine()->registerTimer( getName() + cuT( "/Overlays" ), *m_overlaysTimer );
 #if C3D_DebugTimers
-		m_cpuUpdateTimer = castor::makeUnique< FramePassTimer >( device.makeContext(), getName() + cuT( "/CPU Update" ), crg::TimerScope::eUpdate );
+		m_cpuUpdateTimer = castor::makeUnique< FramePassTimer >( device.makeContext(), mbName + "/CPU Update", crg::TimerScope::eUpdate );
 		getEngine()->registerTimer( getName() + cuT( "/CPU Update" ), *m_cpuUpdateTimer );
-		m_gpuUpdateTimer = castor::makeUnique< FramePassTimer >( device.makeContext(), getName() + cuT( "/GPU Update" ), crg::TimerScope::eUpdate );
+		m_gpuUpdateTimer = castor::makeUnique< FramePassTimer >( device.makeContext(), mbName + "/GPU Update", crg::TimerScope::eUpdate );
 		getEngine()->registerTimer( getName() + cuT( "/GPU Update" ), *m_gpuUpdateTimer );
 #endif
-		m_signalReady = device->createSemaphore( getName() + "Ready" );
+		m_signalReady = device->createSemaphore( castor::toUtf8( getName() ) + "Ready" );
 		m_initialising = false;
 	}
 
 	crg::FramePass & RenderTarget::doCreateOverlayPass( ProgressBar * progress
 		, RenderDevice const & device )
 	{
-		stepProgressBarLocal( progress, "Creating overlays pass" );
+		stepProgressBarLocal( progress, cuT( "Creating overlays pass" ) );
 		auto & group = m_graph.createPassGroup( "Overlays" );
 		auto & result = group.createPass( "Overlays"
 			, [this, progress, &device]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				stepProgressBarLocal( progress, "Initialising overlays pass" );
-				auto result = std::make_unique< OverlayPass >( pass
+				stepProgressBarLocal( progress, cuT( "Initialising overlays pass" ) );
+				auto result = castor::make_unique< OverlayPass >( pass
 					, context
 					, graph
 					, device
@@ -1105,7 +1103,7 @@ namespace castor3d
 					, *m_hdrConfigUbo
 					, true );
 				m_overlayPass = result.get();
-				getOwner()->registerTimer( pass.getFullName()
+				getOwner()->registerTimer( castor::makeString( pass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
@@ -1117,13 +1115,13 @@ namespace castor3d
 	crg::FramePass & RenderTarget::doCreateCombinePass( ProgressBar * progress
 		, crg::ImageViewIdArray source )
 	{
-		stepProgressBarLocal( progress, "Creating combine pass" );
+		stepProgressBarLocal( progress, cuT( "Creating combine pass" ) );
 		auto & result = m_graph.createPass( "Other/Combine"
 			, [this, progress]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				stepProgressBarLocal( progress, "Initialising combine pass" );
+				stepProgressBarLocal( progress, cuT( "Initialising combine pass" ) );
 				auto result = crg::RenderQuadBuilder{}
 					.renderPosition( {} )
 					.renderSize( makeExtent2D( m_combined.getExtent() ) )
@@ -1131,12 +1129,12 @@ namespace castor3d
 					.passIndex( &m_combinePassIndex )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_combineStages ) )
 					.build( pass, context, graph, crg::ru::Config{ 2u } );
-				getOwner()->registerTimer( pass.getFullName()
+				getOwner()->registerTimer( castor::makeString( pass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
 		result.addDependency( m_overlayPassDesc );
-		result.addSampledView( std::move( source )
+		result.addSampledView( castor::move( source )
 			, rendtgt::CombineIdxScene );
 		result.addSampledView( m_overlays.sampledViewId
 			, rendtgt::CombineIdxOverlays );
@@ -1156,24 +1154,21 @@ namespace castor3d
 			try
 			{
 				stepProgressBarGlobalStartLocal( progress
-					, "Initialising: Render Technique"
+					, cuT( "Initialising: Render Technique" )
 					, RenderTechnique::countInitialisationSteps() );
 				m_renderTechnique = castor::makeUnique< RenderTechnique >( getName()
 					, *this
 					, device
-					, queueData
-					, m_techniqueParameters
 					, m_hdrObjects.front()
 					, m_hdrObjects.back()
-					, m_ssaoConfig
-					, std::move( previousPasses )
+					, castor::move( previousPasses )
 					, progress
 					, C3D_UseVisibilityBuffer != 0
 					, C3D_UseWeightedBlendedRendering != 0 );
 			}
 			catch ( castor::Exception & exc )
 			{
-				log::error << cuT( "Couldn't load render technique: " ) << castor::string::stringCast< xchar >( exc.getFullDescription() ) << std::endl;
+				log::error << cuT( "Couldn't load render technique: " ) << castor::makeString( exc.getFullDescription() ) << std::endl;
 				throw;
 			}
 		}
@@ -1202,7 +1197,7 @@ namespace castor3d
 			, float( 1.0 - 2.0 * bandRatioU )
 			, float( 1.0 - 2.0 * bandRatioV ) };
 
-		ProgramModule programModule{ getName() + "/Combine" };
+		ProgramModule programModule{ getName() + cuT( "/Combine" ) };
 		{
 			sdw::TraditionalGraphicsWriter writer{ &getEngine()->getShaderAllocator() };
 
@@ -1229,7 +1224,7 @@ namespace castor3d
 					, texcoord.y() * velocityMetrics->w + velocityMetrics->y );
 			};
 
-			writer.implementEntryPoint( [&]( sdw::VertexIn const & in
+			writer.implementEntryPoint( [&]( sdw::VertexIn const &
 				, sdw::VertexOut out )
 				{
 					outTextureScene = utils.topDownToBottomUp( inUv );
@@ -1245,7 +1240,7 @@ namespace castor3d
 					out.vtx.position = vec4( inPosition, 0.0_f, 1.0_f );
 				} );
 
-			writer.implementEntryPoint( [&]( sdw::FragmentIn const & in
+			writer.implementEntryPoint( [&]( sdw::FragmentIn const &
 				, sdw::FragmentOut const & )
 				{
 					auto sceneColor = writer.declLocale( "sceneColor"
@@ -1269,7 +1264,7 @@ namespace castor3d
 
 	Texture const & RenderTarget::doUpdatePostEffects( CpuUpdater & updater
 		, PostEffectArray const & effects
-		, std::vector< Texture const * > const & images )const
+		, castor::Vector< Texture const * > const & images )const
 	{
 		Texture const * src = images.front();
 		Texture const * dst = images.back();
@@ -1279,7 +1274,7 @@ namespace castor3d
 			if ( ( isFullLoadingEnabled() || effect->isEnabled() )
 				&& effect->update( updater, *src ) )
 			{
-				std::swap( src, dst );
+				castor::swap( src, dst );
 			}
 		}
 
@@ -1312,22 +1307,22 @@ namespace castor3d
 
 	void RenderTarget::doListIntermediateViews( IntermediateViewArray & result )const
 	{
-		result.emplace_back( "Target Result"
+		result.emplace_back( cuT( "Target Result" )
 			, m_combined
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-		result.emplace_back( "Target SRGB Colour"
+		result.emplace_back( cuT( "Target SRGB Colour" )
 			, m_srgbObjects.front()
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) );
-		result.emplace_back( "Target HDR Colour"
+		result.emplace_back( cuT( "Target HDR Colour" )
 			, m_hdrObjects.front()
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) );
-		result.emplace_back( "Target Overlays"
+		result.emplace_back( cuT( "Target Overlays" )
 			, m_overlays
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{ { 0.5f, 0.5f, 0.5f }, { 0.5f, 0.5f, 0.5f } }.invert( true ) );
-		result.emplace_back( "Target Velocity"
+		result.emplace_back( cuT( "Target Velocity" )
 			, m_velocity
 			, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL
 			, TextureFactors{}.invert( true ) );

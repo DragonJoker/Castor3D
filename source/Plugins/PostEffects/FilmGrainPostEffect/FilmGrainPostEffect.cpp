@@ -40,13 +40,13 @@ namespace film_grain
 	{
 		namespace c3d = castor3d::shader;
 
-		static std::string const FilmGrainUbo = "FilmGrainUbo";
-		static std::string const PixelSize = "c3d_pixelSize";
-		static std::string const NoiseIntensity = "c3d_noiseIntensity";
-		static std::string const Exposure = "c3d_exposure";
-		static std::string const Time = "c3d_time";
-		static std::string const SrcTex = "c3d_srcTex";
-		static std::string const NoiseTex = "c3d_noiseTex";
+		static castor::MbString const FilmGrainUbo = "FilmGrainUbo";
+		static castor::MbString const PixelSize = "c3d_pixelSize";
+		static castor::MbString const NoiseIntensity = "c3d_noiseIntensity";
+		static castor::MbString const Exposure = "c3d_exposure";
+		static castor::MbString const Time = "c3d_time";
+		static castor::MbString const SrcTex = "c3d_srcTex";
+		static castor::MbString const NoiseTex = "c3d_noiseTex";
 
 		enum Idx : uint32_t
 		{
@@ -127,33 +127,33 @@ namespace film_grain
 			return writer.getBuilder().releaseShader();
 		}
 
-		static std::array< castor::Image, PostEffect::NoiseMapCount > loadImages( castor3d::Engine const & engine )
+		static castor::Array< castor::Image, PostEffect::NoiseMapCount > loadImages( castor3d::Engine const & engine )
 		{
 			auto & loader = engine.getImageLoader();
-			return { loader.load( cuT( "FilmGrainNoise0" ), "xpm", castor3d::ByteCPtr( NoiseLayer1_xpm ), uint32_t( castor::getCountOf( NoiseLayer1_xpm ) ), {} )
-				, loader.load( cuT( "FilmGrainNoise1" ), "xpm", castor3d::ByteCPtr( NoiseLayer2_xpm ), uint32_t( castor::getCountOf( NoiseLayer2_xpm ) ), {} )
-				, loader.load( cuT( "FilmGrainNoise2" ), "xpm", castor3d::ByteCPtr( NoiseLayer3_xpm ), uint32_t( castor::getCountOf( NoiseLayer3_xpm ) ), {} )
-				, loader.load( cuT( "FilmGrainNoise3" ), "xpm", castor3d::ByteCPtr( NoiseLayer4_xpm ), uint32_t( castor::getCountOf( NoiseLayer4_xpm ) ), {} )
-				, loader.load( cuT( "FilmGrainNoise4" ), "xpm", castor3d::ByteCPtr( NoiseLayer5_xpm ), uint32_t( castor::getCountOf( NoiseLayer5_xpm ) ), {} )
-				, loader.load( cuT( "FilmGrainNoise5" ), "xpm", castor3d::ByteCPtr( NoiseLayer6_xpm ), uint32_t( castor::getCountOf( NoiseLayer6_xpm ) ), {} ) };
+			return { loader.load( cuT( "FilmGrainNoise0" ), cuT( "xpm" ), castor3d::ByteCPtr( NoiseLayer1_xpm ), uint32_t( castor::getCountOf( NoiseLayer1_xpm ) ), {} )
+				, loader.load( cuT( "FilmGrainNoise1" ), cuT( "xpm" ), castor3d::ByteCPtr( NoiseLayer2_xpm ), uint32_t( castor::getCountOf( NoiseLayer2_xpm ) ), {} )
+				, loader.load( cuT( "FilmGrainNoise2" ), cuT( "xpm" ), castor3d::ByteCPtr( NoiseLayer3_xpm ), uint32_t( castor::getCountOf( NoiseLayer3_xpm ) ), {} )
+				, loader.load( cuT( "FilmGrainNoise3" ), cuT( "xpm" ), castor3d::ByteCPtr( NoiseLayer4_xpm ), uint32_t( castor::getCountOf( NoiseLayer4_xpm ) ), {} )
+				, loader.load( cuT( "FilmGrainNoise4" ), cuT( "xpm" ), castor3d::ByteCPtr( NoiseLayer5_xpm ), uint32_t( castor::getCountOf( NoiseLayer5_xpm ) ), {} )
+				, loader.load( cuT( "FilmGrainNoise5" ), cuT( "xpm" ), castor3d::ByteCPtr( NoiseLayer6_xpm ), uint32_t( castor::getCountOf( NoiseLayer6_xpm ) ), {} ) };
 		}
 	}
 
 	//*********************************************************************************************
 
 	castor::String PostEffect::Type = cuT( "film_grain" );
-	castor::String PostEffect::Name = cuT( "FilmGrain PostEffect" );
+	castor::MbString PostEffect::Name = "FilmGrain PostEffect";
 
 	PostEffect::PostEffect( castor3d::RenderTarget & renderTarget
 		, castor3d::RenderSystem & renderSystem
 		, castor3d::Parameters const & params )
 		: castor3d::PostEffect{ PostEffect::Type
-			, "FilmGrain"
-			, PostEffect::Name
+			, cuT( "FilmGrain" )
+			, castor::makeString( PostEffect::Name )
 			, renderTarget
 			, renderSystem
 			, params }
-		, m_shader{ "FilmGrain", postfx::getProgram( *renderTarget.getEngine() ) }
+		, m_shader{ cuT( "FilmGrain" ), postfx::getProgram( *renderTarget.getEngine() ) }
 		, m_stages{ makeProgramStates( renderSystem.getRenderDevice(), m_shader ) }
 		, m_configUbo{ renderSystem.getRenderDevice().uboPool->getBuffer< Configuration >( 0u ) }
 		, m_noiseImages{ postfx::loadImages( *renderTarget.getEngine() ) }
@@ -213,12 +213,12 @@ namespace film_grain
 	{
 		castor::String param;
 
-		if ( parameters.get( "exposure", param ) )
+		if ( parameters.get( cuT( "exposure" ), param ) )
 		{
 			m_config.exposure = castor::string::toFloat( param );
 		}
 
-		if ( parameters.get( "noiseIntensity", param ) )
+		if ( parameters.get( cuT( "noiseIntensity" ), param ) )
 		{
 			m_config.noiseIntensity = castor::string::toFloat( param );
 		}
@@ -255,7 +255,7 @@ namespace film_grain
 				auto & device = getRenderSystem()->getRenderDevice();
 				auto staging = device->createStagingTexture( format
 					, VkExtent2D{ dim.getWidth(), dim.getHeight() } );
-				auto noiseImg = std::make_unique< ashes::Image >( *device
+				auto noiseImg = castor::make_unique< ashes::Image >( *device
 					, graph.createImage( m_noiseImg )
 					, ashes::ImageCreateInfo{ m_noiseImg.data->info } );
 				ashes::ImageView noiseView{ ashes::ImageViewCreateInfo{ m_noiseView.data->info }
@@ -289,7 +289,7 @@ namespace film_grain
 						, context
 						, graph
 						, crg::ru::Config{ 2u } );
-				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );

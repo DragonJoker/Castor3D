@@ -75,9 +75,9 @@ namespace GuiCommon
 			}
 
 		private:
-			std::unique_ptr< ConfigurationVisitorBase > doGetSubConfiguration( castor::String const & category )override
+			castor::RawUniquePtr< ConfigurationVisitorBase > doGetSubConfiguration( castor::String const & category )override
 			{
-				return std::unique_ptr< ConfigurationVisitorBase >( new PostEffectShaderGatherer{ m_device, m_sources } );
+				return castor::RawUniquePtr< ConfigurationVisitorBase >( new PostEffectShaderGatherer{ m_device, m_sources } );
 			}
 
 			ShaderSource & doGetSource( castor::String const & name )
@@ -95,7 +95,7 @@ namespace GuiCommon
 				}
 
 				ShaderSource source{ name };
-				m_sources.emplace_back( std::move( source ) );
+				m_sources.emplace_back( castor::move( source ) );
 				return m_sources.back();
 			}
 
@@ -130,7 +130,7 @@ namespace GuiCommon
 			{
 				ShaderSources sources = PostEffectShaderGatherer::submit( m_effect );
 				ShaderDialog * editor = new ShaderDialog{ m_effect.getRenderSystem()->getEngine()
-					, std::move( sources )
+					, castor::move( sources )
 					, m_effect.getFullName()
 					, m_parent };
 				editor->Show();

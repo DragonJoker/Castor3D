@@ -78,7 +78,7 @@ namespace castor3d
 	private:
 		uint32_t m_alignSize;
 		size_t m_allocatedSize;
-		std::vector< VkDeviceSize > m_free;
+		castor::Vector< VkDeviceSize > m_free;
 	};
 }
 

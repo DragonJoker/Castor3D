@@ -22,11 +22,11 @@ namespace castor3d
 		static castor::LoggerInstance * m_logger;
 
 	public:
-		C3D_API static castor::LoggerStreamT< char, castor::TraceLoggerStreambufT > trace;
-		C3D_API static castor::LoggerStreamT< char, castor::DebugLoggerStreambufT > debug;
-		C3D_API static castor::LoggerStreamT< char, castor::InfoLoggerStreambufT > info;
-		C3D_API static castor::LoggerStreamT< char, castor::WarningLoggerStreambufT > warn;
-		C3D_API static castor::LoggerStreamT< char, castor::ErrorLoggerStreambufT > error;
+		C3D_API static castor::LoggerStreamT< xchar, castor::TraceLoggerStreambufT > trace;
+		C3D_API static castor::LoggerStreamT< xchar, castor::DebugLoggerStreambufT > debug;
+		C3D_API static castor::LoggerStreamT< xchar, castor::InfoLoggerStreambufT > info;
+		C3D_API static castor::LoggerStreamT< xchar, castor::WarningLoggerStreambufT > warn;
+		C3D_API static castor::LoggerStreamT< xchar, castor::ErrorLoggerStreambufT > error;
 	};
 }
 

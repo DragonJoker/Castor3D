@@ -11,7 +11,7 @@ namespace castor
 
 	namespace rgba
 	{
-		static std::map< PredefinedRgbaColour, String > const PredefinedNames
+		static Map< PredefinedRgbaColour, String > const PredefinedNames
 		{
 			{ PredefinedRgbaColour::eTransparentBlack, cuT( "transp_black" ) },
 			{ PredefinedRgbaColour::eTransparentDarkBlue, cuT( "transp_darkblue" ) },

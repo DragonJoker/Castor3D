@@ -64,14 +64,14 @@ namespace PbrBloom
 
 	public:
 		static castor::String const Type;
-		static castor::String const Name;
+		static castor::MbString const Name;
 
 	private:
 		crg::ImageId m_intermediateImg;
 		crg::FramePass const * m_pass{};
-		std::unique_ptr< DownsamplePass > m_downsamplePass;
-		std::unique_ptr< UpsamplePass > m_upsamplePass;
-		std::unique_ptr< CombinePass > m_combinePass;
+		castor::RawUniquePtr< DownsamplePass > m_downsamplePass;
+		castor::RawUniquePtr< UpsamplePass > m_upsamplePass;
+		castor::RawUniquePtr< CombinePass > m_combinePass;
 		castor3d::UniformBufferOffsetT< castor::Point2f > m_ubo;
 		uint32_t m_blurRadius;
 		float m_bloomStrength;

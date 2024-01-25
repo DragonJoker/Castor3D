@@ -94,7 +94,7 @@ namespace castor3d
 		 *\brief		Enregistre les passes de rendu des dépendances des sous-maillages.
 		 */
 		C3D_API crg::FramePassArray record( crg::ResourcesCache & resources
-			, crg::FrameGraph & graph
+			, crg::FramePassGroup & graph
 			, crg::FramePassArray previousPasses );
 		/**
 		 *\~english

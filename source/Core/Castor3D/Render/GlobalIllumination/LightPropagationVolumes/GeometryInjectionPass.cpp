@@ -54,7 +54,7 @@ namespace castor3d
 			SurfaceT( sdw::ShaderWriter & writer
 				, sdw::expr::ExprPtr expr
 				, bool enabled = true )
-				: sdw::StructInstance{ writer, std::move( expr ), enabled }
+				: sdw::StructInstance{ writer, castor::move( expr ), enabled }
 				, layer{ getMember< sdw::Int >( "layer" ) }
 				, rsmPosition{ getMember< sdw::Vec3 >( "rsmPosition" ) }
 				, rsmNormal{ getMember< sdw::Vec3 >( "rsmNormal" ) }
@@ -143,10 +143,10 @@ namespace castor3d
 			, sdw::TraditionalGraphicsWriter & writer
 			, castor3d::shader::LpvGridData const & lpvGridData )
 		{
-			auto c3d_rsmNormalMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( LightType::eDirectional, SmTexture::eNormal )
+			auto c3d_rsmNormalMap = writer.declCombinedImg< FImg2DArrayRgba32 >( castor::toUtf8( getTextureName( LightType::eDirectional, SmTexture::eNormal ) )
 				, GeometryInjectionPass::RsmNormalsIdx
 				, 0u );
-			auto c3d_rsmPositionMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( LightType::eDirectional, SmTexture::ePosition )
+			auto c3d_rsmPositionMap = writer.declCombinedImg< FImg2DArrayRgba32 >( castor::toUtf8( getTextureName( LightType::eDirectional, SmTexture::ePosition ) )
 				, GeometryInjectionPass::RsmPositionIdx
 				, 0u );
 			C3D_LpvLightConfig( writer, GeometryInjectionPass::LpvLightUboIdx, 0u );
@@ -215,10 +215,10 @@ namespace castor3d
 			, sdw::TraditionalGraphicsWriter & writer
 			, castor3d::shader::LpvGridData const & lpvGridData )
 		{
-			auto c3d_rsmNormalMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( LightType::eSpot, SmTexture::eNormal )
+			auto c3d_rsmNormalMap = writer.declCombinedImg< FImg2DArrayRgba32 >( castor::toUtf8( getTextureName( LightType::eSpot, SmTexture::eNormal ) )
 				, GeometryInjectionPass::RsmNormalsIdx
 				, 0u );
-			auto c3d_rsmPositionMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( LightType::eSpot, SmTexture::ePosition )
+			auto c3d_rsmPositionMap = writer.declCombinedImg< FImg2DArrayRgba32 >( castor::toUtf8( getTextureName( LightType::eSpot, SmTexture::ePosition ) )
 				, GeometryInjectionPass::RsmPositionIdx
 				, 0u );
 			C3D_LpvLightConfig( writer, GeometryInjectionPass::LpvLightUboIdx, 0u );
@@ -286,10 +286,10 @@ namespace castor3d
 			, sdw::TraditionalGraphicsWriter & writer
 			, castor3d::shader::LpvGridData const & lpvGridData )
 		{
-			auto c3d_rsmNormalMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( LightType::ePoint, SmTexture::eNormal )
+			auto c3d_rsmNormalMap = writer.declCombinedImg< FImg2DArrayRgba32 >( castor::toUtf8( getTextureName( LightType::ePoint, SmTexture::eNormal ) )
 				, GeometryInjectionPass::RsmNormalsIdx
 				, 0u );
-			auto c3d_rsmPositionMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( LightType::ePoint, SmTexture::ePosition )
+			auto c3d_rsmPositionMap = writer.declCombinedImg< FImg2DArrayRgba32 >( castor::toUtf8( getTextureName( LightType::ePoint, SmTexture::ePosition ) )
 				, GeometryInjectionPass::RsmPositionIdx
 				, 0u );
 			C3D_LpvLightConfig( writer, GeometryInjectionPass::LpvLightUboIdx, 0u );
@@ -458,7 +458,7 @@ namespace castor3d
 			C3D_LpvGridConfig( writer, GeometryInjectionPass::LpvGridUboIdx, 0u, true );
 			getVertexProgram( lightType, rsmTexSize, renderSystem, writer, c3d_lpvGridData );
 			getGeomFragProgram( writer, c3d_lpvGridData );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return castor::make_unique< sdw::Shader >( castor::move( writer.getShader() ) );
 		}
 
 		static ShaderPtr getProgram( CubeMapFace face
@@ -469,7 +469,7 @@ namespace castor3d
 			C3D_LpvGridConfig( writer, GeometryInjectionPass::LpvGridUboIdx, 0u, true );
 			getPointVertexProgram( face, rsmTexSize, renderSystem, writer, c3d_lpvGridData );
 			getGeomFragProgram( writer, c3d_lpvGridData );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return castor::make_unique< sdw::Shader >( castor::move( writer.getShader() ) );
 		}
 
 		static GpuBufferOffsetT< NonTexturedQuad::Vertex > createVertexBuffer( RenderDevice const & device
@@ -502,7 +502,7 @@ namespace castor3d
 		, crg::RunnableGraph & graph
 		, crg::pp::Config config
 		, uint32_t lpvSize )
-		: m_holder{ pass, context, graph, std::move( config ), VK_PIPELINE_BIND_POINT_GRAPHICS, 1u }
+		: m_holder{ pass, context, graph, castor::move( config ), VK_PIPELINE_BIND_POINT_GRAPHICS, 1u }
 		, m_lpvSize{ lpvSize }
 	{
 	}
@@ -603,7 +603,7 @@ namespace castor3d
 		, LightType lightType
 		, uint32_t gridSize
 		, uint32_t rsmSize )
-		: castor::Named{ pass.getName() }
+		: castor::Named{ castor::makeString( pass.getName() ) }
 		, crg::RenderPass{ pass
 			, context
 			, graph
@@ -631,7 +631,7 @@ namespace castor3d
 		, CubeMapFace face
 		, uint32_t gridSize
 		, uint32_t rsmSize )
-		: castor::Named{ pass.getName() }
+		: castor::Named{ castor::makeString( pass.getName() ) }
 		, crg::RenderPass{ pass
 			, context
 			, graph

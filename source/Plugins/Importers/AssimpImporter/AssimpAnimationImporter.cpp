@@ -30,7 +30,7 @@ namespace c3d_assimp
 				, animation.mChannels + animation.mNumChannels
 				, [&nodeName]( aiNodeAnim const * const nodeAnim )
 				{
-					return castor::string::stringCast< castor::xchar >( nodeAnim->mNodeName.data ) == nodeName;
+					return makeString( nodeAnim->mNodeName ) == nodeName;
 				} );
 
 			if ( it != animation.mChannels + animation.mNumChannels )
@@ -46,7 +46,7 @@ namespace c3d_assimp
 			, castor3d::Submesh const & submesh
 			, castor3d::MeshMorphTarget & keyFrame )
 		{
-			std::vector< float > res;
+			castor::Vector< float > res;
 			res.resize( submesh.getMorphTargetsCount() );
 			auto valueIt = values.begin();
 			auto weightIt = weights.begin();
@@ -64,7 +64,7 @@ namespace c3d_assimp
 		}
 	}
 
-	using SceneNodeAnimationKeyFrameMap = std::map< castor::Milliseconds, castor3d::SceneNodeAnimationKeyFrameUPtr >;
+	using SceneNodeAnimationKeyFrameMap = castor::Map< castor::Milliseconds, castor3d::SceneNodeAnimationKeyFrameUPtr >;
 
 	AssimpAnimationImporter::AssimpAnimationImporter( castor3d::Engine & engine )
 		: castor3d::AnimationImporter{ engine }
@@ -152,7 +152,7 @@ namespace c3d_assimp
 				auto & aiAnimation = *animIt->second.second;
 
 				castor3d::MeshAnimationSubmesh animSubmesh{ animation, *submesh };
-				animation.addChild( std::move( animSubmesh ) );
+				animation.addChild( castor::move( animSubmesh ) );
 
 				for ( auto & morphKey : castor::makeArrayView( aiAnimation.mKeys, aiAnimation.mNumKeys ) )
 				{

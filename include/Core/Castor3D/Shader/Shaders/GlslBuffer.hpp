@@ -17,8 +17,8 @@ namespace castor3d::shader
 	{
 	public:
 		BufferBase( sdw::ShaderWriter & writer
-			, std::string blockName
-			, std::string variableName
+			, castor::MbString blockName
+			, castor::MbString variableName
 			, uint32_t binding
 			, uint32_t set
 			, bool enabled = true )
@@ -27,9 +27,9 @@ namespace castor3d::shader
 		{
 			if ( enabled )
 			{
-				m_ssbo = std::make_unique< sdw::StorageBuffer >( m_writer
-					, std::move( blockName )
-					, std::move( variableName )
+				m_ssbo = castor::make_unique< sdw::StorageBuffer >( m_writer
+					, castor::move( blockName )
+					, castor::move( variableName )
 					, binding
 					, set );
 				m_ssbo->declMember< sdw::UVec4 >( "counts" );
@@ -81,8 +81,8 @@ namespace castor3d::shader
 
 	protected:
 		sdw::ShaderWriter & m_writer;
-		std::unique_ptr< sdw::StorageBuffer > m_ssbo;
-		std::string m_variableName;
+		castor::RawUniquePtr< sdw::StorageBuffer > m_ssbo;
+		castor::MbString m_variableName;
 	};
 
 	template< typename DataT >
@@ -92,22 +92,22 @@ namespace castor3d::shader
 	public:
 		template< typename ... ParamsT >
 		BufferT( sdw::ShaderWriter & writer
-			, std::string blockName
-			, std::string variableName
+			, castor::MbString blockName
+			, castor::MbString variableName
 			, uint32_t binding
 			, uint32_t set
 			, bool enabled = true
 			, ParamsT && ... params )
 			: BufferBase{ writer
-				, std::move( blockName )
-				, std::move( variableName )
+				, castor::move( blockName )
+				, castor::move( variableName )
 				, binding
 				, set
 				, enabled }
 		{
 			if ( isEnabled() )
 			{
-				m_ssbo->declMemberArray< DataT >( "d", isEnabled(), std::forward< ParamsT >( params )... );
+				m_ssbo->declMemberArray< DataT >( "d", isEnabled(), castor::forward< ParamsT >( params )... );
 				m_ssbo->end();
 			}
 		}
@@ -118,7 +118,7 @@ namespace castor3d::shader
 		{
 			return ( m_ssbo
 				? m_ssbo->getMemberArray< DataT >( "d", isEnabled() )[index]
-				: m_writer.declLocale< DataT >( "disabled_" + m_variableName + "_data", false, std::forward< ParamsT >( params )... ) );
+				: m_writer.declLocale< DataT >( "disabled_" + m_variableName + "_data", false, castor::forward< ParamsT >( params )... ) );
 		}
 	};
 }

@@ -61,7 +61,7 @@ namespace castor3d
 			 *\brief		Crée et ajoute un group de lignes au sous-maillage.
 			 *\param[in]	lines	Les lignes.
 			 */
-			void addLineGroup( std::vector< LineIndices > const & lines )
+			void addLineGroup( castor::Vector< LineIndices > const & lines )
 			{
 				addLineGroup( lines.data(), lines.data() + lines.size() );
 			}
@@ -74,7 +74,7 @@ namespace castor3d
 			 *\param[in]	lines	Les lignes.
 			 */
 			template< size_t Count >
-			void addLineGroup( std::array< LineIndices, Count > const & lines )
+			void addLineGroup( castor::Array< LineIndices, Count > const & lines )
 			{
 				addLineGroup( lines.data(), lines.data() + Count );
 			}

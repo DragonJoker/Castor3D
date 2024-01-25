@@ -119,7 +119,7 @@ namespace PbrBloom
 		, bool const * enabled
 		, uint32_t const * passIndex )
 		: m_graph{ graph }
-		, m_shader{ "PbrBloomDownsample", down::getProgram( device ) }
+		, m_shader{ cuT( "PbrBloomDownsample" ), down::getProgram( device ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
 		, m_resultViews{ doCreateResultViews( graph, resultImg, passesCount ) }
 		, m_passes{ doCreatePasses( graph, previousPass, device, sceneView, passesCount, enabled, passIndex ) }
@@ -133,7 +133,7 @@ namespace PbrBloom
 
 		for ( auto & view : m_resultViews )
 		{
-			visitor.visit( "PostFX: PBRB - Down " + std::to_string( view.data->info.subresourceRange.baseMipLevel )
+			visitor.visit( cuT( "PostFX: PBRB - Down " ) + castor::string::toString( view.data->info.subresourceRange.baseMipLevel )
 				, view
 				, m_graph.getFinalLayoutState( view ).layout
 				, castor3d::TextureFactors{}.invert( true ) );
@@ -148,7 +148,7 @@ namespace PbrBloom
 
 		for ( uint32_t i = 0u; i < passesCount; ++i )
 		{
-			result.push_back( graph.createView( crg::ImageViewData{ resultImg.data->name + castor::string::toString( i )
+			result.push_back( graph.createView( crg::ImageViewData{ resultImg.data->name + castor::string::toMbString( i )
 				, resultImg
 				, 0u
 				, VK_IMAGE_VIEW_TYPE_2D
@@ -159,7 +159,7 @@ namespace PbrBloom
 		return result;
 	}
 
-	std::vector< crg::FramePass * > DownsamplePass::doCreatePasses( crg::FramePassGroup & graph
+	castor::Vector< crg::FramePass * > DownsamplePass::doCreatePasses( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
 		, castor3d::RenderDevice const & device
 		, crg::ImageViewIdArray const & sceneView
@@ -167,7 +167,7 @@ namespace PbrBloom
 		, bool const * enabled
 		, uint32_t const * passIndex )
 	{
-		std::vector< crg::FramePass * > result;
+		castor::Vector< crg::FramePass * > result;
 		auto prev = &previousPass;
 		auto src = sceneView;
 
@@ -176,7 +176,7 @@ namespace PbrBloom
 			auto srcExtent = castor3d::makeExtent2D( getMipExtent( src.front() ) );
 			auto dstExtent = castor3d::makeExtent2D( getMipExtent( m_resultViews[i] ) );
 			auto count = uint32_t( src.size() );
-			auto & pass = graph.createPass( "Downsample" + std::to_string( i )
+			auto & pass = graph.createPass( "Downsample" + castor::string::toMbString( i )
 				, [this, &device, passIndex, enabled, count, srcExtent, dstExtent, i]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
@@ -211,7 +211,7 @@ namespace PbrBloom
 						, graph
 						, crg::ru::Config{ count } );
 					m_quads.push_back( result.get() );
-					device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+					device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 						, result->getTimer() );
 					return result;
 				} );

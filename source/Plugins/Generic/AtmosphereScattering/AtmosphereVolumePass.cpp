@@ -37,7 +37,7 @@ namespace atmosphere_scattering
 			SurfaceT( sdw::ShaderWriter & writer
 				, sdw::expr::ExprPtr expr
 				, bool enabled = true )
-				: sdw::StructInstance{ writer, std::move( expr ), enabled }
+				: sdw::StructInstance{ writer, castor::move( expr ), enabled }
 				, sliceId{ getMember< sdw::Int >( "sliceId" ) }
 			{
 			}
@@ -253,12 +253,12 @@ namespace atmosphere_scattering
 		, crg::ImageViewId const & resultView
 		, uint32_t index
 		, bool const & enabled )
-		: castor::Named{ "CameraVolumePass" + castor::string::toString( index ) }
+		: castor::Named{ cuT( "CameraVolumePass" ) + castor::string::toString( index ) }
 		, m_shader{ getName(), volume::getProgram( *device.renderSystem.getEngine(), getExtent( resultView ), getExtent( transmittanceView ) ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
 	{
 		auto renderSize = getExtent( resultView );
-		auto & pass = graph.createPass( getName()
+		auto & pass = graph.createPass( castor::toUtf8( getName() )
 			, [this, &device, &enabled, renderSize]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
@@ -269,7 +269,7 @@ namespace atmosphere_scattering
 					.instances( renderSize.depth )
 					.enabled( &enabled )
 					.build( framePass, context, graph );
-				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );

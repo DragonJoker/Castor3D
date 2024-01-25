@@ -213,11 +213,11 @@ namespace castor3d
 
 	private:
 		ElementCacheT & m_cache;
-		mutable std::mutex m_elementsMutex;
-		std::set< ElementKeyT > m_createdElements;
+		mutable castor::Mutex m_elementsMutex;
+		castor::Set< ElementKeyT > m_createdElements;
 		ElementInitialiserT m_initialise;
 		ElementCleanerT m_clean;
-		std::vector< ElementPtrT > m_cleaning;
+		castor::Vector< ElementPtrT > m_cleaning;
 	};
 
 	template< typename CacheT >
@@ -232,8 +232,8 @@ namespace castor3d
 	{
 		return castor::makeUnique< CacheViewT< CacheT, EventT > >( name
 			, cache
-			, std::move( initialiser )
-			, std::move( cleaner ) );
+			, castor::move( initialiser )
+			, castor::move( cleaner ) );
 	}
 }
 

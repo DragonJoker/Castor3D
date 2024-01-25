@@ -12,7 +12,7 @@ namespace castor::platform
 #pragma clang diagnostic ignored "-Wmissing-prototypes"
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wmissing-declarations"
-	void callCpuid( uint32_t func, std::array< int32_t, 4 > & p_data )
+	void callCpuid( uint32_t func, Array< int32_t, 4 > & p_data )
 	{
 	}
 
@@ -21,9 +21,9 @@ namespace castor::platform
 		return android_getCpuCount();
 	}
 
-	std::string getCPUModel()
+	String getCPUModel()
 	{
-		return std::string{};
+		return String{};
 	}
 #pragma GCC diagnostic pop
 #pragma clang diagnostic pop

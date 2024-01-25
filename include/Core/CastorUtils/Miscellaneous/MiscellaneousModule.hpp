@@ -77,6 +77,7 @@ namespace castor
 			\~french
 			\brief		Un itérateur sur une chaîne UTF-8
 			*/
+			template< typename CharT, typename StringT >
 			class iterator;
 			/**
 			\~english
@@ -84,6 +85,7 @@ namespace castor
 			\~french
 			\brief		Un itérateur sur une chaîne UTF-8
 			*/
+			template< typename CharT, typename StringT >
 			class const_iterator;
 		}
 	}

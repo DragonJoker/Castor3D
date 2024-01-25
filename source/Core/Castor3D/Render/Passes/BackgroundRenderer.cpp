@@ -98,7 +98,7 @@ namespace castor3d
 		, crg::ImageViewId const * depthObj
 		, ProgressBar * progress )
 	{
-		stepProgressBarLocal( progress, "Creating background pass" );
+		stepProgressBarLocal( progress, cuT( "Creating background pass" ) );
 		auto size = makeExtent2D( getExtent( colour.front() ) );
 		auto & result = background.createBackgroundPass( graph
 			, m_device

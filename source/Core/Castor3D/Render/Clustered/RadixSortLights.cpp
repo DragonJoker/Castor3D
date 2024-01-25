@@ -238,7 +238,7 @@ namespace castor3d
 					, RenderDevice const & device
 					, FramePass const * parent
 					, LightType lightType )
-					: shader{ VK_SHADER_STAGE_COMPUTE_BIT, "RadixSort/" + getName( lightType ), createShader( device ) }
+					: shader{ VK_SHADER_STAGE_COMPUTE_BIT, cuT( "RadixSort/" ) + getName( lightType ), createShader( device ) }
 					, createInfo{ ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, shader ) } }
 					, cpConfig{ crg::getDefaultV< InitialiseCallback >()
 						, nullptr
@@ -329,21 +329,21 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = std::make_unique< radix::FramePass >( framePass
+				auto result = castor::make_unique< radix::FramePass >( framePass
 					, context
 					, graph
 					, device
 					, clusters
 					, LightType::ePoint );
-				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
 		point.addDependency( *previousPass );
-		createInputStoragePassBinding( point, uint32_t( radix::eInputKeys ), "C3D_InLightMortonCodes", clusters.getOutputPointLightMortonCodesBuffer(), 0u, ashes::WholeSize );
-		createInputStoragePassBinding( point, uint32_t( radix::eInputValues ), "C3D_InLightIndices", clusters.getOutputPointLightIndicesBuffer(), 0u, ashes::WholeSize );
-		createClearableOutputStorageBinding( point, uint32_t( radix::eOutputKeys ), "C3D_OutLightMortonCodes", clusters.getInputPointLightMortonCodesBuffer(), 0u, ashes::WholeSize );
-		createClearableOutputStorageBinding( point, uint32_t( radix::eOutputValues ), "C3D_OutLightIndices", clusters.getInputPointLightIndicesBuffer(), 0u, ashes::WholeSize );
+		createInputStoragePassBinding( point, uint32_t( radix::eInputKeys ), cuT( "C3D_InLightMortonCodes" ), clusters.getOutputPointLightMortonCodesBuffer(), 0u, ashes::WholeSize );
+		createInputStoragePassBinding( point, uint32_t( radix::eInputValues ), cuT( "C3D_InLightIndices" ), clusters.getOutputPointLightIndicesBuffer(), 0u, ashes::WholeSize );
+		createClearableOutputStorageBinding( point, uint32_t( radix::eOutputKeys ), cuT( "C3D_OutLightMortonCodes" ), clusters.getInputPointLightMortonCodesBuffer(), 0u, ashes::WholeSize );
+		createClearableOutputStorageBinding( point, uint32_t( radix::eOutputValues ), cuT( "C3D_OutLightIndices" ), clusters.getInputPointLightIndicesBuffer(), 0u, ashes::WholeSize );
 
 		// Spot lights
 		auto & spot = graph.createPass( "RadixSort/Spot"
@@ -351,21 +351,21 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = std::make_unique< radix::FramePass >( framePass
+				auto result = castor::make_unique< radix::FramePass >( framePass
 					, context
 					, graph
 					, device
 					, clusters
 					, LightType::eSpot );
-				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
 		spot.addDependency( *previousPass );
-		createInputStoragePassBinding( spot, uint32_t( radix::eInputKeys ), "C3D_InLightMortonCodes", clusters.getOutputSpotLightMortonCodesBuffer(), 0u, ashes::WholeSize );
-		createInputStoragePassBinding( spot, uint32_t( radix::eInputValues ), "C3D_InLightIndices", clusters.getOutputSpotLightIndicesBuffer(), 0u, ashes::WholeSize );
-		createClearableOutputStorageBinding( spot, uint32_t( radix::eOutputKeys ), "C3D_OutLightMortonCodes", clusters.getInputSpotLightMortonCodesBuffer(), 0u, ashes::WholeSize );
-		createClearableOutputStorageBinding( spot, uint32_t( radix::eOutputValues ), "C3D_OutLightIndices", clusters.getInputSpotLightIndicesBuffer(), 0u, ashes::WholeSize );
+		createInputStoragePassBinding( spot, uint32_t( radix::eInputKeys ), cuT( "C3D_InLightMortonCodes" ), clusters.getOutputSpotLightMortonCodesBuffer(), 0u, ashes::WholeSize );
+		createInputStoragePassBinding( spot, uint32_t( radix::eInputValues ), cuT( "C3D_InLightIndices" ), clusters.getOutputSpotLightIndicesBuffer(), 0u, ashes::WholeSize );
+		createClearableOutputStorageBinding( spot, uint32_t( radix::eOutputKeys ), cuT( "C3D_OutLightMortonCodes" ), clusters.getInputSpotLightMortonCodesBuffer(), 0u, ashes::WholeSize );
+		createClearableOutputStorageBinding( spot, uint32_t( radix::eOutputValues ), cuT( "C3D_OutLightIndices" ), clusters.getInputSpotLightIndicesBuffer(), 0u, ashes::WholeSize );
 
 		return { &point, &spot };
 	}

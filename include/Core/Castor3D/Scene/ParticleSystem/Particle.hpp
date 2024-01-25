@@ -89,7 +89,7 @@ namespace castor3d
 
 	private:
 		ParticleDeclaration const & m_description;
-		std::vector< uint8_t > m_data;
+		castor::Vector< uint8_t > m_data;
 	};
 }
 

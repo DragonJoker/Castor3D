@@ -28,7 +28,7 @@
 
 namespace convert
 {
-	using StringArray = std::vector< std::string >;
+	using StringArray = castor::Vector< castor::MbString >;
 
 	struct Options
 	{
@@ -62,8 +62,8 @@ namespace convert
 		std::cout << "              - pbr : PBR (default value)" << std::endl;
 	}
 
-	static bool parseSwitchOption( castor::String const & option
-		, castor::StringArray & args )
+	static bool parseSwitchOption( castor::MbString const & option
+		, StringArray & args )
 	{
 		auto it = std::find( args.begin(), args.end(), "-" + option );
 		auto result = it != args.end();
@@ -76,8 +76,8 @@ namespace convert
 		return result;
 	}
 
-	static bool parseValueOption( castor::String const & option
-		, castor::StringArray & args
+	static bool parseValueOption( castor::MbString const & option
+		, StringArray & args
 		, castor::String & value )
 	{
 		auto it = std::find( args.begin(), args.end(), "-" + option );
@@ -93,7 +93,7 @@ namespace convert
 			}
 
 			it = args.erase( it );
-			value = *it;
+			value = castor::makeString( *it );
 			args.erase( it );
 		}
 
@@ -101,7 +101,7 @@ namespace convert
 	}
 
 	static bool parseArgs( int argc
-		, char * argv[]
+		, char const * const argv[]
 		, Options & options )
 	{
 		StringArray args{ argv + 1, argv + argc };
@@ -139,11 +139,11 @@ namespace convert
 		{
 			overridePassType = true;
 
-			if ( value == "blinn_phong" || value == "phong" )
+			if ( value == cuT( "blinn_phong" ) || value == cuT( "phong" ) )
 			{
 				options.passType = castor3d::PhongPass::LightingModel;
 			}
-			else if ( value == "pbr" )
+			else if ( value == cuT( "pbr" ) )
 			{
 				options.passType = castor3d::PbrPass::LightingModel;
 			}
@@ -186,17 +186,15 @@ namespace convert
 			return false;
 		}
 
-		options.input = castor::Path{ args.front() };
+		options.input = castor::Path{ castor::makeString( args.front() ) };
 
 		if ( options.output.empty() )
 		{
 			options.output = options.input.getFileName();
 		}
 
-		auto extension = castor::string::lowerCase( options.input.getExtension() );
-
-		if ( !overridePassType
-			&& ( extension == "gltf" || extension == "glb" ) )
+		if ( auto extension = castor::string::lowerCase( options.input.getExtension() );
+			!overridePassType && ( extension == cuT( "gltf" ) || extension == cuT( "glb" ) ) )
 		{
 			options.passType = castor3d::PbrPass::LightingModel;
 		}
@@ -211,12 +209,12 @@ namespace convert
 		castor::PathArray result;
 
 		// Exclude debug plug-in in release builds, and release plug-ins in debug builds
-		for ( auto file : files )
+		for ( auto const & file : files )
 		{
 			if ( file.find( CU_SharedLibExt ) != castor::String::npos
 				&& file.getFileName().find( cuT( "castor3d" ) ) == 0u )
 			{
-				result.push_back( file );
+				result.emplace_back( file );
 			}
 		}
 
@@ -250,19 +248,14 @@ namespace convert
 			castor::PathArray arrayFailed;
 			castor::PathArray otherPlugins;
 
-			for ( auto file : arrayKept )
+			for ( auto const & file : arrayKept )
 			{
-				if ( file.getExtension() == CU_SharedLibExt )
-				{
+				if ( file.getExtension() == CU_SharedLibExt
 					// Only load importer and material plugins.
-					if ( file.find( cuT( "Importer" ) ) != castor::String::npos
-						|| file.find( cuT( "Material" ) ) != castor::String::npos )
-					{
-						if ( !engine.getPluginCache().loadPlugin( file ) )
-						{
-							arrayFailed.push_back( file );
-						}
-					}
+					&& ( file.find( cuT( "Importer" ) ) != castor::String::npos || file.find( cuT( "Material" ) ) != castor::String::npos )
+					&& !engine.getPluginCache().loadPlugin( file ) )
+				{
+					arrayFailed.emplace_back( file );
 				}
 			}
 
@@ -270,7 +263,7 @@ namespace convert
 			{
 				castor::Logger::logWarning( cuT( "Some plug-ins couldn't be loaded :" ) );
 
-				for ( auto file : arrayFailed )
+				for ( auto const & file : arrayFailed )
 				{
 					castor::Logger::logWarning( file.getFileName() );
 				}
@@ -308,7 +301,7 @@ namespace convert
 
 			if ( renderer != renderers.end() )
 			{
-				if ( engine.loadRenderer( renderer->name ) )
+				if ( engine.loadRenderer( castor::makeString( renderer->name ) ) )
 				{
 					engine.initialise( 100, false );
 					loadPlugins( engine );
@@ -355,7 +348,7 @@ int main( int argc, char * argv[] )
 
 		if ( !castor::File::fileExists( path ) )
 		{
-			std::cerr << "File [" << path << "] does not exist." << std::endl << std::endl;
+			std::cerr << "File [" << castor::toUtf8( path ) << "] does not exist." << std::endl << std::endl;
 			convert::printUsage();
 			return EXIT_SUCCESS;
 		}
@@ -372,14 +365,14 @@ int main( int argc, char * argv[] )
 				, castor3d::Version{ CastorMeshConverter_VERSION_MAJOR, CastorMeshConverter_VERSION_MINOR, CastorMeshConverter_VERSION_BUILD }
 				, false
 				, false };
-			castor3d::Engine engine{ std::move( config ) };
+			castor3d::Engine engine{ castor::move( config ) };
 
 			if ( convert::initialiseEngine( engine ) )
 			{
 				auto name = path.getFileName();
 				auto extension = castor::string::lowerCase( path.getExtension() );
 
-				if ( extension == "cscn" )
+				if ( extension == cuT( "cscn" ) )
 				{
 					try
 					{
@@ -401,7 +394,7 @@ int main( int argc, char * argv[] )
 								}
 
 								castor3d::exporter::CscnSceneExporter exporter{ options.options };
-								exporter.exportScene( *scene, rootFolder / ( scene->getName() + ".cscn" ) );
+								exporter.exportScene( *scene, rootFolder / ( scene->getName() + cuT( ".cscn" ) ) );
 								scene->cleanup();
 							}
 							else
@@ -447,35 +440,35 @@ int main( int argc, char * argv[] )
 						if ( scene.getCameraCache().isEmpty() )
 						{
 							float farPlane = 0.0f;
-							auto cameraNode = scene.createSceneNode( "MainCameraNode", scene );
+							auto cameraNode = scene.createSceneNode( cuT( "MainCameraNode" ), scene );
 							cameraNode->setPosition( convert::getCameraPosition( scene.getBoundingBox(), farPlane ) );
 							cameraNode->attachTo( *scene.getCameraRootNode() );
 
-							if ( auto camNode = scene.addSceneNode( "MainCameraNode", cameraNode ) )
+							if ( auto camNode = scene.addSceneNode( cuT( "MainCameraNode" ), cameraNode ) )
 							{
 								castor3d::Viewport viewport{ *scene.getEngine() };
 								viewport.setPerspective( 45.0_degrees
 									, 1.7778f
 									, std::max( 0.1f, farPlane / 1000.0f )
 									, std::min( farPlane, 1000.0f ) );
-								auto camera = scene.createCamera( "MainCamera"
+								auto camera = scene.createCamera( cuT( "MainCamera" )
 									, scene
 									, *camNode
 									, viewport );
 								camera->attachTo( *camNode );
-								scene.addCamera( "MainCamera", camera, false );
+								scene.addCamera( cuT( "MainCamera" ), camera, false );
 							}
 						}
 
 						if ( scene.getLightCache().isEmpty() )
 						{
-							auto lightNode = scene.createSceneNode( "LightNode", scene );
+							auto lightNode = scene.createSceneNode( cuT( "LightNode" ), scene );
 							lightNode->setOrientation( castor::Quaternion::fromAxisAngle( castor::Point3f{ 1.0, 0.0, 0.0 }, 90.0_degrees ) );
 							lightNode->attachTo( *scene.getObjectRootNode() );
 
-							if ( auto lgtNode = scene.addSceneNode( "LightNode", lightNode ) )
+							if ( auto lgtNode = scene.addSceneNode( cuT( "LightNode" ), lightNode ) )
 							{
-								auto light = scene.createLight( "SunLight"
+								auto light = scene.createLight( cuT( "SunLight" )
 									, scene
 									, *lgtNode
 									, scene.getLightsFactory()
@@ -483,7 +476,7 @@ int main( int argc, char * argv[] )
 								light->setColour( castor::RgbColour::fromComponents( 1.0f, 1.0f, 1.0f ) );
 								light->setIntensity( { 8.0f, 10.0f } );
 								light->attachTo( *lgtNode );
-								scene.addLight( "SunLight", light, false );
+								scene.addLight( cuT( "SunLight" ), light, false );
 							}
 						}
 

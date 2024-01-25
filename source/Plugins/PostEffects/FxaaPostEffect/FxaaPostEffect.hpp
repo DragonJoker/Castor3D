@@ -66,7 +66,7 @@ namespace fxaa
 
 	public:
 		static castor::String Type;
-		static castor::String Name;
+		static castor::MbString Name;
 
 	private:
 		castor::ChangeTracked< float > m_subpixShift{ { 1.0f / 4.0f } };

@@ -91,7 +91,6 @@ See LICENSE file in root folder
 #include <CastorUtils/Multithreading/MultithreadingModule.hpp>
 #include <CastorUtils/Multithreading/ThreadPool.hpp>
 #include <CastorUtils/Pool/BuddyAllocator.hpp>
-#include <CastorUtils/Pool/UniqueObjectPool.hpp>
 #include <CastorUtils/Stream/StreamPrefixManipulators.hpp>
 
 #include <ShaderAST/Shader.hpp>

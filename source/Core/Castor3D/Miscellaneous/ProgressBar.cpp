@@ -152,8 +152,8 @@ namespace castor3d
 
 				if ( progress )
 				{
-					progress->setTitle( castor::string::toU32String( update.title ) );
-					progress->setCaption( castor::string::toU32String( update.label ) );
+					progress->setTitle( castor::toUtf8U32String( update.title ) );
+					progress->setCaption( castor::toUtf8U32String( update.label ) );
 					progress->setProgress( 0 );
 					progress->setRange( castor::makeRange( 0, update.rangeMax ) );
 					progress->setProgress( update.value );
@@ -166,7 +166,7 @@ namespace castor3d
 	ProgressBar::ProgressBar( Engine & engine
 		, ProgressCtrlRPtr globalProgress
 		, ProgressCtrlRPtr localProgress )
-		: m_listener{ engine.addNewFrameListener( "C3D_ProgressBar" ) }
+		: m_listener{ engine.addNewFrameListener( cuT( "C3D_ProgressBar" ) ) }
 		, m_global{ m_listener, globalProgress }
 		, m_local{ m_listener, localProgress }
 	{

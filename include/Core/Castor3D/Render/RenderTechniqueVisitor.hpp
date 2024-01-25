@@ -18,8 +18,8 @@ namespace castor3d
 		inline RenderTechniqueVisitor( PipelineFlags flags
 			, Scene const & scene
 			, Config config = { false } )noexcept
-			: ConfigurationVisitor{ std::move( config ) }
-			, m_flags{ std::move( flags ) }
+			: ConfigurationVisitor{ castor::move( config ) }
+			, m_flags{ castor::move( flags ) }
 			, m_scene{ scene }
 		{
 		}

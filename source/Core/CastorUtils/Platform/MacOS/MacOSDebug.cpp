@@ -17,16 +17,15 @@ namespace castor::debug
 	{
 #if !defined( NDEBUG )
 
-		template< typename CharU, typename CharT >
-		static std::basic_string< CharU > demangleSymbol( std::basic_string< CharT > const & name )
+		static MbString demangleSymbol( MbString const & name )
 		{
-			std::string ret = string::stringCast< char >( name );
-			size_t lindex = name.find( "(" );
-			size_t rindex = name.find( "+" );
+			MbString ret = toUtf8( name );
+			size_t lindex = ret.find( "(" );
+			size_t rindex = ret.find( "+" );
 
-			if ( lindex != std::string::npos && rindex != std::string::npos )
+			if ( lindex != MbString::npos && rindex != MbString::npos )
 			{
-				ret = name.substr( lindex + 1, rindex - 1 - lindex );
+				ret = ret.substr( lindex + 1, rindex - 1 - lindex );
 			}
 
 			int status;
@@ -34,28 +33,27 @@ namespace castor::debug
 
 			if ( !status )
 			{
-				ret = name.substr( 0, lindex + 1 ) + real + name.substr( rindex );
+				ret = ret.substr( 0, lindex + 1 ) + real + name.substr( rindex );
 			}
 			else
 			{
-				ret = name;
+				ret = toUtf8( name );
 			}
 
 			free( real );
-			return string::stringCast< CharU >( ret );
+			return ret;
 		}
 
-		template< typename CharT >
-		static void showBacktrace( std::basic_ostream< CharT > & stream, int toCapture, int toSkip )
+		static void showBacktrace( OutputStream & stream, int toCapture, int toSkip )
 		{
-			stream << "CALL STACK:" << std::endl;
-			std::vector< void * > backTrace( toCapture );
+			stream << cuT( "CALL STACK:" ) << std::endl;
+			Vector< void * > backTrace( toCapture );
 			unsigned int num( ::backtrace( backTrace.data(), toCapture ) );
 			char ** fnStrings( ::backtrace_symbols( backTrace.data(), num ) );
 
 			for ( unsigned i = toSkip; i < num; ++i )
 			{
-				stream << "== " << demangleSymbol< CharT >( string::stringCast< char >( fnStrings[i] ) ) << std::endl;
+				stream << "== " << makeString( demangleSymbol( fnStrings[i] ) ) << std::endl;
 			}
 
 			free( fnStrings );
@@ -63,8 +61,7 @@ namespace castor::debug
 
 #else
 
-		template< typename CharT >
-		static void showBacktrace( std::basic_ostream< CharT > & stream, int toCapture, int toSkip )
+		static void showBacktrace( OutputStream & stream, int toCapture, int toSkip )
 		{
 		}
 
@@ -87,13 +84,7 @@ namespace castor::debug
 	{
 	}
 
-	std::wostream & operator<<( std::wostream & stream, Backtrace const & bt )
-	{
-		backtrace::showBacktrace( stream, bt.m_toCapture, bt.m_toSkip );
-		return stream;
-	}
-
-	std::ostream & operator<<( std::ostream & stream, Backtrace const & bt )
+	OutputStream & operator<<( OutputStream & stream, Backtrace const & bt )
 	{
 		backtrace::showBacktrace( stream, bt.m_toCapture, bt.m_toSkip );
 		return stream;

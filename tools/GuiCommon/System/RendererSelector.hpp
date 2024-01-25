@@ -50,7 +50,7 @@ namespace GuiCommon
 		wxListBox * m_renderersList;
 		wxListBox * m_devicesList;
 		castor3d::Engine & m_engine;
-		std::vector< castor3d::Renderer > m_renderers;
+		castor::Vector< castor3d::Renderer > m_renderers;
 		castor3d::Renderer * m_currentRenderer{};
 	};
 }

@@ -37,7 +37,7 @@ namespace castor3d
 {
 	//*********************************************************************************************
 
-	castor::String const DepthPass::Type = "c3d.depth";
+	castor::String const DepthPass::Type = cuT( "c3d.depth" );
 
 	DepthPass::DepthPass( RenderTechnique * parent
 		, crg::FramePass const & pass
@@ -54,7 +54,7 @@ namespace castor3d
 			, device
 			, Type
 			, {}
-			, std::move( targetDepth )
+			, castor::move( targetDepth )
 			, renderPassDesc
 			, { false, ssaoConfig } }
 	{

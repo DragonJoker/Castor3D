@@ -7,13 +7,13 @@
 
 namespace castor3d
 {
-	inline void Submesh::addPoints( std::vector< InterleavedVertex > const & vertices )
+	inline void Submesh::addPoints( castor::Vector< InterleavedVertex > const & vertices )
 	{
 		addPoints( vertices.data(), vertices.data() + vertices.size() );
 	}
 
 	template< size_t Count >
-	inline void Submesh::addPoints( std::array< InterleavedVertex, Count > const & vertices )
+	inline void Submesh::addPoints( castor::Array< InterleavedVertex, Count > const & vertices )
 	{
 		addPoints( vertices.data(), vertices.data() + vertices.size() );
 	}
@@ -56,7 +56,7 @@ namespace castor3d
 	inline ComponentT * Submesh::createComponent( ParamsT && ... params )
 	{
 		auto component = castor::makeUnique< ComponentT >( *this
-			, std::forward< ParamsT >( params )... );
+			, castor::forward< ParamsT >( params )... );
 		auto result = component.get();
 		addComponent( castor::ptrRefCast< SubmeshComponent >( component ) );
 		return result;

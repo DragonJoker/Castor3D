@@ -17,7 +17,7 @@ namespace castor
 {
 	namespace img
 	{
-		stbir_datatype getStbDataType( PixelFormat fmt )
+		static stbir_datatype getStbDataType( PixelFormat fmt )
 		{
 			if ( isFloatingPoint( fmt ) )
 			{
@@ -73,12 +73,12 @@ namespace castor
 		: Named{ name }
 		, m_pathFile{ path }
 		, m_buffer{ ( buffer
-			? std::move( buffer )
+			? castor::move( buffer )
 			: PxBufferBase::create( layout.dimensions()
 				, layout.depthLayers()
 				, layout.levels
 				, layout.format ) ) }
-		, m_layout{ std::move( layout ) }
+		, m_layout{ castor::move( layout ) }
 	{
 		CU_CheckInvariants();
 	}
@@ -106,7 +106,7 @@ namespace castor
 		auto result = ( m_layout.extent->x != extent.getWidth()
 				|| m_layout.extent->y != extent.getHeight()
 				|| format != m_layout.format )
-			? std::move( m_buffer )
+			? castor::move( m_buffer )
 			: nullptr;
 
 		if ( result )
@@ -176,7 +176,7 @@ namespace castor
 
 	Image & Image::resample( Size const & size )
 	{
-		m_buffer = resample( size, std::move( m_buffer ) );
+		m_buffer = resample( size, castor::move( m_buffer ) );
 		m_layout.extent->x = m_buffer->getHeight();
 		m_layout.extent->y = m_buffer->getWidth();
 		m_layout.format = m_buffer->getFormat();

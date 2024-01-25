@@ -39,7 +39,7 @@ namespace castor3d
 			{
 			case ChunkType::eName:
 				result = doParseChunk( name, chunk );
-				checkError( result, "Couldn't parse name." );
+				checkError( result, cuT( "Couldn't parse name." ) );
 
 				if ( result )
 				{
@@ -68,7 +68,7 @@ namespace castor3d
 
 			case ChunkType::eAnimationObject:
 				result = createBinaryParser< SkeletonAnimationObject >().parse( obj, chunk );
-				checkError( result, "Couldn't parse object." );
+				checkError( result, cuT( "Couldn't parse object." ) );
 				break;
 
 			default:

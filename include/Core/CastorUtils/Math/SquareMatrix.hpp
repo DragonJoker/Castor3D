@@ -53,7 +53,7 @@ namespace castor
 		template< typename Type >
 		explicit SquareMatrix( Matrix< Type, Count, Count > const & rhs );
 		template< typename Type >
-		explicit SquareMatrix( std::array< Type, Count * Count > const & rhs );
+		explicit SquareMatrix( Array< Type, Count * Count > const & rhs );
 		template< typename Type >
 		explicit SquareMatrix( Type const * rhs );
 		explicit SquareMatrix( std::initializer_list< T > rhs );
@@ -252,8 +252,10 @@ namespace castor
 	*name Opérateurs de flux.
 	**/
 	/**@{*/
-	template< typename CharT, typename T, uint32_t Count > std::basic_ostream< CharT > & operator<<( std::basic_ostream< CharT > & streamOut, castor::SquareMatrix< T, Count > const & matrix );
-	template< typename CharT, typename T, uint32_t Count > std::basic_istream< CharT > & operator>>( std::basic_istream< CharT > & streamIn, castor::SquareMatrix< T, Count > & matrix );
+	template< typename CharT, typename T, uint32_t Count >
+	 std::basic_ostream< CharT > & operator<<( std::basic_ostream< CharT > & streamOut, SquareMatrix< T, Count > const & matrix );
+	template< typename CharT, typename T, uint32_t Count >
+	 std::basic_istream< CharT > & operator>>( std::basic_istream< CharT > & streamIn, SquareMatrix< T, Count > & matrix );
 	/**@}*/
 }
 

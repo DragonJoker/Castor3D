@@ -82,7 +82,7 @@ namespace castor3d
 				, OnControlChangedConnection o )noexcept
 				: m_type{ eControl }
 				, m_flags{ f }
-				, m_connection{ std::move( o ) }
+				, m_connection{ castor::move( o ) }
 			{
 				m_value.control = &c;
 			}
@@ -292,8 +292,8 @@ namespace castor3d
 	protected:
 		ControlsManager * m_manager{};
 		LayoutControl * m_container{};
-		std::vector< Item > m_items;
-		std::vector< SpacerUPtr > m_spacers;
+		castor::Vector< Item > m_items;
+		castor::Vector< SpacerUPtr > m_spacers;
 		CpuFrameEvent * m_event{};
 		std::atomic_bool m_updating{ false };
 	};

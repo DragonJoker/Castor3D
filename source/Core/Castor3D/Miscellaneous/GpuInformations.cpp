@@ -2,53 +2,53 @@
 
 namespace castor3d
 {
-	std::ostream & operator<<( std::ostream & stream, GpuInformations const & object )
+	castor::OutputStream & operator<<( castor::OutputStream & stream, GpuInformations const & object )
 	{
 		auto support = []( bool supported )
 		{
 			return ( supported ? "supported" : "not supported" );
 		};
-		std::array< std::string, size_t( GpuMin::eCount ) > const minNames
+		castor::Array< castor::String, size_t( GpuMin::eCount ) > const minNames
 		{
-			"Min buffer map size",
-			"Min uniform buffer offset alignment",
+			cuT( "Min buffer map size" ),
+			cuT( "Min uniform buffer offset alignment" ),
 		};
-		std::array< std::string, size_t( GpuMax::eCount ) > const maxNames
+		castor::Array< castor::String, size_t( GpuMax::eCount ) > const maxNames
 		{
-			"Max image 1D size",
-			"Max image 2D size",
-			"Max image 3D size",
-			"Max image cube size",
-			"Max image layers count",
-			"Max sampler lod bias",
-			"Max clip distances",
-			"Max framebuffer width",
-			"Max framebuffer height",
-			"Max framebuffer layers",
-			"Max framebuffer samples",
-			"Max texel buffer range",
-			"Max uniform buffer range",
-			"Max storage buffer range",
-			"Max viewport width",
-			"Max viewport height",
-			"Max viewports count",
-			"Max work group count X",
-			"Max work group count Y",
-			"Max work group count Z",
-			"Max work group size X",
-			"Max work group size Y",
-			"Max work group size Z",
-			"Max work group invocations",
-			"Max mesh work group invocations",
-			"Max mesh work group size X",
-			"Max mesh work group size Y",
-			"Max mesh work group size Z",
-			"Max mesh output vertices",
-			"Max mesh output primitives",
-			"Max task work group invocations",
-			"Max task work group size X",
-			"Max task work group size Y",
-			"Max task work group size Z",
+			cuT( "Max image 1D size" ),
+			cuT( "Max image 2D size" ),
+			cuT( "Max image 3D size" ),
+			cuT( "Max image cube size" ),
+			cuT( "Max image layers count" ),
+			cuT( "Max sampler lod bias" ),
+			cuT( "Max clip distances" ),
+			cuT( "Max framebuffer width" ),
+			cuT( "Max framebuffer height" ),
+			cuT( "Max framebuffer layers" ),
+			cuT( "Max framebuffer samples" ),
+			cuT( "Max texel buffer range" ),
+			cuT( "Max uniform buffer range" ),
+			cuT( "Max storage buffer range" ),
+			cuT( "Max viewport width" ),
+			cuT( "Max viewport height" ),
+			cuT( "Max viewports count" ),
+			cuT( "Max work group count X" ),
+			cuT( "Max work group count Y" ),
+			cuT( "Max work group count Z" ),
+			cuT( "Max work group size X" ),
+			cuT( "Max work group size Y" ),
+			cuT( "Max work group size Z" ),
+			cuT( "Max work group invocations" ),
+			cuT( "Max mesh work group invocations" ),
+			cuT( "Max mesh work group size X" ),
+			cuT( "Max mesh work group size Y" ),
+			cuT( "Max mesh work group size Z" ),
+			cuT( "Max mesh output vertices" ),
+			cuT( "Max mesh output primitives" ),
+			cuT( "Max task work group invocations" ),
+			cuT( "Max task work group size X" ),
+			cuT( "Max task work group size Y" ),
+			cuT( "Max task work group size Z" ),
 		};
 		stream << "GPU informations:" << "\n";
 		stream << "    Vendor: " << object.getVendor() << "\n";

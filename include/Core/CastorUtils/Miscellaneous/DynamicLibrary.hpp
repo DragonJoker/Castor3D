@@ -92,7 +92,7 @@ namespace castor
 		template< typename FuncType >
 		bool getFunction( FuncType & function, char const * name )noexcept
 		{
-			return getFunction( function, string::stringCast< xchar >( name ) );
+			return getFunction( function, makeString( name ) );
 		}
 		/**
 		 *\~english
@@ -109,7 +109,7 @@ namespace castor
 		template< typename FuncType >
 		bool getFunction( FuncType & function, wchar_t const * name )noexcept
 		{
-			return getFunction( function, string::stringCast< xchar >( name ) );
+			return getFunction( function, makeString( name ) );
 		}
 		/**
 		 *\~english
@@ -144,7 +144,7 @@ namespace castor
 		template< typename FuncType >
 		bool getFunction( char const * name, FuncType & function )noexcept
 		{
-			return getFunction( function, string::stringCast< xchar >( name ) );
+			return getFunction( function, makeString( name ) );
 		}
 		/**
 		 *\~english
@@ -161,7 +161,7 @@ namespace castor
 		template< typename FuncType >
 		bool getFunction( wchar_t const * name, FuncType & function )noexcept
 		{
-			return getFunction( function, string::stringCast< xchar >( name ) );
+			return getFunction( function, makeString( name ) );
 		}
 		/**
 		 *\~english

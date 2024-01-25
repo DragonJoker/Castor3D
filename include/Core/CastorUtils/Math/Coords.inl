@@ -102,7 +102,7 @@ namespace castor
 	template< typename T, uint32_t Count >
 	void Coords< T, Count >::swap( Coords< T, Count > & rhs )noexcept
 	{
-		std::swap( m_coords, rhs.m_coords );
+		castor::swap( m_coords, rhs.m_coords );
 	}
 
 	template< typename T, uint32_t Count, typename U, uint32_t UCount >

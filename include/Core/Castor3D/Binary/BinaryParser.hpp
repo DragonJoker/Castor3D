@@ -59,7 +59,7 @@ namespace castor3d
 			if ( header.getChunkType() != ChunkType::eCmshFile )
 			{
 				result = false;
-				checkError( result, "Not a valid CMSH file." );
+				checkError( result, cuT( "Not a valid CMSH file." ) );
 			}
 
 			if ( result )
@@ -70,7 +70,7 @@ namespace castor3d
 			if ( result )
 			{
 				result = header.checkAvailable( 1 );
-				checkError( result, "No more data in chunk." );
+				checkError( result, cuT( "No more data in chunk." ) );
 			}
 
 			BinaryChunk chunk{ isLittleEndian( header ) };
@@ -78,13 +78,13 @@ namespace castor3d
 			if ( result )
 			{
 				result = header.getSubChunk( chunk );
-				checkError( result, "Couldn't retrieve subchunk." );
+				checkError( result, cuT( "Couldn't retrieve subchunk." ) );
 			}
 
 			if ( result )
 			{
 				result = parse( obj, chunk );
-				checkError( result, "Couldn't parse chunk." );
+				checkError( result, cuT( "Couldn't parse chunk." ) );
 			}
 
 			return result;
@@ -113,7 +113,7 @@ namespace castor3d
 			else
 			{
 				result = false;
-				checkError( result, "Not a valid chunk for parsed type." );
+				checkError( result, cuT( "Not a valid chunk for parsed type." ) );
 			}
 
 			if ( result )
@@ -188,7 +188,7 @@ namespace castor3d
 			if ( schunk.getChunkType() != ChunkType::eCmshHeader )
 			{
 				result = false;
-				checkError( result, "Missing header chunk." );
+				checkError( result, cuT( "Missing header chunk." ) );
 			}
 
 			castor::String name;
@@ -198,7 +198,7 @@ namespace castor3d
 			{
 				BinaryChunk subchunk{ isLittleEndian( chunk ) };
 				result = schunk.getSubChunk( subchunk );
-				checkError( result, "Couldn't retrieve subchunk." );
+				checkError( result, cuT( "Couldn't retrieve subchunk." ) );
 
 				switch ( subchunk.getChunkType() )
 				{
@@ -208,7 +208,7 @@ namespace castor3d
 
 				case ChunkType::eCmshVersion:
 					result = doParseChunk( version, subchunk );
-					checkError( result, "Couldn't parse chunk." );
+					checkError( result, cuT( "Couldn't parse chunk." ) );
 
 					if ( result )
 					{
@@ -238,7 +238,7 @@ namespace castor3d
 
 			if ( !result )
 			{
-				checkError( result, "Couldn't parse chunk." );
+				checkError( result, cuT( "Couldn't parse chunk." ) );
 				chunk.endParse();
 			}
 
@@ -296,7 +296,7 @@ namespace castor3d
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		template< typename T, size_t Count >
-		bool doParseChunk( std::array< T, Count > & values
+		bool doParseChunk( castor::Array< T, Count > & values
 			, BinaryChunk & chunk )const
 		{
 			return ChunkParser< T >::parse( values.data(), Count, chunk );
@@ -314,7 +314,7 @@ namespace castor3d
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		template< typename T >
-		bool doParseChunk( std::vector< T > & values
+		bool doParseChunk( castor::Vector< T > & values
 			, BinaryChunk & chunk )const
 		{
 			return ChunkParser< T >::parse( values.data(), values.size(), chunk );

@@ -50,7 +50,7 @@ namespace castor3d
 		: ElementObjectCacheT{ scene
 			, rootNode
 			, rootCameraNode
-			, rootCameraNode
+			, rootObjectNode
 			, [this, &scene]( ElementT & element )
 			{
 				if ( auto mesh = element.getMesh() )

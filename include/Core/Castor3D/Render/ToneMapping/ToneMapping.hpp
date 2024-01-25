@@ -48,7 +48,7 @@ namespace castor3d
 		 *\param[in]	progress		La barre de progression.
 		 */
 		C3D_API ToneMapping( Engine & engine
-			, crg::FrameGraph & graph
+			, crg::FramePassGroup & graph
 			, crg::ImageViewIdArray const & source
 			, crg::ImageViewId const & target
 			, crg::FramePass const & previousPass
@@ -125,7 +125,7 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		crg::FramePass & doCreatePass( crg::FrameGraph & graph
+		crg::FramePass & doCreatePass( crg::FramePassGroup & graph
 			, crg::ImageViewIdArray const & source
 			, crg::ImageViewId const & target
 			, crg::FramePass const & previousPass
@@ -137,7 +137,7 @@ namespace castor3d
 		castor::String m_name{ cuT( "linear" ) };
 		HdrConfigUbo & m_hdrConfigUbo;
 		ColourGradingUbo & m_colourGradingUbo;
-		castor3d::ProgramModule m_shader{ "ToneMapping" };
+		castor3d::ProgramModule m_shader{ cuT( "ToneMapping" ) };
 		crg::ImageViewId m_source;
 		ashes::PipelineShaderStageCreateInfoArray m_program;
 		crg::FramePass * m_pass{};

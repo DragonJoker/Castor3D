@@ -97,8 +97,8 @@ namespace castor3d
 
 		if ( !m_dirty.empty() )
 		{
-			std::vector< TextureUnit const * > dirty;
-			std::swap( m_dirty, dirty );
+			castor::Vector< TextureUnit const * > dirty;
+			castor::swap( m_dirty, dirty );
 			auto end = std::unique( dirty.begin(), dirty.end() );
 
 			for ( auto unit : castor::makeArrayView( dirty.begin(), end ) )

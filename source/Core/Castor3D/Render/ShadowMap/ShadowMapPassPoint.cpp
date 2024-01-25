@@ -44,7 +44,7 @@
 
 namespace castor3d
 {
-	castor::String const ShadowMapPassPoint::Type = "c3d.shadows.point";
+	castor::String const ShadowMapPassPoint::Type = cuT( "c3d.shadows.point" );
 
 	ShadowMapPassPoint::ShadowMapPassPoint( crg::FramePass const & pass
 		, crg::GraphContext & context

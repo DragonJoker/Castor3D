@@ -44,38 +44,38 @@ namespace castor3d
 		return result;
 	}
 
-	std::string TransformPipeline::getName( Engine const & engine )const
+	castor::String TransformPipeline::getName( Engine const & engine )const
 	{
 		return getName( engine, combineID, morphFlags, meshletsBounds, hasMorphingWeights );
 	}
 
-	std::string TransformPipeline::getName( Engine const & engine
+	castor::String TransformPipeline::getName( Engine const & engine
 		, SubmeshComponentCombineID combineID
 		, MorphFlags const & morphFlags
 		, bool meshletsBounds
 		, bool hasMorphingWeights )
 	{
 		auto combine = engine.getSubmeshComponentsRegister().getSubmeshComponentCombine( combineID );
-		std::string result = "VertexTransformPass";
+		castor::String result = cuT( "VertexTransformPass" );
 
 		if ( morphFlags != MorphFlag::eNone )
 		{
-			result += "Morph";
+			result += cuT( "Morph" );
 		}
 
 		if ( combine.hasSkinFlag )
 		{
-			result += "Skin";
+			result += cuT( "Skin" );
 		}
 
 		if ( meshletsBounds )
 		{
-			result += "Meshlet";
+			result += cuT( "Meshlet" );
 		}
 
 		if ( hasMorphingWeights )
 		{
-			result += "MorphWeights";
+			result += cuT( "MorphWeights" );
 		}
 
 		return result;
@@ -88,18 +88,18 @@ namespace castor3d
 	{
 	}
 
-	std::string BoundsTransformPipeline::getName()const
+	castor::String BoundsTransformPipeline::getName()const
 	{
 		return getName( normals );
 	}
 
-	std::string BoundsTransformPipeline::getName( bool normals )
+	castor::String BoundsTransformPipeline::getName( bool normals )
 	{
-		std::string result =  "MeshletBoundsTransformPass";
+		castor::String result = cuT( "MeshletBoundsTransformPass" );
 
 		if ( normals )
 		{
-			result += "Nml";
+			result += cuT( "Nml" );
 		}
 
 		return result;

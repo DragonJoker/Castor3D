@@ -20,7 +20,7 @@ namespace castor3d
 			: shader::PassMapMaterialShader
 		{
 			C3D_API MaterialShader()
-				: shader::PassMapMaterialShader{ "normal" }
+				: shader::PassMapMaterialShader{ cuT( "normal" ) }
 			{
 			}
 		};
@@ -66,7 +66,7 @@ namespace castor3d
 			bool isComponentNeeded( TextureCombine const & textures
 				, ComponentModeFlags const & filter )const override;
 			void createMapComponent( Pass & pass
-				, std::vector< PassComponentUPtr > & result )const override;
+				, castor::Vector< PassComponentUPtr > & result )const override;
 
 			bool isMapComponent()const override
 			{
@@ -75,12 +75,12 @@ namespace castor3d
 
 			shader::PassComponentsShaderPtr createComponentsShader()const override
 			{
-				return std::make_unique< ComponentsShader >( *this );
+				return castor::make_unique< ComponentsShader >( *this );
 			}
 
 			shader::PassMaterialShaderPtr createMaterialShader()const override
 			{
-				return std::make_unique< MaterialShader >();
+				return castor::make_unique< MaterialShader >();
 			}
 
 			void filterTextureFlags( ComponentModeFlags filter
@@ -114,7 +114,7 @@ namespace castor3d
 			{
 				auto [passIndex, textureFlags] = splitTextureFlag( flags );
 				return ( passIndex == getId() && checkFlag( textureFlags, Normal ) )
-					? castor::String{ "Normal" }
+					? castor::String{ cuT( "Normal" ) }
 					: castor::String{};
 			}
 

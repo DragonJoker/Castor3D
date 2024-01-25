@@ -60,23 +60,4 @@ namespace castor3d
 	{
 		return !( lhs < rhs );
 	}
-
-	std::ostream & operator<<( std::ostream & stream, castor3d::Version const & version )
-	{
-		stream << version.getMajor() << "." << version.getMinor() << "." << version.getBuild();
-		return stream;
-	}
-
-	std::wostream & operator<<( std::wostream & stream, castor3d::Version const & version )
-	{
-		stream << version.getMajor() << L"." << version.getMinor() << L"." << version.getBuild();
-		return stream;
-	}
-
-	castor::String & operator<<( castor::String & str, castor3d::Version const & version )
-	{
-		castor::StringStream stream( castor::makeStringStream() );
-		stream << version;
-		return str += stream.str();
-	}
 }

@@ -136,7 +136,7 @@ namespace castor3d
 		VkExtent2D m_size;
 		Texture m_result;
 		Texture m_bentNormals;
-		std::array< Program, 2u > m_programs;
+		castor::Array< Program, 2u > m_programs;
 		crg::FramePass const * m_lastPass{};
 	};
 }

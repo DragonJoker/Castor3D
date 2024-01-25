@@ -96,7 +96,7 @@ namespace castor3d
 				, crg::RunnableGraph & graph
 				, RenderDevice const & device
 				, FrustumClusters const & clusters )
-				: ShaderHolder{ ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, "FindUniqueClusters", createShader( device ) } }
+				: ShaderHolder{ ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, cuT( "FindUniqueClusters" ), createShader( device ) } }
 				, CreateInfoHolder{ ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, ShaderHolder::getData() ) } }
 				, EnabledHolder{ true }
 				, crg::ComputePass{framePass
@@ -124,19 +124,19 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = std::make_unique< fndunq::FramePass >( framePass
+				auto result = castor::make_unique< fndunq::FramePass >( framePass
 					, context
 					, graph
 					, device
 					, clusters );
-				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
 		pass.addDependency( previousPass );
-		createInputStoragePassBinding( pass, uint32_t( fndunq::eClustersFlags ), "C3D_ClustersFlags", clusters.getClusterFlagsBuffer(), 0u, ashes::WholeSize );
-		createClearableOutputStorageBinding( pass, uint32_t( fndunq::eUniqueClusters ), "C3D_UniqueClusters", clusters.getUniqueClustersBuffer(), 0u, ashes::WholeSize );
-		createClearableOutputStorageBinding( pass, uint32_t( fndunq::eClustersIndirect ), "C3D_ClustersIndirect", clusters.getClustersIndirectBuffer(), 0u, ashes::WholeSize );
+		createInputStoragePassBinding( pass, uint32_t( fndunq::eClustersFlags ), cuT( "C3D_ClustersFlags" ), clusters.getClusterFlagsBuffer(), 0u, ashes::WholeSize );
+		createClearableOutputStorageBinding( pass, uint32_t( fndunq::eUniqueClusters ), cuT( "C3D_UniqueClusters" ), clusters.getUniqueClustersBuffer(), 0u, ashes::WholeSize );
+		createClearableOutputStorageBinding( pass, uint32_t( fndunq::eClustersIndirect ), cuT( "C3D_ClustersIndirect" ), clusters.getClustersIndirectBuffer(), 0u, ashes::WholeSize );
 		return pass;
 	}
 

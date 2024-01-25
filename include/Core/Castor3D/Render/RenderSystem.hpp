@@ -159,7 +159,7 @@ namespace castor3d
 		 */
 		C3D_API SpirVShader compileShader( VkShaderStageFlagBits stage
 			, castor::String const & name
-			, castor::String const & glsl )const;
+			, castor::MbString const & glsl )const;
 		/**
 		 *\~english
 		 *\brief		Compiles a shader module to the necessary shader language.
@@ -308,7 +308,7 @@ namespace castor3d
 
 		castor::String getRendererType()const noexcept
 		{
-			return getDescription().name;
+			return castor::makeString( getDescription().name );
 		}
 
 		bool hasDevice()const noexcept
@@ -398,7 +398,7 @@ namespace castor3d
 		ast::ShaderAllocator & doGetShaderAllocator();
 
 	private:
-		std::recursive_mutex m_mutex;
+		castor::RecursiveMutex m_mutex;
 		Renderer m_renderer{};
 		GpuInformations m_gpuInformations{};
 		DebugCallbacksPtr m_debug{};
@@ -406,10 +406,10 @@ namespace castor3d
 		VkPhysicalDeviceProperties m_properties{};
 		VkPhysicalDeviceFeatures m_features{};
 		RenderDeviceUPtr m_device{};
-		std::stack< SceneRPtr > m_stackScenes{};
+		castor::Stack< SceneRPtr > m_stackScenes{};
 		ashes::BufferPtr< castor::Point4f > m_randomStorage{};
-		std::mutex m_allocMutex;
-		std::unordered_map< std::thread::id, std::unique_ptr< ast::ShaderAllocator > > m_shaderCompileAllocator{};
+		castor::Mutex m_allocMutex;
+		castor::UnorderedMap< std::thread::id, castor::RawUniquePtr< ast::ShaderAllocator > > m_shaderCompileAllocator{};
 	};
 }
 

@@ -38,12 +38,12 @@ namespace castor3d
 					auto & manager = *control.getEngine().getControlsManager();
 					auto scene = control.hasScene() ? &control.getScene() : nullptr;
 					scrollBar = manager.registerControlT( castor::makeUnique< ScrollBarCtrl >( scene
-						, "Scroll/" + prefix
+						, cuT( "Scroll/" ) + prefix
 						, &( style->*get )()
 						, &control
 						, castor::makeRangedValue( 0.0f, 0.0f, float( rangeMax ) )
 						, castor::Position{}
-						, std::move( dim )
+						, castor::move( dim )
 						, ControlFlagType( flag ) ) );
 				}
 
@@ -192,7 +192,7 @@ namespace castor3d
 	{
 		scrollable::checkScrollBar( ScrollBarFlag::eVertical
 			, m_target
-			, "Vertic"
+			, cuT( "Vertic" )
 			, m_scrollableStyle
 			, &ScrollableStyle::hasVerticalStyle
 			, &ScrollableStyle::getVerticalStyle
@@ -201,7 +201,7 @@ namespace castor3d
 			, m_verticalScrollBar );
 		scrollable::checkScrollBar( ScrollBarFlag::eHorizontal
 			, m_target
-			, "Horiz"
+			, cuT( "Horiz" )
 			, m_scrollableStyle
 			, &ScrollableStyle::hasHorizontalStyle
 			, &ScrollableStyle::getHorizontalStyle

@@ -17,8 +17,8 @@ namespace castor
 		ChangeTrackedT()noexcept = default;
 		~ChangeTrackedT()noexcept = default;
 
-		explicit ChangeTrackedT( std::function< void() > callback )noexcept
-			: m_callback{ std::move( callback ) }
+		explicit ChangeTrackedT( castor::Function< void() > callback )noexcept
+			: m_callback{ castor::move( callback ) }
 		{
 		}
 
@@ -28,15 +28,15 @@ namespace castor
 		}
 
 		explicit ChangeTrackedT( ValueT const & rhs
-			, std::function< void() > callback )noexcept
+			, castor::Function< void() > callback )noexcept
 			: m_value{ rhs }
-			, m_callback{ std::move( callback ) }
+			, m_callback{ castor::move( callback ) }
 		{
 		}
 
 		ChangeTrackedT( ChangeTrackedT && rhs )noexcept
-			: m_value{ std::move( rhs.m_value ) }
-			, m_callback{ std::move( rhs.m_callback ) }
+			: m_value{ castor::move( rhs.m_value ) }
+			, m_callback{ castor::move( rhs.m_callback ) }
 		{
 			this->doCopy( m_dirty, rhs.m_dirty );
 		}
@@ -64,7 +64,7 @@ namespace castor
 		ChangeTrackedT & operator=( ChangeTrackedT && rhs )noexcept
 		{
 			this->doCopy( m_dirty, rhs.m_dirty );
-			m_value = std::move( rhs.m_value );
+			m_value = castor::move( rhs.m_value );
 			return *this;
 		}
 
@@ -88,7 +88,7 @@ namespace castor
 			return m_dirty;
 		}
 
-		std::function< void() > callback()const noexcept
+		castor::Function< void() > callback()const noexcept
 		{
 			return m_callback;
 		}
@@ -166,7 +166,7 @@ namespace castor
 	private:
 		ValueT m_value{};
 		ControlT m_dirty{ true };
-		std::function< void() > m_callback;
+		castor::Function< void() > m_callback;
 	};
 
 	template< typename ValueT, typename ControlT >

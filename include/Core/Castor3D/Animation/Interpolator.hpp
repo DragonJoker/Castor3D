@@ -178,9 +178,9 @@ namespace castor3d
 		switch ( type )
 		{
 		case InterpolatorType::eNearest:
-			return std::make_unique < InterpolatorT< DataT, InterpolatorType::eNearest > >();
+			return castor::make_unique < InterpolatorT< DataT, InterpolatorType::eNearest > >();
 		default:
-			return std::make_unique< InterpolatorT< DataT, InterpolatorType::eLinear > >();
+			return castor::make_unique< InterpolatorT< DataT, InterpolatorType::eLinear > >();
 		}
 	}
 }

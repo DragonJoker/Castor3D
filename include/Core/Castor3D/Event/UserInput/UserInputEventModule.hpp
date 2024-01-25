@@ -329,7 +329,7 @@ namespace castor3d
 		castor::Position wheel;
 		//!\~english	The buttons state (true = down).
 		//!\~french		L'état des boutons (true = enfoncé).
-		std::array< bool, size_t( MouseButton::eCount ) > buttons;
+		castor::Array< bool, size_t( MouseButton::eCount ) > buttons;
 		//!\~english	The button which had the last change.
 		//!\~french		Le bouton ayant reçu le dernier changement.
 		MouseButton changed;
@@ -396,10 +396,10 @@ namespace castor3d
 	CU_DeclareSmartPtr( castor3d, EventHandler, C3D_API );
 	CU_DeclareSmartPtr( castor3d, UserInputListener, C3D_API );
 
-	using UserInputEventSPtr = std::shared_ptr< UserInputEvent >;
-	using KeyboardEventSPtr = std::shared_ptr< KeyboardEvent >;
-	using MouseEventSPtr = std::shared_ptr< MouseEvent >;
-	using HandlerEventSPtr = std::shared_ptr< HandlerEvent >;
+	using UserInputEventSPtr = castor::SharedPtr< UserInputEvent >;
+	using KeyboardEventSPtr = castor::SharedPtr< KeyboardEvent >;
+	using MouseEventSPtr = castor::SharedPtr< MouseEvent >;
+	using HandlerEventSPtr = castor::SharedPtr< HandlerEvent >;
 
 	template< class Derived >
 	class NonClientEventHandler;

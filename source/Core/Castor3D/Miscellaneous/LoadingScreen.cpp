@@ -37,7 +37,7 @@ namespace castor3d
 	{
 		static Texture createTexture( RenderDevice const & device
 			, crg::ResourcesCache & resources
-			, std::string const & name
+			, castor::String const & name
 			, castor::Size const & size
 			, VkFormat format
 			, VkImageUsageFlags usage )
@@ -58,13 +58,13 @@ namespace castor3d
 
 		static Texture createColour( RenderDevice const & device
 			, crg::ResourcesCache & resources
-			, std::string const & name
+			, castor::String const & name
 			, castor::Size const & size
 			, VkFormat format )
 		{
 			return createTexture( device
 				, resources
-				, name + "Col"
+				, name + cuT( "Col" )
 				, size
 				, format
 				, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
@@ -73,12 +73,12 @@ namespace castor3d
 
 		static Texture createDepth( RenderDevice const & device
 			, crg::ResourcesCache & resources
-			, std::string const & name
+			, castor::String const & name
 			, castor::Size const & size )
 		{
 			return createTexture( device
 				, resources
-				, name + "Dpt"
+				, name + cuT( "Dpt" )
 				, size
 				, device.selectSuitableDepthFormat( VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT )
 				, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT );
@@ -104,7 +104,7 @@ namespace castor3d
 				auto camera = castor::makeUnique< Camera >( LoadingScreen::SceneName
 					, scene
 					, *scene.getCameraRootNode()
-					, std::move( viewport ) );
+					, castor::move( viewport ) );
 				result = scene.addCamera( LoadingScreen::SceneName
 					, camera );
 				result->update();
@@ -208,11 +208,11 @@ namespace castor3d
 	}
 
 	void LoadingScreen::WindowPass::setTarget( ashes::FrameBuffer const & framebuffer
-		, std::vector< VkClearValue > clearValues )
+		, castor::Vector< VkClearValue > clearValues )
 	{
 		m_framebuffer = framebuffer;
 		m_renderSize = framebuffer.getDimensions();
-		m_clearValues = std::move( clearValues );
+		m_clearValues = castor::move( clearValues );
 	}
 
 	void LoadingScreen::WindowPass::doRecordInto( crg::RecordContext & context
@@ -254,8 +254,8 @@ namespace castor3d
 		, castor::Size const & size )
 		: m_device{ device }
 		, m_progressBar{ progressBar }
-		, m_graph{ std::make_unique< crg::FrameGraph >( resources.getHandler(), SceneName ) }
-		, m_scene{ std::move( scene ) }
+		, m_graph{ castor::make_unique< crg::FrameGraph >( resources.getHandler(), castor::toUtf8( SceneName ) ) }
+		, m_scene{ castor::move( scene ) }
 		, m_background{ *m_scene->getBackground() }
 		, m_renderPass{ renderPass }
 		, m_initialRenderSize{ size }
@@ -398,7 +398,7 @@ namespace castor3d
 				m_colour.destroy();
 				m_graph.reset();
 
-				m_graph = std::make_unique< crg::FrameGraph >( resources.getHandler(), SceneName );
+				m_graph = castor::make_unique< crg::FrameGraph >( resources.getHandler(), castor::toUtf8( SceneName ) );
 				m_colour = loadscreen::createColour( m_device, resources, SceneName, m_initialRenderSize, m_swapchainFormat );
 				m_colour.create();
 				m_backgroundRenderer = castor::makeUnique< BackgroundRenderer >( m_graph->getDefaultGroup()
@@ -435,7 +435,7 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = std::make_unique< ForwardRenderTechniquePass >( nullptr
+				auto result = castor::make_unique< ForwardRenderTechniquePass >( nullptr
 					, pass
 					, context
 					, graph
@@ -465,7 +465,7 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = std::make_unique< ForwardRenderTechniquePass >( nullptr
+				auto result = castor::make_unique< ForwardRenderTechniquePass >( nullptr
 					, pass
 					, context
 					, graph
@@ -494,7 +494,7 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = std::make_unique< OverlayPass >( pass
+				auto result = castor::make_unique< OverlayPass >( pass
 					, context
 					, graph
 					, m_device
@@ -517,7 +517,7 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = std::make_unique< WindowPass >( pass
+				auto result = castor::make_unique< WindowPass >( pass
 					, context
 					, graph
 					, m_device

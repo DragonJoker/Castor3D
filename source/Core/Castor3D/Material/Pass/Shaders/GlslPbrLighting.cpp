@@ -32,7 +32,7 @@ namespace castor3d::shader
 			, lights
 			, true
 			, enableVolumetric
-			, "c3d_pbr_" }
+			, cuT( "c3d_pbr_" ) }
 		, m_cookTorrance{ writer, brdf }
 		, m_sheen{ writer, brdf }
 	{

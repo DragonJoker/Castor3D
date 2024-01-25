@@ -69,7 +69,7 @@ namespace smaa
 
 	public:
 		static castor::String Type;
-		static castor::String Name;
+		static castor::MbString Name;
 
 	private:
 		SmaaConfig m_config;
@@ -78,10 +78,10 @@ namespace smaa
 		castor3d::ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
 
-		std::unique_ptr< EdgeDetection > m_edgeDetection;
-		std::unique_ptr< BlendingWeightCalculation > m_blendingWeightCalculation;
-		std::unique_ptr< NeighbourhoodBlending > m_neighbourhoodBlending;
-		std::unique_ptr< Reproject > m_reproject;
+		castor::RawUniquePtr< EdgeDetection > m_edgeDetection;
+		castor::RawUniquePtr< BlendingWeightCalculation > m_blendingWeightCalculation;
+		castor::RawUniquePtr< NeighbourhoodBlending > m_neighbourhoodBlending;
+		castor::RawUniquePtr< Reproject > m_reproject;
 
 		crg::FramePass const * m_pass{};
 

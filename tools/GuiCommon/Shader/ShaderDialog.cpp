@@ -32,7 +32,7 @@ namespace GuiCommon
 	}
 
 	ShaderDialog::ShaderDialog( castor3d::Engine * engine
-		, ShaderSources && sources
+		, ShaderSources sources
 		, wxString const & title
 		, wxWindow * parent
 		, wxPoint const & position
@@ -40,8 +40,8 @@ namespace GuiCommon
 		: wxFrame( parent, wxID_ANY, title + wxT( " - " ) + _( "Shaders" ), position, size, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxMAXIMIZE_BOX )
 		, m_engine{ engine }
 		, m_auiManager( this, wxAUI_MGR_ALLOW_FLOATING | wxAUI_MGR_TRANSPARENT_HINT | wxAUI_MGR_HINT_FADE | wxAUI_MGR_VENETIAN_BLINDS_HINT | wxAUI_MGR_LIVE_RESIZE )
-		, m_stcContext( std::make_unique< StcContext >() )
-		, m_sources( std::move( sources ) )
+		, m_stcContext( castor::make_unique< StcContext >() )
+		, m_sources( castor::move( sources ) )
 	{
 		doInitialiseShaderLanguage();
 		doInitialiseLayout();

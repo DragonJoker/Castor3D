@@ -292,7 +292,7 @@ namespace castor3d
 						break;
 					}
 
-					m_overlays.push_back( std::move( data ) );
+					m_overlays.push_back( castor::move( data ) );
 				}
 			}
 		}

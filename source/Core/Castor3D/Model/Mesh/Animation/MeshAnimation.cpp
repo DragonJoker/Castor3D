@@ -19,7 +19,7 @@ namespace castor3d
 	{
 		if ( !hasChild( object.getSubmesh() ) )
 		{
-			m_submeshes.push_back( std::move( object ) );
+			m_submeshes.push_back( castor::move( object ) );
 		}
 	}
 

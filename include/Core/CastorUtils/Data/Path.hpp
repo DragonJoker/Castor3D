@@ -301,7 +301,7 @@ namespace castor
 	 */
 	CU_API Path operator/( wchar_t const * lhs, Path const & rhs );
 
-	CU_API std::filesystem::path makePath( castor::StringView str );
+	CU_API std::filesystem::path makePath( StringView str );
 }
 
 #endif

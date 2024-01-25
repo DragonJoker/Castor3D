@@ -30,7 +30,7 @@ namespace smaa
 	{
 		namespace c3d = castor3d::shader;
 
-		enum Idx : uint32_t
+		enum class Idx : uint32_t
 		{
 			CurColTexIdx = SmaaUboIdx + 1,
 			PrvColTexIdx,
@@ -43,9 +43,9 @@ namespace smaa
 			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			C3D_Smaa( writer, SmaaUboIdx, 0u );
-			auto c3d_currentColourTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_currentColourTex", CurColTexIdx, 0u );
-			auto c3d_previousColourTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_previousColourTex", PrvColTexIdx, 0u );
-			auto c3d_velocityTex = writer.declCombinedImg< FImg2DRg32 >( "c3d_velocityTex", VelocityTexIdx, 0u, reprojection );
+			auto c3d_currentColourTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_currentColourTex", uint32_t( Idx::CurColTexIdx ), 0u );
+			auto c3d_previousColourTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_previousColourTex", uint32_t( Idx::PrvColTexIdx ), 0u );
+			auto c3d_velocityTex = writer.declCombinedImg< FImg2DRg32 >( "c3d_velocityTex", uint32_t( Idx::VelocityTexIdx ), 0u, reprojection );
 
 			auto SMAAResolvePS = writer.implementFunction< sdw::Vec4 >( "SMAAResolvePS"
 				, [&]( sdw::Vec2 const & texcoord
@@ -91,15 +91,15 @@ namespace smaa
 				, sdw::InCombinedImage2DRgba32{ writer, "currentColorTex" }
 				, sdw::InCombinedImage2DRgba32{ writer, "previousColorTex" } );
 
-			writer.implementEntryPointT< c3d::PosUv2FT, c3d::Uv2FT >( [&]( sdw::VertexInT< c3d::PosUv2FT > in
+			writer.implementEntryPointT< c3d::PosUv2FT, c3d::Uv2FT >( [&]( sdw::VertexInT< c3d::PosUv2FT > const & in
 				, sdw::VertexOutT< c3d::Uv2FT > out )
 				{
 					out.uv() = in.uv();
 					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
 				} );
 
-			writer.implementEntryPointT< c3d::Uv2FT, c3d::Colour4FT >( [&]( sdw::FragmentInT< c3d::Uv2FT > in
-				, sdw::FragmentOutT< c3d::Colour4FT > out )
+			writer.implementEntryPointT< c3d::Uv2FT, c3d::Colour4FT >( [&]( sdw::FragmentInT< c3d::Uv2FT > const & in
+				, sdw::FragmentOutT< c3d::Colour4FT > const & out )
 				{
 					out.colour() = SMAAResolvePS( in.uv(), c3d_currentColourTex, c3d_previousColourTex );
 				} );
@@ -125,11 +125,11 @@ namespace smaa
 		, m_previousColourViews{ previousColourViews }
 		, m_velocityView{ velocityView }
 		, m_extent{ castor3d::getSafeBandedExtent3D( renderTarget.getSize() ) }
-		, m_shader{ "SmaaReproject", reproj::getProgram( device, velocityView != nullptr ) }
+		, m_shader{ cuT( "SmaaReproject" ), reproj::getProgram( device, velocityView != nullptr ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
 		, m_result{ m_device
 			, renderTarget.getResources()
-			, "SMRpRes"
+			, cuT( "SMRpRes" )
 			, 0u
 			, m_extent
 			, 1u
@@ -151,7 +151,7 @@ namespace smaa
 					.passIndex( &config.subsampleIndex )
 					.enabled( enabled )
 					.build( framePass, context, graph, { config.maxSubsampleIndices } );
-				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} ) }
@@ -161,9 +161,9 @@ namespace smaa
 		auto commandBuffer = data->commandPool->createCommandBuffer( "SmaaReprojectImagesClear" );
 		commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
 
-		for ( auto & view : m_currentColourViews )
+		for ( auto const & view : m_currentColourViews )
 		{
-			ashes::ImagePtr image = std::make_unique< ashes::Image >( *device
+			auto image = castor::make_unique< ashes::Image >( *device
 				, renderTarget.getResources().createImage( context, view.data->image )
 				, ashes::ImageCreateInfo{ view.data->image.data->info } );
 			auto createInfo = view.data->info;
@@ -195,17 +195,17 @@ namespace smaa
 		ubo.createPassBinding( m_pass
 			, SmaaUboIdx );
 		m_pass.addSampledView( m_currentColourViews
-			, reproj::CurColTexIdx
+			, uint32_t( reproj::Idx::CurColTexIdx )
 			, pointSampler );
 		m_pass.addSampledView( m_previousColourViews
-			, reproj::PrvColTexIdx
+			, uint32_t( reproj::Idx::PrvColTexIdx )
 			, pointSampler );
 		m_result.create();
 
 		if ( m_velocityView )
 		{
 			m_pass.addSampledView( *m_velocityView
-				, reproj::VelocityTexIdx
+				, uint32_t( reproj::Idx::VelocityTexIdx )
 				, pointSampler );
 		}
 	}
@@ -218,7 +218,7 @@ namespace smaa
 	void Reproject::accept( castor3d::ConfigurationVisitorBase & visitor )
 	{
 		visitor.visit( m_shader );
-		visitor.visit( "SMAA Reprojection Result"
+		visitor.visit( cuT( "SMAA Reprojection Result" )
 			, m_result
 			, m_graph.getFinalLayoutState( m_result.sampledViewId ).layout
 			, castor3d::TextureFactors{}.invert( true ) );

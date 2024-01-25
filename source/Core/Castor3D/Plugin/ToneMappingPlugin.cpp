@@ -7,7 +7,7 @@ CU_ImplementSmartPtr( castor3d, ToneMappingPlugin )
 namespace castor3d
 {
 	ToneMappingPlugin::ToneMappingPlugin( castor::DynamicLibraryUPtr library, Engine * engine )
-		: Plugin{ PluginType::eToneMapping, std::move( library ), *engine }
+		: Plugin{ PluginType::eToneMapping, castor::move( library ), *engine }
 	{
 		load();
 	}

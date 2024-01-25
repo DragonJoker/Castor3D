@@ -28,7 +28,7 @@ namespace castor
 
 			if ( auto block{ beginBlock( file, cuT( "object" ), geometry.getName() ) } )
 			{
-				result = writeName( file, "parent", geometry.getParent()->getName() )
+				result = writeName( file, cuT( "parent" ), geometry.getParent()->getName() )
 					&& writeOpt( file, cuT( "cast_shadows" ), geometry.isShadowCaster(), true )
 					&& writeOpt( file, cuT( "receive_shadows" ), geometry.isShadowReceiver(), true )
 					&& writeName( file, cuT( "mesh" ), mesh->getName() );
@@ -48,7 +48,7 @@ namespace castor
 						{
 							result = writeName( file, cuT( "material" ), geometry.getMaterial( *mesh->getSubmesh( 0u ) )->getName() );
 						}
-						else if ( auto matsBlock{ beginBlock( file, "materials" ) } )
+						else if ( auto matsBlock{ beginBlock( file, cuT( "materials" ) ) } )
 						{
 							for ( auto & submesh : *mesh )
 							{

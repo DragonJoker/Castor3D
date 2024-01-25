@@ -20,24 +20,24 @@ namespace castor3d
 			switch ( value )
 			{
 			case VK_COMPARE_OP_NEVER:
-				return "Nev";
+				return cuT( "Nev" );
 			case VK_COMPARE_OP_LESS:
-				return "Lss";
+				return cuT( "Lss" );
 			case VK_COMPARE_OP_EQUAL:
-				return "Eq";
+				return cuT( "Eq" );
 			case VK_COMPARE_OP_LESS_OR_EQUAL:
-				return "LEq";
+				return cuT( "LEq" );
 			case VK_COMPARE_OP_GREATER:
-				return "Gtr";
+				return cuT( "Gtr" );
 			case VK_COMPARE_OP_NOT_EQUAL:
-				return "NEq";
+				return cuT( "NEq" );
 			case VK_COMPARE_OP_GREATER_OR_EQUAL:
-				return "GEq";
+				return cuT( "GEq" );
 			case VK_COMPARE_OP_ALWAYS:
-				return "Alw";
+				return cuT( "Alw" );
 			default:
 				assert( false && "Unsupported VkCompareOp." );
-				return "Unsupported VkCompareOp";
+				return cuT( "Unsupported VkCompareOp" );
 			}
 		}
 
@@ -46,14 +46,14 @@ namespace castor3d
 			switch ( value )
 			{
 			case VK_FILTER_NEAREST:
-				return "Near";
+				return cuT( "Near" );
 			case VK_FILTER_LINEAR:
-				return "Lin";
+				return cuT( "Lin" );
 			case VK_FILTER_CUBIC_IMG:
-				return "Cub";
+				return cuT( "Cub" );
 			default:
 				assert( false && "Unsupported VkFilter." );
-				return "Unsupported VkFilter";
+				return cuT( "Unsupported VkFilter" );
 			}
 		}
 
@@ -62,12 +62,12 @@ namespace castor3d
 			switch ( value )
 			{
 			case VK_SAMPLER_MIPMAP_MODE_NEAREST:
-				return "Near";
+				return cuT( "Near" );
 			case VK_SAMPLER_MIPMAP_MODE_LINEAR:
-				return "Lin";
+				return cuT( "Lin" );
 			default:
 				assert( false && "Unsupported VkSamplerMipmapMode." );
-				return "Unsupported VkSamplerMipmapMode";
+				return cuT( "Unsupported VkSamplerMipmapMode" );
 			}
 		}
 
@@ -76,18 +76,18 @@ namespace castor3d
 			switch ( value )
 			{
 			case VK_SAMPLER_ADDRESS_MODE_REPEAT:
-				return "Rep";
+				return cuT( "Rep" );
 			case VK_SAMPLER_ADDRESS_MODE_MIRRORED_REPEAT:
-				return "MRep";
+				return cuT( "MRep" );
 			case VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE:
-				return "CtE";
+				return cuT( "CtE" );
 			case VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER:
-				return "CtB";
+				return cuT( "CtB" );
 			case VK_SAMPLER_ADDRESS_MODE_MIRROR_CLAMP_TO_EDGE:
-				return "MCtE";
+				return cuT( "MCtE" );
 			default:
 				assert( false && "Unsupported VkSamplerAddressMode." );
-				return "Unsupported VkSamplerAddressMode";
+				return cuT( "Unsupported VkSamplerAddressMode" );
 			}
 		}
 	}
@@ -98,7 +98,7 @@ namespace castor3d
 		, VkImageSubresourceRange const * range )
 	{
 		castor::String const name = baseName
-			+ cuT( "_" ) + ashes::getName( filter )
+			+ cuT( "_" ) + castor::makeString( ashes::getName( filter ) )
 			+ ( range
 				? cuT( "_" ) + castor::string::toString( range->baseMipLevel ) + cuT( "_" ) + castor::string::toString( range->levelCount )
 				: castor::String{} );
@@ -133,7 +133,7 @@ namespace castor3d
 			};
 			auto resource = engine.createSampler( name
 				, engine
-				, std::move( createInfo ) );
+				, castor::move( createInfo ) );
 			sampler = engine.addNewSampler( name
 				, resource
 				, false );
@@ -155,9 +155,9 @@ namespace castor3d
 			+ sampler::getName( minFilter )
 			+ sampler::getName( magFilter )
 			+ sampler::getName( mipFilter )
-			+ "U" + sampler::getName( U )
-			+ "V" + sampler::getName( V )
-			+ "W" + sampler::getName( W );
+			+ cuT( "U" ) + sampler::getName( U )
+			+ cuT( "V" ) + sampler::getName( V )
+			+ cuT( "W" ) + sampler::getName( W );
 	}
 
 	//*********************************************************************************************
@@ -188,7 +188,7 @@ namespace castor3d
 		{
 			CU_Require( m_info.sType == VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO );
 			m_info.maxAnisotropy = std::min( m_info.maxAnisotropy, device.properties.limits.maxSamplerAnisotropy );
-			m_sampler = device->createSampler( getName()
+			m_sampler = device->createSampler( castor::toUtf8( getName() )
 				, m_info );
 			m_initialised = true;
 			m_initialising = false;

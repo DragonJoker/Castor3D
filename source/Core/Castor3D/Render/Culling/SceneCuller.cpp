@@ -41,7 +41,7 @@ namespace castor3d
 	{
 		AnimatedObjectRPtr result{};
 		auto & cache = scene.getAnimatedObjectGroupCache();
-		using LockType = std::unique_lock< AnimatedObjectGroupCache const >;
+		using LockType = castor::UniqueLock< AnimatedObjectGroupCache const >;
 		LockType lock{ castor::makeUniqueLock( cache ) };
 
 		for ( auto const & [_, group] : cache )
@@ -224,7 +224,7 @@ namespace castor3d
 			if ( m_isStatic == std::nullopt
 				|| node->instance.getParent()->isStatic() == m_isStatic )
 			{
-				m_culledSubmeshes.emplace_back( std::make_unique< CulledNodeT< SubmeshRenderNode > >( node.get()
+				m_culledSubmeshes.emplace_back( castor::make_unique< CulledNodeT< SubmeshRenderNode > >( node.get()
 					, node->getInstanceCount()
 					, isSubmeshVisible( *node ) ) );
 			}
@@ -239,7 +239,7 @@ namespace castor3d
 			if ( m_isStatic == std::nullopt
 				|| node->instance.getNode()->isStatic() == m_isStatic )
 			{
-				m_culledBillboards.emplace_back( std::make_unique< CulledNodeT< BillboardRenderNode > >( node.get()
+				m_culledBillboards.emplace_back( castor::make_unique< CulledNodeT< BillboardRenderNode > >( node.get()
 					, node->getInstanceCount()
 					, isBillboardVisible( *node ) ) );
 			}
@@ -297,8 +297,8 @@ namespace castor3d
 
 	void SceneCuller::doUpdateCulled( CpuUpdater::DirtyObjects const & sceneObjs )
 	{
-		std::vector< SubmeshRenderNode const * > dirtySubmeshes;
-		std::vector< BillboardRenderNode const * > dirtyBillboards;
+		castor::Vector< SubmeshRenderNode const * > dirtySubmeshes;
+		castor::Vector< BillboardRenderNode const * > dirtyBillboards;
 		doMarkDirty( sceneObjs, dirtySubmeshes, dirtyBillboards );
 
 		if ( !dirtySubmeshes.empty()
@@ -314,8 +314,8 @@ namespace castor3d
 	}
 
 	void SceneCuller::doMarkDirty( CpuUpdater::DirtyObjects const & sceneObjs
-		, std::vector< SubmeshRenderNode const * > & dirtySubmeshes
-		, std::vector< BillboardRenderNode const * > & dirtyBillboards )const
+		, castor::Vector< SubmeshRenderNode const * > & dirtySubmeshes
+		, castor::Vector< BillboardRenderNode const * > & dirtyBillboards )const
 	{
 #if C3D_DebugTimers
 		auto blockDirty( m_timerDirty->start() );
@@ -331,7 +331,7 @@ namespace castor3d
 		}
 	}
 
-	void SceneCuller::duUpdateCulledSubmeshes( std::vector< SubmeshRenderNode const * > const & dirtySubmeshes )
+	void SceneCuller::duUpdateCulledSubmeshes( castor::Vector< SubmeshRenderNode const * > const & dirtySubmeshes )
 	{
 		for ( auto dirty : dirtySubmeshes )
 		{
@@ -360,13 +360,13 @@ namespace castor3d
 			else
 			{
 				m_culledChanged = true;
-				m_culledSubmeshes.emplace_back( std::make_unique< CulledNodeT< SubmeshRenderNode > >( dirty, 1u, visible ) );
+				m_culledSubmeshes.emplace_back( castor::make_unique< CulledNodeT< SubmeshRenderNode > >( dirty, 1u, visible ) );
 				onSubmeshChanged( *this, *m_culledSubmeshes.back(), visible );
 			}
 		}
 	}
 
-	void SceneCuller::duUpdateCulledBillboards( std::vector< BillboardRenderNode const * > const & dirtyBillboards )
+	void SceneCuller::duUpdateCulledBillboards( castor::Vector< BillboardRenderNode const * > const & dirtyBillboards )
 	{
 		for ( auto dirty : dirtyBillboards )
 		{
@@ -395,14 +395,14 @@ namespace castor3d
 			else
 			{
 				m_culledChanged = true;
-				m_culledBillboards.emplace_back( std::make_unique< CulledNodeT< BillboardRenderNode > >( dirty, count, visible ) );
+				m_culledBillboards.emplace_back( castor::make_unique< CulledNodeT< BillboardRenderNode > >( dirty, count, visible ) );
 				onBillboardChanged( *this, *m_culledBillboards.back(), visible );
 			}
 		}
 	}
 
 	void SceneCuller::doMakeDirty( Geometry const & object
-		, std::vector< SubmeshRenderNode const * > & dirtySubmeshes )const
+		, castor::Vector< SubmeshRenderNode const * > & dirtySubmeshes )const
 	{
 		if ( m_isStatic == std::nullopt
 			|| object.getParent()->isStatic() == m_isStatic )
@@ -428,7 +428,7 @@ namespace castor3d
 	}
 
 	void SceneCuller::doMakeDirty( BillboardBase const & object
-		, std::vector< BillboardRenderNode const * > & dirtyBillboards )const
+		, castor::Vector< BillboardRenderNode const * > & dirtyBillboards )const
 	{
 		if ( m_isStatic == std::nullopt
 			|| object.getNode()->isStatic() == m_isStatic )

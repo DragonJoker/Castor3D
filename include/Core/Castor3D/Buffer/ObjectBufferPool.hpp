@@ -21,13 +21,13 @@ namespace castor3d
 		struct ModelBuffers
 		{
 			explicit ModelBuffers( GpuPackedBaseBufferUPtr vtx )
-				: vertex{ std::move( vtx ) }
+				: vertex{ castor::move( vtx ) }
 			{
 			}
 
 			GpuPackedBaseBufferUPtr vertex;
 		};
-		using BufferArray = std::vector< ModelBuffers >;
+		using BufferArray = castor::Vector< ModelBuffers >;
 
 	public:
 		/**
@@ -88,13 +88,13 @@ namespace castor3d
 		struct ModelBuffers
 		{
 			explicit ModelBuffers( GpuPackedBaseBufferUPtr vtx )
-				: vertex{ std::move( vtx ) }
+				: vertex{ castor::move( vtx ) }
 			{
 			}
 
 			GpuPackedBaseBufferUPtr vertex;
 		};
-		using BufferArray = std::vector< ModelBuffers >;
+		using BufferArray = castor::Vector< ModelBuffers >;
 
 	public:
 		/**
@@ -154,14 +154,14 @@ namespace castor3d
 	public:
 		struct ModelBuffers
 		{
-			explicit ModelBuffers( std::array< GpuPackedBaseBufferUPtr, size_t( SubmeshData::eCount ) > bufs = {} )
-				: buffers{ std::move( bufs ) }
+			explicit ModelBuffers( castor::Array< GpuPackedBaseBufferUPtr, size_t( SubmeshData::eCount ) > bufs = {} )
+				: buffers{ castor::move( bufs ) }
 			{
 			}
 
-			std::array< GpuPackedBaseBufferUPtr, size_t( SubmeshData::eCount ) > buffers;
+			castor::Array< GpuPackedBaseBufferUPtr, size_t( SubmeshData::eCount ) > buffers;
 		};
-		using BufferArray = std::vector< ModelBuffers >;
+		using BufferArray = castor::Vector< ModelBuffers >;
 
 	public:
 		/**
@@ -262,8 +262,8 @@ namespace castor3d
 	private:
 		RenderDevice const & m_device;
 		castor::String m_debugName;
-		std::unordered_map< size_t, BufferArray > m_buffers;
-		std::unordered_map< ashes::BufferBase const * , ashes::BufferBase const * > m_indexBuffers;
+		castor::UnorderedMap< size_t, BufferArray > m_buffers;
+		castor::UnorderedMap< ashes::BufferBase const * , ashes::BufferBase const * > m_indexBuffers;
 	};
 }
 

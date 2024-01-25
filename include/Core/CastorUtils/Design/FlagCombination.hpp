@@ -19,11 +19,32 @@ namespace castor
 		using BaseType = typename std::underlying_type< FlagTypeT >::type;
 
 	public:
-		explicit constexpr FlagIterator( FlagIterator const & value )
+		constexpr FlagIterator( FlagIterator && value )noexcept
 			: m_initialValue{ value.m_initialValue }
 			, m_index{ value.m_index }
 			, m_value{ value.m_value }
 		{
+		}
+
+		constexpr FlagIterator( FlagIterator const & value )
+			: m_initialValue{ value.m_initialValue }
+			, m_index{ value.m_index }
+			, m_value{ value.m_value }
+		{
+		}
+
+		constexpr FlagIterator & operator=( FlagIterator && value )noexcept
+		{
+			m_initialValue = value.m_initialValue;
+			m_index = value.m_index;
+			m_value = value.m_value;
+		}
+
+		constexpr FlagIterator & operator=( FlagIterator const & value )
+		{
+			m_initialValue = value.m_initialValue;
+			m_index = value.m_index;
+			m_value = value.m_value;
 		}
 		/**
 		* Begin ctor.

@@ -25,7 +25,7 @@ namespace castor3d
 	}
 
 	bool hasAny( SubmeshComponentCombine const & lhs
-		, std::vector< SubmeshComponentFlag > const & rhs )noexcept
+		, castor::Vector< SubmeshComponentFlag > const & rhs )noexcept
 	{
 		return std::any_of( rhs.begin()
 			, rhs.end()
@@ -148,9 +148,9 @@ namespace castor3d
 		, SubmeshComponentDataUPtr data
 		, castor::StringArray deps )
 		: castor::OwnedBy< Submesh >{ submesh }
-		, m_data{ std::move( data ) }
+		, m_data{ castor::move( data ) }
 		, m_type{ type }
-		, m_dependencies{ std::move( deps ) }
+		, m_dependencies{ castor::move( deps ) }
 		, m_id{ submesh.getComponentId( m_type ) }
 		, m_plugin{ submesh.getComponentPlugin( m_id ) }
 	{

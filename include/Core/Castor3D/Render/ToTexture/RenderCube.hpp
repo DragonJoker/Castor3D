@@ -196,7 +196,7 @@ namespace castor3d
 		ashes::PipelineVertexInputStateCreateInfoPtr m_vertexLayout;
 		ashes::DescriptorSetLayoutPtr m_descriptorLayout;
 		ashes::DescriptorSetPoolPtr m_descriptorPool;
-		std::array< FacePipeline, 6u > m_faces;
+		castor::Array< FacePipeline, 6u > m_faces;
 	};
 }
 

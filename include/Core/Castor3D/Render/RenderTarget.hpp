@@ -40,10 +40,10 @@ namespace castor3d
 	class RenderTarget
 		: public castor::OwnedBy< Engine >
 	{
-		using OnInitialisedFunc = std::function< void( RenderTarget const &, QueueData const & ) >;
+		using OnInitialisedFunc = castor::Function< void( RenderTarget const &, QueueData const & ) >;
 		using OnInitialised = castor::SignalT< OnInitialisedFunc >;
 		using OnInitialisedConnection = castor::ConnectionT< OnInitialised >;
-		using PostEffectArray = std::vector< PostEffectUPtr >;
+		using PostEffectArray = castor::Vector< PostEffectUPtr >;
 
 	public:
 		/**
@@ -159,15 +159,6 @@ namespace castor3d
 		 *\param[in]	device	Le device GPU.
 		 */
 		C3D_API void cleanup( RenderDevice const & device );
-		/**
-		 *\~english
-		 *\brief		adds RenderTechnique parameters.
-		 *\param[in]	parameters	The RenderTechnique parameters.
-		 *\~french
-		 *\brief		Ajoute des paramètres de RenderTechnique.
-		 *\param[in]	parameters	Les paramètres de la RenderTechnique.
-		 */
-		C3D_API void addTechniqueParameters( Parameters const & parameters );
 		/**
 		 *\~english
 		 *\return		The ViewportType.
@@ -425,7 +416,7 @@ namespace castor3d
 		/**@{*/
 		void setSsaoConfig( SsaoConfig config )noexcept
 		{
-			m_ssaoConfig = std::move( config );
+			m_ssaoConfig = castor::move( config );
 		}
 
 		void setJitter( castor::Point2f const & value )noexcept
@@ -460,7 +451,7 @@ namespace castor3d
 
 		void setClustersConfig( ClustersConfig config )noexcept
 		{
-			m_clustersConfig = std::move( config );
+			m_clustersConfig = castor::move( config );
 		}
 		/**@}*/
 
@@ -482,7 +473,7 @@ namespace castor3d
 		void doCleanupCombineProgram();
 		Texture const & doUpdatePostEffects( CpuUpdater & updater
 			, PostEffectArray const & effects
-			, std::vector< Texture const * > const & images )const;
+			, castor::Vector< Texture const * > const & images )const;
 		crg::SemaphoreWaitArray doRender( ashes::Queue const & queue
 			, crg::SemaphoreWaitArray signalsToWait );
 		void doListIntermediateViews( IntermediateViewArray & result )const;
@@ -501,14 +492,13 @@ namespace castor3d
 		std::atomic_bool m_initialised{};
 		std::atomic_bool m_initialising{};
 		crg::ResourcesCache m_resources;
-		std::unique_ptr< HdrConfigUbo > m_hdrConfigUbo;
-		std::unique_ptr< ColourGradingUbo > m_colourGradingUbo;
+		castor::RawUniquePtr< HdrConfigUbo > m_hdrConfigUbo;
+		castor::RawUniquePtr< ColourGradingUbo > m_colourGradingUbo;
 		RenderTechniqueUPtr m_renderTechnique{};
 		SceneRPtr m_scene{};
 		CameraRPtr m_camera{};
 		uint32_t m_index{};
 		castor::String m_name;
-		Parameters m_techniqueParameters;
 		PostEffectArray m_hdrPostEffects;
 		castor::String m_toneMappingName{ cuT( "linear" ) };
 		ToneMappingUPtr m_toneMapping;
@@ -524,8 +514,8 @@ namespace castor3d
 		SceneCullerUPtr m_culler;
 		crg::FrameGraph m_graph;
 		Texture m_velocity;
-		std::array< Texture, 2u > m_srgbObjects;
-		std::array< Texture, 2u > m_hdrObjects;
+		castor::Array< Texture, 2u > m_srgbObjects;
+		castor::Array< Texture, 2u > m_hdrObjects;
 		Texture m_overlays;
 		Texture m_combined;
 		crg::FramePass & m_overlayPassDesc;
@@ -539,7 +529,7 @@ namespace castor3d
 		crg::RunnableGraphPtr m_runnable;
 		ashes::SemaphorePtr m_combineSemaphore;
 		OnInitialised m_onInitialised;
-		std::vector< OnInitialisedConnection > m_onTargetInitialised;
+		castor::Vector< OnInitialisedConnection > m_onTargetInitialised;
 		IntermediateViewArray m_intermediates;
 		TargetDebugConfig m_debugConfig;
 		ClustersConfig m_clustersConfig;

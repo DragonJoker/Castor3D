@@ -9,7 +9,7 @@
 
 namespace castor3d
 {
-	castor::StringView const PhongPass::Type = "blinn_phong";
+	castor::StringView const PhongPass::Type = cuT( "blinn_phong" );
 	castor::StringView const PhongPass::LightingModel = shader::PhongLightingModel::getName();
 
 	PassUPtr PhongPass::create( LightingModelID lightingModelId

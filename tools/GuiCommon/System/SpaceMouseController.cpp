@@ -80,7 +80,7 @@ namespace GuiCommon
 			{
 				try
 				{
-					PutProfileHint( appName.c_str() );
+					PutProfileHint( castor::toUtf8( appName ).c_str() );
 					PutFrameTimingSource( TimingSource::SpaceMouse );
 					EnableNavigation( true );
 					Write( getMotionModelSettingsName(), "FreeCamera" );
@@ -90,11 +90,11 @@ namespace GuiCommon
 				}
 				catch ( std::exception & exc )
 				{
-					castor::Logger::logError( "COuldn't initialise space mouse controller: " + std::string{ exc.what() } );
+					castor::Logger::logError( cuT( "Couldn't initialise space mouse controller: " ) + castor::makeString( exc.what() ) );
 				}
 				catch ( ... )
 				{
-					castor::Logger::logError( "COuldn't initialise space mouse controller: Unknown error" );
+					castor::Logger::logError( cuT( "Couldn't initialise space mouse controller: Unknown error" ) );
 				}
 			}
 
@@ -106,27 +106,27 @@ namespace GuiCommon
 				}
 			}
 
-			static castor::String const & getSettingsName()
+			static castor::MbString const & getSettingsName()
 			{
-				static castor::String const result{ navlib::settings_k };
+				static castor::MbString const result{ navlib::settings_k };
 				return result;
 			}
 
-			static castor::String const & getMotionModelSettingsName()
+			static castor::MbString const & getMotionModelSettingsName()
 			{
-				static castor::String const result{ getSettingsName() + ".MotionModel" };
+				static castor::MbString const result{ getSettingsName() + ".MotionModel" };
 				return result;
 			}
 
-			static castor::String const & getLockHorizonSettingsName()
+			static castor::MbString const & getLockHorizonSettingsName()
 			{
-				static castor::String const result{ getSettingsName() + ".LockHorizon" };
+				static castor::MbString const result{ getSettingsName() + ".LockHorizon" };
 				return result;
 			}
 
-			static castor::String const & getMoveObjectsSettingsName()
+			static castor::MbString const & getMoveObjectsSettingsName()
 			{
-				static castor::String const result{ getSettingsName() + ".MoveObjects" };
+				static castor::MbString const result{ getSettingsName() + ".MoveObjects" };
 				return result;
 			}
 
@@ -183,7 +183,7 @@ namespace GuiCommon
 		public:
 			static castor::Matrix4x4d getCoordinateSystem()
 			{
-				static castor::Matrix4x4d const cs{ std::array< double, 16u >
+				static castor::Matrix4x4d const cs{ castor::Array< double, 16u >
 					{ 1.0, 0.0, 0.0, 0.0
 					, 0.0, 1.0, 0.0, 0.0
 					, 0.0, 0.0, 1.0, 0.0

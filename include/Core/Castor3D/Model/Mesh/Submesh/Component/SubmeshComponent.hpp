@@ -86,7 +86,7 @@ namespace castor3d
 		 */
 		C3D_API virtual crg::FramePassArray record( RenderDevice const & device
 			, crg::ResourcesCache & resources
-			, crg::FrameGraph & graph
+			, crg::FramePassGroup & graph
 			, crg::FramePassArray previousPasses )
 		{
 			return crg::FramePassArray{};
@@ -245,7 +245,7 @@ namespace castor3d
 			, Pass const & pass
 			, ObjectBufferOffset const & bufferOffsets
 			, ashes::BufferCRefArray & buffers
-			, std::vector< uint64_t > & offsets
+			, castor::Vector< uint64_t > & offsets
 			, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
 			, uint32_t & currentBinding
 			, uint32_t & currentLocation ) = 0;

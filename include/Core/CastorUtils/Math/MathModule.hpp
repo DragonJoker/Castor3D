@@ -233,7 +233,7 @@ namespace castor
 	using Length = LengthT< float >;
 	using Quaternion = QuaternionT< float >;
 
-	using QuaternionArray = std::vector< Quaternion >;
+	using QuaternionArray = Vector< Quaternion >;
 
 	CU_DeclarePoint( bool, 4, b );
 	CU_DeclarePoint( bool, 3, b );

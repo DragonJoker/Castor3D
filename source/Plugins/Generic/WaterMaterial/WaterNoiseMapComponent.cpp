@@ -32,7 +32,7 @@ namespace castor
 		{
 		}
 
-		bool operator()( StringStream & file )
+		bool operator()( StringStream & file )const
 		{
 			return writeMask( file, cuT( "water_noise_mask" ), m_mask );
 		}
@@ -81,7 +81,7 @@ namespace water
 		static CU_ImplementAttributeParserBlock( parserTexRemapWaterNoise, SceneImportContext )
 		{
 			auto & plugin = getEngine( *blockContext )->getPassComponentsRegister().getPlugin( WaterNoiseMapComponent::TypeName );
-			blockContext->textureRemapIt = blockContext->textureRemaps.emplace( plugin.getTextureFlags(), TextureConfiguration{} ).first;
+			blockContext->textureRemapIt = blockContext->textureRemaps.try_emplace( plugin.getTextureFlags() ).first;
 			blockContext->textureRemapIt->second = TextureConfiguration{};
 		}
 		CU_EndAttributePushBlock( CSCNSection::eTextureRemapChannel, blockContext )
@@ -154,8 +154,8 @@ namespace water
 		, castor3d::shader::BlendComponents & components
 		, castor3d::shader::SampleTexture const & sampleTexture )const
 	{
-		std::string valueName = "waterNoise";
-		std::string mapName = "waterNoise";
+		castor::MbString valueName = "waterNoise";
+		castor::MbString mapName = "waterNoise";
 		auto textureName = mapName + "MapAndMask";
 
 		if ( !material.hasMember( textureName )
@@ -207,8 +207,8 @@ namespace water
 		, c3d::BlendComponents & components
 		, bool isFrontCulled )const
 	{
-		std::string valueName = "waterNoise";
-		std::string mapName = "waterNoise";
+		castor::MbString valueName = "waterNoise";
+		castor::MbString mapName = "waterNoise";
 		auto textureName = mapName + "MapAndMask";
 
 		if ( !material.hasMember( textureName )
@@ -247,13 +247,14 @@ namespace water
 	void WaterNoiseMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		channelFillers.emplace( "water_noise", ChannelFiller{ getTextureFlags()
+		channelFillers.try_emplace( cuT( "water_noise" )
+			, getTextureFlags()
 			, []( TextureContext & blockContext )
 			{
-				auto & component = getPassComponent< WaterNoiseMapComponent >( blockContext );
+				auto const & component = getPassComponent< WaterNoiseMapComponent >( blockContext );
 				component.fillChannel( blockContext.configuration
 					, 0x00FF0000u );
-			} } );
+			} );
 
 		castor::addParserT( parsers
 			, CSCNSection::eTexture
@@ -287,7 +288,7 @@ namespace water
 	}
 
 	void WaterNoiseMapComponent::Plugin::createMapComponent( Pass & pass
-		, std::vector< PassComponentUPtr > & result )const
+		, castor::Vector< PassComponentUPtr > & result )const
 	{
 		result.push_back( castor::makeUniqueDerived< PassComponent, WaterNoiseMapComponent >( pass ) );
 	}

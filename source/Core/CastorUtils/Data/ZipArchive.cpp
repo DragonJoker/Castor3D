@@ -29,9 +29,9 @@ namespace castor
 
 	namespace zlib
 	{
-		static std::string getError( int error )
+		static MbString getError( int error )
 		{
-			return "(code " + string::toString( error ) + ")";
+			return "(code " + castor::string::toMbString( error ) + ")";
 		}
 
 		struct ZipImpl
@@ -47,11 +47,11 @@ namespace castor
 
 					zlib_filefunc_def ffunc;
 					fill_win32_filefunc( &ffunc );
-					m_zip = zipOpen2( string::stringCast< char >( path ).c_str(), 0, nullptr, &ffunc );
+					m_zip = zipOpen2( toUtf8( path ).c_str(), 0, nullptr, &ffunc );
 
 #else
 
-					m_zip = zipOpen( string::stringCast< char >( path ).c_str(), 0 );
+					m_zip = zipOpen( toUtf8( path ).c_str(), 0 );
 
 #endif
 
@@ -66,17 +66,17 @@ namespace castor
 
 					zlib_filefunc_def ffunc;
 					fill_win32_filefunc( &ffunc );
-					m_unzip = unzOpen2( string::stringCast< char >( path ).c_str(), &ffunc );
+					m_unzip = unzOpen2( toUtf8( path ).c_str(), &ffunc );
 
 #else
 
-					m_unzip = unzOpen( string::stringCast< char >( path ).c_str() );
+					m_unzip = unzOpen( toUtf8( path ).c_str() );
 
 #endif
 
 					if ( !m_unzip )
 					{
-						CU_Exception( "Couldn't open archive file: " + system::getLastErrorText() );
+						CU_Exception( cuT( "Couldn't open archive file: " ) + system::getLastErrorText() );
 					}
 				}
 			}
@@ -173,7 +173,7 @@ namespace castor
 		private:
 			void doInflateCurrentFile( Path const & outFolder, StringArray & result )
 			{
-				std::array< char, 256 > fileNameInZip;
+				Array< char, 256 > fileNameInZip;
 				unz_file_info fileInfo;
 				auto error = unzGetCurrentFileInfo( m_unzip
 					, &fileInfo
@@ -189,7 +189,7 @@ namespace castor
 					CU_Exception( "Error in unzgetCurrentFileInfo: " + zlib::getError( error ) );
 				}
 
-				Path name{ string::stringCast< xchar >( fileNameInZip.data(), fileNameInZip.data() + fileInfo.size_filename ) };
+				Path name{ makeString( MbString{ fileNameInZip.data(), fileNameInZip.data() + fileInfo.size_filename } ) };
 
 				if ( StringArray folders = string::split( name.getPath(), string::toString( Path::NativeSeparator ), 100, false );
 					!folders.empty() )
@@ -223,7 +223,7 @@ namespace castor
 					}
 
 					BinaryFile file( outFolder / name, File::OpenMode::eWrite );
-					std::vector< uint8_t > buffer( CHUNK );
+					Vector< uint8_t > buffer( CHUNK );
 
 					try
 					{
@@ -281,13 +281,14 @@ namespace castor
 				doDeflateFiles( filePath, folder.files );
 			}
 
-			virtual void doDeflateFiles( String const & path, std::list< String > const & files )
+			virtual void doDeflateFiles( String const & path, List< String > const & files )
 			{
 				for ( auto const & name : files )
 				{
-					std::string filePath = string::stringCast< char >( path + cuT( "/" ) + name );
+					auto origPath = Path{ path + cuT( "/" ) + name };
+					auto filePath = toUtf8( origPath );
 
-					if ( !File::fileExists( Path{ string::stringCast< xchar >( filePath ) } ) )
+					if ( !File::fileExists( origPath ) )
 					{
 						CU_Exception( "The file doesn't exist: " + filePath );
 					}
@@ -303,7 +304,7 @@ namespace castor
 					auto size = size_t( file.tellg() );
 					file.seekg( 0, std::ios::beg );
 
-					std::vector< char > buffer( size );
+					Vector< char > buffer( size );
 
 					if ( size == 0 || file.read( buffer.data(), std::streamsize( size ) ) )
 					{
@@ -438,7 +439,7 @@ namespace castor
 	//*********************************************************************************************
 
 	ZipArchive::ZipArchive( Path const & path, File::OpenMode mode )
-		: m_impl( std::make_unique< zlib::ZipImpl >() )
+		: m_impl( castor::make_unique< zlib::ZipImpl >() )
 	{
 		m_impl->open( path, mode );
 	}

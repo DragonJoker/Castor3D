@@ -17,7 +17,7 @@ namespace NoTM
 	struct ToneMapping
 	{
 		static castor::String Type;
-		static castor::String Name;
+		static castor::MbString Name;
 		static void create( ast::ShaderBuilder & builder );
 	};
 }

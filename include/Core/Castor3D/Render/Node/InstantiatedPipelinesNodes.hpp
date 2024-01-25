@@ -22,7 +22,7 @@ namespace castor3d
 			auto data = &node.node->data;
 			auto it = std::find_if( begin()
 				, end()
-				, [&data]( std::pair< NodeObject const *, RenderedNode > const & lookup )
+				, [&data]( castor::Pair< NodeObject const *, RenderedNode > const & lookup )
 				{
 					return lookup.first == data;
 				} );
@@ -40,7 +40,7 @@ namespace castor3d
 					}
 				}
 
-				m_objects.emplace_back( data, std::move( node ) );
+				m_objects.emplace_back( data, castor::move( node ) );
 				it = std::next( begin(), ptrdiff_t( size() - 1u ) );
 			}
 
@@ -88,7 +88,7 @@ namespace castor3d
 		}
 
 	private:
-		std::vector< std::pair< NodeObject const *, RenderedNode > > m_objects;
+		castor::Vector< castor::Pair< NodeObject const *, RenderedNode > > m_objects;
 	};
 
 	template< typename NodeT >
@@ -144,7 +144,7 @@ namespace castor3d
 			, RenderedNode node )
 		{
 			auto it = emplace( buffer );
-			it->nodes.emplace( std::move( node ) );
+			it->nodes.emplace( castor::move( node ) );
 		}
 
 		void clear()noexcept
@@ -195,7 +195,7 @@ namespace castor3d
 		}
 
 	private:
-		std::vector< BufferNodes > m_buffers;
+		castor::Vector< BufferNodes > m_buffers;
 	};
 
 	template< typename NodeT >
@@ -215,7 +215,7 @@ namespace castor3d
 		{
 			PipelineNodes( PipelineAndID pipeline
 				, bool isFrontCulled )
-				: pipeline{ std::move( pipeline ) }
+				: pipeline{ castor::move( pipeline ) }
 				, isFrontCulled{ isFrontCulled }
 			{
 			}
@@ -275,7 +275,7 @@ namespace castor3d
 				it->nodes.emplace( buffer
 					, RenderedNode{ culled.node
 						, culled.visible
-						, std::move( command ) } );
+						, castor::move( command ) } );
 			}
 		}
 
@@ -328,8 +328,8 @@ namespace castor3d
 		}
 
 	private:
-		std::unordered_set< size_t > m_countedNodes;
-		std::map< uint32_t, PipelineNodes > m_pipelines;
+		castor::UnorderedSet< size_t > m_countedNodes;
+		castor::Map< uint32_t, PipelineNodes > m_pipelines;
 	};
 }
 

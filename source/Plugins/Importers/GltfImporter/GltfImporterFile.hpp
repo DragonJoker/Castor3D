@@ -62,16 +62,16 @@ namespace c3d_gltf
 	inline const castor::String DefaultMaterial = cuT( "GLTF_DefaultMaterial" );
 
 	castor3d::NodeTransform convert( std::variant< fastgltf::Node::TRS, fastgltf::Node::TransformMatrix > const & transform );
-	castor::Point3f convert( std::array< float, 3u > const & value );
-	castor::Quaternion convert( std::array< float, 4u > const & value );
+	castor::Point3f convert( castor::Array< float, 3u > const & value );
+	castor::Quaternion convert( castor::Array< float, 4u > const & value );
 
-	using AnimationChannelSampler = std::pair< fastgltf::AnimationChannel, fastgltf::AnimationSampler >;
-	using NodeAnimationChannelSampler = std::vector< AnimationChannelSampler >;
-	using AnimationChannelSamplers = std::map< fastgltf::AnimationPath, NodeAnimationChannelSampler >;
+	using AnimationChannelSampler = castor::Pair< fastgltf::AnimationChannel, fastgltf::AnimationSampler >;
+	using NodeAnimationChannelSampler = castor::Vector< AnimationChannelSampler >;
+	using AnimationChannelSamplers = castor::Map< fastgltf::AnimationPath, NodeAnimationChannelSampler >;
 	using Animations = castor::StringMap< AnimationChannelSamplers >;
 
-	using IndexName = std::pair< size_t, castor::String >;
-	using NameContainer = std::vector< IndexName >;
+	using IndexName = castor::Pair< size_t, castor::String >;
+	using NameContainer = castor::Vector< IndexName >;
 
 	struct GltfSubmeshData
 	{
@@ -95,7 +95,7 @@ namespace c3d_gltf
 			, skinIndex{ pskinIndex }
 		{
 		}
-		std::vector< GltfSubmeshData > submeshes;
+		castor::Vector< GltfSubmeshData > submeshes;
 		fastgltf::Skin const * skin{};
 		size_t skinIndex{};
 	};
@@ -111,13 +111,13 @@ namespace c3d_gltf
 			, size_t pinstanceCount
 			, castor3d::NodeTransform ptransform
 			, fastgltf::Node const * pnode )
-			: NodeData{ std::move( pparent )
-				, std::move( pname )
+			: NodeData{ castor::move( pparent )
+				, castor::move( pname )
 				, pisCamera }
 			, index{ pindex }
 			, instance{ pinstance }
 			, instanceCount{ pinstanceCount }
-			, transform{ std::move( ptransform ) }
+			, transform{ castor::move( ptransform ) }
 			, node{ pnode }
 		{
 		}
@@ -127,7 +127,7 @@ namespace c3d_gltf
 		size_t instanceCount;
 		castor3d::NodeTransform transform{};
 		fastgltf::Node const * node;
-		std::vector< GltfMeshData const * > meshes{};
+		castor::Vector< GltfMeshData const * > meshes{};
 		Animations anims;
 	};
 
@@ -138,8 +138,8 @@ namespace c3d_gltf
 
 	struct GlSceneData
 	{
-		std::vector< GltfNodeData > nodes;
-		std::vector< GltfNodeData > skeletonNodes;
+		castor::Vector< GltfNodeData > nodes;
+		castor::Vector< GltfNodeData > skeletonNodes;
 		castor::StringMap< GltfMeshData > meshes;
 		castor::StringMap< GlSkeletonData > skeletons;
 	};
@@ -183,19 +183,19 @@ namespace c3d_gltf
 
 		bool isSkeletonNode( size_t nodeIndex )const;
 
-		std::vector< castor::String > listMaterials()override;
-		std::vector< MeshData > listMeshes()override;
-		std::vector< castor::String > listSkeletons()override;
-		std::vector< NodeData > listSceneNodes()override;
-		std::vector< LightData > listLights()override;
-		std::vector< GeometryData > listGeometries()override;
-		std::vector< CameraData > listCameras()override;
-		std::vector< castor::String > listMeshAnimations( castor3d::Mesh const & mesh )override;
-		std::vector< castor::String > listSkeletonAnimations( castor3d::Skeleton const & skeleton )override;
-		std::vector< castor::String > listSceneNodeAnimations( castor3d::SceneNode const & node )override;
-		std::vector< castor::String > listAllMeshAnimations()override;
-		std::vector< castor::String > listAllSkeletonAnimations()override;
-		std::vector< castor::String > listAllSceneNodeAnimations()override;
+		castor::StringArray listMaterials()override;
+		castor::Vector< MeshData > listMeshes()override;
+		castor::StringArray listSkeletons()override;
+		castor::Vector< NodeData > listSceneNodes()override;
+		castor::Vector< LightData > listLights()override;
+		castor::Vector< GeometryData > listGeometries()override;
+		castor::Vector< CameraData > listCameras()override;
+		castor::StringArray listMeshAnimations( castor3d::Mesh const & mesh )override;
+		castor::StringArray listSkeletonAnimations( castor3d::Skeleton const & skeleton )override;
+		castor::StringArray listSceneNodeAnimations( castor3d::SceneNode const & node )override;
+		castor::StringArray listAllMeshAnimations()override;
+		castor::StringArray listAllSkeletonAnimations()override;
+		castor::StringArray listAllSceneNodeAnimations()override;
 
 		castor3d::MaterialImporterUPtr createMaterialImporter()override;
 		castor3d::AnimationImporterUPtr createAnimationImporter()override;
@@ -205,7 +205,7 @@ namespace c3d_gltf
 		castor3d::LightImporterUPtr createLightImporter()override;
 		castor3d::CameraImporterUPtr createCameraImporter()override;
 
-		std::vector< GltfNodeData > const & getNodes()const noexcept
+		castor::Vector< GltfNodeData > const & getNodes()const noexcept
 		{
 			return m_sceneData.nodes;
 		}
@@ -226,7 +226,7 @@ namespace c3d_gltf
 		}
 
 	public:
-		static castor::String const Name;
+		static castor::MbString const Name;
 
 	private:
 		void doPrelistNodes();
@@ -239,7 +239,7 @@ namespace c3d_gltf
 	private:
 		fastgltf::Expected< fastgltf::Asset > m_expAsset;
 		fastgltf::Asset const * m_asset{};
-		std::vector< size_t > m_sceneIndices{};
+		castor::Vector< size_t > m_sceneIndices{};
 		GlSceneData m_sceneData;
 		mutable NameContainer m_materialNames;
 		mutable NameContainer m_meshNames;

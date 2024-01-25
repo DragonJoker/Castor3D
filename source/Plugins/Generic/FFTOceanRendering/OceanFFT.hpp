@@ -43,29 +43,30 @@ namespace ocean_fft
 		, ashes::BufferBase const & input
 		, ashes::BufferBase const & output )
 	{
-		auto & result = graph.createPass( "GenerateFrequency" + name
+		auto mbName = castor::toUtf8( name );
+		auto & result = graph.createPass( "GenerateFrequency" + mbName
 			, [&device, extent]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
-				auto res = std::make_unique< GeneratePassT >( framePass
+				auto res = castor::make_unique< GeneratePassT >( framePass
 					, context
 					, runnableGraph
 					, device
 					, extent
 					, crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
-				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );
 		result.addDependencies( previousPasses );
 		ubo.createPassBinding( result
 			, GeneratePassT::eConfig );
-		result.addInputStorageBuffer( { input, name + "Distribution" }
+		result.addInputStorageBuffer( { input, mbName + "Distribution" }
 			, GeneratePassT::eInput
 			, 0u
 			, input.getSize() );
-		result.addOutputStorageBuffer( { output, name + "Frequency" }
+		result.addOutputStorageBuffer( { output, mbName + "Frequency" }
 			, GeneratePassT::eOutput
 			, 0u
 			, output.getSize() );
@@ -89,17 +90,17 @@ namespace ocean_fft
 					, dimensions.width * dimensions.height
 					, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 					, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-					, prefix + name + "Frequency" ) }
+					, prefix + name + cuT( "Frequency" ) ) }
 			, result{ castor3d::makeBufferBase( pfftConfig.device
 					, sizeof( cfloat ) * dimensions.width * dimensions.height
 					, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 					, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-					, prefix + name + "Result0" )
+					, prefix + name + cuT( "Result0" ) )
 				, castor3d::makeBufferBase( pfftConfig.device
 					, sizeof( cfloat ) * dimensions.width * dimensions.height
 					, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 					, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-					, prefix + name + "Result1" ) }
+					, prefix + name + cuT( "Result1" ) ) }
 			, generateFrequency{ &createGenerateFrequencyPassT< FrequencyPassT >( prefix
 				, name
 				, fftConfig.device
@@ -133,7 +134,7 @@ namespace ocean_fft
 	private:
 		VkFFTConfig const & fftConfig;
 		ashes::BufferPtr< cfloat > frequency;
-		std::array< ashes::BufferBasePtr, 2u > result;
+		castor::Array< ashes::BufferBasePtr, 2u > result;
 		crg::FramePass const * generateFrequency{};
 		crg::FramePass const * processFFT{};
 	};
@@ -200,8 +201,8 @@ namespace ocean_fft
 		ashes::BufferPtr< cfloat > m_displacementDistribution;
 		crg::FramePass const * m_generateDisplacementDistribution{};
 		GenerateFFTPassT< GenerateDistributionPass, GenerateDisplacementPass > m_displacement;
-		std::array< castor3d::Texture, 2u > m_heightDisplacement;
-		std::array< castor3d::Texture, 2u > m_gradientJacobian;
+		castor::Array< castor3d::Texture, 2u > m_heightDisplacement;
+		castor::Array< castor3d::Texture, 2u > m_gradientJacobian;
 		crg::FramePass const * m_bakeHeightGradient{};
 		crg::FramePass const * m_generateHeightDispMips{};
 		crg::FramePass const * m_generateGradJacobMips{};

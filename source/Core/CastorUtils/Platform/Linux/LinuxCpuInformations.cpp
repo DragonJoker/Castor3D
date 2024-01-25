@@ -4,6 +4,7 @@
 
 #include "CastorUtils/Exception/Assertion.hpp"
 #include "CastorUtils/Miscellaneous/CpuInformations.hpp"
+#include "CastorUtils/Miscellaneous/StringUtils.hpp"
 
 #include <cpuid.h>
 #include <sstream>
@@ -16,7 +17,7 @@ namespace castor::platform
 #pragma clang diagnostic ignored "-Wmissing-prototypes"
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wmissing-declarations"
-	void callCpuid( uint32_t func, std::array< int32_t, 4 > & p_data )
+	void callCpuid( uint32_t func, Array< int32_t, 4 > & p_data )
 	{
 		uint32_t a{};
 		uint32_t b{};
@@ -44,17 +45,17 @@ namespace castor::platform
 		return uint32_t( res[0] );
 	}
 
-	std::string getCPUModel()
+	String getCPUModel()
 	{
-		std::string line;
+		MbString line;
 		std::ifstream finfo( "/proc/cpuinfo" );
-		std::string result;
+		MbString result;
 
 		while ( std::getline( finfo, line ) )
 		{
-			std::stringstream str( line );
-			std::string itype;
-			std::string info;
+			MbStringStream str( line );
+			MbString itype;
+			MbString info;
 
 			if ( std::getline( str, itype, ':' )
 				&& std::getline( str, info )
@@ -65,7 +66,7 @@ namespace castor::platform
 			}
 		}
 
-		return result;
+		return makeString( result );
 	}
 #pragma GCC diagnostic pop
 #pragma clang diagnostic pop

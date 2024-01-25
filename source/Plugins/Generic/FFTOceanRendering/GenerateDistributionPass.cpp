@@ -38,7 +38,7 @@ namespace ocean_fft
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 					, VK_SHADER_STAGE_COMPUTE_BIT ) };
 			return device->createDescriptorSetLayout( GenerateDistributionPass::Name 
-				, std::move( bindings ) );
+				, castor::move( bindings ) );
 		}
 
 		static ashes::DescriptorSetPtr createDescriptorSet( crg::RunnableGraph & graph
@@ -180,7 +180,7 @@ namespace ocean_fft
 
 	//************************************************************************************************
 
-	castor::String const GenerateDistributionPass::Name{ "GenerateDistribution" };
+	castor::MbString const GenerateDistributionPass::Name{ "GenerateDistribution" };
 
 	GenerateDistributionPass::GenerateDistributionPass( crg::FramePass const & pass
 		, crg::GraphContext & context
@@ -202,7 +202,7 @@ namespace ocean_fft
 		, m_device{ device }
 		, m_descriptorSetLayout{ gendstr::createDescriptorLayout( m_device ) }
 		, m_pipelineLayout{ gendstr::createPipelineLayout( m_device, *m_descriptorSetLayout ) }
-		, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, Name, gendstr::createShader( device, normals ) }
+		, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, castor::makeString( Name ), gendstr::createShader( device, normals ) }
 		, m_pipeline{ gendstr::createPipeline( device, *m_pipelineLayout, m_shader ) }
 		, m_descriptorSetPool{ m_descriptorSetLayout->createPool( 1u ) }
 		, m_descriptorSet{ gendstr::createDescriptorSet( m_graph, *m_descriptorSetPool, m_pass ) }
@@ -260,30 +260,31 @@ namespace ocean_fft
 		, ashes::BufferBase const & input
 		, ashes::BufferBase const & output )
 	{
-		auto & result = graph.createPass( "GenerateDistribution" + name
+		auto mbName = castor::toUtf8( name );
+		auto & result = graph.createPass( "GenerateDistribution" + mbName
 			, [&device, normals, extent]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
-				auto res = std::make_unique< GenerateDistributionPass >( framePass
+				auto res = castor::make_unique< GenerateDistributionPass >( framePass
 					, context
 					, runnableGraph
 					, device
 					, extent
 					, normals
 					, crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
-				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );
 		result.addDependencies( previousPasses );
 		ubo.createPassBinding( result
 			, GenerateDistributionPass::eConfig );
-		result.addInputStorageBuffer( { input, name + "Seed" }
+		result.addInputStorageBuffer( { input, mbName + "Seed" }
 			, GenerateDistributionPass::eInput
 			, 0u
 			, input.getSize() );
-		result.addOutputStorageBuffer( { output, name + "Distribution" }
+		result.addOutputStorageBuffer( { output, mbName + "Distribution" }
 			, GenerateDistributionPass::eOutput
 			, 0u
 			, output.getSize() );

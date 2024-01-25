@@ -21,21 +21,21 @@ namespace castor
 		log::info << tabs() << cuT( "Writing BillboardList " ) << obj.getName() << std::endl;
 		bool result = false;
 
-		if ( auto block{ beginBlock( file, "billboard", obj.getName() ) } )
+		if ( auto block{ beginBlock( file, cuT( "billboard" ), obj.getName() ) } )
 		{
-			result = writeName( file, "parent", obj.getParent()->getName() )
+			result = writeName( file, cuT( "parent" ), obj.getParent()->getName() )
 				&& write( file, cuT( "cast_shadows" ), obj.isShadowCaster() )
 				&& write( file, cuT( "receive_shadows" ), obj.isShadowReceiver() )
-				&& writeName( file, "material", obj.getMaterial()->getName() )
-				&& writeNamedSub( file, "dimensions", obj.getDimensions() );
+				&& writeName( file, cuT( "material" ), obj.getMaterial()->getName() )
+				&& writeNamedSub( file, cuT( "dimensions" ), obj.getDimensions() );
 
 			if ( result && obj.getCount() )
 			{
-				if ( auto posBlock{ beginBlock( file, "positions" ) } )
+				if ( auto posBlock{ beginBlock( file, cuT( "positions" ) ) } )
 				{
 					for ( auto const & point : obj )
 					{
-						result = result && writeNamedSub( file, "pos", point );
+						result = result && writeNamedSub( file, cuT( "pos" ), point );
 					}
 				}
 			}

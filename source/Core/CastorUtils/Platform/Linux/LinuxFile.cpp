@@ -98,25 +98,24 @@ namespace castor
 	{
 		CU_Require( !folderPath.empty() );
 		bool result = false;
-		DIR * dir;
 
-		if ( ( dir = opendir( string::stringCast< char >( folderPath ).c_str() ) ) == nullptr )
-		{
-			file::printErrnoName( cuT( "folder" ), folderPath );
-			result = false;
-		}
-		else
+		if ( auto dir = opendir( toUtf8( folderPath ).c_str() ) )
 		{
 			result = true;
 			dirent * dirent;
 
 			while ( result && ( dirent = readdir( dir ) ) != nullptr )
 			{
-				String name = string::stringCast< xchar >( dirent->d_name );
+				String name = makeString( dirent->d_name );
 				file::traverse( folderPath, directoryFunction, fileFunction, dirent, name, result );
 			}
 
 			closedir( dir );
+		}
+		else
+		{
+			file::printErrnoName( cuT( "folder" ), folderPath );
+			result = false;
 		}
 
 		return result;
@@ -155,7 +154,7 @@ namespace castor
 		if ( bytes > 0 )
 		{
 			path[bytes] = '\0';
-			pathReturn = Path{ string::stringCast< xchar >( path ) };
+			pathReturn = Path{ makeString( path ) };
 		}
 
 		pathReturn = pathReturn.getPath();
@@ -167,14 +166,14 @@ namespace castor
 		Path pathReturn;
 		struct passwd * pw = getpwuid( getuid() );
 		const char * homedir = pw->pw_dir;
-		pathReturn = Path{ string::stringCast< xchar >( homedir ) };
+		pathReturn = Path{ makeString( homedir ) };
 		return pathReturn;
 	}
 
 	bool File::directoryExists( Path const & p_path )
 	{
 		struct stat status{};
-		stat( string::stringCast< char >( p_path ).c_str(), &status );
+		stat( toUtf8( p_path ).c_str(), &status );
 		return ( status.st_mode & S_IFDIR ) == S_IFDIR;
 	}
 
@@ -234,12 +233,12 @@ namespace castor
 			mode |= S_IXOTH;
 		}
 
-		return mkdir( string::stringCast< char >( p_path ).c_str(), mode ) == 0;
+		return mkdir( toUtf8( p_path ).c_str(), mode ) == 0;
 	}
 
 	bool File::deleteEmptyDirectory( Path const & p_path )
 	{
-		bool result = rmdir( string::stringCast< char >( p_path ).c_str() ) == 0;
+		bool result = rmdir( toUtf8( p_path ).c_str() ) == 0;
 
 		if ( !result )
 		{

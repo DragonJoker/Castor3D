@@ -18,7 +18,7 @@ namespace castor3d
 	}
 
 	bool hasAny( PassComponentCombine const & lhs
-		, std::vector< PassComponentFlag > const & rhs )noexcept
+		, castor::Vector< PassComponentFlag > const & rhs )noexcept
 	{
 		return std::any_of( rhs.begin()
 			, rhs.end()

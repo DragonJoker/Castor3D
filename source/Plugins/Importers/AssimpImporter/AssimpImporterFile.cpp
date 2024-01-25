@@ -33,7 +33,7 @@ namespace c3d_assimp
 			, castor3d::Parameters const & parameters )
 		{
 			bool noOptim = false;
-			auto found = parameters.get( "no_optimisations", noOptim );
+			auto found = parameters.get( cuT( "no_optimisations" ), noOptim );
 			uint32_t importFlags{ aiProcess_ValidateDataStructure
 				| aiProcess_FindInvalidData
 				| aiProcess_Triangulate
@@ -69,7 +69,7 @@ namespace c3d_assimp
 
 			try
 			{
-				auto result = importer.ReadFile( castor::string::stringCast< char >( filePath ), importFlags );
+				auto result = importer.ReadFile( castor::toUtf8( filePath ), importFlags );
 
 				if ( !result )
 				{
@@ -87,7 +87,7 @@ namespace c3d_assimp
 		}
 
 		template< typename IterT, typename TypeT >
-		static std::pair< IterT, castor::String > replaceIter( castor::String const & name
+		static castor::Pair< IterT, castor::String > replaceIter( castor::String const & name
 			, IterT iter
 			, castor::StringMap< TypeT > & map )
 		{
@@ -107,7 +107,7 @@ namespace c3d_assimp
 			, aiMaterial const & aiMaterial
 			, uint32_t materialIndex )
 		{
-			castor::String result = file.getExtension() + "-";
+			castor::String result = file.getExtension() + cuT( "-" );
 			aiString name;
 
 			if ( aiMaterial.Get( AI_MATKEY_NAME, name ) == aiReturn_SUCCESS )
@@ -132,18 +132,19 @@ namespace c3d_assimp
 				return true;
 			}
 
+			auto mbName = castor::toUtf8( aiNodeName );
 			return skeletons.end() != std::find_if( skeletons.begin()
 				, skeletons.end()
-				, [&aiNodeName]( castor::StringMap< AssimpSkeletonData >::value_type const & lookup )
+				, [&mbName]( castor::StringMap< AssimpSkeletonData >::value_type const & lookup )
 				{
-					return lookup.second.rootNode->FindNode( aiNodeName.c_str() ) != nullptr;
+					return lookup.second.rootNode->FindNode( mbName.c_str() ) != nullptr;
 				} );
 		}
 
-		static std::map< aiAnimation const *, aiNodeAnim const * > findNodeAnims( aiNode const & aiNode
+		static castor::Map< aiAnimation const *, aiNodeAnim const * > findNodeAnims( aiNode const & aiNode
 			, castor::ArrayView< aiAnimation * > const & animations )
 		{
-			std::map< aiAnimation const *, aiNodeAnim const * > result;
+			castor::Map< aiAnimation const *, aiNodeAnim const * > result;
 
 			for ( auto aiAnimation : animations )
 			{
@@ -177,7 +178,7 @@ namespace c3d_assimp
 					} ) );
 		}
 
-		static std::pair< AssimpSkeletonData *, castor3d::SkeletonRPtr > findSkeletonForAnim( castor3d::Scene * scene
+		static castor::Pair< AssimpSkeletonData *, castor3d::SkeletonRPtr > findSkeletonForAnim( castor3d::Scene * scene
 			, aiNode const & rootNode
 			, aiAnimation const & animation
 			, AssimpSceneData & sceneData )
@@ -194,7 +195,7 @@ namespace c3d_assimp
 			{
 				for ( auto & skeleton : scene->getSkeletonCache() )
 				{
-					if ( auto node = rootNode.FindNode( skeleton.second->getRootNode()->getName().c_str() ) )
+					if ( auto node = rootNode.FindNode( castor::toUtf8( skeleton.second->getRootNode()->getName() ).c_str() ) )
 					{
 						auto & data = sceneData.skeletons.emplace( skeleton.first
 							, AssimpSkeletonData{ node } ).first->second;
@@ -285,10 +286,10 @@ namespace c3d_assimp
 		static castor::String reworkMeshName( castor::String const & name
 			, uint32_t meshIndex )
 		{
-			castor::String separators = " \t\r_$|/:\\*!?&#\"()[]{}@+.";
+			castor::StringView separators = cuT( " \t\r_$|/:\\*!?&#\"()[]{}@+." );
 			auto split = castor::string::split( name, separators, ~( 0u ), false );
-			std::set< int > numbers;
-			std::set< castor::String > names;
+			castor::Set< int > numbers;
+			castor::Set< castor::String > names;
 
 			for ( auto s : split )
 			{
@@ -313,21 +314,21 @@ namespace c3d_assimp
 			for ( auto & s : names )
 			{
 				result += sep + s;
-				sep = "_";
+				sep = cuT( "_" );
 			}
 
 			for ( auto i : numbers )
 			{
 				result += sep + castor::string::toString( i );
-				sep = "_";
+				sep = cuT( "_" );
 			}
 
 			return result;
 		}
 
 		static void accumulateTransformsRec( aiNode const * node
-			, std::vector< AssimpNodeData > const & nodes
-			, std::vector< castor::Matrix4x4f > & transforms )
+			, castor::Vector< AssimpNodeData > const & nodes
+			, castor::Vector< castor::Matrix4x4f > & transforms )
 		{
 			if ( !node )
 			{
@@ -357,14 +358,14 @@ namespace c3d_assimp
 		static castor::Matrix4x4f accumulateTransforms( AssimpImporterFile const & file
 			, castor::String const & name
 			, aiNode const & rootNode
-			, std::vector< AssimpNodeData > const & nodes
+			, castor::Vector< AssimpNodeData > const & nodes
 			, castor::Matrix4x4f transform )
 		{
-			auto node = rootNode.FindNode( file.getExternalName( name ).c_str() );
+			auto node = rootNode.FindNode( castor::toUtf8( file.getExternalName( name ) ).c_str() );
 
 			if ( node )
 			{
-				std::vector< castor::Matrix4x4f > transforms;
+				castor::Vector< castor::Matrix4x4f > transforms;
 				accumulateTransformsRec( node->mParent, nodes, transforms );
 				std::reverse( transforms.begin(), transforms.end() );
 				castor::Matrix4x4f cumulative{ 1.0f };
@@ -383,7 +384,7 @@ namespace c3d_assimp
 
 	//*********************************************************************************************
 
-	castor::String const AssimpImporterFile::Name = cuT( "ASSIMP Importer" );
+	castor::MbString const AssimpImporterFile::Name = "ASSIMP Importer";
 
 	AssimpImporterFile::AssimpImporterFile( castor3d::Engine & engine
 		, castor3d::Scene * scene
@@ -406,8 +407,8 @@ namespace c3d_assimp
 
 			doPrelistMaterials();
 			doPrelistMeshes( doPrelistSkeletons() );
-			std::map< AssimpMeshData const *, aiNodeArray > processed;
-			std::map< aiNode const *, castor::Matrix4x4f > cumulativeTransforms;
+			castor::Map< AssimpMeshData const *, aiNodeArray > processed;
+			castor::Map< aiNode const *, castor::Matrix4x4f > cumulativeTransforms;
 			doPrelistSceneNodes( *m_aiScene->mRootNode, processed, cumulativeTransforms );
 			doPrelistLights();
 			doPrelistCameras();
@@ -475,9 +476,9 @@ namespace c3d_assimp
 		return dummy;
 	}
 
-	std::vector< castor::String > AssimpImporterFile::listMaterials()
+	castor::StringArray AssimpImporterFile::listMaterials()
 	{
-		std::vector< castor::String > result;
+		castor::StringArray result;
 
 		for ( auto materials : m_sceneData.materials )
 		{
@@ -487,10 +488,10 @@ namespace c3d_assimp
 		return result;
 	}
 
-	std::vector< castor3d::ImporterFile::MeshData > AssimpImporterFile::listMeshes()
+	castor::Vector< castor3d::ImporterFile::MeshData > AssimpImporterFile::listMeshes()
 	{
 		m_listedMeshes.clear();
-		std::vector< MeshData > result;
+		castor::Vector< MeshData > result;
 
 		for ( auto it : m_sceneData.meshes )
 		{
@@ -504,9 +505,9 @@ namespace c3d_assimp
 		return result;
 	}
 
-	std::vector< castor::String > AssimpImporterFile::listSkeletons()
+	castor::StringArray AssimpImporterFile::listSkeletons()
 	{
-		std::vector< castor::String > result;
+		castor::StringArray result;
 
 		for ( auto it : m_sceneData.skeletons )
 		{
@@ -517,9 +518,9 @@ namespace c3d_assimp
 		return result;
 	}
 
-	std::vector< castor3d::ImporterFile::NodeData > AssimpImporterFile::listSceneNodes()
+	castor::Vector< castor3d::ImporterFile::NodeData > AssimpImporterFile::listSceneNodes()
 	{
-		std::vector< NodeData > result;
+		castor::Vector< NodeData > result;
 
 		for ( auto & node : m_sceneData.nodes )
 		{
@@ -529,9 +530,9 @@ namespace c3d_assimp
 		return result;
 	}
 
-	std::vector< castor3d::ImporterFile::LightData > AssimpImporterFile::listLights()
+	castor::Vector< castor3d::ImporterFile::LightData > AssimpImporterFile::listLights()
 	{
-		std::vector< LightData > result;
+		castor::Vector< LightData > result;
 
 		for ( auto & light : m_sceneData.lights )
 		{
@@ -546,9 +547,9 @@ namespace c3d_assimp
 		return result;
 	}
 
-	std::vector< castor3d::ImporterFile::GeometryData > AssimpImporterFile::listGeometries()
+	castor::Vector< castor3d::ImporterFile::GeometryData > AssimpImporterFile::listGeometries()
 	{
-		std::vector< GeometryData > result;
+		castor::Vector< GeometryData > result;
 
 		for ( auto & node : m_sceneData.nodes )
 		{
@@ -572,9 +573,9 @@ namespace c3d_assimp
 		return result;
 	}
 
-	std::vector< castor3d::ImporterFile::CameraData > AssimpImporterFile::listCameras()
+	castor::Vector< castor3d::ImporterFile::CameraData > AssimpImporterFile::listCameras()
 	{
-		std::vector< CameraData > result;
+		castor::Vector< CameraData > result;
 
 		for ( auto & camera : m_sceneData.cameras )
 		{
@@ -587,9 +588,9 @@ namespace c3d_assimp
 		return result;
 	}
 
-	std::vector< castor::String > AssimpImporterFile::listMeshAnimations( castor3d::Mesh const & mesh )
+	castor::StringArray AssimpImporterFile::listMeshAnimations( castor3d::Mesh const & mesh )
 	{
-		std::set< castor::String > result;
+		castor::Set< castor::String > result;
 		auto it = m_sceneData.meshes.find( mesh.getName() );
 
 		if ( it != m_sceneData.meshes.end() )
@@ -603,11 +604,11 @@ namespace c3d_assimp
 			}
 		}
 
-		return std::vector< castor::String >{ result.begin()
+		return castor::StringArray{ result.begin()
 			, result.end() };
 	}
 
-	std::vector< castor::String > AssimpImporterFile::listSkeletonAnimations( castor3d::Skeleton const & skeleton )
+	castor::StringArray AssimpImporterFile::listSkeletonAnimations( castor3d::Skeleton const & skeleton )
 	{
 		auto name = skeleton.getName();
 
@@ -617,7 +618,7 @@ namespace c3d_assimp
 			name = getSkeletons().begin()->first;
 		}
 
-		std::vector< castor::String > result;
+		castor::StringArray result;
 		auto it = m_sceneData.skeletons.find( name );
 
 		if ( it != m_sceneData.skeletons.end() )
@@ -631,9 +632,9 @@ namespace c3d_assimp
 		return result;
 	}
 
-	std::vector< castor::String > AssimpImporterFile::listSceneNodeAnimations( castor3d::SceneNode const & node )
+	castor::StringArray AssimpImporterFile::listSceneNodeAnimations( castor3d::SceneNode const & node )
 	{
-		std::vector< castor::String > result;
+		castor::StringArray result;
 		auto it = std::find_if( m_sceneData.nodes.begin()
 			, m_sceneData.nodes.end()
 			, [&node]( AssimpNodeData const & lookup )
@@ -652,9 +653,9 @@ namespace c3d_assimp
 		return result;
 	}
 
-	std::vector< castor::String > AssimpImporterFile::listAllMeshAnimations()
+	castor::StringArray AssimpImporterFile::listAllMeshAnimations()
 	{
-		std::vector< castor::String > result;
+		castor::StringArray result;
 
 		for ( auto & [_, mesh] : m_sceneData.meshes )
 		{
@@ -670,9 +671,9 @@ namespace c3d_assimp
 		return result;
 	}
 
-	std::vector< castor::String > AssimpImporterFile::listAllSkeletonAnimations()
+	castor::StringArray AssimpImporterFile::listAllSkeletonAnimations()
 	{
-		std::vector< castor::String > result;
+		castor::StringArray result;
 
 		for ( auto & [_, skeleton] : m_sceneData.skeletons )
 		{
@@ -685,9 +686,9 @@ namespace c3d_assimp
 		return result;
 	}
 
-	std::vector< castor::String > AssimpImporterFile::listAllSceneNodeAnimations()
+	castor::StringArray AssimpImporterFile::listAllSceneNodeAnimations()
 	{
-		std::vector< castor::String > result;
+		castor::StringArray result;
 
 		for ( auto & node : m_sceneData.nodes )
 		{
@@ -756,9 +757,9 @@ namespace c3d_assimp
 		}
 	}
 
-	std::map< aiMesh const *, aiNode const * > AssimpImporterFile::doPrelistSkeletons()
+	castor::Map< aiMesh const *, aiNode const * > AssimpImporterFile::doPrelistSkeletons()
 	{
-		std::map< aiMesh const *, aiNode const * > result;
+		castor::Map< aiMesh const *, aiNode const * > result;
 		uint32_t meshIndex = 0u;
 
 		for ( auto aiMesh : castor::makeArrayView( m_aiScene->mMeshes, m_aiScene->mNumMeshes ) )
@@ -804,7 +805,7 @@ namespace c3d_assimp
 
 					if ( skeleton && skeleton->hasAnimation( animName ) )
 					{
-						animName += "_" + getName();
+						animName += cuT( "_" ) + getName();
 					}
 
 					skeletonData->anims.emplace( animName, aiAnimation );
@@ -815,7 +816,7 @@ namespace c3d_assimp
 		return result;
 	}
 
-	void AssimpImporterFile::doPrelistMeshes( std::map< aiMesh const *, aiNode const * > const & meshSkeletons )
+	void AssimpImporterFile::doPrelistMeshes( castor::Map< aiMesh const *, aiNode const * > const & meshSkeletons )
 	{
 		uint32_t meshIndex = 0u;
 
@@ -896,8 +897,8 @@ namespace c3d_assimp
 	}
 
 	void AssimpImporterFile::doPrelistSceneNodes( aiNode const & node
-		, std::map< AssimpMeshData const *, aiNodeArray > & processedMeshes
-		, std::map< aiNode const *, castor::Matrix4x4f > & cumulativeTransforms
+		, castor::Map< AssimpMeshData const *, aiNodeArray > & processedMeshes
+		, castor::Map< aiNode const *, castor::Matrix4x4f > & cumulativeTransforms
 		, castor::String parentName
 		, castor::Matrix4x4f transform )
 	{
@@ -985,7 +986,7 @@ namespace c3d_assimp
 			}
 		}
 
-		m_sceneData.nodes.emplace_back( std::move( nodeData ) );
+		m_sceneData.nodes.emplace_back( castor::move( nodeData ) );
 		parentName = nodeName;
 
 		// continue for all child nodes

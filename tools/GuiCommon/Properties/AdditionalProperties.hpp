@@ -129,7 +129,7 @@ See LICENSE file in root folder
 	expdecl namspace::classname & classname##RefFromVariant( wxVariant & variant ) \
 	{ \
 		CU_Assert( variant.GetType() == wxS( #classname ), \
-			castor::String{ wxString::Format( "Variant type should have been '%s'" \
+			std::string{ wxString::Format( "Variant type should have been '%s'" \
 									   "instead of '%s'", \
 									   wxS( #classname ), \
 									   variant.GetType().c_str() ) }.c_str() ); \
@@ -139,7 +139,7 @@ See LICENSE file in root folder
 	expdecl const namspace::classname& classname##RefFromVariant( const wxVariant& variant ) \
 	{ \
 		CU_Assert( variant.GetType() == wxS( #classname ), \
-			castor::String{ wxString::Format( "Variant type should have been '%s'" \
+			std::string{ wxString::Format( "Variant type should have been '%s'" \
 									   "instead of '%s'", \
 									   wxS( #classname ), \
 									   variant.GetType().c_str() ) }.c_str() ); \
@@ -193,7 +193,7 @@ namespace GuiCommon
 		return ValueTraitsT< ValueT >::convert( value );
 	}
 
-	using ButtonEventMethod = std::function< void ( wxVariant const & ) >;
+	using ButtonEventMethod = castor::Function< void ( wxVariant const & ) >;
 
 	class ButtonData
 		: public wxClientData
@@ -355,8 +355,8 @@ namespace GuiCommon
 
 	protected:
 		castor::ImageLoader * m_loader;
-		std::unique_ptr< castor::Image > m_image; // intermediate thumbnail area
-		std::unique_ptr< wxBitmap > m_bitmap; // final thumbnail area
+		castor::RawUniquePtr< castor::Image > m_image; // intermediate thumbnail area
+		castor::RawUniquePtr< wxBitmap > m_bitmap; // final thumbnail area
 
 	private:
 		// Initialize m_image using the current file name.

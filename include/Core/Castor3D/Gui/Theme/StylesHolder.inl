@@ -19,7 +19,7 @@ namespace castor3d
 
 		if ( it != controls.end() )
 		{
-			log::warn << "StylesHolder: Duplicate style [" + name + "]" << std::endl;
+			log::warn << cuT( "StylesHolder: Duplicate style [" ) << name << cuT( "]" ) << std::endl;
 		}
 		else
 		{
@@ -59,7 +59,7 @@ namespace castor3d
 			, m_panelStyles.end()
 			, [&name, &style]( auto const & lookup )
 			{
-				if ( name.find( lookup.first + "/" ) == 0u )
+				if ( name.find( lookup.first + cuT( "/" ) ) == 0u )
 				{
 					style = lookup.second->template getStyle< StyleT >( name.substr( lookup.first.size() + 1u ) );
 				}
@@ -78,8 +78,8 @@ namespace castor3d
 				, m_expandablePanelStyles.end()
 				, [&name, &style]( auto const & lookup )
 				{
-					auto header = lookup.first + "/Header/";
-					auto panel = lookup.first + "/Content/";
+					auto header = lookup.first + cuT( "/Header/" );
+					auto panel = lookup.first + cuT( "/Content/" );
 
 					if ( name.find( header ) == 0u )
 					{

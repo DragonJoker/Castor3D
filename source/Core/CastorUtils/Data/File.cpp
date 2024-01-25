@@ -82,7 +82,7 @@ namespace castor
 
 		fileOpen( m_file
 			, makePath( m_fileFullPath )
-			, string::stringCast< char >( mode ).c_str() );
+			, toUtf8( mode ).c_str() );
 
 		if ( m_file )
 		{
@@ -93,7 +93,7 @@ namespace castor
 		}
 		else
 		{
-			CU_Exception( "Couldn't open file " + string::stringCast< char >( m_fileFullPath ) + " : " + string::stringCast< char >( system::getLastErrorText() ) );
+			CU_Exception( cuT( "Couldn't open file " ) + m_fileFullPath + cuT( " : " ) + system::getLastErrorText() );
 		}
 
 		CU_CheckInvariants();
@@ -292,29 +292,29 @@ namespace castor
 			
 			if ( !result )
 			{
-				Logger::logWarning( cuT( "copyFile - Can't copy [" ) + srcFileName + cuT( "] to [" ) + dstFileName + cuT( "]: " ) + error.message() );
+				Logger::logWarning( makeStringStream() << cuT("copyFile - Can't copy [") << srcFileName << cuT("] to [") << dstFileName << cuT("]: ") << makeString( error.message() ) );
 			}
 		}
 		else
 		{
-			Logger::logWarning( cuT( "copyFile - Source file [" ) + srcFileName + cuT( "] doesn't exist." ) );
+			Logger::logWarning( makeStringStream() << cuT( "copyFile - Source file [" ) << srcFileName << cuT( "] doesn't exist." ) );
 		}
 
 		return result;
 	}
 
-	castor::String File::normaliseFileName( castor::String const & name )
+	String File::normaliseFileName( String const & name )
 	{
 		auto result = name;
-		castor::string::replace( result, "\\", "_" );
-		castor::string::replace( result, "/", "_" );
-		castor::string::replace( result, ":", "_" );
-		castor::string::replace( result, "*", "_" );
-		castor::string::replace( result, "?", "_" );
-		castor::string::replace( result, "\"", "_" );
-		castor::string::replace( result, "<", "_" );
-		castor::string::replace( result, ">", "_" );
-		castor::string::replace( result, "|", "_" );
+		string::replace( result, cuT( "\\" ), cuT( "_" ) );
+		string::replace( result, cuT( "/" ), cuT( "_" ) );
+		string::replace( result, cuT( ":" ), cuT( "_" ) );
+		string::replace( result, cuT( "*" ), cuT( "_" ) );
+		string::replace( result, cuT( "?" ), cuT( "_" ) );
+		string::replace( result, cuT( "\"" ), cuT( "_" ) );
+		string::replace( result, cuT( "<" ), cuT( "_" ) );
+		string::replace( result, cuT( ">" ), cuT( "_" ) );
+		string::replace( result, cuT( "|" ), cuT( "_" ) );
 		return result;
 	}
 

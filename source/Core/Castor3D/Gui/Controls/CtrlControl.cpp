@@ -28,7 +28,7 @@ namespace castor3d
 		, castor::Size const & size
 		, ControlFlagType flags
 		, bool visible )
-		: NonClientEventHandler< Control >{ ( parent ? parent->getName() + "/" + name : name ), type != ControlType::eStatic }
+		: NonClientEventHandler< Control >{ ( parent ? parent->getName() + cuT( "/" ) + name : name ), type != ControlType::eStatic }
 		, m_scene{ scene }
 		, m_parent{ parent }
 		, m_flags{ flags }
@@ -236,7 +236,7 @@ namespace castor3d
 		return *it;
 	}
 
-	std::array< bool, 4u > Control::isInResizeRange( castor::Position const & position )const
+	castor::Array< bool, 4u > Control::isInResizeRange( castor::Position const & position )const
 	{
 		auto size = getSize();
 		auto pos = position - getAbsolutePosition();
@@ -367,8 +367,8 @@ namespace castor3d
 	}
 
 	void Control::updateZIndex( uint32_t & index
-		, std::vector< Control * > & controls
-		, std::vector< Control * > & topControls )
+		, castor::Vector< Control * > & controls
+		, castor::Vector< Control * > & topControls )
 	{
 		auto lock( castor::makeUniqueLock( m_mutexChildren ) );
 		bool hasMovable = std::any_of( m_children.begin()
@@ -397,7 +397,7 @@ namespace castor3d
 			doGetBackground().setOrder( *realIndex, 0u );
 			++( *realIndex );
 			doUpdateZIndex( *realIndex );
-			std::vector< Control * > scrollbars;
+			castor::Vector< Control * > scrollbars;
 
 			for ( auto control : m_children )
 			{
@@ -425,7 +425,7 @@ namespace castor3d
 			++( *realIndex );
 			auto findex = *realIndex;
 			doUpdateZIndex( findex );
-			std::vector< Control * > scrollbars;
+			castor::Vector< Control * > scrollbars;
 			auto maxIndex = findex;
 
 			for ( auto control : m_children )

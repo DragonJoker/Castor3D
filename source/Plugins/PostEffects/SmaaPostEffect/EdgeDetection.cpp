@@ -37,7 +37,7 @@ namespace smaa
 		, m_extent{ castor3d::getSafeBandedExtent3D( renderTarget.getSize() ) }
 		, m_outColour{ m_device
 			, renderTarget.getResources()
-			, "SMEDRes"
+			, cuT( "SMEDRes" )
 			, 0u
 			, m_extent
 			, 1u
@@ -48,7 +48,7 @@ namespace smaa
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) }
 		, m_outDepth{ m_device
 			, renderTarget.getResources()
-			, "SMEDStRes"
+			, cuT( "SMEDStRes" )
 			, 0u
 			, m_extent
 			, 1u
@@ -63,7 +63,7 @@ namespace smaa
 			, VK_IMAGE_VIEW_TYPE_2D
 			, m_outDepth.imageId.data->info.format
 			, { VK_IMAGE_ASPECT_STENCIL_BIT, 0u, 1u, 0u, 1u } } ) }
-		, m_shader{ "SmaaEdge", std::move( shader ) }
+		, m_shader{ cuT( "SmaaEdge" ), castor::move( shader ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
 		, m_pass{ m_graph.createPass( "EdgeDetection"
 			, [this, &device, passIndex, enabled, passCount]( crg::FramePass const & framePass
@@ -92,7 +92,7 @@ namespace smaa
 					, context
 					, graph
 					, crg::ru::Config{ passCount } );
-				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} ) }
@@ -117,7 +117,7 @@ namespace smaa
 	void EdgeDetection::accept( castor3d::ConfigurationVisitorBase & visitor )
 	{
 		visitor.visit( m_shader );
-		visitor.visit( "SMAA EdgeDetection Colour Result"
+		visitor.visit( cuT( "SMAA EdgeDetection Colour Result" )
 			, m_outColour
 			, m_graph.getFinalLayoutState( m_outColour.sampledViewId ).layout
 			, castor3d::TextureFactors{}.invert( true ) );

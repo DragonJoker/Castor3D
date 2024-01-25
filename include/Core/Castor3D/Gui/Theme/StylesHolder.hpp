@@ -19,7 +19,7 @@ namespace castor3d
 		explicit StylesHolder( castor::String name
 			, Engine & engine )
 			: m_engine{ engine }
-			, m_holderName{ std::move( name ) }
+			, m_holderName{ castor::move( name ) }
 			, m_defaultFont{ engine.getFontCache().isEmpty()
 				? nullptr
 				: engine.getFontCache().begin()->second.get() }
@@ -131,7 +131,7 @@ namespace castor3d
 			}
 			else
 			{
-				log::error << "Unsupported style type" << std::endl;
+				log::error << cuT( "Unsupported style type" ) << std::endl;
 				return nullptr;
 			}
 		}

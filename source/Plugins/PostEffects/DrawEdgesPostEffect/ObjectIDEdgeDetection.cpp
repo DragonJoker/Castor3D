@@ -178,11 +178,11 @@ namespace draw_edges
 		: m_device{ device }
 		, m_graph{ graph }
 		, m_extent{ castor3d::getSafeBandedExtent3D( renderTarget.getSize() ) }
-		, m_shader{ "DEObjDetection", oied::getProgram( *renderTarget.getEngine(), m_extent, 1 ) }
+		, m_shader{ cuT( "DEObjDetection" ), oied::getProgram( *renderTarget.getEngine(), m_extent, 1 ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
 		, m_result{ m_device
 			, renderTarget.getResources()
-			, "DEObjDet"
+			, cuT( "DEObjDet" )
 			, 0u
 			, m_extent
 			, 1u
@@ -204,7 +204,7 @@ namespace draw_edges
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.enabled( enabled )
 					.build( framePass, context, graph );
-				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} ) }
@@ -232,7 +232,7 @@ namespace draw_edges
 	void ObjectIDEdgeDetection::accept( castor3d::ConfigurationVisitorBase & visitor )
 	{
 		visitor.visit( m_shader );
-		visitor.visit( "Object ID Edge Detection"
+		visitor.visit( cuT( "Object ID Edge Detection" )
 			, m_result
 			, m_graph.getFinalLayoutState( m_result.sampledViewId ).layout
 			, castor3d::TextureFactors{}.invert( true ) );

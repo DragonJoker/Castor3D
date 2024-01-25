@@ -44,7 +44,7 @@ namespace castor3d
 	using PostEffectFactory = castor::Factory< PostEffect
 		, castor::String
 		, PostEffectUPtr
-		, std::function< PostEffectUPtr( RenderTarget &, RenderSystem &, Parameters const & ) > >;
+		, castor::Function< PostEffectUPtr( RenderTarget &, RenderSystem &, Parameters const & ) > >;
 
 	//@}
 	//@}

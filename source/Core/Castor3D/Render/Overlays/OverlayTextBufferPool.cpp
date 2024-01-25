@@ -21,7 +21,7 @@ namespace castor3d
 		template< typename DataT >
 		OverlayTextBuffer::DataBufferT< DataT > makeDataBuffer( RenderDevice const & device
 			, uint32_t count
-			, std::string const & name )
+			, castor::String const & name )
 		{
 			auto buffer = makeBuffer< DataT >( device
 				, count
@@ -30,27 +30,27 @@ namespace castor3d
 				, name );
 			auto data = castor::makeArrayView( buffer->lock( 0u, ashes::WholeSize, 0u )
 				, buffer->getCount() );
-			return { std::move( buffer ), data };
+			return { castor::move( buffer ), data };
 		}
 	}
 
 	//*************************************************************************
 
 	OverlayTextBuffer::OverlayTextBuffer( Engine & engine
-		, std::string const & debugName
+		, castor::String const & debugName
 		, RenderDevice const & device )
 		: engine{ engine }
 		, device{ device }
 		, name{ debugName }
 		, charsBuffer{ txtbufpool::makeDataBuffer< TextChar >( device
 			, MaxCharsPerBuffer
-			, name + "-CharsData" ) }
+			, name + cuT( "-CharsData" ) ) }
 		, wordsBuffer{ txtbufpool::makeDataBuffer< TextWord >( device
 			, MaxWordsPerBuffer
-			, name + "-WordsData" ) }
+			, name + cuT( "-WordsData" ) ) }
 		, linesBuffer{ txtbufpool::makeDataBuffer< TextLine >( device
 			, MaxLinesPerBuffer
-			, name + "-LinesData" ) }
+			, name + cuT( "-LinesData" ) ) }
 	{
 	}
 
@@ -116,7 +116,7 @@ namespace castor3d
 	//*************************************************************************
 
 	OverlayTextBufferPool::OverlayTextBufferPool( Engine & engine
-		, std::string const & debugName
+		, castor::String const & debugName
 		, RenderDevice const & device )
 		: m_engine{ engine }
 		, m_device{ device }
@@ -132,8 +132,8 @@ namespace castor3d
 
 		if ( !it->second )
 		{
-			it->second = std::make_unique< OverlayTextBuffer >( m_engine
-				, m_name + ( fontTexture ? "-" + fontTexture->getFontName() : std::string{} )
+			it->second = castor::make_unique< OverlayTextBuffer >( m_engine
+				, m_name + ( fontTexture ? cuT( "-" ) + fontTexture->getFontName() : castor::String{} )
 				, m_device );
 		}
 
@@ -154,8 +154,8 @@ namespace castor3d
 
 			if ( !it->second )
 			{
-				it->second = std::make_unique< OverlayTextBuffer >( m_engine
-					, m_name + ( fontTexture ? "-" + fontTexture->getFontName() : std::string{} )
+				it->second = castor::make_unique< OverlayTextBuffer >( m_engine
+					, m_name + ( fontTexture ? cuT( "-" ) + fontTexture->getFontName() : castor::String{} )
 					, m_device );
 			}
 
@@ -184,8 +184,8 @@ namespace castor3d
 
 		if ( !it->second )
 		{
-			it->second = std::make_unique< OverlayTextBuffer >( m_engine
-				, m_name + "-" + fontTexture.getFontName()
+			it->second = castor::make_unique< OverlayTextBuffer >( m_engine
+				, m_name + cuT( "-" ) + fontTexture.getFontName()
 				, m_device );
 		}
 

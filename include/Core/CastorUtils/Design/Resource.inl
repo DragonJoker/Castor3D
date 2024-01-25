@@ -18,20 +18,20 @@ namespace castor
 	template< typename ResT, typename KeyT >
 	template< typename ... ParametersT >
 	ResourceT< ResT, KeyT >::ResourceT( ParametersT && ... params )
-		: ResT{ std::forward< ParametersT >( params )... }
+		: ResT{ castor::forward< ParametersT >( params )... }
 	{
 	}
 
 	template< typename ResT, typename KeyT >
 	ResourceT< ResT, KeyT >::ResourceT( ElementT && rhs )
-		: ResT{ std::move( rhs ) }
+		: ResT{ castor::move( rhs ) }
 	{
 	}
 
 	template< typename ResT, typename KeyT >
 	ResourceT< ResT, KeyT > & ResourceT< ResT, KeyT >::operator=( ElementT && rhs )
 	{
-		ResT::operator=( std::move( rhs ) );
+		ResT::operator=( castor::move( rhs ) );
 		return *this;
 	}
 
@@ -42,7 +42,7 @@ namespace castor
 		if ( !m_initialised.exchange( true ) )
 		{
 			onInitialising( *this );
-			ResT::initialise( std::forward< ParametersT >( params )... );
+			ResT::initialise( castor::forward< ParametersT >( params )... );
 			onInitialised( *this );
 		}
 	}
@@ -54,7 +54,7 @@ namespace castor
 		if ( m_initialised.exchange( false ) )
 		{
 			onCleaning( *this );
-			ResT::cleanup( std::forward< ParametersT >( params )... );
+			ResT::cleanup( castor::forward< ParametersT >( params )... );
 			onCleaned( *this );
 		}
 	}
@@ -66,8 +66,8 @@ namespace castor
 	{
 		if ( m_initialised )
 		{
-			cleanup( std::forward< ParametersT >( paramsT )... );
-			initialise( std::forward< ParametersU >( paramsU )... );
+			cleanup( castor::forward< ParametersT >( paramsT )... );
+			initialise( castor::forward< ParametersU >( paramsU )... );
 		}
 	}
 

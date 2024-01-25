@@ -39,7 +39,7 @@ namespace castor
 	bool TextWriter< Point< ValueT, 1u > >::operator()( Point< ValueT, 1u > const & object, StringStream & file )
 	{
 		auto result = details::PointTextT< ValueT, 1u >::write( object, file );
-		this->checkError( result, "Point value" );
+		this->checkError( result, cuT( "Point value" ) );
 		return result;
 	}
 
@@ -55,7 +55,7 @@ namespace castor
 	bool TextWriter< Point< ValueT, 2u > >::operator()( Point< ValueT, 2u > const & object, StringStream & file )
 	{
 		auto result = details::PointTextT< ValueT, 2u >::write( object, file );
-		this->checkError( result, "Point value" );
+		this->checkError( result, cuT( "Point value" ) );
 		return result;
 	}
 
@@ -71,7 +71,7 @@ namespace castor
 	bool TextWriter< Point< ValueT, 3u > >::operator()( Point< ValueT, 3u > const & object, StringStream & file )
 	{
 		auto result = details::PointTextT< ValueT, 3u >::write( object, file );
-		this->checkError( result, "Point value" );
+		this->checkError( result, cuT( "Point value" ) );
 		return result;
 	}
 
@@ -87,7 +87,7 @@ namespace castor
 	bool TextWriter< Point< ValueT, 4u > >::operator()( Point< ValueT, 4u > const & object, StringStream & file )
 	{
 		auto result = details::PointTextT< ValueT, 4u >::write( object, file );
-		this->checkError( result, "Point value" );
+		this->checkError( result, cuT( "Point value" ) );
 		return result;
 	}
 

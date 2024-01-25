@@ -214,7 +214,7 @@ namespace castor
 
 		void setCompressionSupport( PxCompressionSupport support )
 		{
-			m_options.support = std::move( support );
+			m_options.support = castor::move( support );
 		}
 
 		PxBufferConvertOptions const & getOptions()const
@@ -229,7 +229,7 @@ namespace castor
 		CU_API ImageLoaderImpl * findLoader( String const & imageFormat )const;
 
 	private:
-		std::vector< ImageLoaderPtr > m_loaders;
+		Vector< ImageLoaderPtr > m_loaders;
 		StringMap< ImageLoaderImpl * > m_extLoaders;
 		PxBufferConvertOptions m_options;
 	};

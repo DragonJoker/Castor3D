@@ -35,7 +35,7 @@ namespace castor3d::shader
 		Light( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+			: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
 		{
 		}
 
@@ -59,7 +59,7 @@ namespace castor3d::shader
 		DirectionalLight( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+			: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
 		{
 		}
 
@@ -82,7 +82,7 @@ namespace castor3d::shader
 		PointLight( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+			: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
 		{
 		}
 
@@ -116,7 +116,7 @@ namespace castor3d::shader
 		C3D_API SpotLight( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+			: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
 		{
 		}
 

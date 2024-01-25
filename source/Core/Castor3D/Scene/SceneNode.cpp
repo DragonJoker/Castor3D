@@ -27,9 +27,9 @@ namespace castor3d
 		, m_scene{ scene }
 		, m_static{ isStatic }
 		, m_displayable{ name == Scene::RootNode }
-		, m_orientation{ std::move( orientation ) }
-		, m_position{ std::move( position ) }
-		, m_scale{ std::move( scale ) }
+		, m_orientation{ castor::move( orientation ) }
+		, m_position{ castor::move( position ) }
+		, m_scale{ castor::move( scale ) }
 	{
 		if ( m_name.empty() )
 		{
@@ -90,7 +90,7 @@ namespace castor3d
 	{
 		auto it = std::find_if( m_objects.begin()
 			, m_objects.end()
-			, [&object]( std::reference_wrapper< MovableObject > obj )
+			, [&object]( castor::ReferenceWrapper< MovableObject > obj )
 			{
 				return &obj.get() == &object;
 			} );
@@ -126,7 +126,7 @@ namespace castor3d
 		{
 			found = m_children.end() != std::find_if( m_children.begin()
 				, m_children.end()
-				, [&name]( std::pair< castor::String, SceneNodeRPtr > const & pair )
+				, [&name]( castor::Pair< castor::String, SceneNodeRPtr > const & pair )
 				{
 					return pair.second->hasChild( name );
 				} );
@@ -140,7 +140,7 @@ namespace castor3d
 		doAddChild( child );
 	}
 
-	void SceneNode::detachChild( SceneNode & child )noexcept
+	void SceneNode::detachChild( SceneNode const & child )noexcept
 	{
 		doDetachChild( child.getName() );
 	}
@@ -506,7 +506,7 @@ namespace castor3d
 	void SceneNode::doDetachChildren( bool cleanup )noexcept
 	{
 		SceneNodeMap flush;
-		std::swap( flush, m_children );
+		castor::swap( flush, m_children );
 
 		for ( auto const & [_, current] : flush )
 		{

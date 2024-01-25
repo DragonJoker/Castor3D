@@ -22,14 +22,14 @@ namespace castor
 			}
 
 			auto name = material->getName();
-			return !string::endsWith( name, "_THG" )
-				&& !string::endsWith( name, "_BHG" )
-				&& !string::endsWith( name, "_FHG" )
-				&& !string::endsWith( name, "_BPU" )
-				&& !string::endsWith( name, "_FPU" )
-				&& !string::endsWith( name, "_TDS" )
-				&& !string::endsWith( name, "_BDS" )
-				&& !string::endsWith( name, "_FDS" );
+			return !string::endsWith( name, cuT( "_THG" ) )
+				&& !string::endsWith( name, cuT( "_BHG" ) )
+				&& !string::endsWith( name, cuT( "_FHG" ) )
+				&& !string::endsWith( name, cuT( "_BPU" ) )
+				&& !string::endsWith( name, cuT( "_FPU" ) )
+				&& !string::endsWith( name, cuT( "_TDS" ) )
+				&& !string::endsWith( name, cuT( "_BDS" ) )
+				&& !string::endsWith( name, cuT( "_FDS" ) );
 		}
 	}
 
@@ -45,7 +45,7 @@ namespace castor
 	{
 		log::info << tabs() << cuT( "Writing ButtonCtrl " ) << control.getName() << std::endl;
 		return writeSub< Control >( file, control )
-			&& writeName( file, cuT( "caption" ), string::stringCast< xchar >( control.getCaption() ) )
+			&& writeName( file, cuT( "caption" ), makeString( control.getCaption() ) )
 			&& writeOpt( file, cuT( "horizontal_align" ), getName( control.getHAlign() ), getName( HAlign::eLeft ) )
 			&& writeOpt( file, cuT( "vertical_align" ), getName( control.getVAlign() ), getName( VAlign::eTop ) );
 	}

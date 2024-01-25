@@ -41,7 +41,7 @@ namespace castor
 		 *\brief		Constructor.
 		 */
 		explicit ParserParameter( ValueType rhs )
-			: m_value{ std::move( rhs ) }
+			: m_value{ castor::move( rhs ) }
 			, m_set{ true }
 		{
 		}
@@ -64,7 +64,7 @@ namespace castor
 		 */
 		ParserParameterBaseSPtr clone()const override
 		{
-			return std::make_shared< ParserParameter< Type > >( *this );
+			return castor::make_shared< ParserParameter< Type > >( *this );
 		}
 		/**
 		 *\copydoc		castor::ParserParameterBase::parse
@@ -125,7 +125,7 @@ namespace castor
 		 *\brief		Constructor.
 		 */
 		explicit ParserParameter( ValueType rhs )
-			: m_value{ std::move( rhs ) }
+			: m_value{ castor::move( rhs ) }
 			, m_range{ makeRange( std::numeric_limits< ValueType >::lowest(), std::numeric_limits< ValueType >::max() ) }
 			, m_set{ true }
 		{
@@ -154,7 +154,7 @@ namespace castor
 		 */
 		explicit ParserParameter( ValueType rhs
 			, Range< ValueType > const & range )
-			: m_value{ std::move( rhs ) }
+			: m_value{ castor::move( rhs ) }
 			, m_range{ range }
 			, m_set{ true }
 		{
@@ -178,7 +178,7 @@ namespace castor
 		 */
 		ParserParameterBaseSPtr clone()const override
 		{
-			return std::make_shared< ParserParameter< Type > >( *this );
+			return castor::make_shared< ParserParameter< Type > >( *this );
 		}
 		/**
 		 *\copydoc		castor::ParserParameterBase::parse
@@ -234,7 +234,7 @@ namespace castor
 		 *\brief		Constructor.
 		 */
 		explicit ParserParameter( String rhs )
-			: ParserParameter< ParameterType::eText >{ std::move( rhs ) }
+			: ParserParameter< ParameterType::eText >{ castor::move( rhs ) }
 		{
 		}
 		/**
@@ -459,7 +459,7 @@ namespace castor
 	template< ParameterType Type >
 	ParserParameterBaseSPtr makeParameter()
 	{
-		return std::make_shared< ParserParameter< Type > >();
+		return castor::make_shared< ParserParameter< Type > >();
 	}
 	/**
 	 *\~english
@@ -473,8 +473,8 @@ namespace castor
 	ParserParameterBaseSPtr makeDefaultedParameter( ParserParameterValueType< Type > defaultValue
 		, Params && ... params )
 	{
-		return std::make_shared< ParserParameter< Type > >( defaultValue
-			, std::forward< Params >( params )... );
+		return castor::make_shared< ParserParameter< Type > >( defaultValue
+			, castor::forward< Params >( params )... );
 	}
 	/**
 	 *\~english
@@ -502,7 +502,7 @@ namespace castor
 				|| ( Type == ParameterType::eLongDouble && std::is_same_v< T, long double > )
 			, "C type and ParameterType must match." );
 
-		return std::make_shared< ParserParameter< Type > >( range );
+		return castor::make_shared< ParserParameter< Type > >( range );
 	}
 	/**
 	 *\~english
@@ -522,7 +522,7 @@ namespace castor
 	{
 		static_assert( Type == ParameterType::eCheckedText || Type == ParameterType::eBitwiseOred32BitsCheckedText
 			, "Only for ParameterType::eCheckedText or ParameterType::eBitwiseOred32BitsCheckedText" );
-		return std::make_shared< ParserParameter< Type > >( values, name );
+		return castor::make_shared< ParserParameter< Type > >( values, name );
 	}
 	/**
 	 *\~english
@@ -542,7 +542,7 @@ namespace castor
 	{
 		static_assert( Type == ParameterType::eBitwiseOred64BitsCheckedText
 			, "Only for ParameterType::eBitwiseOred64BitsCheckedText" );
-		return std::make_shared< ParserParameter< Type > >( values, name );
+		return castor::make_shared< ParserParameter< Type > >( values, name );
 	}
 	/**
 	 *\~english
@@ -557,7 +557,7 @@ namespace castor
 	{
 		static_assert( Type == ParameterType::eCheckedText || Type == ParameterType::eBitwiseOred32BitsCheckedText || Type == ParameterType::eBitwiseOred64BitsCheckedText
 			, "Only for ParameterType::eCheckedText or ParameterType::eBitwiseOred32BitsCheckedText or ParameterType::eBitwiseOred64BitsCheckedText" );
-		return std::make_shared< ParserParameter< Type > >( ParserEnumTraits< EnumType >::Values
+		return castor::make_shared< ParserParameter< Type > >( ParserEnumTraits< EnumType >::Values
 			, ParserEnumTraits< EnumType >::Name );
 	}
 }

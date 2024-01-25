@@ -30,7 +30,7 @@ namespace PbrBloom
 		crg::ImageViewIdArray doCreateResultViews( crg::FramePassGroup & graph
 			, crg::ImageId const & resultImg
 			, uint32_t passesCount );
-		std::vector< crg::FramePass * > doCreatePasses( crg::FramePassGroup & graph
+		castor::Vector< crg::FramePass * > doCreatePasses( crg::FramePassGroup & graph
 			, crg::FramePass const & previousPass
 			, castor3d::RenderDevice const & device
 			, crg::ImageViewIdArray const & sceneView
@@ -44,8 +44,8 @@ namespace PbrBloom
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
 		crg::ImageViewId m_resultView;
 		crg::ImageViewIdArray m_resultViews;
-		std::vector< crg::RenderQuad * > m_quads;
-		std::vector< crg::FramePass * > m_passes;
+		castor::Vector< crg::RenderQuad * > m_quads;
+		castor::Vector< crg::FramePass * > m_passes;
 	};
 }
 

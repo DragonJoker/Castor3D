@@ -234,19 +234,19 @@ namespace castor3d
 	//! TextureUnit array
 	CU_DeclareVector( TextureUnit, TextureUnit );
 	// ARGB => 4 components => 4 channels per configuration.
-	using TextureFlagConfigurations = std::array< TextureFlagConfiguration, 4u >;
+	using TextureFlagConfigurations = castor::Array< TextureFlagConfiguration, 4u >;
 
-	using TextureUnitDatas = std::vector< TextureUnitDataUPtr >;
-	using TextureUnitDataRefs = std::vector< TextureUnitDataRPtr >;
-	using TextureUnitDataSet = std::map< PassComponentTextureFlag, TextureUnitDataRPtr >;
+	using TextureUnitDatas = castor::Vector< TextureUnitDataUPtr >;
+	using TextureUnitDataRefs = castor::Vector< TextureUnitDataRPtr >;
+	using TextureUnitDataSet = castor::Map< PassComponentTextureFlag, TextureUnitDataRPtr >;
 
-	using OnTextureUnitChangedFunction = std::function< void( TextureUnit const & ) >;
+	using OnTextureUnitChangedFunction = castor::Function< void( TextureUnit const & ) >;
 	using OnTextureUnitChanged = castor::SignalT< OnTextureUnitChangedFunction >;
 	using OnTextureUnitChangedConnection = OnTextureUnitChanged::connection;
 
-	std::ostream & operator<<( std::ostream & stream, castor::ImageLayout const & rhs );
-	std::ostream & operator<<( std::ostream & stream, castor::Image const & rhs );
-	std::ostream & operator<<( std::ostream & stream, TextureLayout const & layout );
+	castor::OutputStream & operator<<( castor::OutputStream & stream, castor::ImageLayout const & rhs );
+	castor::OutputStream & operator<<( castor::OutputStream & stream, castor::Image const & rhs );
+	castor::OutputStream & operator<<( castor::OutputStream & stream, TextureLayout const & layout );
 	/**
 	*\~english
 	*	Helper structure to specialise a cache behaviour.

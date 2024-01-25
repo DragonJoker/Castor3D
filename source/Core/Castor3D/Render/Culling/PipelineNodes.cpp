@@ -4,7 +4,7 @@ namespace castor3d
 {
 	void registerPipelineNodes( PipelineBaseHash hash
 		, ashes::BufferBase const & buffer
-		, std::vector< PipelineBuffer > & nodesIds )
+		, castor::Vector< PipelineBuffer > & nodesIds )
 	{
 		auto it = std::find_if( nodesIds.begin()
 			, nodesIds.end()
@@ -22,7 +22,7 @@ namespace castor3d
 
 	uint32_t getPipelineNodeIndex( PipelineBaseHash hash
 		, ashes::BufferBase const & buffer
-		, std::vector< PipelineBuffer > const & cont )
+		, castor::Vector< PipelineBuffer > const & cont )
 	{
 		auto it = std::find_if( cont.begin()
 			, cont.end()
@@ -39,7 +39,7 @@ namespace castor3d
 
 	PipelineNodes & getPipelineNodes( PipelineBaseHash hash
 		, ashes::BufferBase const & buffer
-		, std::vector< PipelineBuffer > const & cont
+		, castor::Vector< PipelineBuffer > const & cont
 		, PipelineNodes * nodes
 		, VkDeviceSize maxNodesCount )
 	{

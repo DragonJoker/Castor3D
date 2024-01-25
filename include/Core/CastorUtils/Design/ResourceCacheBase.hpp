@@ -51,9 +51,9 @@ namespace castor
 			, ElementCleanerT clean = ElementCleanerT{}
 			, ElementMergerT merge = ElementMergerT{} )
 			: m_logger{ logger }
-			, m_initialise{ std::move( initialise ) }
-			, m_clean{ std::move( clean ) }
-			, m_merge{ std::move( merge ) }
+			, m_initialise{ castor::move( initialise ) }
+			, m_clean{ castor::move( clean ) }
+			, m_merge{ castor::move( merge ) }
 		{
 		}
 
@@ -101,7 +101,7 @@ namespace castor
 		{
 			this->reportCreation( name );
 			return this->doCreateT( name
-					, std::forward< ParametersT >( parameters )... );
+					, castor::forward< ParametersT >( parameters )... );
 		}
 		/**
 		 *\~english
@@ -219,7 +219,7 @@ namespace castor
 			return this->doTryAddNoLockT( name
 				, initialise
 				, created
-				, std::forward< ParametersT >( parameters )... );
+				, castor::forward< ParametersT >( parameters )... );
 		}
 		/**
 		 *\~english
@@ -246,7 +246,7 @@ namespace castor
 			return this->doTryAddNoLockT( name
 				, initialise
 				, created
-				, std::forward< ParametersT >( parameters )... );
+				, castor::forward< ParametersT >( parameters )... );
 		}
 		/**
 		 *\~english
@@ -266,7 +266,7 @@ namespace castor
 		{
 			auto lock( castor::makeUniqueLock( *this ) );
 			return this->doAddNoLockT( name
-				, std::forward< ParametersT >( parameters )... );
+				, castor::forward< ParametersT >( parameters )... );
 		}
 		/**
 		 *\~english
@@ -285,7 +285,7 @@ namespace castor
 			, ParametersT && ... parameters )
 		{
 			return this->doAddNoLockT( name
-				, std::forward< ParametersT >( parameters )... );
+				, castor::forward< ParametersT >( parameters )... );
 		}
 		/**
 		 *\~english
@@ -393,10 +393,10 @@ namespace castor
 				return;
 			}
 
-			ElementPtrT element = std::move( oldIt->second );
+			ElementPtrT element = castor::move( oldIt->second );
 			m_resources.erase( oldIt );
 			element->rename( newName );
-			m_resources.emplace( newName, std::move( element ) );
+			m_resources.emplace( newName, castor::move( element ) );
 		}
 		/**
 		 *\~english
@@ -487,7 +487,7 @@ namespace castor
 			{
 				for ( auto & it : *this )
 				{
-					m_merge( *this, destination.m_resources, std::move( it.second ) );
+					m_merge( *this, destination.m_resources, castor::move( it.second ) );
 				}
 			}
 
@@ -679,7 +679,7 @@ namespace castor
 		{
 			return ElementCacheTraitsT::makeElement( *static_cast< ElementCacheT const * >( this )
 				, name
-				, std::forward< ParametersT >( parameters )... );
+				, castor::forward< ParametersT >( parameters )... );
 		}
 
 		ElementObsT doTryAddNoLock( ElementKeyT const & name
@@ -690,7 +690,7 @@ namespace castor
 
 			if ( ires.second )
 			{
-				ires.first->second = std::move( element );
+				ires.first->second = castor::move( element );
 				auto & elem = ires.first->second;
 
 				if ( initialise && elem && m_initialise )
@@ -743,7 +743,7 @@ namespace castor
 			if ( ires.second )
 			{
 				ires.first->second = doCreateT( name
-					, std::forward< ParametersT >( parameters )... );
+					, castor::forward< ParametersT >( parameters )... );
 				created = ElementCacheTraitsT::makeElementObs( ires.first->second );
 
 				if ( initialise
@@ -765,7 +765,7 @@ namespace castor
 			auto result = doTryAddNoLockT( name
 				, true
 				, created
-				, std::forward< ParametersT >( parameters )... );
+				, castor::forward< ParametersT >( parameters )... );
 
 			if ( !ElementCacheTraitsT::areElementsEqual( result, created ) )
 			{
@@ -787,7 +787,7 @@ namespace castor
 			if ( auto it = m_resources.find( name );
 				it != m_resources.end() )
 			{
-				result = std::move( it->second );
+				result = castor::move( it->second );
 
 				if ( cleanup && m_clean )
 				{
@@ -815,7 +815,7 @@ namespace castor
 		}
 
 	protected:
-		using MutexT = std::recursive_mutex;
+		using MutexT = castor::RecursiveMutex;
 
 		LoggerInstance & m_logger;
 		CheckedMutexT< MutexT > m_mutex;

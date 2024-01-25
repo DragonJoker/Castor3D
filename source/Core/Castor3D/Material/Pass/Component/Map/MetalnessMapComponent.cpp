@@ -111,7 +111,7 @@ namespace castor3d
 		, shader::BlendComponents & components
 		, shader::SampleTexture const & sampleTexture )const
 	{
-		applyFloatComponent( "metalness"
+		applyFloatComponent( cuT( "metalness" )
 			, passShaders
 			, textureConfigs
 			, textureAnims
@@ -125,7 +125,7 @@ namespace castor3d
 	void MetalnessMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		channelFillers.try_emplace( "metalness"
+		channelFillers.try_emplace( cuT( "metalness" )
 			, getTextureFlags()
 			, []( TextureContext & blockContext )
 			{
@@ -167,7 +167,7 @@ namespace castor3d
 	}
 
 	void MetalnessMapComponent::Plugin::createMapComponent( Pass & pass
-		, std::vector< PassComponentUPtr > & result )const
+		, castor::Vector< PassComponentUPtr > & result )const
 	{
 		result.push_back( castor::makeUniqueDerived< PassComponent, MetalnessMapComponent >( pass ) );
 	}

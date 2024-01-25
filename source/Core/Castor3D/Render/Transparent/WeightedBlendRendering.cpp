@@ -49,8 +49,8 @@ namespace castor3d
 			C3D_Scene( writer, SceneUboIndex, 0u );
 			C3D_HdrConfig( writer, HdrUboIndex, 0u );
 			auto c3d_mapDepth = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapDepth", uint32_t( DepthTexIndex ), 0u );
-			auto c3d_mapAccumulation = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( WbTexture::eAccumulation ), uint32_t( AccumTexIndex ), 0u );
-			auto c3d_mapRevealage = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( WbTexture::eRevealage ), uint32_t( RevealTexIndex ), 0u );
+			auto c3d_mapAccumulation = writer.declCombinedImg< FImg2DRgba32 >( castor::toUtf8( getTextureName( WbTexture::eAccumulation ) ), uint32_t( AccumTexIndex ), 0u );
+			auto c3d_mapRevealage = writer.declCombinedImg< FImg2DRgba32 >( castor::toUtf8( getTextureName( WbTexture::eRevealage ) ), uint32_t( RevealTexIndex ), 0u );
 
 			writer.implementEntryPointT< shader::PosUv2FT, sdw::VoidT >( [&]( sdw::VertexInT< shader::PosUv2FT > const & in
 				, sdw::VertexOut out )
@@ -134,7 +134,7 @@ namespace castor3d
 		, m_enabled{ enabled }
 		, m_transparentPassResult{ transparentPassResult }
 		, m_size{ size }
-		, m_shader{ "TransparentCombine", wboit::getProgram( device ) }
+		, m_shader{ cuT( "TransparentCombine" ), wboit::getProgram( device ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
 		, m_finalCombinePassDesc{ doCreateFinalCombine( graph
 			, transparentPassDesc
@@ -149,11 +149,11 @@ namespace castor3d
 
 	void WeightedBlendRendering::accept( RenderTechniqueVisitor & visitor )
 	{
-		visitor.visit( "Transparent Accumulation"
+		visitor.visit( cuT( "Transparent Accumulation" )
 			, m_transparentPassResult[WbTexture::eAccumulation]
 			, m_graph.getFinalLayoutState( m_transparentPassResult[WbTexture::eAccumulation].sampledViewId ).layout
 			, TextureFactors{}.invert( true ) );
-		visitor.visit( "Transparent Revealage"
+		visitor.visit( cuT( "Transparent Revealage" )
 			, m_transparentPassResult[WbTexture::eRevealage]
 			, m_graph.getFinalLayoutState( m_transparentPassResult[WbTexture::eRevealage].sampledViewId ).layout
 			, TextureFactors{}.invert( true ) );
@@ -176,20 +176,20 @@ namespace castor3d
 		, HdrConfigUbo const & hdrConfigUbo
 		, ProgressBar * progress )
 	{
-		stepProgressBarLocal( progress, "Creating transparent resolve pass" );
+		stepProgressBarLocal( progress, cuT( "Creating transparent resolve pass" ) );
 		auto & result = graph.createPass( "Combine"
 			, [this, progress]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				stepProgressBarLocal( progress, "Initialising transparent resolve pass" );
+				stepProgressBarLocal( progress, cuT( "Initialising transparent resolve pass" ) );
 				auto result = crg::RenderQuadBuilder{}
 					.renderPosition( {} )
 					.renderSize( makeExtent2D( m_size ) )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.enabled( &m_enabled )
 					.build( framePass, context, graph, crg::ru::Config{ 1u } );
-				m_device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+				m_device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );

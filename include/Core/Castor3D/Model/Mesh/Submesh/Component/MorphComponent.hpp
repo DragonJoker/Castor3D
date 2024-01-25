@@ -30,7 +30,7 @@ namespace castor3d
 				, Pass const & pass
 				, ObjectBufferOffset const & bufferOffsets
 				, ashes::BufferCRefArray & buffers
-				, std::vector< uint64_t > & offsets
+				, castor::Vector< uint64_t > & offsets
 				, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
 				, uint32_t & currentBinding
 				, uint32_t & currentLocation )override
@@ -75,7 +75,7 @@ namespace castor3d
 			 *\~french
 			 *\return		Les données de cibles de morph.
 			 */
-			std::vector< SubmeshAnimationBuffer > const & getMorphTargetsBuffers()const noexcept
+			castor::Vector< SubmeshAnimationBuffer > const & getMorphTargetsBuffers()const noexcept
 			{
 				return m_targets;
 			}
@@ -85,7 +85,7 @@ namespace castor3d
 			 *\~french
 			 *\return		Les données de cibles de morph.
 			 */
-			std::vector< SubmeshAnimationBuffer > & getMorphTargetsBuffers()noexcept
+			castor::Vector< SubmeshAnimationBuffer > & getMorphTargetsBuffers()noexcept
 			{
 				return m_targets;
 			}
@@ -109,7 +109,7 @@ namespace castor3d
 			MorphFlags m_flags{};
 			uint32_t m_targetDataCount{};
 			GpuBufferOffsetT< castor::Point4f > m_buffer;
-			std::vector< SubmeshAnimationBuffer > m_targets;
+			castor::Vector< SubmeshAnimationBuffer > m_targets;
 
 		private:
 			friend class BinaryWriter< MorphComponent >;

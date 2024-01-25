@@ -22,7 +22,7 @@ namespace GuiCommon
 		~FrameVariablesList()override;
 
 		void loadVariables( VkShaderStageFlagBits stage
-			, std::vector< UniformBufferValues > & ubos );
+			, castor::Vector< UniformBufferValues > & ubos );
 		void unloadVariables();
 
 	private:

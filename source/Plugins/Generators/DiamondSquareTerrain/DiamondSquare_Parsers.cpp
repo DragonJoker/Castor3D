@@ -34,7 +34,7 @@ namespace diamond_square_terrain
 
 		static CU_ImplementAttributeParserBlock( parserDiamondSquareTerrainEnd, TerrainContext )
 		{
-			auto & factory = getEngine( *blockContext->mesh )->getMeshFactory();
+			auto const & factory = getEngine( *blockContext->mesh )->getMeshFactory();
 			auto generator = factory.create( Generator::Type );
 			auto & dsgen = static_cast< Generator & >( *generator );
 			std::sort( blockContext->biomes.begin()
@@ -53,17 +53,11 @@ namespace diamond_square_terrain
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
-			else
+			else if ( auto value = params[0]->get< bool >() )
 			{
-				bool value;
-				params[0]->get( value );
-
-				if ( value )
-				{
-					blockContext->parameters.add( Generator::ParamRandomSeed, castor::string::toString( value ) );
-				}
+				blockContext->parameters.add( Generator::ParamRandomSeed, castor::string::toString( value ) );
 			}
 		}
 		CU_EndAttribute()
@@ -72,17 +66,11 @@ namespace diamond_square_terrain
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
-			else
+			else if ( auto value = params[0]->get< bool >() )
 			{
-				bool value;
-				params[0]->get( value );
-
-				if ( value )
-				{
-					blockContext->parameters.add( Generator::ParamIsland, castor::string::toString( value ) );
-				}
+				blockContext->parameters.add( Generator::ParamIsland, castor::string::toString( value ) );
 			}
 		}
 		CU_EndAttribute()
@@ -91,12 +79,11 @@ namespace diamond_square_terrain
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
-				castor::Point2f value;
-				params[0]->get( value );
+				auto value = params[0]->get< castor::Point2f >();
 				blockContext->parameters.add( Generator::ParamXScale, castor::string::toString( value->x ) );
 				blockContext->parameters.add( Generator::ParamZScale, castor::string::toString( value->y ) );
 			}
@@ -107,12 +94,11 @@ namespace diamond_square_terrain
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
-				castor::Point2f value;
-				params[0]->get( value );
+				auto value = params[0]->get< castor::Point2f >();
 				blockContext->parameters.add( Generator::ParamUScale, castor::string::toString( value->x ) );
 				blockContext->parameters.add( Generator::ParamVScale, castor::string::toString( value->y ) );
 			}
@@ -123,12 +109,11 @@ namespace diamond_square_terrain
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
-				castor::Point2f value;
-				params[0]->get( value );
+				auto value = params[0]->get< castor::Point2f >();
 				blockContext->parameters.add( Generator::ParamYMin, castor::string::toString( value->x ) );
 				blockContext->parameters.add( Generator::ParamYMax, castor::string::toString( value->y ) );
 			}
@@ -139,44 +124,12 @@ namespace diamond_square_terrain
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
-				uint32_t value;
-				params[0]->get( value );
+				auto value = params[0]->get< uint32_t >();
 				blockContext->parameters.add( Generator::ParamDetail, castor::string::toString( value ) );
-			}
-		}
-		CU_EndAttribute()
-
-		static CU_ImplementAttributeParserBlock( parserGradient, TerrainContext )
-		{
-			if ( params.empty() )
-			{
-				CU_ParsingError( "Missing parameter" );
-			}
-			else
-			{
-				castor::Path folder;
-				castor::Path relative;
-				params[0]->get( relative );
-
-				if ( castor::File::fileExists( context.file.getPath() / relative ) )
-				{
-					folder = context.file.getPath();
-				}
-				else if ( !castor::File::fileExists( relative ) )
-				{
-					CU_ParsingError( cuT( "File [" ) + relative + cuT( "] not found, check the relativeness of the path" ) );
-					relative.clear();
-				}
-
-				if ( !relative.empty() )
-				{
-					blockContext->parameters.add( Generator::ParamGradientFolder, folder );
-					blockContext->parameters.add( Generator::ParamGradientRelative, relative );
-				}
 			}
 		}
 		CU_EndAttribute()
@@ -185,12 +138,11 @@ namespace diamond_square_terrain
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
-				float value;
-				params[0]->get( value );
+				auto value = params[0]->get< float >();
 				blockContext->parameters.add( Generator::ParamHeatOffset, castor::string::toString( value ) );
 			}
 		}
@@ -200,7 +152,7 @@ namespace diamond_square_terrain
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -226,12 +178,11 @@ namespace diamond_square_terrain
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
-				castor::Point2f value;
-				params[0]->get( value );
+				auto value = params[0]->get< castor::Point2f >();
 				blockContext->biome.heightRange = { value->x, value->y };
 			}
 		}
@@ -241,14 +192,12 @@ namespace diamond_square_terrain
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
-				uint32_t pass;
-				params[0]->get( pass );
-				castor::Point2f range;
-				params[1]->get( range );
+				auto pass = params[0]->get< uint32_t >();
+				auto range= params[1]->get< castor::Point2f >();
 				blockContext->biome.steepnessBiomes[0].passIndex = pass;
 				blockContext->biome.steepnessBiomes[0].steepnessRange = { range->x, range->y };
 			}
@@ -259,14 +208,12 @@ namespace diamond_square_terrain
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
-				uint32_t pass;
-				params[0]->get( pass );
-				castor::Point2f range;
-				params[1]->get( range );
+				auto pass = params[0]->get< uint32_t >();
+				auto range = params[1]->get< castor::Point2f >();
 				blockContext->biome.steepnessBiomes[1].passIndex = pass;
 				blockContext->biome.steepnessBiomes[1].steepnessRange = { range->x, range->y };
 			}
@@ -277,14 +224,12 @@ namespace diamond_square_terrain
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
-				uint32_t pass;
-				params[0]->get( pass );
-				castor::Point2f range;
-				params[1]->get( range );
+				auto pass = params[0]->get< uint32_t >();
+				auto range = params[1]->get< castor::Point2f >();
 				blockContext->biome.steepnessBiomes[2].passIndex = pass;
 				blockContext->biome.steepnessBiomes[2].steepnessRange = { range->x, range->y };
 			}

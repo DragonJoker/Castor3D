@@ -1,14 +1,15 @@
 #include "CastorUtils/Miscellaneous/CpuInformations.hpp"
 
 #include "CastorUtils/Exception/Assertion.hpp"
+#include "CastorUtils/Miscellaneous/StringUtils.hpp"
 
 namespace castor
 {
 	namespace cpuinf
 	{
-		static std::string makeString( int32_t v )
+		static String makeString( int32_t v )
 		{
-			std::string result;
+			MbString result;
 			auto c = char( ( v >> 0 ) & 0xff );
 
 			if ( c )
@@ -34,21 +35,21 @@ namespace castor
 				result += c;
 			}
 
-			return result;
+			return castor::makeString( result );
 		};
 	}
 
 	namespace platform
 	{
-		void callCpuid( uint32_t func, std::array< int32_t, 4 > & data );
+		void callCpuid( uint32_t func, Array< int32_t, 4 > & data );
 		uint32_t getCoreCount();
-		std::string getCPUModel();
+		String getCPUModel();
 	}
 
 	CpuInformations::CpuInformationsInternal::CpuInformationsInternal()
 	{
-		std::vector< std::array< int32_t, 4 > > datas{};
-		std::array< int32_t, 4 > data;
+		Vector< Array< int32_t, 4 > > datas{};
+		Array< int32_t, 4 > data;
 		platform::callCpuid( 0u, data );
 		auto ids = data[0];
 
@@ -64,11 +65,11 @@ namespace castor
 			m_vendor += cpuinf::makeString( datas[0][3] );
 			m_vendor += cpuinf::makeString( datas[0][2] );
 
-			if ( m_vendor == "GenuineIntel" )
+			if ( m_vendor == cuT( "GenuineIntel" ) )
 			{
 				m_isIntel = true;
 			}
-			else if ( m_vendor == "AuthenticAMD" )
+			else if ( m_vendor == cuT( "AuthenticAMD" ) )
 			{
 				m_isAMD = true;
 			}
@@ -94,7 +95,7 @@ namespace castor
 
 	CpuInformations::CpuInformationsInternal const CpuInformations::m_internal;
 
-	std::ostream & operator<<( std::ostream & stream, CpuInformations const & object )
+	OutputStream & operator<<( OutputStream & stream, CpuInformations const & object )
 	{
 		auto support = []( bool supported )
 		{

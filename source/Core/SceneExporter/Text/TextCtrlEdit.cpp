@@ -22,8 +22,8 @@ namespace castor
 	{
 		log::info << tabs() << cuT( "Writing EditCtrl " ) << control.getName() << std::endl;
 		return writeSub< Control >( file, control )
-			&& writeOpt( file, "multiline", control.isMultiLine(), false )
-			&& writeName( file, "caption", string::stringCast< xchar >( control.getCaption() ) );
+			&& writeOpt( file, cuT( "multiline" ), control.isMultiLine(), false )
+			&& writeName( file, cuT( "caption" ), makeString( control.getCaption() ) );
 	}
 
 	//*********************************************************************************************

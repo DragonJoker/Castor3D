@@ -39,7 +39,7 @@ namespace smaa
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -52,7 +52,7 @@ namespace smaa
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -67,7 +67,7 @@ namespace smaa
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -82,7 +82,7 @@ namespace smaa
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -95,7 +95,7 @@ namespace smaa
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -108,7 +108,7 @@ namespace smaa
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -121,7 +121,7 @@ namespace smaa
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -134,7 +134,7 @@ namespace smaa
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -147,7 +147,7 @@ namespace smaa
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -160,7 +160,7 @@ namespace smaa
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -173,7 +173,7 @@ namespace smaa
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -186,7 +186,7 @@ namespace smaa
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -199,7 +199,7 @@ namespace smaa
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -212,7 +212,7 @@ namespace smaa
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -225,7 +225,7 @@ namespace smaa
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -238,7 +238,7 @@ namespace smaa
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -286,24 +286,24 @@ namespace smaa
 	{
 		static castor::UInt32StrMap modes
 		{
-			{ "1X", uint32_t( smaa::Mode::e1X ) },
-			{ "T2X", uint32_t( smaa::Mode::eT2X ) },
-			{ "S2X", uint32_t( smaa::Mode::eS2X ) },
-			{ "4X", uint32_t( smaa::Mode::e4X ) }
+			{ cuT( "1X" ), uint32_t( smaa::Mode::e1X ) },
+			{ cuT( "T2X" ), uint32_t( smaa::Mode::eT2X ) },
+			{ cuT( "S2X" ), uint32_t( smaa::Mode::eS2X ) },
+			{ cuT( "4X" ), uint32_t( smaa::Mode::e4X ) }
 		};
 		static castor::UInt32StrMap presets
 		{
-			{ "low", uint32_t( smaa::Preset::eLow ) },
-			{ "medium", uint32_t( smaa::Preset::eMedium ) },
-			{ "high", uint32_t( smaa::Preset::eHigh ) },
-			{ "ultra", uint32_t( smaa::Preset::eUltra ) },
-			{ "custom", uint32_t( smaa::Preset::eCustom ) }
+			{ cuT( "low" ), uint32_t( smaa::Preset::eLow ) },
+			{ cuT( "medium" ), uint32_t( smaa::Preset::eMedium ) },
+			{ cuT( "high" ), uint32_t( smaa::Preset::eHigh ) },
+			{ cuT( "ultra" ), uint32_t( smaa::Preset::eUltra ) },
+			{ cuT( "custom" ), uint32_t( smaa::Preset::eCustom ) }
 		};
 		static castor::UInt32StrMap detections
 		{
-			{ "depth", uint32_t( smaa::EdgeDetectionType::eDepth ) },
-			{ "colour", uint32_t( smaa::EdgeDetectionType::eColour ) },
-			{ "luma", uint32_t( smaa::EdgeDetectionType::eLuma ) }
+			{ cuT( "depth" ), uint32_t( smaa::EdgeDetectionType::eDepth ) },
+			{ cuT( "colour" ), uint32_t( smaa::EdgeDetectionType::eColour ) },
+			{ cuT( "luma" ), uint32_t( smaa::EdgeDetectionType::eLuma ) }
 		};
 		castor::AttributeParsers result;
 
@@ -316,17 +316,17 @@ namespace smaa
 			, parse::SmaaSection::eRoot
 			, cuT( "mode" )
 			, &parse::parserMode
-			, { castor::makeParameter< castor::ParameterType::eCheckedText >( "SMAAMode", modes ) } );
+			, { castor::makeParameter< castor::ParameterType::eCheckedText >( cuT( "SMAAMode" ), modes ) } );
 		addParserT( result
 			, parse::SmaaSection::eRoot
 			, cuT( "preset" )
 			, &parse::parserPreset
-			, { castor::makeParameter< castor::ParameterType::eCheckedText >( "SMAAPreset", presets ) } );
+			, { castor::makeParameter< castor::ParameterType::eCheckedText >( cuT( "SMAAPreset" ), presets ) } );
 		addParserT( result
 			, parse::SmaaSection::eRoot
 			, cuT( "edgeDetection" )
 			, &parse::parserEdgeDetection
-			, { castor::makeParameter< castor::ParameterType::eCheckedText >( "SMAADepthDetection", detections ) } );
+			, { castor::makeParameter< castor::ParameterType::eCheckedText >( cuT( "SMAADepthDetection" ), detections ) } );
 		addParserT( result
 			, parse::SmaaSection::eRoot
 			, cuT( "disableDiagonalDetection" )

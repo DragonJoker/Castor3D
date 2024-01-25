@@ -157,7 +157,7 @@ namespace smaa
 					out.colour().xy() = SMAALumaEdgeDetectionPS( in.texcoord(), in.offset() );
 				} );
 
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return castor::make_unique< sdw::Shader >( castor::move( writer.getShader() ) );
 		}
 
 		static crg::ImageViewData doCreatePredicationView( crg::ImageViewId const & pred )

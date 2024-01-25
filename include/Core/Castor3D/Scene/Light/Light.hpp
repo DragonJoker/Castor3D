@@ -348,7 +348,7 @@ namespace castor3d
 
 		void setShadowConfig( ShadowConfig config )
 		{
-			m_shadows = std::move( config );
+			m_shadows = castor::move( config );
 			markDirty();
 		}
 

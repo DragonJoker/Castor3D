@@ -301,7 +301,7 @@ namespace castor3d
 			BarycentricFullDerivatives( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr
 				, bool enabled )
-				: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+				: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
 			{
 			}
 
@@ -390,7 +390,7 @@ namespace castor3d
 			Position( sdw::ShaderWriter & writer
 				, sdw::expr::ExprPtr expr
 				, bool enabled = true )
-				: sdw::StructInstance{ writer, std::move( expr ), enabled }
+				: sdw::StructInstance{ writer, castor::move( expr ), enabled }
 				, position{ getMember< sdw::Vec4 >( "position" ) }
 				, fill{ getMemberArray< sdw::Vec4 >( "fill", true ) }
 			{
@@ -639,12 +639,12 @@ namespace castor3d
 							, shader::MeshVertex v2 )
 						{
 							auto bbPositions = m_writer.declConstantArray( "bbPositions"
-								, std::vector< sdw::Vec3 >{ vec3( -0.5_f, -0.5_f, 1.0_f )
+								, castor::Vector< sdw::Vec3 >{ vec3( -0.5_f, -0.5_f, 1.0_f )
 								, vec3( -0.5_f, +0.5_f, 1.0_f )
 								, vec3( +0.5_f, -0.5_f, 1.0_f )
 								, vec3( +0.5_f, +0.5_f, 1.0_f ) } );
 							auto bbTexcoords = m_writer.declConstantArray( "bbTexcoords"
-								, std::vector< sdw::Vec2 >{ vec2( 0.0_f, 0.0_f )
+								, castor::Vector< sdw::Vec2 >{ vec2( 0.0_f, 0.0_f )
 								, vec2( 0.0_f, 1.0_f )
 								, vec2( 1.0_f, 0.0_f )
 								, vec2( 1.0_f, 1.0_f ) } );
@@ -1186,11 +1186,11 @@ namespace castor3d
 							, modelData.getMaterialId()
 							, baseSurface.passMultipliers
 							, components );
-						output.registerOutput( "Surface", "Normal", fma( components.normal, vec3( 0.5_f ), vec3( 0.5_f ) ) );
-						output.registerOutput( "Surface", "Tangent", fma( baseSurface.tangent.xyz(), vec3( 0.5_f ), vec3( 0.5_f ) ) );
-						output.registerOutput( "Surface", "Bitangent", fma( baseSurface.bitangent, vec3( 0.5_f ), vec3( 0.5_f ) ) );
-						output.registerOutput( "Surface", "World Position", baseSurface.worldPosition );
-						output.registerOutput( "Surface", "View Position", baseSurface.viewPosition );
+						output.registerOutput( cuT( "Surface" ), cuT( "Normal" ), fma( components.normal, vec3( 0.5_f ), vec3( 0.5_f ) ) );
+						output.registerOutput( cuT( "Surface" ), cuT( "Tangent" ), fma( baseSurface.tangent.xyz(), vec3( 0.5_f ), vec3( 0.5_f ) ) );
+						output.registerOutput( cuT( "Surface" ), cuT( "Bitangent" ), fma( baseSurface.bitangent, vec3( 0.5_f ), vec3( 0.5_f ) ) );
+						output.registerOutput( cuT( "Surface" ), cuT( "World Position" ), baseSurface.worldPosition );
+						output.registerOutput( cuT( "Surface" ), cuT( "View Position" ), baseSurface.viewPosition );
 
 						if ( components.occlusion )
 						{
@@ -1282,9 +1282,9 @@ namespace castor3d
 									}
 
 									directLighting.ambient() = components.ambientColour * c3d_sceneData.ambientLight() * components.ambientFactor;
-									output.registerOutput( "Lighting", "Ambient", directLighting.ambient() );
-									output.registerOutput( "Lighting", "Occlusion", occlusion );
-									output.registerOutput( "Lighting", "Emissive", components.emissiveColour * components.emissiveFactor );
+									output.registerOutput( cuT( "Lighting" ), cuT( "Ambient" ), directLighting.ambient() );
+									output.registerOutput( cuT( "Lighting" ), cuT( "Occlusion" ), occlusion );
+									output.registerOutput( cuT( "Lighting" ), cuT( "Emissive" ), components.emissiveColour * components.emissiveFactor );
 
 									// Indirect Lighting
 									lightSurface.updateL( utils
@@ -1342,7 +1342,7 @@ namespace castor3d
 										, coatReflected
 										, sheenReflected
 										, output );
-									output.registerOutput( "Reflections", "Incident", sdw::fma( incident, vec3( 0.5_f ), vec3( 0.5_f ) ) );
+									output.registerOutput( cuT( "Reflections" ), cuT( "Incident" ), sdw::fma( incident, vec3( 0.5_f ), vec3( 0.5_f ) ) );
 
 									// Combine
 									outResult = vec4( lightingModel->combine( output
@@ -1454,7 +1454,7 @@ namespace castor3d
 		}
 
 		static ashes::DescriptorSetLayoutPtr createInDescriptorLayout( RenderDevice const & device
-			, std::string const & name
+			, castor::String const & name
 			, MaterialCache const & matCache
 			, Scene const & scene
 			, RenderTechnique const & technique
@@ -1567,11 +1567,11 @@ namespace castor3d
 					, index );
 			}
 
-			return device->createDescriptorSetLayout( name + "InOut"
-				, std::move( bindings ) );
+			return device->createDescriptorSetLayout( castor::toUtf8( name ) + "InOut"
+				, castor::move( bindings ) );
 		}
 
-		static ashes::DescriptorSetPtr createInDescriptorSet( std::string const & name
+		static ashes::DescriptorSetPtr createInDescriptorSet( castor::String const & name
 			, ashes::DescriptorSetPool const & pool
 			, crg::RunnableGraph & graph
 			, CameraUbo const & cameraUbo
@@ -1689,15 +1689,15 @@ namespace castor3d
 					, index );
 			}
 
-			auto result = pool.createDescriptorSet( name + "InOut"
+			auto result = pool.createDescriptorSet( castor::toUtf8( name ) + "InOut"
 				, Sets::eInOuts );
-			result->setBindings( std::move( writes ) );
+			result->setBindings( castor::move( writes ) );
 			result->update();
 			return result;
 		}
 
 		static ashes::DescriptorSetLayoutPtr createVtxDescriptorLayout( RenderDevice const & device
-			, std::string const & name )
+			, castor::String const & name )
 		{
 			auto stages = VkShaderStageFlags( VisibilityResolvePass::useCompute()
 				? VK_SHADER_STAGE_COMPUTE_BIT
@@ -1706,12 +1706,12 @@ namespace castor3d
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( VtxBindings::eInPosition
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 				, stages ) );
-			return device->createDescriptorSetLayout( name + "Vtx"
-				, std::move( bindings ) );
+			return device->createDescriptorSetLayout( castor::toUtf8( name ) + "Vtx"
+				, castor::move( bindings ) );
 		}
 
 		static ashes::DescriptorSetLayoutPtr createVtxDescriptorLayout( RenderDevice const & device
-			, std::string const & name
+			, castor::String const & name
 			, PipelineFlags const & flags
 			, bool isMeshShading )
 		{
@@ -1811,11 +1811,11 @@ namespace castor3d
 					, stages ) );
 			}
 
-			return device->createDescriptorSetLayout( name + "Vtx"
-				, std::move( bindings ) );
+			return device->createDescriptorSetLayout( castor::toUtf8( name ) + "Vtx"
+				, castor::move( bindings ) );
 		}
 
-		static ashes::DescriptorSetPtr createVtxDescriptorSet( std::string const & name
+		static ashes::DescriptorSetPtr createVtxDescriptorSet( castor::String const & name
 			, ashes::DescriptorSetPool const & pool
 			, ashes::BufferBase const & positionsBuffer
 			, VkDeviceSize offset
@@ -1823,14 +1823,14 @@ namespace castor3d
 		{
 			ashes::WriteDescriptorSetArray writes;
 			writes.emplace_back( makeDescriptorWrite( positionsBuffer, VtxBindings::eInPosition, offset, range ) );
-			auto result = pool.createDescriptorSet( name + "Vtx"
+			auto result = pool.createDescriptorSet( castor::toUtf8( name ) + "Vtx"
 				, Sets::eVtx );
-			result->setBindings( std::move( writes ) );
+			result->setBindings( castor::move( writes ) );
 			result->update();
 			return result;
 		}
 
-		static ashes::DescriptorSetPtr createVtxDescriptorSet( std::string const & name
+		static ashes::DescriptorSetPtr createVtxDescriptorSet( castor::String const & name
 			, PipelineFlags const & flags
 			, bool isMeshShading
 			, ashes::DescriptorSetPool const & pool
@@ -1917,15 +1917,15 @@ namespace castor3d
 				writes.emplace_back( makeDescriptorWrite( buffer, VtxBindings::eInVelocity, 0u, buffer.getSize() ) );
 			}
 
-			auto result = pool.createDescriptorSet( name + "Vtx"
+			auto result = pool.createDescriptorSet( castor::toUtf8( name ) + "Vtx"
 				, Sets::eVtx );
-			result->setBindings( std::move( writes ) );
+			result->setBindings( castor::move( writes ) );
 			result->update();
 			return result;
 		}
 
 		static ashes::RenderPassPtr createRenderPass( RenderDevice const & device
-			, std::string const & name
+			, castor::String const & name
 			, crg::ImageViewIdArray const & targetImage
 			, Texture const * scattering
 			, bool first
@@ -1979,7 +1979,7 @@ namespace castor3d
 				, ashes::nullopt
 				, {} };
 			ashes::SubpassDescriptionArray subpasses;
-			subpasses.push_back( std::move( subpassesDesc ) );
+			subpasses.emplace_back( castor::move( subpassesDesc ) );
 			ashes::VkSubpassDependencyArray dependencies{ { VK_SUBPASS_EXTERNAL
 					, 0u
 					, srcStage
@@ -1995,15 +1995,15 @@ namespace castor3d
 					, dstAccess
 					, VK_DEPENDENCY_BY_REGION_BIT } };
 			ashes::RenderPassCreateInfo createInfo{ 0u
-				, std::move( attaches )
-				, std::move( subpasses )
-				, std::move( dependencies ) };
-			return device->createRenderPass( name
-				, std::move( createInfo ) );
+				, castor::move( attaches )
+				, castor::move( subpasses )
+				, castor::move( dependencies ) };
+			return device->createRenderPass( castor::toUtf8( name )
+				, castor::move( createInfo ) );
 		}
 
 		static ashes::FrameBufferPtr createFrameBuffer( ashes::RenderPass const & renderPass
-			, std::string const & name
+			, castor::String const & name
 			, crg::RunnableGraph & graph
 			, crg::ImageViewIdArray const & targetImage
 			, Texture const * scattering )
@@ -2017,7 +2017,7 @@ namespace castor3d
 				fbAttaches.emplace_back( scattering->targetView );
 			}
 
-			return renderPass.createFrameBuffer( name
+			return renderPass.createFrameBuffer( castor::toUtf8( name )
 				, makeVkStruct< VkFramebufferCreateInfo >( 0u
 					, renderPass
 					, uint32_t( fbAttaches.size() )
@@ -2059,15 +2059,15 @@ namespace castor3d
 				, { makeViewport( castor::Point2ui{ extent.width, extent.height } ) }
 				, { makeScissor( castor::Point2ui{ extent.width, extent.height } ) } };
 			return device->createPipeline( ashes::GraphicsPipelineCreateInfo{ 0u
-				, std::move( stages )
-				, std::move( vertexState )
+				, castor::move( stages )
+				, castor::move( vertexState )
 				, ashes::PipelineInputAssemblyStateCreateInfo{ 0u, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP }
 				, ashes::nullopt
-				, std::move( viewportState )
+				, castor::move( viewportState )
 				, ashes::PipelineRasterizationStateCreateInfo{ 0u, VK_FALSE, VK_FALSE, VK_POLYGON_MODE_FILL, VK_CULL_MODE_NONE }
 				, ashes::PipelineMultisampleStateCreateInfo{}
 				, std::nullopt
-				, std::move( blendState )
+				, castor::move( blendState )
 				, ashes::nullopt
 				, pipelineLayout
 				, static_cast< VkRenderPass const & >( renderPass ) } );
@@ -2108,8 +2108,8 @@ namespace castor3d
 		, m_nodesPass{ nodesPass }
 		, m_cameraUbo{ renderPassDesc.m_cameraUbo }
 		, m_sceneUbo{ *renderPassDesc.m_sceneUbo }
-		, m_targetImage{ std::move( targetImage ) }
-		, m_targetDepth{ std::move( targetDepth ) }
+		, m_targetImage{ castor::move( targetImage ) }
+		, m_targetDepth{ castor::move( targetDepth ) }
 		, m_ssaoConfig{ techniquePassDesc.m_ssaoConfig }
 		, m_ssao{ techniquePassDesc.m_ssao }
 		, m_deferredLightingFilter{ renderPassDesc.m_deferredLightingFilter }
@@ -2245,8 +2245,8 @@ namespace castor3d
 		}
 	}
 
-	PipelineFlags VisibilityResolvePass::createPipelineFlags( PassComponentCombine passComponents
-		, SubmeshComponentCombine submeshComponents
+	PipelineFlags VisibilityResolvePass::createPipelineFlags( PassComponentCombine const & passComponents
+		, SubmeshComponentCombine const & submeshComponents
 		, BlendMode colourBlendMode
 		, BlendMode alphaBlendMode
 		, RenderPassTypeID renderPassTypeId
@@ -2263,8 +2263,8 @@ namespace castor3d
 		, GpuBufferOffsetT< castor::Point4f > const & morphTargets
 		, SubmeshRenderData * submeshData )const
 	{
-		auto result = m_nodesPass.createPipelineFlags( std::move( passComponents )
-			, std::move( submeshComponents )
+		auto result = m_nodesPass.createPipelineFlags( passComponents
+			, submeshComponents
 			, colourBlendMode
 			, alphaBlendMode
 			, renderPassTypeId
@@ -2395,7 +2395,7 @@ namespace castor3d
 		, VkCommandBuffer commandBuffer )
 	{
 		m_drawCalls = {};
-		std::array< VkDescriptorSet, 3u > descriptorSets{ VkDescriptorSet{}
+		castor::Array< VkDescriptorSet, 3u > descriptorSets{ VkDescriptorSet{}
 			, VkDescriptorSet{}
 			, *getScene().getBindlessTexDescriptorSet() };
 		visres::PushData pushData{ 0u, 0u };
@@ -2470,11 +2470,11 @@ namespace castor3d
 		, VkCommandBuffer commandBuffer )
 	{
 		m_drawCalls = {};
-		std::array< VkDescriptorSet, 3u > descriptorSets{ VkDescriptorSet{}
+		castor::Array< VkDescriptorSet, 3u > descriptorSets{ VkDescriptorSet{}
 			, VkDescriptorSet{}
 			, *getScene().getBindlessTexDescriptorSet() };
 		visres::PushData pushData{ 0u, 0u };
-		std::vector< VkClearValue > clearValues;
+		castor::Vector< VkClearValue > clearValues;
 		clearValues.push_back( transparentBlackClearColor );
 		clearValues.push_back( transparentBlackClearColor );
 		auto & extent = m_parent->getNormal().getExtent();
@@ -2594,14 +2594,14 @@ namespace castor3d
 				: VK_SHADER_STAGE_FRAGMENT_BIT;
 			auto stageFlags = VkShaderStageFlags( stageBit );
 			auto extent = m_parent->getNormal().getExtent();
-			auto result = std::make_unique< Pipeline >( flags );
+			auto result = castor::make_unique< Pipeline >( flags );
 			result->flags = flags;
 			result->vtxDescriptorLayout = stride == 0u
 				? visres::createVtxDescriptorLayout( m_device, getName(), flags, m_nodesPass.isMeshShading() )
 				: visres::createVtxDescriptorLayout( m_device, getName() );
 			result->ioDescriptorLayout = visres::createInDescriptorLayout( m_device, getName(), getScene().getOwner()->getMaterialCache()
 				, getScene(), *m_parent, getClustersConfig()->enabled, hasSsao() ? m_ssao : nullptr, &getIndirectLighting() );
-			result->pipelineLayout = m_device->createPipelineLayout( getName()
+			result->pipelineLayout = m_device->createPipelineLayout( castor::toUtf8( getName() )
 				, { *result->ioDescriptorLayout, *result->vtxDescriptorLayout, *getScene().getBindlessTexDescriptorLayout() }
 				, { { stageFlags, 0u, sizeof( visres::PushData ) } } );
 
@@ -2625,14 +2625,14 @@ namespace castor3d
 			if ( useCompute() )
 			{
 				result->pipeline = m_device->createPipeline( ashes::ComputePipelineCreateInfo{ 0u
-					, std::move( stages.front() )
+					, castor::move( stages.front() )
 					, *result->pipelineLayout } );
 			}
 			else
 			{
 				result->pipeline = visres::createPipeline( m_device
 					, extent
-					, std::move( stages )
+					, castor::move( stages )
 					, *result->pipelineLayout
 					, *m_renderPass
 					, m_outputScattering ? &getTechnique().getScattering() : nullptr
@@ -2643,7 +2643,7 @@ namespace castor3d
 			result->ioDescriptorPool = result->ioDescriptorLayout->createPool( 1u );
 			result->ioDescriptorSet = visres::createInDescriptorSet( getName(), *result->ioDescriptorPool, m_graph, m_cameraUbo, m_sceneUbo, *m_parent, getScene()
 				, getClustersConfig()->enabled, m_targetImage, hasSsao() ? m_ssao : nullptr, &getIndirectLighting(), m_deferredLightingFilter );
-			pipelines.push_back( std::move( result ) );
+			pipelines.push_back( castor::move( result ) );
 			it = std::next( pipelines.begin(), ptrdiff_t( pipelines.size() - 1u ) );
 		}
 

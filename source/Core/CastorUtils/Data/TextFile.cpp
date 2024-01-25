@@ -32,12 +32,12 @@ namespace castor
 				if ( m_encoding == EncodingMode::eASCII )
 				{
 					iOrigChar = getc( m_file );
-					cChar = string::stringCast< xchar, char >( { char( iOrigChar ), char( 0 ) } )[0];
+					cChar = makeString( MbString{ char( iOrigChar ), char( 0 ) } )[0];
 				}
 				else
 				{
 					iOrigChar = getwc( m_file );
-					cChar = string::stringCast< xchar, wchar_t >( { wchar_t( iOrigChar ), wchar_t( 0 ) } )[0];
+					cChar = makeString( WString{ wchar_t( iOrigChar ), wchar_t( 0 ) } )[0];
 				}
 
 				bContinue =  ! feof( m_file );
@@ -80,12 +80,12 @@ namespace castor
 			if ( m_encoding == EncodingMode::eASCII )
 			{
 				iOrigChar = getc( m_file );
-				toRead = string::stringCast< xchar, char >( { char( iOrigChar ), char( 0 ) } )[0];
+				toRead = makeString( MbString{ char( iOrigChar ), char( 0 ) } )[0];
 			}
 			else
 			{
 				iOrigChar = getwc( m_file );
-				toRead = string::stringCast< xchar, wchar_t >( { wchar_t( iOrigChar ), wchar_t( 0 ) } )[0];
+				toRead = makeString( WString{ wchar_t( iOrigChar ), wchar_t( 0 ) } )[0];
 			}
 
 			uiReturn++;
@@ -106,12 +106,12 @@ namespace castor
 		{
 			if ( m_encoding != EncodingMode::eASCII )
 			{
-				uiReturn =  doWrite( ByteCPtr( line.c_str() ), sizeof( xchar ) * line.size() );
+				uiReturn = doWrite( ByteCPtr( line.c_str() ), sizeof( xchar ) * line.size() );
 			}
 			else
 			{
-				auto ln = string::stringCast< char >( line );
-				uiReturn =  doWrite( ByteCPtr( ln.c_str() ), sizeof( char ) * ln.size() );
+				auto ln = toUtf8( line );
+				uiReturn = doWrite( ByteCPtr( ln.c_str() ), sizeof( char ) * ln.size() );
 			}
 		}
 
@@ -133,28 +133,6 @@ namespace castor
 			strOut += strLine + cuT( "\n" );
 		}
 
-		CU_CheckInvariants();
-		return uiReturn;
-	}
-
-	uint64_t TextFile::print( uint64_t uiMaxSize, xchar const * pFormat, ... )
-	{
-		CU_CheckInvariants();
-		CU_Require( checkFlag( m_mode, OpenMode::eWrite ) || checkFlag( m_mode, OpenMode::eAppend ) );
-		uint64_t uiReturn = 0;
-		std::vector< xchar > text;
-		text.resize( size_t( uiMaxSize ) );
-
-		if ( pFormat )
-		{
-			va_list vaList;
-			va_start( vaList, pFormat );
-			vsnprintf( text.data(), size_t( uiMaxSize ), pFormat, vaList );
-			va_end( vaList );
-			uiReturn = writeText( text.data() );
-		}
-
-		CU_Ensure( uiReturn <= uiMaxSize );
 		CU_CheckInvariants();
 		return uiReturn;
 	}

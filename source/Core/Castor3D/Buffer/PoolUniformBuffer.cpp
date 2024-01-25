@@ -18,8 +18,8 @@ namespace castor3d
 		: m_renderSystem{ renderSystem }
 		, m_usage{ usage }
 		, m_flags{ flags | VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT }
-		, m_sharingMode{ std::move( sharingMode ) }
-		, m_debugName{ std::move( debugName ) }
+		, m_sharingMode{ castor::move( sharingMode ) }
+		, m_debugName{ castor::move( debugName ) }
 	{
 		initialise( m_renderSystem.getRenderDevice() );
 	}
@@ -31,12 +31,12 @@ namespace castor3d
 		auto maxSize = std::min( 65536u, m_renderSystem.getValue( GpuMax::eUniformBufferSize ) );
 		auto elemCount = uint32_t( std::floor( float( maxSize ) / float( elemSize ) ) );
 		m_buffer = ashes::makeUniformBuffer( *device.device
-			, m_debugName + "Ubo"
+			, castor::toUtf8( m_debugName + cuT( "Ubo" ) )
 			, elemCount
 			, elemSize
 			, m_usage | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 			, m_sharingMode );
-		m_buffer->bindMemory( setupMemory( device, *m_buffer, m_flags, m_debugName + "Ubo" ) );
+		m_buffer->bindMemory( setupMemory( device, *m_buffer, m_flags, m_debugName + cuT( "Ubo" ) ) );
 		m_data = castor::makeArrayView( m_buffer->getBuffer().lock( 0u, ashes::WholeSize, 0u )
 			, m_buffer->getBuffer().getSize() );
 		return uint32_t( m_buffer->getBuffer().getSize() );

@@ -103,9 +103,9 @@ namespace GuiCommon
 		static wxString PROPERTY_CAPTION = _( "Caption" );
 
 		static wxString PROPERTY_HALIGN = _( "Horiz. align." );
-		static std::array< wxString, size_t( castor3d::HAlign::eCount ) > PROPERTY_HALIGN_TEXTS{ _( "Left" ), _( "Center" ), _( "Right" ) };
+		static castor::Array< wxString, size_t( castor3d::HAlign::eCount ) > PROPERTY_HALIGN_TEXTS{ _( "Left" ), _( "Center" ), _( "Right" ) };
 		static wxString PROPERTY_VALIGN = _( "Vertic. align." );
-		static std::array< wxString, size_t( castor3d::VAlign::eCount ) > PROPERTY_VALIGN_TEXTS{ _( "Top" ), _( "Center" ), _( "Bottom" ) };
+		static castor::Array< wxString, size_t( castor3d::VAlign::eCount ) > PROPERTY_VALIGN_TEXTS{ _( "Top" ), _( "Center" ), _( "Bottom" ) };
 
 		wxArrayString haligns{ make_wxArrayString( PROPERTY_HALIGN_TEXTS ) };
 		wxString halign{ PROPERTY_HALIGN_TEXTS[size_t( control.getHAlign() )] };
@@ -146,9 +146,9 @@ namespace GuiCommon
 		static wxString PROPERTY_CAPTION = _( "Caption" );
 
 		static wxString PROPERTY_HALIGN = _( "Horiz. align." );
-		static std::array< wxString, size_t( castor3d::HAlign::eCount ) > PROPERTY_HALIGN_TEXTS{ _( "Left" ), _( "Center" ), _( "Right" ) };
+		static castor::Array< wxString, size_t( castor3d::HAlign::eCount ) > PROPERTY_HALIGN_TEXTS{ _( "Left" ), _( "Center" ), _( "Right" ) };
 		static wxString PROPERTY_VALIGN = _( "Vertic. align." );
-		static std::array< wxString, size_t( castor3d::VAlign::eCount ) > PROPERTY_VALIGN_TEXTS{ _( "Top" ), _( "Center" ), _( "Bottom" ) };
+		static castor::Array< wxString, size_t( castor3d::VAlign::eCount ) > PROPERTY_VALIGN_TEXTS{ _( "Top" ), _( "Center" ), _( "Bottom" ) };
 
 		wxArrayString haligns{ make_wxArrayString( PROPERTY_HALIGN_TEXTS ) };
 		wxString halign{ PROPERTY_HALIGN_TEXTS[size_t( control.getHeaderHAlign() )] };
@@ -181,9 +181,9 @@ namespace GuiCommon
 		static wxString PROPERTY_CAPTION = _( "Caption" );
 
 		static wxString PROPERTY_HALIGN = _( "Horiz. align." );
-		static std::array< wxString, size_t( castor3d::HAlign::eCount ) > PROPERTY_HALIGN_TEXTS{ _( "Left" ), _( "Center" ), _( "Right" ) };
+		static castor::Array< wxString, size_t( castor3d::HAlign::eCount ) > PROPERTY_HALIGN_TEXTS{ _( "Left" ), _( "Center" ), _( "Right" ) };
 		static wxString PROPERTY_VALIGN = _( "Vertic. align." );
-		static std::array< wxString, size_t( castor3d::VAlign::eCount ) > PROPERTY_VALIGN_TEXTS{ _( "Top" ), _( "Center" ), _( "Bottom" ) };
+		static castor::Array< wxString, size_t( castor3d::VAlign::eCount ) > PROPERTY_VALIGN_TEXTS{ _( "Top" ), _( "Center" ), _( "Bottom" ) };
 
 		wxArrayString haligns{ make_wxArrayString( PROPERTY_HALIGN_TEXTS ) };
 		wxString halign{ PROPERTY_HALIGN_TEXTS[size_t( control.getHAlign() )] };

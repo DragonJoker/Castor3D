@@ -37,7 +37,7 @@ namespace castor
 		bool operator()( ocean_fft::FFTWaterComponent const & object
 			, StringStream & file )override
 		{
-			return writeOpt( file, "waterDensity", object.getWaterDensity(), ocean_fft::FFTWaterComponent::Default );
+			return writeOpt( file, cuT( "waterDensity" ), object.getWaterDensity(), ocean_fft::FFTWaterComponent::Default );
 		}
 	};
 }

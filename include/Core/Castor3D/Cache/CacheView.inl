@@ -11,8 +11,8 @@ namespace castor3d
 		, ElementCleanerT clean )
 		: castor::Named{ name }
 		, m_cache{ cache }
-		, m_initialise{ std::move( initialise ) }
-		, m_clean{ std::move( clean ) }
+		, m_initialise{ castor::move( initialise ) }
+		, m_clean{ castor::move( clean ) }
 	{
 	}
 
@@ -31,7 +31,7 @@ namespace castor3d
 					m_clean( *resource );
 				}
 
-				m_cleaning.emplace_back( std::move( resource ) );
+				m_cleaning.emplace_back( castor::move( resource ) );
 			}
 		}
 	}
@@ -47,7 +47,7 @@ namespace castor3d
 		auto result = m_cache.tryAddNoLock( name
 			, false
 			, created
-			, std::forward< ParametersT >( params )... );
+			, castor::forward< ParametersT >( params )... );
 
 		if ( ElementCacheTraitsT::areElementsEqual( result, created ) )
 		{
@@ -72,7 +72,7 @@ namespace castor3d
 		return this->tryAdd( name
 			, true
 			, created
-			, std::forward< ParametersT >( params )... );
+			, castor::forward< ParametersT >( params )... );
 	}
 
 	template< typename CacheT, EventType EventT >

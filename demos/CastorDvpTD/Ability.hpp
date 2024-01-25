@@ -9,7 +9,7 @@ namespace castortd
 	template< typename T >
 	struct Ability
 	{
-		using ValueIncrementFunction = std::function< T( T const &, uint32_t ) >;
+		using ValueIncrementFunction = castor::Function< T( T const &, uint32_t ) >;
 
 		void initialise( T const & value
 			, ValueIncrementFunction const & increment )
@@ -40,7 +40,7 @@ namespace castortd
 		: private Ability< T >
 	{
 		using ValueIncrementFunction = typename Ability< T >::ValueIncrementFunction;
-		using CostIncrementFunction = std::function< uint32_t( uint32_t, uint32_t ) >;
+		using CostIncrementFunction = castor::Function< uint32_t( uint32_t, uint32_t ) >;
 
 		void initialise( T const & value
 			, ValueIncrementFunction const & valueIncrement

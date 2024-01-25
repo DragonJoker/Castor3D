@@ -77,7 +77,7 @@ namespace GuiCommon
 		if ( m_engine )
 		{
 			auto & cache = m_engine->getMaterialCache();
-			using LockType = std::unique_lock< castor3d::MaterialCache >;
+			using LockType = castor::UniqueLock< castor3d::MaterialCache >;
 			LockType lock{ castor::makeUniqueLock( cache ) };
 
 			for ( auto & pair : cache )
@@ -234,7 +234,7 @@ namespace GuiCommon
 		, wxString const & name
 		, wxArrayString const & choices
 		, castor3d::MaterialObs selected
-		, std::function< void( castor3d::MaterialObs ) > setter )
+		, castor::Function< void( castor3d::MaterialObs ) > setter )
 	{
 		if ( selected )
 		{
@@ -275,7 +275,7 @@ namespace GuiCommon
 			return handler;
 		}
 
-		return [controls = std::move( controls ), handler]( wxVariant const & var )
+		return [controls = castor::move( controls ), handler]( wxVariant const & var )
 		{
 			for ( auto control : controls )
 			{
@@ -299,7 +299,7 @@ namespace GuiCommon
 			return handler;
 		}
 
-		return [controls=std::move( controls ), handler]( wxVariant const & var )
+		return [controls=castor::move( controls ), handler]( wxVariant const & var )
 		{
 			for ( auto control : controls )
 			{

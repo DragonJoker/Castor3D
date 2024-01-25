@@ -35,8 +35,8 @@ namespace castor3d
 
 			if ( texture.renderTarget )
 			{
-				result = castor::makeUnique< TextureSourceInfo >( std::move( name )
-					, std::move( texture.configuration )
+				result = castor::makeUnique< TextureSourceInfo >( castor::move( name )
+					, castor::move( texture.configuration )
 					, texture.renderTarget );
 			}
 			else if ( texture.folder.empty() && texture.relative.empty() )
@@ -45,8 +45,8 @@ namespace castor3d
 			}
 			else
 			{
-				result = castor::makeUnique< TextureSourceInfo >( std::move( name )
-					, std::move( texture.configuration )
+				result = castor::makeUnique< TextureSourceInfo >( castor::move( name )
+					, castor::move( texture.configuration )
 					, texture.folder
 					, texture.relative );
 			}
@@ -213,7 +213,7 @@ namespace castor3d
 			if ( auto sourceInfo = getSourceInfo( context, blockContext->name, *blockContext ) )
 			{
 				getEngine( *blockContext )->getTextureUnitCache().getSourceData( *sourceInfo );
-				blockContext->root->sourceInfos.try_emplace( blockContext->name, std::move( sourceInfo ) );
+				blockContext->root->sourceInfos.try_emplace( blockContext->name, castor::move( sourceInfo ) );
 			}
 		}
 		CU_EndAttributePop()
@@ -378,7 +378,7 @@ namespace castor3d
 
 					blockContext->pass->pass->registerTexture( sourceInfo
 						, PassTextureConfig{ blockContext->sampler, blockContext->texcoordSet }
-						, std::move( blockContext->textureAnimation ) );
+						, castor::move( blockContext->textureAnimation ) );
 				}
 			}
 			else
@@ -436,7 +436,7 @@ namespace castor3d
 			if ( blockContext->pass )
 			{
 				blockContext->textureAnimation = castor::makeUnique< TextureAnimation >( *getEngine( *blockContext )
-					, "Default" );
+					, cuT( "Default" ) );
 			}
 		}
 		CU_EndAttributePushBlock( CSCNSection::eTextureAnimation, blockContext )
@@ -514,16 +514,16 @@ namespace castor3d
 	}
 
 	TextureUnit::TextureUnit( TextureUnit && rhs )noexcept
-		: AnimableT< Engine >{ std::move( rhs ) }
+		: AnimableT< Engine >{ castor::move( rhs ) }
 		, m_data{ rhs.m_data }
-		, m_device{ std::move( rhs.m_device ) }
-		, m_configuration{ std::move( rhs.m_configuration ) }
-		, m_transform{ std::move( rhs.m_transform ) }
-		, m_transformations{ std::move( rhs.m_transformations ) }
-		, m_texture{ std::move( rhs.m_texture ) }
-		, m_descriptor{ std::move( rhs.m_descriptor ) }
+		, m_device{ castor::move( rhs.m_device ) }
+		, m_configuration{ castor::move( rhs.m_configuration ) }
+		, m_transform{ castor::move( rhs.m_transform ) }
+		, m_transformations{ castor::move( rhs.m_transformations ) }
+		, m_texture{ castor::move( rhs.m_texture ) }
+		, m_descriptor{ castor::move( rhs.m_descriptor ) }
 		, m_id{ rhs.m_id }
-		, m_name{ std::move( rhs.m_name ) }
+		, m_name{ castor::move( rhs.m_name ) }
 		, m_initialised{ rhs.m_initialised }
 		, m_animated{ rhs.m_animated }
 		, m_setIndex{ rhs.m_setIndex }
@@ -623,31 +623,31 @@ namespace castor3d
 	{
 		if ( !hasAnimation() )
 		{
-			addAnimation( castor::makeUniqueDerived< Animation, TextureAnimation >( *getEngine(), "Default" ) );
+			addAnimation( castor::makeUniqueDerived< Animation, TextureAnimation >( *getEngine(), cuT( "Default" ) ) );
 			m_animated = true;
 		}
 
-		return doGetAnimation< TextureAnimation >( "Default" );
+		return doGetAnimation< TextureAnimation >( cuT( "Default" ) );
 	}
 
 	void TextureUnit::removeAnimation()
 	{
 		if ( hasAnimation() )
 		{
-			doRemoveAnimation( "Default" );
+			doRemoveAnimation( cuT( "Default" ) );
 		}
 	}
 
 	TextureAnimation & TextureUnit::getAnimation()
 	{
 		CU_Require( hasAnimation() );
-		return doGetAnimation< TextureAnimation >( "Default" );
+		return doGetAnimation< TextureAnimation >( cuT( "Default" ) );
 	}
 
 	TextureAnimation const & TextureUnit::getAnimation()const
 	{
 		CU_Require( hasAnimation() );
-		return doGetAnimation< TextureAnimation >( "Default" );
+		return doGetAnimation< TextureAnimation >( cuT( "Default" ) );
 	}
 
 	void TextureUnit::addParsers( castor::AttributeParsers & result
@@ -678,7 +678,7 @@ namespace castor3d
 		unitContext.addParser( cuT( "invert_y" ), texunit::parserInvertY, { makeParameter< ParameterType::eBool >() } );
 		unitContext.addParser( cuT( "tileset" ), texunit::parserTileSet, { makeParameter< ParameterType::ePoint2I >() } );
 		unitContext.addParser( cuT( "tiles" ), texunit::parserTiles, { makeParameter< ParameterType::eUInt32 >() } );
-		unitContext.addParser( cuT( "channel" ), texunit::parserChannel, { makeParameter< ParameterType::eBitwiseOred32BitsCheckedText >( "TextureChannel", textureChannels ) } );
+		unitContext.addParser( cuT( "channel" ), texunit::parserChannel, { makeParameter< ParameterType::eBitwiseOred32BitsCheckedText >( cuT( "TextureChannel" ), textureChannels ) } );
 		unitContext.addParser( cuT( "levels_count" ), texunit::parserLevelsCount, { makeParameter< ParameterType::eUInt32 >() } );
 		unitContext.addParser( cuT( "texcoord_set" ), texunit::parserTexcoordSet, { makeParameter< ParameterType::eUInt32 >() } );
 		unitContext.addParser( cuT( "texture" ), texunit::parserUnitTexture, { makeParameter< ParameterType::eName >() } );
@@ -815,7 +815,7 @@ namespace castor3d
 		auto flippedPixels = m_data.base->image
 			? m_data.base->image->getPixels()->isFlipped()
 			: needsYInversion;
-		m_configuration = std::move( value );
+		m_configuration = castor::move( value );
 		m_configuration.needsYInversion = ( ( flippedPixels && needsYInversion )
 			? 0u
 			: ( ( flippedPixels || needsYInversion ) ? 1u : 0u ) );

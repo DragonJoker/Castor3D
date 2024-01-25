@@ -218,11 +218,11 @@ namespace castor3d::shader
 			, prefracted
 			, pcoatReflected
 			, psheenReflected );
-		debugOutput.registerOutput( "Refl. Diffuse", preflectedDiffuse );
-		debugOutput.registerOutput( "Refl. Specular", preflectedSpecular );
-		debugOutput.registerOutput( "Refracted", prefracted );
-		debugOutput.registerOutput( "Coating", pcoatReflected );
-		debugOutput.registerOutput( "Sheen", psheenReflected );
+		debugOutput.registerOutput( cuT( "Refl. Diffuse" ), preflectedDiffuse );
+		debugOutput.registerOutput( cuT( "Refl. Specular" ), preflectedSpecular );
+		debugOutput.registerOutput( cuT( "Refracted" ), prefracted );
+		debugOutput.registerOutput( cuT( "Coating" ), pcoatReflected );
+		debugOutput.registerOutput( cuT( "Sheen" ), psheenReflected );
 	}
 
 	void ReflectionModel::computeCombined( BlendComponents & pcomponents
@@ -384,11 +384,11 @@ namespace castor3d::shader
 			, prefracted
 			, pcoatReflected
 			, psheenReflected );
-		debugOutput.registerOutput( "Refl. Diffuse", preflectedDiffuse );
-		debugOutput.registerOutput( "Refl. Specular", preflectedSpecular );
-		debugOutput.registerOutput( "Refracted", prefracted );
-		debugOutput.registerOutput( "Coating", pcoatReflected );
-		debugOutput.registerOutput( "Sheen", psheenReflected );
+		debugOutput.registerOutput( cuT( "Refl. Diffuse" ), preflectedDiffuse );
+		debugOutput.registerOutput( cuT( "Refl. Specular" ), preflectedSpecular );
+		debugOutput.registerOutput( cuT( "Refracted" ), prefracted );
+		debugOutput.registerOutput( cuT( "Coating" ), pcoatReflected );
+		debugOutput.registerOutput( cuT( "Sheen" ), psheenReflected );
 	}
 
 	void ReflectionModel::computeReflections( BlendComponents & components
@@ -446,8 +446,8 @@ namespace castor3d::shader
 			, envMapIndex
 			, reflectedDiffuse
 			, reflectedSpecular );
-		debugOutput.registerOutput( "Refl. Diffuse", reflectedDiffuse );
-		debugOutput.registerOutput( "Refl. Specular", reflectedSpecular );
+		debugOutput.registerOutput( cuT( "Refl. Diffuse" ), reflectedDiffuse );
+		debugOutput.registerOutput( cuT( "Refl. Specular" ), reflectedSpecular );
 	}
 
 	sdw::Vec3 ReflectionModel::computeRefractions( BlendComponents & components
@@ -490,7 +490,7 @@ namespace castor3d::shader
 			, envMapIndex
 			, components
 			, refracted );
-		debugOutput.registerOutput( "Refracted", refracted );
+		debugOutput.registerOutput( cuT( "Refracted" ), refracted );
 		return refracted;
 	}
 
@@ -624,8 +624,8 @@ namespace castor3d::shader
 				, pdepthMap
 				, pnormalMap
 				, pcolourMap ) );
-		debugOutput.registerOutput( "SSRResult", result.xyz() );
-		debugOutput.registerOutput( "SSRFactor", result.www() );
+		debugOutput.registerOutput( cuT( "SSRResult" ), result.xyz() );
+		debugOutput.registerOutput( cuT( "SSRFactor" ), result.www() );
 		return result;
 	}
 

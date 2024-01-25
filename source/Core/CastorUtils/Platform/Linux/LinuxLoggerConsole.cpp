@@ -15,23 +15,19 @@ namespace castor
 			switch ( logLevel )
 			{
 			case LogType::eTrace:
-				m_header = cuT( "\033[36m" );
+				m_header = "\033[36m";
 				break;
-
 			case LogType::eDebug:
-				m_header = cuT( "\033[1;36m" );
+				m_header = "\033[1;36m";
 				break;
-
 			case LogType::eInfo:
-				m_header = cuT( "\033[0m" );
+				m_header = "\033[0m";
 				break;
-
 			case LogType::eWarning:
-				m_header = cuT( "\033[33m" );
+				m_header = "\033[33m";
 				break;
-
 			case LogType::eError:
-				m_header = cuT( "\033[31m" );
+				m_header = "\033[31m";
 				break;
 
 			default:
@@ -39,7 +35,7 @@ namespace castor
 			}
 		}
 
-		void print( String const & toLog, bool newLine )override
+		void print( MbString const & toLog, bool newLine )override
 		{
 			printf( "%s%s\033[0m", m_header.c_str(), toLog.c_str() );
 
@@ -50,15 +46,15 @@ namespace castor
 		}
 
 	private:
-		String m_header;
+		MbString m_header;
 	};
 
 	//************************************************************************************************
 
-	ProgramConsole::ProgramConsole( bool CU_UnusedParam( showConsole ) )
+	ProgramConsole::ProgramConsole( CU_UnusedParam( bool, showConsole ) )
 	{
 		std::ios::sync_with_stdio( false );
-		m_console = std::make_unique< LinuxConsole >();
+		m_console = castor::make_unique< LinuxConsole >();
 	}
 
 	void ProgramConsole::beginLog( LogType logLevel )
@@ -66,7 +62,7 @@ namespace castor
 		m_console->beginLog( logLevel );
 	}
 
-	void ProgramConsole::print( String const & toLog, bool newLine )
+	void ProgramConsole::print( MbString const & toLog, bool newLine )
 	{
 		m_console->print( toLog, newLine );
 	}

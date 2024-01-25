@@ -26,7 +26,7 @@ namespace castor3d
 			SDW_DeclStructInstance( C3D_API, HdrConfigData );
 
 			C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
-			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
+			C3D_API static castor::RawUniquePtr< sdw::Struct > declare( sdw::ShaderWriter & writer );
 
 			C3D_API sdw::Vec3 removeGamma( sdw::Vec3 const & srgb )const;
 			C3D_API sdw::Vec3 applyGamma( sdw::Vec3 const & hdr )const;

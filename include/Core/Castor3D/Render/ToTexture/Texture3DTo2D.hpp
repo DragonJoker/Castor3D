@@ -95,7 +95,7 @@ namespace castor3d
 		};
 
 		IntermediateViewArray m_textures;
-		std::vector< Texture3DToScreen > m_texture3DToScreen;
+		castor::Vector< Texture3DToScreen > m_texture3DToScreen;
 		uint32_t m_index{ 0u };
 	};
 }

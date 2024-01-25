@@ -30,8 +30,8 @@ namespace light_streaks
 		}
 
 	public:
-		static castor::String const CombineMapScene;
-		static castor::String const CombineMapKawase;
+		static castor::MbString const CombineMapScene;
+		static castor::MbString const CombineMapKawase;
 
 	private:
 		castor3d::ProgramModule m_shader;

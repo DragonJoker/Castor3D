@@ -26,8 +26,8 @@ namespace castor
 	}
 
 	DynamicLibrary::DynamicLibrary( DynamicLibrary && lib )noexcept
-		: m_library( std::move( lib.m_library ) )
-		, m_pathLibrary( std::move( lib.m_pathLibrary ) )
+		: m_library( castor::move( lib.m_library ) )
+		, m_pathLibrary( castor::move( lib.m_pathLibrary ) )
 	{
 		lib.m_library = nullptr;
 		lib.m_pathLibrary.clear();
@@ -55,8 +55,8 @@ namespace castor
 	{
 		if ( this != &lib )
 		{
-			m_library = std::move( lib.m_library );
-			m_pathLibrary = std::move( lib.m_pathLibrary );
+			m_library = castor::move( lib.m_library );
+			m_pathLibrary = castor::move( lib.m_pathLibrary );
 			lib.m_library = nullptr;
 			lib.m_pathLibrary.clear();
 		}

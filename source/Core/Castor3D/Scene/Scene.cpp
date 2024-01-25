@@ -33,7 +33,6 @@
 #include "Castor3D/Scene/SceneFileParserData.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Animation/AnimatedObjectGroup.hpp"
-#include "Castor3D/Scene/Background/BackgroundTextWriter.hpp"
 #include "Castor3D/Scene/Background/Background.hpp"
 #include "Castor3D/Scene/Background/Colour.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
@@ -52,18 +51,18 @@ namespace castor3d
 {
 	//*************************************************************************************************
 
-	std::string print( castor::Point3f const & obj )
+	castor::String print( castor::Point3f const & obj )
 	{
-		std::stringstream stream;
+		auto stream = castor::makeStringStream();
 		stream << std::setprecision( 4 ) << obj->x
 			<< ", " << std::setprecision( 4 ) << obj->y
 			<< ", " << std::setprecision( 4 ) << obj->z;
 		return stream.str();
 	}
 
-	std::string print( castor::BoundingBox const & obj )
+	castor::String print( castor::BoundingBox const & obj )
 	{
-		std::stringstream stream;
+		auto stream = castor::makeStringStream();
 		stream << "min: " << print( obj.getMin() ) << ", max: " << print( obj.getMax() );
 		return stream.str();
 	}
@@ -279,23 +278,24 @@ namespace castor3d
 	{
 		auto & engine = *getEngine();
 		auto const & device = engine.getRenderSystem()->getRenderDevice();
-		m_timerParticlesGpu = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), getName() + "/ParticlesGPU", crg::TimerScope::eUpdate );
-		engine.registerTimer( getName() + "/ParticlesGPU", *m_timerParticlesGpu );
+		auto mbName = castor::toUtf8( getName() );
+		m_timerParticlesGpu = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), mbName + "/ParticlesGPU", crg::TimerScope::eUpdate );
+		engine.registerTimer( getName() + cuT( "/ParticlesGPU" ), *m_timerParticlesGpu );
 #if C3D_DebugTimers
-		m_timerSceneNodes = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), getName() + "/SceneNodes", crg::TimerScope::eUpdate );
-		engine.registerTimer( getName() + "/SceneNodes", *m_timerSceneNodes );
-		m_timerBoundingBox = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), getName() + "/BoundingBoxes", crg::TimerScope::eUpdate );
-		engine.registerTimer( getName() + "/BoundingBoxes", *m_timerBoundingBox );
-		m_timerMaterials = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), getName() + "/Materials", crg::TimerScope::eUpdate );
-		engine.registerTimer( getName() + "/Materials", *m_timerMaterials );
-		m_timerLights = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), getName() + "/Lights", crg::TimerScope::eUpdate );
-		engine.registerTimer( getName() + "/Lights", *m_timerLights );
-		m_timerParticlesCpu = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), getName() + "/ParticlesCPU", crg::TimerScope::eUpdate );
-		engine.registerTimer( getName() + "/ParticlesCPU", *m_timerParticlesCpu );
-		m_timerGpuUpdate = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), getName() + "/GPUUpdate", crg::TimerScope::eUpdate );
-		engine.registerTimer( getName() + "/GPUUpdate", *m_timerGpuUpdate );
-		m_timerMovables = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), getName() + "/Movables", crg::TimerScope::eUpdate );
-		engine.registerTimer( getName() + "/Movables", *m_timerMovables );
+		m_timerSceneNodes = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), mbName + "/SceneNodes", crg::TimerScope::eUpdate );
+		engine.registerTimer( getName() + cuT( "/SceneNodes" ), *m_timerSceneNodes );
+		m_timerBoundingBox = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), mbName + "/BoundingBoxes", crg::TimerScope::eUpdate );
+		engine.registerTimer( getName() + cuT( "/BoundingBoxes" ), *m_timerBoundingBox );
+		m_timerMaterials = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), mbName + "/Materials", crg::TimerScope::eUpdate );
+		engine.registerTimer( getName() + cuT( "/Materials" ), *m_timerMaterials );
+		m_timerLights = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), mbName + "/Lights", crg::TimerScope::eUpdate );
+		engine.registerTimer( getName() + cuT( "/Lights" ), *m_timerLights );
+		m_timerParticlesCpu = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), mbName + "/ParticlesCPU", crg::TimerScope::eUpdate );
+		engine.registerTimer( getName() + cuT( "/ParticlesCPU" ), *m_timerParticlesCpu );
+		m_timerGpuUpdate = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), mbName + "/GPUUpdate", crg::TimerScope::eUpdate );
+		engine.registerTimer( getName() + cuT( "/GPUUpdate" ), *m_timerGpuUpdate );
+		m_timerMovables = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), mbName + "/Movables", crg::TimerScope::eUpdate );
+		engine.registerTimer( getName() + cuT( "/Movables" ), *m_timerMovables );
 #endif
 
 		m_animatedObjectGroupCache->initialise( device );
@@ -311,7 +311,7 @@ namespace castor3d
 	void Scene::updateBoundingBox()
 	{
 #if C3D_DebugTimers
-		auto block( m_timerBoundingBox ? std::make_unique< crg::FramePassTimerBlock >( m_timerBoundingBox->start() ) : nullptr );
+		auto block( m_timerBoundingBox ? castor::make_unique< crg::FramePassTimerBlock >( m_timerBoundingBox->start() ) : nullptr );
 #endif
 		auto & cache = *m_geometryCache;
 		auto lock( castor::makeUniqueLock( cache ) );
@@ -388,22 +388,22 @@ namespace castor3d
 
 		auto & engine = *getEngine();
 #if C3D_DebugTimers
-		engine.unregisterTimer( getName() + "/SceneNodes", *m_timerSceneNodes );
+		engine.unregisterTimer( getName() + cuT( "/SceneNodes" ), *m_timerSceneNodes );
 		m_timerSceneNodes.reset();
-		engine.unregisterTimer( getName() + "/BoundingBoxes", *m_timerBoundingBox );
+		engine.unregisterTimer( getName() + cuT( "/BoundingBoxes" ), *m_timerBoundingBox );
 		m_timerBoundingBox.reset();
-		engine.unregisterTimer( getName() + "/Materials", *m_timerMaterials );
+		engine.unregisterTimer( getName() + cuT( "/Materials" ), *m_timerMaterials );
 		m_timerMaterials.reset();
-		engine.unregisterTimer( getName() + "/Lights", *m_timerLights );
+		engine.unregisterTimer( getName() + cuT( "/Lights" ), *m_timerLights );
 		m_timerLights.reset();
-		engine.unregisterTimer( getName() + "/ParticlesCPU", *m_timerParticlesCpu );
+		engine.unregisterTimer( getName() + cuT( "/ParticlesCPU" ), *m_timerParticlesCpu );
 		m_timerParticlesCpu.reset();
-		engine.unregisterTimer( getName() + "/GPUUpdate", *m_timerGpuUpdate );
+		engine.unregisterTimer( getName() + cuT( "/GPUUpdate" ), *m_timerGpuUpdate );
 		m_timerGpuUpdate.reset();
-		engine.unregisterTimer( getName() + "/Movables", *m_timerMovables );
+		engine.unregisterTimer( getName() + cuT( "/Movables" ), *m_timerMovables );
 		m_timerMovables.reset();
 #endif
-		engine.unregisterTimer( getName() + "/ParticlesGPU", *m_timerParticlesGpu );
+		engine.unregisterTimer( getName() + cuT( "/ParticlesGPU" ), *m_timerParticlesGpu );
 		m_timerParticlesGpu.reset();
 
 		{
@@ -481,7 +481,7 @@ namespace castor3d
 
 	void Scene::setBackground( SceneBackgroundUPtr value )
 	{
-		m_background = std::move( value );
+		m_background = castor::move( value );
 		m_background->initialise( getEngine()->getRenderSystem()->getRenderDevice() );
 		onSetBackground( *m_background );
 	}
@@ -502,7 +502,7 @@ namespace castor3d
 	uint32_t Scene::getVertexCount()const
 	{
 		uint32_t result = 0;
-		using LockType = std::unique_lock< GeometryCache >;
+		using LockType = castor::UniqueLock< GeometryCache >;
 		LockType lock{ castor::makeUniqueLock( *m_geometryCache ) };
 
 		for ( auto const & [_, geometry] : *m_geometryCache )
@@ -519,7 +519,7 @@ namespace castor3d
 	uint32_t Scene::getFaceCount()const
 	{
 		uint32_t result = 0;
-		using LockType = std::unique_lock< GeometryCache >;
+		using LockType = castor::UniqueLock< GeometryCache >;
 		LockType lock{ castor::makeUniqueLock( *m_geometryCache ) };
 
 		for ( auto const & [_, geometry] : *m_geometryCache )
@@ -649,7 +649,7 @@ namespace castor3d
 		return m_background->getModelName();
 	}
 
-	std::vector< LightingModelID > Scene::getLightingModelsID()const
+	castor::Vector< LightingModelID > Scene::getLightingModelsID()const
 	{
 		return getEngine()->getLightingModelFactory().getLightingModelsID( m_background->getModelID() );
 	}
@@ -929,7 +929,7 @@ namespace castor3d
 		m_dirtyNodes.clear();
 	}
 
-	void Scene::doUpdateSceneNodes( CpuUpdater::DirtyObjects const & sceneObjs )
+	void Scene::doUpdateSceneNodes( CpuUpdater::DirtyObjects const & sceneObjs )const
 	{
 #if C3D_DebugTimers
 		auto block( m_timerSceneNodes->start() );
@@ -962,7 +962,7 @@ namespace castor3d
 			{
 				for ( auto & [_, rendered] : submeshes )
 				{
-					auto & submesh = rendered.second->data;
+					auto const & submesh = rendered.second->data;
 
 					if ( submesh.isInitialised() )
 					{
@@ -1130,8 +1130,8 @@ namespace castor3d
 	{
 		bool needsGI = false;
 		bool hasAnyShadows = false;
-		std::array< bool, size_t( LightType::eCount ) > hasShadows{};
-		std::array< std::set< GlobalIlluminationType >, size_t( LightType::eCount ) > giTypes{};
+		castor::Array< bool, size_t( LightType::eCount ) > hasShadows{};
+		castor::Array< castor::Set< GlobalIlluminationType >, size_t( LightType::eCount ) > giTypes{};
 
 		m_lightCache->forEach( [&giTypes, &needsGI, &hasAnyShadows, &hasShadows]( Light const & light )
 			{

@@ -357,7 +357,7 @@ namespace castor
 	//*********************************************************************************************
 
 	PxBufferConvertOptions::PxBufferConvertOptions( PxCompressionSupport support )
-		: support{ std::move( support ) }
+		: support{ castor::move( support ) }
 #if CU_UseCVTT
 		, additionalOptions{ new CVTTOptions{} }
 #endif
@@ -421,28 +421,28 @@ namespace castor
 #if CU_UseCVTT
 		switch ( format )
 		{
-		case castor::PixelFormat::eBC1_RGB_UNORM_BLOCK:
-		case castor::PixelFormat::eBC1_RGB_SRGB_BLOCK:
-		case castor::PixelFormat::eBC1_RGBA_UNORM_BLOCK:
-		case castor::PixelFormat::eBC1_RGBA_SRGB_BLOCK:
-		case castor::PixelFormat::eBC4_UNORM_BLOCK:
-		case castor::PixelFormat::eBC4_SNORM_BLOCK:
-		case castor::PixelFormat::eBC2_UNORM_BLOCK:
-		case castor::PixelFormat::eBC2_SRGB_BLOCK:
-		case castor::PixelFormat::eBC3_UNORM_BLOCK:
-		case castor::PixelFormat::eBC3_SRGB_BLOCK:
-		case castor::PixelFormat::eBC5_UNORM_BLOCK:
-		case castor::PixelFormat::eBC5_SNORM_BLOCK:
-		case castor::PixelFormat::eBC6H_UFLOAT_BLOCK:
-		case castor::PixelFormat::eBC6H_SFLOAT_BLOCK:
-		case castor::PixelFormat::eBC7_UNORM_BLOCK:
-		case castor::PixelFormat::eBC7_SRGB_BLOCK:
-		case castor::PixelFormat::eETC2_R8G8B8_UNORM_BLOCK:
-		case castor::PixelFormat::eETC2_R8G8B8_SRGB_BLOCK:
-		case castor::PixelFormat::eETC2_R8G8B8A1_UNORM_BLOCK:
-		case castor::PixelFormat::eETC2_R8G8B8A1_SRGB_BLOCK:
-		case castor::PixelFormat::eETC2_R8G8B8A8_UNORM_BLOCK:
-		case castor::PixelFormat::eETC2_R8G8B8A8_SRGB_BLOCK:
+		case PixelFormat::eBC1_RGB_UNORM_BLOCK:
+		case PixelFormat::eBC1_RGB_SRGB_BLOCK:
+		case PixelFormat::eBC1_RGBA_UNORM_BLOCK:
+		case PixelFormat::eBC1_RGBA_SRGB_BLOCK:
+		case PixelFormat::eBC4_UNORM_BLOCK:
+		case PixelFormat::eBC4_SNORM_BLOCK:
+		case PixelFormat::eBC2_UNORM_BLOCK:
+		case PixelFormat::eBC2_SRGB_BLOCK:
+		case PixelFormat::eBC3_UNORM_BLOCK:
+		case PixelFormat::eBC3_SRGB_BLOCK:
+		case PixelFormat::eBC5_UNORM_BLOCK:
+		case PixelFormat::eBC5_SNORM_BLOCK:
+		case PixelFormat::eBC6H_UFLOAT_BLOCK:
+		case PixelFormat::eBC6H_SFLOAT_BLOCK:
+		case PixelFormat::eBC7_UNORM_BLOCK:
+		case PixelFormat::eBC7_SRGB_BLOCK:
+		case PixelFormat::eETC2_R8G8B8_UNORM_BLOCK:
+		case PixelFormat::eETC2_R8G8B8_SRGB_BLOCK:
+		case PixelFormat::eETC2_R8G8B8A1_UNORM_BLOCK:
+		case PixelFormat::eETC2_R8G8B8A1_SRGB_BLOCK:
+		case PixelFormat::eETC2_R8G8B8A8_UNORM_BLOCK:
+		case PixelFormat::eETC2_R8G8B8A8_SRGB_BLOCK:
 			return uint32_t( cvtt::NumParallelBlocks * getBytesPerPixel( format ) );
 		default:
 			return 1u;
@@ -504,12 +504,12 @@ namespace castor
 	PxBufferBase::PxBufferBase( PxBufferBase && rhs )noexcept
 		: m_format{ rhs.m_format }
 		, m_flipped{ rhs.m_flipped }
-		, m_size{ std::move( rhs.m_size ) }
+		, m_size{ castor::move( rhs.m_size ) }
 		, m_layers{ rhs.m_layers }
 		, m_levels{ rhs.m_levels }
 		, m_align{ rhs.m_align }
-		, m_tiles{ std::move( rhs.m_tiles ) }
-		, m_buffer{ std::move( rhs.m_buffer ) }
+		, m_tiles{ castor::move( rhs.m_tiles ) }
+		, m_buffer{ castor::move( rhs.m_buffer ) }
 	{
 	}
 
@@ -528,13 +528,13 @@ namespace castor
 
 	PxBufferBase & PxBufferBase::operator=( PxBufferBase && rhs )noexcept
 	{
-		m_size = std::move( rhs.m_size );
+		m_size = castor::move( rhs.m_size );
 		m_format = rhs.m_format;
 		m_align = rhs.m_align;
 		m_layers = rhs.m_layers;
 		m_levels = rhs.m_levels;
-		m_tiles = std::move( rhs.m_tiles );
-		m_buffer = std::move( rhs.m_buffer );
+		m_tiles = castor::move( rhs.m_tiles );
+		m_buffer = castor::move( rhs.m_buffer );
 		return * this;
 	}
 
@@ -632,14 +632,14 @@ namespace castor
 
 	void PxBufferBase::swap( PxBufferBase & pixelBuffer )noexcept
 	{
-		std::swap( m_format, pixelBuffer.m_format );
-		std::swap( m_flipped, pixelBuffer.m_flipped );
-		std::swap( m_size, pixelBuffer.m_size );
-		std::swap( m_layers, pixelBuffer.m_layers );
-		std::swap( m_levels, pixelBuffer.m_levels );
-		std::swap( m_align, pixelBuffer.m_align );
-		std::swap( m_tiles, pixelBuffer.m_tiles );
-		std::swap( m_buffer, pixelBuffer.m_buffer );
+		castor::swap( m_format, pixelBuffer.m_format );
+		castor::swap( m_flipped, pixelBuffer.m_flipped );
+		castor::swap( m_size, pixelBuffer.m_size );
+		castor::swap( m_layers, pixelBuffer.m_layers );
+		castor::swap( m_levels, pixelBuffer.m_levels );
+		castor::swap( m_align, pixelBuffer.m_align );
+		castor::swap( m_tiles, pixelBuffer.m_tiles );
+		castor::swap( m_buffer, pixelBuffer.m_buffer );
 	}
 
 	void PxBufferBase::generateMips()

@@ -7,7 +7,6 @@
 
 #include <Windows.h>
 #include <VersionHelpers.h>
-#include <codecvt>
 
 namespace castor
 {
@@ -19,7 +18,7 @@ namespace castor
 			{
 				ScreenData( uint32_t wanted
 					, uint32_t current
-					, castor::Size & size )
+					, Size & size )
 					: wanted{ wanted }
 					, current{ current }
 					, size{ size }
@@ -28,7 +27,7 @@ namespace castor
 
 				uint32_t wanted;
 				uint32_t current;
-				castor::Size & size;
+				Size & size;
 				bool retrieved{};
 			};
 			using ScreenDataPtr = ScreenData *;
@@ -81,14 +80,22 @@ namespace castor
 						, 0
 						, nullptr ) != 0 )
 				{
-					if ( int length = WideCharToMultiByte( CP_UTF8, 0u, errorText, -1, nullptr, 0u, nullptr, nullptr );
-						length > 0 )
+					if constexpr ( std::is_same_v< xchar, char > )
 					{
-						String converted( size_t( length ), 0 );
-						WideCharToMultiByte( CP_UTF8, 0u, errorText, -1, converted.data(), length, nullptr, nullptr );
-						string::replace( converted, "\r", String{} );
-						string::replace( converted, "\n", String{} );
-						stream << cuT( " (" ) << converted.c_str() << cuT( ")" );
+						if ( int length = WideCharToMultiByte( CP_UTF8, 0u, errorText, -1, nullptr, 0u, nullptr, nullptr );
+							length > 0 )
+						{
+							MbString converted( size_t( length ), 0 );
+							WideCharToMultiByte( CP_UTF8, 0u, errorText, -1, converted.data(), length, nullptr, nullptr );
+							auto convResult = makeString( converted );
+							string::replace( convResult, cuT( "\r" ), cuT( "" ) );
+							string::replace( convResult, cuT( "\n" ), cuT( "" ) );
+							stream << cuT( " (" ) << converted.c_str() << cuT( ")" );
+						}
+					}
+					else if constexpr ( std::is_same_v< xchar, wchar_t > )
+					{
+						stream << cuT( " (" ) << makeString( errorText ) << cuT( ")" );
 					}
 				}
 				else
@@ -132,60 +139,60 @@ namespace castor
 
 			if ( IsWindows11OrGreater() )
 			{
-				result += " 11 or greater";
+				result += cuT( "11 or greater" );
 			}
 			else if ( IsWindows10OrGreater() )
 			{
-				result += " 10 or greater";
+				result += cuT( " 10 or greater" );
 			}
 			else if ( IsWindows8Point1OrGreater() )
 			{
-				result += " 8.1";
+				result += cuT( " 8.1" );
 			}
 			else if ( IsWindows8OrGreater() )
 			{
-				result += " 8";
+				result += cuT( " 8" );
 			}
 			else if ( IsWindows7SP1OrGreater() )
 			{
-				result += " 7 SP 1";
+				result += cuT( " 7 SP 1" );
 			}
 			else if ( IsWindows7OrGreater() )
 			{
-				result += " 7";
+				result += cuT( " 7" );
 			}
 			else if ( IsWindowsVistaSP2OrGreater() )
 			{
-				result += "Vista SP 2";
+				result += cuT( "Vista SP 2" );
 			}
 			else if ( IsWindowsVistaSP1OrGreater() )
 			{
-				result += "Vista SP 1";
+				result += cuT( "Vista SP 1" );
 			}
 			else if ( IsWindowsVistaOrGreater() )
 			{
-				result += "Vista";
+				result += cuT( "Vista" );
 			}
 			else if ( IsWindowsXPSP3OrGreater() )
 			{
-				result += "XP SP 3";
+				result += cuT( "XP SP 3" );
 			}
 			else if ( IsWindowsXPSP2OrGreater() )
 			{
-				result += "XP SP 2";
+				result += cuT( "XP SP 2" );
 			}
 			else if ( IsWindowsXPSP1OrGreater() )
 			{
-				result += "XP SP 1";
+				result += cuT( "XP SP 1" );
 			}
 			else if ( IsWindowsXPOrGreater() )
 			{
-				result += "XP";
+				result += cuT( "XP" );
 			}
 
 			if ( IsWindowsServer() )
 			{
-				result += " Server";
+				result += cuT( " Server" );
 			}
 
 			return result;

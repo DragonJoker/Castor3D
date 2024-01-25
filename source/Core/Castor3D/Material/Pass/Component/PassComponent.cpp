@@ -42,8 +42,8 @@ namespace castor3d
 				, texCoords.dPdy() );
 		}
 
-		void PassComponentsShader::applyFloatComponent( std::string const & mapName
-			, std::string const & valueName
+		void PassComponentsShader::applyFloatComponent( castor::String const & mapName
+			, castor::String const & valueName
 			, PassShaders const & passShaders
 			, TextureConfigurations const & textureConfigs
 			, TextureAnimations const & textureAnims
@@ -51,36 +51,38 @@ namespace castor3d
 			, BlendComponents & components
 			, SampleTexture const & sampleTexture )const
 		{
-			auto textureName = mapName + "MapAndMask";
+			auto mbMapName = castor::toUtf8( mapName );
+			auto mbValueName = castor::toUtf8( valueName );
+			auto textureName = mbMapName + "MapAndMask";
 
 			if ( !material.hasMember( textureName )
-				|| !components.hasMember( valueName ) )
+				|| !components.hasMember( mbValueName ) )
 			{
 				return;
 			}
 
 			auto & writer{ *material.getWriter() };
-			auto map = writer.declLocale( mapName + "Map"
+			auto map = writer.declLocale( mbMapName + "Map"
 				, material.getMember< sdw::UInt >( textureName ) >> 16u );
-			auto mask = writer.declLocale( mapName + "Mask"
+			auto mask = writer.declLocale( mbMapName + "Mask"
 				, material.getMember< sdw::UInt >( textureName ) & 0xFFFFu );
-			auto value = components.getMember< sdw::Float >( valueName );
+			auto value = components.getMember< sdw::Float >( mbValueName );
 
-			auto config = writer.declLocale( valueName + "Config"
+			auto config = writer.declLocale( mbValueName + "Config"
 				, textureConfigs.getTextureConfiguration( map ) );
-			auto anim = writer.declLocale( valueName + "Anim"
+			auto anim = writer.declLocale( mbValueName + "Anim"
 				, textureAnims.getTextureAnimation( map ) );
 			passShaders.computeTexcoords( textureConfigs
 				, config
 				, anim
 				, components );
-			auto sampled = writer.declLocale( valueName + "Sampled"
+			auto sampled = writer.declLocale( mbValueName + "Sampled"
 				, sampleTexture( map, config, components ) );
 			value *= shader::TextureConfigData::getFloat( sampled, mask );
 		}
 
-		void PassComponentsShader::applyVec3Component( std::string const & mapName
-			, std::string const & valueName
+		void PassComponentsShader::applyVec3Component( castor::String const & mapName
+			, castor::String const & valueName
 			, PassShaders const & passShaders
 			, TextureConfigurations const & textureConfigs
 			, TextureAnimations const & textureAnims
@@ -88,30 +90,32 @@ namespace castor3d
 			, BlendComponents & components
 			, SampleTexture const & sampleTexture )const
 		{
-			auto textureName = mapName + "MapAndMask";
+			auto mbMapName = castor::toUtf8( mapName );
+			auto mbValueName = castor::toUtf8( valueName );
+			auto textureName = mbMapName + "MapAndMask";
 
 			if ( !material.hasMember( textureName )
-				|| !components.hasMember( valueName ) )
+				|| !components.hasMember( mbValueName ) )
 			{
 				return;
 			}
 
 			auto & writer{ *material.getWriter() };
-			auto map = writer.declLocale( mapName + "Map"
+			auto map = writer.declLocale( mbMapName + "Map"
 				, material.getMember< sdw::UInt >( textureName ) >> 16u );
-			auto mask = writer.declLocale( mapName + "Mask"
+			auto mask = writer.declLocale( mbMapName + "Mask"
 				, material.getMember< sdw::UInt >( textureName ) & 0xFFFFu );
-			auto value = components.getMember< sdw::Vec3 >( valueName );
+			auto value = components.getMember< sdw::Vec3 >( mbValueName );
 
-			auto config = writer.declLocale( valueName + "Config"
+			auto config = writer.declLocale( mbValueName + "Config"
 				, textureConfigs.getTextureConfiguration( map ) );
-			auto anim = writer.declLocale( valueName + "Anim"
+			auto anim = writer.declLocale( mbValueName + "Anim"
 				, textureAnims.getTextureAnimation( map ) );
 			passShaders.computeTexcoords( textureConfigs
 				, config
 				, anim
 				, components );
-			auto sampled = writer.declLocale( valueName + "Sampled"
+			auto sampled = writer.declLocale( mbValueName + "Sampled"
 				, sampleTexture( map, config, components ) );
 			value *= shader::TextureConfigData::getVec3( sampled, mask );
 		}
@@ -123,8 +127,8 @@ namespace castor3d
 		, castor::String type
 		, castor::StringArray deps )
 		: castor::OwnedBy< Pass >{ pass }
-		, m_type{ std::move( type ) }
-		, m_dependencies{ std::move( deps ) }
+		, m_type{ castor::move( type ) }
+		, m_dependencies{ castor::move( deps ) }
 		, m_id{ pass.getComponentId( m_type ) }
 		, m_plugin{ pass.getComponentPlugin( m_id ) }
 		, m_dirty{ pass.m_dirty }

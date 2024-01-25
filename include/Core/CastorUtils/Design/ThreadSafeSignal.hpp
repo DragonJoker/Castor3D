@@ -59,7 +59,7 @@ namespace castor
 #if !defined( NDEBUG )
 
 			StringStream stream{ castor::makeStringStream() };
-			stream << Debug::Backtrace{};
+			stream << debug::Backtrace{};
 			m_stack = stream.str();
 
 #endif
@@ -76,7 +76,7 @@ namespace castor
 			: m_connection{ rhs.m_connection }
 			, m_signal{ rhs.m_signal }
 #if !defined( NDEBUG )
-			, m_stack{ std::move( rhs.m_stack ) }
+			, m_stack{ castor::move( rhs.m_stack ) }
 #endif
 		{
 			if ( m_signal )
@@ -122,7 +122,7 @@ namespace castor
 						m_connection = rhs.m_connection;
 						m_signal = rhs.m_signal;
 #if !defined( NDEBUG )
-						m_stack = std::move( rhs.m_stack );
+						m_stack = castor::move( rhs.m_stack );
 #endif
 
 						if ( m_signal )
@@ -212,12 +212,12 @@ namespace castor
 		{
 			if ( &rhs != &lhs )
 			{
-				std::swap( lhs.m_signal, rhs.m_signal );
-				std::swap( lhs.m_connection, rhs.m_connection );
+				castor::swap( lhs.m_signal, rhs.m_signal );
+				castor::swap( lhs.m_connection, rhs.m_connection );
 
 #if !defined( NDEBUG )
 
-				std::swap( lhs.m_stack, rhs.m_stack );
+				castor::swap( lhs.m_stack, rhs.m_stack );
 
 #endif
 			}
@@ -258,16 +258,16 @@ namespace castor
 		{
 			auto rhsLock( makeUniqueLock( rhs.m_mutex ) );
 			auto lhsLock( makeUniqueLock( m_mutex ) );
-			m_connections = std::move( rhs.m_connections );
-			m_slots = std::move( rhs.m_slots );
+			m_connections = castor::move( rhs.m_connections );
+			m_slots = castor::move( rhs.m_slots );
 		}
 
 		TSSignalT & operator=( TSSignalT && rhs )noexcept
 		{
 			auto rhsLock( makeUniqueLock( rhs.m_mutex ) );
 			auto lhsLock( makeUniqueLock( m_mutex ) );
-			m_connections = std::move( rhs.m_connections );
-			m_slots = std::move( rhs.m_slots );
+			m_connections = castor::move( rhs.m_connections );
+			m_slots = castor::move( rhs.m_slots );
 
 			return *this;
 		}
@@ -353,7 +353,7 @@ namespace castor
 
 			for ( auto it : m_slots )
 			{
-				it.second( std::forward< Params >( params )... );
+				it.second( castor::forward< Params >( params )... );
 			}
 		}
 
@@ -429,10 +429,10 @@ namespace castor
 		mutable SpinMutex m_mutex;
 		//!\~english	The connected functions list.
 		//!\~french		La liste des fonctions connectées.
-		std::map< uint32_t, Function > m_slots;
+		Map< uint32_t, Function > m_slots;
 		//!\~english	The connections list.
 		//!\~french		La liste des connections à ce signal.
-		std::set< my_connection_ptr > m_connections;
+		Set< my_connection_ptr > m_connections;
 	};
 }
 

@@ -11,13 +11,13 @@ namespace castor3d
 		, uint32_t uiLine )
 		: Exception{ "", strFile, strFunction, uiLine }
 	{
-		std::stringstream stream;
+		auto stream = castor::makeStringStreamT< char >();
 		stream << "Expected version [";
 		stream << expected;
 		stream << "] but got version [";
 		stream << given;
 		stream << "] - Incompatible versions";
 		m_description = stream.str();
-		log::debug << m_description << std::endl;
+		log::debug << castor::makeString( m_description ) << std::endl;
 	}
 }

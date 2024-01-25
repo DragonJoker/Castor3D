@@ -25,7 +25,7 @@ namespace castor
 	{
 		bool result = false;
 
-		if ( auto block{ beginBlock( file, "pass" ) } )
+		if ( auto block{ beginBlock( file, cuT( "pass" ) ) } )
 		{
 			result = pass.writeText( tabs(), m_folder, m_subfolder, file );
 

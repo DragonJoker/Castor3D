@@ -377,7 +377,7 @@ namespace castor3d
 					, FramePass const * parent
 					, LightType lightType )
 					: shader{ VK_SHADER_STAGE_COMPUTE_BIT
-						, ( mergePathPartitions ? std::string{ "MergePathPartitions/" } : std::string{ "MergeSort/" } ) + getName( lightType )
+						, ( mergePathPartitions ? castor::String{ cuT( "MergePathPartitions/" ) } : castor::String{ cuT( "MergeSort/" ) } ) + getName( lightType )
 						, createShader( device, mergePathPartitions ) }
 					, createInfo{ ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, shader ) } }
 					, cpConfig{ crg::getDefaultV< InitialiseCallback >()
@@ -581,7 +581,7 @@ namespace castor3d
 	}
 
 	crg::FramePassArray createMergeSortLightsPass( crg::FramePassGroup & graph
-		, crg::FramePassArray previousPasses
+		, crg::FramePassArray const & previousPasses
 		, RenderDevice const & device
 		, FrustumClusters & clusters )
 	{
@@ -591,22 +591,22 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = std::make_unique< merge::FramePass >( framePass
+				auto result = castor::make_unique< merge::FramePass >( framePass
 					, context
 					, graph
 					, device
 					, clusters
 					, LightType::ePoint );
-				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
 		point.addDependency( *previousPasses.front() );
-		createInOutStoragePassBinding( point, uint32_t( merge::eInputKeys ), "C3D_InMortonCodes", clusters.getInputPointLightMortonCodesBuffers(), 0u, ashes::WholeSize );
-		createInOutStoragePassBinding( point, uint32_t( merge::eInputValues ), "C3D_InLightIndices", clusters.getInputPointLightIndicesBuffers(), 0u, ashes::WholeSize );
-		createInOutStoragePassBinding( point, uint32_t( merge::eOutputKeys ), "C3D_OutMortonCodes", clusters.getOutputPointLightMortonCodesBuffers(), 0u, ashes::WholeSize );
-		createInOutStoragePassBinding( point, uint32_t( merge::eOutputValues ), "C3D_OutLightIndices", clusters.getOutputPointLightIndicesBuffers(), 0u, ashes::WholeSize );
-		createClearableOutputStorageBinding( point, uint32_t( merge::eMergePathPartitions ), "C3D_MergePathPartitions", clusters.getMergePathPartitionsBuffer(), 0u, ashes::WholeSize );
+		createInOutStoragePassBinding( point, uint32_t( merge::eInputKeys ), cuT( "C3D_InMortonCodes" ), clusters.getInputPointLightMortonCodesBuffers(), 0u, ashes::WholeSize );
+		createInOutStoragePassBinding( point, uint32_t( merge::eInputValues ), cuT( "C3D_InLightIndices" ), clusters.getInputPointLightIndicesBuffers(), 0u, ashes::WholeSize );
+		createInOutStoragePassBinding( point, uint32_t( merge::eOutputKeys ), cuT( "C3D_OutMortonCodes" ), clusters.getOutputPointLightMortonCodesBuffers(), 0u, ashes::WholeSize );
+		createInOutStoragePassBinding( point, uint32_t( merge::eOutputValues ), cuT( "C3D_OutLightIndices" ), clusters.getOutputPointLightIndicesBuffers(), 0u, ashes::WholeSize );
+		createClearableOutputStorageBinding( point, uint32_t( merge::eMergePathPartitions ), cuT( "C3D_MergePathPartitions" ), clusters.getMergePathPartitionsBuffer(), 0u, ashes::WholeSize );
 
 		// Spot lights
 		auto & spot = graph.createPass( "MergeSort/Spot"
@@ -614,23 +614,23 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = std::make_unique< merge::FramePass >( framePass
+				auto result = castor::make_unique< merge::FramePass >( framePass
 					, context
 					, graph
 					, device
 					, clusters
 					, LightType::eSpot );
-				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
 		spot.addDependency( point );
 		spot.addDependency( *previousPasses.back() );
-		createInOutStoragePassBinding( spot, uint32_t( merge::eInputKeys ), "C3D_InMortonCodes", clusters.getInputSpotLightMortonCodesBuffers(), 0u, ashes::WholeSize );
-		createInOutStoragePassBinding( spot, uint32_t( merge::eInputValues ), "C3D_InLightIndices", clusters.getInputSpotLightIndicesBuffers(), 0u, ashes::WholeSize );
-		createInOutStoragePassBinding( spot, uint32_t( merge::eOutputKeys ), "C3D_OutMortonCodes", clusters.getOutputSpotLightMortonCodesBuffers(), 0u, ashes::WholeSize );
-		createInOutStoragePassBinding( spot, uint32_t( merge::eOutputValues ), "C3D_OutLightIndices", clusters.getOutputSpotLightIndicesBuffers(), 0u, ashes::WholeSize );
-		createClearableOutputStorageBinding( spot, uint32_t( merge::eMergePathPartitions ), "C3D_MergePathPartitions", clusters.getMergePathPartitionsBuffer(), 0u, ashes::WholeSize );
+		createInOutStoragePassBinding( spot, uint32_t( merge::eInputKeys ), cuT( "C3D_InMortonCodes" ), clusters.getInputSpotLightMortonCodesBuffers(), 0u, ashes::WholeSize );
+		createInOutStoragePassBinding( spot, uint32_t( merge::eInputValues ), cuT( "C3D_InLightIndices" ), clusters.getInputSpotLightIndicesBuffers(), 0u, ashes::WholeSize );
+		createInOutStoragePassBinding( spot, uint32_t( merge::eOutputKeys ), cuT( "C3D_OutMortonCodes" ), clusters.getOutputSpotLightMortonCodesBuffers(), 0u, ashes::WholeSize );
+		createInOutStoragePassBinding( spot, uint32_t( merge::eOutputValues ), cuT( "C3D_OutLightIndices" ), clusters.getOutputSpotLightIndicesBuffers(), 0u, ashes::WholeSize );
+		createClearableOutputStorageBinding( spot, uint32_t( merge::eMergePathPartitions ), cuT( "C3D_MergePathPartitions" ), clusters.getMergePathPartitionsBuffer(), 0u, ashes::WholeSize );
 
 		return { &point, &spot };
 	}

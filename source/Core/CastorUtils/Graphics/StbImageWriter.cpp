@@ -25,10 +25,11 @@ namespace castor
 		{
 			bool result = false;
 			int n = getComponentsCount( buffer.getFormat() );
+			auto asciiPath = toUtf8( path );
 
 			if ( !n )
 			{
-				CU_LoaderError( cuT( "Couldn't write file " ) + path + cuT( ":\nUnsupported pixel format." ) );
+				CU_LoaderError( "Couldn't write file " + asciiPath + ":\nUnsupported pixel format." );
 			}
 
 			auto x = int( buffer.getWidth() );
@@ -36,35 +37,35 @@ namespace castor
 			stbi_flip_vertically_on_write( 1u );
 
 			if ( auto extension = string::upperCase( path.getExtension() );
-				extension == "PNG" )
+				extension == cuT( "PNG" ) )
 			{
-				result = stbi_write_png( string::stringCast< char >( path ).c_str()
+				result = stbi_write_png( asciiPath.c_str()
 					, x
 					, y
 					, n
 					, buffer.getConstPtr()
 					, int( buffer.getSize() / buffer.getHeight() ) ) != 0;
 			}
-			else if ( extension == "BMP" )
+			else if ( extension == cuT( "BMP" ) )
 			{
-				result = stbi_write_bmp( string::stringCast< char >( path ).c_str()
+				result = stbi_write_bmp( asciiPath.c_str()
 					, x
 					, y
 					, n
 					, buffer.getConstPtr() ) != 0;
 			}
-			else if ( extension == "TGA" )
+			else if ( extension == cuT( "TGA" ) )
 			{
-				result = stbi_write_tga( string::stringCast< char >( path ).c_str()
+				result = stbi_write_tga( asciiPath.c_str()
 					, x
 					, y
 					, n
 					, buffer.getConstPtr() ) != 0;
 			}
-			else if ( extension == "JPG"
-				|| extension == "JPEG" )
+			else if ( extension == cuT( "JPG" )
+				|| extension == cuT( "JPEG" ) )
 			{
-				result = stbi_write_jpg( string::stringCast< char >( path ).c_str()
+				result = stbi_write_jpg( asciiPath.c_str()
 					, x
 					, y
 					, n
@@ -73,12 +74,12 @@ namespace castor
 			}
 			else
 			{
-				CU_LoaderError( cuT( "Couldn't write file " ) + path + cuT( ":\nUnsupported image format." ) );
+				CU_LoaderError( "Couldn't write file " + asciiPath + ":\nUnsupported image format." );
 			}
 
 			if ( !result )
 			{
-				CU_LoaderError( cuT( "Couldn't write file [" ) + path + cuT( "]:\nInternal error" ) );
+				CU_LoaderError( "Couldn't write file [" + asciiPath + "]:\nInternal error" );
 			}
 
 			return result;
@@ -89,19 +90,20 @@ namespace castor
 		{
 			bool result = false;
 			int n = getComponentsCount( buffer.getFormat() );
+			auto asciiPath = toUtf8( path );
 
 			if ( !n )
 			{
-				CU_LoaderError( cuT( "Couldn't write file " ) + path + cuT( ":\nUnsupported pixel format." ) );
+				CU_LoaderError( "Couldn't write file " + asciiPath + ":\nUnsupported pixel format." );
 			}
 
 			auto x = int( buffer.getWidth() );
 			auto y = int( buffer.getHeight() );
-			Path realPath = path.getPath() / ( path.getFileName() + ".hdr" );
+			Path realPath = path.getPath() / ( path.getFileName() + cuT( ".hdr" ) );
 			stbi_flip_vertically_on_write( 1u );
 			using FloatCPtr = float const *;
-			auto data = FloatCPtr( buffer.getConstPtr() );
-			result = stbi_write_hdr( string::stringCast< char >( realPath ).c_str()
+			auto data = reinterpret_cast< FloatCPtr >( buffer.getConstPtr() );
+			result = stbi_write_hdr( toUtf8( realPath ).c_str()
 				, x
 				, y
 				, n
@@ -109,7 +111,7 @@ namespace castor
 
 			if ( !result )
 			{
-				CU_LoaderError( cuT( "Couldn't write file [" ) + path + cuT( "]:\nInternal error" ) );
+				CU_LoaderError( "Couldn't write file [" + asciiPath + "]:\nInternal error" );
 			}
 
 			return result;
@@ -142,7 +144,7 @@ namespace castor
 	void StbImageWriter::registerWriter( ImageWriter & reg )
 	{
 		reg.registerWriter( stbiw::listExtensions()
-			, std::make_unique< StbImageWriter >() );
+			, castor::make_unique< StbImageWriter >() );
 	}
 
 	void StbImageWriter::unregisterWriter( ImageWriter & reg )

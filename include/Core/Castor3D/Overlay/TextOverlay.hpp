@@ -132,7 +132,7 @@ namespace castor3d
 			return m_fontTexture;
 		}
 
-		std::u32string getCaption()const
+		castor::U32String getCaption()const
 		{
 			return m_currentCaption;
 		}
@@ -186,9 +186,9 @@ namespace castor3d
 		*	Mutateurs.
 		*/
 		/**@{*/
-		void setCaption( std::u32string value )
+		void setCaption( castor::U32String value )
 		{
-			m_currentCaption = std::move( value );
+			m_currentCaption = castor::move( value );
 			m_textChanged = true;
 		}
 
@@ -224,7 +224,7 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		using UvGenFunc = std::function< void( castor::Point2f const & size
+		using UvGenFunc = castor::Function< void( castor::Point2f const & size
 			, castor::Point4i const & absolute
 			, castor::Point4f & uv ) >;
 		/**
@@ -246,8 +246,8 @@ namespace castor3d
 		void doPrepareText( castor::Size const & renderSize );
 
 	private:
-		std::u32string m_currentCaption;
-		std::u32string m_previousCaption;
+		castor::U32String m_currentCaption;
+		castor::U32String m_previousCaption;
 		FontTextureRPtr m_fontTexture{};
 		TextWrappingMode m_wrappingMode{ TextWrappingMode::eNone };
 		TextLineSpacingMode m_lineSpacingMode{ TextLineSpacingMode::eOwnHeight };
@@ -256,7 +256,7 @@ namespace castor3d
 		bool m_textChanged{ true };
 		FontTexture::OnChanged::connection m_connection;
 		TextTexturingMode m_texturingMode{ TextTexturingMode::eText };
-		std::array< TextChar, MaxCharsPerOverlay > m_text;
+		castor::Array< TextChar, MaxCharsPerOverlay > m_text;
 		uint32_t m_charsCount{};
 		OverlayWords m_words;
 		OverlayLines m_lines;

@@ -68,9 +68,9 @@ namespace atmosphere_scattering
 			else
 			{
 				blockContext->atmosphere.multiScatteringLUTRes = float( blockContext->multiScatterDim );
-				blockContext->background->setAtmosphereCfg( std::move( blockContext->atmosphere ) );
-				blockContext->background->setCloudsCfg( std::move( blockContext->clouds ) );
-				blockContext->background->setWeatherCfg( std::move( blockContext->weather ) );
+				blockContext->background->setAtmosphereCfg( castor::move( blockContext->atmosphere ) );
+				blockContext->background->setCloudsCfg( castor::move( blockContext->clouds ) );
+				blockContext->background->setWeatherCfg( castor::move( blockContext->weather ) );
 				blockContext->background->loadTransmittance( blockContext->transmittanceDim );
 				blockContext->background->loadMultiScatter( blockContext->multiScatterDim );
 				blockContext->background->loadAtmosphereVolume( blockContext->atmosphereVolumeDim );
@@ -88,7 +88,7 @@ namespace atmosphere_scattering
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -110,7 +110,7 @@ namespace atmosphere_scattering
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -132,7 +132,7 @@ namespace atmosphere_scattering
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -145,7 +145,7 @@ namespace atmosphere_scattering
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -158,7 +158,7 @@ namespace atmosphere_scattering
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -171,7 +171,7 @@ namespace atmosphere_scattering
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -184,7 +184,7 @@ namespace atmosphere_scattering
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -197,7 +197,7 @@ namespace atmosphere_scattering
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -210,7 +210,7 @@ namespace atmosphere_scattering
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -223,7 +223,7 @@ namespace atmosphere_scattering
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -236,7 +236,7 @@ namespace atmosphere_scattering
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -249,7 +249,7 @@ namespace atmosphere_scattering
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -262,7 +262,7 @@ namespace atmosphere_scattering
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -275,7 +275,7 @@ namespace atmosphere_scattering
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -288,7 +288,7 @@ namespace atmosphere_scattering
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -301,7 +301,7 @@ namespace atmosphere_scattering
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -314,7 +314,7 @@ namespace atmosphere_scattering
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -327,7 +327,7 @@ namespace atmosphere_scattering
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -340,7 +340,7 @@ namespace atmosphere_scattering
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -353,7 +353,7 @@ namespace atmosphere_scattering
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -366,7 +366,7 @@ namespace atmosphere_scattering
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -379,7 +379,7 @@ namespace atmosphere_scattering
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -428,7 +428,7 @@ namespace atmosphere_scattering
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -441,7 +441,7 @@ namespace atmosphere_scattering
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -454,7 +454,7 @@ namespace atmosphere_scattering
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -467,7 +467,7 @@ namespace atmosphere_scattering
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -480,7 +480,7 @@ namespace atmosphere_scattering
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -504,7 +504,7 @@ namespace atmosphere_scattering
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -517,7 +517,7 @@ namespace atmosphere_scattering
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -530,7 +530,7 @@ namespace atmosphere_scattering
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -543,7 +543,7 @@ namespace atmosphere_scattering
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -556,7 +556,7 @@ namespace atmosphere_scattering
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -569,7 +569,7 @@ namespace atmosphere_scattering
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -582,7 +582,7 @@ namespace atmosphere_scattering
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -595,7 +595,7 @@ namespace atmosphere_scattering
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -613,7 +613,7 @@ namespace atmosphere_scattering
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -626,7 +626,7 @@ namespace atmosphere_scattering
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -639,7 +639,7 @@ namespace atmosphere_scattering
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -652,7 +652,7 @@ namespace atmosphere_scattering
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -665,7 +665,7 @@ namespace atmosphere_scattering
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -678,7 +678,7 @@ namespace atmosphere_scattering
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -691,7 +691,7 @@ namespace atmosphere_scattering
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -704,7 +704,7 @@ namespace atmosphere_scattering
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -717,7 +717,7 @@ namespace atmosphere_scattering
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -730,7 +730,7 @@ namespace atmosphere_scattering
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -743,7 +743,7 @@ namespace atmosphere_scattering
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -756,11 +756,11 @@ namespace atmosphere_scattering
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
-				blockContext->clouds.enablePowder = params[0]->get< bool >() ? 1 : 0;;
+				blockContext->clouds.enablePowder = params[0]->get< bool >() ? 1 : 0;
 			}
 		}
 		CU_EndAttribute()
@@ -769,7 +769,7 @@ namespace atmosphere_scattering
 		{
 			if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -972,7 +972,7 @@ namespace atmosphere_scattering
 			, parse::AtmosphereSection::eDensity
 			, parse::AtmosphereSection::eRoot
 			, cuT( "}" )
-			, &castor3d::parserDefaultEnd );
+			, &parse::parserDensityEnd );
 		addParserT( result
 			, parse::AtmosphereSection::eWeather
 			, cuT( "worleyResolution" )
@@ -1097,9 +1097,9 @@ namespace atmosphere_scattering
 		return
 		{
 			{ uint32_t( parse::AtmosphereSection::eRoot ), AtmosphereBackgroundModel::PluginType },
-			{ uint32_t( parse::AtmosphereSection::eDensity ), "density" },
-			{ uint32_t( parse::AtmosphereSection::eWeather ), "weather" },
-			{ uint32_t( parse::AtmosphereSection::eClouds ), "clouds" },
+			{ uint32_t( parse::AtmosphereSection::eDensity ), cuT( "density" ) },
+			{ uint32_t( parse::AtmosphereSection::eWeather ), cuT( "weather" ) },
+			{ uint32_t( parse::AtmosphereSection::eClouds ), cuT( "clouds" ) },
 		};
 	}
 }

@@ -17,7 +17,7 @@ namespace castor3d
 		using TObj = T;
 		using TObjRef = T &;
 		using TObjConstRef = T const &;
-		using TObjList = typename std::list< TObj > ;
+		using TObjList = typename castor::List< TObj > ;
 
 	public:
 		/**

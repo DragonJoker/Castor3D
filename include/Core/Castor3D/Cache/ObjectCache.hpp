@@ -64,11 +64,11 @@ namespace castor3d
 				, rootNode
 				, rootCameraNode
 				, rootObjectNode
-				, std::move( initialise )
-				, std::move( clean )
-				, std::move( merge )
-				, std::move( attach )
-				, std::move( detach ) }
+				, castor::move( initialise )
+				, castor::move( clean )
+				, castor::move( merge )
+				, castor::move( attach )
+				, castor::move( detach ) }
 		{
 		}
 	};
@@ -86,7 +86,7 @@ namespace castor3d
 		, typename ... ParametersT >
 	ObjectCachePtrT< ObjT, KeyT, TraitsT > makeObjectCache( ParametersT && ... parameters )
 	{
-		return castor::makeUnique< ObjectCacheT< ObjT, KeyT, TraitsT > >( std::forward< ParametersT >( parameters )... );
+		return castor::makeUnique< ObjectCacheT< ObjT, KeyT, TraitsT > >( castor::forward< ParametersT >( parameters )... );
 	}
 }
 

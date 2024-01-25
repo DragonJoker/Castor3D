@@ -612,34 +612,16 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 	)
 	source_group( "Source Files\\Platform\\Win32" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
 
-	set( ${PROJECT_NAME}_FOLDER_SRC_FILES
-		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Pool/PoolException.cpp
-	)
 	set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Pool/BuddyAllocator.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Pool/BuddyAllocator.inl
-		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Pool/FixedGrowingSizeMarkedMemoryData.hpp
-		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Pool/FixedGrowingSizeMemoryData.hpp
-		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Pool/FixedSizeMarkedMemoryData.hpp
-		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Pool/FixedSizeMemoryData.hpp
-		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Pool/MemoryDataTyper.hpp
-		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Pool/ObjectPool.hpp
-		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Pool/PoolException.hpp
-		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Pool/PoolManagedObject.hpp
-		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Pool/PoolException.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Pool/PoolModule.hpp
-		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Pool/UniqueObjectPool.hpp
-	)
-	set( ${PROJECT_NAME}_SRC_FILES
-		${${PROJECT_NAME}_SRC_FILES}
-		${${PROJECT_NAME}_FOLDER_SRC_FILES}
 	)
 	set( ${PROJECT_NAME}_HDR_FILES
 		${${PROJECT_NAME}_HDR_FILES}
 		${${PROJECT_NAME}_FOLDER_HDR_FILES}
 	)
 	source_group( "Header Files\\Pool" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
-	source_group( "Source Files\\Pool" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
 
 	set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Stream/StreamBaseManipulators.hpp

@@ -44,7 +44,7 @@ namespace castor3d
 
 				auto buffer = BytePtr( &itAnim->second );
 				using ParamPtr = ParamT *;
-				*ParamPtr( buffer + outputOffset ) = value;
+				*reinterpret_cast< ParamPtr >( buffer + outputOffset ) = value;
 			}
 
 			return result;
@@ -60,7 +60,7 @@ namespace castor3d
 		m_timer.getElapsed();
 	}
 
-	AnimatedObjectGroup::~AnimatedObjectGroup()
+	AnimatedObjectGroup::~AnimatedObjectGroup()noexcept
 	{
 		m_objects.clear();
 		m_animations.clear();
@@ -69,10 +69,10 @@ namespace castor3d
 	AnimatedObjectRPtr AnimatedObjectGroup::addObject( SceneNode & node
 		, castor::String const & name )
 	{
-		auto object = castor::makeUniqueDerived< AnimatedObject, AnimatedSceneNode >( name + "_Node", node );
+		auto object = castor::makeUniqueDerived< AnimatedObject, AnimatedSceneNode >( name + cuT( "_Node" ), node );
 		auto result = object.get();
 
-		if ( !addObject( std::move( object ) ) )
+		if ( !addObject( castor::move( object ) ) )
 		{
 			result = {};
 		}
@@ -84,10 +84,10 @@ namespace castor3d
 		, Geometry & geometry
 		, castor::String const & name )
 	{
-		auto object = castor::makeUniqueDerived< AnimatedObject, AnimatedMesh >( name + "_Mesh", mesh, geometry );
+		auto object = castor::makeUniqueDerived< AnimatedObject, AnimatedMesh >( name + cuT( "_Mesh" ), mesh, geometry );
 		auto result = object.get();
 
-		if ( !addObject( std::move( object ) ) )
+		if ( !addObject( castor::move( object ) ) )
 		{
 			result = {};
 		}
@@ -100,10 +100,10 @@ namespace castor3d
 		, Geometry & geometry
 		, castor::String const & name )
 	{
-		auto object = castor::makeUniqueDerived< AnimatedObject, AnimatedSkeleton >( name + "_Skeleton", skeleton, mesh, geometry );
+		auto object = castor::makeUniqueDerived< AnimatedObject, AnimatedSkeleton >( name + cuT( "_Skeleton" ), skeleton, mesh, geometry );
 		auto result = object.get();
 
-		if ( !addObject( std::move( object ) ) )
+		if ( !addObject( castor::move( object ) ) )
 		{
 			result = {};
 		}
@@ -118,7 +118,7 @@ namespace castor3d
 		auto object = castor::makeUniqueDerived< AnimatedObject, AnimatedTexture >( sourceInfo, config , pass );
 		auto result = object.get();
 
-		if ( !addObject( std::move( object ) ) )
+		if ( !addObject( castor::move( object ) ) )
 		{
 			result = {};
 		}
@@ -135,7 +135,7 @@ namespace castor3d
 		{
 			if ( result )
 			{
-				m_objects.try_emplace( name, std::move( object ) );
+				m_objects.try_emplace( name, castor::move( object ) );
 
 				switch ( obj->getKind() )
 				{
@@ -172,7 +172,7 @@ namespace castor3d
 
 	AnimatedObject * AnimatedObjectGroup::findObject( castor::String const & name )const
 	{
-		for ( auto & [nm, obj] : m_objects )
+		for ( auto const & [nm, obj] : m_objects )
 		{
 			if ( nm == name )
 			{

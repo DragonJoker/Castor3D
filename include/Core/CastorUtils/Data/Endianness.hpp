@@ -48,7 +48,7 @@ namespace castor
 
 		for ( lo = 0, hi = sizeof( T ) - 1; hi > lo; lo++, hi-- )
 		{
-			std::swap( p[lo], p[hi] );
+			castor::swap( p[lo], p[hi] );
 		}
 
 		return value;
@@ -119,7 +119,7 @@ namespace castor
 	 *\param[in,out]	value	La valeur à convertir.
 	 */
 	template< typename T, size_t N >
-	constexpr std::array< T, N > & systemEndianToBigEndian( std::array< T, N > & value )noexcept
+	constexpr Array< T, N > & systemEndianToBigEndian( Array< T, N > & value )noexcept
 	{
 		if constexpr ( !isBigEndian() )
 		{
@@ -144,9 +144,9 @@ namespace castor
 	 *\param[in,out]	value	La valeur à convertir.
 	 */
 	template< typename T, size_t N >
-	constexpr std::array< T, N > systemEndianToBigEndian( std::array< T, N > const & value )
+	constexpr Array< T, N > systemEndianToBigEndian( Array< T, N > const & value )
 	{
-		std::array< T, N > result{ value };
+		Array< T, N > result{ value };
 
 		if constexpr ( !isBigEndian() )
 		{
@@ -171,7 +171,7 @@ namespace castor
 	 *\param[in,out]	value	La valeur à convertir.
 	 */
 	template< typename T >
-	constexpr std::vector< T > & systemEndianToBigEndian( std::vector< T > & value )noexcept
+	constexpr Vector< T > & systemEndianToBigEndian( Vector< T > & value )noexcept
 	{
 		if constexpr ( !isBigEndian() )
 		{
@@ -196,9 +196,9 @@ namespace castor
 	 *\param[in,out]	value	La valeur à convertir.
 	 */
 	template< typename T >
-	constexpr std::vector< T > systemEndianToBigEndian( std::vector< T > const & value )
+	constexpr Vector< T > systemEndianToBigEndian( Vector< T > const & value )
 	{
-		std::vector< T > result{ value };
+		Vector< T > result{ value };
 
 		if constexpr ( !isBigEndian() )
 		{
@@ -265,7 +265,7 @@ namespace castor
 	 *\param[in,out]	value	La valeur à convertir.
 	 */
 	template< typename T, size_t N >
-	constexpr std::array< T, N > & systemEndianToLittleEndian( std::array< T, N > & value )noexcept
+	constexpr Array< T, N > & systemEndianToLittleEndian( Array< T, N > & value )noexcept
 	{
 		if constexpr ( !isLittleEndian() )
 		{
@@ -290,9 +290,9 @@ namespace castor
 	 *\param[in,out]	value	La valeur à convertir.
 	 */
 	template< typename T, size_t N >
-	constexpr std::array< T, N > systemEndianToLittleEndian( std::array< T, N > const & value )
+	constexpr Array< T, N > systemEndianToLittleEndian( Array< T, N > const & value )
 	{
-		std::array< T, N > result{ value };
+		Array< T, N > result{ value };
 
 		if constexpr ( !isLittleEndian() )
 		{
@@ -317,7 +317,7 @@ namespace castor
 	 *\param[in,out]	value	La valeur à convertir.
 	 */
 	template< typename T >
-	inline std::vector< T > & systemEndianToLittleEndian( std::vector< T > & value )noexcept
+	inline Vector< T > & systemEndianToLittleEndian( Vector< T > & value )noexcept
 	{
 		if constexpr ( !isLittleEndian() )
 		{
@@ -342,9 +342,9 @@ namespace castor
 	 *\param[in,out]	value	La valeur à convertir.
 	 */
 	template< typename T >
-	inline std::vector< T > systemEndianToLittleEndian( std::vector< T > const & value )
+	inline Vector< T > systemEndianToLittleEndian( Vector< T > const & value )
 	{
-		std::vector< T > result{ value };
+		Vector< T > result{ value };
 
 		if constexpr ( !isLittleEndian() )
 		{
@@ -411,7 +411,7 @@ namespace castor
 	 *\param[in,out]	value	La valeur à convertir.
 	 */
 	template< typename T, size_t N >
-	constexpr std::array< T, N > & bigEndianToSystemEndian( std::array< T, N > & value )noexcept
+	constexpr Array< T, N > & bigEndianToSystemEndian( Array< T, N > & value )noexcept
 	{
 		if constexpr ( !isBigEndian() )
 		{
@@ -436,9 +436,9 @@ namespace castor
 	 *\param[in,out]	value	La valeur à convertir.
 	 */
 	template< typename T, size_t N >
-	constexpr std::array< T, N > bigEndianToSystemEndian( std::array< T, N > const & value )
+	constexpr Array< T, N > bigEndianToSystemEndian( Array< T, N > const & value )
 	{
-		std::array< T, N > result{ value };
+		Array< T, N > result{ value };
 
 		if constexpr ( !isBigEndian() )
 		{
@@ -463,7 +463,7 @@ namespace castor
 	 *\param[in,out]	value	La valeur à convertir.
 	 */
 	template< typename T >
-	inline std::vector< T > & bigEndianToSystemEndian( std::vector< T > & value )noexcept
+	inline Vector< T > & bigEndianToSystemEndian( Vector< T > & value )noexcept
 	{
 		if constexpr ( !isBigEndian() )
 		{
@@ -488,9 +488,9 @@ namespace castor
 	 *\param[in,out]	value	La valeur à convertir.
 	 */
 	template< typename T >
-	inline std::vector< T > bigEndianToSystemEndian( std::vector< T > const & value )
+	inline Vector< T > bigEndianToSystemEndian( Vector< T > const & value )
 	{
-		std::vector< T > result{ value };
+		Vector< T > result{ value };
 
 		if constexpr ( !isBigEndian() )
 		{
@@ -557,7 +557,7 @@ namespace castor
 	 *\param[in,out]	value	La valeur à convertir.
 	 */
 	template< typename T, size_t N >
-	constexpr std::array< T, N > & littleEndianToSystemEndian( std::array< T, N > & value )noexcept
+	constexpr Array< T, N > & littleEndianToSystemEndian( Array< T, N > & value )noexcept
 	{
 		if constexpr ( !isLittleEndian() )
 		{
@@ -582,9 +582,9 @@ namespace castor
 	 *\param[in,out]	value	La valeur à convertir.
 	 */
 	template< typename T, size_t N >
-	constexpr std::array< T, N > littleEndianToSystemEndian( std::array< T, N > const & value )
+	constexpr Array< T, N > littleEndianToSystemEndian( Array< T, N > const & value )
 	{
-		std::array< T, N > result{ value };
+		Array< T, N > result{ value };
 
 		if constexpr ( !isLittleEndian() )
 		{
@@ -609,7 +609,7 @@ namespace castor
 	 *\param[in,out]	value	La valeur à convertir.
 	 */
 	template< typename T >
-	inline std::vector< T > & littleEndianToSystemEndian( std::vector< T > & value )noexcept
+	inline Vector< T > & littleEndianToSystemEndian( Vector< T > & value )noexcept
 	{
 		if constexpr ( !isLittleEndian() )
 		{
@@ -634,9 +634,9 @@ namespace castor
 	 *\param[in,out]	value	La valeur à convertir.
 	 */
 	template< typename T >
-	inline std::vector< T > littleEndianToSystemEndian( std::vector< T > const & value )
+	inline Vector< T > littleEndianToSystemEndian( Vector< T > const & value )
 	{
-		std::vector< T > result{ value };
+		Vector< T > result{ value };
 
 		if constexpr ( !isLittleEndian() )
 		{

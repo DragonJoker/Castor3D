@@ -61,7 +61,7 @@ namespace GuiCommon
 		}
 
 	private:
-		std::unique_ptr< IRecorderImpl > m_impl;
+		castor::RawUniquePtr< IRecorderImpl > m_impl;
 	};
 }
 

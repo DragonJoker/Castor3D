@@ -11,7 +11,7 @@ namespace castor
 {
 	namespace system
 	{
-		bool getScreenSize( uint32_t p_screen, castor::Size & p_size )
+		bool getScreenSize( uint32_t p_screen, Size & p_size )
 		{
 			uint32_t w, h;
 			getDisplaySize( &w, &h );
@@ -26,7 +26,7 @@ namespace castor
 
 			if ( error != 0 && ( szError = strerror( error ) ) != nullptr )
 			{
-				result = string::toString( error ) + cuT( " (" ) + string::stringCast< xchar >( szError ) + cuT( ")" );
+				result = string::toString( error ) + cuT( " (" ) + makeString( szError ) + cuT( ")" );
 				string::replace( result, cuT( "\n" ), cuT( "" ) );
 			}
 
@@ -35,30 +35,30 @@ namespace castor
 
 		String getOSName()
 		{
-			char name[128];
+			Array< char, 128u > name;
 			FILE * fp = popen( "sw_vers -productName", "r" );
-			auto read = fread( name, 1, sizeof( name ) - 1, fp );
+			auto nameRead = fread( name.data(), 1, name.size() - 1, fp );
 
-			if ( !read || read >= sizeof( name ) )
+			if ( !nameRead || nameRead >= name.size() )
 			{
 				CU_Failure( "Couldn't retrieve OS name" );
 			}
 
 			pclose( fp );
-			char version[128];
+			Array< char, 128u > version;
 			fp = popen( "sw_vers -productVersion", "r" );
-			read = fread( version, 1, sizeof( version ) - 1, fp );
+			auto versionRead = fread( version.data(), 1, version.size() - 1, fp );
 
-			if ( !read || read >= sizeof( version ) )
+			if ( !versionRead || versionRead >= version.size() )
 			{
 				CU_Failure( "Couldn't retrieve OS version" );
 			}
 
 			pclose( fp );
 			std::stringstream stream;
-			stream << name << " " << version;
+			stream << MbStringView{ name.data(), nameRead } << " " << MbStringView{ version.data(), versionRead };
 			auto result = stream.str();
-			return string::replace( result, "\n", "" );
+			return makeString( string::replace( result, "\n", "" ) );
 		}
 	}
 

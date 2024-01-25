@@ -154,7 +154,7 @@ namespace castor3d
 
 	void BinaryChunk::add( castor::ByteArray data )
 	{
-		m_addedData.push_back( std::move( data ) );
+		m_addedData.push_back( castor::move( data ) );
 	}
 
 	void BinaryChunk::add( uint8_t * data, uint32_t size )
@@ -226,7 +226,7 @@ namespace castor3d
 		buffer.insert( buffer.end(), subchunk.m_data.begin(), subchunk.m_data.end() );
 
 		// Now add it to this chunk
-		add( std::move( buffer ) );
+		add( castor::move( buffer ) );
 
 		return true;
 	}
@@ -282,7 +282,7 @@ namespace castor3d
 		return result;
 	}
 
-	void BinaryChunk::binaryError( std::string_view view )const
+	void BinaryChunk::binaryError( castor::StringView view )const
 	{
 		log::error << view;
 	}

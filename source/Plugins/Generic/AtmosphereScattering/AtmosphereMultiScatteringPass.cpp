@@ -251,7 +251,7 @@ namespace atmosphere_scattering
 		, crg::ImageViewId const & transmittanceLut
 		, crg::ImageViewId const & resultView
 		, bool const & enabled )
-		: m_computeShader{ VK_SHADER_STAGE_COMPUTE_BIT, "MultiScatteringPass", multiscatter::getProgram( *device.renderSystem.getEngine(), getExtent( resultView ).width, getExtent( transmittanceLut ) ) }
+		: m_computeShader{ VK_SHADER_STAGE_COMPUTE_BIT, cuT( "MultiScatteringPass" ), multiscatter::getProgram( *device.renderSystem.getEngine(), getExtent( resultView ).width, getExtent( transmittanceLut ) ) }
 		, m_stages{ makeShaderState( device, m_computeShader ) }
 	{
 		auto renderSize = getExtent( resultView );
@@ -260,7 +260,7 @@ namespace atmosphere_scattering
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = std::make_unique< crg::ComputePass >( framePass
+				auto result = castor::make_unique< crg::ComputePass >( framePass
 					, context
 					, graph
 					, crg::ru::Config{}
@@ -269,7 +269,7 @@ namespace atmosphere_scattering
 						.groupCountY( renderSize.height )
 						.enabled( &enabled )
 						.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) ) );
-				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );

@@ -44,7 +44,7 @@ extern "C"
 		engine->getToneMappingFactory().registerType( HejlBurgessDawson::ToneMapping::Type
 			, &HejlBurgessDawson::ToneMapping::create );
 		engine->getRenderTargetCache().registerToneMappingName( HejlBurgessDawson::ToneMapping::Type
-			, HejlBurgessDawson::ToneMapping::Name );
+			, castor::makeString( HejlBurgessDawson::ToneMapping::Name ) );
 	}
 
 	C3D_HejlBurgessDawsonToneMapping_API void OnUnload( castor3d::Engine * engine )

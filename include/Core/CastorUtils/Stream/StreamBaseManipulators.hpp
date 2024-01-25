@@ -23,8 +23,8 @@ namespace castor::manip
 		explicit BasicBaseManip( int base )
 			: m_base( base )
 		{
-			assert( base >= 2 );
-			assert( base <= 36 );
+			assert( m_base >= 2 );
+			assert( m_base <= 36 );
 		}
 
 		static int getIWord()
@@ -46,6 +46,22 @@ namespace castor::manip
 	using WBaseManip = BasicBaseManip< wchar_t >;
 	using XBaseManip = BasicBaseManip< xchar >;
 	using U32BaseManip = BasicBaseManip< u32char >;
+
+	/**
+	 *\~english
+	 *\brief		Stream operator
+	 *\remarks		Creates a manipulator, to be able to use it in a stream
+	 *\param[in]	b	The base
+	 *\~french
+	 *\brief		Opérateur de flux
+	 *\remarks		Crée un manipulateur, pour l'utiliser dans un flux
+	 *\param[in]	b	La base
+	 */
+	template< typename CharType >
+	inline BasicBaseManip< CharType > baseT( int b )
+	{
+		return BasicBaseManip< CharType >( b );
+	}
 
 	/**
 	 *\~english
@@ -160,10 +176,51 @@ namespace castor::manip
 		manip.apply( stream );
 		return stream;
 	}
+
+	template< typename CharType >
+	struct DigitChars;
+
+	template<>
+	struct DigitChars< char >
+	{
+		static std::string_view constexpr digitCharLc{ "0123456789abcdefghijklmnopqrstuvwxyz" };
+		static std::string_view constexpr digitCharUc{ "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ" };
+	};
+
+	template<>
+	struct DigitChars< wchar_t >
+	{
+		static std::wstring_view constexpr digitCharLc{ L"0123456789abcdefghijklmnopqrstuvwxyz" };
+		static std::wstring_view constexpr digitCharUc{ L"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ" };
+	};
+
+	template<>
+	struct DigitChars< char8_t >
+	{
+		static std::u8string_view constexpr digitCharLc{ u8"0123456789abcdefghijklmnopqrstuvwxyz" };
+		static std::u8string_view constexpr digitCharUc{ u8"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ" };
+	};
+
+	template<>
+	struct DigitChars< char16_t >
+	{
+		static std::u16string_view constexpr digitCharLc{ u"0123456789abcdefghijklmnopqrstuvwxyz" };
+		static std::u16string_view constexpr digitCharUc{ u"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ" };
+	};
+
+	template<>
+	struct DigitChars< char32_t >
+	{
+		static std::u32string_view constexpr digitCharLc{ U"0123456789abcdefghijklmnopqrstuvwxyz" };
+		static std::u32string_view constexpr digitCharUc{ U"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ" };
+	};
+
+	template< typename CharType >
+	inline std::basic_string_view< CharType > constexpr digitCharLcT = DigitChars< CharType >::digitCharLc;
+	template< typename CharType >
+	inline std::basic_string_view< CharType > constexpr digitCharUcT = DigitChars< CharType >::digitCharUc;
+
 	/**
-	\author		Sylvain DOREMUS
-	\version	0.7.0.0
-	\date		02/09/2014
 	\~english
 	\brief		A custom number output facet.
 	\remarks	These are used by the std::locale code in streams.
@@ -227,7 +284,7 @@ namespace castor::manip
 
 			// We want to conver the base, so do it and output.
 
-			std::array< size_t, CHAR_BIT * sizeof( NumType ) > digits{};
+			Array< size_t, CHAR_BIT * sizeof( NumType ) > digits{};
 			size_t i = 0;
 			NumType tempVal = absVal( val );
 
@@ -258,9 +315,7 @@ namespace castor::manip
 				std::fill_n( out, str.width() - i, fill );
 			}
 
-			std::string digitCharLc = "0123456789abcdefghijklmnopqrstuvwxyz";
-			std::string digitCharUc = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-			auto const * digitChar = ( str.flags() & std::ios_base::uppercase ) ? &digitCharUc : &digitCharLc;
+			auto const * digitChar = ( str.flags() & std::ios_base::uppercase ) ? &digitCharUcT< CharType > : &digitCharLcT< CharType >;
 
 			while ( i > 0 )
 			{

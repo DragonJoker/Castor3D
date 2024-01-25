@@ -20,7 +20,7 @@ namespace castor3d
 		VoxelData::VoxelData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstance{ writer, std::move( expr ), enabled }
+			: StructInstance{ writer, castor::move( expr ), enabled }
 			, worldToGrid{ getMember< sdw::Float >( "worldToGrid" ) }
 			, gridToWorld{ getMember< sdw::Float >( "gridToWorld" ) }
 			, clipToGrid{ getMember< sdw::Float >( "clipToGrid" ) }
@@ -66,9 +66,9 @@ namespace castor3d
 			return result;
 		}
 
-		std::unique_ptr< sdw::Struct > VoxelData::declare( sdw::ShaderWriter & writer )
+		castor::RawUniquePtr< sdw::Struct > VoxelData::declare( sdw::ShaderWriter & writer )
 		{
-			return std::make_unique< sdw::Struct >( writer
+			return castor::make_unique< sdw::Struct >( writer
 				, makeType( writer.getTypesCache() ) );
 		}
 

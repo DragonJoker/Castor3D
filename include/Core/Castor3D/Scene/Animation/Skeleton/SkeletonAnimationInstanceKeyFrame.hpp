@@ -14,7 +14,7 @@ namespace castor3d
 		: public castor::OwnedBy< SkeletonAnimationInstance >
 	{
 	public:
-		using ObjectArray = std::vector< std::pair< SkeletonAnimationInstanceObject *, castor::Matrix4x4f > >;
+		using ObjectArray = castor::Vector< castor::Pair< SkeletonAnimationInstanceObject *, castor::Matrix4x4f > >;
 
 	public:
 		/**
@@ -56,7 +56,7 @@ namespace castor3d
 		ObjectArray m_objects;
 		SubmeshBoundingBoxList m_boxes;
 	};
-	using SkeletonAnimationInstanceKeyFrameArray = std::vector< SkeletonAnimationInstanceKeyFrame >;
+	using SkeletonAnimationInstanceKeyFrameArray = castor::Vector< SkeletonAnimationInstanceKeyFrame >;
 }
 
 #endif

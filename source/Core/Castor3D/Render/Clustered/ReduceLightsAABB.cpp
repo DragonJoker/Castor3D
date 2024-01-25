@@ -316,7 +316,7 @@ namespace castor3d
 			RenderDevice const & m_device;
 			FrustumClusters const & m_clusters;
 			LightCache const & m_lightCache;
-			std::map< uint32_t, ProgramData > m_programs;
+			castor::Map< uint32_t, ProgramData > m_programs;
 			uint32_t m_dispatchCount{};
 
 		private:
@@ -327,7 +327,7 @@ namespace castor3d
 				if ( res )
 				{
 					auto & program = it->second;
-					program.shaderModule = ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, "ReduceLightsAABB/First", createShader( m_device, m_clusters.getConfig(), true ) };
+					program.shaderModule = ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, cuT( "ReduceLightsAABB/First" ), createShader( m_device, m_clusters.getConfig(), true ) };
 					program.stages = ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( m_device, program.shaderModule ) };
 				}
 
@@ -434,7 +434,7 @@ namespace castor3d
 			RenderDevice const & m_device;
 			FrustumClusters const & m_clusters;
 			LightCache const & m_lightCache;
-			std::map< uint32_t, ProgramData > m_programs;
+			castor::Map< uint32_t, ProgramData > m_programs;
 
 		private:
 			crg::VkPipelineShaderStageCreateInfoArray doCreateProgram( uint32_t passIndex )
@@ -444,7 +444,7 @@ namespace castor3d
 				if ( res )
 				{
 					auto & program = it->second;
-					program.shaderModule = ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, "ReduceLightsAABB/Second", createShader( m_device, m_clusters.getConfig(), false ) };
+					program.shaderModule = ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, cuT( "ReduceLightsAABB/Second" ), createShader( m_device, m_clusters.getConfig(), false ) };
 					program.stages = ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( m_device, program.shaderModule ) };
 				}
 
@@ -511,41 +511,41 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = std::make_unique< rdclgb::FirstFramePass >( framePass
+				auto result = castor::make_unique< rdclgb::FirstFramePass >( framePass
 					, context
 					, graph
 					, device
 					, clusters
 					, crg::cp::Config{} );
-				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
 		first.addDependency( *previousPass );
 		cameraUbo.createPassBinding( first, rdclgb::eCamera );
 		clusters.getClustersUbo().createPassBinding( first, rdclgb::eClusters );
-		createInputStoragePassBinding( first, uint32_t( rdclgb::eAllLightsAABB ), "C3D_AllLightsAABB", clusters.getAllLightsAABBBuffer(), 0u, ashes::WholeSize );
-		createClearableOutputStorageBinding( first, uint32_t( rdclgb::eReducedLightsAABB ), "C3D_ReducedLightsAABB", clusters.getReducedLightsAABBBuffer(), 0u, ashes::WholeSize );
+		createInputStoragePassBinding( first, uint32_t( rdclgb::eAllLightsAABB ), cuT( "C3D_AllLightsAABB" ), clusters.getAllLightsAABBBuffer(), 0u, ashes::WholeSize );
+		createClearableOutputStorageBinding( first, uint32_t( rdclgb::eReducedLightsAABB ), cuT( "C3D_ReducedLightsAABB" ), clusters.getReducedLightsAABBBuffer(), 0u, ashes::WholeSize );
 
 		auto & second = graph.createPass( "ReduceLightsAABB/Second"
 			, [&clusters, &device]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = std::make_unique< rdclgb::SecondFramePass >( framePass
+				auto result = castor::make_unique< rdclgb::SecondFramePass >( framePass
 					, context
 					, graph
 					, device
 					, clusters
 					, crg::cp::Config{} );
-				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
 		second.addDependency( first );
 		cameraUbo.createPassBinding( second, rdclgb::eCamera );
 		clusters.getClustersUbo().createPassBinding( second, rdclgb::eClusters );
-		createInOutStoragePassBinding( second, uint32_t( rdclgb::eReducedLightsAABB ), "C3D_ReducedLightsAABB", clusters.getReducedLightsAABBBuffer(), 0u, ashes::WholeSize );
+		createInOutStoragePassBinding( second, uint32_t( rdclgb::eReducedLightsAABB ), cuT( "C3D_ReducedLightsAABB" ), clusters.getReducedLightsAABBBuffer(), 0u, ashes::WholeSize );
 
 		return second;
 	}

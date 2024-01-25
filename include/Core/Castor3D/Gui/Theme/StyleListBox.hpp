@@ -22,9 +22,9 @@ namespace castor3d
 				, name
 				, scene
 				, engine }
-			, m_itemStyle{ name + "/Item", scene, engine, fontName }
-			, m_selectedItemStyle{ name + "/SelectedItem", scene, engine, fontName }
-			, m_highlightedItemStyle{ name + "/HighlightedItem", scene, engine, fontName }
+			, m_itemStyle{ name + cuT( "/Item" ), scene, engine, fontName }
+			, m_selectedItemStyle{ name + cuT( "/SelectedItem" ), scene, engine, fontName }
+			, m_highlightedItemStyle{ name + cuT( "/HighlightedItem" ), scene, engine, fontName }
 		{
 		}
 
@@ -78,7 +78,7 @@ namespace castor3d
 		{
 			m_itemStyle.setBackgroundMaterial( getBackgroundMaterial() );
 			m_highlightedItemStyle.setBackgroundMaterial( createMaterial( getEngine()
-				, getBackgroundMaterial()->getName() + "_Highlight"
+				, getBackgroundMaterial()->getName() + cuT( "_Highlight" )
 				, doGetHighlightedColour( getMaterialColour( *getBackgroundMaterial()->getPass( 0 ) ) ) ) );
 		}
 

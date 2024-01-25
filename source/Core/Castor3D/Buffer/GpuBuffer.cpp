@@ -15,7 +15,7 @@ namespace castor3d
 {
 	//*********************************************************************************************
 	
-	std::pair< VkDeviceSize, VkDeviceSize > adaptRange( VkDeviceSize offset
+	castor::Pair< VkDeviceSize, VkDeviceSize > adaptRange( VkDeviceSize offset
 		, VkDeviceSize size
 		, VkDeviceSize align )
 	{
@@ -36,7 +36,7 @@ namespace castor3d
 	void copyBuffer( ashes::CommandBuffer const & commandBuffer
 		, ashes::BufferBase const & src
 		, ashes::BufferBase const & dst
-		, std::vector< VkBufferCopy > const & regions
+		, castor::Vector< VkBufferCopy > const & regions
 		, VkAccessFlags dstAccessFlags
 		, VkPipelineStageFlags dstPipelineFlags )
 	{
@@ -56,7 +56,7 @@ namespace castor3d
 	void updateBuffer( ashes::CommandBuffer const & commandBuffer
 		, castor::ByteArray src
 		, ashes::BufferBase const & dst
-		, std::vector< VkBufferCopy > const & regions
+		, castor::Vector< VkBufferCopy > const & regions
 		, VkAccessFlags dstAccessFlags
 		, VkPipelineStageFlags dstPipelineFlags )
 	{
@@ -89,7 +89,7 @@ namespace castor3d
 		: m_renderSystem{ renderSystem }
 		, m_usage{ usage }
 		, m_memoryFlags{ memoryFlags }
-		, m_sharingMode{ std::move( sharingMode ) }
+		, m_sharingMode{ castor::move( sharingMode ) }
 		, m_allocatedSize{ allocatedSize }
 		, m_buffer{ makeBuffer< uint8_t >( renderSystem.getRenderDevice()
 			, uint32_t( m_allocatedSize )
@@ -105,8 +105,8 @@ namespace castor3d
 
 	void GpuBufferBase::upload( UploadData & uploader )
 	{
-		std::unordered_map< size_t, MemoryRangeArray > allRanges;
-		std::swap( m_ranges, allRanges );
+		castor::UnorderedMap< size_t, MemoryRangeArray > allRanges;
+		castor::swap( m_ranges, allRanges );
 
 		for ( auto const & [id, ranges] : allRanges )
 		{

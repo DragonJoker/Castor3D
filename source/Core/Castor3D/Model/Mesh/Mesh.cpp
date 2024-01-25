@@ -64,12 +64,12 @@ namespace castor3d
 	}
 
 	crg::FramePassArray Mesh::record( crg::ResourcesCache & resources
-		, crg::FrameGraph & graph
+		, crg::FramePassGroup & graph
 		, crg::FramePassArray previousPasses )
 	{
 		for ( auto & submesh : *this )
 		{
-			previousPasses = submesh->record( resources, graph, std::move( previousPasses ) );
+			previousPasses = submesh->record( resources, graph, castor::move( previousPasses ) );
 		}
 
 		return previousPasses;

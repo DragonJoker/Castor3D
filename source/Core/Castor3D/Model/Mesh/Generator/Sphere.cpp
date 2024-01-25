@@ -41,7 +41,7 @@ namespace castor3d
 		{
 			Submesh & submesh = *mesh.createDefaultSubmesh();
 			float rAngle = castor::PiMult2< float > / float( nbFaces );
-			std::vector< castor::Point2f > arc( nbFaces + 1u );
+			castor::Vector< castor::Point2f > arc( nbFaces + 1u );
 			float rAlpha = 0;
 			uint32_t iCur = 0;
 			uint32_t iPrv = 0;

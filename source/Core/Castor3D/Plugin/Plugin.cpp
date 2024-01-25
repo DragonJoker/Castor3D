@@ -21,35 +21,35 @@ namespace castor3d
 
 	Plugin::Plugin( PluginType type, castor::DynamicLibraryUPtr library, Engine & engine )
 		: OwnedBy< Engine >( engine )
-		, m_library{ std::move( library ) }
+		, m_library{ castor::move( library ) }
 		, m_type{ type }
 	{
 		if ( !m_library->getFunction( m_pfnGetName, plugin::GetNameFunctionABIName ) )
 		{
 			castor::String strError = cuT( "Error encountered while loading dll [" ) + m_library->getPath().getFileName() + cuT( "] plug-in getName function : " );
 			strError += castor::system::getLastErrorText();
-			C3D_PluginException( castor::string::stringCast< char >( strError ), true );
+			C3D_PluginException( castor::toUtf8( strError ), true );
 		}
 
 		if ( !m_library->getFunction( m_pfnGetRequiredVersion, plugin::GetRequiredVersionFunctionABIName ) )
 		{
 			castor::String strError = cuT( "Error encountered while loading dll [" ) + m_library->getPath().getFileName() + cuT( "] plug-in getRequiredVersion function : " );
 			strError += castor::system::getLastErrorText();
-			C3D_PluginException( castor::string::stringCast< char >( strError ), true );
+			C3D_PluginException( castor::toUtf8( strError ), true );
 		}
 
 		if ( !m_library->getFunction( m_pfnOnLoad, plugin::GetOnLoadFunctionABIName ) )
 		{
 			castor::String strError = cuT( "Error encountered while loading dll [" ) + m_library->getPath().getFileName() + cuT( "] plug-in OnLoad function : " );
 			strError += castor::system::getLastErrorText();
-			C3D_PluginException( castor::string::stringCast< char >( strError ), true );
+			C3D_PluginException( castor::toUtf8( strError ), true );
 		}
 
 		if ( !m_library->getFunction( m_pfnOnUnload, plugin::GetOnUnloadFunctionABIName ) )
 		{
 			castor::String strError = cuT( "Error encountered while loading dll [" ) + m_library->getPath().getFileName() + cuT( "] plug-in OnUnload function : " );
 			strError += castor::system::getLastErrorText();
-			C3D_PluginException( castor::string::stringCast< char >( strError ), true );
+			C3D_PluginException( castor::toUtf8( strError ), true );
 		}
 	}
 
@@ -69,7 +69,7 @@ namespace castor3d
 		{
 			char const * name;
 			m_pfnGetName( &name );
-			strReturn = name;
+			strReturn = castor::makeString( name );
 		}
 
 		return strReturn;
@@ -83,7 +83,7 @@ namespace castor3d
 #if !defined( NDEBUG )
 			if ( m_library )
 			{
-				castor::Debug::loadModule( *m_library );
+				castor::debug::loadModule( *m_library );
 			}
 #endif
 
@@ -100,7 +100,7 @@ namespace castor3d
 #if !defined( NDEBUG )
 			if ( m_library )
 			{
-				castor::Debug::unloadModule( *m_library );
+				castor::debug::unloadModule( *m_library );
 			}
 #endif
 		}

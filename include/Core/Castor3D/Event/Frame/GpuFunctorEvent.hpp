@@ -12,7 +12,7 @@ namespace castor3d
 		: public GpuFrameEvent
 	{
 	public:
-		using Functor = std::function< void( RenderDevice const &, QueueData const & ) >;
+		using Functor = castor::Function< void( RenderDevice const &, QueueData const & ) >;
 
 	private:
 		GpuFunctorEvent( GpuFunctorEvent const & copy ) = delete;
@@ -32,7 +32,7 @@ namespace castor3d
 		GpuFunctorEvent( GpuEventType type
 			, Functor functor )
 			: GpuFrameEvent{ type }
-			, m_functor{ std::move( functor ) }
+			, m_functor{ castor::move( functor ) }
 		{
 		}
 

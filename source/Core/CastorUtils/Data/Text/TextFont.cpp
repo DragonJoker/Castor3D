@@ -15,8 +15,8 @@ namespace castor
 
 		if ( auto block{ beginBlock( file, cuT( "font" ), object.getName() ) } )
 		{
-			result = writeFile( file, "file", object.getFilePath(), m_folder, "Fonts" )
-				&& write( file, "height", object.getHeight() );
+			result = writeFile( file, cuT( "file" ), object.getFilePath(), m_folder, cuT( "Fonts" ) )
+				&& write( file, cuT( "height" ), object.getHeight() );
 		}
 
 		return result;

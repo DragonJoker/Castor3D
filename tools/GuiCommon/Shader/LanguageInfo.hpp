@@ -23,7 +23,7 @@ namespace GuiCommon
 	class LanguageInfo
 	{
 	private:
-		typedef std::array< castor::String, 9u > WordArray;
+		using WordArray = castor::Array< castor::String, 9u >;
 
 	public:
 		LanguageInfo();
@@ -32,7 +32,7 @@ namespace GuiCommon
 			, castor::StringArray const & keywords );
 		void updateStyles();
 
-		inline castor::String const & getKeywords( uint32_t index )const
+		castor::String const & getKeywords( uint32_t index )const
 		{
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wextra-semi-stmt"
@@ -41,23 +41,23 @@ namespace GuiCommon
 			return m_keywords[index];
 		}
 
-		inline StyleInfo & getStyle( int type )
+		StyleInfo & getStyle( int type )
 		{
 			return m_styles.at( type );
 		}
 
-		inline StyleInfo const & getStyle( int type )const
+		StyleInfo const & getStyle( int type )const
 		{
 			return m_styles.at( type );
 		}
 
-		inline StyleInfoMap const & getStyles()const
+		StyleInfoMap const & getStyles()const
 		{
 			return m_styles;
 		}
 
 	public:
-		castor::String name;
+		castor::String name{ DEFAULT_LANGUAGE };
 		castor::String filePattern;
 		bool isCLike{ true };
 		int foldFlags{ 0 };

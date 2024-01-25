@@ -12,7 +12,7 @@ namespace castor3d::shader
 		, sdw::Vec4 const output
 		, bool enable )
 		: m_config{ config }
-		, m_categories{ std::move( category ) }
+		, m_categories{ castor::move( category ) }
 		, m_index{ index }
 		, m_output{ output }
 		, m_enable{ enable }
@@ -69,7 +69,7 @@ namespace castor3d::shader
 
 	DebugOutputCategory DebugOutput::pushBlock( castor::String category )
 	{
-		m_categories.push_back( std::move( category ) );
+		m_categories.push_back( castor::move( category ) );
 		return DebugOutputCategory{ *this };
 	}
 }

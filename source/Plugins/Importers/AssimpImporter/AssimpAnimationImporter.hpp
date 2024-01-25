@@ -10,8 +10,8 @@ See LICENSE file in root folder
 
 namespace c3d_assimp
 {
-	using SkeletonAnimationKeyFrameMap = std::map< castor::Milliseconds, castor3d::SkeletonAnimationKeyFrameUPtr >;
-	using SkeletonAnimationObjectSet = std::set< castor3d::SkeletonAnimationObjectRPtr >;
+	using SkeletonAnimationKeyFrameMap = castor::Map< castor::Milliseconds, castor3d::SkeletonAnimationKeyFrameUPtr >;
+	using SkeletonAnimationObjectSet = castor::Set< castor3d::SkeletonAnimationObjectRPtr >;
 
 	class AssimpAnimationImporter
 		: public castor3d::AnimationImporter

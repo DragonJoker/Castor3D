@@ -235,9 +235,9 @@ namespace castor
 		 */
 		CU_API int seek( long long offset
 			, OffsetMode origin = OffsetMode::eBeginning );
-		using TraverseDirFunction = std::function< bool( Path const & path ) >;
-		using HitFileFunction = std::function< void( Path const & folder, String const & name ) >;
-		using FilterFunction = std::function< bool( Path const & folder, String const & name ) >;
+		using TraverseDirFunction = castor::Function< bool( Path const & path ) >;
+		using HitFileFunction = castor::Function< void( Path const & folder, String const & name ) >;
+		using FilterFunction = castor::Function< bool( Path const & folder, String const & name ) >;
 		/**
 		*\brief
 		*	Traverses the files and directories of a directory.
@@ -395,7 +395,7 @@ namespace castor
 		 *\~french
 		 *\brief		Remplace les caractères non valides pour un nim de fichier par des '_'
 		 */
-		CU_API static castor::String normaliseFileName( castor::String const & name );
+		CU_API static String normaliseFileName( String const & name );
 		/**
 		 *\~english
 		 *\brief		Retrieves the file size

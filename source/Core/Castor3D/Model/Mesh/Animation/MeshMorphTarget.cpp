@@ -23,9 +23,9 @@ namespace castor3d
 	}
 
 	void MeshMorphTarget::setTargetsWeights( Submesh const & submesh
-		, std::vector< float > weights )
+		, castor::Vector< float > weights )
 	{
-		auto & data = m_submeshesTargets.try_emplace( submesh.getId(), std::move( weights ) ).first->second;
+		auto & data = m_submeshesTargets.try_emplace( submesh.getId(), castor::move( weights ) ).first->second;
 		auto weightIt = data.begin();
 		auto component = submesh.getComponent< MorphComponent >();
 		m_boundingBox = submesh.getBoundingBox();
@@ -51,9 +51,9 @@ namespace castor3d
 			return;
 		}
 
-		std::vector< float > weights;
+		castor::Vector< float > weights;
 		weights.resize( size );
-		auto & data = m_submeshesTargets.try_emplace( submesh.getId(), std::move( weights ) ).first->second;
+		auto & data = m_submeshesTargets.try_emplace( submesh.getId(), castor::move( weights ) ).first->second;
 		CU_Require( data.size() == submesh.getMorphTargetsCount() );
 		data[targetIndex] = targetWeight;
 	}

@@ -16,7 +16,7 @@ namespace castor3d
 		HdrConfigData::HdrConfigData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstance{ writer, std::move( expr ), enabled }
+			: StructInstance{ writer, castor::move( expr ), enabled }
 			, m_exposure{ getMember< sdw::Float >( "exposure" ) }
 			, m_gamma{ getMember< sdw::Float >( "gamma" ) }
 		{
@@ -36,9 +36,9 @@ namespace castor3d
 			return result;
 		}
 
-		std::unique_ptr< sdw::Struct > HdrConfigData::declare( sdw::ShaderWriter & writer )
+		castor::RawUniquePtr< sdw::Struct > HdrConfigData::declare( sdw::ShaderWriter & writer )
 		{
-			return std::make_unique< sdw::Struct >( writer
+			return castor::make_unique< sdw::Struct >( writer
 				, makeType( writer.getTypesCache() ) );
 		}
 

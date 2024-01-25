@@ -11,8 +11,8 @@ namespace ocean_fft
 {
 	//************************************************************************************************
 
-	castor::String const OceanUbo::Buffer = cuT( "Ocean" );
-	castor::String const OceanUbo::Data = cuT( "c3d_oceanData" );
+	castor::MbString const OceanUbo::Buffer = "Ocean";
+	castor::MbString const OceanUbo::Data = "c3d_oceanData";
 
 	OceanUbo::OceanUbo( castor3d::RenderDevice const & device )
 		: m_device{ device }

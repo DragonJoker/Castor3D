@@ -15,7 +15,7 @@ namespace castor
 		DataHolderT()noexcept = default;
 
 		explicit DataHolderT( Data d )noexcept
-			: m_data{ std::move( d ) }
+			: m_data{ castor::move( d ) }
 		{
 		}
 
@@ -31,7 +31,7 @@ namespace castor
 
 		void setData( Data data )
 		{
-			m_data = std::move( data );
+			m_data = castor::move( data );
 		}
 
 	private:

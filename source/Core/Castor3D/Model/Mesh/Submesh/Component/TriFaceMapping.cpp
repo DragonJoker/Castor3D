@@ -129,7 +129,7 @@ namespace castor3d
 	TriFaceMapping::TriFaceMapping( Submesh & submesh
 		, VkBufferUsageFlags bufferUsageFlags )
 		: IndexMapping{ submesh, TypeName
-			, std::make_unique< ComponentData >( submesh, bufferUsageFlags ) }
+			, castor::make_unique< ComponentData >( submesh, bufferUsageFlags ) }
 	{
 	}
 

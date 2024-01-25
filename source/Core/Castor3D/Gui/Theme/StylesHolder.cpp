@@ -24,67 +24,67 @@ namespace castor3d
 	ButtonStyleRPtr StylesHolder::createButtonStyle( castor::String name
 		, Scene * scene )
 	{
-		return createControlStyle( std::move( name ), scene, m_buttonStyles );
+		return createControlStyle( castor::move( name ), scene, m_buttonStyles );
 	}
 
 	ComboBoxStyleRPtr StylesHolder::createComboBoxStyle( castor::String name
 		, Scene * scene )
 	{
-		return createControlStyle( std::move( name ), scene, m_comboBoxStyles );
+		return createControlStyle( castor::move( name ), scene, m_comboBoxStyles );
 	}
 
 	EditStyleRPtr StylesHolder::createEditStyle( castor::String name
 		, Scene * scene )
 	{
-		return createControlStyle( std::move( name ), scene, m_editStyles );
+		return createControlStyle( castor::move( name ), scene, m_editStyles );
 	}
 
 	ExpandablePanelStyleRPtr StylesHolder::createExpandablePanelStyle( castor::String name
 		, Scene * scene )
 	{
-		return createControlStyle( std::move( name ), scene, m_expandablePanelStyles );
+		return createControlStyle( castor::move( name ), scene, m_expandablePanelStyles );
 	}
 
 	FrameStyleRPtr StylesHolder::createFrameStyle( castor::String name
 		, Scene * scene )
 	{
-		return createControlStyle( std::move( name ), scene, m_frameStyles );
+		return createControlStyle( castor::move( name ), scene, m_frameStyles );
 	}
 
 	ListBoxStyleRPtr StylesHolder::createListBoxStyle( castor::String name
 		, Scene * scene )
 	{
-		return createControlStyle( std::move( name ), scene, m_listBoxStyles );
+		return createControlStyle( castor::move( name ), scene, m_listBoxStyles );
 	}
 
 	PanelStyleRPtr StylesHolder::createPanelStyle( castor::String name
 		, Scene * scene )
 	{
-		return createControlStyle( std::move( name ), scene, m_panelStyles );
+		return createControlStyle( castor::move( name ), scene, m_panelStyles );
 	}
 
 	ProgressStyleRPtr StylesHolder::createProgressStyle( castor::String name
 		, Scene * scene )
 	{
-		return createControlStyle( std::move( name ), scene, m_progressStyles );
+		return createControlStyle( castor::move( name ), scene, m_progressStyles );
 	}
 
 	ScrollBarStyleRPtr StylesHolder::createScrollBarStyle( castor::String name
 		, Scene * scene )
 	{
-		return createControlStyle( std::move( name ), scene, m_scrollBarStyles );
+		return createControlStyle( castor::move( name ), scene, m_scrollBarStyles );
 	}
 
 	SliderStyleRPtr StylesHolder::createSliderStyle( castor::String name
 		, Scene * scene )
 	{
-		return createControlStyle( std::move( name ), scene, m_sliderStyles );
+		return createControlStyle( castor::move( name ), scene, m_sliderStyles );
 	}
 
 	StaticStyleRPtr StylesHolder::createStaticStyle( castor::String name
 		, Scene * scene )
 	{
-		return createControlStyle( std::move( name ), scene, m_staticStyles );
+		return createControlStyle( castor::move( name ), scene, m_staticStyles );
 	}
 
 	ButtonStyleRPtr StylesHolder::getButtonStyle( castor::String const & name )const

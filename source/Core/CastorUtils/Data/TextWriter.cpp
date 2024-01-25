@@ -54,7 +54,7 @@ namespace castor
 		, m_result{ txtwrite::writeBlockHeader( writer->tabs(), m_name, file ) }
 	{
 		m_writer->m_indent++;
-		m_writer->checkError( m_result, ( "header " + m_name ).c_str() );
+		m_writer->checkError( m_result, ( cuT( "header " ) + m_name ).c_str() );
 	}
 
 	TextWriterBase::WriterBlock::WriterBlock( TextWriterBase * writer
@@ -113,7 +113,7 @@ namespace castor
 				// Nothing to do here...
 			}
 
-			m_writer->checkError( m_result, ( "footer " + m_name ).c_str() );
+			m_writer->checkError( m_result, ( cuT( "footer " ) + m_name ).c_str() );
 		}
 	}
 
@@ -121,8 +121,8 @@ namespace castor
 
 	TextWriterBase::TextWriterBase( String tabs
 		, StringView name )
-		: m_tabs{ std::move( tabs ) }
-		, m_name{ name.empty() ? String{ name } : String{ name } + " - " }
+		: m_tabs{ castor::move( tabs ) }
+		, m_name{ name.empty() ? String{ name } : String{ name } + cuT( " - " ) }
 	{
 	}
 
@@ -299,16 +299,32 @@ namespace castor
 		return result;
 	}
 
-	bool TextWriterBase::write( StringStream & file, StringView name, String const & value )const
+	bool TextWriterBase::write( StringStream & file, StringView name, WString const & value )const
 	{
-		auto result = txtwrite::writeRawText( file, tabs() + String{ name } + cuT( " " ) + value + cuT( "\n" ) );
+		auto result = txtwrite::writeRawText( file, tabs() + String{ name } + cuT( " " ) + makeString( value ) + cuT( "\n" ) );
 		checkError( result, name );
 		return result;
 	}
 
-	bool TextWriterBase::writeText( StringStream & file, String const & value )const
+	bool TextWriterBase::write( StringStream & file, StringView name, MbString const & value )const
 	{
-		return txtwrite::writeRawText( file, value );
+		auto result = txtwrite::writeRawText( file, tabs() + String{ name } + cuT( " " ) + makeString( value ) + cuT( "\n" ) );
+		checkError( result, name );
+		return result;
+	}
+
+	bool TextWriterBase::writeText( StringStream & file, WString const & value )const
+	{
+		auto result = txtwrite::writeRawText( file, makeString( value ) );
+		checkError( result, cuT( "" ) );
+		return result;
+	}
+
+	bool TextWriterBase::writeText( StringStream & file, MbString const & value )const
+	{
+		auto result = txtwrite::writeRawText( file, makeString( value ) );
+		checkError( result, cuT( "" ) );
+		return result;
 	}
 
 	bool TextWriterBase::writeOpt( StringStream & file, StringView name, bool value )const
@@ -316,14 +332,31 @@ namespace castor
 		return writeOpt( file, name, value, false );
 	}
 
-	bool TextWriterBase::writeName( StringStream & file, StringView name, String const & value )const
+	bool TextWriterBase::writeName( StringStream & file, StringView name, WString const & value )const
 	{
-		auto result = txtwrite::writeRawText( file, tabs() + String{ name } + cuT( " \"" ) + value + cuT( "\"\n" ) );
+		auto result = txtwrite::writeRawText( file, tabs() + String{ name } + cuT( " \"" ) + makeString( value ) + cuT( "\"\n" ) );
 		checkError( result, name );
 		return result;
 	}
 
-	bool TextWriterBase::writeNameOpt( StringStream & file, StringView name, String const & value, String const & comp )const
+	bool TextWriterBase::writeName( StringStream & file, StringView name, MbString const & value )const
+	{
+		auto result = txtwrite::writeRawText( file, tabs() + String{ name } + cuT( " \"" ) + makeString( value ) + cuT( "\"\n" ) );
+		checkError( result, name );
+		return result;
+	}
+
+	bool TextWriterBase::writeNameOpt( StringStream & file, StringView name, WString const & value, WString const & comp )const
+	{
+		if ( value != comp )
+		{
+			return writeName( file, name, value );
+		}
+
+		return true;
+	}
+
+	bool TextWriterBase::writeNameOpt( StringStream & file, StringView name, MbString const & value, MbString const & comp )const
 	{
 		if ( value != comp )
 		{
@@ -354,7 +387,7 @@ namespace castor
 	//*********************************************************************************************
 
 	TextWriter< int8_t >::TextWriter( String tabs )
-		: TextWriterT< int8_t >{ std::move( tabs ) }
+		: TextWriterT< int8_t >{ castor::move( tabs ) }
 	{
 	}
 
@@ -362,14 +395,14 @@ namespace castor
 		, StringStream & file )
 	{
 		auto result = txtwrite::writeRawText( file, string::toString( value ) );
-		checkError( result, "" );
+		checkError( result, cuEmptyString );
 		return result;
 	}
 
 	//*********************************************************************************************
 
 	TextWriter< uint8_t >::TextWriter( String tabs )
-		: TextWriterT< uint8_t >{ std::move( tabs ) }
+		: TextWriterT< uint8_t >{ castor::move( tabs ) }
 	{
 	}
 
@@ -377,14 +410,14 @@ namespace castor
 		, StringStream & file )
 	{
 		auto result = txtwrite::writeRawText( file, string::toString( value ) );
-		checkError( result, "" );
+		checkError( result, cuEmptyString );
 		return result;
 	}
 
 	//*********************************************************************************************
 
 	TextWriter< int16_t >::TextWriter( String tabs )
-		: TextWriterT< int16_t >{ std::move( tabs ) }
+		: TextWriterT< int16_t >{ castor::move( tabs ) }
 	{
 	}
 
@@ -392,14 +425,14 @@ namespace castor
 		, StringStream & file )
 	{
 		auto result = txtwrite::writeRawText( file, string::toString( value ) );
-		checkError( result, "" );
+		checkError( result, cuEmptyString );
 		return result;
 	}
 
 	//*********************************************************************************************
 
 	TextWriter< uint16_t >::TextWriter( String tabs )
-		: TextWriterT< uint16_t >{ std::move( tabs ) }
+		: TextWriterT< uint16_t >{ castor::move( tabs ) }
 	{
 	}
 
@@ -407,14 +440,14 @@ namespace castor
 		, StringStream & file )
 	{
 		auto result = txtwrite::writeRawText( file, string::toString( value ) );
-		checkError( result, "" );
+		checkError( result, cuEmptyString );
 		return result;
 	}
 
 	//*********************************************************************************************
 
 	TextWriter< int32_t >::TextWriter( String tabs )
-		: TextWriterT< int32_t >{ std::move( tabs ) }
+		: TextWriterT< int32_t >{ castor::move( tabs ) }
 	{
 	}
 
@@ -422,14 +455,14 @@ namespace castor
 		, StringStream & file )
 	{
 		auto result = txtwrite::writeRawText( file, string::toString( value ) );
-		checkError( result, "" );
+		checkError( result, cuEmptyString );
 		return result;
 	}
 
 	//*********************************************************************************************
 
 	TextWriter< uint32_t >::TextWriter( String tabs )
-		: TextWriterT< uint32_t >{ std::move( tabs ) }
+		: TextWriterT< uint32_t >{ castor::move( tabs ) }
 	{
 	}
 
@@ -437,14 +470,14 @@ namespace castor
 		, StringStream & file )
 	{
 		auto result = txtwrite::writeRawText( file, string::toString( value ) );
-		checkError( result, "" );
+		checkError( result, cuEmptyString );
 		return result;
 	}
 
 	//*********************************************************************************************
 
 	TextWriter< int64_t >::TextWriter( String tabs )
-		: TextWriterT< int64_t >{ std::move( tabs ) }
+		: TextWriterT< int64_t >{ castor::move( tabs ) }
 	{
 	}
 
@@ -452,14 +485,14 @@ namespace castor
 		, StringStream & file )
 	{
 		auto result = txtwrite::writeRawText( file, string::toString( value ) );
-		checkError( result, "" );
+		checkError( result, cuEmptyString );
 		return result;
 	}
 
 	//*********************************************************************************************
 
 	TextWriter< uint64_t >::TextWriter( String tabs )
-		: TextWriterT< uint64_t >{ std::move( tabs ) }
+		: TextWriterT< uint64_t >{ castor::move( tabs ) }
 	{
 	}
 
@@ -467,14 +500,14 @@ namespace castor
 		, StringStream & file )
 	{
 		auto result = txtwrite::writeRawText( file, string::toString( value ) );
-		checkError( result, "" );
+		checkError( result, cuEmptyString );
 		return result;
 	}
 
 	//*********************************************************************************************
 
 	TextWriter< float >::TextWriter( String tabs )
-		: TextWriterT< float >{ std::move( tabs ) }
+		: TextWriterT< float >{ castor::move( tabs ) }
 	{
 	}
 
@@ -491,7 +524,7 @@ namespace castor
 	//*********************************************************************************************
 
 	TextWriter< double >::TextWriter( String tabs )
-		: TextWriterT< double >{ std::move( tabs ) }
+		: TextWriterT< double >{ castor::move( tabs ) }
 	{
 	}
 
@@ -508,7 +541,7 @@ namespace castor
 	//*********************************************************************************************
 
 	TextWriter< String >::TextWriter( String tabs )
-		: TextWriterT< String >{ std::move( tabs ) }
+		: TextWriterT< String >{ castor::move( tabs ) }
 	{
 	}
 

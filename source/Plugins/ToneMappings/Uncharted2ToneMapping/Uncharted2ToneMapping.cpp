@@ -14,7 +14,7 @@ namespace Uncharted2
 {
 	namespace c3d = castor3d::shader;
 	castor::String ToneMapping::Type = cuT( "uncharted2" );
-	castor::String ToneMapping::Name = cuT( "Uncharted 2 Tone Mapping" );
+	castor::MbString ToneMapping::Name = "Uncharted 2 Tone Mapping";
 
 	void ToneMapping::create( ast::ShaderBuilder & builder )
 	{

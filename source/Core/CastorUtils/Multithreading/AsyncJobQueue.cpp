@@ -22,7 +22,7 @@ namespace castor
 		auto lock( makeUniqueLock( m_mutex ) );
 		if ( !m_ended )
 		{
-			m_pending.emplace_back( std::move( job ) );
+			m_pending.emplace_back( castor::move( job ) );
 		}
 	}
 

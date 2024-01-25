@@ -4,8 +4,6 @@
 
 #include <atomic>
 
-using namespace castor;
-
 namespace Testing
 {
 	CastorUtilsWorkerThreadTest::CastorUtilsWorkerThreadTest()
@@ -23,9 +21,9 @@ namespace Testing
 	void CastorUtilsWorkerThreadTest::SingleThread()
 	{
 		static constexpr size_t count = 1000000u;
-		WorkerThread worker;
+		castor::WorkerThread worker;
 		CT_CHECK( worker.isEnded() );
-		std::vector< size_t > data;
+		castor::Vector< size_t > data;
 
 		worker.feed( [&data]()
 		{
@@ -47,8 +45,8 @@ namespace Testing
 	void CastorUtilsWorkerThreadTest::ProducerConsumer()
 	{
 		static constexpr size_t count = 1000000u;
-		WorkerThread producer;
-		WorkerThread consumer;
+		castor::WorkerThread producer;
+		castor::WorkerThread consumer;
 		std::atomic_int value{ 0 };
 
 		producer.feed( [&value]()
@@ -83,8 +81,8 @@ namespace Testing
 	void CastorUtilsWorkerThreadTest::MultipleSameTask()
 	{
 		static constexpr size_t count = 1000000u;
-		WorkerThread worker1;
-		WorkerThread worker2;
+		castor::WorkerThread worker1;
+		castor::WorkerThread worker2;
 		std::atomic_int value{ 0 };
 
 		auto job = [&value]()

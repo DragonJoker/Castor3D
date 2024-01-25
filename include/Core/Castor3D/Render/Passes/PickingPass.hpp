@@ -95,7 +95,7 @@ namespace castor3d
 		C3D_API static castor::String const Type;
 
 	private:
-		using CameraQueueMap = std::map< Camera const *, RenderQueue >;
+		using CameraQueueMap = castor::Map< Camera const *, RenderQueue >;
 		C3D_API static uint32_t const UboBindingPoint;
 
 	private:

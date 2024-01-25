@@ -65,9 +65,9 @@ namespace Bloom
 			return writer.getBuilder().releaseShader();
 		}
 
-		static std::vector< float > getHalfPascal( uint32_t height )
+		static castor::Vector< float > getHalfPascal( uint32_t height )
 		{
-			std::vector< float > result;
+			castor::Vector< float > result;
 			result.resize( height );
 			auto x = 1.0f;
 			auto max = 1 + height;
@@ -103,9 +103,9 @@ namespace Bloom
 			return result;
 		}
 
-		static std::array< castor::Point4f, 15u > doCreateKernel( uint32_t count )
+		static castor::Array< castor::Point4f, 15u > doCreateKernel( uint32_t count )
 		{
-			std::array< castor::Point4f, 15u > result;
+			castor::Array< castor::Point4f, 15u > result;
 			auto kernel = getHalfPascal( count );
 			std::memcpy( result.data()->ptr()
 				, kernel.data()
@@ -134,13 +134,13 @@ namespace Bloom
 				};
 				data.blurCoeffsCount = coefficientsCount;
 				data.blurCoeffs = kernel;
-				result.emplace_back( std::move( ubo ) );
+				result.emplace_back( castor::move( ubo ) );
 			}
 
 			return result;
 		}
 
-		static std::vector< BlurPass::Subpass > doCreateSubpasses( crg::FramePassGroup & graph
+		static castor::Vector< BlurPass::Subpass > doCreateSubpasses( crg::FramePassGroup & graph
 			, crg::FramePassArray & previousPasses
 			, castor3d::RenderDevice const & device
 			, crg::ImageViewIdArray const & srcImages
@@ -152,7 +152,7 @@ namespace Bloom
 			, bool isVertical
 			, bool const * enabled )
 		{
-			std::vector< BlurPass::Subpass > result;
+			castor::Vector< BlurPass::Subpass > result;
 			assert( srcImages.size() == dstImages.size()
 				&& srcImages.size() == blurPassesCount );
 
@@ -189,7 +189,7 @@ namespace Bloom
 		, uint32_t index
 		, bool isVertical
 		, bool const * enabled )
-		: pass{ graph.createPass( "Blur" + std::to_string( index ) + ( isVertical ? "Y" : "X" )
+		: pass{ graph.createPass( "Blur" + castor::string::toMbString( index ) + ( isVertical ? "Y" : "X" )
 			, [&device, &stages, dimensions, index, enabled]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
@@ -201,13 +201,13 @@ namespace Bloom
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( stages ) )
 					.enabled( enabled )
 					.build( framePass, context, graph );
-				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} ) }
 	{
 		pass.addDependency( previousPass );
-		blurUbo.createPassBinding( pass, std::string{ "BlurCfg" } + ( isVertical ? "Y" : "X" ), blur::GaussCfgUboIdx );
+		blurUbo.createPassBinding( pass, castor::MbString{ "BlurCfg" } + ( isVertical ? "Y" : "X" ), blur::GaussCfgUboIdx );
 		pass.addSampledView( srcView
 			, blur::DifImgIdx
 			, crg::SamplerDesc{ VK_FILTER_NEAREST
@@ -237,7 +237,7 @@ namespace Bloom
 		: m_device{ device }
 		, m_blurPassesCount{ blurPassesCount }
 		, m_blurUbo{ blur::doCreateUbo( m_device, dimensions, blurKernelSize, m_blurPassesCount, isVertical ) }
-		, m_shader{ "BloomBlurPass", blur::getProgram( device ) }
+		, m_shader{ cuT( "BloomBlurPass" ), blur::getProgram( device ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
 		, m_passes{ previousPasses }
 		, m_subpasses{ blur::doCreateSubpasses( graph

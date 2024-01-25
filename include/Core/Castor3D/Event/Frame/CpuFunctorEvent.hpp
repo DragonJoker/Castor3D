@@ -12,7 +12,7 @@ namespace castor3d
 		: public CpuFrameEvent
 	{
 	public:
-		using Functor = std::function< void() >;
+		using Functor = castor::Function< void() >;
 
 	private:
 		CpuFunctorEvent( CpuFunctorEvent const & copy ) = delete;
@@ -32,7 +32,7 @@ namespace castor3d
 		CpuFunctorEvent( CpuEventType type
 			, Functor functor )
 			: CpuFrameEvent{ type }
-			, m_functor{ std::move( functor ) }
+			, m_functor{ castor::move( functor ) }
 		{
 		}
 

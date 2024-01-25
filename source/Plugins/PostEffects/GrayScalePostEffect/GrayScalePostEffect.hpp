@@ -63,7 +63,7 @@ namespace grayscale
 
 	public:
 		static castor::String Type;
-		static castor::String Name;
+		static castor::MbString Name;
 
 	private:
 		castor3d::UniformBufferOffsetT< castor::Point3f > m_configUbo;

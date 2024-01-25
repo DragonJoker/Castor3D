@@ -38,7 +38,7 @@ namespace castor3d
 		, VkRenderPass renderPass )
 	{
 		renderPassAtInit = renderPass;
-		commandBuffer = queueData.commandPool->createCommandBuffer( name
+		commandBuffer = queueData.commandPool->createCommandBuffer( castor::toUtf8( name )
 			, VK_COMMAND_BUFFER_LEVEL_SECONDARY );
 		commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT | VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT
 			, makeVkStruct< VkCommandBufferInheritanceInfo >( renderPassAtInit
@@ -68,7 +68,7 @@ namespace castor3d
 			} ) )
 		, m_ignoredNode{ ignored }
 		, m_renderNodes{ castor::makeUnique< QueueRenderNodes >( *this, device, typeName, meshShading ) }
-		, m_pass{ std::make_unique< PassData >() }
+		, m_pass{ castor::make_unique< PassData >() }
 		, m_currentPass{ m_pass.get() }
 		, m_viewport{ castor::makeGroupChangeTracked< ashes::Optional< VkViewport > >( m_culledChanged, ashes::nullopt ) }
 		, m_scissor{ castor::makeGroupChangeTracked< ashes::Optional< VkRect2D > >( m_culledChanged, ashes::nullopt ) }
@@ -77,8 +77,8 @@ namespace castor3d
 
 	void RenderQueue::invalidate()
 	{
-		m_toDelete = std::move( m_pass );
-		m_pass = std::make_unique< PassData >();
+		m_toDelete = castor::move( m_pass );
+		m_pass = castor::make_unique< PassData >();
 		m_currentPass = m_pass.get();
 		m_invalidated = true;
 		m_commandsChanged = true;
@@ -87,7 +87,7 @@ namespace castor3d
 	void RenderQueue::cleanup()noexcept
 	{
 		CU_Require( m_renderNodes );
-		m_toDelete = std::move( m_pass );
+		m_toDelete = castor::move( m_pass );
 	}
 
 	void RenderQueue::update( ShadowMapLightTypeArray const & shadowMaps
@@ -188,8 +188,8 @@ namespace castor3d
 
 		if ( hasCommandBuffer() )
 		{
-			m_toDelete = std::move( m_pass );
-			m_pass = std::make_unique< PassData >();
+			m_toDelete = castor::move( m_pass );
+			m_pass = castor::make_unique< PassData >();
 			m_currentPass = m_pass.get();
 		}
 

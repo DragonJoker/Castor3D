@@ -43,7 +43,7 @@ namespace castor3d
 
 			if ( style == nullptr )
 			{
-				CU_ParsingError( "Style [" + styleName + "] was not found" );
+				CU_ParsingError( cuT( "Style [" ) + styleName + cuT( "] was not found" ) );
 				return nullptr;
 			}
 
@@ -67,17 +67,17 @@ namespace castor3d
 			}
 		}
 
-		GuiContext * getGuiContext( RootContext const * context )
+		static GuiContext * getGuiContext( RootContext const * context )
 		{
 			return context->gui.get();
 		}
 
-		GuiContext * getGuiContext( SceneContext const * context )
+		static GuiContext * getGuiContext( SceneContext const * context )
 		{
 			return context->root->gui.get();
 		}
 
-		GuiContext * getGuiContext( GuiContext * context )
+		static GuiContext * getGuiContext( GuiContext * context )
 		{
 			return context;
 		}
@@ -162,7 +162,7 @@ namespace castor3d
 				, *blockContext
 				, getScene( blockContext )
 				, blockContext->controlName
-				, params[0]->get< castor::String >() + "/Button"
+				, params[0]->get< castor::String >() + cuT( "/Button" )
 				, blockContext->button );
 		}
 		CU_EndAttribute()
@@ -208,7 +208,7 @@ namespace castor3d
 		{
 			if ( auto control = blockContext->button )
 			{
-				control->setCaption( castor::string::toU32String( params[0]->get< castor::String >() ) );
+				control->setCaption( castor::toUtf8U32String( params[0]->get< castor::String >() ) );
 			}
 			else
 			{
@@ -230,7 +230,7 @@ namespace castor3d
 				, *blockContext
 				, getScene( blockContext )
 				, blockContext->controlName
-				, params[0]->get< castor::String >() + "/ComboBox"
+				, params[0]->get< castor::String >() + cuT( "/ComboBox" )
 				, blockContext->combo );
 		}
 		CU_EndAttribute()
@@ -272,7 +272,7 @@ namespace castor3d
 				, *blockContext
 				, getScene( blockContext )
 				, blockContext->controlName
-				, params[0]->get< castor::String >() + "/Edit"
+				, params[0]->get< castor::String >() + cuT( "/Edit" )
 				, blockContext->edit );
 			blockContext->scrollable = blockContext->edit;
 		}
@@ -295,17 +295,17 @@ namespace castor3d
 			if ( auto edit = blockContext->edit )
 			{
 				auto text = params[0]->get< castor::String >();
-				castor::string::replace( text, R"(\?)", "\?" );
-				castor::string::replace( text, R"(\\)", "\\" );
-				castor::string::replace( text, R"(\")", "\"" );
-				castor::string::replace( text, R"(\a)", "\a" );
-				castor::string::replace( text, R"(\b)", "\b" );
-				castor::string::replace( text, R"(\f)", "\f" );
-				castor::string::replace( text, R"(\n)", "\n" );
-				castor::string::replace( text, R"(\r)", "\r" );
-				castor::string::replace( text, R"(\t)", "\t" );
-				castor::string::replace( text, R"(\v)", "\v" );
-				edit->setCaption( castor::string::toU32String( text ) );
+				castor::string::replace( text, cuT( R"(\?)" ), cuT( "\?" ) );
+				castor::string::replace( text, cuT( R"(\\)" ), cuT( "\\" ) );
+				castor::string::replace( text, cuT( R"(\")" ), cuT( "\"" ) );
+				castor::string::replace( text, cuT( R"(\a)" ), cuT( "\a" ) );
+				castor::string::replace( text, cuT( R"(\b)" ), cuT( "\b" ) );
+				castor::string::replace( text, cuT( R"(\f)" ), cuT( "\f" ) );
+				castor::string::replace( text, cuT( R"(\n)" ), cuT( "\n" ) );
+				castor::string::replace( text, cuT( R"(\r)" ), cuT( "\r" ) );
+				castor::string::replace( text, cuT( R"(\t)" ), cuT( "\t" ) );
+				castor::string::replace( text, cuT( R"(\v)" ), cuT( "\v" ) );
+				edit->setCaption( castor::toUtf8U32String( text ) );
 			}
 			else
 			{
@@ -343,7 +343,7 @@ namespace castor3d
 				, *blockContext
 				, getScene( blockContext )
 				, blockContext->controlName
-				, params[0]->get< castor::String >() + "/ListBox"
+				, params[0]->get< castor::String >() + cuT( "/ListBox" )
 				, blockContext->listbox );
 		}
 		CU_EndAttribute()
@@ -385,7 +385,7 @@ namespace castor3d
 				, *blockContext
 				, getScene( blockContext )
 				, blockContext->controlName
-				, params[0]->get< castor::String >() + "/Slider"
+				, params[0]->get< castor::String >() + cuT( "/Slider" )
 				, blockContext->slider );
 		}
 		CU_EndAttribute()
@@ -414,7 +414,7 @@ namespace castor3d
 				, *blockContext
 				, getScene( blockContext )
 				, blockContext->controlName
-				, params[0]->get< castor::String >() + "/Static"
+				, params[0]->get< castor::String >() + cuT( "/Static" )
 				, blockContext->staticTxt );
 		}
 		CU_EndAttribute()
@@ -460,7 +460,7 @@ namespace castor3d
 		{
 			if ( auto control = blockContext->staticTxt )
 			{
-				control->setCaption( castor::string::toU32String( params[0]->get< castor::String >() ) );
+				control->setCaption( castor::toUtf8U32String( params[0]->get< castor::String >() ) );
 			}
 			else
 			{
@@ -482,7 +482,7 @@ namespace castor3d
 				, *blockContext
 				, getScene( blockContext )
 				, blockContext->controlName
-				, params[0]->get< castor::String >() + "/Panel"
+				, params[0]->get< castor::String >() + cuT( "/Panel" )
 				, blockContext->panel );
 			blockContext->scrollable = blockContext->panel;
 		}
@@ -513,7 +513,7 @@ namespace castor3d
 				, *blockContext
 				, getScene( blockContext )
 				, blockContext->controlName
-				, params[0]->get< castor::String >() + "/Progress"
+				, params[0]->get< castor::String >() + cuT( "/Progress" )
 				, blockContext->progress );
 		}
 		CU_EndAttribute()
@@ -633,7 +633,7 @@ namespace castor3d
 				, *blockContext
 				, getScene( blockContext )
 				, blockContext->controlName
-				, params[0]->get< castor::String >() + "/ExpandablePanel"
+				, params[0]->get< castor::String >() + cuT( "/ExpandablePanel" )
 				, blockContext->expandablePanel );
 		}
 		CU_EndAttribute()
@@ -680,13 +680,13 @@ namespace castor3d
 
 		static CU_ImplementAttributeParserBlock( parserExpandablePanelExpandCaption, GuiContext )
 		{
-			blockContext->expandablePanel->setExpandCaption( castor::string::toU32String( params[0]->get< castor::String >() ) );
+			blockContext->expandablePanel->setExpandCaption( castor::toUtf8U32String( params[0]->get< castor::String >() ) );
 		}
 		CU_EndAttribute()
 
 		static CU_ImplementAttributeParserBlock( parserExpandablePanelRetractCaption, GuiContext )
 		{
-			blockContext->expandablePanel->setRetractCaption( castor::string::toU32String( params[0]->get< castor::String >() ) );
+			blockContext->expandablePanel->setRetractCaption( castor::toUtf8U32String( params[0]->get< castor::String >() ) );
 		}
 		CU_EndAttribute()
 
@@ -717,7 +717,7 @@ namespace castor3d
 				, *blockContext
 				, getScene( blockContext )
 				, blockContext->controlName
-				, params[0]->get< castor::String >() + "/Frame"
+				, params[0]->get< castor::String >() + cuT( "/Frame" )
 				, blockContext->frame );
 		}
 		CU_EndAttribute()
@@ -763,7 +763,7 @@ namespace castor3d
 		{
 			if ( auto control = blockContext->frame )
 			{
-				control->setCaption( castor::string::toU32String( params[0]->get< castor::String >() ) );
+				control->setCaption( castor::toUtf8U32String( params[0]->get< castor::String >() ) );
 			}
 			else
 			{
@@ -1009,7 +1009,7 @@ namespace castor3d
 		{
 			if ( !blockContext->scrollable )
 			{
-				CU_ParsingError( "No ScrollableCtrl initialised" );
+				CU_ParsingError( cuT( "No ScrollableCtrl initialised" ) );
 			}
 			else
 			{
@@ -1018,7 +1018,7 @@ namespace castor3d
 
 				if ( style == nullptr )
 				{
-					CU_ParsingError( "Style [" + styleName + "] was not found" );
+					CU_ParsingError( cuT( "Style [" ) + styleName + cuT( "] was not found" ) );
 				}
 				else
 				{
@@ -1032,7 +1032,7 @@ namespace castor3d
 		{
 			if ( !blockContext->scrollable )
 			{
-				CU_ParsingError( "No ScrollableCtrl initialised" );
+				CU_ParsingError( cuT( "No ScrollableCtrl initialised" ) );
 			}
 			else
 			{
@@ -1041,7 +1041,7 @@ namespace castor3d
 
 				if ( style == nullptr )
 				{
-					CU_ParsingError( "Style [" + styleName + "] was not found" );
+					CU_ParsingError( cuT( "Style [" ) + styleName + cuT( "] was not found" ) );
 				}
 				else
 				{
@@ -1084,7 +1084,7 @@ namespace castor3d
 				}
 				else
 				{
-					CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
+					CU_ParsingError( cuT( "Material not found: [" ) + name + cuT( "]." ) );
 				}
 			}
 			else
@@ -1107,7 +1107,7 @@ namespace castor3d
 				}
 				else
 				{
-					CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
+					CU_ParsingError( cuT( "Material not found: [" ) + name + cuT( "]." ) );
 				}
 			}
 			else
@@ -1130,7 +1130,7 @@ namespace castor3d
 				}
 				else
 				{
-					CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
+					CU_ParsingError( cuT( "Material not found: [" ) + name + cuT( "]." ) );
 				}
 			}
 			else
@@ -1153,7 +1153,7 @@ namespace castor3d
 				}
 				else
 				{
-					CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
+					CU_ParsingError( cuT( "Material not found: [" ) + name + cuT( "]." ) );
 				}
 			}
 			else
@@ -1176,7 +1176,7 @@ namespace castor3d
 				}
 				else
 				{
-					CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
+					CU_ParsingError( cuT( "Material not found: [" ) + name + cuT( "]." ) );
 				}
 			}
 			else
@@ -1199,7 +1199,7 @@ namespace castor3d
 				}
 				else
 				{
-					CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
+					CU_ParsingError( cuT( "Material not found: [" ) + name + cuT( "]." ) );
 				}
 			}
 			else
@@ -1222,7 +1222,7 @@ namespace castor3d
 				}
 				else
 				{
-					CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
+					CU_ParsingError( cuT( "Material not found: [" ) + name + cuT( "]." ) );
 				}
 			}
 			else
@@ -1245,7 +1245,7 @@ namespace castor3d
 				}
 				else
 				{
-					CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
+					CU_ParsingError( cuT( "Material not found: [" ) + name + cuT( "]." ) );
 				}
 			}
 			else
@@ -1268,7 +1268,7 @@ namespace castor3d
 				}
 				else
 				{
-					CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
+					CU_ParsingError( cuT( "Material not found: [" ) + name + cuT( "]." ) );
 				}
 			}
 			else
@@ -1291,7 +1291,7 @@ namespace castor3d
 				}
 				else
 				{
-					CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
+					CU_ParsingError( cuT( "Material not found: [" ) + name + cuT( "]." ) );
 				}
 			}
 			else
@@ -1341,7 +1341,7 @@ namespace castor3d
 				}
 				else
 				{
-					CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
+					CU_ParsingError( cuT( "Material not found: [" ) + name + cuT( "]." ) );
 				}
 			}
 			else
@@ -1364,7 +1364,7 @@ namespace castor3d
 				}
 				else
 				{
-					CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
+					CU_ParsingError( cuT( "Material not found: [" ) + name + cuT( "]." ) );
 				}
 			}
 			else
@@ -1435,7 +1435,7 @@ namespace castor3d
 				}
 				else
 				{
-					CU_ParsingError( cuT( "Material [" + name + "] not found." ) );
+					CU_ParsingError( cuT( "Material not found: [" ) + name + cuT( "]." ) );
 				}
 			}
 			else
@@ -1471,7 +1471,7 @@ namespace castor3d
 				}
 				else
 				{
-					CU_ParsingError( cuT( "Material [" + name + "] not found." ) );
+					CU_ParsingError( cuT( "Material not found: [" ) + name + cuT( "]." ) );
 				}
 			}
 			else
@@ -1535,7 +1535,7 @@ namespace castor3d
 				}
 				else
 				{
-					CU_ParsingError( cuT( "Material [" + name + "] not found." ) );
+					CU_ParsingError( cuT( "Material not found: [" ) + name + cuT( "]." ) );
 				}
 			}
 			else
@@ -1592,7 +1592,7 @@ namespace castor3d
 				}
 				else
 				{
-					CU_ParsingError( cuT( "Material [" + name + "] not found." ) );
+					CU_ParsingError( cuT( "Material not found: [" ) + name + cuT( "]." ) );
 				}
 			}
 			else
@@ -1643,7 +1643,7 @@ namespace castor3d
 				}
 				else
 				{
-					CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
+					CU_ParsingError( cuT( "Material not found: [" ) + name + cuT( "]." ) );
 				}
 			}
 			else
@@ -1666,7 +1666,7 @@ namespace castor3d
 				}
 				else
 				{
-					CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
+					CU_ParsingError( cuT( "Material not found: [" ) + name + cuT( "]." ) );
 				}
 			}
 			else
@@ -1857,11 +1857,11 @@ namespace castor3d
 			{
 				if ( blockContext->layout->hasContainer() )
 				{
-					blockContext->layout->getContainer().setLayout( std::move( blockContext->layout ) );
+					blockContext->layout->getContainer().setLayout( castor::move( blockContext->layout ) );
 				}
 				else if ( blockContext->layout->hasManager() )
 				{
-					blockContext->layout->getManager().setLayout( std::move( blockContext->layout ) );
+					blockContext->layout->getManager().setLayout( castor::move( blockContext->layout ) );
 				}
 				else
 				{
@@ -2038,13 +2038,13 @@ namespace castor3d
 			{
 				if ( auto parent = blockContext->getTopControl() )
 				{
-					blockContext->controlName = parent->getName() + "/" + blockContext->controlName;
+					blockContext->controlName = parent->getName() + cuT( "/" ) + blockContext->controlName;
 				}
 
 				if ( auto control = blockContext->controls->findControl( blockContext->controlName ) )
 				{
 					blockContext->layout->addControl( *control
-						, std::move( blockContext->layoutCtrlFlags ) );
+						, castor::move( blockContext->layoutCtrlFlags ) );
 				}
 				else
 				{
@@ -2452,17 +2452,17 @@ namespace castor3d
 		{
 			using namespace castor;
 			addParserT( result, GUISection::eTheme, cuT( "default_font" ), &parserStyleDefaultFont< GuiContext >, { makeParameter< ParameterType::eName >() } );
-			addParserT( result, GUISection::eTheme, GUISection::eButtonStyle, cuT( "button_style" ), &parserStyleButtonStyle< GuiContext >, { makeDefaultedParameter< ParameterType::eName >( "Button" ) } );
-			addParserT( result, GUISection::eTheme, GUISection::eStaticStyle, cuT( "static_style" ), &parserStyleStaticStyle< GuiContext >, { makeDefaultedParameter< ParameterType::eName >( "Static" ) } );
-			addParserT( result, GUISection::eTheme, GUISection::eSliderStyle, cuT( "slider_style" ), &parserStyleSliderStyle< GuiContext >, { makeDefaultedParameter< ParameterType::eName >( "Slider" ) } );
-			addParserT( result, GUISection::eTheme, GUISection::eComboStyle, cuT( "combobox_style" ), &parserStyleComboBoxStyle< GuiContext >, { makeDefaultedParameter< ParameterType::eName >( "ComboBox" ) } );
-			addParserT( result, GUISection::eTheme, GUISection::eListStyle, cuT( "listbox_style" ), &parserStyleListBoxStyle< GuiContext >, { makeDefaultedParameter< ParameterType::eName >( "ListBox" ) } );
-			addParserT( result, GUISection::eTheme, GUISection::eEditStyle, cuT( "edit_style" ), &parserStyleEditStyle< GuiContext >, { makeDefaultedParameter< ParameterType::eName >( "Edit" ) } );
-			addParserT( result, GUISection::eTheme, GUISection::ePanelStyle, cuT( "panel_style" ), &parserStylePanelStyle< GuiContext >, { makeDefaultedParameter< ParameterType::eName >( "Panel" ) } );
-			addParserT( result, GUISection::eTheme, GUISection::eProgressStyle, cuT( "progress_style" ), &parserStyleProgressStyle< GuiContext >, { makeDefaultedParameter< ParameterType::eName >( "Progress" ) } );
-			addParserT( result, GUISection::eTheme, GUISection::eExpandablePanelStyle, cuT( "expandable_panel_style" ), &parserStyleExpandablePanelStyle< GuiContext >, { makeDefaultedParameter< ParameterType::eName >( "ExpandablePanel" ) } );
-			addParserT( result, GUISection::eTheme, GUISection::eFrameStyle, cuT( "frame_style" ), &parserStyleFrameStyle< GuiContext >, { makeDefaultedParameter< ParameterType::eName >( "Frame" ) } );
-			addParserT( result, GUISection::eTheme, GUISection::eScrollBarStyle, cuT( "scrollbar_style" ), &parserStyleScrollBarStyle< GuiContext >, { makeDefaultedParameter< ParameterType::eName >( "ScrollBar" ) } );
+			addParserT( result, GUISection::eTheme, GUISection::eButtonStyle, cuT( "button_style" ), &parserStyleButtonStyle< GuiContext >, { makeDefaultedParameter< ParameterType::eName >( cuT( "Button" ) ) } );
+			addParserT( result, GUISection::eTheme, GUISection::eStaticStyle, cuT( "static_style" ), &parserStyleStaticStyle< GuiContext >, { makeDefaultedParameter< ParameterType::eName >( cuT( "Static" ) ) } );
+			addParserT( result, GUISection::eTheme, GUISection::eSliderStyle, cuT( "slider_style" ), &parserStyleSliderStyle< GuiContext >, { makeDefaultedParameter< ParameterType::eName >( cuT( "Slider" ) ) } );
+			addParserT( result, GUISection::eTheme, GUISection::eComboStyle, cuT( "combobox_style" ), &parserStyleComboBoxStyle< GuiContext >, { makeDefaultedParameter< ParameterType::eName >( cuT( "ComboBox" ) ) } );
+			addParserT( result, GUISection::eTheme, GUISection::eListStyle, cuT( "listbox_style" ), &parserStyleListBoxStyle< GuiContext >, { makeDefaultedParameter< ParameterType::eName >( cuT( "ListBox" ) ) } );
+			addParserT( result, GUISection::eTheme, GUISection::eEditStyle, cuT( "edit_style" ), &parserStyleEditStyle< GuiContext >, { makeDefaultedParameter< ParameterType::eName >( cuT( "Edit" ) ) } );
+			addParserT( result, GUISection::eTheme, GUISection::ePanelStyle, cuT( "panel_style" ), &parserStylePanelStyle< GuiContext >, { makeDefaultedParameter< ParameterType::eName >( cuT( "Panel" ) ) } );
+			addParserT( result, GUISection::eTheme, GUISection::eProgressStyle, cuT( "progress_style" ), &parserStyleProgressStyle< GuiContext >, { makeDefaultedParameter< ParameterType::eName >( cuT( "Progress" ) ) } );
+			addParserT( result, GUISection::eTheme, GUISection::eExpandablePanelStyle, cuT( "expandable_panel_style" ), &parserStyleExpandablePanelStyle< GuiContext >, { makeDefaultedParameter< ParameterType::eName >( cuT( "ExpandablePanel" ) ) } );
+			addParserT( result, GUISection::eTheme, GUISection::eFrameStyle, cuT( "frame_style" ), &parserStyleFrameStyle< GuiContext >, { makeDefaultedParameter< ParameterType::eName >( cuT( "Frame" ) ) } );
+			addParserT( result, GUISection::eTheme, GUISection::eScrollBarStyle, cuT( "scrollbar_style" ), &parserStyleScrollBarStyle< GuiContext >, { makeDefaultedParameter< ParameterType::eName >( cuT( "ScrollBar" ) ) } );
 			addParserT( result, GUISection::eTheme, castor::PreviousSection, cuT( "}" ), &parserThemeEnd );
 		}
 

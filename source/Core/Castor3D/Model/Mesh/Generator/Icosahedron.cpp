@@ -45,7 +45,7 @@ namespace castor3d
 		auto & texcoordsData = texcoords->getData();
 
 		// Construction de l'icosaèdre
-		std::vector< InterleavedVertex > vertices{ 12 };
+		castor::Vector< InterleavedVertex > vertices{ 12 };
 
 		// on crée les 12 points le composant
 		uint32_t index{ 0u };

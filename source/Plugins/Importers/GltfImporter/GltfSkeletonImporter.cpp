@@ -12,7 +12,7 @@ namespace c3d_gltf
 		static castor3d::SkeletonNode * addNode( GltfImporterFile const & file
 			, castor3d::Skeleton & skeleton
 			, fastgltf::pmr::MaybeSmallVector<std::size_t> const & skinJoints
-			, std::vector< castor::Matrix4x4f > const & skinOffsetMatrices
+			, castor::Vector< castor::Matrix4x4f > const & skinOffsetMatrices
 			, castor::String const & name
 			, size_t nodeIndex )
 		{
@@ -31,7 +31,7 @@ namespace c3d_gltf
 
 		static castor3d::SkeletonNode * processSkeletonNode( GltfImporterFile const & file
 			, fastgltf::pmr::MaybeSmallVector<std::size_t> const & skinJoints
-			, std::vector< castor::Matrix4x4f > const & skinOffsetMatrices
+			, castor::Vector< castor::Matrix4x4f > const & skinOffsetMatrices
 			, castor3d::Skeleton & skeleton
 			, size_t nodeIndex
 			, castor3d::SkeletonNode * parentSkelNode )
@@ -60,7 +60,7 @@ namespace c3d_gltf
 
 		static void processSkeletonNodes( GltfImporterFile const & file
 			, fastgltf::pmr::MaybeSmallVector<std::size_t> const & skinJoints
-			, std::vector< castor::Matrix4x4f > const & skinOffsetMatrices
+			, castor::Vector< castor::Matrix4x4f > const & skinOffsetMatrices
 			, castor3d::Skeleton & skeleton
 			, size_t parentIndex
 			, castor3d::SkeletonNode * parentSkelNode )
@@ -83,8 +83,8 @@ namespace c3d_gltf
 
 		template< typename FuncT >
 		static void findSkinRootNodeInSkeletonNodes( GltfImporterFile const & file
-			, std::set< size_t > & currentNodes
-			, std::set< size_t > & parentNodes
+			, castor::Set< size_t > & currentNodes
+			, castor::Set< size_t > & parentNodes
 			, FuncT findParentNode )
 		{
 			do
@@ -111,8 +111,8 @@ namespace c3d_gltf
 
 		template< typename FuncT >
 		static void findSkinRootNodeInOtherNodes( GltfImporterFile const & file
-			, std::set< size_t > & currentNodes
-			, std::set< size_t > & parentNodes
+			, castor::Set< size_t > & currentNodes
+			, castor::Set< size_t > & parentNodes
 			, FuncT findParentNode )
 		{
 			do
@@ -160,14 +160,14 @@ namespace c3d_gltf
 
 				return size_t{ ~0u };
 			};
-			std::set< size_t > currentNodes;
+			castor::Set< size_t > currentNodes;
 
 			for ( auto nodeIndex : impSkin.joints )
 			{
 				currentNodes.insert( nodeIndex );
 			}
 
-			std::set< size_t > parentNodes;
+			castor::Set< size_t > parentNodes;
 			findSkinRootNodeInSkeletonNodes( file, currentNodes, parentNodes, findParentNode );
 
 			if ( parentNodes.size() > 1 )
@@ -221,7 +221,7 @@ namespace c3d_gltf
 
 		castor3d::log::info << cuT( "  Skeleton found: [" ) << name << cuT( "]" ) << std::endl;
 		auto & impSkin = *it;
-		std::vector< castor::Matrix4x4f > skinOffsetMatrices;
+		castor::Vector< castor::Matrix4x4f > skinOffsetMatrices;
 
 		if ( impSkin.inverseBindMatrices )
 		{
@@ -230,7 +230,7 @@ namespace c3d_gltf
 				, impAsset.accessors[*impSkin.inverseBindMatrices]
 				, [&skinOffsetMatrices]( castor::Matrix4x4f value )
 				{
-					skinOffsetMatrices.push_back( std::move( value ) );
+					skinOffsetMatrices.push_back( castor::move( value ) );
 				} );
 		}
 		else

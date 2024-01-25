@@ -19,9 +19,6 @@ namespace castor
 	class LoggerInstance
 	{
 	public:
-		using my_string = std::string;
-		using my_ostream = std::ostream;
-
 		LoggerInstance( LoggerInstance const & ) = delete;
 		LoggerInstance & operator=( LoggerInstance const & ) = delete;
 		CU_API LoggerInstance( LoggerInstance && rhs )noexcept;
@@ -81,274 +78,424 @@ namespace castor
 		CU_API LogType getLevel()const;
 		/**
 		 *\~english
-		 *\brief		Logs a trace message, from a std::string
+		 *\brief		Logs a trace message, from a std::basic_string< CharT >
 		 *\param[in]	msg	The line to log
 		 *\~french
-		 *\brief		Log un message trace, à partir d'un std::string
+		 *\brief		Log un message trace, à partir d'un std::basic_string< CharT >
 		 *\param[in]	msg	La ligne a logger
 		 */
-		CU_API void lockedLogTrace( my_string const & msg );
+		template< typename CharT >
+		void lockedLogTrace( std::basic_string< CharT > const & msg )
+		{
+			doLockedPushMessage( LogType::eTrace, toUtf8( msg ), true );
+		}
 		/**
 		 *\~english
-		 *\brief		Logs a debug message, from a std::string
+		 *\brief		Logs a trace message, from a std::basic_string< CharT >
 		 *\param[in]	msg	The line to log
 		 *\~french
-		 *\brief		Log un message debug, à partir d'un std::string
+		 *\brief		Log un message trace, à partir d'un std::basic_string< CharT >
 		 *\param[in]	msg	La ligne a logger
 		 */
-		CU_API void lockedLogDebug( my_string const & msg );
+		template< typename CharT >
+		void lockedLogTraceNoLF( std::basic_string< CharT > const & msg )
+		{
+			doLockedPushMessage( LogType::eTrace, toUtf8( msg ), false );
+		}
 		/**
 		 *\~english
-		 *\brief		Logs a message, from a std::string
+		 *\brief		Logs a trace message, from a std::basic_string< CharT >
 		 *\param[in]	msg	The line to log
 		 *\~french
-		 *\brief		Log un message, à partir d'un std::string
+		 *\brief		Log un message trace, à partir d'un std::basic_string< CharT >
 		 *\param[in]	msg	La ligne a logger
 		 */
-		CU_API void lockedLogInfo( my_string const & msg );
+		template< typename CharT >
+		void logTrace( std::basic_string< CharT > const & msg )
+		{
+			pushMessage( LogType::eTrace, msg, true );
+		}
 		/**
 		 *\~english
-		 *\brief		Logs a warning, from a std::string
+		 *\brief		Logs a trace message, from a std::basic_ostream< CharT >
 		 *\param[in]	msg	The line to log
 		 *\~french
-		 *\brief		Log un avertissement, à partir d'un std::string
-		 *\param[in]	msg	The line to log
+		 *\brief		Log un message trace, à partir d'un std::basic_ostream< CharT >
+		 *\param[in]	msg	La ligne a logger
 		 */
-		CU_API void lockedLogWarning( my_string const & msg );
+		template< typename CharT >
+		void logTrace( std::basic_ostream< CharT > const & msg )
+		{
+			auto sbuf = msg.rdbuf();
+			std::basic_stringstream< CharT > ss;
+			ss << sbuf;
+			logTrace( ss.str() );
+		}
 		/**
 		 *\~english
-		 *\brief		Logs an error, from a std::string
+		 *\brief		Logs a trace message, from a std::basic_string< CharT >
+		 *\param[in]	msg	The line to log
+		 *\~french
+		 *\brief		Log un message trace, à partir d'un std::basic_string< CharT >
+		 *\param[in]	msg	La ligne a logger
+		 */
+		template< typename CharT >
+		void logTraceNoLF( std::basic_string< CharT > const & msg )
+		{
+			pushMessage( LogType::eTrace, msg, false );
+		}
+		/**
+		 *\~english
+		 *\brief		Logs a trace message, from a std::basic_ostream< CharT >
+		 *\param[in]	msg	The line to log
+		 *\~french
+		 *\brief		Log un message trace, à partir d'un std::basic_ostream< CharT >
+		 *\param[in]	msg	La ligne a logger
+		 */
+		template< typename CharT >
+		void logTraceNoLF( std::basic_ostream< CharT > const & msg )
+		{
+			auto sbuf = msg.rdbuf();
+			std::basic_stringstream< CharT > ss;
+			ss << sbuf;
+			logTraceNoLF( ss.str() );
+		}
+		/**
+		 *\~english
+		 *\brief		Logs a debug message, from a std::basic_string< CharT >
+		 *\param[in]	msg	The line to log
+		 *\~french
+		 *\brief		Log un message debug, à partir d'un std::basic_string< CharT >
+		 *\param[in]	msg	La ligne a logger
+		 */
+		template< typename CharT >
+		void lockedLogDebug( std::basic_string< CharT > const & msg )
+		{
+			doLockedPushMessage( LogType::eDebug, toUtf8( msg ), true );
+		}
+		/**
+		 *\~english
+		 *\brief		Logs a debug message, from a std::basic_string< CharT >
+		 *\param[in]	msg	The line to log
+		 *\~french
+		 *\brief		Log un message debug, à partir d'un std::basic_string< CharT >
+		 *\param[in]	msg	La ligne a logger
+		 */
+		template< typename CharT >
+		void lockedLogDebugNoLF( std::basic_string< CharT > const & msg )
+		{
+			doLockedPushMessage( LogType::eDebug, toUtf8( msg ), false );
+		}
+		/**
+		 *\~english
+		 *\brief		Logs a debug message, from a std::basic_string< CharT >
+		 *\param[in]	msg	The line to log
+		 *\~french
+		 *\brief		Log un message debug, à partir d'un std::basic_string< CharT >
+		 *\param[in]	msg	La ligne a logger
+		 */
+		template< typename CharT >
+		void logDebug( std::basic_string< CharT > const & msg )
+		{
+			pushMessage( LogType::eDebug, msg, true );
+		}
+		/**
+		 *\~english
+		 *\brief		Logs a debug message, from a std::basic_ostream< CharT >
+		 *\param[in]	msg	The line to log
+		 *\~french
+		 *\brief		Log un message debug, à partir d'un std::basic_ostream< CharT >
+		 *\param[in]	msg	La ligne a logger
+		 */
+		template< typename CharT >
+		void logDebug( std::basic_ostream< CharT > const & msg )
+		{
+			auto sbuf = msg.rdbuf();
+			std::basic_stringstream< CharT > ss;
+			ss << sbuf;
+			logDebug( ss.str() );
+		}
+		/**
+		 *\~english
+		 *\brief		Logs a debug message, from a std::basic_string< CharT >
+		 *\param[in]	msg	The line to log
+		 *\~french
+		 *\brief		Log un message debug, à partir d'un std::basic_string< CharT >
+		 *\param[in]	msg	La ligne a logger
+		 */
+		template< typename CharT >
+		void logDebugNoLF( std::basic_string< CharT > const & msg )
+		{
+			pushMessage( LogType::eDebug, msg, false );
+		}
+		/**
+		 *\~english
+		 *\brief		Logs a debug message, from a std::basic_ostream< CharT >
+		 *\param[in]	msg	The line to log
+		 *\~french
+		 *\brief		Log un message debug, à partir d'un std::basic_ostream< CharT >
+		 *\param[in]	msg	La ligne a logger
+		 */
+		template< typename CharT >
+		void logDebugNoLF( std::basic_ostream< CharT > const & msg )
+		{
+			auto sbuf = msg.rdbuf();
+			std::basic_stringstream< CharT > ss;
+			ss << sbuf;
+			logDebugNoLF( ss.str() );
+		}
+		/**
+		 *\~english
+		 *\brief		Logs a message, from a std::basic_string< CharT >
+		 *\param[in]	msg	The line to log
+		 *\~french
+		 *\brief		Log un message, à partir d'un std::basic_string< CharT >
+		 *\param[in]	msg	La ligne a logger
+		 */
+		template< typename CharT >
+		void lockedLogInfo( std::basic_string< CharT > const & msg )
+		{
+			doLockedPushMessage( LogType::eInfo, toUtf8( msg ), true );
+		}
+		/**
+		 *\~english
+		 *\brief		Logs a message, from a std::basic_string< CharT >
+		 *\param[in]	msg	The line to log
+		 *\~french
+		 *\brief		Log un message, à partir d'un std::basic_string< CharT >
+		 *\param[in]	msg	La ligne a logger
+		 */
+		template< typename CharT >
+		void lockedLogInfoNoLF( std::basic_string< CharT > const & msg )
+		{
+			doLockedPushMessage( LogType::eInfo, toUtf8( msg ), false );
+		}
+		/**
+		 *\~english
+		 *\brief		Logs a message, from a std::basic_string< CharT >
+		 *\param[in]	msg	The line to log
+		 *\~french
+		 *\brief		Log un message, à partir d'un std::basic_string< CharT >
+		 *\param[in]	msg	La ligne a logger
+		 */
+		template< typename CharT >
+		void logInfo( std::basic_string< CharT > const & msg )
+		{
+			pushMessage( LogType::eInfo, msg, true );
+		}
+		/**
+		 *\~english
+		 *\brief		Logs a message, from a std::basic_ostream< CharT >
+		 *\param[in]	msg	The line to log
+		 *\~french
+		 *\brief		Log un message, à partir d'un std::basic_ostream< CharT >
+		 *\param[in]	msg	The line to log
+		 */
+		template< typename CharT >
+		void logInfo( std::basic_ostream< CharT > const & msg )
+		{
+			auto sbuf = msg.rdbuf();
+			std::basic_stringstream< CharT > ss;
+			ss << sbuf;
+			logInfo( ss.str() );
+		}
+		/**
+		 *\~english
+		 *\brief		Logs a message, from a std::basic_string< CharT >
+		 *\param[in]	msg	The line to log
+		 *\~french
+		 *\brief		Log un message, à partir d'un std::basic_string< CharT >
+		 *\param[in]	msg	La ligne a logger
+		 */
+		template< typename CharT >
+		void logInfoNoLF( std::basic_string< CharT > const & msg )
+		{
+			pushMessage( LogType::eInfo, msg, false );
+		}
+		/**
+		 *\~english
+		 *\brief		Logs a message, from a std::basic_ostream< CharT >
+		 *\param[in]	msg	The line to log
+		 *\~french
+		 *\brief		Log un message, à partir d'un std::basic_ostream< CharT >
+		 *\param[in]	msg	The line to log
+		 */
+		template< typename CharT >
+		void logInfoNoLF( std::basic_ostream< CharT > const & msg )
+		{
+			auto sbuf = msg.rdbuf();
+			std::basic_stringstream< CharT > ss;
+			ss << sbuf;
+			logInfoNoLF( ss.str() );
+		}
+		/**
+		 *\~english
+		 *\brief		Logs a warning, from a std::basic_string< CharT >
+		 *\param[in]	msg	The line to log
+		 *\~french
+		 *\brief		Log un avertissement, à partir d'un std::basic_string< CharT >
+		 *\param[in]	msg	The line to log
+		 */
+		template< typename CharT >
+		void lockedLogWarning( std::basic_string< CharT > const & msg )
+		{
+			doLockedPushMessage( LogType::eWarning, toUtf8( msg ), true );
+		}
+		/**
+		 *\~english
+		 *\brief		Logs a warning, from a std::basic_string< CharT >
+		 *\param[in]	msg	The line to log
+		 *\~french
+		 *\brief		Log un avertissement, à partir d'un std::basic_string< CharT >
+		 *\param[in]	msg	The line to log
+		 */
+		template< typename CharT >
+		void lockedLogWarningNoLF( std::basic_string< CharT > const & msg )
+		{
+			doLockedPushMessage( LogType::eWarning, toUtf8( msg ), false );
+		}
+		/**
+		 *\~english
+		 *\brief		Logs a warning, from a std::basic_string< CharT >
+		 *\param[in]	msg	The line to log
+		 *\~french
+		 *\brief		Log un avertissement, à partir d'un std::basic_string< CharT >
+		 *\param[in]	msg	The line to log
+		 */
+		template< typename CharT >
+		void logWarning( std::basic_string< CharT > const & msg )
+		{
+			pushMessage( LogType::eWarning, msg, true );
+		}
+		/**
+		 *\~english
+		 *\brief		Logs a warning, from a std::basic_ostream< CharT >
+		 *\param[in]	msg	The line to log
+		 *\~french
+		 *\brief		Log un avertissement, à partir d'un std::basic_ostream< CharT >
+		 *\param[in]	msg	The line to log
+		 */
+		template< typename CharT >
+		void logWarning( std::basic_ostream< CharT > const & msg )
+		{
+			auto sbuf = msg.rdbuf();
+			std::basic_stringstream< CharT > ss;
+			ss << sbuf;
+			logWarning( ss.str() );
+		}
+		/**
+		 *\~english
+		 *\brief		Logs a warning, from a std::basic_string< CharT >
+		 *\param[in]	msg	The line to log
+		 *\~french
+		 *\brief		Log un avertissement, à partir d'un std::basic_string< CharT >
+		 *\param[in]	msg	The line to log
+		 */
+		template< typename CharT >
+		void logWarningNoLF( std::basic_string< CharT > const & msg )
+		{
+			pushMessage( LogType::eWarning, msg, false );
+		}
+		/**
+		 *\~english
+		 *\brief		Logs a warning, from a std::basic_ostream< CharT >
+		 *\param[in]	msg	The line to log
+		 *\~french
+		 *\brief		Log un avertissement, à partir d'un std::basic_ostream< CharT >
+		 *\param[in]	msg	The line to log
+		 */
+		template< typename CharT >
+		void logWarningNoLF( std::basic_ostream< CharT > const & msg )
+		{
+			auto sbuf = msg.rdbuf();
+			std::basic_stringstream< CharT > ss;
+			ss << sbuf;
+			logWarningNoLF( ss.str() );
+		}
+		/**
+		 *\~english
+		 *\brief		Logs an error, from a std::basic_string< CharT >
 		 *\param[in]	msg		The line to log
 		 *\~french
-		 *\brief		Log une erreur, à partir d'un std::string
+		 *\brief		Log une erreur, à partir d'un std::basic_string< CharT >
 		 *\param[in]	msg		The line to log
 		 */
-		CU_API void lockedLogError( my_string const & msg );
+		template< typename CharT >
+		void lockedLogError( std::basic_string< CharT > const & msg )
+		{
+			doLockedPushMessage( LogType::eError, toUtf8( msg ), true );
+		}
 		/**
 		 *\~english
-		 *\brief		Logs a trace message, from a std::string
-		 *\param[in]	msg	The line to log
-		 *\~french
-		 *\brief		Log un message trace, à partir d'un std::string
-		 *\param[in]	msg	La ligne a logger
-		 */
-		CU_API void logTrace( my_string const & msg );
-		/**
-		 *\~english
-		 *\brief		Logs a trace message, from a std::ostream
-		 *\param[in]	msg	The line to log
-		 *\~french
-		 *\brief		Log un message trace, à partir d'un std::ostream
-		 *\param[in]	msg	La ligne a logger
-		 */
-		CU_API void logTrace( my_ostream const & msg );
-		/**
-		 *\~english
-		 *\brief		Logs a debug message, from a std::string
-		 *\param[in]	msg	The line to log
-		 *\~french
-		 *\brief		Log un message debug, à partir d'un std::string
-		 *\param[in]	msg	La ligne a logger
-		 */
-		CU_API void logDebug( my_string const & msg );
-		/**
-		 *\~english
-		 *\brief		Logs a debug message, from a std::ostream
-		 *\param[in]	msg	The line to log
-		 *\~french
-		 *\brief		Log un message debug, à partir d'un std::ostream
-		 *\param[in]	msg	La ligne a logger
-		 */
-		CU_API void logDebug( my_ostream const & msg );
-		/**
-		 *\~english
-		 *\brief		Logs a message, from a std::string
-		 *\param[in]	msg	The line to log
-		 *\~french
-		 *\brief		Log un message, à partir d'un std::string
-		 *\param[in]	msg	La ligne a logger
-		 */
-		CU_API void logInfo( my_string const & msg );
-		/**
-		 *\~english
-		 *\brief		Logs a message, from a std::ostream
-		 *\param[in]	msg	The line to log
-		 *\~french
-		 *\brief		Log un message, à partir d'un std::ostream
-		 *\param[in]	msg	The line to log
-		 */
-		CU_API void logInfo( my_ostream const & msg );
-		/**
-		 *\~english
-		 *\brief		Logs a warning, from a std::string
-		 *\param[in]	msg	The line to log
-		 *\~french
-		 *\brief		Log un avertissement, à partir d'un std::string
-		 *\param[in]	msg	The line to log
-		 */
-		CU_API void logWarning( my_string const & msg );
-		/**
-		 *\~english
-		 *\brief		Logs a warning, from a std::ostream
-		 *\param[in]	msg	The line to log
-		 *\~french
-		 *\brief		Log un avertissement, à partir d'un std::ostream
-		 *\param[in]	msg	The line to log
-		 */
-		CU_API void logWarning( my_ostream const & msg );
-		/**
-		 *\~english
-		 *\brief		Logs an error, from a std::string
+		 *\brief		Logs an error, from a std::basic_string< CharT >
 		 *\param[in]	msg		The line to log
 		 *\~french
-		 *\brief		Log une erreur, à partir d'un std::string
+		 *\brief		Log une erreur, à partir d'un std::basic_string< CharT >
 		 *\param[in]	msg		The line to log
 		 */
-		CU_API void logError( my_string const & msg );
+		template< typename CharT >
+		void lockedLogErrorNoLF( std::basic_string< CharT > const & msg )
+		{
+			doLockedPushMessage( LogType::eError, toUtf8( msg ), false );
+		}
 		/**
 		 *\~english
-		 *\brief		Logs an error, from a std::ostream
-		 *\param[in]	msg	The line to log
-		 *\~french
-		 *\brief		Log une erreur, à partir d'un std::ostream
-		 *\param[in]	msg	The line to log
-		 */
-		CU_API void logError( my_ostream const & msg );
-		/**
-		 *\~english
-		 *\brief		Logs a trace message, from a std::string
-		 *\param[in]	msg	The line to log
-		 *\~french
-		 *\brief		Log un message trace, à partir d'un std::string
-		 *\param[in]	msg	La ligne a logger
-		 */
-		CU_API void lockedLogTraceNoLF( my_string const & msg );
-		/**
-		 *\~english
-		 *\brief		Logs a debug message, from a std::string
-		 *\param[in]	msg	The line to log
-		 *\~french
-		 *\brief		Log un message debug, à partir d'un std::string
-		 *\param[in]	msg	La ligne a logger
-		 */
-		CU_API void lockedLogDebugNoLF( my_string const & msg );
-		/**
-		 *\~english
-		 *\brief		Logs a message, from a std::string
-		 *\param[in]	msg	The line to log
-		 *\~french
-		 *\brief		Log un message, à partir d'un std::string
-		 *\param[in]	msg	La ligne a logger
-		 */
-		CU_API void lockedLogInfoNoLF( my_string const & msg );
-		/**
-		 *\~english
-		 *\brief		Logs a warning, from a std::string
-		 *\param[in]	msg	The line to log
-		 *\~french
-		 *\brief		Log un avertissement, à partir d'un std::string
-		 *\param[in]	msg	The line to log
-		 */
-		CU_API void lockedLogWarningNoLF( my_string const & msg );
-		/**
-		 *\~english
-		 *\brief		Logs an error, from a std::string
+		 *\brief		Logs an error, from a std::basic_string< CharT >
 		 *\param[in]	msg		The line to log
 		 *\~french
-		 *\brief		Log une erreur, à partir d'un std::string
+		 *\brief		Log une erreur, à partir d'un std::basic_string< CharT >
 		 *\param[in]	msg		The line to log
 		 */
-		CU_API void lockedLogErrorNoLF( my_string const & msg );
+		template< typename CharT >
+		void logError( std::basic_string< CharT > const & msg )
+		{
+			pushMessage( LogType::eError, msg, true );
+		}
 		/**
 		 *\~english
-		 *\brief		Logs a trace message, from a std::string
+		 *\brief		Logs an error, from a std::basic_ostream< CharT >
 		 *\param[in]	msg	The line to log
 		 *\~french
-		 *\brief		Log un message trace, à partir d'un std::string
-		 *\param[in]	msg	La ligne a logger
-		 */
-		CU_API void logTraceNoLF( my_string const & msg );
-		/**
-		 *\~english
-		 *\brief		Logs a trace message, from a std::ostream
-		 *\param[in]	msg	The line to log
-		 *\~french
-		 *\brief		Log un message trace, à partir d'un std::ostream
-		 *\param[in]	msg	La ligne a logger
-		 */
-		CU_API void logTraceNoLF( my_ostream const & msg );
-		/**
-		 *\~english
-		 *\brief		Logs a debug message, from a std::string
-		 *\param[in]	msg	The line to log
-		 *\~french
-		 *\brief		Log un message debug, à partir d'un std::string
-		 *\param[in]	msg	La ligne a logger
-		 */
-		CU_API void logDebugNoLF( my_string const & msg );
-		/**
-		 *\~english
-		 *\brief		Logs a debug message, from a std::ostream
-		 *\param[in]	msg	The line to log
-		 *\~french
-		 *\brief		Log un message debug, à partir d'un std::ostream
-		 *\param[in]	msg	La ligne a logger
-		 */
-		CU_API void logDebugNoLF( my_ostream const & msg );
-		/**
-		 *\~english
-		 *\brief		Logs a message, from a std::string
-		 *\param[in]	msg	The line to log
-		 *\~french
-		 *\brief		Log un message, à partir d'un std::string
-		 *\param[in]	msg	La ligne a logger
-		 */
-		CU_API void logInfoNoLF( my_string const & msg );
-		/**
-		 *\~english
-		 *\brief		Logs a message, from a std::ostream
-		 *\param[in]	msg	The line to log
-		 *\~french
-		 *\brief		Log un message, à partir d'un std::ostream
+		 *\brief		Log une erreur, à partir d'un std::basic_ostream< CharT >
 		 *\param[in]	msg	The line to log
 		 */
-		CU_API void logInfoNoLF( my_ostream const & msg );
+		template< typename CharT >
+		void logError( std::basic_ostream< CharT > const & msg )
+		{
+			auto sbuf = msg.rdbuf();
+			std::basic_stringstream< CharT > ss;
+			ss << sbuf;
+			logError( ss.str() );
+		}
 		/**
 		 *\~english
-		 *\brief		Logs a warning, from a std::string
-		 *\param[in]	msg	The line to log
-		 *\~french
-		 *\brief		Log un avertissement, à partir d'un std::string
-		 *\param[in]	msg	The line to log
-		 */
-		CU_API void logWarningNoLF( my_string const & msg );
-		/**
-		 *\~english
-		 *\brief		Logs a warning, from a std::ostream
-		 *\param[in]	msg	The line to log
-		 *\~french
-		 *\brief		Log un avertissement, à partir d'un std::ostream
-		 *\param[in]	msg	The line to log
-		 */
-		CU_API void logWarningNoLF( my_ostream const & msg );
-		/**
-		 *\~english
-		 *\brief		Logs an error, from a std::string
+		 *\brief		Logs an error, from a std::basic_string< CharT >
 		 *\param[in]	msg		The line to log
 		 *\~french
-		 *\brief		Log une erreur, à partir d'un std::string
+		 *\brief		Log une erreur, à partir d'un std::basic_string< CharT >
 		 *\param[in]	msg		The line to log
 		 */
-		CU_API void logErrorNoLF( my_string const & msg );
+		template< typename CharT >
+		void logErrorNoLF( std::basic_string< CharT > const & msg )
+		{
+			pushMessage( LogType::eError, msg, false );
+		}
 		/**
 		 *\~english
-		 *\brief		Logs an error, from a std::ostream
+		 *\brief		Logs an error, from a std::basic_ostream< CharT >
 		 *\param[in]	msg	The line to log
 		 *\~french
-		 *\brief		Log une erreur, à partir d'un std::ostream
+		 *\brief		Log une erreur, à partir d'un std::basic_ostream< CharT >
 		 *\param[in]	msg	The line to log
 		 */
-		CU_API void logErrorNoLF( my_ostream const & msg );
+		template< typename CharT >
+		void logErrorNoLF( std::basic_ostream< CharT > const & msg )
+		{
+			auto sbuf = msg.rdbuf();
+			std::basic_stringstream< CharT > ss;
+			ss << sbuf;
+			logErrorNoLF( ss.str() );
+		}
 		/**
 		 *\~english
 		 *\brief		Pushes a message into the queue.
@@ -361,13 +508,18 @@ namespace castor
 		 *\param[in]	message	Le message.
 		 *\param[in]	addLF	Dit si on ajoute un LF à la fin..
 		 */
-		CU_API void pushMessage( LogType type
-			, std::string const & message
-			, bool addLF = true );
+		template< typename CharT >
+		void pushMessage( LogType type
+			, std::basic_string< CharT > const & message
+			, bool addLF = true )
+		{
+			auto lock( makeUniqueLock( m_mutexQueue ) );
+			doLockedPushMessage( type, toUtf8( message ), addLF );
+		}
 
 		CU_API void flushQueue();
 
-		String getHeader( uint8_t index )const noexcept
+		MbString getHeader( uint8_t index )const noexcept
 		{
 			return m_headers[index];
 		}
@@ -385,23 +537,23 @@ namespace castor
 	private:
 		void doInitialiseThread();
 		void doCleanupThread();
-		void doLockedPushMessage( LogType type
-			, std::string const & message
+		CU_API void doLockedPushMessage( LogType type
+			, MbString const & message
 			, bool addLF = true );
 
 	private:
 		LogType m_logLevel;
 		LoggerImpl m_impl;
-		std::array< String, size_t( LogType::eCount ) > m_headers
+		Array< MbString, size_t( LogType::eCount ) > m_headers
 		{
-			cuT( "****TRACE**** " ),
-			cuT( "****DEBUG**** " ),
-			cuT( "              " ),
-			cuT( "***WARNING*** " ),
-			cuT( "****ERROR**** " ),
+			"****TRACE**** ",
+			"****DEBUG**** ",
+			"              ",
+			"***WARNING*** ",
+			"****ERROR**** ",
 		};
 		MessageQueue m_queue;
-		mutable std::mutex m_mutexQueue;
+		mutable castor::Mutex m_mutexQueue;
 		std::thread m_logThread;
 		std::atomic_bool m_initialised{ false };
 		std::atomic_bool m_stopped{ false };

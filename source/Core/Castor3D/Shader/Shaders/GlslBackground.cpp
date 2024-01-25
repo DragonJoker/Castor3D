@@ -15,7 +15,7 @@ namespace castor3d::shader
 		, VkExtent2D targetSize )
 		: m_writer{ writer }
 		, m_utils{ utils }
-		, m_targetSize{ std::move( targetSize ) }
+		, m_targetSize{ castor::move( targetSize ) }
 	{
 	}
 
@@ -31,7 +31,7 @@ namespace castor3d::shader
 			, *scene.getEngine()
 			, writer
 			, utils
-			, std::move( targetSize )
+			, castor::move( targetSize )
 			, needsForeground
 			, binding
 			, set );

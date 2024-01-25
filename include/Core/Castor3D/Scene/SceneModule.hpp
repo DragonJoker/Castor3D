@@ -366,27 +366,27 @@ namespace castor3d
 	//! Scene pointer map, sorted by name.
 	CU_DeclareMap( castor::String, SceneRPtr, ScenePtrStr );
 
-	using OnSceneChangedFunction = std::function< void( Scene const & ) >;
+	using OnSceneChangedFunction = castor::Function< void( Scene const & ) >;
 	using OnSceneChanged = castor::SignalT< OnSceneChangedFunction >;
 	using OnSceneChangedConnection = OnSceneChanged::connection;
 
-	using OnSceneUpdateFunction = std::function< void( Scene const & ) >;
+	using OnSceneUpdateFunction = castor::Function< void( Scene const & ) >;
 	using OnSceneUpdate = castor::SignalT< OnSceneUpdateFunction >;
 	using OnSceneUpdateConnection = OnSceneUpdate::connection;
 
-	using OnCameraChangedFunction = std::function< void( Camera const & ) >;
+	using OnCameraChangedFunction = castor::Function< void( Camera const & ) >;
 	using OnCameraChanged = castor::SignalT< OnCameraChangedFunction >;
 	using OnCameraChangedConnection = OnCameraChanged::connection;
 
-	using OnSceneNodeChangedFunction = std::function< void( SceneNode const & ) >;
+	using OnSceneNodeChangedFunction = castor::Function< void( SceneNode const & ) >;
 	using OnSceneNodeChanged = castor::SignalT< OnSceneNodeChangedFunction >;
 	using OnSceneNodeChangedConnection = OnSceneNodeChanged::connection;
 
-	using OnSceneNodeReparentFunction = std::function< void( SceneNode & ) >;
+	using OnSceneNodeReparentFunction = castor::Function< void( SceneNode & ) >;
 	using OnSceneNodeReparent = castor::SignalT< OnSceneNodeReparentFunction >;
 	using OnSceneNodeReparentConnection = OnSceneNodeReparent::connection;
 
-	using SubmeshMaterialMap = std::map< Submesh const *, MaterialObs >;
+	using SubmeshMaterialMap = castor::Map< Submesh const *, MaterialObs >;
 
 	C3D_API castor::LoggerInstance & getLogger( Scene const & scene );
 	C3D_API Engine & getEngine( Scene const & scene );
@@ -463,22 +463,22 @@ namespace castor3d
 		using ElementKeyT = KeyT;
 		using ElementPtrT = castor::UniquePtr< ElementT >;
 		using ElementObsT = ElementT *;
-		using ElementContT = std::map< KeyT, ElementPtrT >;
+		using ElementContT = castor::Map< KeyT, ElementPtrT >;
 		using ElementCacheT = ObjectCacheBaseT< ElementT, KeyT >;
 
-		using ElementInitialiserT = std::function< void( ElementT & ) >;
-		using ElementCleanerT = std::function< void( ElementT & ) >;
-		using ElementMergerT = std::function< void( ElementCacheT const &
+		using ElementInitialiserT = castor::Function< void( ElementT & ) >;
+		using ElementCleanerT = castor::Function< void( ElementT & ) >;
+		using ElementMergerT = castor::Function< void( ElementCacheT const &
 			, ElementContT &
 			, ElementPtrT
 			, SceneNodeRPtr
 			, SceneNodeRPtr ) >;
-		using ElementAttacherT = std::function< void( ElementT &
+		using ElementAttacherT = castor::Function< void( ElementT &
 			, SceneNode &
 			, SceneNodeRPtr
 			, SceneNodeRPtr
 			, SceneNodeRPtr ) >;
-		using ElementDetacherT = std::function< void( ElementT & ) >;
+		using ElementDetacherT = castor::Function< void( ElementT & ) >;
 
 		template< typename ... ParametersT >
 		static ElementPtrT makeElement( ElementCacheT const & cache
@@ -486,7 +486,7 @@ namespace castor3d
 			, ParametersT && ... params )
 		{
 			return castor::makeUnique< ElementT >( key
-				, std::forward< ParametersT >( params )... );
+				, castor::forward< ParametersT >( params )... );
 		}
 
 		static ElementObsT makeElementObs( ElementPtrT const & element )

@@ -306,7 +306,7 @@ namespace castor3d
 		{
 			if ( blockContext->renderTarget )
 			{
-				blockContext->renderTarget->setSsaoConfig( std::move( blockContext->ssaoConfig ) );
+				blockContext->renderTarget->setSsaoConfig( castor::move( blockContext->ssaoConfig ) );
 				blockContext->ssaoConfig = {};
 			}
 			else

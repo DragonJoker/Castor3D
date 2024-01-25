@@ -90,7 +90,7 @@ namespace castor3d
 			 *\brief		Crée et ajoute une face au sous-maillage.
 			 *\param[in]	faces	Les faces.
 			 */
-			void addFaceGroup( std::vector< FaceIndices > const & faces )
+			void addFaceGroup( castor::Vector< FaceIndices > const & faces )
 			{
 				addFaceGroup( faces.data(), faces.data() + faces.size() );
 			}
@@ -103,7 +103,7 @@ namespace castor3d
 			 *\param[in]	faces	Les faces.
 			 */
 			template< size_t Count >
-			void addFaceGroup( std::array< FaceIndices, Count > const & faces )
+			void addFaceGroup( castor::Array< FaceIndices, Count > const & faces )
 			{
 				addFaceGroup( faces.data(), faces.data() + Count );
 			}
@@ -139,7 +139,7 @@ namespace castor3d
 
 			void setData( FaceArray faces )
 			{
-				m_faces = std::move( faces );
+				m_faces = castor::move( faces );
 			}
 
 			uint32_t getCount()const noexcept

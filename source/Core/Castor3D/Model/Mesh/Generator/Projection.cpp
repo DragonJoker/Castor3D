@@ -9,9 +9,6 @@ namespace castor3d
 {
 	Projection::Projection()
 		: MeshGenerator( cuT( "projection" ) )
-		, m_depth( 0 )
-		, m_closed( false )
-		, m_nbFaces( 0 )
 	{
 	}
 
@@ -20,18 +17,19 @@ namespace castor3d
 		return castor::makeUniqueDerived< MeshGenerator, Projection >();
 	}
 
-	void Projection::setPoints( Pattern< castor::Point3f > const & pattern
-		, castor::Point3f const & axis
-		, bool closed )
+	void Projection::setPoints( [[maybe_unused]] Pattern< castor::Point3f > const & pattern
+		, [[maybe_unused]] castor::Point3f const & axis
+		, [[maybe_unused]] bool closed )
 	{
-		m_pattern = pattern;
-		m_closed = closed;
-		m_axis = axis;
-		castor::point::normalise( m_axis );
-		m_axis = m_axis * m_depth;
+		//m_pattern = pattern;
+		//m_closed = closed;
+		//m_axis = axis;
+		//castor::point::normalise( m_axis );
+		//m_axis = m_axis * m_depth;
 	}
 
-	void Projection::doGenerate( Mesh & mesh, Parameters const & parameters )
+	void Projection::doGenerate( [[maybe_unused]] Mesh & mesh
+		, [[maybe_unused]] Parameters const & parameters )
 	{
 	//	m_nbFaces = faces[0];
 	//	m_depth = dimensions[0];

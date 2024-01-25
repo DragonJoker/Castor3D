@@ -48,17 +48,17 @@ namespace castor3d
 		{
 			Data( uint32_t count
 				, GpuBufferOffsetT< InstantiationData > buffer
-				, std::vector< InstantiationData > data = {} )
+				, castor::Vector< InstantiationData > data = {} )
 				: count{ count }
-				, buffer{ std::move( buffer ) }
-				, data{ std::move( data ) }
+				, buffer{ castor::move( buffer ) }
+				, data{ castor::move( data ) }
 			{
 			}
 			uint32_t count;
 			GpuBufferOffsetT< InstantiationData > buffer;
-			std::vector< InstantiationData > data;
+			castor::Vector< InstantiationData > data;
 		};
-		using InstanceDataMap = std::map< uint32_t, Data >;
+		using InstanceDataMap = castor::Map< uint32_t, Data >;
 
 		struct ComponentData
 			: public SubmeshComponentData
@@ -72,7 +72,7 @@ namespace castor3d
 				, Pass const & pass
 				, ObjectBufferOffset const & bufferOffsets
 				, ashes::BufferCRefArray & buffers
-				, std::vector< uint64_t > & offsets
+				, castor::Vector< uint64_t > & offsets
 				, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
 				, uint32_t & currentBinding
 				, uint32_t & currentLocation )override;
@@ -158,7 +158,7 @@ namespace castor3d
 
 		private:
 			InstanceDataMap m_instances;
-			std::unordered_map< size_t, ashes::PipelineVertexInputStateCreateInfo > m_mtxLayouts;
+			castor::UnorderedMap< size_t, ashes::PipelineVertexInputStateCreateInfo > m_mtxLayouts;
 			uint32_t m_threshold;
 		};
 

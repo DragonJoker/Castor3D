@@ -115,7 +115,7 @@ namespace castor
 	xchar const * const RegexFormat< HdrRgbaColour >::Value = cuT( "#([0-9a-fA-F]{2}[0-9a-fA-F]{2}[0-9a-fA-F]{2}[0-9a-fA-F]{2})"
 		"|#([0-9a-fA-F]{2}[0-9a-fA-F]{2}[0-9a-fA-F]{2})" );
 
-	static std::array< StringView, size_t( ParameterType::eCount ) > constexpr TypeName
+	static Array< StringView, size_t( ParameterType::eCount ) > constexpr TypeName
 	{
 		ParserParameterStringType< ParameterType::eText >,
 		ParserParameterStringType< ParameterType::eName >,

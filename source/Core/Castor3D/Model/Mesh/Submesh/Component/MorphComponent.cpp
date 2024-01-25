@@ -51,7 +51,7 @@ namespace castor3d
 			buffer.boundingBox.load( min, max );
 		}
 
-		static std::pair< MorphFlags, uint32_t > computeMorphFlags( SubmeshAnimationBuffer const & buffer )
+		static castor::Pair< MorphFlags, uint32_t > computeMorphFlags( SubmeshAnimationBuffer const & buffer )
 		{
 			MorphFlags flags{};
 			uint32_t count{};
@@ -135,7 +135,7 @@ namespace castor3d
 
 		CU_Require( smshcompmorph::computeMorphFlags( data ).first == m_flags );
 		smshcompmorph::computeBoundingBox( data );
-		m_targets.emplace_back( std::move( data ) );
+		m_targets.emplace_back( castor::move( data ) );
 	}
 
 	bool MorphComponent::ComponentData::doInitialise( RenderDevice const & device )
@@ -267,7 +267,7 @@ namespace castor3d
 
 	MorphComponent::MorphComponent( Submesh & submesh )
 		: SubmeshComponent{ submesh, TypeName
-			, std::make_unique< ComponentData >( submesh ) }
+			, castor::make_unique< ComponentData >( submesh ) }
 	{
 	}
 

@@ -83,7 +83,7 @@ namespace castor3d
 
 		void setTransform( NodeTransform tranform )noexcept
 		{
-			m_transform = std::move( tranform );
+			m_transform = castor::move( tranform );
 		}
 
 	private:

@@ -35,8 +35,8 @@ namespace Testing
 		float m_bufferMtx4x4C[16];
 		bool m_bClInitialised;
 		cl::Context m_context;
-		std::vector< cl::Device > m_arrayDevices;
-		std::vector< cl::Platform > m_arrayPlatforms;
+		castor::Vector< cl::Device > m_arrayDevices;
+		castor::Vector< cl::Platform > m_arrayPlatforms;
 		cl::Platform m_platform;
 		cl::Buffer m_clBufferMtx4x4A;
 		cl::Buffer m_clBufferMtx4x4B;

@@ -10,19 +10,15 @@ namespace castor
 	}
 
 	Position::Position( Position const & rhs )
-		: BaseType{ getData().buffer.data() }
+		:DataHolderT{ rhs }
+		, BaseType{ getData().buffer.data() }
 	{
-		getData().position.x = rhs.getData().position.x;
-		getData().position.y = rhs.getData().position.y;
 	}
 
 	Position::Position( Position && rhs )noexcept
-		: BaseType{ getData().buffer.data() }
+		: DataHolderT{ std::move( rhs ) }
+		, BaseType{ getData().buffer.data() }
 	{
-		getData().position.x = rhs.getData().position.x;
-		getData().position.y = rhs.getData().position.y;
-		rhs.getData().position.x = 0;
-		rhs.getData().position.y = 0;
 	}
 
 	Position & Position::operator=( Position const & rhs )

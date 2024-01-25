@@ -67,7 +67,7 @@ namespace castor3d
 		 *\brief		Liste les vues intermédiaires utilisées par toute la technique.
 		 *\param[out]	intermediates	Reçoit les vues intermédiaires.
 		 */
-		C3D_API void listIntermediates( std::vector< IntermediateView > & intermediates );
+		C3D_API void listIntermediates( castor::Vector< IntermediateView > & intermediates );
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, CPU wise.

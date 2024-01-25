@@ -247,16 +247,16 @@ namespace castor3d
 		std::atomic< castor::Microseconds > m_lastFrameTime;
 		//!\~english	The debug overlays.
 		//!\~french		Les incrustations de débogage.
-		std::unique_ptr< DebugOverlays > m_debugOverlays;
-		std::mutex m_debugOverlaysMtx;
+		castor::RawUniquePtr< DebugOverlays > m_debugOverlays;
+		castor::Mutex m_debugOverlaysMtx;
 
 	private:
 		int32_t m_ignored = 5;
 		QueueData const * m_reservedQueue{};
-		std::unordered_set< ShaderBuffer const * > m_shaderBuffers;
-		std::mutex m_shaderBuffersMtx;
-		std::array< FramePassTimerUPtr, size_t( CpuEventType::eCount ) > m_timerCpuEvents;
-		std::array< FramePassTimerUPtr, size_t( GpuEventType::eCount ) > m_timerGpuEvents;
+		castor::UnorderedSet< ShaderBuffer const * > m_shaderBuffers;
+		castor::Mutex m_shaderBuffersMtx;
+		castor::Array< FramePassTimerUPtr, size_t( CpuEventType::eCount ) > m_timerCpuEvents;
+		castor::Array< FramePassTimerUPtr, size_t( GpuEventType::eCount ) > m_timerGpuEvents;
 		UploadDataUPtr m_uploadData{};
 		ashes::FencePtr m_uploadFence{};
 	};

@@ -151,7 +151,7 @@ namespace castor3d
 				, RenderDevice const & device
 				, crg::cp::Config config
 				, ClustersConfig const & clustersConfig )
-				: ShaderHolder{ ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, "ComputeClustersAABB", createShader( device, clustersConfig ) } }
+				: ShaderHolder{ ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, cuT( "ComputeClustersAABB" ), createShader( device, clustersConfig ) } }
 				, CreateInfoHolder{ ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, ShaderHolder::getData() ) } }
 				, crg::ComputePass{ framePass
 					, context
@@ -203,7 +203,7 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = std::make_unique< cptclsb::FramePass >( framePass
+				auto result = castor::make_unique< cptclsb::FramePass >( framePass
 					, context
 					, graph
 					, device
@@ -213,15 +213,15 @@ namespace castor3d
 						.groupCountZ( clusters.getDimensions()->z )
 						.enabled( &clusters.needsClustersUpdate() )
 					, clusters.getConfig() );
-				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			});
 		pass.addDependency( *previousPass );
 		cameraUbo.createPassBinding( pass, cptclsb::eCamera );
 		clusters.getClustersUbo().createPassBinding( pass, cptclsb::eClusters );
-		createInputStoragePassBinding( pass, uint32_t( cptclsb::eReducedLightsAABB ), "C3D_ReducedLightsAABB", clusters.getReducedLightsAABBBuffer(), 0u, ashes::WholeSize );
-		createClearableOutputStorageBinding( pass, uint32_t( cptclsb::eClustersAABB ), "C3D_ClustersAABB", clusters.getClustersAABBBuffer(), 0u, ashes::WholeSize );
+		createInputStoragePassBinding( pass, uint32_t( cptclsb::eReducedLightsAABB ), cuT( "C3D_ReducedLightsAABB" ), clusters.getReducedLightsAABBBuffer(), 0u, ashes::WholeSize );
+		createClearableOutputStorageBinding( pass, uint32_t( cptclsb::eClustersAABB ), cuT( "C3D_ClustersAABB" ), clusters.getClustersAABBBuffer(), 0u, ashes::WholeSize );
 		return pass;
 	}
 

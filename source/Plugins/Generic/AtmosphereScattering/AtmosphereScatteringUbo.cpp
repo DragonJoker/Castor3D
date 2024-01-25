@@ -13,8 +13,8 @@ namespace atmosphere_scattering
 {
 	//*********************************************************************************************
 
-	castor::String const AtmosphereScatteringUbo::Buffer = cuT( "C3D_ATM_Atmosphere" );
-	castor::String const AtmosphereScatteringUbo::Data = cuT( "d" );
+	castor::MbString const AtmosphereScatteringUbo::Buffer = "C3D_ATM_Atmosphere";
+	castor::MbString const AtmosphereScatteringUbo::Data = "d";
 
 	AtmosphereScatteringUbo::AtmosphereScatteringUbo( castor3d::RenderDevice const & device
 		, bool & dirty )
@@ -33,7 +33,7 @@ namespace atmosphere_scattering
 		m_device.uboPool->putBuffer( m_ubo );
 	}
 
-	std::pair< castor::Point3f, castor::Vector3f > AtmosphereScatteringUbo::cpuUpdate( Configuration const & config
+	castor::Pair< castor::Point3f, castor::Vector3f > AtmosphereScatteringUbo::cpuUpdate( Configuration const & config
 		, castor3d::SceneNode const & sunNode
 		, castor3d::SceneNode const & planetNode )
 	{

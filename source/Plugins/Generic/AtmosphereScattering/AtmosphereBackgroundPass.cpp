@@ -24,7 +24,7 @@ namespace atmosphere_scattering
 
 	namespace atmos
 	{
-		castor::String const Name{ "Atmosphere" };
+		castor::String const Name{ cuT( "Atmosphere" ) };
 
 		static castor3d::ShaderPtr getProgram( castor3d::Engine & engine
 			, VkExtent2D const & renderSize

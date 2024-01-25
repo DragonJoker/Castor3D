@@ -109,8 +109,8 @@ namespace castor3d
 		, shader::BlendComponents & components
 		, shader::SampleTexture const & sampleTexture )const
 	{
-		std::string valueName = "iridescenceThickness";
-		std::string mapName = "iridescenceThickness";
+		castor::MbString valueName = "iridescenceThickness";
+		castor::MbString mapName = "iridescenceThickness";
 		auto textureName = mapName + "MapAndMask";
 
 		if ( !material.hasMember( textureName )
@@ -148,7 +148,7 @@ namespace castor3d
 	void IridescenceThicknessMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		channelFillers.try_emplace( "iridescence_thickness"
+		channelFillers.try_emplace( cuT( "iridescence_thickness" )
 			, getTextureFlags()
 			, []( TextureContext & blockContext )
 			{
@@ -190,7 +190,7 @@ namespace castor3d
 	}
 
 	void IridescenceThicknessMapComponent::Plugin::createMapComponent( Pass & pass
-		, std::vector< PassComponentUPtr > & result )const
+		, castor::Vector< PassComponentUPtr > & result )const
 	{
 		result.push_back( castor::makeUniqueDerived< PassComponent, IridescenceThicknessMapComponent >( pass ) );
 	}

@@ -27,7 +27,7 @@ namespace castor3d
 		: m_device{ device }
 		, m_size{ ashes::getAlignedSize( size + shdbuf::HeaderSize
 			, m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) ) }
-		, m_wantedState{ std::move( wantedState ) }
+		, m_wantedState{ castor::move( wantedState ) }
 		, m_buffer{ makeBufferBase( m_device
 			, m_size
 			, ( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT )
@@ -73,10 +73,9 @@ namespace castor3d
 	}
 
 	void ShaderBuffer::createPassBinding( crg::FramePass & pass
-		, castor::String const & name
 		, uint32_t binding )const
 	{
-		pass.addInputStorageBuffer( { *m_buffer, name }
+		pass.addInputStorageBuffer( { *m_buffer, m_buffer->getName() }
 			, binding
 			, 0u
 			, uint32_t( m_size ) );

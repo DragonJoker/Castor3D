@@ -43,7 +43,7 @@ namespace castor3d
 					, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
 					, VK_SHADER_STAGE_COMPUTE_BIT ) };
 			return device->createDescriptorSetLayout( "VoxelBufferToTexture"
-				, std::move( bindings ) );
+				, castor::move( bindings ) );
 		}
 
 		static ashes::DescriptorSetPtr createDescriptorSet( crg::RunnableGraph & graph
@@ -144,13 +144,13 @@ namespace castor3d
 		{
 			auto temporalSmoothing = ( ( index >> 0 ) % 2 ) == 1u;
 			VoxelBufferToTexture::Pipeline result{ { VK_SHADER_STAGE_COMPUTE_BIT
-				, "VoxelBufferToTexture"
+				, cuT( "VoxelBufferToTexture" )
 				, createShader( device, temporalSmoothing, voxelGridSize ) } };
 			result.pipeline = createPipeline( device, pipelineLayout, result.shader );
 			return result;
 		}
 
-		static std::array< VoxelBufferToTexture::Pipeline, 4u > createPipelines( RenderDevice const & device
+		static castor::Array< VoxelBufferToTexture::Pipeline, 4u > createPipelines( RenderDevice const & device
 			, ashes::PipelineLayout const & pipelineLayout
 			, uint32_t voxelGridSize )
 		{
@@ -176,7 +176,7 @@ namespace castor3d
 				, GetPipelineStateCallback( [](){ return crg::getPipelineState( VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT ); } )
 				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i ); }
 				, GetPassIndexCallback( [this](){ return doGetPassIndex(); } )
-				, std::move( isEnabled )
+				, castor::move( isEnabled )
 				, IsComputePassCallback( [this](){ return doIsComputePass(); } ) }
 			, crg::ru::Config{ 2u, false }.implicitAction( pass.images.front().view()
 				, crg::RecordContext::clearAttachment( pass.images.front().view(), transparentBlackClearColor ) ) }

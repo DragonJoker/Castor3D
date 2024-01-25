@@ -7,7 +7,7 @@ CU_ImplementSmartPtr( castor3d, DividerPlugin )
 namespace castor3d
 {
 	DividerPlugin::DividerPlugin( castor::DynamicLibraryUPtr library, Engine * engine )
-		: Plugin( PluginType::eDivider, std::move( library ), *engine )
+		: Plugin( PluginType::eDivider, castor::move( library ), *engine )
 	{
 		load();
 	}

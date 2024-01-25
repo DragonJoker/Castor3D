@@ -70,8 +70,8 @@ namespace GuiCommon
 
 	private:
 		ImageIdMap m_mapImages;
-		std::mutex m_mutex;
-		std::vector< std::thread > m_arrayCurrentLoads;
+		castor::Mutex m_mutex;
+		castor::Vector< std::thread > m_arrayCurrentLoads;
 	};
 }
 

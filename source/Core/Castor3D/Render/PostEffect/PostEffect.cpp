@@ -27,7 +27,7 @@ namespace castor3d
 		, castor::Named{ name }
 		, m_fullName{ fullName }
 		, m_renderTarget{ renderTarget }
-		, m_graph{ m_renderTarget.getGraph().createPassGroup( groupName ) }
+		, m_graph{ m_renderTarget.getGraph().createPassGroup( castor::toUtf8( groupName ) ) }
 		, m_passesCount{ passesCount }
 		, m_kind{ kind }
 	{

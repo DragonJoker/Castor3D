@@ -97,7 +97,7 @@ namespace castor3d
 						, writer.cast< sdw::UInt >( in.drawID ) ) );
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[nodeId - 1u] );
-				auto passMultipliers = std::vector< sdw::Vec4 >{ vec4( 1.0_f, 0.0_f, 0.0_f, 0.0_f )
+				auto passMultipliers = castor::Vector< sdw::Vec4 >{ vec4( 1.0_f, 0.0_f, 0.0_f, 0.0_f )
 					, vec4( 0.0_f )
 					, vec4( 0.0_f )
 					, vec4( 0.0_f ) };
@@ -373,7 +373,7 @@ namespace castor3d
 					, flags.enablePassMasks() );
 				auto passMultipliers = writer.declLocaleArray( "passMultipliers"
 					, 4u
-					, std::vector< sdw::Vec4 >{ vec4( 1.0_f, 0.0_f, 0.0_f, 0.0_f )
+					, castor::Vector< sdw::Vec4 >{ vec4( 1.0_f, 0.0_f, 0.0_f, 0.0_f )
 						, vec4( 0.0_f )
 						, vec4( 0.0_f )
 						, vec4( 0.0_f ) }
@@ -704,7 +704,7 @@ namespace castor3d
 					, flags.enablePassMasks() );
 				auto passMultipliers = writer.declLocaleArray( "passMultipliers"
 					, 4u
-					, std::vector< sdw::Vec4 >{ vec4( 1.0_f, 0.0_f, 0.0_f, 0.0_f )
+					, castor::Vector< sdw::Vec4 >{ vec4( 1.0_f, 0.0_f, 0.0_f, 0.0_f )
 						, vec4( 0.0_f )
 						, vec4( 0.0_f )
 						, vec4( 0.0_f ) }

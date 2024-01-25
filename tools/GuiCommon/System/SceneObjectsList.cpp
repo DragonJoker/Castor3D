@@ -113,13 +113,13 @@ namespace GuiCommon
 				, scene->getName()
 				, eBMP_SCENE
 				, eBMP_SCENE_SEL
-				, new SceneTreeItemProperty( this, m_propertiesHolder->isEditable(), *scene ) );
+				, new SceneTreeItemProperty{ m_propertiesHolder->isEditable(), *scene } );
 
 			AppendItem( sceneId
 				, _( "Background" )
 				, eBMP_BACKGROUND
 				, eBMP_BACKGROUND_SEL
-				, new BackgroundTreeItemProperty( this, m_propertiesHolder->isEditable(), *scene->getBackground() ) );
+				, new BackgroundTreeItemProperty{ m_propertiesHolder->isEditable(), *scene->getBackground() } );
 
 			auto catId = AppendItem( sceneId
 				, _( "Render Targets" )
@@ -710,28 +710,28 @@ namespace GuiCommon
 		else if ( style.getType() == castor3d::ControlType::eExpandablePanel )
 		{
 			auto & expandable = static_cast< castor3d::ExpandablePanelStyle & >( style );
-			doAddStyle( parentId, "Header", expandable.getHeaderStyle(), scene );
-			doAddStyle( parentId, "Expand", expandable.getExpandStyle(), scene );
-			doAddStyle( parentId, "Content", expandable.getContentStyle(), scene );
+			doAddStyle( parentId, cuT( "Header" ), expandable.getHeaderStyle(), scene );
+			doAddStyle( parentId, cuT( "Expand" ), expandable.getExpandStyle(), scene );
+			doAddStyle( parentId, cuT( "Content" ), expandable.getContentStyle(), scene );
 		}
 		else if ( style.getType() == castor3d::ControlType::eComboBox )
 		{
 			auto & combo = static_cast< castor3d::ComboBoxStyle & >( style );
-			doAddStyle( parentId, "Expand", combo.getExpandStyle(), scene );
-			doAddStyle( parentId, "Elements", combo.getElementsStyle(), scene );
+			doAddStyle( parentId, cuT( "Expand" ), combo.getExpandStyle(), scene );
+			doAddStyle( parentId, cuT( "Elements" ), combo.getElementsStyle(), scene );
 		}
 		else if ( style.getType() == castor3d::ControlType::eListBox )
 		{
 			auto & list = static_cast< castor3d::ListBoxStyle & >( style );
-			doAddStyle( parentId, "Item", list.getItemStyle(), scene );
-			doAddStyle( parentId, "Highlighted Item", list.getHighlightedItemStyle(), scene );
-			doAddStyle( parentId, "Selected Item", list.getSelectedItemStyle(), scene );
+			doAddStyle( parentId, cuT( "Item" ), list.getItemStyle(), scene );
+			doAddStyle( parentId, cuT( "Highlighted Item" ), list.getHighlightedItemStyle(), scene );
+			doAddStyle( parentId, cuT( "Selected Item" ), list.getSelectedItemStyle(), scene );
 		}
 		else if ( style.getType() == castor3d::ControlType::eSlider )
 		{
 			auto & slider = static_cast< castor3d::SliderStyle & >( style );
-			doAddStyle( parentId, "Line", slider.getLineStyle(), scene );
-			doAddStyle( parentId, "Tick", slider.getTickStyle(), scene );
+			doAddStyle( parentId, cuT( "Line" ), slider.getLineStyle(), scene );
+			doAddStyle( parentId, cuT( "Tick" ), slider.getTickStyle(), scene );
 		}
 	}
 
@@ -762,14 +762,14 @@ namespace GuiCommon
 		else if ( control.getType() == castor3d::ControlType::eExpandablePanel )
 		{
 			auto & expandable = static_cast< castor3d::ExpandablePanelCtrl const & >( control );
-			doAddControl( parentId, "Header", *expandable.getHeader(), false, false );
-			doAddControl( parentId, "Expand", *expandable.getExpand(), false, false );
-			doAddControl( parentId, "Content", *expandable.getContent(), false, false );
+			doAddControl( parentId, cuT( "Header" ), *expandable.getHeader(), false, false );
+			doAddControl( parentId, cuT( "Expand" ), *expandable.getExpand(), false, false );
+			doAddControl( parentId, cuT( "Content" ), *expandable.getContent(), false, false );
 		}
 		else if ( control.getType() == castor3d::ControlType::eFrame )
 		{
 			auto & frame = static_cast< castor3d::FrameCtrl const & >( control );
-			doAddControl( parentId, "Content", *frame.getContent(), false, false );
+			doAddControl( parentId, cuT( "Content" ), *frame.getContent(), false, false );
 		}
 	}
 

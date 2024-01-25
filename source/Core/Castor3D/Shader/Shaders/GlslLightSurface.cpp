@@ -10,7 +10,7 @@ namespace castor3d::shader
 	LightSurface::LightSurface( sdw::ShaderWriter & writer
 		, sdw::expr::ExprPtr expr
 		, bool enabled )
-		: StructInstance{ writer, std::move( expr ), enabled }
+		: StructInstance{ writer, castor::move( expr ), enabled }
 		, m_eyePosition{ getMember< sdw::Vec3 >( "eyePosition" ) }
 		, m_worldPosition{ getMember< sdw::Vec4 >( "worldPosition" ) }
 		, m_viewPosition{ getMember< sdw::Vec3 >( "viewPosition" ) }
@@ -61,9 +61,9 @@ namespace castor3d::shader
 	{
 		auto type = cache.getStruct( ast::type::MemoryLayout::eC
 			, "C3D_LightSurface"
-				+ ( enableDotProducts ? std::string{ "Prods" } : std::string{} )
-				+ ( enableFresnel ? std::string{ "F" } : std::string{} )
-				+ ( enableIridescence ? std::string{ "I" } : std::string{} ) );
+				+ ( enableDotProducts ? castor::MbString{ "Prods" } : castor::MbString{} )
+				+ ( enableFresnel ? castor::MbString{ "F" } : castor::MbString{} )
+				+ ( enableIridescence ? castor::MbString{ "I" } : castor::MbString{} ) );
 
 		if ( type->empty() )
 		{
@@ -91,7 +91,7 @@ namespace castor3d::shader
 	}
 
 	LightSurface LightSurface::create( sdw::ShaderWriter & writer
-		, std::string const & name
+		, castor::MbString const & name
 		, sdw::Vec3 const eye
 		, sdw::Vec4 const world
 		, sdw::Vec3 const view
@@ -109,7 +109,7 @@ namespace castor3d::shader
 	}
 
 	LightSurface LightSurface::create( sdw::ShaderWriter & writer
-		, std::string const & name
+		, castor::MbString const & name
 		, sdw::Vec4 const world
 		, sdw::Vec3 const clip
 		, sdw::Vec3 const normal
@@ -123,7 +123,7 @@ namespace castor3d::shader
 
 	LightSurface LightSurface::create( sdw::ShaderWriter & writer
 		, Utils & utils
-		, std::string const & name
+		, castor::MbString const & name
 		, sdw::Vec3 const eye
 		, sdw::Vec4 const world
 		, sdw::Vec3 const view
@@ -254,6 +254,6 @@ namespace castor3d::shader
 			}
 		}
 
-		return sdw::makeAggrInit( type, std::move( inits ) );
+		return sdw::makeAggrInit( type, castor::move( inits ) );
 	}
 }

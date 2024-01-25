@@ -37,7 +37,7 @@ namespace castor
 			{
 				auto & sss = object.getSubsurfaceScattering();
 
-				if ( auto block{ beginBlock( file, "subsurface_scattering" ) } )
+				if ( auto block{ beginBlock( file, cuT( "subsurface_scattering" ) ) } )
 				{
 					result = write( file, cuT( "strength" ), sss.getStrength() )
 						&& write( file, cuT( "gaussian_width" ), sss.getGaussianWidth() )
@@ -160,7 +160,7 @@ namespace castor3d
 			else
 			{
 				auto & component = getPassComponent< SubsurfaceScatteringComponent >( *blockContext->pass );
-				component.setSubsurfaceScattering( std::move( blockContext->subsurfaceScattering ) );
+				component.setSubsurfaceScattering( castor::move( blockContext->subsurfaceScattering ) );
 			}
 		}
 		CU_EndAttributePop()
@@ -302,9 +302,9 @@ namespace castor3d
 	void SubsurfaceScatteringComponent::Plugin::createSections( castor::StrUInt32Map & sections )const
 	{
 		sections.try_emplace( uint32_t( sss::Section::eSubsurfaceScattering )
-			, "subsurface_scattering" );
+			, cuT( "subsurface_scattering" ) );
 		sections.try_emplace( uint32_t( sss::Section::eTransmittanceProfile )
-			, "transmittance_profile" );
+			, cuT( "transmittance_profile" ) );
 	}
 
 	void SubsurfaceScatteringComponent::Plugin::zeroBuffer( Pass const & pass
@@ -351,7 +351,7 @@ namespace castor3d
 
 	void SubsurfaceScatteringComponent::setSubsurfaceScattering( SubsurfaceScatteringUPtr value )
 	{
-		( *m_value ) = std::move( value );
+		( *m_value ) = castor::move( value );
 		m_sssConnection = ( *m_value )->onChanged.connect( [this]( SubsurfaceScattering const & )
 			{
 				m_sssDirty = true;
@@ -402,7 +402,7 @@ namespace castor3d
 		sss->setThicknessScale( subsurfaceScattering.getThicknessScale() );
 
 		auto result = castor::makeUnique< SubsurfaceScatteringComponent >( pass );
-		result->setSubsurfaceScattering( std::move( sss ) );
+		result->setSubsurfaceScattering( castor::move( sss ) );
 		return castor::ptrRefCast< PassComponent >( result );
 	}
 

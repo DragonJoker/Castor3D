@@ -8,6 +8,7 @@ See LICENSE file in root folder
 
 #include <Castor3D/Gui/GuiModule.hpp>
 
+#include <wx/imaglist.h>
 #include <wx/panel.h>
 #include <wx/treectrl.h>
 
@@ -17,9 +18,9 @@ namespace GuiCommon
 		: public wxTreeCtrl
 	{
 	private:
-		using SubmeshIdMap = std::map< castor3d::Submesh const *, wxTreeItemId >;
-		using GeometrySubmeshIdMap = std::map< castor3d::GeometryRPtr, SubmeshIdMap >;
-		using MaterialIdMap = std::map< castor3d::MaterialRPtr, wxTreeItemId >;
+		using SubmeshIdMap = castor::Map< castor3d::Submesh const *, wxTreeItemId >;
+		using GeometrySubmeshIdMap = castor::Map< castor3d::GeometryRPtr, SubmeshIdMap >;
+		using MaterialIdMap = castor::Map< castor3d::MaterialRPtr, wxTreeItemId >;
 
 	public:
 		SceneObjectsList( PropertiesContainer * propertiesHolder

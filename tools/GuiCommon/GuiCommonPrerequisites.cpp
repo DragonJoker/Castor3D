@@ -75,8 +75,8 @@ namespace GuiCommon
 			castor::PathArray files;
 			castor::File::listDirectoryFiles( folder, files );
 			castor::PathArray result;
-			castor::String endRel = "." + castor::String{ CU_SharedLibExt };
-			castor::String endDbg = "d" + endRel;
+			castor::String endRel = cuT( "." ) + castor::String{ CU_SharedLibExt };
+			castor::String endDbg = cuT( "d" ) + endRel;
 
 			// Exclude debug plug-in in release builds, and release plug-ins in debug builds
 			for ( auto file : files )
@@ -116,34 +116,25 @@ namespace GuiCommon
 			};
 
 		public:
-			explicit PreprocessedSceneFile( castor::FileParser & parser )
-				: castor::PreprocessedFile{ parser }
-			{
-			}
-
-			PreprocessedSceneFile( castor::FileParser & parser
-				, castor::FileParserContextUPtr context )
-				: castor::PreprocessedFile{ parser, std::move( context ) }
-			{
-			}
+			using castor::PreprocessedFile::PreprocessedFile;
 
 			castor::SectionId getCategory( castor::String const & name
 				, castor::SectionId curSection
 				, castor::SectionId nextSection
-				, bool implicit )
+				, bool implicit )const
 			{
 				using namespace castor3d;
 
 				if ( implicit )
 				{
-					if ( name == "}" )
+					if ( name == cuT( "}" ) )
 					{
 						curSection = nextSection;
 					}
 				}
 				else
 				{
-					if ( name != "}" )
+					if ( name != cuT( "}" ) )
 					{
 						curSection = nextSection;
 					}
@@ -230,17 +221,17 @@ namespace GuiCommon
 
 			uint32_t getCategoryActionsCount( castor::SectionId section )const
 			{
-				return m_total[section];
+				return m_totalCat[section];
 			}
 
 			uint32_t incCategoryActions( castor::SectionId section, uint32_t count = 1u )
 			{
-				return m_current[section] += count;
+				return m_currentCat[section] += count;
 			}
 
 			uint32_t getCategoriesCount()const
 			{
-				return uint32_t( std::count_if( m_total.begin(), m_total.end()
+				return uint32_t( std::count_if( m_totalCat.begin(), m_totalCat.end()
 					, []( uint32_t value )
 					{
 						return value > 0u;
@@ -253,27 +244,27 @@ namespace GuiCommon
 				switch ( section )
 				{
 				case uint32_t( Category::eSampler ):
-					return "Loading Samplers";
+					return cuT( "Loading Samplers" );
 				case uint32_t( Category::eLight ):
-					return "Loading Lights";
+					return cuT( "Loading Lights" );
 				case uint32_t( Category::eNode ):
-					return "Loading Nodes";
+					return cuT( "Loading Nodes" );
 				case uint32_t( Category::eObject ):
-					return "Loading Objects";
+					return cuT( "Loading Objects" );
 				case uint32_t( Category::eMesh ):
-					return "Loading Meshes";
+					return cuT( "Loading Meshes" );
 				case uint32_t( Category::eMaterial ):
-					return "Loading Materials";
+					return cuT( "Loading Materials" );
 				case uint32_t( Category::eTexture ):
-					return "Loading Textures";
+					return cuT( "Loading Textures" );
 				case uint32_t( Category::eOverlay ):
-					return "Loading Overlays";
+					return cuT( "Loading Overlays" );
 				case uint32_t( Category::eImport ):
-					return "Processing Imports";
+					return cuT( "Processing Imports" );
 				case uint32_t( Category::eGui ):
-					return "Loading GUI";
+					return cuT( "Loading GUI" );
 				default:
-					return "Others";
+					return cuT( "Others" );
 				}
 			}
 
@@ -291,19 +282,19 @@ namespace GuiCommon
 					, section
 					, function.resultSection
 					, implicit );
-				m_total[category]++;
-				castor::PreprocessedFile::doAddParserAction( std::move( file )
+				m_totalCat[category]++;
+				castor::PreprocessedFile::doAddParserAction( castor::move( file )
 					, line
-					, std::move( name )
+					, castor::move( name )
 					, section
-					, std::move( function )
-					, std::move( params )
+					, castor::move( function )
+					, castor::move( params )
 					, implicit );
 			}
 
 		private:
-			std::array< uint32_t, Category::eCount > m_total{};
-			std::array< uint32_t, Category::eCount > m_current{};
+			castor::Array< uint32_t, Category::eCount > m_totalCat{};
+			castor::Array< uint32_t, Category::eCount > m_currentCat{};
 		};
 	}
 
@@ -462,9 +453,9 @@ namespace GuiCommon
 					if ( progress )
 					{
 						castor3d::setProgressBarGlobalTitle( progress
-							, "Loading scene..." );
+							, cuT( "Loading scene..." ) );
 						castor3d::stepProgressBarGlobalStartLocal( progress
-							, "Preprocessing scene file"
+							, cuT( "Preprocessing scene file" )
 							, 1u );
 
 						helpers::PreprocessedSceneFile preprocessed{ parser, parser.initialiseParser( fileName ) };
@@ -479,11 +470,11 @@ namespace GuiCommon
 									auto status = preprocessed.incCategoryActions( section );
 									auto total = preprocessed.getCategoryActionsCount( section );
 									castor3d::setProgressBarGlobalStep( progress
-										, "Loading scene..."
+										, cuT( "Loading scene..." )
 										, index + section );
 									castor3d::setProgressBarLocal( progress
 										, preprocessed.getCategoryName( section )
-										, castor::string::toString( status ) + " / " + castor::string::toString( total )
+										, castor::string::toString( status ) + cuT( " / " ) + castor::string::toString( total )
 										, total
 										, status );
 							} );
@@ -599,7 +590,7 @@ namespace GuiCommon
 	{
 #if defined( CU_PlatformWindows )
 
-		return ashes::WindowHandle( std::make_unique< ashes::IMswWindowHandle >( ::GetModuleHandle( nullptr )
+		return ashes::WindowHandle( castor::make_unique< ashes::IMswWindowHandle >( ::GetModuleHandle( nullptr )
 			, window->GetHandle() ) );
 
 #elif defined( CU_PlatformLinux )
@@ -622,7 +613,7 @@ namespace GuiCommon
 					auto surface = gdkWindow
 						? gdk_wayland_window_get_wl_surface( gdkWindow )
 						: nullptr;
-					return ashes::WindowHandle( std::make_unique< ashes::IWaylandWindowHandle >( display, surface ) );
+					return ashes::WindowHandle( castor::make_unique< ashes::IWaylandWindowHandle >( display, surface ) );
 				}
 #	endif
 #endif
@@ -635,7 +626,7 @@ namespace GuiCommon
 					GLXDrawable drawable = gdkWindow
 						? gdk_x11_window_get_xid( gdkWindow )
 						: 0;
-					return ashes::WindowHandle( std::make_unique< ashes::IXWindowHandle >( drawable, display ) );
+					return ashes::WindowHandle( castor::make_unique< ashes::IXWindowHandle >( drawable, display ) );
 				}
 #	endif
 #endif
@@ -650,7 +641,7 @@ namespace GuiCommon
 
 		auto handle = window->GetHandle();
 		makeViewMetalCompatible( handle );
-		return ashes::WindowHandle( std::make_unique< ashes::IMacOsWindowHandle >( handle ) );
+		return ashes::WindowHandle( castor::make_unique< ashes::IMacOsWindowHandle >( handle ) );
 
 #else
 
@@ -667,7 +658,7 @@ namespace GuiCommon
 		{
 			castor::String name = make_String( wxfont.GetFaceName() ) + castor::string::toString( wxfont.GetPointSize() );
 			font = castor::makeUnique< castor::Font >( name, wxfont.GetPointSize() );
-			font->setGlyphLoader( std::make_unique< helpers::wxWidgetsFontImpl >( wxfont ) );
+			font->setGlyphLoader( castor::make_unique< helpers::wxWidgetsFontImpl >( wxfont ) );
 			castor::Font::BinaryLoader{}( *font
 				, castor::Path{ castor::String{ wxfont.GetFaceName() } }
 				, uint32_t( std::abs( wxfont.GetPointSize() ) ) );
@@ -678,12 +669,12 @@ namespace GuiCommon
 
 	castor::String make_String( wxString const & value )
 	{
-		return castor::String( value.mb_str( wxConvUTF8 ).data() );
+		return castor::makeString( value.mb_str( wxConvUTF8 ).data() );
 	}
 
 	castor::U32String make_U32String( wxString const & value )
 	{
-		return castor::string::toU32String( make_String( value ) );
+		return castor::toUtf8U32String( make_String( value ) );
 	}
 
 	castor::Path make_Path( wxString const & value )
@@ -691,14 +682,19 @@ namespace GuiCommon
 		return castor::Path( value.mb_str( wxConvUTF8 ).data() );
 	}
 
-	wxString make_wxString( castor::String const & value )
+	wxString make_wxString( castor::MbString const & value )
+	{
+		return wxString( value.c_str(), wxConvUTF8 );
+	}
+
+	wxString make_wxString( castor::WString const & value )
 	{
 		return wxString( value.c_str(), wxConvUTF8 );
 	}
 
 	wxString make_wxString( castor::U32String const & value )
 	{
-		return make_wxString( castor::string::stringCast< castor::xchar >( value ) );
+		return make_wxString( castor::makeString( value ) );
 	}
 
 	wxArrayString make_wxArrayString( castor::StringArray const & values )

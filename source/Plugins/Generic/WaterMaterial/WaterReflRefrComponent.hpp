@@ -83,7 +83,7 @@ namespace water
 
 			castor3d::shader::PassReflRefrShaderPtr createReflRefrShader()const override
 			{
-				return std::make_unique< ReflRefrShader >( *this );
+				return castor::make_unique< ReflRefrShader >( *this );
 			}
 
 			bool isReflRefrComponent()const override

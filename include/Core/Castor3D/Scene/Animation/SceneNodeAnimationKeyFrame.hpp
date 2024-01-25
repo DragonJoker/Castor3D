@@ -49,24 +49,24 @@ namespace castor3d
 			, castor::Quaternion rotate
 			, castor::Point3f scale )
 		{
-			m_position = std::move( translate );
-			m_rotation = std::move( rotate );
-			m_scale = std::move( scale );
+			m_position = castor::move( translate );
+			m_rotation = castor::move( rotate );
+			m_scale = castor::move( scale );
 		}
 
 		void setPosition( castor::Point3f value )
 		{
-			m_position = std::move( value );
+			m_position = castor::move( value );
 		}
 
 		void setRotation( castor::Quaternion value )
 		{
-			m_rotation = std::move( value );
+			m_rotation = castor::move( value );
 		}
 
 		void setScale( castor::Point3f value )
 		{
-			m_scale = std::move( value );
+			m_scale = castor::move( value );
 		}
 
 	private:

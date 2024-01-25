@@ -97,8 +97,8 @@ namespace castor3d
 		{
 			ScrolledControl( OnControlChangedConnection connection
 				, castor::Position originalPosition )
-				: connection{ std::move( connection ) }
-				, originalPosition{ std::move( originalPosition ) }
+				: connection{ castor::move( connection ) }
+				, originalPosition{ castor::move( originalPosition ) }
 			{
 			}
 
@@ -106,7 +106,7 @@ namespace castor3d
 			castor::Position originalPosition;
 		};
 
-		using OnScrollContentFunction = std::function< void( castor::Position const & ) >;
+		using OnScrollContentFunction = castor::Function< void( castor::Position const & ) >;
 		using OnScrollContent = castor::SignalT< OnScrollContentFunction >;
 		using OnScrollContentConnection = OnScrollContent::connection;
 
@@ -124,7 +124,7 @@ namespace castor3d
 		ScrollBarCtrlRPtr m_verticalScrollBar{};
 		ScrollBarCtrlRPtr m_horizontalScrollBar{};
 		PanelOverlayRPtr m_corner{};
-		std::map< ControlRPtr, ScrolledControl > m_controls{};
+		castor::Map< ControlRPtr, ScrolledControl > m_controls{};
 		OnScrollBarEventConnection m_onVerticalThumbRelease{};
 		OnScrollBarEventConnection m_onHorizontalThumbRelease{};
 		OnScrollBarEventConnection m_onVerticalThumbTrack{};

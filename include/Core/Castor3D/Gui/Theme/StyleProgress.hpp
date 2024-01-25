@@ -30,9 +30,9 @@ namespace castor3d
 			: ControlStyle{ Type, name, scene, engine }
 			, m_titleFontName{ fontName }
 			, m_titleMaterial{ getEngine().findMaterial( cuT( "White" ) ) }
-			, m_containerStyle{ name + "/Container", scene, engine }
-			, m_progressStyle{ name + "/Progress", scene, engine }
-			, m_labelStyle{ name + "/Label", scene, engine, fontName }
+			, m_containerStyle{ name + cuT( "/Container" ), scene, engine }
+			, m_progressStyle{ name + cuT( "/Progress" ), scene, engine }
+			, m_labelStyle{ name + cuT( "/Label" ), scene, engine, fontName }
 		{
 			setTextMaterial( m_titleMaterial );
 			m_labelStyle.setBackgroundInvisible( true );
@@ -70,7 +70,7 @@ namespace castor3d
 
 		void setTitleFontName( castor::String value )
 		{
-			m_titleFontName = std::move( value );
+			m_titleFontName = castor::move( value );
 		}
 
 		void setTitleMaterial( MaterialObs value )

@@ -26,8 +26,8 @@ namespace castor3d
 		, public RenderedObject
 	{
 	public:
-		using IdRenderNode = std::pair< uint32_t, SubmeshRenderNode * >;
-		using SubmeshIdRenderNodeMap = std::unordered_map< uint32_t, IdRenderNode >;
+		using IdRenderNode = castor::Pair< uint32_t, SubmeshRenderNode * >;
+		using SubmeshIdRenderNodeMap = castor::UnorderedMap< uint32_t, IdRenderNode >;
 
 	public:
 		/**
@@ -206,7 +206,7 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		std::unordered_map< Pass const *, SubmeshIdRenderNodeMap > const & getIds()const
+		castor::UnorderedMap< Pass const *, SubmeshIdRenderNodeMap > const & getIds()const
 		{
 			return m_ids;
 		}
@@ -241,7 +241,7 @@ namespace castor3d
 		SubmeshBoundingSphereMap m_submeshesSpheres;
 		castor::BoundingBox m_box;
 		castor::BoundingSphere m_sphere;
-		std::unordered_map< Pass const *, SubmeshIdRenderNodeMap > m_ids{};
+		castor::UnorderedMap< Pass const *, SubmeshIdRenderNodeMap > m_ids{};
 	};
 
 	struct ObjectContext

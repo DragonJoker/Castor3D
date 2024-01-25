@@ -61,19 +61,17 @@ namespace castor
 				for ( size_t i = 1; i <= count; ++i )
 				{
 					String text = ( *it )[i];
+					auto stream = makeStringStreamT< char >();
+					stream << toUtf8( text );
 
-					if ( text.find( "0x" ) == String::npos
-						&& text.find( "0X" ) == String::npos )
+					if ( text.find( cuT( "0x" ) ) == String::npos
+						&& text.find( cuT( "0X" ) ) == String::npos )
 					{
-						auto stream = makeStringStream();
-						stream << ( *it )[i];
 						stream >> value[i - 1];
 					}
 					else
 					{
-						auto stream = makeStringStream();
-						stream << std::hex << ( *it )[i];
-						stream >> value[i - 1];
+						stream >> std::hex >> value[i - 1];
 					}
 				}
 
@@ -94,12 +92,12 @@ namespace castor
 			}
 			else
 			{
-				logger.logWarning( castor::makeStringStream() << cuT( "Couldn't parse from " ) << params );
+				logger.logWarning( makeStringStream() << cuT( "Couldn't parse from " ) << params );
 			}
 		}
 		catch ( std::exception & exc )
 		{
-			logger.logError( castor::makeStringStream() << cuT( "Couldn't parse from " ) << params << cuT( ": " ) << string::stringCast< xchar >( exc.what() ) );
+			logger.logError( makeStringStream() << cuT( "Couldn't parse from " ) << params << cuT( ": " ) << makeString( exc.what() ) );
 		}
 
 		return result;
@@ -137,7 +135,7 @@ namespace castor
 				if ( value < range.getMin()
 					|| value > range.getMax() )
 				{
-					logger.logWarning( castor::makeStringStream() << cuT( "Value " ) << value << cuT( " is outside of range [" ) << range.getMin() << cuT( ", " ) << range.getMax() << cuT( "]" ) );
+					logger.logWarning( makeStringStream() << cuT( "Value " ) << value << cuT( " is outside of range [" ) << range.getMin() << cuT( ", " ) << range.getMax() << cuT( "]" ) );
 					value = range.clamp( value );
 				}
 			}
@@ -256,7 +254,8 @@ namespace castor
 			, value.ptr() );
 	}
 
-	inline void parseHexColour( std::ssub_match const & match
+	template< typename StringItT >
+	inline void parseHexColour( std::sub_match< StringItT > const & match
 		, uint32_t & colour )
 	{
 		if ( match.matched )
@@ -265,7 +264,7 @@ namespace castor
 
 			if ( text.size() == 6 )
 			{
-				text = "FF" + text;
+				text = cuT( "FF" ) + text;
 			}
 
 			InputStringStream stream{ text };
@@ -309,7 +308,7 @@ namespace castor
 		}
 		catch ( std::exception & exc )
 		{
-			logger.logError( makeStringStream() << cuT( "Couldn't parse from " ) << params << cuT( ": " ) << string::stringCast< xchar >( exc.what() ) );
+			logger.logError( makeStringStream() << cuT( "Couldn't parse from " ) << params << cuT( ": " ) << makeString( exc.what() ) );
 		}
 	}
 
@@ -575,11 +574,11 @@ namespace castor
 
 			if ( params == cuT( "screen_size" ) )
 			{
-				result = castor::system::getScreenSize( 0, value );
+				result = system::getScreenSize( 0, value );
 
 				if ( !result )
 				{
-					logger.logError( castor::system::getLastErrorText() );
+					logger.logError( system::getLastErrorText() );
 				}
 			}
 			else
@@ -841,7 +840,7 @@ namespace castor
 
 	inline ParserParameterBaseSPtr ParserParameter< ParameterType::eName >::clone()const
 	{
-		return std::make_shared< ParserParameter< ParameterType::eName > >( *this );
+		return castor::make_shared< ParserParameter< ParameterType::eName > >( *this );
 	}
 
 	inline bool ParserParameter< ParameterType::eName >::parse( CU_UnusedParam( LoggerInstance &, logger )
@@ -890,7 +889,7 @@ namespace castor
 
 	inline ParserParameterBaseSPtr ParserParameter< ParameterType::eCheckedText >::clone()const
 	{
-		return std::make_shared< ParserParameter< ParameterType::eCheckedText > >( *this );
+		return castor::make_shared< ParserParameter< ParameterType::eCheckedText > >( *this );
 	}
 
 	inline bool ParserParameter< ParameterType::eCheckedText >::parse( CU_UnusedParam( LoggerInstance &, logger )
@@ -947,7 +946,7 @@ namespace castor
 
 	inline ParserParameterBaseSPtr ParserParameter< ParameterType::eBitwiseOred32BitsCheckedText >::clone()const
 	{
-		return std::make_shared< ParserParameter< ParameterType::eBitwiseOred32BitsCheckedText > >( *this );
+		return castor::make_shared< ParserParameter< ParameterType::eBitwiseOred32BitsCheckedText > >( *this );
 	}
 
 	inline bool ParserParameter< ParameterType::eBitwiseOred32BitsCheckedText >::parse( CU_UnusedParam( LoggerInstance &, logger )
@@ -978,7 +977,7 @@ namespace castor
 						params = value.substr( delim + 1u );
 						string::trim( params );
 						value = value.substr( 0, delim );
-						sep = "|";
+						sep = cuT( "|" );
 					}
 
 					auto it = m_values.find( value );
@@ -992,7 +991,7 @@ namespace castor
 				else
 				{
 					params += sep + value;
-					sep = "|";
+					sep = cuT( "|" );
 				}
 			}
 		}
@@ -1028,7 +1027,7 @@ namespace castor
 
 	inline ParserParameterBaseSPtr ParserParameter< ParameterType::eBitwiseOred64BitsCheckedText >::clone()const
 	{
-		return std::make_shared< ParserParameter< ParameterType::eBitwiseOred64BitsCheckedText > >( *this );
+		return castor::make_shared< ParserParameter< ParameterType::eBitwiseOred64BitsCheckedText > >( *this );
 	}
 
 	inline bool ParserParameter< ParameterType::eBitwiseOred64BitsCheckedText >::parse( CU_UnusedParam( LoggerInstance &, logger )
@@ -1059,7 +1058,7 @@ namespace castor
 						params = value.substr( delim + 1u );
 						string::trim( params );
 						value = value.substr( 0, delim );
-						sep = "|";
+						sep = cuT( "|" );
 					}
 
 					auto it = m_values.find( value );
@@ -1073,7 +1072,7 @@ namespace castor
 				else
 				{
 					params += sep + value;
-					sep = "|";
+					sep = cuT( "|" );
 				}
 			}
 		}

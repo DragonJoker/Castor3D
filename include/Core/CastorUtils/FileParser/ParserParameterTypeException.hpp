@@ -12,7 +12,7 @@ namespace castor
 {
 	template< ParameterType ExpectedT >
 	class ParserParameterTypeException
-		: public castor::Exception
+		: public Exception
 	{
 	public:
 		/**
@@ -27,8 +27,8 @@ namespace castor
 			, char const * file
 			, char const * function
 			, uint32_t line )
-			: castor::Exception{ "Wrong parameter type in parser: user gave " + String{ getTypeName( givenType ) }
-					+ " while parameter base type is " + String{ ParserParameterStringType< ExpectedT > }
+			: Exception{ "Wrong parameter type in parser: user gave " + toUtf8( getTypeName( givenType ) )
+					+ " while parameter base type is " + toUtf8( ParserParameterStringType< ExpectedT > )
 				, file
 				, function
 				, line }

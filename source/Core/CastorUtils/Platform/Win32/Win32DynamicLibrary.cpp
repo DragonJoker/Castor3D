@@ -17,7 +17,7 @@ namespace castor
 	{
 		if ( !m_library )
 		{
-			std::string name( string::stringCast< char >( m_pathLibrary ) );
+			MbString name( toUtf8( m_pathLibrary ) );
 
 			try
 			{
@@ -33,17 +33,13 @@ namespace castor
 			}
 			catch ( std::exception & exc )
 			{
-				String strError = cuT( "Can't load dynamic library at [" ) + m_pathLibrary + cuT( "]: " );
-				strError += exc.what();
-				Logger::logError( strError );
+				Logger::logError( makeStringStream() << cuT( "Can't load dynamic library at [" ) << m_pathLibrary << cuT( "]: " ) << exc.what() );
 				m_library = nullptr;
 				m_pathLibrary.clear();
 			}
 			catch ( ... )
 			{
-				String strError = cuT( "Can't load dynamic library at [" ) + m_pathLibrary + cuT( "]: " );
-				strError += system::getLastErrorText();
-				Logger::logError( strError );
+				Logger::logError( makeStringStream() << cuT( "Can't load dynamic library at [" ) << m_pathLibrary << cuT( "]: " ) << system::getLastErrorText() );
 				m_library = nullptr;
 				m_pathLibrary.clear();
 			}
@@ -56,14 +52,14 @@ namespace castor
 
 		if ( m_library )
 		{
-			std::string stdname( string::stringCast< char >( name ) );
+			MbString stdname( toUtf8( name ) );
 			UINT oldMode = ::SetErrorMode( SEM_FAILCRITICALERRORS );
 			result = VoidFnType( ::GetProcAddress( static_cast< HMODULE >( m_library ), stdname.c_str() ) );
 			::SetErrorMode( oldMode );
 		}
 		else
 		{
-			Logger::logError( cuT( "Can't load function [" ) + name + cuT( "] because dynamic library is not loaded" ) );
+			Logger::logError( makeStringStream() << cuT( "Can't load function [" ) << name << cuT( "] because dynamic library is not loaded" ) );
 		}
 
 		return result;

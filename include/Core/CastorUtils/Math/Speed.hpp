@@ -227,16 +227,16 @@ namespace castor
 	struct IsSpeedT : std::false_type{};
 
 	template< typename ValueT >
-	struct IsSpeedT< SpeedT< ValueT, castor::Seconds > > : std::true_type{};
+	struct IsSpeedT< SpeedT< ValueT, Seconds > > : std::true_type{};
 
 	template< typename ValueT >
-	struct IsSpeedT< SpeedT< ValueT, castor::Milliseconds > > : std::true_type{};
+	struct IsSpeedT< SpeedT< ValueT, Milliseconds > > : std::true_type{};
 
 	template< typename ValueT >
-	struct IsSpeedT< SpeedT< ValueT, castor::Microseconds > > : std::true_type{};
+	struct IsSpeedT< SpeedT< ValueT, Microseconds > > : std::true_type{};
 
 	template< typename ValueT >
-	struct IsSpeedT< SpeedT< ValueT, castor::Nanoseconds > > : std::true_type{};
+	struct IsSpeedT< SpeedT< ValueT, Nanoseconds > > : std::true_type{};
 
 	template< typename ValueT >
 	static bool constexpr isSpeedT = IsSpeedT< ValueT >::value;

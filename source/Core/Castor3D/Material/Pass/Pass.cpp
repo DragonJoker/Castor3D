@@ -51,7 +51,7 @@ namespace castor3d
 
 	namespace matpass
 	{
-		using SortedTextureSources = std::map< PassComponentTextureFlag
+		using SortedTextureSources = castor::Map< PassComponentTextureFlag
 			, Pass::PassTextureSource >;
 
 		static SortedTextureSources sortSources( Pass::TextureSourceArray const & sources )
@@ -207,7 +207,7 @@ namespace castor3d
 				clonedAnim->setTranslateSpeed( srcAnim.getTranslateSpeed() );
 				registerTexture( info
 					, config
-					, std::move( clonedAnim ) );
+					, castor::move( clonedAnim ) );
 			}
 			else
 			{
@@ -248,7 +248,7 @@ namespace castor3d
 					m_textureUnits.erase( it );
 				}
 
-				std::vector< TextureFlagConfiguration > textureConfigs;
+				castor::Vector< TextureFlagConfiguration > textureConfigs;
 
 				for ( auto & unit : m_textureUnits )
 				{
@@ -379,7 +379,7 @@ namespace castor3d
 		}
 
 		component->onAddToPass();
-		m_components.emplace( id, std::move( component ) );
+		m_components.emplace( id, castor::move( component ) );
 		m_dirty = true;
 	}
 
@@ -412,9 +412,9 @@ namespace castor3d
 		return result;
 	}
 
-	std::vector< PassComponentUPtr > Pass::removeComponent( castor::String const & name )
+	castor::Vector< PassComponentUPtr > Pass::removeComponent( castor::String const & name )
 	{
-		std::vector< PassComponentUPtr > result;
+		castor::Vector< PassComponentUPtr > result;
 
 		if ( auto it = std::find_if( m_components.begin()
 			, m_components.end()
@@ -424,7 +424,7 @@ namespace castor3d
 			} );
 			it != m_components.end() )
 		{
-			auto tmp = std::move( it->second );
+			auto tmp = castor::move( it->second );
 			m_components.erase( it );
 
 			if ( tmp->getPlugin().getComponentFlags() == m_reflRefrFlag )
@@ -463,7 +463,7 @@ namespace castor3d
 			}
 
 			result = doRemoveDependencies( name );
-			result.emplace_back( std::move( tmp ) );
+			result.emplace_back( castor::move( tmp ) );
 			m_dirty = true;
 		}
 
@@ -516,8 +516,8 @@ namespace castor3d
 			} );
 			it == m_sources.end() )
 		{
-			m_sources.emplace_back( std::move( sourceInfo )
-				, std::move( configuration ) );
+			m_sources.emplace_back( castor::move( sourceInfo )
+				, castor::move( configuration ) );
 		}
 		else
 		{
@@ -543,9 +543,9 @@ namespace castor3d
 		, TextureAnimationUPtr animation )
 	{
 		m_animations.try_emplace( sourceInfo
-			, std::move( animation ) );
-		registerTexture( std::move( sourceInfo )
-			, std::move( configuration ) );
+			, castor::move( animation ) );
+		registerTexture( castor::move( sourceInfo )
+			, castor::move( configuration ) );
 	}
 
 	void Pass::unregisterTexture( TextureSourceInfo const & sourceInfo )noexcept
@@ -579,7 +579,7 @@ namespace castor3d
 		{
 			auto configuration = it->second;
 			m_sources.erase( it );
-			registerTexture( std::move( dstSourceInfo ), configuration );
+			registerTexture( castor::move( dstSourceInfo ), configuration );
 		}
 	}
 
@@ -587,7 +587,7 @@ namespace castor3d
 		, TextureConfiguration configuration )
 	{
 		resetTexture( sourceInfo
-			, { sourceInfo, std::move( configuration ) } );
+			, { sourceInfo, castor::move( configuration ) } );
 	}
 
 	void Pass::prepareTextures()
@@ -917,10 +917,10 @@ namespace castor3d
 		auto & textureCache = engine.getTextureUnitCache();
 		auto animIt = m_animations.find( sourceInfo );
 		auto anim = ( animIt != m_animations.end()
-			? std::move( animIt->second )
+			? castor::move( animIt->second )
 			: nullptr );
 		auto flags = getFlags( sourceInfo.textureConfig() );
-		m_prepared.emplace_back( &textureCache.getSourceData( sourceInfo, passConfig, std::move( anim ) ) );
+		m_prepared.emplace_back( &textureCache.getSourceData( sourceInfo, passConfig, castor::move( anim ) ) );
 	}
 
 	void Pass::doAddUnit( TextureUnitData & unitData
@@ -949,7 +949,7 @@ namespace castor3d
 
 	void Pass::doUpdateTextureFlags()
 	{
-		std::vector< TextureFlagConfiguration > textureConfigs;
+		castor::Vector< TextureFlagConfiguration > textureConfigs;
 
 		if ( m_texturesReduced.exchange( false ) )
 		{
@@ -985,9 +985,9 @@ namespace castor3d
 		m_dirty = true;
 	}
 
-	std::vector< PassComponentUPtr > Pass::doRemoveDependencies( castor::String const & name )
+	castor::Vector< PassComponentUPtr > Pass::doRemoveDependencies( castor::String const & name )
 	{
-		std::vector< PassComponentUPtr > result;
+		castor::Vector< PassComponentUPtr > result;
 		// First gather the ones depending directly from it.
 		castor::StringArray depends;
 
@@ -1014,7 +1014,7 @@ namespace castor3d
 
 			for ( auto & rem : removed )
 			{
-				result.emplace_back( std::move( rem ) );
+				result.emplace_back( castor::move( rem ) );
 			}
 		}
 

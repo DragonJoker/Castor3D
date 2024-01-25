@@ -27,19 +27,19 @@ namespace castor3d
 			, ProgressBar * progress );
 
 	public:
-		std::vector< castor::String > listMaterials()override;
-		std::vector< MeshData > listMeshes()override;
-		std::vector< castor::String > listSkeletons()override;
-		std::vector< NodeData > listSceneNodes()override;
-		std::vector< LightData > listLights()override;
-		std::vector< GeometryData > listGeometries()override;
-		std::vector< CameraData > listCameras()override;
-		std::vector< castor::String > listMeshAnimations( Mesh const & mesh )override;
-		std::vector< castor::String > listSkeletonAnimations( Skeleton const & skeleton )override;
-		std::vector< castor::String > listSceneNodeAnimations( SceneNode const & node )override;
-		std::vector< castor::String > listAllMeshAnimations()override;
-		std::vector< castor::String > listAllSkeletonAnimations()override;
-		std::vector< castor::String > listAllSceneNodeAnimations()override;
+		castor::StringArray listMaterials()override;
+		castor::Vector< MeshData > listMeshes()override;
+		castor::StringArray listSkeletons()override;
+		castor::Vector< NodeData > listSceneNodes()override;
+		castor::Vector< LightData > listLights()override;
+		castor::Vector< GeometryData > listGeometries()override;
+		castor::Vector< CameraData > listCameras()override;
+		castor::StringArray listMeshAnimations( Mesh const & mesh )override;
+		castor::StringArray listSkeletonAnimations( Skeleton const & skeleton )override;
+		castor::StringArray listSceneNodeAnimations( SceneNode const & node )override;
+		castor::StringArray listAllMeshAnimations()override;
+		castor::StringArray listAllSkeletonAnimations()override;
+		castor::StringArray listAllSceneNodeAnimations()override;
 
 		MaterialImporterUPtr createMaterialImporter()override;
 		AnimationImporterUPtr createAnimationImporter()override;

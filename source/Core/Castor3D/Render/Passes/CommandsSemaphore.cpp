@@ -6,8 +6,8 @@ namespace castor3d
 {
 	CommandsSemaphore::CommandsSemaphore( ashes::CommandBufferPtr commandBuffer
 		, ashes::SemaphorePtr semaphore )
-		: commandBuffer{ std::move( commandBuffer ) }
-		, semaphore{ std::move( semaphore ) }
+		: commandBuffer{ castor::move( commandBuffer ) }
+		, semaphore{ castor::move( semaphore ) }
 	{
 	}
 
@@ -15,8 +15,8 @@ namespace castor3d
 		, QueueData const & queueData
 		, castor::String const & name
 		, VkCommandBufferLevel level )
-		: CommandsSemaphore{ queueData.commandPool->createCommandBuffer( name, level )
-			, device->createSemaphore( name ) }
+		: CommandsSemaphore{ queueData.commandPool->createCommandBuffer( castor::toUtf8( name ), level )
+			, device->createSemaphore( castor::toUtf8( name ) ) }
 	{
 	}
 

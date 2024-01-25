@@ -111,7 +111,7 @@ namespace castor
 	void GliImageWriter::registerWriter( ImageWriter & reg )
 	{
 		reg.registerWriter( gliw::listExtensions()
-			, std::make_unique< GliImageWriter >() );
+			, castor::make_unique< GliImageWriter >() );
 	}
 
 	void GliImageWriter::unregisterWriter( ImageWriter & reg )
@@ -122,21 +122,22 @@ namespace castor
 	bool GliImageWriter::write( Path const & path
 		, PxBufferBase const & buffer )const
 	{
+		auto realPath = toUtf8( path );
 		auto imageFormat = string::lowerCase( path.getExtension() );
 		bool result = false;
 		auto texture = gliw::convert( buffer );
 
 		if ( imageFormat.find( cuT( "dds" ) ) != String::npos )
 		{
-			result = gli::save_dds( texture, path );
+			result = gli::save_dds( texture, realPath );
 		}
 		else if ( imageFormat.find( cuT( "kmg" ) ) != String::npos )
 		{
-			result = gli::save_kmg( texture, path );
+			result = gli::save_kmg( texture, realPath );
 		}
 		else if ( imageFormat.find( cuT( "ktx" ) ) != String::npos )
 		{
-			result = gli::save_ktx( texture, path );
+			result = gli::save_ktx( texture, realPath );
 		}
 
 		return result;

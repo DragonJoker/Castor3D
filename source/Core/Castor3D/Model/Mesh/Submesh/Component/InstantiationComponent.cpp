@@ -82,7 +82,7 @@ namespace castor3d
 		, Pass const & pass
 		, ObjectBufferOffset const & bufferOffsets
 		, ashes::BufferCRefArray & buffers
-		, std::vector< uint64_t > & offsets
+		, castor::Vector< uint64_t > & offsets
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
 		, uint32_t & currentBinding
 		, uint32_t & currentLocation )
@@ -280,7 +280,7 @@ namespace castor3d
 	InstantiationComponent::InstantiationComponent( Submesh & submesh
 		, uint32_t threshold )
 		: SubmeshComponent{ submesh, TypeName
-			, std::make_unique< ComponentData >( submesh, threshold ) }
+			, castor::make_unique< ComponentData >( submesh, threshold ) }
 	{
 	}
 

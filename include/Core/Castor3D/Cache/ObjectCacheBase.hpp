@@ -34,7 +34,7 @@ namespace castor3d
 		using ElementDetacherT = ObjectDetacherT< ElementT, ElementKeyT >;
 
 	public:
-		using OnChangedFunction = std::function< void() >;
+		using OnChangedFunction = castor::Function< void() >;
 		using OnChanged = castor::SignalT< OnChangedFunction >;
 
 	protected:
@@ -102,9 +102,9 @@ namespace castor3d
 			, m_rootNode{ rootNode }
 			, m_rootCameraNode{ rootCameraNode }
 			, m_rootObjectNode{ rootObjectNode }
-			, m_merge{ std::move( merge ) }
-			, m_attach{ std::move( attach ) }
-			, m_detach{ std::move( detach ) }
+			, m_merge{ castor::move( merge ) }
+			, m_attach{ castor::move( attach ) }
+			, m_detach{ castor::move( detach ) }
 		{
 		}
 
@@ -128,7 +128,7 @@ namespace castor3d
 				{
 					m_merge( *this
 						, destination.m_resources
-						, std::move( it.second )
+						, castor::move( it.second )
 						, destination.m_rootCameraNode
 						, destination.m_rootObjectNode );
 				}

@@ -82,7 +82,7 @@ namespace castor
 	void GliImageLoader::registerLoader( ImageLoader & reg )
 	{
 		reg.registerLoader( glil::listExtensions()
-			, std::make_unique< GliImageLoader >() );
+			, castor::make_unique< GliImageLoader >() );
 	}
 
 	void GliImageLoader::unregisterLoader( ImageLoader & reg )

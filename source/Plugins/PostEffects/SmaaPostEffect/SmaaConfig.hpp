@@ -40,7 +40,7 @@ namespace smaa
 
 			if ( !parameters.get( cuT( "preset" ), value ) )
 			{
-				value = "high";
+				value = cuT( "high" );
 			}
 
 			if ( value == cuT( "low" ) )
@@ -231,9 +231,9 @@ namespace smaa
 
 		Data data;
 		uint32_t subsampleIndex{ 0u };
-		std::array< castor::Point4f, 4u > subsampleIndices;
+		castor::Array< castor::Point4f, 4u > subsampleIndices;
 		uint32_t maxSubsampleIndices{ 1u };
-		std::vector< castor::Point2f > jitters;
+		castor::Vector< castor::Point2f > jitters;
 	};
 }
 

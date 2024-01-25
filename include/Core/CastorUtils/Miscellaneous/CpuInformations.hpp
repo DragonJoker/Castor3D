@@ -26,8 +26,8 @@ namespace castor
 			bool m_isIntel{ false };
 			bool m_isAMD{ false };
 			uint32_t m_coreCount{ 0u };
-			std::string m_vendor{};
-			std::string m_model{};
+			String m_vendor{};
+			String m_model{};
 			std::bitset< 32 > m_f_1_ECX{ 0 };
 			std::bitset< 32 > m_f_1_EDX{ 0 };
 			std::bitset< 32 > m_f_7_EBX{ 0 };
@@ -58,7 +58,7 @@ namespace castor
 		 *\~french
 		 *\return		Le vendeur du CPU.
 		 */
-		std::string getVendor()const
+		String getVendor()const
 		{
 			return m_internal.m_vendor;
 		}
@@ -68,7 +68,7 @@ namespace castor
 		 *\~french
 		 *\return		Le modèle du CPU.
 		 */
-		std::string getModel()const
+		String getModel()const
 		{
 			return m_internal.m_model;
 		}
@@ -498,7 +498,7 @@ namespace castor
 	 *\param[in]		object	L'objet à mettre dans le flux.
 	 *\return			Le flux
 	 */
-	CU_API std::ostream & operator<<( std::ostream & stream, CpuInformations const & object );
+	CU_API OutputStream & operator<<( OutputStream & stream, CpuInformations const & object );
 }
 
 #endif

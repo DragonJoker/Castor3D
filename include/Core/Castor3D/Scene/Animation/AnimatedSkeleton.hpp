@@ -98,7 +98,7 @@ namespace castor3d
 		void doClearAnimations()override;
 
 	protected:
-		using InstanceArray = std::vector< SkeletonAnimationInstance * >;
+		using InstanceArray = castor::Vector< SkeletonAnimationInstance * >;
 
 		Skeleton & m_skeleton;
 		Mesh & m_mesh;

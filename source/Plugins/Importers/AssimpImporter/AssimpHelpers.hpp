@@ -22,25 +22,30 @@ namespace c3d_assimp
 {
 	inline castor::String makeString( aiString const & name )
 	{
-		return castor::string::stringCast< castor::xchar >( name.C_Str() );
+		return castor::makeString( name.C_Str() );
+	}
+
+	inline castor::MbString toUtf8( aiString const & name )
+	{
+		return castor::toUtf8( makeString( name ) );
 	}
 
 	inline castor::String normalizeName( castor::String name )
 	{
-		castor::string::replace( name, "\\", "-" );
-		castor::string::replace( name, "|", "-" );
-		castor::string::replace( name, ":", "-" );
-		castor::string::replace( name, "*", "-" );
-		castor::string::replace( name, "?", "-" );
-		castor::string::replace( name, "<", "-" );
-		castor::string::replace( name, ">", "-" );
-		castor::string::replace( name, "\"", "-" );
-		return castor::string::replace( name, "/", "-" );
+		castor::string::replace( name, cuT( "\\" ), cuT( "-" ) );
+		castor::string::replace( name, cuT( "|" ), cuT( "-" ) );
+		castor::string::replace( name, cuT( ":" ), cuT( "-" ) );
+		castor::string::replace( name, cuT( "*" ), cuT( "-" ) );
+		castor::string::replace( name, cuT( "?" ), cuT( "-" ) );
+		castor::string::replace( name, cuT( "<" ), cuT( "-" ) );
+		castor::string::replace( name, cuT( ">" ), cuT( "-" ) );
+		castor::string::replace( name, cuT( "\"" ), cuT( "-" ) );
+		return castor::string::replace( name, cuT( "/" ), cuT( "-" ) );
 	}
 
 	inline castor::Matrix4x4f fromAssimp( aiMatrix4x4 const & aiMatrix )
 	{
-		std::array< float, 16u > data
+		castor::Array< float, 16u > data
 			{ aiMatrix.a1, aiMatrix.b1, aiMatrix.c1, aiMatrix.d1
 			, aiMatrix.a2, aiMatrix.b2, aiMatrix.c2, aiMatrix.d2
 			, aiMatrix.a3, aiMatrix.b3, aiMatrix.c3, aiMatrix.d3
@@ -141,13 +146,13 @@ namespace c3d_assimp
 		return result;
 	}
 
-	inline std::string getLongestCommonSubstring( std::string const & a, std::string const & b )
+	inline castor::String getLongestCommonSubstring( castor::String const & a, castor::String const & b )
 	{
 		auto result = castor::string::getLongestCommonSubstring( a, b );
 		return castor::string::trim( result
 			, true
 			, true
-			, " \r\t-_/\\|*$<>[](){}" );
+			, castor::StringView{ cuT( " \r\t-_/\\|*$<>[](){}" ) } );
 	}
 
 	inline bool isValidMesh( aiMesh const & mesh )
@@ -305,7 +310,7 @@ namespace c3d_assimp
 		}
 	}
 
-	inline std::vector< castor3d::SubmeshAnimationBuffer > gatherMeshAnimBuffers( castor::Point3fArray const & positions
+	inline castor::Vector< castor3d::SubmeshAnimationBuffer > gatherMeshAnimBuffers( castor::Point3fArray const & positions
 		, castor::Point3fArray const & normals
 		, castor::Point4fArray const & tangents
 		, castor::Point3fArray const & bitangents
@@ -316,7 +321,7 @@ namespace c3d_assimp
 		, castor::Point3fArray const & colours
 		, castor::ArrayView< aiAnimMesh * > animMeshes )
 	{
-		std::vector< castor3d::SubmeshAnimationBuffer > result;
+		castor::Vector< castor3d::SubmeshAnimationBuffer > result;
 
 		for ( auto aiAnimMesh : animMeshes )
 		{
@@ -428,13 +433,13 @@ namespace c3d_assimp
 				}
 			}
 
-			result.emplace_back( std::move( buffer ) );
+			result.emplace_back( castor::move( buffer ) );
 		}
 
 		return result;
 	}
 
-	inline std::pair< uint32_t, double > getNodeAnimFrameTicks( aiNodeAnim const & aiNodeAnim )
+	inline castor::Pair< uint32_t, double > getNodeAnimFrameTicks( aiNodeAnim const & aiNodeAnim )
 	{
 		return { std::max( { aiNodeAnim.mNumPositionKeys
 				, aiNodeAnim.mNumRotationKeys
@@ -450,7 +455,7 @@ namespace c3d_assimp
 					: 0.0 ) } ) };
 	}
 
-	inline std::pair< uint32_t, double > getAnimationFrameTicks( aiAnimation const & aiAnimation )
+	inline castor::Pair< uint32_t, double > getAnimationFrameTicks( aiAnimation const & aiAnimation )
 	{
 		uint32_t count = 0u;
 		double ticks = 0.0;
@@ -504,7 +509,7 @@ namespace c3d_assimp
 		, castor::ArrayView< aiBone * > bones
 		, aiNode const * meshNode )
 	{
-		std::vector< aiNode const * > bonesRootNodes;
+		castor::Vector< aiNode const * > bonesRootNodes;
 		auto insertNode = [&bonesRootNodes]( aiNode const * node )
 		{
 			if ( std::all_of( bonesRootNodes.begin()
@@ -554,8 +559,8 @@ namespace c3d_assimp
 	inline castor::String findSkeletonName( castor::StringMap< castor::Matrix4x4f > const & bonesNodes
 		, aiNode const & rootNode )
 	{
-		std::vector< aiNode const * > bones;
-		std::vector< aiNode const * > work;
+		castor::Vector< aiNode const * > bones;
+		castor::Vector< aiNode const * > work;
 		work.push_back( &rootNode );
 		auto name = makeString( rootNode.mName );
 
@@ -609,11 +614,11 @@ namespace c3d_assimp
 	using KeyDataTypeT = typename KeyDataTyperT< KeyT >::Type;
 
 	template< typename KeyT >
-	inline std::map< castor::Milliseconds, KeyDataTypeT< KeyT > > processKeys( castor::ArrayView< KeyT > const & keys
+	inline castor::Map< castor::Milliseconds, KeyDataTypeT< KeyT > > processKeys( castor::ArrayView< KeyT > const & keys
 		, int64_t ticksPerSecond
-		, std::set< castor::Milliseconds > & times )
+		, castor::Set< castor::Milliseconds > & times )
 	{
-		std::map< castor::Milliseconds, KeyDataTypeT< KeyT > > result;
+		castor::Map< castor::Milliseconds, KeyDataTypeT< KeyT > > result;
 
 		for ( auto const & key : keys )
 		{
@@ -631,7 +636,7 @@ namespace c3d_assimp
 	template< typename KeyFrameT, typename AnimationT >
 	inline KeyFrameT & getKeyFrame( castor::Milliseconds const & time
 		, AnimationT & animation
-		, std::map< castor::Milliseconds, castor::UniquePtr< KeyFrameT > > & keyframes )
+		, castor::Map< castor::Milliseconds, castor::UniquePtr< KeyFrameT > > & keyframes )
 	{
 		auto it = keyframes.find( time );
 
@@ -646,9 +651,9 @@ namespace c3d_assimp
 
 	template< typename T >
 	inline void findValue( castor::Milliseconds time
-		, typename std::map< castor::Milliseconds, T > const & map
-		, typename std::map< castor::Milliseconds, T >::const_iterator & prv
-		, typename std::map< castor::Milliseconds, T >::const_iterator & cur )
+		, typename castor::Map< castor::Milliseconds, T > const & map
+		, typename castor::Map< castor::Milliseconds, T >::const_iterator & prv
+		, typename castor::Map< castor::Milliseconds, T >::const_iterator & cur )
 	{
 		if ( map.empty() )
 		{
@@ -659,7 +664,7 @@ namespace c3d_assimp
 		{
 			cur = std::find_if( map.begin()
 				, map.end()
-				, [&time]( std::pair< castor::Milliseconds, T > const & pair )
+				, [&time]( castor::Pair< castor::Milliseconds, T > const & pair )
 				{
 					return pair.first > time;
 				} );
@@ -681,7 +686,7 @@ namespace c3d_assimp
 	template< typename T >
 	inline T interpolate( castor::Milliseconds const & time
 		, castor3d::Interpolator< T > const & interpolator
-		, std::map< castor::Milliseconds, T > const & values )
+		, castor::Map< castor::Milliseconds, T > const & values )
 	{
 		T result;
 
@@ -711,14 +716,14 @@ namespace c3d_assimp
 	}
 
 	template< typename AnimationT, typename KeyFrameT, typename FuncT >
-	inline void synchroniseKeys( std::map< castor::Milliseconds, castor::Point3f > const & translates
-		, std::map< castor::Milliseconds, castor::Point3f > const & scales
-		, std::map< castor::Milliseconds, castor::Quaternion > const & rotates
-		, std::set< castor::Milliseconds > const & times
+	inline void synchroniseKeys( castor::Map< castor::Milliseconds, castor::Point3f > const & translates
+		, castor::Map< castor::Milliseconds, castor::Point3f > const & scales
+		, castor::Map< castor::Milliseconds, castor::Quaternion > const & rotates
+		, [[maybe_unused]] castor::Set< castor::Milliseconds > const & times
 		, uint32_t fps
 		, castor::Milliseconds maxTime
 		, AnimationT & animation
-		, std::map< castor::Milliseconds, castor::UniquePtr< KeyFrameT > > & keyframes
+		, castor::Map< castor::Milliseconds, castor::UniquePtr< KeyFrameT > > & keyframes
 		, FuncT fillKeyFrame )
 	{
 		castor3d::InterpolatorT< castor::Point3f, castor3d::InterpolatorType::eLinear > pointInterpolator;
@@ -748,10 +753,10 @@ namespace c3d_assimp
 		, castor::Milliseconds maxTime
 		, int64_t ticksPerSecond
 		, AnimationT & animation
-		, std::map< castor::Milliseconds, castor::UniquePtr< KeyFrameT > > & keyframes
+		, castor::Map< castor::Milliseconds, castor::UniquePtr< KeyFrameT > > & keyframes
 		, FuncT fillKeyFrame )
 	{
-		std::set< castor::Milliseconds > times;
+		castor::Set< castor::Milliseconds > times;
 		auto translates = processKeys( castor::makeArrayView( aiAnim.mPositionKeys
 				, aiAnim.mNumPositionKeys )
 			, ticksPerSecond

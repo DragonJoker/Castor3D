@@ -34,7 +34,7 @@ namespace castor3d
 		markDirty();
 	}
 
-	MovableObject::~MovableObject()
+	MovableObject::~MovableObject()noexcept
 	{
 		auto node = getParent();
 

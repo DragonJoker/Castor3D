@@ -46,10 +46,7 @@ namespace castor
 		 *\param[in]	toLog	Le texte à logger.
 		 *\param[in]	newLine	Dit si le caractère de fin de ligne doit être ajouté.
 		 */
-		virtual void print( String const & toLog, bool newLine ) = 0;
-
-	protected:
-		castor::String m_header;
+		virtual void print( MbString const & toLog, bool newLine ) = 0;
 	};
 
 	class ProgramConsole
@@ -81,12 +78,12 @@ namespace castor
 		 *\param[in]	toLog	Le texte à logger.
 		 *\param[in]	newLine	Dit si le caractère de fin de ligne doit être ajouté.
 		 */
-		void print( String const & toLog, bool newLine );
+		void print( MbString const & toLog, bool newLine );
 
 	private:
 		//!\~english	The platform specific console.
 		//!\~french		La console spécifique à la plateforme.
-		std::unique_ptr< ConsoleImpl > m_console;
+		castor::RawUniquePtr< ConsoleImpl > m_console;
 	};
 }
 

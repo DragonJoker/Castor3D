@@ -203,8 +203,8 @@ namespace castor3d::shader
 	CU_DeclareSmartPtr( castor3d::shader, ShadowsBuffer, C3D_API );
 	CU_DeclareSmartPtr( castor3d::shader, SssTransmittance, C3D_API );
 
-	using ReflectionModelPtr = std::unique_ptr< ReflectionModel >;
-	using LightingModelCreator = std::function< LightingModelUPtr( LightingModelID lightingModelId
+	using ReflectionModelPtr = castor::RawUniquePtr< ReflectionModel >;
+	using LightingModelCreator = castor::Function< LightingModelUPtr( LightingModelID lightingModelId
 		, sdw::ShaderWriter & writer
 		, Materials const & materials
 		, Utils & utils
@@ -217,8 +217,8 @@ namespace castor3d::shader
 	{
 	};
 
-	using BackgroundModelPtr = std::unique_ptr< BackgroundModel >;
-	using BackgroundModelCreator = std::function< BackgroundModelPtr( Engine const & engine
+	using BackgroundModelPtr = castor::RawUniquePtr< BackgroundModel >;
+	using BackgroundModelCreator = castor::Function< BackgroundModelPtr( Engine const & engine
 		, sdw::ShaderWriter & writer
 		, Utils & utils
 		, VkExtent2D targetSize
@@ -278,7 +278,7 @@ namespace castor3d::shader
 		DerivTex( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+			: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
 		{
 		}
 
@@ -314,7 +314,7 @@ namespace castor3d::shader
 		BufferData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+			: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
 		{
 		}
 
@@ -323,35 +323,11 @@ namespace castor3d::shader
 		}
 	};
 
-	namespace details
-	{
-		inline void makeExprListRec( sdw::expr::ExprList & )
-		{
-		}
-
-		inline void makeExprListRec( sdw::expr::ExprList & result
-			, sdw::expr::ExprPtr expr )
-		{
-			result.emplace_back( std::move( expr ) );
-		}
-
-		template< typename ... ExprT >
-		inline void makeExprListRec( sdw::expr::ExprList & result
-			, sdw::expr::ExprPtr expr
-			, ExprT && ... remains )
-		{
-			result.emplace_back( std::move( expr ) );
-			details::makeExprListRec( result
-				, std::forward< ExprT >( remains )... );
-		}
-	}
-
 	template< typename ... ExprT >
 	inline sdw::expr::ExprList makeExprList( ExprT && ... expr )
 	{
 		sdw::expr::ExprList result;
-		details::makeExprListRec( result
-			, std::forward< ExprT >( expr )... );
+		( result.emplace_back( castor::forward< ExprT >( expr ) ), ... );
 		return result;
 	}
 

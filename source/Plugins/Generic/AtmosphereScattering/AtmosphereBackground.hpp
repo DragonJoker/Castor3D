@@ -129,7 +129,7 @@ namespace atmosphere_scattering
 
 		void setAtmosphereCfg( AtmosphereScatteringConfig config )noexcept
 		{
-			m_atmosphereCfg = std::move( config );
+			m_atmosphereCfg = castor::move( config );
 		}
 
 		auto & getAtmosphereCfg()const noexcept
@@ -139,7 +139,7 @@ namespace atmosphere_scattering
 
 		void setWeatherCfg( WeatherConfig config )noexcept
 		{
-			m_weatherCfg = std::move( config );
+			m_weatherCfg = castor::move( config );
 		}
 
 		auto & getWeatherCfg()const noexcept
@@ -149,7 +149,7 @@ namespace atmosphere_scattering
 
 		void setCloudsCfg( CloudsConfig config )noexcept
 		{
-			m_cloudsCfg = std::move( config );
+			m_cloudsCfg = castor::move( config );
 		}
 
 		auto & getCloudsCfg()const noexcept
@@ -284,10 +284,10 @@ namespace atmosphere_scattering
 			castor3d::Texture cloudsResult;
 			mutable bool camAtmoChanged{ true };
 			mutable CameraUbo cameraUbo;
-			std::unique_ptr< AtmosphereSkyViewPass > skyViewPass;
-			std::unique_ptr< AtmosphereVolumePass > volumePass;
-			std::unique_ptr< CloudsVolumePass > volumetricCloudsPass;
-			std::unique_ptr< CloudsResolvePass > cloudsResolvePass;
+			castor::RawUniquePtr< AtmosphereSkyViewPass > skyViewPass;
+			castor::RawUniquePtr< AtmosphereVolumePass > volumePass;
+			castor::RawUniquePtr< CloudsVolumePass > volumetricCloudsPass;
+			castor::RawUniquePtr< CloudsResolvePass > cloudsResolvePass;
 			crg::FramePass * lastPass;
 		};
 
@@ -307,12 +307,12 @@ namespace atmosphere_scattering
 		mutable bool m_generateCurl{ true };
 		mutable bool m_cloudsChanged{ true };
 		mutable bool m_weatherChanged{ true };
-		std::unique_ptr< WeatherUbo > m_weatherUbo;
-		std::unique_ptr< CloudsUbo > m_cloudsUbo;
-		std::unique_ptr< CloudsWorleyPass > m_worleyPass;
-		std::unique_ptr< CloudsPerlinPass > m_perlinWorleyPass;
-		std::unique_ptr< CloudsCurlPass > m_curlPass;
-		std::unique_ptr< CloudsWeatherPass > m_weatherPass;
+		castor::RawUniquePtr< WeatherUbo > m_weatherUbo;
+		castor::RawUniquePtr< CloudsUbo > m_cloudsUbo;
+		castor::RawUniquePtr< CloudsWorleyPass > m_worleyPass;
+		castor::RawUniquePtr< CloudsPerlinPass > m_perlinWorleyPass;
+		castor::RawUniquePtr< CloudsCurlPass > m_curlPass;
+		castor::RawUniquePtr< CloudsWeatherPass > m_weatherPass;
 		// Atmosphere
 		AtmosphereScatteringConfig m_atmosphereCfg;
 		castor3d::Texture m_transmittance;
@@ -324,10 +324,10 @@ namespace atmosphere_scattering
 		uint32_t m_curlResolution{ 32u };
 		uint32_t m_weatherResolution{ 32u };
 		mutable bool m_atmosphereChanged{ true };
-		std::unique_ptr< AtmosphereScatteringUbo > m_atmosphereUbo;
-		std::unique_ptr< AtmosphereTransmittancePass > m_transmittancePass;
-		std::unique_ptr< AtmosphereMultiScatteringPass > m_multiScatteringPass;
-		std::map< crg::ImageData const *, std::unique_ptr< CameraPasses > > m_cameraPasses;
+		castor::RawUniquePtr< AtmosphereScatteringUbo > m_atmosphereUbo;
+		castor::RawUniquePtr< AtmosphereTransmittancePass > m_transmittancePass;
+		castor::RawUniquePtr< AtmosphereMultiScatteringPass > m_multiScatteringPass;
+		castor::Map< crg::ImageData const *, castor::RawUniquePtr< CameraPasses > > m_cameraPasses;
 		mutable castor::PreciseTimer m_timer;
 		mutable float m_time{};
 	};

@@ -52,7 +52,7 @@ namespace castor3d
 
 		m_activeHandler = {};
 		m_lastMouseTarget = {};
-		using LockType = std::unique_lock< std::mutex >;
+		using LockType = castor::UniqueLock< castor::Mutex >;
 		LockType lock{ castor::makeUniqueLock( m_mutexHandlers ) };
 		auto it = m_handlers.begin();
 
@@ -89,7 +89,7 @@ namespace castor3d
 
 		if ( it == m_onMouseMoveActions.end() )
 		{
-			m_onMouseMoveActions.try_emplace( handler, std::move( function ) );
+			m_onMouseMoveActions.try_emplace( handler, castor::move( function ) );
 		}
 	}
 
@@ -111,7 +111,7 @@ namespace castor3d
 
 		if ( it == m_onSelectActions.end() )
 		{
-			m_onSelectActions.try_emplace( handler, std::move( function ) );
+			m_onSelectActions.try_emplace( handler, castor::move( function ) );
 		}
 	}
 
@@ -122,7 +122,7 @@ namespace castor3d
 
 		if ( it == m_onTextActions.end() )
 		{
-			m_onTextActions.try_emplace( handler, std::move( function ) );
+			m_onTextActions.try_emplace( handler, castor::move( function ) );
 		}
 	}
 
@@ -133,18 +133,18 @@ namespace castor3d
 
 		if ( it == m_onExpandActions.end() )
 		{
-			m_onExpandActions.try_emplace( handler, std::move( function ) );
+			m_onExpandActions.try_emplace( handler, castor::move( function ) );
 		}
 	}
 
 	void UserInputListener::registerCursorAction( OnCursorActionFunction function )
 	{
-		m_onCursorAction = std::move( function );
+		m_onCursorAction = castor::move( function );
 	}
 
 	void UserInputListener::registerClipboardTextAction( OnClipboardTextActionFunction function )
 	{
-		m_onClipboardTextAction = std::move( function );
+		m_onClipboardTextAction = castor::move( function );
 	}
 
 	void UserInputListener::unregisterMouseMoveAction( castor::String const & handler )
@@ -271,7 +271,7 @@ namespace castor3d
 		, castor::U32String text )const
 	{
 		return m_onClipboardTextAction
-			? m_onClipboardTextAction( set, std::move( text ) )
+			? m_onClipboardTextAction( set, castor::move( text ) )
 			: castor::U32String{};
 	}
 

@@ -61,7 +61,7 @@ namespace castor3d::shader
 
 	private:
 		DebugConfig & m_config;
-		std::vector< castor::String > m_categories;
+		castor::StringArray m_categories;
 		sdw::UInt m_index;
 		sdw::Vec4 m_output;
 		bool m_enable;
@@ -107,7 +107,7 @@ namespace castor3d::shader
 		void registerOutput( castor::String name
 			, ValueT const value )
 		{
-			m_debugOutput->registerOutput( std::move( name ), value );
+			m_debugOutput->registerOutput( castor::move( name ), value );
 		}
 
 	private:

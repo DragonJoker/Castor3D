@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___CU_Exception_H___
 
 #include "CastorUtils/Exception/Assertion.hpp"
+#include "CastorUtils/Miscellaneous/StringUtils.hpp"
 
 #include <string>
 #include <cstdint>
@@ -33,20 +34,39 @@ namespace castor
 		 *\param[in]	function	Le nom de la fonction
 		 *\param[in]	line		Le numéro de ligne
 		 */
-		Exception( std::string const & description
+		Exception( MbString const & description
 			, char const * file
 			, char const * function
 			, uint32_t line )
-			: m_line( line )
-			, m_description( description )
-			, m_filename( file ? file : "" )
-			, m_functionName( function ? function : "" )
+			: m_line{ line }
+			, m_description{ description }
+			, m_filename{ file ? file : "" }
+			, m_functionName{ function ? function : "" }
 		{
-			static std::locale const loc{ "C" };
-			std::stringstream stream;
-			stream.imbue( loc );
-			stream << Debug::Backtrace{};
-			m_callStack = stream.str();
+			auto stream = makeStringStream();
+			stream << debug::Backtrace{};
+			m_callStack = toUtf8( stream.str() );
+		}
+		/**
+		 *\~english
+		 *\brief		Specified constructor
+		 *\param[in]	description	The exception description
+		 *\param[in]	file		The file name
+		 *\param[in]	function	The function name
+		 *\param[in]	line		The line number
+		 *\~french
+		 *\brief		Constructeur spécifié
+		 *\param[in]	description	La description de l'exception
+		 *\param[in]	file		Le nom du fichier
+		 *\param[in]	function	Le nom de la fonction
+		 *\param[in]	line		Le numéro de ligne
+		 */
+		Exception( WString const & description
+			, char const * file
+			, char const * function
+			, uint32_t line )
+			: Exception{ toUtf8( description ), file, function, line }
+		{
 		}
 		/**
 		 *\~english
@@ -68,7 +88,7 @@ namespace castor
 		 *\brief		Récupère le nom du fichier
 		 *\return		Le nom du fichier
 		 */
-		std::string const & getFileName()const noexcept
+		MbString const & getFileName()const noexcept
 		{
 			return m_filename;
 		}
@@ -80,7 +100,7 @@ namespace castor
 		 *\brief		Récupère le nom de la fonction
 		 *\return		Le nom de la fonction
 		 */
-		std::string const & getFunction()const noexcept
+		MbString const & getFunction()const noexcept
 		{
 			return m_functionName;
 		}
@@ -104,7 +124,7 @@ namespace castor
 		 *\brief		Récupère la description de l'exception
 		 *\return		La description de l'exception
 		 */
-		std::string const & getDescription()const noexcept
+		MbString const & getDescription()const noexcept
 		{
 			return m_description;
 		}
@@ -116,10 +136,9 @@ namespace castor
 		 *\brief		Récupère le texte complet de l'exception (description, ligne, fichier et fonction)
 		 *\return		La texte complet de l'exception
 		 */
-		std::string getFullDescription()const noexcept
+		MbString getFullDescription()const noexcept
 		{
-			static std::locale const loc{ "C" };
-			std::string result;
+			MbString result;
 
 			if ( !m_filename.empty() )
 			{
@@ -141,8 +160,7 @@ namespace castor
 
 			if ( m_line )
 			{
-				std::stringstream stream;
-				stream.imbue( loc );
+				auto stream = makeStringStreamT< char >();
 				stream << m_line;
 				result += stream.str() + " : ";
 			}
@@ -170,10 +188,10 @@ namespace castor
 
 	protected:
 		uint32_t m_line;
-		std::string m_description;
-		std::string m_filename;
-		std::string m_functionName;
-		std::string m_callStack;
+		MbString m_description;
+		MbString m_filename;
+		MbString m_functionName;
+		MbString m_callStack;
 	};
 }
 /**

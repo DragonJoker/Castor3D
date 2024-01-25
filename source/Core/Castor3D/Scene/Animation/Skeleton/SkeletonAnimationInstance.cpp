@@ -20,7 +20,7 @@ namespace castor3d
 	{
 		static castor::String const & getObjectTypeName( SkeletonNodeType type )
 		{
-			static std::map< SkeletonNodeType, castor::String > Names
+			static castor::Map< SkeletonNodeType, castor::String > Names
 			{
 				{ SkeletonNodeType::eNode, cuT( "Node_" ) },
 				{ SkeletonNodeType::eBone, cuT( "Bone_" ) },

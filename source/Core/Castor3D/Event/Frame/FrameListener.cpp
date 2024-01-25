@@ -9,7 +9,7 @@ namespace castor3d
 	namespace frmevtlstr
 	{
 		template< typename EventT, typename ... ParamsT >
-		static bool doFireEvents( std::vector< castor::UniquePtr< EventT > > & arrayEvents
+		static bool doFireEvents( castor::Vector< castor::UniquePtr< EventT > > & arrayEvents
 			, ParamsT & ... params )
 		{
 			bool result = true;
@@ -23,12 +23,12 @@ namespace castor3d
 			}
 			catch ( castor::Exception & exc )
 			{
-				log::error << cuT( "Encountered exception while processing events: " ) << castor::string::stringCast< xchar >( exc.getFullDescription() ) << std::endl;
+				log::error << cuT( "Encountered exception while processing events: " ) << castor::makeString( exc.getFullDescription() ) << std::endl;
 				result = false;
 			}
 			catch ( std::exception & exc )
 			{
-				log::error << cuT( "Encountered exception while processing events: " ) << castor::string::stringCast< xchar >( exc.what() ) << std::endl;
+				log::error << cuT( "Encountered exception while processing events: " ) << castor::makeString( exc.what() ) << std::endl;
 				result = false;
 			}
 			catch ( ... )
@@ -78,7 +78,7 @@ namespace castor3d
 	{
 		auto lock( castor::makeUniqueLock( m_mutex ) );
 		auto result = event.get();
-		m_cpuEvents[size_t( event->getType() )].push_back( std::move( event ) );
+		m_cpuEvents[size_t( event->getType() )].push_back( castor::move( event ) );
 		return result;
 	}
 
@@ -86,7 +86,7 @@ namespace castor3d
 	{
 		auto lock( castor::makeUniqueLock( m_mutex ) );
 		auto result = event.get();
-		m_gpuEvents[size_t( event->getType() )].push_back( std::move( event ) );
+		m_gpuEvents[size_t( event->getType() )].push_back( castor::move( event ) );
 		return result;
 	}
 
@@ -95,7 +95,7 @@ namespace castor3d
 		CpuFrameEventPtrArray arrayEvents;
 		{
 			auto lock( castor::makeUniqueLock( m_mutex ) );
-			std::swap( arrayEvents, m_cpuEvents[size_t( type )] );
+			castor::swap( arrayEvents, m_cpuEvents[size_t( type )] );
 		}
 		return frmevtlstr::doFireEvents( arrayEvents );
 	}
@@ -107,7 +107,7 @@ namespace castor3d
 		GpuFrameEventPtrArray arrayEvents;
 		{
 			auto lock( castor::makeUniqueLock( m_mutex ) );
-			std::swap( arrayEvents, m_gpuEvents[size_t( type )] );
+			castor::swap( arrayEvents, m_gpuEvents[size_t( type )] );
 		}
 		return frmevtlstr::doFireEvents( arrayEvents, device, queueData );
 	}
@@ -116,13 +116,13 @@ namespace castor3d
 	{
 		CpuFrameEventPtrArray cpuEvents;
 		auto lock( castor::makeUniqueLock( m_mutex ) );
-		std::swap( cpuEvents, m_cpuEvents[size_t( type )] );
+		castor::swap( cpuEvents, m_cpuEvents[size_t( type )] );
 	}
 
 	void FrameListener::flushEvents( GpuEventType type )
 	{
 		GpuFrameEventPtrArray gpuEvents;
 		auto lock( castor::makeUniqueLock( m_mutex ) );
-		std::swap( gpuEvents, m_gpuEvents[size_t( type )] );
+		castor::swap( gpuEvents, m_gpuEvents[size_t( type )] );
 	}
 }

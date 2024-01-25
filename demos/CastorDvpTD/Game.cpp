@@ -133,7 +133,7 @@ namespace castortd
 		m_updateTimer = castor::makeUnique< castor3d::FramePassTimer >( m_scene.getEngine()->getRenderSystem()->getRenderDevice().makeContext()
 			, "CastorDvpTD/Update"
 			, crg::TimerScope::eUpdate );
-		m_scene.getEngine()->registerTimer( "CastorDvpTD/Update", *m_updateTimer );
+		m_scene.getEngine()->registerTimer( cuT( "CastorDvpTD/Update" ), *m_updateTimer );
 		m_cellDimensions[0] = m_mapCubeMesh->getBoundingBox().getMax()[0] - m_mapCubeMesh->getBoundingBox().getMin()[0];
 		m_cellDimensions[1] = m_mapCubeMesh->getBoundingBox().getMax()[1] - m_mapCubeMesh->getBoundingBox().getMin()[1];
 		m_cellDimensions[2] = m_mapCubeMesh->getBoundingBox().getMax()[2] - m_mapCubeMesh->getBoundingBox().getMin()[2];
@@ -149,7 +149,7 @@ namespace castortd
 	void Game::reset()
 	{
 		Grid grid;
-		std::swap( m_grid, grid );
+		castor::swap( m_grid, grid );
 
 		m_totalBullets = 0ull;
 		m_totalBoulders = 0ull;
@@ -178,7 +178,7 @@ namespace castortd
 
 		for ( auto & enemy : m_enemies )
 		{
-			m_spawner.killEnemy( *this, std::move( enemy ) );
+			m_spawner.killEnemy( *this, castor::move( enemy ) );
 		}
 
 		m_enemies.clear();
@@ -312,7 +312,7 @@ namespace castortd
 			{
 				cell.m_state = Cell::State::Tower;
 				spend( category->getTowerCost() );
-				doAddTower( cell, std::move( category ) );
+				doAddTower( cell, castor::move( category ) );
 				result = true;
 			}
 		}
@@ -351,7 +351,7 @@ namespace castortd
 				geometry->setMaterial( *submesh, m_bulletMaterial );
 			}
 
-			m_scene.addGeometry( std::move( geometry ) );
+			m_scene.addGeometry( castor::move( geometry ) );
 			m_bullets.emplace_back( speed, damage, *node, target );
 		}
 		else
@@ -384,7 +384,7 @@ namespace castortd
 				geometry->setMaterial( *submesh, m_boulderMaterial );
 			}
 
-			m_scene.addGeometry( std::move( geometry ) );
+			m_scene.addGeometry( castor::move( geometry ) );
 			m_boulders.emplace_back( speed, damage, *node, target );
 		}
 		else
@@ -542,7 +542,7 @@ namespace castortd
 					if ( enemy->accept( *this ) )
 					{
 						loseLife( 1u );
-						m_spawner.killEnemy( *this, std::move( enemy ) );
+						m_spawner.killEnemy( *this, castor::move( enemy ) );
 						it = m_enemies.erase( it );
 					}
 					else
@@ -560,7 +560,7 @@ namespace castortd
 			{
 				enemy->die();
 				earn( enemy->getBounty() );
-				m_spawner.killEnemy( *this, std::move( enemy ) );
+				m_spawner.killEnemy( *this, castor::move( enemy ) );
 				it = m_enemies.erase( it );
 				++m_kills;
 			}
@@ -635,7 +635,7 @@ namespace castortd
 
 	void Game::doAddMapCube( Cell & cell )
 	{
-		castor::String name = cuT( "MapCube_" ) + std::to_string( cell.m_x ) + cuT( "x" ) + std::to_string( cell.m_y );
+		castor::String name = cuT( "MapCube_" ) + castor::string::toString( cell.m_x ) + cuT( "x" ) + castor::string::toString( cell.m_y );
 		auto node = m_scene.addNewSceneNode( name );
 		auto geometry = m_scene.createGeometry( name
 			, m_scene
@@ -650,7 +650,7 @@ namespace castortd
 		}
 
 		m_lastMapCube = geometry.get();
-		m_scene.addGeometry( std::move( geometry ) );
+		m_scene.addGeometry( castor::move( geometry ) );
 		cell.m_state = Cell::State::Empty;
 	}
 
@@ -680,7 +680,7 @@ namespace castortd
 
 	void Game::doAddTower( Cell & cell, Tower::CategoryPtr && category )
 	{
-		castor::String name = cuT( "Tower_" ) + std::to_string( cell.m_x ) + cuT( "x" ) + std::to_string( cell.m_y );
+		castor::String name = cuT( "Tower_" ) + castor::string::toString( cell.m_x ) + cuT( "x" ) + castor::string::toString( cell.m_y );
 		auto node = m_scene.addNewSceneNode( name );
 		node->setPosition( convert( castor::Point2i{ cell.m_x, cell.m_y } ) + castor::Point3f{ 0, m_cellDimensions[1], 0 } );
 		node->attachTo( *m_mapNode );
@@ -727,14 +727,14 @@ namespace castortd
 		game::doUpdateMaterials( *tower
 			, category->getKind()
 			, m_scene.getMaterialView() );
-		m_scene.addGeometry( std::move( tower ) );
+		m_scene.addGeometry( castor::move( tower ) );
 		cell.m_state = Cell::State::Tower;
 		category->setAttackAnimationTime( time );
 		animGroup->startAnimation( category->getAttackAnimationName() );
 		animGroup->pauseAnimation( category->getAttackAnimationName() );
 		node->setScale( castor::Point3f{ 0.15, 0.15, 0.15 } );
 		std::clog << "Animation time: " << time.count() << std::endl;
-		m_towers.push_back( std::make_shared< Tower >( std::move( category ), *node, *animGroup, cell ) );
+		m_towers.push_back( castor::make_shared< Tower >( castor::move( category ), *node, *animGroup, cell ) );
 	}
 
 	void Game::doGameOver()

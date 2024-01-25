@@ -1,7 +1,5 @@
 #include "CastorUtilsStringTest.hpp"
 
-using namespace castor;
-
 namespace Testing
 {
 	//*********************************************************************************************
@@ -13,9 +11,9 @@ namespace Testing
 		{
 			if ( !strIn.empty() )
 			{
-				typedef typename std::codecvt< OutChar, InChar, std::mbstate_t > facet_type;
-				std::mbstate_t state = std::mbstate_t();
-				std::vector< OutChar > buffer( strIn.size() );
+				using facet_type = std::codecvt< OutChar, InChar, std::mbstate_t >;
+				std::mbstate_t state{};
+				castor::Vector< OutChar > buffer( strIn.size() );
 				InChar const * pEndIn = nullptr;
 				OutChar * pEndOut = nullptr;
 				std::use_facet< facet_type >( loc ).in( state,
@@ -39,52 +37,57 @@ namespace Testing
 
 	void CastorUtilsStringTest::doRegisterTests()
 	{
-		doRegisterTest( "StringConversions", std::bind( &CastorUtilsStringTest::StringConversions, this ) );
+		doRegisterTest( "StringConversions", [this](){ StringConversions(); } );
 	}
 
 	void CastorUtilsStringTest::StringConversions()
 	{
-		String tstrOut;
-		String tstrIn( cuT( "STR : Bonjoir éêèàÉÊÈÀ" ) );
-		std::string strIn = "STR : Bonjoir éêèàÉÊÈÀ";
-		std::wstring wstrIn = L"STR : Bonjoir éêèàÉÊÈÀ";
-		std::wstring wstrOut;
-		std::string strOut;
-		tstrOut = string::stringCast< xchar >( strIn );
-		std::cout << "	Conversion from std::string to String" << std::endl;
-		std::cout << "		Entry  : " << strIn << std::endl;
-		std::cout << "		Result : " << tstrOut << std::endl;
-		std::cout << std::endl;
-		CT_EQUAL( tstrOut, tstrIn );
-		tstrOut = string::stringCast< xchar >( wstrIn );
-		std::cout << "	Conversion from std::wstring to String" << std::endl;
-		std::wcout << L"		Entry  : " << wstrIn << std::endl;
-		std::cout << "		Result : " << tstrOut << std::endl;
-		std::cout << std::endl;
-		CT_EQUAL( tstrOut, tstrIn );
-		strOut = string::stringCast< char >( tstrIn );
-		std::cout << "	Conversion from String to std::string" << std::endl;
-		std::cout << "		Entry  : " << tstrIn << std::endl;
-		std::cout << "		Result : " << strOut << std::endl;
-		std::cout << std::endl;
-		CT_EQUAL( strOut, strIn );
-		wstrOut = string::stringCast< wchar_t >( tstrIn );
-		std::cout << "	Conversion from String to std::wstring" << std::endl;
-		std::cout << "		Entry  : " << tstrIn << std::endl;
-		std::wcout << L"		Result : " << wstrOut << std::endl;
-		std::cout << std::endl;
-		CT_EQUAL( wstrOut, wstrIn );
-		convert( strIn, wstrOut );
-		std::cout << "	Conversion from std::string to std::wstring" << std::endl;
-		std::cout << "		Entry  : " << strIn << std::endl;
-		std::wcout << L"		Result : " << wstrOut << std::endl;
-		std::cout << std::endl;
-		CT_EQUAL( wstrOut, wstrIn );
-		convert( wstrIn, strOut );
-		std::cout << "	Conversion from std::wstring to std::string" << std::endl;
-		std::wcout << L"		Entry  : " << wstrIn << std::endl;
-		std::cout << "		Result : " << strOut << std::endl;
-		CT_EQUAL( strOut, strIn );
+		castor::String tstrRef = cuT( "STR : Bonjoir éêèàÉÊÈÀ" );
+		std::string strRef = "STR : Bonjoir éêèàÉÊÈÀ";
+		std::wstring wstrRef = L"STR : Bonjoir éêèàÉÊÈÀ";
+		std::u32string u32strRef = U"STR : Bonjoir éêèàÉÊÈÀ";
+		{
+			CT_ON( "Conversion from std::string to String" );
+			auto out = castor::makeString( strRef );
+			CT_WHEN( "Entry  = " + strRef );
+			CT_AND( cuT( " Result = " ) + out );
+			CT_EQUAL( out, tstrRef );
+		}
+		{
+			CT_ON( "Conversion from std::wstring to String" );
+			auto out = castor::makeString( wstrRef );
+			CT_WHEN( L"Entry  = " + wstrRef );
+			CT_AND( cuT( " Result = " ) + out );
+			CT_EQUAL( out, tstrRef );
+		}
+		{
+			CT_ON( "Conversion from std::u32string to String" );
+			auto out = castor::makeString( u32strRef );
+			CT_WHEN( U"Entry  = " + u32strRef );
+			CT_AND( cuT( " Result = " ) + out );
+			CT_EQUAL( out, tstrRef );
+		}
+		{
+			CT_ON( "Conversion from String to std::string" );
+			auto out = castor::toUtf8( tstrRef );
+			CT_WHEN( cuT( "Entry  = " ) + tstrRef );
+			CT_AND( " Result = " + out );
+			CT_EQUAL( out, strRef );
+		}
+		{
+			CT_ON( "Conversion from String to std::wstring" );
+			auto out = castor::toSystemWide( tstrRef );
+			CT_WHEN( cuT( "Entry  = " ) + tstrRef );
+			CT_AND( L" Result = " + out );
+			CT_EQUAL( out, wstrRef );
+		}
+		{
+			CT_ON( "Conversion from String to std::u32string" );
+			auto out = castor::toUtf8U32String( tstrRef );
+			CT_WHEN( cuT( "Entry  = " ) + tstrRef );
+			CT_AND( U" Result = " + out );
+			CT_EQUAL( out, u32strRef );
+		}
 	}
 
 	//*********************************************************************************************

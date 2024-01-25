@@ -18,7 +18,7 @@ namespace c3d_gltf
 		explicit GltfMeshImporter( castor3d::Engine & engine );
 
 	private:
-		using PrimitiveArray = std::vector< fastgltf::Primitive const * >;
+		using PrimitiveArray = castor::Vector< fastgltf::Primitive const * >;
 
 		bool doImportMesh( castor3d::Mesh & mesh )override;
 		void doProcessPointsSubmesh( castor3d::Mesh & mesh
@@ -55,7 +55,7 @@ namespace c3d_gltf
 		void doCheckNmlTan( castor3d::Submesh & submesh
 			, castor3d::IndexMappingUPtr mapping );
 		void doTransformMesh( fastgltf::Node const & impNode
-			, std::vector< fastgltf::Node > const & impNodes
+			, castor::Vector< fastgltf::Node > const & impNodes
 			, castor3d::Mesh & mesh
 			, castor::Matrix4x4f transformAcc = castor::Matrix4x4f{ 1.0f } );
 	};

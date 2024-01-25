@@ -86,8 +86,8 @@ namespace castor3d
 				return lhs.offset < rhs.offset;
 			}
 		};
-		std::set< MemChunk, MemChunkCompare > m_allocated;
-		std::vector< MemChunk > m_deallocated;
+		castor::Set< MemChunk, MemChunkCompare > m_allocated;
+		castor::Vector< MemChunk > m_deallocated;
 		VkDeviceSize m_currentAllocated{};
 	};
 }

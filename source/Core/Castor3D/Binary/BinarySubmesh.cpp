@@ -251,8 +251,8 @@ namespace castor3d
 	{
 		bool result = true;
 		castor::String name;
-		std::vector< FaceIndices > faces;
-		std::vector< LineIndices > lines;
+		castor::Vector< FaceIndices > faces;
+		castor::Vector< LineIndices > lines;
 		castor::Point3fArray values;
 		uint32_t count{ 0u };
 		uint32_t components{ 0u };
@@ -267,7 +267,7 @@ namespace castor3d
 				if ( m_fileVersion > Version{ 1, 5, 0 } )
 				{
 					result = doParseChunk( count, chunk );
-					checkError( result, "Couldn't parse vertex count." );
+					checkError( result, cuT( "Couldn't parse vertex count." ) );
 
 					if ( result )
 					{
@@ -279,7 +279,7 @@ namespace castor3d
 				if ( auto component = castor::makeUnique< PositionsComponent >( obj ) )
 				{
 					result = doParseChunk( values, chunk );
-					checkError( result, "Couldn't parse vertex positions." );
+					checkError( result, cuT( "Couldn't parse vertex positions." ) );
 
 					if ( result )
 					{
@@ -292,7 +292,7 @@ namespace castor3d
 				if ( auto component = castor::makeUnique< NormalsComponent >( obj ) )
 				{
 					result = doParseChunk( values, chunk );
-					checkError( result, "Couldn't parse vertex normals." );
+					checkError( result, cuT( "Couldn't parse vertex normals." ) );
 
 					if ( result )
 					{
@@ -307,7 +307,7 @@ namespace castor3d
 					castor::Point4fArray tangents;
 					tangents.resize( count );
 					result = doParseChunk( tangents, chunk );
-					checkError( result, "Couldn't parse vertex tangents." );
+					checkError( result, cuT( "Couldn't parse vertex tangents." ) );
 
 					if ( result )
 					{
@@ -320,7 +320,7 @@ namespace castor3d
 				if ( auto component = castor::makeUnique< BitangentsComponent >( obj ) )
 				{
 					result = doParseChunk( values, chunk );
-					checkError( result, "Couldn't parse vertex bitangents." );
+					checkError( result, cuT( "Couldn't parse vertex bitangents." ) );
 
 					if ( result )
 					{
@@ -333,7 +333,7 @@ namespace castor3d
 				if ( auto component = castor::makeUnique< Texcoords0Component >( obj ) )
 				{
 					result = doParseChunk( values, chunk );
-					checkError( result, "Couldn't parse vertex texcoords." );
+					checkError( result, cuT( "Couldn't parse vertex texcoords0." ) );
 
 					if ( result )
 					{
@@ -346,7 +346,7 @@ namespace castor3d
 				if ( auto component = castor::makeUnique< Texcoords1Component >( obj ) )
 				{
 					result = doParseChunk( values, chunk );
-					checkError( result, "Couldn't parse vertex texcoords." );
+					checkError( result, cuT( "Couldn't parse vertex texcoords1." ) );
 
 					if ( result )
 					{
@@ -359,7 +359,7 @@ namespace castor3d
 				if ( auto component = castor::makeUnique< Texcoords2Component >( obj ) )
 				{
 					result = doParseChunk( values, chunk );
-					checkError( result, "Couldn't parse vertex texcoords." );
+					checkError( result, cuT( "Couldn't parse vertex texcoords2." ) );
 
 					if ( result )
 					{
@@ -372,7 +372,7 @@ namespace castor3d
 				if ( auto component = castor::makeUnique< Texcoords3Component >( obj ) )
 				{
 					result = doParseChunk( values, chunk );
-					checkError( result, "Couldn't parse vertex texcoords." );
+					checkError( result, cuT( "Couldn't parse vertex texcoords3." ) );
 
 					if ( result )
 					{
@@ -385,7 +385,7 @@ namespace castor3d
 				if ( auto component = castor::makeUnique< ColoursComponent >( obj ) )
 				{
 					result = doParseChunk( values, chunk );
-					checkError( result, "Couldn't parse vertex colours." );
+					checkError( result, cuT( "Couldn't parse vertex colours." ) );
 
 					if ( result )
 					{
@@ -398,7 +398,7 @@ namespace castor3d
 				if ( auto component = castor::makeUnique< SkinComponent >( obj ) )
 				{
 					result = createBinaryParser< SkinComponent >().parse( *component, chunk );
-					checkError( result, "Couldn't parse bones component." );
+					checkError( result, cuT( "Couldn't parse bones component." ) );
 
 					if ( result )
 					{
@@ -410,7 +410,7 @@ namespace castor3d
 				if ( auto component = castor::makeUnique< MorphComponent >( obj ) )
 				{
 					result = createBinaryParser< MorphComponent >().parse( *component, chunk );
-					checkError( result, "Couldn't parse morph component." );
+					checkError( result, cuT( "Couldn't parse morph component." ) );
 
 					if ( result )
 					{
@@ -420,11 +420,11 @@ namespace castor3d
 				break;
 			case ChunkType::eSubmeshIndexComponentCount:
 				result = doParseChunk( components, chunk );
-				checkError( result, "Couldn't parse index component size." );
+				checkError( result, cuT( "Couldn't parse index component size." ) );
 				break;
 			case ChunkType::eSubmeshIndexCount:
 				result = doParseChunk( count, chunk );
-				checkError( result, "Couldn't parse index count." );
+				checkError( result, cuT( "Couldn't parse index count." ) );
 				if ( result )
 				{
 					faceCount = count;
@@ -445,7 +445,7 @@ namespace castor3d
 					if ( components == 3u )
 					{
 						result = doParseChunk( faces, chunk );
-						checkError( result, "Couldn't parse index data." );
+						checkError( result, cuT( "Couldn't parse index data." ) );
 
 						if ( result )
 						{
@@ -456,7 +456,7 @@ namespace castor3d
 					else if ( components == 2u )
 					{
 						result = doParseChunk( lines, chunk );
-						checkError( result, "Couldn't parse index data." );
+						checkError( result, cuT( "Couldn't parse index data." ) );
 
 						if ( result )
 						{
@@ -504,13 +504,13 @@ namespace castor3d
 
 		if ( m_fileVersion <= Version{ 1, 3, 0 } )
 		{
-			std::vector< FaceIndices > faces;
-			std::vector< OldInterleavedVertexT< double > > srcbuf;
+			castor::Vector< FaceIndices > faces;
+			castor::Vector< OldInterleavedVertexT< double > > srcbuf;
 			uint32_t count{ 0u };
 			uint32_t faceCount{ 0u };
 			BinaryChunk chunk{ doIsLittleEndian() };
 			uint32_t boneCount{ 0u };
-			std::vector< VertexBoneData > bones;
+			castor::Vector< VertexBoneData > bones;
 
 			while ( result && doGetSubChunk( chunk ) )
 			{
@@ -518,7 +518,7 @@ namespace castor3d
 				{
 				case ChunkType::eSubmeshVertexCount:
 					result = doParseChunk( count, chunk );
-					checkError( result, "Couldn't parse vertex count." );
+					checkError( result, cuT( "Couldn't parse vertex count." ) );
 					if ( result )
 					{
 						srcbuf.resize( count );
@@ -533,7 +533,7 @@ namespace castor3d
 #pragma GCC diagnostic pop
 #pragma warning( pop )
 					result = doParseChunk( srcbuf, chunk );
-					checkError( result, "Couldn't parse vertex data." );
+					checkError( result, cuT( "Couldn't parse vertex data." ) );
 					if ( result && !srcbuf.empty() )
 					{
 						InterleavedVertexNoMikkArray dstbuf( srcbuf.size() );
@@ -555,7 +555,7 @@ namespace castor3d
 #pragma GCC diagnostic pop
 #pragma warning( pop )
 					result = doParseChunk( count, chunk );
-					checkError( result, "Couldn't parse faces count." );
+					checkError( result, cuT( "Couldn't parse faces count." ) );
 					if ( result )
 					{
 						faceCount = count;
@@ -570,14 +570,14 @@ namespace castor3d
 #pragma GCC diagnostic pop
 #pragma warning( pop )
 					result = doParseChunk( faces, chunk );
-					checkError( result, "Couldn't parse faces data." );
+					checkError( result, cuT( "Couldn't parse faces data." ) );
 					if ( result && faceCount > 0 )
 					{
 						auto indexMapping = obj.createComponent< TriFaceMapping >();
 
 						for ( auto & face : faces )
 						{
-							std::swap( face.m_index[1], face.m_index[2] );
+							castor::swap( face.m_index[1], face.m_index[2] );
 						}
 
 						indexMapping->getData().addFaceGroup( faces );
@@ -586,7 +586,7 @@ namespace castor3d
 					break;
 				case ChunkType::eSubmeshBoneCount:
 					result = doParseChunk( count, chunk );
-					checkError( result, "Couldn't parse bones count." );
+					checkError( result, cuT( "Couldn't parse bones count." ) );
 					if ( result )
 					{
 						boneCount = count;
@@ -595,7 +595,7 @@ namespace castor3d
 					break;
 				case ChunkType::eSubmeshBones:
 					result = doParseChunk( bones, chunk );
-					checkError( result, "Couldn't parse bones data." );
+					checkError( result, cuT( "Couldn't parse bones data." ) );
 					if ( result && boneCount > 0 )
 					{
 						auto bonesComponent = obj.createComponent< SkinComponent >();
@@ -632,7 +632,7 @@ namespace castor3d
 					if ( m_fileVersion > Version{ 1, 3, 0 } )
 					{
 						result = doParseChunk( count, chunk );
-						checkError( result, "Couldn't parse vertex count." );
+						checkError( result, cuT( "Couldn't parse vertex count." ) );
 						if ( result )
 						{
 							vertices.resize( count );
@@ -649,7 +649,7 @@ namespace castor3d
 					if ( m_fileVersion > Version{ 1, 3, 0 } )
 					{
 						result = doParseChunk( vertices, chunk );
-						checkError( result, "Couldn't parse vertex data." );
+						checkError( result, cuT( "Couldn't parse vertex data." ) );
 
 						if ( result && !vertices.empty() )
 						{

@@ -143,9 +143,9 @@ namespace castor3d
 			sdw::Function< sdw::Void, sdw::InUInt > pushNode;
 			sdw::Function< sdw::UInt > popNode;
 
-			std::function< sdw::UInt( sdw::UInt, sdw::UInt ) > getFirstChild;
-			std::function< sdw::Boolean( sdw::UInt, sdw::UInt ) > isLeafNode;
-			std::function< sdw::UInt( sdw::UInt, sdw::UInt ) > getLeafIndex;
+			castor::Function< sdw::UInt( sdw::UInt, sdw::UInt ) > getFirstChild;
+			castor::Function< sdw::Boolean( sdw::UInt, sdw::UInt ) > isLeafNode;
+			castor::Function< sdw::UInt( sdw::UInt, sdw::UInt ) > getLeafIndex;
 
 			if ( config.useLightsBVH )
 			{
@@ -582,7 +582,7 @@ namespace castor3d
 				if ( res )
 				{
 					auto & program = it->second;
-					program.shaderModule = ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, "AssignLightsToClusters", dspclst::createShader( m_device, m_config ) };
+					program.shaderModule = ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, cuT( "AssignLightsToClusters" ), dspclst::createShader( m_device, m_config ) };
 					program.stages = ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( m_device, program.shaderModule ) };
 				}
 
@@ -622,7 +622,7 @@ namespace castor3d
 		private:
 			RenderDevice const & m_device;
 			ClustersConfig const & m_config;
-			std::map< uint32_t, ProgramData > m_programs;
+			castor::Map< uint32_t, ProgramData > m_programs;
 		};
 
 		class FramePassDepth
@@ -700,7 +700,7 @@ namespace castor3d
 				if ( res )
 				{
 					auto & program = it->second;
-					program.shaderModule = ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, "AssignLightsToClusters", dspclst::createShader( m_device, m_config ) };
+					program.shaderModule = ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, cuT( "AssignLightsToClusters" ), dspclst::createShader( m_device, m_config ) };
 					program.stages = ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( m_device, program.shaderModule ) };
 				}
 
@@ -754,7 +754,7 @@ namespace castor3d
 		private:
 			RenderDevice const & m_device;
 			ClustersConfig const & m_config;
-			std::map< uint32_t, ProgramData > m_programs;
+			castor::Map< uint32_t, ProgramData > m_programs;
 		};
 	}
 
@@ -773,7 +773,7 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = std::make_unique< dspclst::FramePassNoDepth >( framePass
+				auto result = castor::make_unique< dspclst::FramePassNoDepth >( framePass
 					, context
 					, graph
 					, device
@@ -782,7 +782,7 @@ namespace castor3d
 						.groupCountX( clusters.getDimensions()->x )
 						.groupCountY( clusters.getDimensions()->y )
 						.groupCountZ( clusters.getDimensions()->z ) );
-				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
@@ -790,21 +790,21 @@ namespace castor3d
 		cameraUbo.createPassBinding( passNoDepth, dspclst::eCamera );
 		lights.createPassBinding( passNoDepth, dspclst::eLights );
 		clusters.getClustersUbo().createPassBinding( passNoDepth, dspclst::eClusters );
-		createInputStoragePassBinding( passNoDepth, uint32_t( dspclst::eAllLightsAABB ), "C3D_AllLightsAABB", clusters.getAllLightsAABBBuffer(), 0u, ashes::WholeSize );
-		createInputStoragePassBinding( passNoDepth, uint32_t( dspclst::eClustersAABB ), "C3D_ClustersAABB", clusters.getClustersAABBBuffer(), 0u, ashes::WholeSize );
-		createClearableOutputStorageBinding( passNoDepth, uint32_t( dspclst::ePointLightIndex ), "C3D_PointLightClusterIndex", clusters.getPointLightClusterIndexBuffer(), 0u, ashes::WholeSize );
-		createClearableOutputStorageBinding( passNoDepth, uint32_t( dspclst::ePointLightCluster ), "C3D_PointLightClusterGrid", clusters.getPointLightClusterGridBuffer(), 0u, ashes::WholeSize );
-		createClearableOutputStorageBinding( passNoDepth, uint32_t( dspclst::eSpotLightIndex ), "C3D_SpotLightClusterIndex", clusters.getSpotLightClusterIndexBuffer(), 0u, ashes::WholeSize );
-		createClearableOutputStorageBinding( passNoDepth, uint32_t( dspclst::eSpotLightCluster ), "C3D_SpotLightClusterGrid", clusters.getSpotLightClusterGridBuffer( ), 0u, ashes::WholeSize );
-		createInputStoragePassBinding( passNoDepth, uint32_t( dspclst::ePointLightBVH ), "C3D_PointLightsBVH", clusters.getPointLightBVHBuffer(), 0u, ashes::WholeSize );
-		createInputStoragePassBinding( passNoDepth, uint32_t( dspclst::eSpotLightBVH ), "C3D_SpotLightsBVH", clusters.getSpotLightBVHBuffer(), 0u, ashes::WholeSize );
-		createInputStoragePassBinding( passNoDepth, uint32_t( dspclst::ePointLightIndices ), "C3D_PointLightIndices"
+		createInputStoragePassBinding( passNoDepth, uint32_t( dspclst::eAllLightsAABB ), cuT( "C3D_AllLightsAABB" ), clusters.getAllLightsAABBBuffer(), 0u, ashes::WholeSize );
+		createInputStoragePassBinding( passNoDepth, uint32_t( dspclst::eClustersAABB ), cuT( "C3D_ClustersAABB" ), clusters.getClustersAABBBuffer(), 0u, ashes::WholeSize );
+		createClearableOutputStorageBinding( passNoDepth, uint32_t( dspclst::ePointLightIndex ), cuT( "C3D_PointLightClusterIndex" ), clusters.getPointLightClusterIndexBuffer(), 0u, ashes::WholeSize );
+		createClearableOutputStorageBinding( passNoDepth, uint32_t( dspclst::ePointLightCluster ), cuT( "C3D_PointLightClusterGrid" ), clusters.getPointLightClusterGridBuffer(), 0u, ashes::WholeSize );
+		createClearableOutputStorageBinding( passNoDepth, uint32_t( dspclst::eSpotLightIndex ), cuT( "C3D_SpotLightClusterIndex" ), clusters.getSpotLightClusterIndexBuffer(), 0u, ashes::WholeSize );
+		createClearableOutputStorageBinding( passNoDepth, uint32_t( dspclst::eSpotLightCluster ), cuT( "C3D_SpotLightClusterGrid" ), clusters.getSpotLightClusterGridBuffer(), 0u, ashes::WholeSize );
+		createInputStoragePassBinding( passNoDepth, uint32_t( dspclst::ePointLightBVH ), cuT( "C3D_PointLightsBVH" ), clusters.getPointLightBVHBuffer(), 0u, ashes::WholeSize );
+		createInputStoragePassBinding( passNoDepth, uint32_t( dspclst::eSpotLightBVH ), cuT( "C3D_SpotLightsBVH" ), clusters.getSpotLightBVHBuffer(), 0u, ashes::WholeSize );
+		createInputStoragePassBinding( passNoDepth, uint32_t( dspclst::ePointLightIndices ), cuT( "C3D_PointLightIndices" )
 			, { &clusters.getOutputPointLightIndicesBuffer(), &clusters.getInputPointLightIndicesBuffer(), &clusters.getOutputPointLightIndicesBuffer()
 				, &clusters.getOutputPointLightIndicesBuffer(), &clusters.getInputPointLightIndicesBuffer(), &clusters.getOutputPointLightIndicesBuffer()
 				, &clusters.getOutputPointLightIndicesBuffer(), &clusters.getInputPointLightIndicesBuffer(), &clusters.getOutputPointLightIndicesBuffer()
 				, &clusters.getOutputPointLightIndicesBuffer(), &clusters.getInputPointLightIndicesBuffer(), &clusters.getOutputPointLightIndicesBuffer() }
 			, 0u, ashes::WholeSize );
-		createInputStoragePassBinding( passNoDepth, uint32_t( dspclst::eSpotLightIndices ), "C3D_SpotLightIndices"
+		createInputStoragePassBinding( passNoDepth, uint32_t( dspclst::eSpotLightIndices ), cuT( "C3D_SpotLightIndices" )
 			, { &clusters.getOutputSpotLightIndicesBuffer(), &clusters.getInputSpotLightIndicesBuffer(), &clusters.getOutputSpotLightIndicesBuffer()
 				, &clusters.getOutputSpotLightIndicesBuffer(), &clusters.getInputSpotLightIndicesBuffer(), &clusters.getOutputSpotLightIndicesBuffer()
 				, &clusters.getOutputSpotLightIndicesBuffer(), &clusters.getInputSpotLightIndicesBuffer(), &clusters.getOutputSpotLightIndicesBuffer()
@@ -816,14 +816,14 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = std::make_unique< dspclst::FramePassDepth >( framePass
+				auto result = castor::make_unique< dspclst::FramePassDepth >( framePass
 					, context
 					, graph
 					, device
 					, clusters
 					, crg::cp::Config{}
 						.indirectBuffer( crg::IndirectBuffer{ { clusters.getClustersIndirectBuffer(), "C3D_ClustersIndirect" }, uint32_t( sizeof( VkDispatchIndirectCommand ) ) } ) );
-				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
@@ -831,27 +831,27 @@ namespace castor3d
 		cameraUbo.createPassBinding( passDepth, dspclst::eCamera );
 		lights.createPassBinding( passDepth, dspclst::eLights );
 		clusters.getClustersUbo().createPassBinding( passDepth, dspclst::eClusters );
-		createInputStoragePassBinding( passDepth, uint32_t( dspclst::eAllLightsAABB ), "C3D_AllLightsAABB", clusters.getAllLightsAABBBuffer(), 0u, ashes::WholeSize );
-		createInputStoragePassBinding( passDepth, uint32_t( dspclst::eClustersAABB ), "C3D_ClustersAABB", clusters.getClustersAABBBuffer(), 0u, ashes::WholeSize );
-		createClearableOutputStorageBinding( passDepth, uint32_t( dspclst::ePointLightIndex ), "C3D_PointLightClusterIndex", clusters.getPointLightClusterIndexBuffer(), 0u, ashes::WholeSize );
-		createClearableOutputStorageBinding( passDepth, uint32_t( dspclst::ePointLightCluster ), "C3D_PointLightClusterGrid", clusters.getPointLightClusterGridBuffer(), 0u, ashes::WholeSize );
-		createClearableOutputStorageBinding( passDepth, uint32_t( dspclst::eSpotLightIndex ), "C3D_SpotLightClusterIndex", clusters.getSpotLightClusterIndexBuffer(), 0u, ashes::WholeSize );
-		createClearableOutputStorageBinding( passDepth, uint32_t( dspclst::eSpotLightCluster ), "C3D_SpotLightClusterGrid", clusters.getSpotLightClusterGridBuffer( ), 0u, ashes::WholeSize );
-		createInputStoragePassBinding( passDepth, uint32_t( dspclst::ePointLightBVH ), "C3D_PointLightsBVH", clusters.getPointLightBVHBuffer(), 0u, ashes::WholeSize );
-		createInputStoragePassBinding( passDepth, uint32_t( dspclst::eSpotLightBVH ), "C3D_SpotLightsBVH", clusters.getSpotLightBVHBuffer(), 0u, ashes::WholeSize );
-		createInputStoragePassBinding( passDepth, uint32_t( dspclst::ePointLightIndices ), "C3D_PointLightIndices"
+		createInputStoragePassBinding( passDepth, uint32_t( dspclst::eAllLightsAABB ), cuT( "C3D_AllLightsAABB" ), clusters.getAllLightsAABBBuffer(), 0u, ashes::WholeSize );
+		createInputStoragePassBinding( passDepth, uint32_t( dspclst::eClustersAABB ), cuT( "C3D_ClustersAABB" ), clusters.getClustersAABBBuffer(), 0u, ashes::WholeSize );
+		createClearableOutputStorageBinding( passDepth, uint32_t( dspclst::ePointLightIndex ), cuT( "C3D_PointLightClusterIndex" ), clusters.getPointLightClusterIndexBuffer(), 0u, ashes::WholeSize );
+		createClearableOutputStorageBinding( passDepth, uint32_t( dspclst::ePointLightCluster ), cuT( "C3D_PointLightClusterGrid" ), clusters.getPointLightClusterGridBuffer(), 0u, ashes::WholeSize );
+		createClearableOutputStorageBinding( passDepth, uint32_t( dspclst::eSpotLightIndex ), cuT( "C3D_SpotLightClusterIndex" ), clusters.getSpotLightClusterIndexBuffer(), 0u, ashes::WholeSize );
+		createClearableOutputStorageBinding( passDepth, uint32_t( dspclst::eSpotLightCluster ), cuT( "C3D_SpotLightClusterGrid" ), clusters.getSpotLightClusterGridBuffer(), 0u, ashes::WholeSize );
+		createInputStoragePassBinding( passDepth, uint32_t( dspclst::ePointLightBVH ), cuT( "C3D_PointLightsBVH" ), clusters.getPointLightBVHBuffer(), 0u, ashes::WholeSize );
+		createInputStoragePassBinding( passDepth, uint32_t( dspclst::eSpotLightBVH ), cuT( "C3D_SpotLightsBVH" ), clusters.getSpotLightBVHBuffer(), 0u, ashes::WholeSize );
+		createInputStoragePassBinding( passDepth, uint32_t( dspclst::ePointLightIndices ), cuT( "C3D_PointLightIndices" )
 			, { &clusters.getOutputPointLightIndicesBuffer(), &clusters.getInputPointLightIndicesBuffer(), &clusters.getOutputPointLightIndicesBuffer()
 				, &clusters.getOutputPointLightIndicesBuffer(), &clusters.getInputPointLightIndicesBuffer(), &clusters.getOutputPointLightIndicesBuffer()
 				, &clusters.getOutputPointLightIndicesBuffer(), &clusters.getInputPointLightIndicesBuffer(), &clusters.getOutputPointLightIndicesBuffer()
 				, &clusters.getOutputPointLightIndicesBuffer(), &clusters.getInputPointLightIndicesBuffer(), &clusters.getOutputPointLightIndicesBuffer() }
 			, 0u, ashes::WholeSize );
-		createInputStoragePassBinding( passDepth, uint32_t( dspclst::eSpotLightIndices ), "C3D_SpotLightIndices"
+		createInputStoragePassBinding( passDepth, uint32_t( dspclst::eSpotLightIndices ), cuT( "C3D_SpotLightIndices" )
 			, { &clusters.getOutputSpotLightIndicesBuffer(), &clusters.getInputSpotLightIndicesBuffer(), &clusters.getOutputSpotLightIndicesBuffer()
 				, &clusters.getOutputSpotLightIndicesBuffer(), &clusters.getInputSpotLightIndicesBuffer(), &clusters.getOutputSpotLightIndicesBuffer()
 				, &clusters.getOutputSpotLightIndicesBuffer(), &clusters.getInputSpotLightIndicesBuffer(), &clusters.getOutputSpotLightIndicesBuffer()
 				, &clusters.getOutputSpotLightIndicesBuffer(), &clusters.getInputSpotLightIndicesBuffer(), &clusters.getOutputSpotLightIndicesBuffer() }
 			, 0u, ashes::WholeSize );
-		createInputStoragePassBinding( passDepth, uint32_t( dspclst::eUniqueClusters ), "C3D_UniqueClusters", clusters.getUniqueClustersBuffer(), 0u, ashes::WholeSize );
+		createInputStoragePassBinding( passDepth, uint32_t( dspclst::eUniqueClusters ), cuT( "C3D_UniqueClusters" ), clusters.getUniqueClustersBuffer(), 0u, ashes::WholeSize );
 
 		return passDepth;
 	}

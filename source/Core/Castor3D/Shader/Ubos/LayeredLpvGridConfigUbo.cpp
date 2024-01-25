@@ -18,7 +18,7 @@ namespace castor3d
 		LayeredLpvGridData::LayeredLpvGridData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstance{ writer, std::move( expr ), enabled }
+			: StructInstance{ writer, castor::move( expr ), enabled }
 			, allMinVolumeCorners{ getMemberArray< sdw::Vec4 >( "allMinVolumeCorners" ) }
 			, allCellSizes{ getMember< sdw::Vec4 >( "allCellSizes" ) }
 			, gridSizesAtt{ getMember< sdw::Vec4 >( "gridSizesAtt" ) }
@@ -42,9 +42,9 @@ namespace castor3d
 			return result;
 		}
 
-		std::unique_ptr< sdw::Struct > LayeredLpvGridData::declare( sdw::ShaderWriter & writer )
+		castor::RawUniquePtr< sdw::Struct > LayeredLpvGridData::declare( sdw::ShaderWriter & writer )
 		{
-			return std::make_unique< sdw::Struct >( writer
+			return castor::make_unique< sdw::Struct >( writer
 				, makeType( writer.getTypesCache() ) );
 		}
 	}
@@ -62,7 +62,7 @@ namespace castor3d
 		m_device.uboPool->putBuffer( m_ubo );
 	}
 
-	void LayeredLpvGridConfigUbo::cpuUpdate( std::array< castor::Grid const *, LpvMaxCascadesCount > const & grids
+	void LayeredLpvGridConfigUbo::cpuUpdate( castor::Array< castor::Grid const *, LpvMaxCascadesCount > const & grids
 		, float indirectAttenuation )
 	{
 		CU_Require( m_ubo );

@@ -10,113 +10,99 @@ namespace castor::string
 
 	namespace details
 	{
-		template< typename InChar, typename OutChar > struct StringConverter;
-
-		template<> struct StringConverter< char, wchar_t >
+		template< typename StringT, typename StringViewT >
+		Vector< StringT > split( StringT const & text
+			, StringViewT delims
+			, uint32_t maxSplits
+			, bool keepEmpty )
 		{
-			static void convert( std::basic_string_view< char > strIn
-				, std::basic_string< wchar_t > & strOut
-				, std::locale const & locale = std::locale( "C" ) )
+			Vector< StringT > result;
+
+			if ( !text.empty() && !delims.empty() && maxSplits > 0 )
 			{
-				if ( !strIn.empty() )
+				result.reserve( maxSplits + 1 );
+				std::size_t pos = 0;
+				std::size_t start = 0;
+
+				do
 				{
-					using facet_type = std::codecvt< wchar_t, char, std::mbstate_t >;
-					auto const & facet = std::use_facet< facet_type >( locale );
-					std::mbstate_t state{};
-					std::vector< wchar_t > dst( strIn.size() * facet.max_length(), 0 );
-					const char * endSrc = nullptr;
-					wchar_t * endDst = nullptr;
-					facet.in( state
-						, strIn.data(), strIn.data() + strIn.size(), endSrc
-						, &dst[0], &dst[0] + dst.size(), endDst );
-					strOut = std::wstring( &dst.front(), endDst );
+					pos = text.find_first_of( delims, start );
+
+					if ( pos == start )
+					{
+						start = pos + 1;
+
+						if ( keepEmpty )
+						{
+							result.emplace_back();
+						}
+					}
+					else if ( pos == StringT::npos || result.size() == maxSplits )
+					{
+						if ( StringT remnants = text.substr( start );
+							!remnants.empty() || keepEmpty )
+						{
+							result.push_back( remnants );
+						}
+
+						pos = StringT::npos;
+					}
+					else
+					{
+						result.push_back( text.substr( start, pos - start ) );
+						start = pos + 1;
+					}
+
+				}
+				while ( pos != StringT::npos );
+			}
+
+			return result;
+		}
+
+		template< typename StringT, typename StringViewT >
+		StringT & trim( StringT & text
+			, bool left
+			, bool right
+			, StringViewT seps )
+		{
+			if ( !text.empty() )
+			{
+				if ( left )
+				{
+					if ( auto index = text.find_first_not_of( seps );
+						index > 0 )
+					{
+						if ( index != StringT::npos )
+						{
+							text = text.substr( index, StringT::npos );
+						}
+						else
+						{
+							text = text.substr( 0, 0 );
+						}
+					}
+				}
+
+				if ( right && !text.empty() )
+				{
+					if ( auto index = text.find_last_not_of( seps );
+						index < text.size() - 1 )
+					{
+						if ( index != StringT::npos )
+						{
+							text = text.substr( 0, index + 1 );
+						}
+						else
+						{
+							text = text.substr( 0, 0 );
+						}
+					}
 				}
 			}
-		};
 
-		template<> struct StringConverter< char, char32_t >
-		{
-			static void convert( std::basic_string_view< char > strIn
-				, std::basic_string< char32_t > & strOut
-				, std::locale const & locale = std::locale( "C" ) )
-			{
-				if ( !strIn.empty() )
-				{
-					using Char8CPtr = char8_t const *;
-					using facet_type = std::codecvt< char32_t, char8_t, std::mbstate_t >;
-					auto const & facet = std::use_facet< facet_type >( locale );
-					std::mbstate_t state{};
-					std::vector< char32_t > dst( strIn.size() * facet.max_length(), 0 );
-					const char8_t * endSrc = nullptr;
-					char32_t * endDst = nullptr;
-					facet.in( state
-						, Char8CPtr( strIn.data() )
-						, Char8CPtr( strIn.data() ) + strIn.size()
-						, endSrc
-						, &dst[0], &dst[0] + dst.size(), endDst );
-					strOut = std::u32string( &dst.front(), endDst );
-				}
-			}
-		};
-
-		template<> struct StringConverter< wchar_t, char >
-		{
-			static void convert( std::basic_string_view< wchar_t > strIn
-				, std::basic_string< char > & strOut
-				, std::locale const & locale = std::locale() )
-			{
-				if ( !strIn.empty() )
-				{
-					using facet_type = std::codecvt< wchar_t, char, std::mbstate_t >;
-					auto const & facet = std::use_facet< facet_type >( locale );
-					std::mbstate_t state{};
-					std::vector< char > dst( strIn.size() * facet.max_length(), 0 );
-					const wchar_t * endSrc = nullptr;
-					char * endDst = nullptr;
-					facet.out( state,
-						strIn.data(), strIn.data() + strIn.size(), endSrc
-						, &dst[0], &dst[0] + dst.size(), endDst );
-					strOut = std::string( &dst.front(), endDst );
-				}
-			}
-		};
-
-		template<> struct StringConverter< char32_t, char >
-		{
-			static void convert( std::basic_string_view< char32_t > strIn
-				, std::basic_string< char > & strOut
-				, std::locale const & locale = std::locale() )
-			{
-				if ( !strIn.empty() )
-				{
-					using Char8Ptr = char8_t *;
-					using CharPtr = char *;
-					using facet_type = std::codecvt< char32_t, char8_t, std::mbstate_t >;
-					auto const & facet = std::use_facet< facet_type >( locale );
-					std::mbstate_t state{};
-					std::vector< char > dst( strIn.size() * facet.max_length(), 0 );
-					const char32_t * endSrc = nullptr;
-					char8_t * endDst = nullptr;
-					facet.out( state,
-						strIn.data(), strIn.data() + strIn.size(), endSrc
-							, Char8Ptr( &dst[0] )
-							, Char8Ptr( &dst[0] ) + dst.size()
-							, endDst );
-					strOut = std::string( &dst.front(), CharPtr( endDst ) );
-				}
-			}
-		};
-
-		template< typename InChar >
-		struct StringConverter< InChar, InChar >
-		{
-			static void convert( std::basic_string_view< InChar > strIn
-				, std::basic_string< InChar > & strOut
-				, CU_UnusedParam( std::locale const &, locale ) = std::locale() )
-			{
-				strOut = strIn;
-			}
-		};
+			return text;
+		}
 	}
 
 	//*************************************************************************************************
@@ -148,46 +134,198 @@ namespace castor::string
 	}
 
 	template< typename T >
-	inline U32String toU32String( T const & value, std::locale const & locale )
+	inline MbString toMbString( T const & value, std::locale const & locale )
 	{
-		return toU32String( toString( value, locale ) );
+		MbStringStream result;
+		result.imbue( locale );
+		result << value;
+		return result.str();
 	}
 
-	template< typename T, typename U >
-	std::basic_string< T > stringCast( std::basic_string< U > const & src )
+	template< typename CharT >
+	Vector< std::basic_string< CharT > > split( std::basic_string< CharT > const & text
+		, std::basic_string_view< CharT > delims
+		, uint32_t maxSplits
+		, bool keepEmpty )
 	{
-		std::basic_string< T > result;
-		details::StringConverter< U, T >::convert( src, result );
-		return result;
+		return details::split( text, delims, maxSplits, keepEmpty );
 	}
 
-	template< typename T, typename U >
-	std::basic_string< T > stringCast( U const * src )
+	template< typename CharT >
+	Vector< std::basic_string< CharT > > split( std::basic_string< CharT > const & text
+		, std::basic_string< CharT > delims
+		, uint32_t maxSplits
+		, bool keepEmpty )
 	{
-		std::basic_string< T > result;
+		return details::split( text, delims, maxSplits, keepEmpty );
+	}
 
-		if ( src )
+	template< typename CharT >
+	Vector< std::basic_string< CharT > > split( std::basic_string< CharT > const & text
+		, CharT const * delims
+		, uint32_t maxSplits
+		, bool keepEmpty )
+	{
+		return details::split( text, std::basic_string_view< CharT >{ delims }, maxSplits, keepEmpty );
+	}
+
+	template< typename CharT >
+	Vector< std::basic_string_view< CharT > > split( std::basic_string_view< CharT > text
+		, std::basic_string_view< CharT > delims
+		, uint32_t maxSplits
+		, bool keepEmpty )
+	{
+		return details::split( text, delims, maxSplits, keepEmpty );
+	}
+
+	template< typename CharT >
+	Vector< std::basic_string_view< CharT > > split( std::basic_string_view< CharT > text
+		, std::basic_string< CharT > delims
+		, uint32_t maxSplits
+		, bool keepEmpty )
+	{
+		return details::split( text, delims, maxSplits, keepEmpty );
+	}
+
+	template< typename CharT >
+	Vector< std::basic_string_view< CharT > > split( std::basic_string_view< CharT > text
+		, CharT const * delims
+		, uint32_t maxSplits
+		, bool keepEmpty )
+	{
+		return details::split( text, std::basic_string_view< CharT >{ delims }, maxSplits, keepEmpty );
+	}
+
+	template< typename CharT >
+	std::basic_string< CharT > & replace( std::basic_string< CharT > & text
+		, CharT lookup
+		, CharT replacement )
+	{
+		return replace( text
+			, std::basic_string< CharT >{ lookup, CharT( '\0' ) }
+			, std::basic_string< CharT >{ replacement, CharT( '\0' ) } );
+	}
+
+	template< typename CharT >
+	std::basic_string< CharT > & replace( std::basic_string< CharT > & text
+		, CharT const * lookup
+		, CharT const * replacement )
+	{
+		return replace( text
+			, std::basic_string_view< CharT >{ lookup }
+			, std::basic_string_view< CharT >{ replacement } );
+	}
+
+	template< typename CharT >
+	std::basic_string< CharT > & replace( std::basic_string< CharT > & text
+		, std::basic_string_view< CharT > lookup
+		, CharT replacement )
+	{
+		return replace( text
+			, lookup
+			, std::basic_string< CharT >{ replacement, CharT( '\0' ) } );
+	}
+
+	template< typename CharT >
+	std::basic_string< CharT > & replace( std::basic_string< CharT > & text
+		, CharT lookup
+		, std::basic_string_view< CharT > replacement )
+	{
+		return replace( text
+			, std::basic_string< CharT >{ lookup, CharT( '\0' ) }
+			, replacement );
+	}
+
+	template< typename CharT >
+	std::basic_string< CharT > & replace( std::basic_string< CharT > & text
+		, std::basic_string< CharT > lookup
+		, std::basic_string< CharT > replacement )
+	{
+		return replace( text
+			, std::basic_string_view< CharT >{ lookup }
+			, std::basic_string_view< CharT >{ replacement } );
+	}
+
+	template< typename CharT >
+	std::basic_string< CharT > & replace( std::basic_string< CharT > & text
+		, std::basic_string_view< CharT > lookup
+		, std::basic_string_view< CharT > replacement )
+	{
+		std::basic_string< CharT > result;
+		std::size_t currentPos = 0;
+		std::size_t pos = 0;
+
+		while ( ( pos = text.find( lookup, currentPos ) ) != std::basic_string< CharT >::npos )
 		{
-			details::StringConverter< U, T >::convert( std::basic_string< U >( src ), result );
+			result.append( text.substr( currentPos, pos - currentPos ) );
+			result.append( replacement );
+			currentPos = pos + lookup.size();
 		}
 
-		return result;
+		if ( currentPos != text.size() )
+		{
+			result.append( text.substr( currentPos, pos - currentPos ) );
+		}
+
+		text = result;
+		return text;
 	}
 
-	template< typename T, typename U >
-	std::basic_string< T > stringCast( U const * begin, U const * end )
+	template< typename CharT >
+	std::basic_string< CharT > & trim( std::basic_string< CharT > & text
+		, bool left
+		, bool right
+		, std::basic_string_view< CharT > seps )
 	{
-		std::basic_string< T > result;
-		details::StringConverter< U, T >::convert( std::basic_string< U >( begin, end ), result );
-		return result;
+		return details::trim( text, left, right, seps );
 	}
 
-	template< typename T, typename U >
-	std::basic_string< T > stringCast( std::initializer_list< U > const & src )
+	template< typename CharT >
+	std::basic_string_view< CharT > & trim( std::basic_string_view< CharT > & text
+		, bool left
+		, bool right
+		, std::basic_string_view< CharT > seps )
 	{
-		std::basic_string< T > result;
-		details::StringConverter< U, T >::convert( std::basic_string< U >( src ), result );
-		return result;
+		return details::trim( text, left, right, seps );
+	}
+
+	template< typename CharT >
+	std::basic_string< CharT > getLongestCommonSubstring( std::basic_string< CharT > const & lhs
+		, std::basic_string< CharT > const & rhs )
+	{
+		if ( lhs.empty() )
+		{
+			return rhs;
+		}
+
+		if ( rhs.empty() )
+		{
+			return lhs;
+		}
+
+		Vector< std::basic_string< CharT > > substrings;
+
+		for ( auto beg = lhs.begin(); beg != std::prev( lhs.end() ); ++beg )
+		{
+			for ( auto end = beg; end != lhs.end(); ++end )
+			{
+				if ( rhs.find( std::basic_string< CharT >{ beg, std::next( end ) } ) != std::basic_string< CharT >::npos )
+				{
+					substrings.emplace_back( beg, std::next( end ) );
+				}
+			}
+		}
+
+		if ( substrings.empty() )
+		{
+			return std::basic_string< CharT >{};
+		}
+
+		return *std::max_element( substrings.begin(), substrings.end(),
+			[]( auto & elem1, auto & elem2 )
+			{
+				return elem1.length() < elem2.length();
+			} );
 	}
 
 	namespace utf8
@@ -196,47 +334,64 @@ namespace castor::string
 
 		namespace details
 		{
-			static constexpr std::byte FirstBitMask = std::byte( 0x80 );
-			static constexpr std::byte SecondBitMask = std::byte( 0x40 );
-			static constexpr std::byte ThirdBitMask = std::byte( 0x20 );
-			static constexpr std::byte FourthBitMask = std::byte( 0x10 );
-			static constexpr std::byte FifthBitMask = std::byte( 0x08 );
+			static constexpr auto FirstBitMask = uint8_t( 0x80 );
+			static constexpr auto SecondBitMask = uint8_t( 0x40 );
+			static constexpr auto ThirdBitMask = uint8_t( 0x20 );
+			static constexpr auto FourthBitMask = uint8_t( 0x10 );
+			static constexpr auto FifthBitMask = uint8_t( 0x08 );
+
+			static constexpr auto ThreeBitsMask = uint8_t( 0b0000'0111 );
+			static constexpr auto FourBitsMask = uint8_t( 0b0000'1111 );
+			static constexpr auto FiveBitsMask = uint8_t( 0b0001'1111 );
+			static constexpr auto SixBitsMask = uint8_t( 0b0011'1111 );
 		}
 
 		template< typename IteratorType >
-		inline char32_t toUtf8( IteratorType value )
+		inline char32_t toUtf8( IteratorType first, IteratorType end )
 		{
-			char32_t result;
+			char32_t result{};
 
-			if ( auto firstByte = std::byte( *value );
+			if ( auto firstByte = uint8_t( *first );
 				checkFlag( firstByte, details::FirstBitMask ) ) // This means the first byte has a value greater than 127, and so is beyond the ASCII range.
 			{
-				if ( checkFlag( firstByte, details::ThirdBitMask ) ) // This means that the first byte has a value greater than 191, and so it must be at least a three-octet code point.
+				if ( auto second = std::next( first );
+					second != end )
 				{
-					if ( checkFlag( firstByte, details::FourthBitMask ) ) // This means that the first byte has a value greater than 224, and so it must be a four-octet code point.
+					if ( checkFlag( firstByte, details::ThirdBitMask ) ) // This means that the first byte has a value greater than 191, and so it must be at least a three-octet code point.
 					{
-						result = char32_t( ( firstByte & std::byte( 0x07 ) ) << 18 );
-						auto secondByte = std::byte( *( value + 1 ) );
-						result += char32_t( ( secondByte & std::byte( 0x3f ) ) << 12 );
-						auto thirdByte = std::byte( *( value + 2 ) );
-						result += char32_t( ( thirdByte & std::byte( 0x3f ) ) << 6 );
-						auto fourthByte = std::byte( *( value + 3 ) );
-						result += char32_t( fourthByte & std::byte( 0x3f ) );
+						if ( auto third = std::next( second );
+							third != end )
+						{
+							if ( checkFlag( firstByte, details::FourthBitMask ) ) // This means that the first byte has a value greater than 224, and so it must be a four-octet code point.
+							{
+								if ( auto fourth = std::next( third );
+									fourth != end )
+								{
+									result = char32_t( ( firstByte & details::ThreeBitsMask ) << 18 );
+									auto secondByte = uint8_t( *second );
+									result += char32_t( ( secondByte & details::SixBitsMask ) << 12 );
+									auto thirdByte = uint8_t( *third );
+									result += char32_t( ( thirdByte & details::SixBitsMask ) << 6 );
+									auto fourthByte = uint8_t( *fourth );
+									result += char32_t( fourthByte & details::SixBitsMask );
+								}
+							}
+							else
+							{
+								result = char32_t( ( firstByte & details::FourBitsMask ) << 12 );
+								auto secondByte = uint8_t( *second );
+								result += char32_t( ( secondByte & details::SixBitsMask ) << 6 );
+								auto thirdByte = uint8_t( *third );
+								result += char32_t( thirdByte & details::SixBitsMask );
+							}
+						}
 					}
 					else
 					{
-						result = char32_t( ( firstByte & std::byte( 0x0f ) ) << 12 );
-						auto secondByte = std::byte( *( value + 1 ) );
-						result += char32_t( ( secondByte & std::byte( 0x3f ) ) << 6 );
-						auto thirdByte = std::byte( *( value + 2 ) );
-						result += char32_t( thirdByte & std::byte( 0x3f ) );
+						result = char32_t( ( firstByte & details::FiveBitsMask ) << 6 );
+						auto secondByte = uint8_t( *second );
+						result += char32_t( secondByte & details::SixBitsMask );
 					}
-				}
-				else
-				{
-					result = char32_t( ( firstByte & std::byte( 0x1f ) ) << 6 );
-					auto secondByte = std::byte( *( value + 1 ) );
-					result += char32_t( secondByte & std::byte( 0x3f ) );
 				}
 			}
 			else
@@ -247,30 +402,65 @@ namespace castor::string
 			return result;
 		}
 
+		inline Array< char, 5u > fromUtf8( char32_t c )
+		{
+			Array< char, 5u > result{};
+			auto it = result.begin();
+
+			if ( c < 0x7f )
+			{
+				*( it++ ) = char( c );
+			}
+			else if ( c < 0x7ff )
+			{
+				*( it++ ) = char( 0b1100'0000 + uint8_t( c >> 6 ) );
+				*( it++ ) = char( 0b1000'0000 + uint8_t( c & details::SixBitsMask ) );
+			}
+			else if ( c < 0x10000 )
+			{
+				*( it++ ) = char( 0b1110'0000 + uint8_t( c >> 12 ) );
+				*( it++ ) = char( 0b1000'0000 + uint8_t( ( c >> 6 ) & details::SixBitsMask ) );
+				*( it++ ) = char( 0b1000'0000 + uint8_t( c & details::SixBitsMask ) );
+			}
+			else if ( c < 0x110000 )
+			{
+				*( it++ ) = char( 0b1111'0000 + uint8_t( c >> 18 ) );
+				*( it++ ) = char( 0b1000'0000 + uint8_t( ( c >> 12 ) & details::SixBitsMask ) );
+				*( it++ ) = char( 0b1000'0000 + uint8_t( ( c >> 6 ) & details::SixBitsMask ) );
+				*( it++ ) = char( 0b1000'0000 + uint8_t( c & details::SixBitsMask ) );
+			}
+
+			return result;
+		}
+
 		//*************************************************************************************************
 
-		inline iterator::iterator( std::string::iterator const & rhs )
+		template< typename CharT, typename StringT >
+		inline iterator< CharT, StringT >::iterator( typename iterator::iterator_type const & rhs )
 			: m_it( rhs )
 			, m_lastCodePoint( 0 )
 			, m_dirty( true )
 		{
 		}
 
-		inline iterator::iterator( iterator const & rhs )
+		template< typename CharT, typename StringT >
+		inline iterator< CharT, StringT >::iterator( iterator< CharT, StringT > const & rhs )
 			: m_it( rhs.m_it )
 			, m_lastCodePoint( rhs.m_lastCodePoint )
 			, m_dirty( rhs.m_dirty )
 		{
 		}
 
-		inline iterator::iterator( iterator && rhs )noexcept
+		template< typename CharT, typename StringT >
+		inline iterator< CharT, StringT >::iterator( iterator< CharT, StringT > && rhs )noexcept
 			: m_it( rhs.m_it )
 			, m_lastCodePoint( rhs.m_lastCodePoint )
 			, m_dirty( rhs.m_dirty )
 		{
 		}
 
-		inline iterator & iterator::operator=( std::string::iterator const & rhs )
+		template< typename CharT, typename StringT >
+		inline iterator< CharT, StringT > & iterator< CharT, StringT >::operator=( typename iterator::iterator_type const & rhs )
 		{
 			m_it = rhs;
 			m_lastCodePoint = 0;
@@ -278,7 +468,8 @@ namespace castor::string
 			return *this;
 		}
 
-		inline iterator & iterator::operator=( iterator const & rhs )
+		template< typename CharT, typename StringT >
+		inline iterator< CharT, StringT > & iterator< CharT, StringT >::operator=( iterator< CharT, StringT > const & rhs )
 		{
 			m_it = rhs.m_it;
 			m_lastCodePoint = rhs.m_lastCodePoint;
@@ -286,7 +477,8 @@ namespace castor::string
 			return *this;
 		}
 
-		inline iterator & iterator::operator=( iterator && rhs )noexcept
+		template< typename CharT, typename StringT >
+		inline iterator< CharT, StringT > & iterator< CharT, StringT >::operator=( iterator< CharT, StringT > && rhs )noexcept
 		{
 			m_it = rhs.m_it;
 			m_lastCodePoint = rhs.m_lastCodePoint;
@@ -294,7 +486,8 @@ namespace castor::string
 			return *this;
 		}
 
-		inline iterator & iterator::operator+=( size_t rhs )
+		template< typename CharT, typename StringT >
+		inline iterator< CharT, StringT > & iterator< CharT, StringT >::operator+=( size_t rhs )
 		{
 			while ( rhs-- )
 			{
@@ -304,7 +497,8 @@ namespace castor::string
 			return *this;
 		}
 
-		inline iterator & iterator::operator-=( size_t rhs )
+		template< typename CharT, typename StringT >
+		inline iterator< CharT, StringT > & iterator< CharT, StringT >::operator-=( size_t rhs )
 		{
 			while ( rhs-- )
 			{
@@ -314,9 +508,10 @@ namespace castor::string
 			return *this;
 		}
 
-		inline iterator & iterator::operator++()
+		template< typename CharT, typename StringT >
+		inline iterator< CharT, StringT > & iterator< CharT, StringT >::operator++()
 		{
-			auto firstByte = std::byte( *m_it );
+			auto firstByte = uint8_t( *m_it );
 			++m_it;
 
 			if ( checkFlag( firstByte, details::FirstBitMask ) ) // This means the first byte has a value greater than 127, and so is beyond the ASCII range.
@@ -338,26 +533,28 @@ namespace castor::string
 			return *this;
 		}
 
-		inline iterator iterator::operator++( int )
+		template< typename CharT, typename StringT >
+		inline iterator< CharT, StringT > iterator< CharT, StringT >::operator++( int )
 		{
-			iterator temp = *this;
+			iterator< CharT, StringT > temp = *this;
 			++( *this );
 			return temp;
 		}
 
-		inline iterator & iterator::operator--()
+		template< typename CharT, typename StringT >
+		inline iterator< CharT, StringT > & iterator< CharT, StringT >::operator--()
 		{
 			--m_it;
 
-			if ( checkFlag( std::byte( *m_it ), details::FirstBitMask ) ) // This means that the previous byte is not an ASCII character.
+			if ( checkFlag( uint8_t( *m_it ), details::FirstBitMask ) ) // This means that the previous byte is not an ASCII character.
 			{
 				--m_it;
 
-				if ( !checkFlag( std::byte( *m_it ), details::SecondBitMask ) )
+				if ( !checkFlag( uint8_t( *m_it ), details::SecondBitMask ) )
 				{
 					--m_it;
 
-					if ( !checkFlag( std::byte( *m_it ), details::SecondBitMask ) )
+					if ( !checkFlag( uint8_t( *m_it ), details::SecondBitMask ) )
 					{
 						--m_it;
 					}
@@ -368,93 +565,107 @@ namespace castor::string
 			return *this;
 		}
 
-		inline iterator iterator::operator--( int )
+		template< typename CharT, typename StringT >
+		inline iterator< CharT, StringT > iterator< CharT, StringT >::operator--( int )
 		{
-			iterator temp = *this;
+			iterator< CharT, StringT > temp = *this;
 			--( *this );
 			return temp;
 		}
 
-		inline char32_t iterator::operator*()const
+		template< typename CharT, typename StringT >
+		inline char32_t iterator< CharT, StringT >::operator*()const
 		{
 			doCalculateCurrentCodePoint();
 			return m_lastCodePoint;
 		}
 
-		inline bool iterator::operator==( const iterator & rhs )const
+		template< typename CharT, typename StringT >
+		inline bool iterator< CharT, StringT >::operator==( const iterator< CharT, StringT > & rhs )const
 		{
 			return m_it == rhs.m_it;
 		}
 
-		inline bool iterator::operator==( const std::string::iterator & rhs )const
+		template< typename CharT, typename StringT >
+		inline bool iterator< CharT, StringT >::operator==( const typename iterator::iterator_type & rhs )const
 		{
 			return m_it == rhs;
 		}
 
-		inline bool iterator::operator!=( const iterator & rhs )const
+		template< typename CharT, typename StringT >
+		inline bool iterator< CharT, StringT >::operator!=( const iterator< CharT, StringT > & rhs )const
 		{
 			return m_it != rhs.m_it;
 		}
 
-		inline bool iterator::operator!=( const std::string::iterator & rhs )const
+		template< typename CharT, typename StringT >
+		inline bool iterator< CharT, StringT >::operator!=( const typename iterator::iterator_type & rhs )const
 		{
 			return m_it != rhs;
 		}
 
-		inline std::string::iterator iterator::internal()const
+		template< typename CharT, typename StringT >
+		inline typename iterator< CharT, StringT >::iterator_type iterator< CharT, StringT >::internal()const
 		{
 			return m_it;
 		}
 
-		inline void iterator::doCalculateCurrentCodePoint()const
+		template< typename CharT, typename StringT >
+		inline void iterator< CharT, StringT >::doCalculateCurrentCodePoint()const
 		{
 			if ( m_dirty )
 			{
-				m_lastCodePoint = toUtf8( m_it );
+				m_lastCodePoint = toUtf8( m_it, m_it );
 				m_dirty = false;
 			}
 		}
 
 		//*************************************************************************************************
 
-		iterator operator+( iterator lhs, size_t rhs )
+		template< typename CharT, typename StringT >
+		iterator< CharT, StringT > operator+( iterator< CharT, StringT > lhs, size_t rhs )
 		{
-			iterator it( lhs );
+			iterator< CharT, StringT > it( lhs );
 			it += rhs;
 			return it;
 		}
 
-		iterator operator-( iterator lhs, size_t rhs )
+		template< typename CharT, typename StringT >
+		iterator< CharT, StringT > operator-( iterator< CharT, StringT > lhs, size_t rhs )
 		{
-			iterator it( lhs );
+			iterator< CharT, StringT > it( lhs );
 			it -= rhs;
 			return it;
 		}
 
 		//*************************************************************************************************
 
-		inline const_iterator::const_iterator( std::string::const_iterator const & rhs )
+		template< typename CharT, typename StringT >
+		inline const_iterator< CharT, StringT >::const_iterator( typename const_iterator::iterator_type const & rhs )
 			: m_it( rhs )
 			, m_lastCodePoint( 0 )
 			, m_dirty( true )
 		{
 		}
 
-		inline const_iterator::const_iterator( const_iterator const & rhs )
+		template< typename CharT, typename StringT >
+		inline const_iterator< CharT, StringT >::const_iterator( const_iterator< CharT, StringT > const & rhs )
 			: m_it( rhs.m_it )
 			, m_lastCodePoint( rhs.m_lastCodePoint )
 			, m_dirty( rhs.m_dirty )
 		{
 		}
 
-		inline const_iterator::const_iterator( const_iterator && rhs )noexcept
+		template< typename CharT, typename StringT >
+		inline const_iterator< CharT, StringT >::const_iterator( const_iterator< CharT, StringT > && rhs )noexcept
 			: m_it( rhs.m_it )
 			, m_lastCodePoint( rhs.m_lastCodePoint )
 			, m_dirty( rhs.m_dirty )
 		{
 		}
 
-		inline const_iterator & const_iterator::operator=( std::string::const_iterator const & rhs )
+		template< typename CharT, typename StringT >
+		inline const_iterator< CharT, StringT > & const_iterator< CharT, StringT >::operator=( typename const_iterator::iterator_type const & rhs )
 		{
 			m_it = rhs;
 			m_lastCodePoint = 0;
@@ -462,7 +673,8 @@ namespace castor::string
 			return *this;
 		}
 
-		inline const_iterator & const_iterator::operator=( const_iterator const & rhs )
+		template< typename CharT, typename StringT >
+		inline const_iterator< CharT, StringT > & const_iterator< CharT, StringT >::operator=( const_iterator< CharT, StringT > const & rhs )
 		{
 			m_it = rhs.m_it;
 			m_lastCodePoint = rhs.m_lastCodePoint;
@@ -470,7 +682,8 @@ namespace castor::string
 			return *this;
 		}
 
-		inline const_iterator & const_iterator::operator=( const_iterator && rhs )noexcept
+		template< typename CharT, typename StringT >
+		inline const_iterator< CharT, StringT > & const_iterator< CharT, StringT >::operator=( const_iterator< CharT, StringT > && rhs )noexcept
 		{
 			m_it = rhs.m_it;
 			m_lastCodePoint = rhs.m_lastCodePoint;
@@ -478,7 +691,8 @@ namespace castor::string
 			return *this;
 		}
 
-		inline const_iterator & const_iterator::operator+=( size_t rhs )
+		template< typename CharT, typename StringT >
+		inline const_iterator< CharT, StringT > & const_iterator< CharT, StringT >::operator+=( size_t rhs )
 		{
 			while ( rhs-- )
 			{
@@ -488,7 +702,8 @@ namespace castor::string
 			return *this;
 		}
 
-		inline const_iterator & const_iterator::operator-=( size_t rhs )
+		template< typename CharT, typename StringT >
+		inline const_iterator< CharT, StringT > & const_iterator< CharT, StringT >::operator-=( size_t rhs )
 		{
 			while ( rhs-- )
 			{
@@ -498,9 +713,10 @@ namespace castor::string
 			return *this;
 		}
 
-		inline const_iterator & const_iterator::operator++()
+		template< typename CharT, typename StringT >
+		inline const_iterator< CharT, StringT > & const_iterator< CharT, StringT >::operator++()
 		{
-			auto firstByte = std::byte( *m_it );
+			auto firstByte = uint8_t( *m_it );
 			++m_it;
 
 			if ( checkFlag( firstByte, details::FirstBitMask ) ) // This means the first byte has a value greater than 127, and so is beyond the ASCII range.
@@ -522,26 +738,28 @@ namespace castor::string
 			return *this;
 		}
 
-		inline const_iterator const_iterator::operator++( int )
+		template< typename CharT, typename StringT >
+		inline const_iterator< CharT, StringT > const_iterator< CharT, StringT >::operator++( int )
 		{
-			const_iterator temp = *this;
+			const_iterator< CharT, StringT > temp = *this;
 			++( *this );
 			return temp;
 		}
 
-		inline const_iterator & const_iterator::operator--()
+		template< typename CharT, typename StringT >
+		inline const_iterator< CharT, StringT > & const_iterator< CharT, StringT >::operator--()
 		{
 			--m_it;
 
-			if ( checkFlag( std::byte( *m_it ), details::FirstBitMask ) ) // This means that the previous byte is not an ASCII character.
+			if ( checkFlag( uint8_t( *m_it ), details::FirstBitMask ) ) // This means that the previous byte is not an ASCII character.
 			{
 				--m_it;
 
-				if ( !checkFlag( std::byte( *m_it ), details::SecondBitMask ) )
+				if ( !checkFlag( uint8_t( *m_it ), details::SecondBitMask ) )
 				{
 					--m_it;
 
-					if ( !checkFlag( std::byte( *m_it ), details::SecondBitMask ) )
+					if ( !checkFlag( uint8_t( *m_it ), details::SecondBitMask ) )
 					{
 						--m_it;
 					}
@@ -552,65 +770,75 @@ namespace castor::string
 			return *this;
 		}
 
-		inline const_iterator const_iterator::operator--( int )
+		template< typename CharT, typename StringT >
+		inline const_iterator< CharT, StringT > const_iterator< CharT, StringT >::operator--( int )
 		{
-			const_iterator temp = *this;
+			const_iterator< CharT, StringT > temp = *this;
 			--( *this );
 			return temp;
 		}
 
-		inline char32_t const_iterator::operator*()const
+		template< typename CharT, typename StringT >
+		inline char32_t const_iterator< CharT, StringT >::operator*()const
 		{
 			doCalculateCurrentCodePoint();
 			return m_lastCodePoint;
 		}
 
-		inline bool const_iterator::operator==( const const_iterator & rhs )const
+		template< typename CharT, typename StringT >
+		inline bool const_iterator< CharT, StringT >::operator==( const const_iterator< CharT, StringT > & rhs )const
 		{
 			return m_it == rhs.m_it;
 		}
 
-		inline bool const_iterator::operator==( const std::string::const_iterator & rhs )const
+		template< typename CharT, typename StringT >
+		inline bool const_iterator< CharT, StringT >::operator==( const const_iterator::iterator_type & rhs )const
 		{
 			return m_it == rhs;
 		}
 
-		inline bool const_iterator::operator!=( const const_iterator & rhs )const
+		template< typename CharT, typename StringT >
+		inline bool const_iterator< CharT, StringT >::operator!=( const const_iterator< CharT, StringT > & rhs )const
 		{
 			return m_it != rhs.m_it;
 		}
 
-		inline bool const_iterator::operator!=( const std::string::const_iterator & rhs )const
+		template< typename CharT, typename StringT >
+		inline bool const_iterator< CharT, StringT >::operator!=( const typename const_iterator::iterator_type & rhs )const
 		{
 			return m_it != rhs;
 		}
 
-		inline std::string::const_iterator const_iterator::internal()const
+		template< typename CharT, typename StringT >
+		inline typename const_iterator< CharT, StringT >::iterator_type const_iterator< CharT, StringT >::internal()const
 		{
 			return m_it;
 		}
 
-		inline void const_iterator::doCalculateCurrentCodePoint()const
+		template< typename CharT, typename StringT >
+		inline void const_iterator< CharT, StringT >::doCalculateCurrentCodePoint()const
 		{
 			if ( m_dirty )
 			{
-				m_lastCodePoint = toUtf8( m_it );
+				m_lastCodePoint = toUtf8( m_it, m_it );
 				m_dirty = false;
 			}
 		}
 
 		//*************************************************************************************************
 
-		const_iterator operator+( const_iterator lhs, size_t rhs )
+		template< typename CharT, typename StringT >
+		const_iterator< CharT, StringT >  operator+( const_iterator< CharT, StringT > lhs, size_t rhs )
 		{
-			const_iterator it( lhs );
+			const_iterator< CharT, StringT > it( lhs );
 			it += rhs;
 			return it;
 		}
 
-		const_iterator operator-( const_iterator lhs, size_t rhs )
+		template< typename CharT, typename StringT >
+		const_iterator< CharT, StringT > operator-( const_iterator< CharT, StringT > lhs, size_t rhs )
 		{
-			const_iterator it( lhs );
+			const_iterator< CharT, StringT > it( lhs );
 			it -= rhs;
 			return it;
 		}

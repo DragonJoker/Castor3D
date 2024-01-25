@@ -14,7 +14,7 @@ namespace castor3d
 	namespace v1_3
 	{
 		template< typename T >
-		using OldInterleavedVertexTArray = std::vector< OldInterleavedVertexT< T > >;
+		using OldInterleavedVertexTArray = castor::Vector< OldInterleavedVertexT< T > >;
 
 		template< typename T >
 		void convert( OldInterleavedVertexTArray< T > const & in
@@ -106,13 +106,13 @@ namespace castor3d
 			{
 			case ChunkType::eMeshMorphTargetTime:
 				result = doParseChunk( time, chunk );
-				checkError( result, "Couldn't parse time index." );
+				checkError( result, cuT( "Couldn't parse time index." ) );
 				obj.doSetTimeIndex( castor::Milliseconds{ int64_t( time * 1000 ) } );
 				break;
 			case ChunkType::eMeshMorphTargetSubmeshID:
 				submesh = {};
 				result = doParseChunk( id, chunk );
-				checkError( result, "Couldn't parse submesh ID." );
+				checkError( result, cuT( "Couldn't parse submesh ID." ) );
 				if ( result )
 				{
 					submesh = static_cast< Mesh const & >( *obj.getOwner()->getAnimable() ).getSubmesh( id );
@@ -126,14 +126,14 @@ namespace castor3d
 			case ChunkType::eMeshMorphTargetWeights:
 				if ( submesh )
 				{
-					std::vector< float > weights;
+					castor::Vector< float > weights;
 					weights.resize( submesh->getMorphTargetsCount() );
 					result = doParseChunk( weights, chunk );
-					checkError( result, "Couldn't parse submesh morph targets weights." );
+					checkError( result, cuT( "Couldn't parse submesh morph targets weights." ) );
 					if ( result )
 					{
 						obj.setTargetsWeights( *submesh
-							, std::move( weights ) );
+							, castor::move( weights ) );
 					}
 				}
 				break;
@@ -167,7 +167,7 @@ namespace castor3d
 #pragma warning( pop )
 				{
 					result = doParseChunk( pointsd, chunk );
-					checkError( result, "Couldn't parse buffer data." );
+					checkError( result, cuT( "Couldn't parse buffer data." ) );
 
 					if ( result )
 					{
@@ -206,7 +206,7 @@ namespace castor3d
 #pragma warning( pop )
 				{
 					result = doParseChunk( points, chunk );
-					checkError( result, "Couldn't parse buffer data." );
+					checkError( result, cuT( "Couldn't parse buffer data." ) );
 
 					if ( result )
 					{

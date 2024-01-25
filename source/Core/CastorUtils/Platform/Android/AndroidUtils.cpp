@@ -12,7 +12,7 @@ namespace castor
 {
 	namespace system
 	{
-		bool getScreenSize( uint32_t p_screen, castor::Size & p_size )
+		bool getScreenSize( uint32_t p_screen, Size & p_size )
 		{
 			bool result = false;
 			auto display = eglGetDisplay( EGLNativeDisplayType( intptr_t( p_screen ) ) );
@@ -51,7 +51,7 @@ namespace castor
 
 			if ( error != 0 && ( szError = strerror( error ) ) != nullptr )
 			{
-				strReturn = string::toString( error ) + cuT( " (" ) + string::stringCast< xchar >( szError ) + cuT( ")" );
+				strReturn = string::toString( error ) + cuT( " (" ) + makeString( szError ) + cuT( ")" );
 				string::replace( strReturn, cuT( "\n" ), cuT( "" ) );
 			}
 

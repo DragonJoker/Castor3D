@@ -30,7 +30,7 @@ namespace castor
 	template< typename NoiseT >
 	FractalNoiseT< NoiseT >::FractalNoiseT( uint32_t octaves
 		, NoiseT noise )
-		: m_noise{ std::move( noise ) }
+		: m_noise{ castor::move( noise ) }
 		, m_octaves{ octaves }
 	{
 	}
@@ -64,7 +64,7 @@ namespace castor
 		, NoiseT noise )
 	{
 		return FractalNoiseT< NoiseT >{ octaves
-			, std::move( noise ) };
+			, castor::move( noise ) };
 	}
 }
 

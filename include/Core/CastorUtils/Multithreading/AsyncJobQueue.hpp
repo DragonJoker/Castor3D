@@ -17,8 +17,8 @@ namespace castor
 		: public NonMovable
 	{
 	public:
-		using Job = std::function< void() >;
-		using JobArray = std::vector< Job >;
+		using Job = castor::Function< void() >;
+		using JobArray = Vector< Job >;
 
 	public:
 		/**
@@ -79,7 +79,7 @@ namespace castor
 		std::atomic_bool m_ended{};
 		JobArray m_pending;
 		ThreadPool m_pool;
-		std::mutex m_mutex;
+		castor::Mutex m_mutex;
 		std::thread m_worker;
 	};
 }

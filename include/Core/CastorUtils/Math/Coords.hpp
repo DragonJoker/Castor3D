@@ -230,7 +230,7 @@ namespace castor
 		}
 
 	private:
-		T * m_coords;
+		T * m_coords{};
 	};
 	/**
 	 *\~english
@@ -485,13 +485,13 @@ namespace castor
 	**/
 	/**@{*/
 	template< typename T, uint32_t Count >
-	castor::String & operator<<( castor::String & out, castor::Coords< T, Count > const & in );
+	String & operator<<( String & out, Coords< T, Count > const & in );
 	template< typename T, uint32_t Count >
-	castor::String & operator>>( castor::String & in, castor::Coords< T, Count > & out );
+	String & operator>>( String & in, Coords< T, Count > & out );
 	template< typename T, uint32_t Count, typename CharType >
-	std::basic_ostream< CharType > & operator<<( std::basic_ostream< CharType > & out, castor::Coords< T, Count > const & in );
+	std::basic_ostream< CharType > & operator<<( std::basic_ostream< CharType > & out, Coords< T, Count > const & in );
 	template< typename T, uint32_t Count, typename CharType >
-	std::basic_istream< CharType > & operator>>( std::basic_istream< CharType > & in, castor::Coords< T, Count > & out );
+	std::basic_istream< CharType > & operator>>( std::basic_istream< CharType > & in, Coords< T, Count > & out );
 	/**@}*/
 }
 

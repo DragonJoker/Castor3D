@@ -227,7 +227,7 @@ namespace castor3d
 	class GpuLinearAllocatorT;
 
 	using GpuBufferBuddyAllocator = castor::BuddyAllocatorT< GpuBufferBuddyAllocatorTraits >;
-	using GpuBufferBuddyAllocatorUPtr = std::unique_ptr< GpuBufferBuddyAllocator >;
+	using GpuBufferBuddyAllocatorUPtr = castor::RawUniquePtr< GpuBufferBuddyAllocator >;
 	using GpuBuddyBuffer = GpuBufferT< GpuBufferBuddyAllocator >;
 	using GpuLinearBuffer = GpuBufferT< GpuBufferLinearAllocator >;
 	using GpuPackedBuffer = GpuBufferT< GpuBufferPackedAllocator >;
@@ -294,13 +294,13 @@ namespace castor3d
 	C3D_API void copyBuffer( ashes::CommandBuffer const & commandBuffer
 		, ashes::BufferBase const & src
 		, ashes::BufferBase const & dst
-		, std::vector< VkBufferCopy > const & regions
+		, castor::Vector< VkBufferCopy > const & regions
 		, VkAccessFlags dstAccessFlags
 		, VkPipelineStageFlags dstPipelineFlags );
 	C3D_API void updateBuffer( ashes::CommandBuffer const & commandBuffer
 		, castor::ByteArray data
 		, ashes::BufferBase const & dst
-		, std::vector< VkBufferCopy > const & regions
+		, castor::Vector< VkBufferCopy > const & regions
 		, VkAccessFlags dstAccessFlags
 		, VkPipelineStageFlags dstPipelineFlags );
 	//@}

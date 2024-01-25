@@ -65,7 +65,7 @@ namespace castor3d
 			*/
 			C3D_API SubmeshRenderShaderPtr createRenderShader()const override
 			{
-				return std::make_unique< RenderShader >();
+				return castor::make_unique< RenderShader >();
 			}
 
 			C3D_API SubmeshComponentFlag getRenderFlag()const noexcept override

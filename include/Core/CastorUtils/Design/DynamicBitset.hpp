@@ -25,7 +25,7 @@ namespace castor
 		/**@{*/
 		DynamicBitsetT();
 		explicit DynamicBitsetT( size_t size, bool value = false );
-		explicit DynamicBitsetT( String const & bits );
+		explicit DynamicBitsetT( MbString const & bits );
 		explicit DynamicBitsetT( char const * bits );
 		DynamicBitsetT( char const * bits, size_t size );
 		/**@}*/
@@ -88,7 +88,7 @@ namespace castor
 		BlockTypeT doGetLastBlockMask()const;
 
 	private:
-		std::vector< BlockTypeT > m_blocks;
+		Vector< BlockTypeT > m_blocks;
 		size_t m_bitCount;
 	};
 	/**
@@ -147,6 +147,8 @@ namespace castor
 		friend DynamicBitsetT< BlockTypeT >;
 
 	private:
+		Bit( Bit const & bit ) = delete;
+		Bit( Bit && bit )noexcept = delete;
 		Bit( BlockTypeT & block
 			, BlockTypeT mask )
 			: m_block{ block }
@@ -155,8 +157,10 @@ namespace castor
 		}
 
 	public:
+		~Bit()noexcept = default;
 		Bit & operator=( bool val );
 		Bit & operator=( Bit const & bit );
+		Bit & operator=( Bit && bit )noexcept;
 
 		void set( bool val = true );
 

@@ -207,15 +207,15 @@ namespace castor3d
 	void VctConfig::accept( ConfigurationVisitorBase & visitor )
 	{
 		visitor.visit( cuT( "Voxel Cone Tracing" ) );
-		visitor.visit( "Enable VCT", enabled );
-		visitor.visit( "Conservative Rasterization", enableConservativeRasterization );
-		visitor.visit( "Occlusion", enableOcclusion );
-		visitor.visit( "Temporal Smoothing", enableTemporalSmoothing );
-		visitor.visit( "Secondary Bounce", enableSecondaryBounce );
-		visitor.visit( "Num. Cones", numCones );
-		visitor.visit( "Max. Distance", maxDistance );
-		visitor.visit( "Ray Step Size", rayStepSize );
-		visitor.visit( "Voxel Size", voxelSizeFactor );
+		visitor.visit( cuT( "Enable VCT" ), enabled );
+		visitor.visit( cuT( "Conservative Rasterization" ), enableConservativeRasterization );
+		visitor.visit( cuT( "Occlusion" ), enableOcclusion );
+		visitor.visit( cuT( "Temporal Smoothing" ), enableTemporalSmoothing );
+		visitor.visit( cuT( "Secondary Bounce" ), enableSecondaryBounce );
+		visitor.visit( cuT( "Num. Cones" ), numCones );
+		visitor.visit( cuT( "Max. Distance" ), maxDistance );
+		visitor.visit( cuT( "Ray Step Size" ), rayStepSize );
+		visitor.visit( cuT( "Voxel Size" ), voxelSizeFactor );
 	}
 
 	void VctConfig::addParsers( castor::AttributeParsers & result )

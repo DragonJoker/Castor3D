@@ -29,7 +29,7 @@ namespace castor3d
 	//! SubmeshVertex array.
 	CU_DeclareVector( SubmeshVertex, SubmeshVertex );
 
-	using InterleavedVertexArray = std::vector< InterleavedVertex >;
+	using InterleavedVertexArray = castor::Vector< InterleavedVertex >;
 
 	//@}
 }

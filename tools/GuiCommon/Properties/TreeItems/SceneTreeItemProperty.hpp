@@ -32,8 +32,7 @@ namespace GuiCommon
 		 *\param[in]	editable	Dit si les propriétés sont modifiables
 		 *\param[in]	scene		L'objet cible
 		 */
-		SceneTreeItemProperty( wxWindow * parent
-			, bool editable
+		SceneTreeItemProperty( bool editable
 			, castor3d::Scene & scene );
 		/**
 		 *\~english

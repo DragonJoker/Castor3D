@@ -33,7 +33,7 @@ namespace atmosphere_scattering
 			&& lhs.constantTerm == rhs.constantTerm;
 	}
 
-	using DensityProfileLayers = std::array< DensityProfileLayer, 2u >;
+	using DensityProfileLayers = castor::Array< DensityProfileLayer, 2u >;
 
 	// All units in kilometers
 	static constexpr float EarthBottomRadius = 6360.0f;

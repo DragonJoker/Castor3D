@@ -28,7 +28,7 @@ namespace castor3d
 			ashes::ImageView view;
 			ashes::FrameBufferPtr frameBuffer;
 		};
-		std::array< FrameBuffer, 6u > m_frameBuffers;
+		castor::Array< FrameBuffer, 6u > m_frameBuffers;
 		ashes::CommandBufferPtr m_commandBuffer;
 		ashes::ImageView const & m_view;
 		ashes::RenderPassPtr m_renderPass;

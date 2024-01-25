@@ -248,7 +248,7 @@ namespace castor3d
 				it != m_values.end() && sizeof( ValueT ) * count >= it->second.size() )
 			{
 				using ValueCPtr = ValueT const *;
-				auto begin = ValueCPtr( it->second.data() );
+				auto begin = reinterpret_cast< ValueCPtr >( it->second.data() );
 				std::copy( begin
 					, begin + count
 					, values );
@@ -314,7 +314,7 @@ namespace castor3d
 				it != m_values.end() )
 			{
 				using CharCPtr = xchar const * const;
-				value = CharCPtr( it->second.data() );
+				value = reinterpret_cast< CharCPtr >( it->second.data() );
 				result = true;
 			}
 
@@ -369,8 +369,8 @@ namespace castor3d
 		}
 
 	private:
-		using ByteArray = std::vector< uint8_t >;
-		using ParamNameMap = std::map< KeyT, ByteArray, std::less<> >;
+		using ByteArray = castor::Vector< uint8_t >;
+		using ParamNameMap = castor::Map< KeyT, ByteArray, std::less<> >;
 		ParamNameMap m_values;
 	};
 }

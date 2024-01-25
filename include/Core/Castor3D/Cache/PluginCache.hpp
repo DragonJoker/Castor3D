@@ -105,13 +105,13 @@ namespace castor
 		castor3d::PluginStrMapArray m_loadedPlugins;
 		//!\~english	The mutex protecting the loaded plug-ins map.
 		//!\~french		Le mutex protégeant la map des plug-ins chargés.
-		std::recursive_mutex m_mutexLoadedPlugins;
+		castor::RecursiveMutex m_mutexLoadedPlugins;
 		//!\~english	The loaded plug-ins map, sorted by plug-in type.
 		//!\~french		La map des plug-ins chargés, triés par type de plug-in.
 		castor3d::PluginTypePathMap m_loadedPluginTypes;
 		//!\~english	The mutex protecting the loaded plug-ins map sorted by type.
 		//!\~french		Le mutex protégeant la map de plug-ins chargés triés par type.
-		std::recursive_mutex m_mutexLoadedPluginTypes;
+		castor::RecursiveMutex m_mutexLoadedPluginTypes;
 	};
 }
 

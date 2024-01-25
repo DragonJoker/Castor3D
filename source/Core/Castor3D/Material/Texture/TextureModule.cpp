@@ -86,7 +86,7 @@ namespace castor3d
 		for ( auto value : values )
 		{
 			result += sep + getName( value );
-			sep = "|";
+			sep = cuT( "|" );
 		}
 
 		return result;
@@ -114,12 +114,12 @@ namespace castor3d
 		}
 	}
 
-	std::ostream & operator<<( std::ostream & stream, castor::ImageLayout const & rhs )
+	castor::OutputStream & operator<<( castor::OutputStream & stream, castor::ImageLayout const & rhs )
 	{
 		stream << castor::ImageLayout::getName( rhs.type )
-			<< ", " << ashes::getName( convert( rhs.format ) )
-			<< ", " << rhs.extent->x
-			<< "x" << rhs.extent->y;
+			<< cuT( ", " ) << castor::makeString( ashes::getName( convert( rhs.format ) ) )
+			<< cuT( ", " ) << rhs.extent->x
+			<< cuT( "x" ) << rhs.extent->y;
 
 		if ( rhs.extent->z > 1 )
 		{
@@ -134,13 +134,13 @@ namespace castor3d
 		return stream;
 	}
 
-	std::ostream & operator<<( std::ostream & stream, castor::Image const & rhs )
+	castor::OutputStream & operator<<( castor::OutputStream & stream, castor::Image const & rhs )
 	{
 		stream << rhs.getLayout();
 		return stream;
 	}
 
-	std::ostream & operator<<( std::ostream & stream, TextureLayout const & rhs )
+	castor::OutputStream & operator<<( castor::OutputStream & stream, TextureLayout const & rhs )
 	{
 		stream << rhs.getImage();
 		return stream;
@@ -214,7 +214,7 @@ namespace castor3d
 			, createInfo
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, name );
-		texture->setSource( std::move( buffer ), isStatic );
+		texture->setSource( castor::move( buffer ), isStatic );
 		return texture;
 	}
 

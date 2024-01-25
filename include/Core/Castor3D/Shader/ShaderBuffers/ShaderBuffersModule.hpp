@@ -81,9 +81,9 @@ namespace castor3d
 	class TextureAnimationBuffer;
 
 	struct GpuDataBufferOffset;
-	using GpuDataBufferOffsetPtr = std::unique_ptr< GpuDataBufferOffset >;
+	using GpuDataBufferOffsetPtr = castor::RawUniquePtr< GpuDataBufferOffset >;
 
-	using GpuDataBufferOffsetModifyFunc = std::function< void( GpuDataBufferOffset const & ) >;
+	using GpuDataBufferOffsetModifyFunc = castor::Function< void( GpuDataBufferOffset const & ) >;
 	using GpuDataBufferOffsetModifySignal = castor::SignalT< GpuDataBufferOffsetModifyFunc >;
 	using GpuDataBufferOffsetModifyConnection = castor::ConnectionT< GpuDataBufferOffsetModifySignal >;
 

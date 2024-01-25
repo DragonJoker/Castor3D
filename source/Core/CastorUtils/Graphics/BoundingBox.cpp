@@ -60,7 +60,7 @@ namespace castor
 	{
 		auto min = getMin();
 		auto max = getMax();
-		std::array< Point3f, 8u > corners
+		Array< Point3f, 8u > corners
 		{
 			min,
 			max,

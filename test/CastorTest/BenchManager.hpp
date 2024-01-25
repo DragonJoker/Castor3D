@@ -9,8 +9,6 @@ namespace Testing
 	class BenchManager
 	{
 	public:
-		BenchManager();
-		~BenchManager();
 		static void registerType( BenchCasePtr bench );
 		static void registerType( TestCasePtr test );
 		static void ExecuteBenchs();

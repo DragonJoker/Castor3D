@@ -34,7 +34,7 @@ namespace castor3d
 		, m_graph{ getOwner()->getGraph().createPassGroup( "Transparent" ) }
 		, m_mippedColour{ m_device
 			, getOwner()->getResources()
-			, getOwner()->getName() + "/MippedColour"
+			, getOwner()->getName() + cuT( "/MippedColour" )
 			, 0u
 			, makeExtent3D( getOwner()->getSize() )
 			, 1u
@@ -153,21 +153,21 @@ namespace castor3d
 		}
 
 		m_mippedColour.create();
-		stepProgressBarLocal( progress, "Creating colour copy pass" );
+		stepProgressBarLocal( progress, cuT( "Creating colour copy pass" ) );
 		auto & copy = m_graph.createPass( "ColCopyPass"
 			, [this, progress]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
-				stepProgressBarLocal( progress, "Initialising colour copy pass" );
-				auto res = std::make_unique< crg::ImageCopy >( framePass
+				stepProgressBarLocal( progress, cuT( "Initialising colour copy pass" ) );
+				auto res = castor::make_unique< crg::ImageCopy >( framePass
 					, context
 					, runnableGraph
 					, m_mippedColour.getExtent()
 					, crg::ru::Config{ 1u }
 					, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
 					, crg::RunnablePass::IsEnabledCallback( [this](){ return m_enabled; } ) );
-				getEngine()->registerTimer( framePass.getFullName()
+				getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );
@@ -175,21 +175,21 @@ namespace castor3d
 		copy.addTransferInputView( getOwner()->getTargetResult() );
 		copy.addTransferOutputView( m_mippedColour.targetViewId );
 
-		stepProgressBarLocal( progress, "Creating mips generation pass" );
+		stepProgressBarLocal( progress, cuT( "Creating mips generation pass" ) );
 		auto & result = m_graph.createPass( "MipsGenPass"
 			, [this, progress]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
-				stepProgressBarLocal( progress, "Initialising mips generation pass" );
-				auto res = std::make_unique< crg::GenerateMipmaps >( framePass
+				stepProgressBarLocal( progress, cuT( "Initialising mips generation pass" ) );
+				auto res = castor::make_unique< crg::GenerateMipmaps >( framePass
 					, context
 					, runnableGraph
 					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 					, crg::ru::Config{}
 					, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
 					, crg::RunnablePass::IsEnabledCallback( [this](){ return m_enabled; } ) );
-				getEngine()->registerTimer( framePass.getFullName()
+				getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );
@@ -201,7 +201,7 @@ namespace castor3d
 	crg::FramePass & TransparentRendering::doCreateForwardTransparentPass( ProgressBar * progress
 		, crg::FramePass const & lastPass )
 	{
-		stepProgressBarLocal( progress, "Creating transparent pass" );
+		stepProgressBarLocal( progress, cuT( "Creating transparent pass" ) );
 		auto targetResult = getOwner()->getTargetResult();
 		auto targetDepth = getOwner()->getTargetDepth();
 		auto & result = m_graph.createPass( "NodesPass"
@@ -209,10 +209,10 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
-				stepProgressBarLocal( progress, "Initialising transparent pass" );
+				stepProgressBarLocal( progress, cuT( "Initialising transparent pass" ) );
 				static constexpr bool isOit = false;
 				static constexpr bool hasVelocity = false;
-				auto res = std::make_unique< ForwardRenderTechniquePass >( getOwner()
+				auto res = castor::make_unique< ForwardRenderTechniquePass >( getOwner()
 					, framePass
 					, context
 					, runnableGraph
@@ -236,7 +236,7 @@ namespace castor3d
 						.hasVelocity( hasVelocity )
 					, &m_mippedColour );
 				m_transparentPass = res.get();
-				getEngine()->registerTimer( framePass.getFullName()
+				getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );
@@ -252,7 +252,7 @@ namespace castor3d
 	crg::FramePass & TransparentRendering::doCreateWBTransparentPass( ProgressBar * progress
 		, crg::FramePass const & lastPass )
 	{
-		stepProgressBarLocal( progress, "Creating transparent pass" );
+		stepProgressBarLocal( progress, cuT( "Creating transparent pass" ) );
 		auto targetResult = getOwner()->getTargetResult();
 		auto targetDepth = getOwner()->getTargetDepth();
 		auto & result = m_graph.createPass( "NodesPass"
@@ -260,7 +260,7 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
-				stepProgressBarLocal( progress, "Initialising transparent pass" );
+				stepProgressBarLocal( progress, cuT( "Initialising transparent pass" ) );
 				castor::String name = cuT( "Accumulation" );
 				static constexpr bool isOit = true;
 				static constexpr bool hasVelocity = false;
@@ -271,7 +271,7 @@ namespace castor3d
 				auto ssaoIt = std::next( normalIt );
 				auto accumIt = std::next( ssaoIt );
 				auto revealIt = std::next( accumIt );
-				auto res = std::make_unique< TransparentPass >( getOwner()
+				auto res = castor::make_unique< TransparentPass >( getOwner()
 					, framePass
 					, context
 					, runnableGraph
@@ -306,7 +306,7 @@ namespace castor3d
 						.clustersConfig( getOwner()->getClustersConfig() )
 						.hasVelocity( hasVelocity ) );
 				m_transparentPass = res.get();
-				getEngine()->registerTimer( framePass.getFullName()
+				getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, res->getTimer() );
 				return res;
 			} );

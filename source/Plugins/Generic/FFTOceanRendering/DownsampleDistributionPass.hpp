@@ -47,7 +47,7 @@ namespace ocean_fft
 		void accept( castor3d::RenderTechniqueVisitor & visitor );
 
 	public:
-		static castor::String const Name;
+		static castor::MbString const Name;
 
 	private:
 		void doRecordInto( crg::RecordContext & context

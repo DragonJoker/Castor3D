@@ -37,7 +37,7 @@ namespace castor
 		bool operator()( castor3d::SpecularFactorComponent const & object
 			, StringStream & file )override
 		{
-			return writeOpt( file, "specular_factor", object.getFactor(), castor3d::SpecularFactorComponent::Default );
+			return writeOpt( file, cuT( "specular_factor" ), object.getFactor(), castor3d::SpecularFactorComponent::Default );
 		}
 	};
 }

@@ -23,7 +23,7 @@ namespace water
 			: castor3d::shader::PassMapMaterialShader
 		{
 			MaterialShader()
-				: castor3d::shader::PassMapMaterialShader{ "waterNormal1" }
+				: castor3d::shader::PassMapMaterialShader{ cuT( "waterNormal1" ) }
 			{
 			}
 		};
@@ -83,7 +83,7 @@ namespace water
 			bool isComponentNeeded( castor3d::TextureCombine const & textures
 				, castor3d::ComponentModeFlags const & filter )const override;
 			void createMapComponent( castor3d::Pass & pass
-				, std::vector< castor3d::PassComponentUPtr > & result )const override;
+				, castor::Vector< castor3d::PassComponentUPtr > & result )const override;
 
 			bool isMapComponent()const override
 			{
@@ -92,12 +92,12 @@ namespace water
 
 			castor3d::shader::PassComponentsShaderPtr createComponentsShader()const override
 			{
-				return std::make_unique< ComponentsShader >( *this );
+				return castor::make_unique< ComponentsShader >( *this );
 			}
 
 			castor3d::shader::PassMaterialShaderPtr createMaterialShader()const override
 			{
-				return std::make_unique< MaterialShader >();
+				return castor::make_unique< MaterialShader >();
 			}
 
 			void filterTextureFlags( castor3d::ComponentModeFlags filter
@@ -125,7 +125,7 @@ namespace water
 			{
 				auto [passIndex, textureFlags] = castor3d::splitTextureFlag( flags );
 				return ( passIndex == getId() && checkFlag( textureFlags, Normal1 ) )
-					? castor::String{ "WaterNormal1" }
+					? castor::String{ cuT( "WaterNormal1" ) }
 				: castor::String{};
 			}
 

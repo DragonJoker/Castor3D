@@ -2,8 +2,6 @@
 
 #include <CastorUtils/Design/Unique.hpp>
 
-using namespace castor;
-
 namespace Testing
 {
 	//*********************************************************************************************
@@ -11,11 +9,11 @@ namespace Testing
 	namespace
 	{
 		class TestUnique
-			: public Unique< TestUnique >
+			: public castor::Unique< TestUnique >
 		{
 		public:
 			TestUnique()
-				: Unique< TestUnique >( this )
+				: castor::Unique< TestUnique >( this )
 			{
 			}
 		};
@@ -31,25 +29,25 @@ namespace Testing
 		};
 
 		class TestUniqueFirst
-			: public Unique< TestUniqueFirst >
+			: public castor::Unique< TestUniqueFirst >
 			, public IntVal
 			, public PtrVal
 		{
 		public:
 			TestUniqueFirst()
-				: Unique< TestUniqueFirst >( this )
+				: castor::Unique< TestUniqueFirst >( this )
 			{
 			}
 		};
 
 		class TestUniqueMiddle
 			: public IntVal
-			, public Unique< TestUniqueMiddle >
+			, public castor::Unique< TestUniqueMiddle >
 			, public PtrVal
 		{
 		public:
 			TestUniqueMiddle()
-				: Unique< TestUniqueMiddle >( this )
+				: castor::Unique< TestUniqueMiddle >( this )
 			{
 			}
 		};
@@ -57,11 +55,11 @@ namespace Testing
 		class TestUniqueLast
 			: public IntVal
 			, public PtrVal
-			, public Unique< TestUniqueLast >
+			, public castor::Unique< TestUniqueLast >
 		{
 		public:
 			TestUniqueLast()
-				: Unique< TestUniqueLast >( this )
+				: castor::Unique< TestUniqueLast >( this )
 			{
 			}
 		};
@@ -99,7 +97,7 @@ namespace Testing
 	void CastorUtilsUniqueTest::MultipleInstanceTest()
 	{
 		TestUnique tmp1;
-		CT_CHECK_THROW( std::make_unique< TestUnique >() );
+		CT_CHECK_THROW( castor::make_unique< TestUnique >() );
 	}
 
 	void CastorUtilsUniqueTest::MemoryTest()

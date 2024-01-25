@@ -24,15 +24,15 @@ namespace castor3d
 				, engine
 				, MouseCursor::eHand }
 			, m_textMaterial{ getForegroundMaterial() }
-			, m_highlightedTextMaterial{ doCreateMaterial( getTextMaterial(), -0.1f, "_THG" ) }
-			, m_highlightedBackgroundMaterial{ doCreateMaterial( getBackgroundMaterial(), 0.1f, "_BHG" ) }
-			, m_highlightedForegroundMaterial{ doCreateMaterial( getForegroundMaterial(), -0.1f, "_FHG" ) }
-			, m_pushedTextMaterial{ doCreateMaterial( getTextMaterial(), -0.1f, "_TPU" ) }
-			, m_pushedBackgroundMaterial{ doCreateMaterial( getBackgroundMaterial(), 0.1f, "_BPU" ) }
-			, m_pushedForegroundMaterial{ doCreateMaterial( getForegroundMaterial(), -0.1f, "_FPU" ) }
-			, m_disabledTextMaterial{ doCreateMaterial( getTextMaterial(), -0.2f, "_TDS" ) }
-			, m_disabledBackgroundMaterial{ doCreateMaterial( getBackgroundMaterial(), +0.2f, "_BDS" ) }
-			, m_disabledForegroundMaterial{ doCreateMaterial( getForegroundMaterial(), -0.2f, "_FDS" ) }
+			, m_highlightedTextMaterial{ doCreateMaterial( getTextMaterial(), -0.1f, cuT( "_THG" ) ) }
+			, m_highlightedBackgroundMaterial{ doCreateMaterial( getBackgroundMaterial(), 0.1f, cuT( "_BHG" ) ) }
+			, m_highlightedForegroundMaterial{ doCreateMaterial( getForegroundMaterial(), -0.1f, cuT( "_FHG" ) ) }
+			, m_pushedTextMaterial{ doCreateMaterial( getTextMaterial(), -0.1f, cuT( "_TPU" ) ) }
+			, m_pushedBackgroundMaterial{ doCreateMaterial( getBackgroundMaterial(), 0.1f, cuT( "_BPU" ) ) }
+			, m_pushedForegroundMaterial{ doCreateMaterial( getForegroundMaterial(), -0.1f, cuT( "_FPU" ) ) }
+			, m_disabledTextMaterial{ doCreateMaterial( getTextMaterial(), -0.2f, cuT( "_TDS" ) ) }
+			, m_disabledBackgroundMaterial{ doCreateMaterial( getBackgroundMaterial(), +0.2f, cuT( "_BDS" ) ) }
+			, m_disabledForegroundMaterial{ doCreateMaterial( getForegroundMaterial(), -0.2f, cuT( "_FDS" ) ) }
 			, m_fontName{ fontName }
 		{
 		}
@@ -157,12 +157,12 @@ namespace castor3d
 	private:
 		void doUpdateBackgroundMaterial()override
 		{
-			m_highlightedBackgroundMaterial = doCreateMaterial( getBackgroundMaterial(), 0.1f, "_BHG" );
+			m_highlightedBackgroundMaterial = doCreateMaterial( getBackgroundMaterial(), 0.1f, cuT( "_BHG" ) );
 		}
 
 		void doUpdateForegroundMaterial()override
 		{
-			m_highlightedForegroundMaterial = doCreateMaterial( getForegroundMaterial(), -0.1f, "_FHG" );
+			m_highlightedForegroundMaterial = doCreateMaterial( getForegroundMaterial(), -0.1f, cuT( "_FHG" ) );
 		}
 
 	private:

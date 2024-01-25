@@ -42,7 +42,7 @@ namespace castor3d
 		, castor::String debugName )
 		: castor::OwnedBy< RenderSystem >{ device.renderSystem }
 		, m_device{ device }
-		, m_debugName{ std::move( debugName ) }
+		, m_debugName{ castor::move( debugName ) }
 	{
 	}
 
@@ -134,7 +134,7 @@ namespace castor3d
 			, flags
 			, m_debugName
 			, sharingMode );
-		buffers.push_back( { m_currentUboIndex, std::move( buffer ) } );
+		buffers.push_back( { m_currentUboIndex, castor::move( buffer ) } );
 		++m_currentUboIndex;
 		auto itB = std::next( buffers.begin()
 			, ptrdiff_t( buffers.size() - 1 ) );

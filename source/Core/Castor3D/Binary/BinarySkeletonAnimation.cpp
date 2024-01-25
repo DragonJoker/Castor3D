@@ -61,7 +61,7 @@ namespace castor3d
 			{
 			case ChunkType::eName:
 				result = doParseChunk( name, chunk );
-				checkError( result, "Couldn't parse name." );
+				checkError( result, cuT( "Couldn't parse name." ) );
 
 				if ( result )
 				{
@@ -73,7 +73,7 @@ namespace castor3d
 			case ChunkType::eSkeletonAnimationNode:
 				node = castor::makeUnique< SkeletonAnimationNode >( obj );
 				result = createBinaryParser< SkeletonAnimationNode >().parse( *node, chunk );
-				checkError( result, "Couldn't parse node." );
+				checkError( result, cuT( "Couldn't parse node." ) );
 
 				if ( result )
 				{
@@ -85,7 +85,7 @@ namespace castor3d
 			case ChunkType::eSkeletonAnimationBone:
 				bone = castor::makeUnique< SkeletonAnimationBone >( obj );
 				result = createBinaryParser< SkeletonAnimationBone >().parse( *bone, chunk );
-				checkError( result, "Couldn't parse bone." );
+				checkError( result, cuT( "Couldn't parse bone." ) );
 
 				if ( result )
 				{
@@ -97,7 +97,7 @@ namespace castor3d
 			case ChunkType::eSkeletonAnimationKeyFrame:
 				keyFrame = castor::makeUnique< SkeletonAnimationKeyFrame >( obj, 0_ms );
 				result = createBinaryParser< SkeletonAnimationKeyFrame >().parse( *keyFrame, chunk );
-				checkError( result, "Couldn't parse keyframe." );
+				checkError( result, cuT( "Couldn't parse keyframe." ) );
 
 				if ( result )
 				{

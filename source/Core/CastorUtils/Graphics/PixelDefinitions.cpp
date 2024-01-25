@@ -15,7 +15,7 @@ namespace castor
 			return int8_t( ( v >> 31 ) | -( -v >> 31 ) );
 		}
 
-		static std::array< uint8_t, 768 > const DivisionTable0To767By3
+		static Array< uint8_t, 768 > const DivisionTable0To767By3
 		{
 			0, 0, 0, 1, 1, 1, 2, 2,
 			2, 3, 3, 3, 4, 4, 4, 5,
@@ -115,7 +115,7 @@ namespace castor
 			253, 253, 254, 254, 254, 255, 255, 255,
 		};
 
-		static std::array< uint8_t, 1792 > const DivisionTable0To1791By7
+		static Array< uint8_t, 1792 > const DivisionTable0To1791By7
 		{
 			0, 0, 0, 0, 0, 0, 0, 1,
 			1, 1, 1, 1, 1, 1, 2, 2,
@@ -343,7 +343,7 @@ namespace castor
 			254, 255, 255, 255, 255, 255, 255, 255,
 		};
 
-		static std::array< uint8_t, 1280 > const DivisionTable0To1279By5
+		static Array< uint8_t, 1280 > const DivisionTable0To1279By5
 		{
 			0, 0, 0, 0, 0, 1, 1, 1,
 			1, 1, 2, 2, 2, 2, 2, 3,
@@ -534,10 +534,10 @@ namespace castor
 
 		inline uint32_t doPack32( uint32_t r, uint32_t g, uint32_t b, uint32_t a )
 		{
-			return uint32_t( std::byte( r ) << 0 )
-				| uint32_t( std::byte( g ) << 8 )
-				| uint32_t( std::byte( b ) << 16 )
-				| uint32_t( std::byte( a ) << 24 );
+			return uint32_t( uint8_t( r ) << 0 )
+				| uint32_t( uint8_t( g ) << 8 )
+				| uint32_t( uint8_t( b ) << 16 )
+				| uint32_t( uint8_t( a ) << 24 );
 		}
 
 		inline bool doDecodeBC5Block( uint8_t const * bitstring
@@ -548,7 +548,7 @@ namespace castor
 			using UInt64CPtr = uint64_t const *;
 			using UInt16Ptr = uint16_t *;
 			// LSBFirst byte order only.
-			auto bits = ( *UInt64CPtr( &bitstring[0] ) ) >> 16;
+			auto bits = ( *reinterpret_cast< UInt64CPtr >( &bitstring[0] ) ) >> 16;
 			int lum0 = int8_t( bitstring[0] );
 			int lum1 = int8_t( bitstring[1] );
 
@@ -569,7 +569,7 @@ namespace castor
 			}
 
 			// Note: values are mapped to a red value of -127 to 127.
-			auto pixel16_buffer = UInt16Ptr( pixelBuffer );
+			auto pixel16_buffer = reinterpret_cast< UInt16Ptr >( pixelBuffer );
 
 			for ( int i = 0; i < 16; i++ )
 			{
@@ -623,12 +623,12 @@ namespace castor
 	{
 		using UInt32CPtr = uint32_t const *;
 		using UInt32Ptr = uint32_t *;
-		auto colors = *UInt32CPtr( &bitstring[0] );
+		auto colors = *reinterpret_cast< UInt32CPtr >( &bitstring[0] );
 
 		// Decode the two 5-6-5 RGB colors.
-		std::array< int, 4 > color_r{};
-		std::array< int, 4 > color_g{};
-		std::array< int, 4 > color_b{};
+		Array< int, 4 > color_r{};
+		Array< int, 4 > color_g{};
+		Array< int, 4 > color_b{};
 		color_b[0] = int( ( colors & 0x0000001F ) << 3 );
 		color_g[0] = int( ( colors & 0x000007E0 ) >> ( 5 - 2 ) );
 		color_r[0] = int( ( colors & 0x0000F800 ) >> ( 11 - 3 ) );
@@ -653,12 +653,12 @@ namespace castor
 			color_r[3] = color_g[3] = color_b[3] = 0;
 		}
 
-		uint32_t pixels = *UInt32CPtr( &bitstring[4] );
+		uint32_t pixels = *reinterpret_cast< UInt32CPtr >( &bitstring[4] );
 
 		for ( int i = 0; i < 16; i++ )
 		{
 			auto pixel = size_t( ( pixels >> ( i * 2 ) ) & 0x3 );
-			*UInt32Ptr( pixelBuffer + i * 4u ) = pxdef::doPack32( uint32_t( color_r[pixel] )
+			*reinterpret_cast< UInt32Ptr >( pixelBuffer + i * 4u ) = pxdef::doPack32( uint32_t( color_r[pixel] )
 				, uint32_t( color_g[pixel] )
 				, uint32_t( color_b[pixel] )
 				, 0x000000FFu );
@@ -675,11 +675,11 @@ namespace castor
 
 		int alpha0 = bitstring[0];
 		int alpha1 = bitstring[1];
-		uint32_t colors = *UInt32CPtr( &bitstring[8] );
+		uint32_t colors = *reinterpret_cast< UInt32CPtr >( &bitstring[8] );
 
-		std::array< int, 4 > color_r{};
-		std::array< int, 4 > color_g{};
-		std::array< int, 4 > color_b{};
+		Array< int, 4 > color_r{};
+		Array< int, 4 > color_g{};
+		Array< int, 4 > color_b{};
 		// color_x[] has a value between 0 and 248 with the lower three bits zero.
 		color_b[0] = int( ( colors & 0x0000001F ) << 3 );
 		color_g[0] = int( ( colors & 0x000007E0 ) >> ( 5 - 2 ) );
@@ -693,10 +693,10 @@ namespace castor
 		color_r[3] = int( pxdef::doDivide0To767By3( uint32_t( color_r[0] + 2 * color_r[1] ) ) );
 		color_g[3] = int( pxdef::doDivide0To767By3( uint32_t( color_g[0] + 2 * color_g[1] ) ) );
 		color_b[3] = int( pxdef::doDivide0To767By3( uint32_t( color_b[0] + 2 * color_b[1] ) ) );
-		uint32_t pixels = *UInt32CPtr( &bitstring[12] );
+		uint32_t pixels = *reinterpret_cast< UInt32CPtr >( &bitstring[12] );
 		uint64_t alpha_bits = uint32_t( bitstring[2] )
 			| ( uint32_t( bitstring[3] ) << 8 )
-			| ( ( *UInt32CPtr( &bitstring[4] ) ) << 16 );
+			| ( ( *reinterpret_cast< UInt32CPtr >( &bitstring[4] ) ) << 16 );
 
 		for ( int i = 0; i < 16; i++ )
 		{
@@ -734,7 +734,7 @@ namespace castor
 				}
 			}
 
-			*UInt32Ptr( pixelBuffer + i * 4 ) = pxdef::doPack32( uint32_t( color_r[pixel] )
+			*reinterpret_cast< UInt32Ptr >( pixelBuffer + i * 4 ) = pxdef::doPack32( uint32_t( color_r[pixel] )
 				, uint32_t( color_g[pixel] )
 				, uint32_t( color_b[pixel] )
 				, uint32_t( alpha ) );

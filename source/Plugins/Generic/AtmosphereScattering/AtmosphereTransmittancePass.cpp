@@ -98,7 +98,7 @@ namespace atmosphere_scattering
 		, AtmosphereScatteringUbo const & atmosphereUbo
 		, crg::ImageViewId const & resultView
 		, bool const & enabled )
-		: m_shader{ "TransmittancePass", transmittance::getProgram( *device.renderSystem.getEngine(), getExtent( resultView ) ) }
+		: m_shader{ cuT( "TransmittancePass" ), transmittance::getProgram( *device.renderSystem.getEngine(), getExtent( resultView ) ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
 	{
 		auto renderSize = getExtent( resultView );
@@ -112,7 +112,7 @@ namespace atmosphere_scattering
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.enabled( &enabled )
 					.build( framePass, context, graph );
-				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );

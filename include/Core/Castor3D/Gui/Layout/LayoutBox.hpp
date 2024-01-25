@@ -47,7 +47,7 @@ namespace castor3d
 		void doUpdate()override;
 
 		uint32_t doComputeSeparator( uint32_t component )const;
-		std::pair< int32_t, uint32_t > doGetFixedPosSize( Item const & item
+		castor::Pair< int32_t, uint32_t > doGetFixedPosSize( Item const & item
 			, uint32_t limit
 			, uint32_t component )const;
 

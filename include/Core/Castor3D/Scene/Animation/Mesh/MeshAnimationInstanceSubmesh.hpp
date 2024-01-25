@@ -54,8 +54,8 @@ namespace castor3d
 		 *\param[in]	curbb	La bounding box pour le tampon d'animation courant.
 		 */
 		C3D_API void update( float factor
-			, std::vector< float > const & prv
-			, std::vector< float > const & cur
+			, castor::Vector< float > const & prv
+			, castor::Vector< float > const & cur
 			, castor::BoundingBox const & prvbb
 			, castor::BoundingBox const & curbb );
 		/**
@@ -78,7 +78,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Les poids courants.
 		 */
-		std::vector< float > getWeights()const
+		castor::Vector< float > getWeights()const
 		{
 			return m_cur;
 		}
@@ -89,7 +89,7 @@ namespace castor3d
 		MeshAnimationSubmesh & m_animationObject;
 		//!\~english	The current animation buffer.
 		//!\~french		Le tampon d'animation actuel.
-		std::vector< float > m_cur;
+		castor::Vector< float > m_cur;
 	};
 }
 

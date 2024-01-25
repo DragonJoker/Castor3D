@@ -34,7 +34,7 @@ namespace castor3d
 		{
 			Texture result{ device
 				, resources
-				, "RadianceComputerResult"
+				, cuT( "RadianceComputerResult" )
 				, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT
 				, { size[0], size[1], 1u }
 				, 6u
@@ -77,7 +77,7 @@ namespace castor3d
 
 		static ashes::PipelineShaderStageCreateInfoArray doCreateProgram( RenderDevice const & device )
 		{
-			ProgramModule programModule{ "RadianceCompute" };
+			ProgramModule programModule{ cuT( "RadianceCompute" ) };
 			{
 				sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
@@ -94,14 +94,14 @@ namespace castor3d
 				auto outWorldPosition = writer.declOutput< sdw::Vec3 >( "outWorldPosition", sdw::EntryPoint::eVertex, 0u );
 				auto outColour = writer.declOutput< sdw::Vec4 >( "outColour", sdw::EntryPoint::eFragment, 0u );
 
-				writer.implementEntryPointT< sdw::VoidT, sdw::VoidT >( [&]( sdw::VertexIn const & in
+				writer.implementEntryPointT< sdw::VoidT, sdw::VoidT >( [&]( sdw::VertexIn const &
 					, sdw::VertexOut out )
 					{
 						outWorldPosition = inPosition;
 						out.vtx.position = ( c3d_viewProjection * vec4( inPosition, 1.0_f ) ).xyww();
 					} );
 
-				writer.implementEntryPointT< sdw::VoidT, sdw::VoidT >( [&]( sdw::FragmentIn const & in
+				writer.implementEntryPointT< sdw::VoidT, sdw::VoidT >( [&]( sdw::FragmentIn const &
 					, sdw::FragmentOut const & )
 					{
 						// From https://learnopengl.com/#!PBR/Lighting
@@ -194,12 +194,12 @@ namespace castor3d
 			ashes::RenderPassCreateInfo createInfo
 			{
 				0u,
-				std::move( attaches ),
-				std::move( subpasses ),
-				std::move( dependencies ),
+				castor::move( attaches ),
+				castor::move( subpasses ),
+				castor::move( dependencies ),
 			};
 			auto result = device->createRenderPass( "RadianceComputer"
-				, std::move( createInfo ) );
+				, castor::move( createInfo ) );
 			return result;
 		}
 	}
@@ -217,7 +217,7 @@ namespace castor3d
 		, m_srcImage{ m_srcView.image.get() }
 		, m_srcImageView{ radcomp::doCreateSrcView( *m_srcImage ) }
 		, m_renderPass{ radcomp::doCreateRenderPass( m_device, m_result.getFormat() ) }
-		, m_commands{ m_device, *m_device.graphicsData(), "RadianceComputer" }
+		, m_commands{ m_device, *m_device.graphicsData(), cuT( "RadianceComputer" ) }
 	{
 		auto & dstTexture = m_result;
 		auto & context = m_device.makeContext();
@@ -225,7 +225,7 @@ namespace castor3d
 		for ( auto face = 0u; face < 6u; ++face )
 		{
 			auto & facePass = m_renderPasses[face];
-			auto name = "RadianceComputer" + castor::string::toString( face );
+			auto name = "RadianceComputer" + castor::string::toMbString( face );
 			// Create the views.
 			facePass.dstView = dstTexture.resources->createImageView( context, dstTexture.subViewsId[face] );
 			// Initialise the frame buffer.
@@ -237,7 +237,7 @@ namespace castor3d
 				, size.getHeight()
 				, 1u );
 			facePass.frameBuffer = m_renderPass->createFrameBuffer( name
-				, std::move( createInfo ) );
+				, castor::move( createInfo ) );
 		}
 
 		auto program = radcomp::doCreateProgram( m_device );

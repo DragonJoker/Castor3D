@@ -42,7 +42,7 @@ namespace atmosphere_scattering
 		CloudsData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+			: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
 		{
 		}
 
@@ -109,8 +109,8 @@ namespace atmosphere_scattering
 		}
 
 	public:
-		static const castor::String Buffer;
-		static const castor::String Data;
+		static const castor::MbString Buffer;
+		static const castor::MbString Data;
 
 	private:
 		castor3d::RenderDevice const & m_device;

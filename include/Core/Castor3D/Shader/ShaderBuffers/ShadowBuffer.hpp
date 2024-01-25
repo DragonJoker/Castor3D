@@ -34,7 +34,7 @@ namespace castor3d
 		 *\param[in]	device	Le device GPU.
 		 *\param[in]	count	Le nombre maximal de passes.
 		 */
-		C3D_API ShadowBuffer( RenderDevice const & device );
+		C3D_API explicit ShadowBuffer( RenderDevice const & device );
 		C3D_API ~ShadowBuffer()noexcept;
 		/**
 		 *\~english

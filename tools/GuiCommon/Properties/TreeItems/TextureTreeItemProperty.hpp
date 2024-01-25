@@ -27,11 +27,11 @@ namespace GuiCommon
 				, castor3d::PassMapComponentUPtr pownComponent = {}
 				, castor3d::PassMapComponentRPtr pcomponent = {}
 				, PropertyArray pproperties = {} )
-				: flag{ std::move( pflag ) }
-				, configuration{ std::move( pconfiguration ) }
-				, ownComponent{ std::move( pownComponent ) }
-				, component{ std::move( pcomponent ) }
-				, properties{ std::move( pproperties ) }
+				: flag{ pflag }
+				, configuration{ castor::move( pconfiguration ) }
+				, ownComponent{ castor::move( pownComponent ) }
+				, component{ pcomponent }
+				, properties{ castor::move( pproperties ) }
 
 			{
 			}
@@ -49,8 +49,8 @@ namespace GuiCommon
 			bool isSetting{};
 		};
 
-		using PropertiesPtr = std::unique_ptr< Properties >;
-		using PropertiesArray = std::vector< PropertiesPtr >;
+		using PropertiesPtr = castor::RawUniquePtr< Properties >;
+		using PropertiesArray = castor::Vector< PropertiesPtr >;
 
 	public:
 		/**
@@ -74,7 +74,7 @@ namespace GuiCommon
 		void doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )override;
 
 		void moveComponentsToPass( castor3d::PassComponentUPtr component );
-		void moveComponentsToProps( std::vector< castor3d::PassComponentUPtr > removed );
+		void moveComponentsToProps( castor::Vector< castor3d::PassComponentUPtr > removed );
 
 	private:
 		castor3d::Pass & m_pass;

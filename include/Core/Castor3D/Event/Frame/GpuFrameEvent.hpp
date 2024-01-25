@@ -96,7 +96,7 @@ namespace castor3d
 	template< typename EventT, typename ... ParamsT >
 	inline GpuFrameEventUPtr makeGpuFrameEvent( ParamsT && ... params )
 	{
-		return castor::makeUniqueDerived< GpuFrameEvent, EventT >( std::forward< ParamsT >( params )... );
+		return castor::makeUniqueDerived< GpuFrameEvent, EventT >( castor::forward< ParamsT >( params )... );
 	}
 }
 

@@ -1,106 +1,11 @@
 #include "CastorUtils/Miscellaneous/StringUtils.hpp"
 
+#include <codecvt>
+
 #pragma warning( disable: 4273 )
 
 namespace castor::string
 {
-	namespace helpers
-	{
-		template< typename StringT >
-		std::vector< StringT > split( StringT const & text
-			, StringView delims
-			, uint32_t maxSplits
-			, bool keepEmpty )
-		{
-			std::vector< StringT >	result;
-
-			if ( !text.empty() && !delims.empty() && maxSplits > 0 )
-			{
-				result.reserve( maxSplits + 1 );
-				std::size_t pos = 0;
-				std::size_t start = 0;
-
-				do
-				{
-					pos = text.find_first_of( delims, start );
-
-					if ( pos == start )
-					{
-						start = pos + 1;
-
-						if ( keepEmpty )
-						{
-							result.emplace_back();
-						}
-					}
-					else if ( pos == std::string::npos || result.size() == maxSplits )
-					{
-						if ( StringT remnants = text.substr( start );
-							!remnants.empty() || keepEmpty )
-						{
-							result.push_back( remnants );
-						}
-
-						pos = String::npos;
-					}
-					else
-					{
-						result.push_back( text.substr( start, pos - start ) );
-						start = pos + 1;
-					}
-
-				}
-				while ( pos != std::string::npos );
-			}
-
-			return result;
-		}
-
-		template< typename StringT >
-		StringT & trim( StringT & text
-			, bool left
-			, bool right
-			, StringView seps )
-		{
-			if ( !text.empty() )
-			{
-				if ( left )
-				{
-					if ( auto index = text.find_first_not_of( seps );
-						index > 0 )
-					{
-						if ( index != String::npos )
-						{
-							text = text.substr( index, String::npos );
-						}
-						else
-						{
-							text = text.substr( 0, 0 );
-						}
-					}
-				}
-
-				if ( right && !text.empty() )
-				{
-					if ( auto index = text.find_last_not_of( seps );
-						index < text.size() - 1 )
-					{
-						if ( index != String::npos )
-						{
-							text = text.substr( 0, index + 1 );
-						}
-						else
-						{
-							text = text.substr( 0, 0 );
-						}
-					}
-				}
-			}
-
-			return text;
-		}
-	}
-
 	bool isInteger( String const & text, CU_UnusedParam( std::locale const &, locale ) )
 	{
 		bool result = false;
@@ -353,49 +258,18 @@ namespace castor::string
 		return text;
 	}
 
-	StringArray split( String const & text
-		, StringView delims
-		, uint32_t maxSplits
-		, bool keepEmpty )
-	{
-		return helpers::split( text, delims, maxSplits, keepEmpty );
-	}
-
-	StringViewArray split( StringView text
-		, StringView delims
-		, uint32_t maxSplits
-		, bool keepEmpty )
-	{
-		return helpers::split( text, delims, maxSplits, keepEmpty );
-	}
-
-	String & trim( String & text
-		, bool left
-		, bool right
-		, StringView seps )
-	{
-		return helpers::trim( text, left, right, seps );
-	}
-
-	StringView & trim( StringView & text
-		, bool left
-		, bool right
-		, StringView seps )
-	{
-		return helpers::trim( text, left, right, seps );
-	}
-
 	String toString( char32_t value )
 	{
-		std::array< char32_t, 2u > arr{ value, 0 };
-		return toString( reinterpret_cast< char const * >( arr.data() ) );
+		Array< char32_t, 2u > arr{ value, 0 };
+		using CharCPtr = char const *;
+		return toString( CharCPtr( arr.data() ) );
 	}
 
 	String toString( uint8_t value, int base, std::locale const & locale )
 	{
 		StringStream result;
 		result.imbue( locale );
-		result << manip::xbase( base ) << value;
+		result << manip::baseT< xchar >( base ) << value;
 		return result.str();
 	}
 
@@ -403,7 +277,7 @@ namespace castor::string
 	{
 		StringStream result;
 		result.imbue( locale );
-		result << manip::xbase( base ) << value;
+		result << manip::baseT< xchar >( base ) << value;
 		return result.str();
 	}
 
@@ -411,7 +285,7 @@ namespace castor::string
 	{
 		StringStream result;
 		result.imbue( locale );
-		result << manip::xbase( base ) << value;
+		result << manip::baseT< xchar >( base ) << value;
 		return result.str();
 	}
 
@@ -419,7 +293,7 @@ namespace castor::string
 	{
 		StringStream result;
 		result.imbue( locale );
-		result << manip::xbase( base ) << value;
+		result << manip::baseT< xchar >( base ) << value;
 		return result.str();
 	}
 
@@ -427,7 +301,7 @@ namespace castor::string
 	{
 		StringStream result;
 		result.imbue( locale );
-		result << manip::xbase( base ) << value;
+		result << manip::baseT< xchar >( base ) << value;
 		return result.str();
 	}
 
@@ -435,7 +309,7 @@ namespace castor::string
 	{
 		StringStream result;
 		result.imbue( locale );
-		result << manip::xbase( base ) << value;
+		result << manip::baseT< xchar >( base ) << value;
 		return result.str();
 	}
 
@@ -443,101 +317,71 @@ namespace castor::string
 	{
 		StringStream result;
 		result.imbue( locale );
-		result << manip::xbase( base ) << value;
+		result << manip::baseT< xchar >( base ) << value;
 		return result.str();
 	}
 
-	U32String toU32String( String const & text )
+	MbString toMbString( char32_t value )
 	{
-		U32String result;
-
-		for ( string::utf8::const_iterator it{ text.begin() }; it != text.end(); ++it )
-		{
-			result += *it;
-		}
-
-		return result;
+		Array< char32_t, 2u > arr{ value, 0 };
+		using CharCPtr = char const *;
+		return toMbString( CharCPtr( arr.data() ) );
 	}
 
-	String & replace( String & text, xchar lookup, xchar replacement )
+	MbString toMbString( uint8_t value, int base, std::locale const & locale )
 	{
-		return replace( text
-			, String{ lookup, cuT( '\0' ) }
-			, String{ replacement, cuT( '\0' ) } );
+		MbStringStream result;
+		result.imbue( locale );
+		result << manip::baseT< mbchar >( base ) << value;
+		return result.str();
 	}
 
-	String & replace( String & text, StringView lookup, xchar replacement )
+	MbString toMbString( int16_t value, int base, std::locale const & locale )
 	{
-		return replace( text
-			, lookup
-			, String{ replacement, cuT( '\0' ) } );
+		MbStringStream result;
+		result.imbue( locale );
+		result << manip::baseT< mbchar >( base ) << value;
+		return result.str();
 	}
 
-	String & replace( String & text, xchar lookup, StringView replacement )
+	MbString toMbString( uint16_t value, int base, std::locale const & locale )
 	{
-		return replace( text
-			, String{ lookup, cuT( '\0' ) }
-			, replacement );
+		MbStringStream result;
+		result.imbue( locale );
+		result << manip::baseT< mbchar >( base ) << value;
+		return result.str();
 	}
 
-	String & replace( String & text, StringView lookup, StringView replacement )
+	MbString toMbString( int32_t value, int base, std::locale const & locale )
 	{
-		String result;
-		std::size_t currentPos = 0;
-		std::size_t pos = 0;
-
-		while ( ( pos = text.find( lookup, currentPos ) ) != String::npos )
-		{
-			result.append( text.substr( currentPos, pos - currentPos ) );
-			result.append( replacement );
-			currentPos = pos + lookup.size();
-		}
-
-		if ( currentPos != text.size() )
-		{
-			result.append( text.substr( currentPos, pos - currentPos ) );
-		}
-
-		text = result;
-		return text;
+		MbStringStream result;
+		result.imbue( locale );
+		result << manip::baseT< mbchar >( base ) << value;
+		return result.str();
 	}
 
-	String getLongestCommonSubstring( String const & lhs
-		, String const & rhs )
+	MbString toMbString( uint32_t value, int base, std::locale const & locale )
 	{
-		if ( lhs.empty() )
-		{
-			return rhs;
-		}
+		MbStringStream result;
+		result.imbue( locale );
+		result << manip::baseT< mbchar >( base ) << value;
+		return result.str();
+	}
 
-		if ( rhs.empty() )
-		{
-			return lhs;
-		}
+	MbString toMbString( int64_t value, int base, std::locale const & locale )
+	{
+		MbStringStream result;
+		result.imbue( locale );
+		result << manip::baseT< mbchar >( base ) << value;
+		return result.str();
+	}
 
-		std::vector< String > substrings;
-
-		for ( auto beg = lhs.begin(); beg != std::prev( lhs.end() ); ++beg )
-		{
-			for ( auto end = beg; end != lhs.end(); ++end )
-			{
-				if ( rhs.find( String{ beg, std::next( end ) } ) != String::npos )
-				{
-					substrings.emplace_back( beg, std::next( end ) );
-				}
-			}
-		}
-
-		if ( substrings.empty() )
-		{
-			return castor::String{};
-		}
-
-		return *std::max_element( substrings.begin(), substrings.end(),
-			[]( auto & elem1, auto & elem2 )
-			{
-				return elem1.length() < elem2.length();
-			} );
+	MbString toMbString( uint64_t value, int base, std::locale const & locale )
+	{
+		MbStringStream result;
+		result.imbue( locale );
+		result << manip::baseT< mbchar >( base ) << value;
+		return result.str();
 	}
 
 	bool endsWith( StringView value
@@ -558,5 +402,178 @@ namespace castor::string
 		, StringView lookup )
 	{
 		return value.find( lookup ) == 0;
+	}
+}
+
+namespace castor
+{
+	namespace convert
+	{
+		thread_local std::locale const loc{ std::locale{ "C" } };
+
+		template< typename InChar, typename OutChar >
+		struct StringConverter
+		{
+			static void convert( std::basic_string_view< InChar > strIn
+				, std::basic_string< OutChar > & strOut )
+			{
+				if ( !strIn.empty() )
+				{
+					using facet_type = std::codecvt< OutChar, InChar, std::mbstate_t >;
+					auto const & facet = std::use_facet< facet_type >( loc );
+					std::mbstate_t state{};
+					std::vector< OutChar > dst( strIn.size() * facet.max_length(), 0 );
+					const InChar * endSrc = nullptr;
+					OutChar * endDst = nullptr;
+					facet.in( state
+						, strIn.data(), strIn.data() + strIn.size(), endSrc
+						, &dst[0], &dst[0] + dst.size(), endDst );
+					strOut = std::basic_string< OutChar >( &dst.front(), endDst );
+				}
+			}
+		};
+
+		template<> struct StringConverter< char, wchar_t >
+		{
+			static void convert( std::basic_string_view< char > strIn
+				, std::basic_string< wchar_t > & strOut )
+			{
+				if ( !strIn.empty() )
+				{
+					using TmpInCPtr = char8_t const *;
+					std::u8string tmpIn{ TmpInCPtr( strIn.data() ), strIn.size() };
+					std::u16string tmpOut;
+					StringConverter< char8_t, char16_t >::convert( tmpIn, tmpOut );
+
+					for ( auto c : tmpOut )
+					{
+						strOut += wchar_t( c );
+					}
+				}
+			}
+		};
+
+		template<> struct StringConverter< char, char32_t >
+		{
+			static void convert( std::basic_string_view< char > strIn
+				, std::basic_string< char32_t > & strOut )
+			{
+				if ( !strIn.empty() )
+				{
+					using TmpInCPtr = char8_t const *;
+					std::u8string tmpIn{ TmpInCPtr( strIn.data() ), strIn.size() };
+					StringConverter< char8_t, char32_t >::convert( tmpIn, strOut );
+				}
+			}
+		};
+
+		template<> struct StringConverter< wchar_t, char >
+		{
+			static void convert( std::basic_string_view< wchar_t > strIn
+				, std::basic_string< char > & strOut )
+			{
+				if ( !strIn.empty() )
+				{
+					for ( auto c : strIn )
+					{
+						strOut += string::utf8::fromUtf8( char32_t( c ) ).data();
+					}
+				}
+			}
+		};
+
+		template<> struct StringConverter< char32_t, char >
+		{
+			static void convert( std::basic_string_view< char32_t > strIn
+				, std::basic_string< char > & strOut )
+			{
+				if ( !strIn.empty() )
+				{
+					for ( auto c : strIn )
+					{
+						strOut += string::utf8::fromUtf8( c ).data();
+					}
+				}
+			}
+		};
+
+		template< typename InChar >
+		struct StringConverter< InChar, InChar >
+		{
+			static void convert( std::basic_string_view< InChar > strIn
+				, std::basic_string< InChar > & strOut )
+			{
+				strOut = strIn;
+			}
+		};
+	}
+
+	String makeString( MbStringView const & in )
+	{
+		String result;
+		convert::StringConverter< mbchar, xchar >::convert( in, result );
+		return result;
+	}
+
+	String makeString( WStringView const & in )
+	{
+		String result;
+		convert::StringConverter< wchar, xchar >::convert( in, result );
+		return result;
+	}
+
+	String makeString( U32StringView const & in )
+	{
+		String result;
+
+		if constexpr ( std::is_same_v< xchar, mbchar > )
+		{
+			MbString tmp;
+			convert::StringConverter< char32_t, mbchar >::convert( in, tmp );
+			result = makeString( tmp );
+		}
+		else
+		{
+			for ( auto c : in )
+			{
+				result += xchar( c );
+			}
+		}
+
+		return result;
+	}
+
+	MbString toUtf8( WStringView in )
+	{
+		MbString result;
+		convert::StringConverter< wchar, mbchar >::convert( in, result );
+		return result;
+	}
+
+	WString toSystemWide( MbStringView in )
+	{
+		WString result;
+		convert::StringConverter< mbchar, wchar >::convert( in, result );
+		return result;
+	}
+
+	U32String toUtf8U32String( StringView in )
+	{
+		U32String result;
+
+		if constexpr ( std::is_same_v< xchar, mbchar > )
+		{
+			for ( auto it = string::utf8::cbegin( in ); it != in.end(); ++it )
+			{
+				result += *it;
+			}
+		}
+		else
+		{
+			auto tmp = toUtf8( in );
+			convert::StringConverter< mbchar, char32_t >::convert( tmp, result );
+		}
+
+		return result;
 	}
 }

@@ -16,12 +16,12 @@ namespace castor
 	*\brief
 	*	Atomic operators based spin lock implementation.
 	*\remarks
-	*	Uses the same interface as std::mutex.
+	*	Uses the same interface as castor::Mutex.
 	*\~french
 	*\brief
 	*	Implémentation de spin lock basée sur les opérations atomiques.
 	*\remarks
-	*	Utilise la même interface que std::mutex.
+	*	Utilise la même interface que castor::Mutex.
 	*/
 	class SpinMutex;
 	/**

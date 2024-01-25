@@ -4,8 +4,6 @@
 
 #include <numeric>
 
-using namespace castor;
-
 namespace Testing
 {
 	CastorUtilsArrayViewTest::CastorUtilsArrayViewTest()
@@ -21,10 +19,10 @@ namespace Testing
 	void CastorUtilsArrayViewTest::BasicTest()
 	{
 		{
-			CT_ON( cuT( "	Check build from dynamically allocated buffer" ) );
+			CT_ON("	Check build from dynamically allocated buffer" );
 			uint64_t const size = 8;
 			int * tmp = new int[size];
-			ArrayView< int > view1 = castor::makeArrayView( tmp, size );
+			castor::ArrayView< int > view1 = castor::makeArrayView( tmp, size );
 			CT_CHECK( view1.size() == size );
 			CT_CHECK( !view1.empty() );
 			CT_CHECK( view1.begin() == tmp );
@@ -45,10 +43,10 @@ namespace Testing
 			delete[] tmp;
 		}
 		{
-			CT_ON( cuT( "	Check build from statically allocated buffer" ) );
+			CT_ON("	Check build from statically allocated buffer" );
 			static size_t const size = 8;
 			int tmp[size];
-			ArrayView< int > view1 = makeArrayView( tmp );
+			castor::ArrayView< int > view1 = castor::makeArrayView( tmp );
 			CT_CHECK( view1.size() == size );
 			CT_CHECK( !view1.empty() );
 			CT_CHECK( view1.begin() == tmp );
@@ -68,10 +66,10 @@ namespace Testing
 			CT_CHECK( *view1.rbegin() == tmp[--index] );
 		}
 		{
-			CT_ON( cuT( "	Check build buffer part" ) );
+			CT_ON("	Check build buffer part" );
 			size_t const size = 0;
 			int * tmp = new int[size + 1];
-			ArrayView< int > view1 = makeArrayView( tmp, size );
+			castor::ArrayView< int > view1 = castor::makeArrayView( tmp, size );
 			CT_CHECK( view1.size() == size );
 			CT_CHECK( view1.empty() );
 			CT_CHECK( view1.begin() == tmp );

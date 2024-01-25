@@ -12,7 +12,7 @@ namespace light_streaks
 	KawaseData::KawaseData( sdw::ShaderWriter & writer
 		, ast::expr::ExprPtr expr
 		, bool enabled )
-		: sdw::StructInstance{ writer, std::move( expr ), enabled }
+		: sdw::StructInstance{ writer, castor::move( expr ), enabled }
 		, pixelSize{ getMember< sdw::Vec2 >( "pixelSize" ) }
 		, direction{ getMember< sdw::Vec2 >( "direction" ) }
 		, samples{ getMember< sdw::Int >( "samples" ) }
@@ -40,8 +40,8 @@ namespace light_streaks
 
 	//*********************************************************************************************
 
-	castor::String const KawaseUbo::Buffer = cuT( "Kawase" );
-	castor::String const KawaseUbo::Data = cuT( "c3d_kawaseData" );
+	castor::MbString const KawaseUbo::Buffer = "Kawase";
+	castor::MbString const KawaseUbo::Data = "c3d_kawaseData";
 
 	KawaseUbo::KawaseUbo( castor3d::RenderDevice const & device )
 		: m_device{ device }

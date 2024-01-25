@@ -198,7 +198,7 @@ namespace atmosphere_scattering
 		, WeatherUbo const & weatherUbo
 		, crg::ImageViewId const & resultView
 		, bool const & enabled )
-		: m_shader{ "Clouds/WeatherPass", weather::getProgram( *device.renderSystem.getEngine(), getExtent( resultView ).width ) }
+		: m_shader{ cuT( "Clouds/WeatherPass" ), weather::getProgram( *device.renderSystem.getEngine(), getExtent( resultView ).width ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
 	{
 		auto renderSize = getExtent( resultView );
@@ -211,7 +211,7 @@ namespace atmosphere_scattering
 
 				if constexpr ( weather::useCompute )
 				{
-					result = std::make_unique< crg::ComputePass >( framePass
+					result = castor::make_unique< crg::ComputePass >( framePass
 						, context
 						, graph
 						, crg::ru::Config{}
@@ -230,7 +230,7 @@ namespace atmosphere_scattering
 						.build( framePass, context, graph );
 				}
 
-				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );

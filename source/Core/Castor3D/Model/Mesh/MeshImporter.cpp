@@ -85,10 +85,8 @@ namespace castor3d
 					meshimp::transformMesh( transform, mesh );
 				}
 
-				bool invertNormals{};
-
-				if ( parameters.get( "invert_normals", invertNormals )
-					&& invertNormals )
+				if ( bool invertNormals{};
+					parameters.get( cuT( "invert_normals" ), invertNormals ) && invertNormals )
 				{
 					for ( auto & submesh : mesh )
 					{
@@ -100,19 +98,19 @@ namespace castor3d
 				}
 
 				bool noOptim = false;
-				auto found = parameters.get( "no_optimisations", noOptim );
 
-				if ( !found || !noOptim )
+				if ( auto found = parameters.get( cuT( "no_optimisations" ), noOptim );
+					!found || !noOptim )
 				{
 					MeshPreparer::prepare( mesh, parameters );
 				}
 
 				mesh.computeContainers();
-				log::info << "Loaded mesh [" << mesh.getName() << "]"
-					<< " AABB (" << print( mesh.getBoundingBox() ) << ")"
-					<< ", " << mesh.getVertexCount() << " vertices"
-					<< ", " << mesh.getFaceCount() << " faces"
-					<< ", " << mesh.getSubmeshCount() << " submeshes" << std::endl;
+				log::info << cuT( "Loaded mesh [" ) << mesh.getName() << cuT( "]" )
+					<< cuT( " AABB (" ) << print( mesh.getBoundingBox() ) << cuT( ")" )
+					<< cuT( ", " ) << mesh.getVertexCount() << cuT( " vertices" )
+					<< cuT( ", " ) << mesh.getFaceCount() << cuT( " faces" )
+					<< cuT( ", " ) << mesh.getSubmeshCount() << cuT( " submeshes" ) << std::endl;
 			}
 		}
 		else
@@ -141,7 +139,7 @@ namespace castor3d
 		}
 
 		castor::String preferredImporter = cuT( "any" );
-		parameters.get( "preferred_importer", preferredImporter );
+		parameters.get( cuT( "preferred_importer" ), preferredImporter );
 		auto file = engine.getImporterFileFactory().create( extension
 			, preferredImporter
 			, engine

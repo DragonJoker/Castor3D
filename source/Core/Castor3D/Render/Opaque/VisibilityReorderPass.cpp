@@ -78,12 +78,12 @@ namespace castor3d
 			, ashes::PipelineShaderStageCreateInfoArray const & stages )
 		{
 			auto renderSize = getExtent( data );
-			auto & pass = graph.createPass( name + "/MaterialsCount"
-				, [&stages, &device, enable = std::move( isEnabled ), renderSize]( crg::FramePass const & framePass
+			auto & pass = graph.createPass( castor::toUtf8( name ) + "/MaterialsCount"
+				, [&stages, &device, enable = castor::move( isEnabled ), renderSize]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{
-					auto result = std::make_unique< crg::ComputePass >( framePass
+					auto result = castor::make_unique< crg::ComputePass >( framePass
 						, context
 						, graph
 						, crg::ru::Config{}
@@ -92,7 +92,7 @@ namespace castor3d
 							.groupCountX( castor::divRoundUp( renderSize.width, 16u ) )
 							.groupCountY( castor::divRoundUp( renderSize.height, 16u ) )
 							.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( stages ) ) );
-					device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+					device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 						, result->getTimer() );
 					return result;
 				} );
@@ -178,12 +178,12 @@ namespace castor3d
 			, ashes::Buffer< uint32_t > const & starts
 			, ashes::PipelineShaderStageCreateInfoArray const & stages )
 		{
-			auto & pass = graph.createPass( name + "/MaterialsStart"
-				, [&stages, &device, enable = std::move( isEnabled )]( crg::FramePass const & framePass
+			auto & pass = graph.createPass( castor::toUtf8( name ) + "/MaterialsStart"
+				, [&stages, &device, enable = castor::move( isEnabled )]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{
-					auto result = std::make_unique< crg::ComputePass >( framePass
+					auto result = castor::make_unique< crg::ComputePass >( framePass
 						, context
 						, graph
 						, crg::ru::Config{}
@@ -191,7 +191,7 @@ namespace castor3d
 							.isEnabled( enable )
 							.groupCountX( device.renderSystem.getEngine()->getMaxPassTypeCount() / 64u )
 							.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( stages ) ) );
-					device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+					device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 						, result->getTimer() );
 					return result;
 				} );
@@ -290,12 +290,12 @@ namespace castor3d
 			, ashes::PipelineShaderStageCreateInfoArray const & stages )
 		{
 			auto renderSize = getExtent( data );
-			auto & pass = graph.createPass( name + "/PixelsXY"
-				, [&stages, &device, enable = std::move( isEnabled ), renderSize]( crg::FramePass const & framePass
+			auto & pass = graph.createPass( castor::toUtf8( name ) + "/PixelsXY"
+				, [&stages, &device, enable = castor::move( isEnabled ), renderSize]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{
-					auto result = std::make_unique< crg::ComputePass >( framePass
+					auto result = castor::make_unique< crg::ComputePass >( framePass
 						, context
 						, graph
 						, crg::ru::Config{}
@@ -304,7 +304,7 @@ namespace castor3d
 							.groupCountX( castor::divRoundUp( renderSize.width, 16u ) )
 							.groupCountY( castor::divRoundUp( renderSize.height, 16u ) )
 							.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( stages ) ) );
-					device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+					device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 						, result->getTimer() );
 					return result;
 				} );
@@ -344,7 +344,7 @@ namespace castor3d
 		, ashes::Buffer< uint32_t > const & materialsStarts
 		, ashes::Buffer< castor::Point2ui > const & pixels
 		, crg::RunnablePass::IsEnabledCallback isEnabled )
-		: castor::Named{ "VisibilityReorder" }
+		: castor::Named{ cuT( "VisibilityReorder" ) }
 		, m_computeCountsShader{ VK_SHADER_STAGE_COMPUTE_BIT
 			, getName()
 			, matcount::getProgram( device ) }
@@ -383,7 +383,7 @@ namespace castor3d
 			, previousPasses
 			, previousPass
 			, device
-			, std::move( isEnabled )
+			, castor::move( isEnabled )
 			, data
 			, materialsCounts
 			, materialsStarts

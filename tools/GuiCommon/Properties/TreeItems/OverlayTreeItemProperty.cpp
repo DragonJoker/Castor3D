@@ -79,7 +79,7 @@ namespace GuiCommon
 		static wxString PROPERTY_OVERLAY_BORDER_INNER_UV = _( "Borders Inner UV" );
 		static wxString PROPERTY_OVERLAY_BORDER_OUTER_UV = _( "Borders Outer UV" );
 		static wxString PROPERTY_OVERLAY_BORDER_POSITION = _( "Borders Position" );
-		static std::array< wxString, size_t( castor3d::BorderPosition::eCount ) > PROPERTY_OVERLAY_BORDER_POSITION_TEXTS{ _( "Internal" ), _( "Middle" ), _( "External" ) };
+		static castor::Array< wxString, size_t( castor3d::BorderPosition::eCount ) > PROPERTY_OVERLAY_BORDER_POSITION_TEXTS{ _( "Internal" ), _( "Middle" ), _( "External" ) };
 
 		auto & engine = *overlay.getOverlay().getEngine();
 		addProperty( grid, PROPERTY_CATEGORY_BORDER_PANEL_OVERLAY );
@@ -105,15 +105,15 @@ namespace GuiCommon
 		static wxString PROPERTY_OVERLAY_FONT = _( "Font" );
 		static wxString PROPERTY_OVERLAY_CAPTION = _( "Caption" );
 		static wxString PROPERTY_OVERLAY_HALIGN = _( "Horiz. align." );
-		static std::array< wxString, size_t( castor3d::HAlign::eCount ) > PROPERTY_OVERLAY_HALIGN_TEXTS{ _( "Left" ), _( "Center" ), _( "Right" ) };
+		static castor::Array< wxString, size_t( castor3d::HAlign::eCount ) > PROPERTY_OVERLAY_HALIGN_TEXTS{ _( "Left" ), _( "Center" ), _( "Right" ) };
 		static wxString PROPERTY_OVERLAY_VALIGN = _( "Vertic. align." );
-		static std::array< wxString, size_t( castor3d::VAlign::eCount ) > PROPERTY_OVERLAY_VALIGN_TEXTS{ _( "Top" ), _( "Center" ), _( "Bottom" ) };
+		static castor::Array< wxString, size_t( castor3d::VAlign::eCount ) > PROPERTY_OVERLAY_VALIGN_TEXTS{ _( "Top" ), _( "Center" ), _( "Bottom" ) };
 		static wxString PROPERTY_OVERLAY_WRAPPING = _( "Wrapping" );
-		static std::array< wxString, size_t( castor3d::TextWrappingMode::eCount ) > PROPERTY_OVERLAY_WRAPPING_TEXTS{ _( "None" ), _( "Letter" ), _( "Word" ) };
+		static castor::Array< wxString, size_t( castor3d::TextWrappingMode::eCount ) > PROPERTY_OVERLAY_WRAPPING_TEXTS{ _( "None" ), _( "Letter" ), _( "Word" ) };
 		static wxString PROPERTY_OVERLAY_SPACING = _( "Line spacing" );
-		static std::array< wxString, size_t( castor3d::TextLineSpacingMode::eCount ) > PROPERTY_OVERLAY_SPACING_TEXTS{ _( "Own height" ), _( "Max lines height" ), _( "Max fonts height" ) };
+		static castor::Array< wxString, size_t( castor3d::TextLineSpacingMode::eCount ) > PROPERTY_OVERLAY_SPACING_TEXTS{ _( "Own height" ), _( "Max lines height" ), _( "Max fonts height" ) };
 		static wxString PROPERTY_OVERLAY_TEXTURING = _( "Texture mapping" );
-		static std::array< wxString, size_t( castor3d::TextTexturingMode::eCount ) > PROPERTY_OVERLAY_TEXTURING_TEXTS{ _( "Letter" ), _( "Text" ) };
+		static castor::Array< wxString, size_t( castor3d::TextTexturingMode::eCount ) > PROPERTY_OVERLAY_TEXTURING_TEXTS{ _( "Letter" ), _( "Text" ) };
 
 		wxArrayString haligns{ make_wxArrayString( PROPERTY_OVERLAY_HALIGN_TEXTS ) };
 		wxString halign{ PROPERTY_OVERLAY_HALIGN_TEXTS[size_t( overlay.getHAlign() )] };

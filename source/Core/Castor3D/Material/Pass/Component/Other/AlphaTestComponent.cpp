@@ -29,7 +29,7 @@ namespace castor
 		bool operator()( castor3d::AlphaTestComponent const & object
 			, StringStream & file )override
 		{
-			static std::map< VkCompareOp, String > alphaFuncs
+			static castor::Map< VkCompareOp, String > alphaFuncs
 			{
 				{ VK_COMPARE_OP_ALWAYS, cuT( "always" ) },
 				{ VK_COMPARE_OP_LESS, cuT( "less" ) },

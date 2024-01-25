@@ -4,6 +4,7 @@
 
 #include "CastorUtils/Exception/Assertion.hpp"
 #include "CastorUtils/Miscellaneous/CpuInformations.hpp"
+#include "CastorUtils/Miscellaneous/StringUtils.hpp"
 
 #include <cpuid.h>
 #include <sys/sysctl.h>
@@ -15,7 +16,7 @@ namespace castor::platform
 #pragma clang diagnostic ignored "-Wzero-as-null-pointer-constant"
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wmissing-declarations"
-	void callCpuid( uint32_t func, std::array< int32_t, 4 > & p_data )
+	void callCpuid( uint32_t func, Array< int32_t, 4 > & p_data )
 	{
 		uint32_t a{};
 		uint32_t b{};
@@ -30,21 +31,21 @@ namespace castor::platform
 
 	uint32_t getCoreCount()
 	{
-		int mib[4];
+		Array< int, 4u > mib;
 		int numCPU;
-		size_t len = sizeof( numCPU ); 
+		size_t len = sizeof( numCPU );
 
 		/* set the mib for hw.ncpu */
 		mib[0] = CTL_HW;
 		mib[1] = HW_AVAILCPU;
 
 		/* get the number of CPUs from the system */
-		sysctl( mib, 2, &numCPU, &len, NULL, 0 );
+		sysctl( mib.data(), 2, &numCPU, &len, nullptr, 0 );
 
 		if ( numCPU < 1 )
 		{
 			mib[1] = HW_NCPU;
-			sysctl( mib, 2, &numCPU, &len, NULL, 0 );
+			sysctl( mib.data(), 2, &numCPU, &len, nullptr, 0 );
 
 			if ( numCPU < 1 )
 			{
@@ -55,18 +56,18 @@ namespace castor::platform
 		return uint32_t( numCPU );
 	}
 
-	std::string getCPUModel()
+	String getCPUModel()
 	{
-		char buffer[1024];
+		Array< char, 1024u > buffer;
 		size_t size = sizeof( buffer );
-		std::string result;
+		MbString result;
 
-		if ( sysctlbyname( "machdep.cpu.brand_string", &buffer, &size, NULL, 0 ) >= 0 )
+		if ( sysctlbyname( "machdep.cpu.brand_string", buffer.data(), &size, nullptr, 0 ) >= 0 )
 		{
-			result = buffer;
+			result = castor::makeString( buffer.data(), size );
 		}
 
-		return result;
+		return makeString( result );
 	}
 #pragma GCC diagnostic pop
 #pragma clang diagnostic pop

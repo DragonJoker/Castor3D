@@ -176,7 +176,7 @@ namespace castor3d
 			{
 				onPassChanged( p );
 			} ) );
-		m_passes.emplace_back( std::move( result ) );
+		m_passes.emplace_back( castor::move( result ) );
 		onChanged( *this );
 		return ret;
 	}
@@ -205,7 +205,7 @@ namespace castor3d
 			{
 				onPassChanged( p );
 			} ) );
-		m_passes.emplace_back( std::move( newPass ) );
+		m_passes.emplace_back( castor::move( newPass ) );
 		onChanged( *this );
 	}
 

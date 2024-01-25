@@ -72,6 +72,25 @@ namespace castor3d
 {
 	namespace scnprs
 	{
+		static SceneRPtr getScene( castor::FileParserContext const & context
+			, OverlayContext const * blockContext
+			, OverlayContext::OverlayPtr const & overlay )
+		{
+			if ( overlay.rptr )
+			{
+				return overlay.rptr->getScene();
+			}
+
+			if ( !blockContext || !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene context in overlay context" ) );
+				CU_Failure( "No scene context in overlay context" );
+				CU_Exception( "No scene context in overlay context" );
+			}
+
+			return blockContext->scene->scene;
+		}
+
 		static void fillMeshImportParameters( castor::FileParserContext & context
 			, castor::String const & meshParams
 			, Parameters & parameters )
@@ -301,7 +320,7 @@ namespace castor3d
 			else
 			{
 				castor::String name;
-				blockContext->overlays->parentOverlays.push_back( std::move( blockContext->overlays->overlay ) );
+				blockContext->overlays->parentOverlays.push_back( castor::move( blockContext->overlays->overlay ) );
 				auto & parent = blockContext->overlays->parentOverlays.back();
 				blockContext->overlays->overlay.rptr = blockContext->engine->tryFindOverlay( params[0]->get( name ) );
 
@@ -329,7 +348,7 @@ namespace castor3d
 			else
 			{
 				castor::String name;
-				blockContext->overlays->parentOverlays.push_back( std::move( blockContext->overlays->overlay ) );
+				blockContext->overlays->parentOverlays.push_back( castor::move( blockContext->overlays->overlay ) );
 				auto & parent = blockContext->overlays->parentOverlays.back();
 				blockContext->overlays->overlay.rptr = blockContext->engine->tryFindOverlay( params[0]->get( name ) );
 
@@ -357,7 +376,7 @@ namespace castor3d
 			else
 			{
 				castor::String name;
-				blockContext->overlays->parentOverlays.push_back( std::move( blockContext->overlays->overlay ) );
+				blockContext->overlays->parentOverlays.push_back( castor::move( blockContext->overlays->overlay ) );
 				auto & parent = blockContext->overlays->parentOverlays.back();
 				blockContext->overlays->overlay.rptr = blockContext->engine->tryFindOverlay( params[0]->get( name ) );
 
@@ -525,7 +544,7 @@ namespace castor3d
 				<< ", HDR(" << blockContext->window.allowHdr << ")"
 				<< ", VSYNC(" << blockContext->window.enableVSync << ")"
 				<< ", FS(" << blockContext->window.fullscreen << ")]" << std::endl;
-			blockContext->root->window = std::move( blockContext->window );
+			blockContext->root->window = castor::move( blockContext->window );
 		}
 		CU_EndAttributePop()
 
@@ -767,7 +786,7 @@ namespace castor3d
 				else
 				{
 					effect->enable( true );
-					effect->setParameters( std::move( parameters ) );
+					effect->setParameters( castor::move( parameters ) );
 				}
 			}
 		}
@@ -813,16 +832,16 @@ namespace castor3d
 			{
 				auto target = blockContext->renderTarget;
 				log::info << "Loaded target [" << target->getName()
-					<< ", FMT(" << ashes::getName( VkFormat( target->getPixelFormat() ) ) << ")"
+					<< ", FMT(" << castor::makeString( ashes::getName( VkFormat( target->getPixelFormat() ) ) ) << ")"
 					<< ", DIM(" << target->getSize() << ")]" << std::endl;
 
 				if ( blockContext->window )
 				{
-					blockContext->window->window.renderTarget = std::move( blockContext->renderTarget );
+					blockContext->window->window.renderTarget = castor::move( blockContext->renderTarget );
 				}
 				else
 				{
-					blockContext->texture->renderTarget = std::move( blockContext->renderTarget );
+					blockContext->texture->renderTarget = castor::move( blockContext->renderTarget );
 				}
 			}
 		}
@@ -1350,7 +1369,7 @@ namespace castor3d
 			else
 			{
 				castor::String name;
-				blockContext->overlays->parentOverlays.push_back( std::move( blockContext->overlays->overlay ) );
+				blockContext->overlays->parentOverlays.push_back( castor::move( blockContext->overlays->overlay ) );
 				auto & parent = blockContext->overlays->parentOverlays.back();
 				blockContext->overlays->overlay.rptr = blockContext->scene->tryFindOverlay( params[0]->get( name ) );
 
@@ -1382,7 +1401,7 @@ namespace castor3d
 			else
 			{
 				castor::String name;
-				blockContext->overlays->parentOverlays.push_back( std::move( blockContext->overlays->overlay ) );
+				blockContext->overlays->parentOverlays.push_back( castor::move( blockContext->overlays->overlay ) );
 				auto & parent = blockContext->overlays->parentOverlays.back();
 				blockContext->overlays->overlay.rptr = blockContext->scene->tryFindOverlay( params[0]->get( name ) );
 
@@ -1414,7 +1433,7 @@ namespace castor3d
 			else
 			{
 				castor::String name;
-				blockContext->overlays->parentOverlays.push_back( std::move( blockContext->overlays->overlay ) );
+				blockContext->overlays->parentOverlays.push_back( castor::move( blockContext->overlays->overlay ) );
 				auto & parent = blockContext->overlays->parentOverlays.back();
 				blockContext->overlays->overlay.rptr = blockContext->scene->tryFindOverlay( params[0]->get( name ) );
 
@@ -1503,7 +1522,7 @@ namespace castor3d
 
 				if ( blockContext->scene->getName() == LoadingScreen::SceneName )
 				{
-					getEngine( *blockContext )->setLoadingScene( std::move( blockContext->ownScene ) );
+					getEngine( *blockContext )->setLoadingScene( castor::move( blockContext->ownScene ) );
 				}
 				else
 				{
@@ -2479,7 +2498,7 @@ namespace castor3d
 
 					if ( material )
 					{
-						for ( auto & submesh : *blockContext->geometry->getMesh() )
+						for ( auto const & submesh : *blockContext->geometry->getMesh() )
 						{
 							blockContext->geometry->setMaterial( *submesh, material );
 						}
@@ -2585,7 +2604,7 @@ namespace castor3d
 
 			if ( blockContext->ownGeometry )
 			{
-				blockContext->scene->scene->addGeometry( std::move( blockContext->ownGeometry ) );
+				blockContext->scene->scene->addGeometry( castor::move( blockContext->ownGeometry ) );
 			}
 		}
 		CU_EndAttributePop()
@@ -2692,7 +2711,7 @@ namespace castor3d
 					scnprs::fillMeshImportParameters( context, meshParams, parameters );
 				}
 
-				auto & engine = *getEngine( *blockContext );
+				auto const & engine = *getEngine( *blockContext );
 				auto extension = castor::string::lowerCase( path.getExtension() );
 
 				if ( !engine.getImporterFileFactory().isTypeRegistered( extension ) )
@@ -2702,7 +2721,7 @@ namespace castor3d
 				else
 				{
 					castor::String preferredImporter = cuT( "any" );
-					parameters.get( "preferred_importer", preferredImporter );
+					parameters.get( cuT( "preferred_importer" ), preferredImporter );
 					auto file = engine.getImporterFileFactory().create( extension
 						, preferredImporter
 						, *blockContext->scene->scene
@@ -2767,7 +2786,7 @@ namespace castor3d
 					parameters.parse( params[1]->get( tmp ) );
 				}
 
-				auto & factory = getEngine( *blockContext )->getMeshFactory();
+				auto const & factory = getEngine( *blockContext )->getMeshFactory();
 				factory.create( params[0]->get< castor::String >() )->generate( *blockContext->mesh, parameters );
 			}
 		}
@@ -2987,7 +3006,7 @@ namespace castor3d
 							}
 						}
 
-						component->getData().addMorphTarget( std::move( buffer ) );
+						component->getData().addMorphTarget( castor::move( buffer ) );
 					}
 
 					mesh.cleanup();
@@ -3016,7 +3035,7 @@ namespace castor3d
 
 				if ( auto material = getEngine( *blockContext )->findMaterial( params[0]->get( name ) ) )
 				{
-					for ( auto & submesh : *blockContext->mesh )
+					for ( auto const & submesh : *blockContext->mesh )
 					{
 						submesh->setDefaultMaterial( material );
 					}
@@ -3088,7 +3107,7 @@ namespace castor3d
 					blockContext->geometry->geometry->setMesh( mesh );
 				}
 
-				for ( auto & submesh : *mesh )
+				for ( auto const & submesh : *mesh )
 				{
 					if ( !submesh->hasRenderComponent() )
 					{
@@ -3125,10 +3144,10 @@ namespace castor3d
 				params[2]->get( targetWeight );
 				auto & animation = *blockContext->morphAnimation;
 
-				for ( auto & submesh : *mesh )
+				for ( auto const & submesh : *mesh )
 				{
 					MeshAnimationSubmesh animSubmesh{ animation, *submesh };
-					animation.addChild( std::move( animSubmesh ) );
+					animation.addChild( castor::move( animSubmesh ) );
 					auto time = castor::Milliseconds{ uint64_t( timeIndex * 1000 ) };
 					auto kfit = animation.find( time );
 					castor3d::MeshMorphTarget * kf{};
@@ -3584,7 +3603,7 @@ namespace castor3d
 					blockContext->submesh->createComponent< Texcoords0Component >();
 				}
 
-				std::vector< InterleavedVertex > vertices{ blockContext->vertexPos.size() / 3 };
+				castor::Vector< InterleavedVertex > vertices{ blockContext->vertexPos.size() / 3 };
 				uint32_t index{ 0u };
 
 				for ( auto & vertex : vertices )
@@ -3874,7 +3893,7 @@ namespace castor3d
 		{
 			auto engine = getEngine( *blockContext );
 			castor::String name;
-			blockContext->parentOverlays.push_back( std::move( blockContext->overlay ) );
+			blockContext->parentOverlays.push_back( castor::move( blockContext->overlay ) );
 			auto & parent = blockContext->parentOverlays.back();
 			blockContext->overlay.rptr = blockContext->scene
 				? blockContext->scene->scene->tryFindOverlay( params[0]->get( name ) )
@@ -3884,7 +3903,7 @@ namespace castor3d
 			{
 				blockContext->overlay.uptr = castor::makeUnique< Overlay >( *engine
 					, OverlayType::ePanel
-					, parent.rptr ? parent.rptr->getScene() : blockContext->scene->scene
+					, scnprs::getScene( context, blockContext, parent )
 					, parent.rptr );
 				blockContext->overlay.rptr = blockContext->overlay.uptr.get();
 				blockContext->overlay.rptr->rename( name );
@@ -3898,7 +3917,7 @@ namespace castor3d
 		{
 			auto engine = getEngine( *blockContext );
 			castor::String name;
-			blockContext->parentOverlays.push_back( std::move( blockContext->overlay ) );
+			blockContext->parentOverlays.push_back( castor::move( blockContext->overlay ) );
 			auto & parent = blockContext->parentOverlays.back();
 			blockContext->overlay.rptr = blockContext->scene
 				? blockContext->scene->scene->tryFindOverlay( params[0]->get( name ) )
@@ -3908,7 +3927,7 @@ namespace castor3d
 			{
 				blockContext->overlay.uptr = castor::makeUnique< Overlay >( *engine
 					, OverlayType::eBorderPanel
-					, parent.rptr ? parent.rptr->getScene() : blockContext->scene->scene
+					, scnprs::getScene( context, blockContext, parent )
 					, parent.rptr );
 				blockContext->overlay.rptr = blockContext->overlay.uptr.get();
 				blockContext->overlay.rptr->rename( name );
@@ -3922,7 +3941,7 @@ namespace castor3d
 		{
 			auto engine = getEngine( *blockContext );
 			castor::String name;
-			blockContext->parentOverlays.push_back( std::move( blockContext->overlay ) );
+			blockContext->parentOverlays.push_back( castor::move( blockContext->overlay ) );
 			auto & parent = blockContext->parentOverlays.back();
 			blockContext->overlay.rptr = blockContext->scene
 				? blockContext->scene->scene->tryFindOverlay( params[0]->get( name ) )
@@ -3932,7 +3951,7 @@ namespace castor3d
 			{
 				blockContext->overlay.uptr = castor::makeUnique< Overlay >( *engine
 					, OverlayType::eText
-					, parent.rptr ? parent.rptr->getScene() : blockContext->scene->scene
+					, scnprs::getScene( context, blockContext, parent )
 					, parent.rptr );
 				blockContext->overlay.rptr = blockContext->overlay.uptr.get();
 				blockContext->overlay.rptr->rename( name );
@@ -3982,7 +4001,7 @@ namespace castor3d
 			}
 
 			CU_Require( !blockContext->parentOverlays.empty() );
-			blockContext->overlay = std::move( blockContext->parentOverlays.back() );
+			blockContext->overlay = castor::move( blockContext->parentOverlays.back() );
 			blockContext->parentOverlays.pop_back();
 		}
 		CU_EndAttributePop()
@@ -4216,7 +4235,7 @@ namespace castor3d
 				castor::String strParams;
 				params[0]->get( strParams );
 				castor::string::replace( strParams, cuT( "\\n" ), cuT( "\n" ) );
-				overlay->getTextOverlay()->setCaption( castor::string::stringCast< char32_t >( strParams ) );
+				overlay->getTextOverlay()->setCaption( castor::toUtf8U32String( strParams ) );
 			}
 			else
 			{
@@ -4288,9 +4307,9 @@ namespace castor3d
 				auto camera = blockContext->scene->scene->addNewCamera( blockContext->name
 					, *blockContext->scene->scene
 					, *node
-					, std::move( *blockContext->viewport.release() ) );
-				camera->setHdrConfig( std::move( blockContext->hdrConfig ) );
-				camera->setColourGradingConfig( std::move( blockContext->colourGradingConfig ) );
+					, castor::move( *blockContext->viewport.release() ) );
+				camera->setHdrConfig( castor::move( blockContext->hdrConfig ) );
+				camera->setColourGradingConfig( castor::move( blockContext->colourGradingConfig ) );
 				log::info << "Loaded camera [" << camera->getName() << "]" << std::endl;
 			}
 		}
@@ -4643,12 +4662,12 @@ namespace castor3d
 					}
 					else
 					{
-						CU_ParsingError( cuT( "Geometry [" ) + name + "] has no mesh" );
+						CU_ParsingError( cuT( "Geometry [" ) + name + cuT( "] has no mesh" ) );
 					}
 				}
 				else
 				{
-					CU_ParsingError( cuT( "No geometry with name [" ) + name + "]" );
+					CU_ParsingError( cuT( "No geometry with name [" ) + name + cuT( "]" ) );
 				}
 			}
 		}
@@ -4684,17 +4703,17 @@ namespace castor3d
 						}
 						else
 						{
-							CU_ParsingError( cuT( "Geometry [" ) + name + "]'s mesh has no skeleton" );
+							CU_ParsingError( cuT( "Geometry [" ) + name + cuT( "]'s mesh has no skeleton" ) );
 						}
 					}
 					else
 					{
-						CU_ParsingError( cuT( "Geometry [" ) + name + "] has no mesh" );
+						CU_ParsingError( cuT( "Geometry [" ) + name + cuT( "] has no mesh" ) );
 					}
 				}
 				else
 				{
-					CU_ParsingError( cuT( "No geometry with name [" ) + name + "]" );
+					CU_ParsingError( cuT( "No geometry with name [" ) + name + cuT( "]" ) );
 				}
 			}
 		}
@@ -4724,7 +4743,7 @@ namespace castor3d
 				}
 				else
 				{
-					CU_ParsingError( cuT( "No node with name [" ) + name + "]" );
+					CU_ParsingError( cuT( "No node with name [" ) + name + cuT( "]" ) );
 				}
 			}
 		}

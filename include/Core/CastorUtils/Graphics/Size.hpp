@@ -19,7 +19,7 @@ namespace castor
 			uint32_t y;
 		};
 		Mbr size;
-		std::array< uint32_t, 2u > buffer;
+		Array< uint32_t, 2u > buffer;
 	};
 
 	class Size
@@ -54,7 +54,7 @@ namespace castor
 		 *\brief		Constructeur par copie
 		 *\param[in]	obj	L'objet à copier
 		 */
-		CU_API Size( Size const & obj )noexcept;
+		CU_API Size( Size const & obj );
 		/**
 		 *\~english
 		 *\brief		Move assignment Constructor

@@ -23,7 +23,7 @@ namespace castor
 
 		if ( !File::fileExists( realPath ) )
 		{
-			CU_Exception( "Can't create the font, invalid name: " + string::stringCast< char >( name ) + ", path: " + string::stringCast< char >( path ) );
+			CU_Exception( cuT( "Can't create the font, invalid name: " ) + name + cuT( ", path: " ) + path );
 		}
 
 		return makeResource< Font, String >( name, height, realPath );

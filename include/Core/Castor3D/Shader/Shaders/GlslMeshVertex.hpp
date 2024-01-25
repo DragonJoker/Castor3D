@@ -68,7 +68,7 @@ namespace castor3d::shader
 		MeshPosition( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
 			, bool enabled = true )
-			: sdw::StructInstance{ writer, std::move( expr ), enabled }
+			: sdw::StructInstance{ writer, castor::move( expr ), enabled }
 			, position{ getMember< sdw::Vec4 >( "position" ) }
 			, fill{ getMemberArray< sdw::Vec4 >( "fill", true ) }
 		{

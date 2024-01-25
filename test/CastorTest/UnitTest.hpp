@@ -4,6 +4,7 @@
 
 #include "CastorTestPrerequisites.hpp"
 
+#include <CastorUtils/Config/ConfigModule.hpp>
 #include <CastorUtils/Config/SmartPtr.hpp>
 
 #include <array>
@@ -49,6 +50,24 @@ namespace Testing
 			std::stringstream stream;
 			stream << value;
 			return stream.str();
+		}
+	};
+
+	template<>
+	struct Stringifier< wchar_t >
+	{
+		static std::string get( wchar_t const & value )
+		{
+			return castor::toUtf8( &value, 1u );
+		}
+	};
+
+	template<>
+	struct Stringifier< char32_t >
+	{
+		static std::string get( char32_t const & value )
+		{
+			return castor::toUtf8( castor::makeString( &value, 1u ) );
 		}
 	};
 
@@ -220,9 +239,16 @@ namespace Testing
 	{
 		static std::string get( std::wstring const & value )
 		{
-			std::stringstream stream;
-			stream << reinterpret_cast< char const * >( value.c_str() );
-			return stream.str();
+			return castor::toUtf8( value );
+		}
+	};
+
+	template<>
+	struct Stringifier< std::u32string >
+	{
+		static std::string get( std::u32string const & value )
+		{
+			return castor::toUtf8( castor::makeString( value ) );
 		}
 	};
 
@@ -516,9 +542,9 @@ namespace Testing
 
 	public:
 		explicit Lazy( std::function< Value() > const & expression )
-			: m_thunk{ std::make_shared< getter >( [expression]()
+			: m_thunk{ castor::make_shared< getter >( [expression]()
 			{
-				return std::make_shared< value_type >( expression() );
+				return castor::make_shared< value_type >( expression() );
 			} ) }
 		{
 		}
@@ -607,7 +633,7 @@ namespace Testing
 
 	public:
 		explicit Lazy( std::function< void() > const & expression )
-			: m_thunk{ std::make_shared< getter >( [expression]()
+			: m_thunk{ castor::make_shared< getter >( [expression]()
 			{
 				return expression();
 			} ) }
@@ -651,11 +677,21 @@ namespace Testing
 	struct TestBlock
 	{
 		TestBlock( TestCase & testCase
-			, std::string const & text );
-		~TestBlock();
+			, std::string text
+			, bool indent );
+		TestBlock( TestCase & testCase
+			, std::wstring text
+			, bool indent );
+		TestBlock( TestCase & testCase
+			, std::u32string text
+			, bool indent );
+		~TestBlock()noexcept;
 
 		TestCase & testCase;
 		std::string text;
+		std::wstring wtext;
+		std::u32string u32text;
+		bool indent;
 	};
 
 	using TestBlockPtr = std::unique_ptr< TestBlock >;
@@ -668,19 +704,44 @@ namespace Testing
 
 	public:
 		explicit TestCase( std::string const & name );
-		virtual ~TestCase();
+		virtual ~TestCase()noexcept = default;
 		void registerTests();
 		void execute( uint32_t & errCount
 			, uint32_t & testCount );
 
 		TestBlockPtr on( std::string const & text )
 		{
-			return doPushBlock( "On " + text );
+			return doPushBlock( "On " + text, true );
 		}
 
-		TestBlockPtr when( std::string text )
+		TestBlockPtr when( std::string const & text )
 		{
-			return doPushBlock( "When " + text );
+			return doPushBlock( "When " + text, true );
+		}
+
+		TestBlockPtr when( std::wstring const & text )
+		{
+			return doPushBlock( L"When " + text, true );
+		}
+
+		TestBlockPtr when( std::u32string const & text )
+		{
+			return doPushBlock( U"When " + text, true );
+		}
+
+		TestBlockPtr andWhen( std::string const & text )
+		{
+			return doPushBlock( "And " + text, false );
+		}
+
+		TestBlockPtr andWhen( std::wstring const & text )
+		{
+			return doPushBlock( L"And " + text, false );
+		}
+
+		TestBlockPtr andWhen( std::u32string const & text )
+		{
+			return doPushBlock( U"And " + text, false );
 		}
 
 		std::string const & getName()const
@@ -705,9 +766,11 @@ namespace Testing
 	private:
 		virtual void doRegisterTests() = 0;
 
-		TestBlockPtr doPushBlock( std::string const & text );
+		TestBlockPtr doPushBlock( std::string const & text, bool indent );
+		TestBlockPtr doPushBlock( std::wstring const & text, bool indent );
+		TestBlockPtr doPushBlock( std::u32string const & text, bool indent );
 		void doPopBlock( TestBlock * block );
-		void doPrintError( std::string const & error );
+		void doPrintError( std::string const & error )const;
 
 	public:
 		void fail( char const * const file
@@ -1116,6 +1179,9 @@ namespace Testing
 #	define CT_WHEN_EX( test, text )\
 	Testing::TestBlockPtr CT_NAME_CONCAT( whenBlock, __LINE__ ){ ( test ).when( text ) }
 
+#	define CT_AND_EX( test, text )\
+	Testing::TestBlockPtr CT_NAME_CONCAT( andBlock, __LINE__ ){ ( test ).andWhen( text ) }
+
 #	define CT_FAILURE( x )\
 	CT_FAILURE_EX( *this, x )
 
@@ -1142,6 +1208,9 @@ namespace Testing
 
 #	define CT_WHEN( text )\
 	CT_WHEN_EX( *this, text )
+
+#	define CT_AND( text )\
+	CT_AND_EX( *this, text )
 }
 
 #endif

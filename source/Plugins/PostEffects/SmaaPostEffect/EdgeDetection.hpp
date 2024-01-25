@@ -33,7 +33,7 @@ namespace smaa
 		EDVertexT( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
 			, bool enabled )
-			: EDVertexStructT< FlagT >{ writer, std::move( expr ), enabled }
+			: EDVertexStructT< FlagT >{ writer, castor::move( expr ), enabled }
 		{
 		}
 

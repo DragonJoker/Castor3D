@@ -41,7 +41,7 @@ namespace castor3d
 			auto camera = castor::makeUnique< Camera >( cuT( "EnvironmentMap_" ) + node.getName()
 				, *node.getScene()
 				, node
-				, std::move( viewport ) );
+				, castor::move( viewport ) );
 			camera->update();
 			return camera;
 		}
@@ -54,11 +54,11 @@ namespace castor3d
 		, CubeMapFace face
 		, SceneBackground & background )
 		: OwnedBy< EnvironmentMap >{ environmentMap }
-		, castor::Named{ "Env" + environmentMap.getScene().getName() + castor::string::toString( index ) + "/" + castor3d::getName( face ) }
+		, castor::Named{ cuT( "Env" ) + environmentMap.getScene().getName() + castor::string::toString( index ) + cuT( "/" ) + castor3d::getName( face ) }
 		, m_device{ device }
-		, m_graph{ device.renderSystem.getEngine()->getGraphResourceHandler(), getName() }
+		, m_graph{ device.renderSystem.getEngine()->getGraphResourceHandler(), castor::toUtf8( getName() ) }
 		, m_background{ background }
-		, m_node{ std::move( faceNode ) }
+		, m_node{ castor::move( faceNode ) }
 		, m_index{ index }
 		, m_face{ face }
 		, m_camera{ envpass::doCreateCamera( *m_node, getOwner()->getSize() ) }
@@ -187,7 +187,7 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto res = std::make_unique< ForwardRenderTechniquePass >( nullptr
+				auto res = castor::make_unique< ForwardRenderTechniquePass >( nullptr
 					, framePass
 					, context
 					, graph
@@ -201,7 +201,7 @@ namespace castor3d
 						.componentModeFlags( ForwardRenderTechniquePass::DefaultComponentFlags )
 					, RenderTechniquePassDesc{ true, SsaoConfig{} }
 					, nullptr );
-				m_node->getScene()->getEngine()->registerTimer( framePass.getFullName()
+				m_node->getScene()->getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, res->getTimer() );
 				m_opaquePass = res.get();
 				return res;
@@ -224,7 +224,7 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto res = std::make_unique< ForwardRenderTechniquePass >( nullptr
+				auto res = castor::make_unique< ForwardRenderTechniquePass >( nullptr
 					, framePass
 					, context
 					, graph
@@ -238,7 +238,7 @@ namespace castor3d
 						.componentModeFlags( ForwardRenderTechniquePass::DefaultComponentFlags )
 					, RenderTechniquePassDesc{ true, SsaoConfig{} }
 					, nullptr );
-				m_node->getScene()->getEngine()->registerTimer( framePass.getFullName()
+				m_node->getScene()->getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, res->getTimer() );
 				m_transparentPass = res.get();
 				return res;
@@ -256,11 +256,11 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = std::make_unique< crg::ImageCopy >( framePass
+				auto result = castor::make_unique< crg::ImageCopy >( framePass
 					, context
 					, graph
 					, getExtent( m_colourRenderView ) );
-				m_node->getScene()->getEngine()->registerTimer( framePass.getFullName()
+				m_node->getScene()->getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
@@ -273,11 +273,11 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = std::make_unique< crg::GenerateMipmaps >( framePass
+				auto result = castor::make_unique< crg::GenerateMipmaps >( framePass
 					, context
 					, graph
 					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-				m_node->getScene()->getEngine()->registerTimer( framePass.getFullName()
+				m_node->getScene()->getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );

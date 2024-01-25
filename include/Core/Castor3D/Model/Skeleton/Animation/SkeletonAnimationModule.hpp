@@ -66,7 +66,7 @@ namespace castor3d
 		NodeTransform transform{};
 		castor::Matrix4x4f cumulative{};
 	};
-	using TransformArray = std::vector< ObjectTransform >;
+	using TransformArray = castor::Vector< ObjectTransform >;
 
 	CU_DeclareSmartPtr( castor3d, SkeletonAnimation, C3D_API );
 	CU_DeclareSmartPtr( castor3d, SkeletonAnimationKeyFrame, C3D_API );
@@ -74,7 +74,7 @@ namespace castor3d
 	CU_DeclareSmartPtr( castor3d, SkeletonAnimationBone, C3D_API );
 	CU_DeclareSmartPtr( castor3d, SkeletonAnimationNode, C3D_API );
 
-	using SkeletonAnimationObjectArray = std::vector< SkeletonAnimationObjectRPtr >;
+	using SkeletonAnimationObjectArray = castor::Vector< SkeletonAnimationObjectRPtr >;
 
 	//@}
 	//@}

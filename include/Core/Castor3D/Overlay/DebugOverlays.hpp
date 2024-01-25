@@ -144,7 +144,7 @@ namespace castor3d
 				, castor::String const & label
 				, Engine & engine
 				, PanelCtrl & parent
-				, std::function< castor::String() > value );
+				, castor::Function< castor::String() > value );
 			DebugPanel( DebugPanel && rhs )noexcept;
 			~DebugPanel()noexcept;
 
@@ -152,7 +152,7 @@ namespace castor3d
 
 		protected:
 			Engine & m_engine;
-			std::function< castor::String() > m_v;
+			castor::Function< castor::String() > m_v;
 			PanelCtrlRPtr m_panel;
 			StaticCtrlRPtr m_label;
 			StaticCtrlRPtr m_value;
@@ -160,7 +160,7 @@ namespace castor3d
 
 		class DebugPanels
 		{
-			using DebugPanelArray = std::vector< DebugPanel >;
+			using DebugPanelArray = castor::Vector< DebugPanel >;
 
 		public:
 			DebugPanels( DebugPanels const & ) = delete;
@@ -176,7 +176,7 @@ namespace castor3d
 			uint32_t updatePosition( uint32_t y );
 			void add( castor::String const & name
 				, castor::String const & label
-				, std::function< castor::String() > value );
+				, castor::Function< castor::String() > value );
 
 		private:
 			Engine & m_engine;
@@ -185,7 +185,7 @@ namespace castor3d
 			DebugPanelArray m_panels;
 		};
 
-		using DebugPanelsPtr = std::unique_ptr< DebugPanels >;
+		using DebugPanelsPtr = castor::RawUniquePtr< DebugPanels >;
 
 		class MainDebugPanel
 		{
@@ -267,17 +267,17 @@ namespace castor3d
 			castor::String m_name;
 			bool m_visible{ true };
 			uint32_t m_visibleCount{};
-			std::map< FramePassTimer *, crg::OnFramePassDestroyConnection > m_timers;
+			castor::Map< FramePassTimer *, crg::OnFramePassDestroyConnection > m_timers;
 			PanelCtrlRPtr m_panel;
 			StaticCtrlRPtr m_passName;
 			TimeOverlays m_cpu;
 			TimeOverlays m_gpu;
 		};
 
-		using PassOverlaysPtr = std::unique_ptr< PassOverlays >;
+		using PassOverlaysPtr = castor::RawUniquePtr< PassOverlays >;
 		class CategoryOverlays;
-		using CategoryOverlaysPtr = std::unique_ptr< CategoryOverlays >;
-		using CategoriesOverlays = std::vector< CategoryOverlaysPtr >;
+		using CategoryOverlaysPtr = castor::RawUniquePtr< CategoryOverlays >;
+		using CategoriesOverlays = castor::Vector< CategoryOverlaysPtr >;
 
 		class CategoryOverlays
 		{
@@ -349,7 +349,7 @@ namespace castor3d
 			int m_posX{};
 			bool m_visible{ true };
 			bool m_parentVisible{ true };
-			std::vector< PassOverlaysPtr > m_passes{};
+			castor::Vector< PassOverlaysPtr > m_passes{};
 			CategoriesOverlays m_categories{};
 			ExpandablePanelCtrlRPtr m_container{};
 			StaticCtrlRPtr m_name{};
@@ -382,14 +382,14 @@ namespace castor3d
 			+ GpuValueWidth;
 		static uint32_t constexpr PanelBaseLevel = 65536u;
 
-		std::mutex m_mutex;
+		castor::Mutex m_mutex;
 		castor::PreciseTimer m_taskTimer{};
 		castor::PreciseTimer m_frameTimer{};
 		castor::PreciseTimer m_debugTimer{};
-		std::unique_ptr< MainDebugPanel > m_debugPanel;
+		castor::RawUniquePtr< MainDebugPanel > m_debugPanel;
 		PanelCtrlRPtr m_passesContainer;
 		CategoryOverlays m_renderPasses;
-		std::array< castor::Nanoseconds, FrameSamplesCount > m_framesTimes{};
+		castor::Array< castor::Nanoseconds, FrameSamplesCount > m_framesTimes{};
 		uint32_t m_frameIndex{ 0 };
 		uint64_t m_frameCount{ 0 };
 		bool m_visible{ false };

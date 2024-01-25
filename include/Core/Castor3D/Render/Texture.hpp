@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "RenderModule.hpp"
 
+#include <ashespp/Image/Image.hpp>
 #include <ashespp/Image/ImageView.hpp>
 
 #include <RenderGraph/GraphContext.hpp>
@@ -192,7 +193,7 @@ namespace castor3d
 		VkImageView targetView{};
 		VkImageView sampledView{};
 		crg::ImageViewIdArray subViewsId{};
-		std::vector< VkImageView > subViews{};
+		castor::Vector< VkImageView > subViews{};
 		ashes::Sampler const * sampler{};
 	};
 
@@ -204,10 +205,10 @@ namespace castor3d
 			, crg::ImageViewId const & viewId
 			, VkImageLayout layout
 			, TextureFactors factors = {} )noexcept
-			: name{ std::move( name ) }
+			: name{ castor::move( name ) }
 			, viewId{ viewId }
 			, layout{ layout }
-			, factors{ std::move( factors ) }
+			, factors{ castor::move( factors ) }
 		{
 		}
 
@@ -215,10 +216,10 @@ namespace castor3d
 			, Texture const & texture
 			, VkImageLayout layout
 			, TextureFactors factors = {} )noexcept
-			: IntermediateView{ std::move( name )
+			: IntermediateView{ castor::move( name )
 				, texture.sampledViewId
 				, layout
-				, std::move( factors ) }
+				, castor::move( factors ) }
 		{
 		}
 

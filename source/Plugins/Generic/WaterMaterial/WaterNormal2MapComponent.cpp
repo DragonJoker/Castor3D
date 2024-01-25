@@ -33,7 +33,7 @@ namespace castor
 		{
 		}
 
-		bool operator()( StringStream & file )
+		bool operator()( StringStream & file )const
 		{
 			return writeMask( file, cuT( "water_normal2_mask" ), m_mask );
 		}
@@ -82,7 +82,7 @@ namespace water
 		static CU_ImplementAttributeParserBlock( parserTexRemapWaterNormal2, SceneImportContext )
 		{
 			auto & plugin = getEngine( *blockContext )->getPassComponentsRegister().getPlugin( WaterNormal2MapComponent::TypeName );
-			blockContext->textureRemapIt = blockContext->textureRemaps.emplace( plugin.getTextureFlags(), TextureConfiguration{} ).first;
+			blockContext->textureRemapIt = blockContext->textureRemaps.try_emplace( plugin.getTextureFlags() ).first;
 			blockContext->textureRemapIt->second = TextureConfiguration{};
 		}
 		CU_EndAttributePushBlock( CSCNSection::eTextureRemapChannel, blockContext )
@@ -157,8 +157,8 @@ namespace water
 		, castor3d::shader::BlendComponents & components
 		, castor3d::shader::SampleTexture const & sampleTexture )const
 	{
-		std::string valueName = "waterNormals2";
-		std::string mapName = "waterNormal2";
+		castor::MbString valueName = "waterNormals2";
+		castor::MbString mapName = "waterNormal2";
 		auto textureName = mapName + "MapAndMask";
 
 		if ( !material.hasMember( textureName )
@@ -210,13 +210,14 @@ namespace water
 	void WaterNormal2MapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		channelFillers.emplace( "water_normal2", ChannelFiller{ getTextureFlags()
+		channelFillers.try_emplace( cuT( "water_normal2" )
+			, getTextureFlags()
 			, []( TextureContext & blockContext )
 			{
-				auto & component = getPassComponent< WaterNormal2MapComponent >( blockContext );
+				auto const & component = getPassComponent< WaterNormal2MapComponent >( blockContext );
 				component.fillChannel( blockContext.configuration
 					, 0x00FFFFFFu );
-			} } );
+			} );
 
 		castor::addParserT( parsers
 			, CSCNSection::eTexture
@@ -250,7 +251,7 @@ namespace water
 	}
 
 	void WaterNormal2MapComponent::Plugin::createMapComponent( Pass & pass
-		, std::vector< PassComponentUPtr > & result )const
+		, castor::Vector< PassComponentUPtr > & result )const
 	{
 		result.push_back( castor::makeUniqueDerived< PassComponent, WaterNormal2MapComponent >( pass ) );
 	}

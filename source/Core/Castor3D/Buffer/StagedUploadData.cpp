@@ -18,22 +18,22 @@ namespace castor3d
 	}
 
 	StagedUploadData::StagedUploadData( RenderDevice const & device
-		, std::string debugName
+		, castor::String debugName
 		, ashes::CommandBufferPtr commandBuffer )
-		: CommandBufferHolder{ std::move( commandBuffer ) }
-		, UploadData{ device, std::move( debugName ), CommandBufferHolder::getData().get() }
-		, m_buffers{ FrameBuffers{ device->createSemaphore( m_debugName ) }
-			, FrameBuffers{ device->createSemaphore( m_debugName ) } }
+		: CommandBufferHolder{ castor::move( commandBuffer ) }
+		, UploadData{ device, castor::move( debugName ), CommandBufferHolder::getData().get() }
+		, m_buffers{ FrameBuffers{ device->createSemaphore( castor::toUtf8( m_debugName ) ) }
+			, FrameBuffers{ device->createSemaphore( castor::toUtf8( m_debugName ) ) } }
 		, m_cpuBuffers{ &m_buffers[0] }
 		, m_gpuBuffers{ &m_buffers[0] }
 		, m_timer{ castor::makeUnique< crg::FramePassTimer >( device.makeContext(), "Upload", crg::TimerScope::eUpdate ) }
 	{
-		m_device.renderSystem.getEngine()->registerTimer( "Upload", *m_timer );
+		m_device.renderSystem.getEngine()->registerTimer( cuT( "Upload" ), *m_timer );
 	}
 
 	StagedUploadData::~StagedUploadData()noexcept
 	{
-		m_device.renderSystem.getEngine()->unregisterTimer( "Upload", *m_timer );
+		m_device.renderSystem.getEngine()->unregisterTimer( cuT( "Upload" ), *m_timer );
 		VkDeviceSize totalSize{};
 
 		for ( auto [buffer, mapped] : m_wholeBuffers )
@@ -48,12 +48,12 @@ namespace castor3d
 
 	void StagedUploadData::doBegin()
 	{
-		m_cpuBlock = std::make_unique< crg::FramePassTimerBlock >( m_timer->start() );
+		m_cpuBlock = castor::make_unique< crg::FramePassTimerBlock >( m_timer->start() );
 		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
 	}
 
-	void StagedUploadData::doPreprocess( std::vector< BufferDataRange > *& pendingBuffers
-		, std::vector< ImageDataRange > *& pendingImages )
+	void StagedUploadData::doPreprocess( castor::Vector< BufferDataRange > *& pendingBuffers
+		, castor::Vector< ImageDataRange > *& pendingImages )
 	{
 		auto const & engine = *m_device.renderSystem.getEngine();
 		m_commandBuffer->beginDebugBlock( { "Buffers Upload"
@@ -208,7 +208,7 @@ namespace castor3d
 
 		if ( offset.getOffset() + data.srcSize > offset.buffer->getSize() )
 		{
-			log::error << "StagedUploadBuffer: Trying to copy more than there can be in staging [" << offset.buffer->getName()
+			log::error << "StagedUploadBuffer: Trying to copy more than there can be in staging [" << castor::makeString( offset.buffer->getName() )
 				<< "] buffer: offset = " << offset.getOffset()
 				<< ", size = " << data.srcSize << std::endl;
 			CU_Failure( "Trying to copy more than there can be in staging buffer" );
@@ -216,14 +216,14 @@ namespace castor3d
 
 		if ( data.dstOffset >= data.dstBuffer->getSize() )
 		{
-			log::error << "StagedUploadBuffer: Trying to copy at invalid offset for target [" << data.dstBuffer->getName()
+			log::error << "StagedUploadBuffer: Trying to copy at invalid offset for target [" << castor::makeString( data.dstBuffer->getName() )
 				<< "] buffer: dstOffset = " << data.dstOffset << std::endl;
 			CU_Failure( "Trying to copy at invalid offset for target buffer" );
 		}
 
 		if ( data.dstOffset + data.srcSize > data.dstBuffer->getSize() )
 		{
-			log::error << "StagedUploadBuffer: Trying to copy more than there is in target [" << data.dstBuffer->getName()
+			log::error << "StagedUploadBuffer: Trying to copy more than there is in target [" << castor::makeString( data.dstBuffer->getName() )
 				<< "] buffer: dstOffset = " << data.dstOffset
 				<< ", size = " << data.srcSize << std::endl;
 			CU_Failure( "Trying to copy more than there is in target buffer" );
@@ -249,7 +249,7 @@ namespace castor3d
 
 		if ( offset.getOffset() + data.srcSize > offset.buffer->getSize() )
 		{
-			log::error << "StagedUploadImage: Trying to copy more than there can be in staging [" << offset.buffer->getName()
+			log::error << "StagedUploadImage: Trying to copy more than there can be in staging [" << castor::makeString( offset.buffer->getName() )
 				<< "] buffer: offset = " << offset.getOffset()
 				<< ", size = " << data.srcSize << std::endl;
 			CU_Failure( "Trying to copy more than there can be in staging buffer" );
@@ -258,21 +258,21 @@ namespace castor3d
 		if ( auto imgSize = data.dstImage->getMemoryRequirements().size;
 			data.srcSize > imgSize )
 		{
-			log::error << "StagedUploadImage: Trying to copy more than there can be in image [" << data.dstImage->getName()
+			log::error << "StagedUploadImage: Trying to copy more than there can be in image [" << castor::makeString( data.dstImage->getName() )
 				<< "] device memory: size = " << data.srcSize << std::endl;
 			CU_Failure( "Trying to copy more than there can be in image" );
 		}
 
 		if ( data.dstRange.baseArrayLayer >= data.dstImage->getLayerCount() )
 		{
-			log::error << "StagedUploadImage: Trying to copy to invalid base array layer for image [" << data.dstImage->getName()
+			log::error << "StagedUploadImage: Trying to copy to invalid base array layer for image [" << castor::makeString( data.dstImage->getName() )
 				<< "]: baseArrayLayer = " << data.dstRange.baseArrayLayer << std::endl;
 			CU_Failure( "Trying to copy to invalid base array layer for image" );
 		}
 
 		if ( data.dstRange.baseArrayLayer + data.dstRange.layerCount > data.dstImage->getLayerCount() )
 		{
-			log::error << "StagedUploadImage: Trying to copy to invalid array layers for image [" << data.dstImage->getName()
+			log::error << "StagedUploadImage: Trying to copy to invalid array layers for image [" << castor::makeString( data.dstImage->getName() )
 				<< "]: baseArrayLayer = " << data.dstRange.baseArrayLayer
 				<< ", layerCount = " << data.dstRange.layerCount << std::endl;
 			CU_Failure( "Trying to copy to invalid array layers for image" );
@@ -280,14 +280,14 @@ namespace castor3d
 
 		if ( data.dstRange.baseMipLevel >= data.dstImage->getMipmapLevels() )
 		{
-			log::error << "StagedUploadImage: Trying to copy to invalid base mip level for image [" << data.dstImage->getName()
+			log::error << "StagedUploadImage: Trying to copy to invalid base mip level for image [" << castor::makeString( data.dstImage->getName() )
 				<< "]: baseMipLevel = " << data.dstRange.baseArrayLayer << std::endl;
 			CU_Failure( "Trying to copy to invalid base mip level for image" );
 		}
 
 		if ( data.dstRange.baseMipLevel + data.dstRange.levelCount > data.dstImage->getMipmapLevels() )
 		{
-			log::error << "StagedUploadImage: Trying to copy to invalid mip levels for image [" << data.dstImage->getName()
+			log::error << "StagedUploadImage: Trying to copy to invalid mip levels for image [" << castor::makeString( data.dstImage->getName() )
 				<< "]: baseMipLevel = " << data.dstRange.baseMipLevel
 				<< ", levelCount = " << data.dstRange.levelCount << std::endl;
 			CU_Failure( "Trying to copy to invalid mip levels for image" );
@@ -359,7 +359,7 @@ namespace castor3d
 			, m_gpuBuffers->currentSize
 			, m_gpuBuffers->buffersCount };
 
-		std::swap( m_cpuBuffers, m_gpuBuffers );
+		castor::swap( m_cpuBuffers, m_gpuBuffers );
 		m_frameIndex = 1u - m_frameIndex;
 
 		if ( fence )
@@ -388,7 +388,7 @@ namespace castor3d
 					CU_Failure( "StagedUpload: Unexpected unmapped buffer" );
 				}
 
-				log::debug << "Releasing staging buffer [" << it->buffer->getBuffer().getName() << "]" << std::endl;
+				log::debug << cuT( "Releasing staging buffer [" ) << castor::makeString( it->buffer->getBuffer().getName() ) << cuT( "]" ) << std::endl;
 				it = m_gpuBuffers->pool.erase( it );
 			}
 			else
@@ -424,11 +424,11 @@ namespace castor3d
 			StagingBuffer buffer{ castor::makeUnique< GpuPackedBaseBuffer >( m_device
 				, VkBufferUsageFlags{ VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT }
 				, VkMemoryPropertyFlags{ VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT }
-				, m_debugName + "Staging" + std::to_string( pool.size() )
+				, m_debugName + cuT( "Staging" ) + castor::string::toString( pool.size() )
 				, ashes::QueueShare{}
 				, GpuBufferPackedAllocator{ uint32_t( maxCount )
 				, m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) } ) };
-			pool.emplace_back( std::move( buffer ) );
+			pool.emplace_back( castor::move( buffer ) );
 			it = std::next( pool.begin()
 				, ptrdiff_t( pool.size() - 1u ) );
 		}
@@ -439,7 +439,7 @@ namespace castor3d
 
 		if ( result.getOffset() + size > result.buffer->getSize() )
 		{
-			log::error << "StagedUploadBuffer: Retrieved invalid offset from [" << result.buffer->getName()
+			log::error << "StagedUploadBuffer: Retrieved invalid offset from [" << castor::makeString( result.buffer->getName() )
 				<< "] buffer: offset = " << result.getOffset()
 				<< ", size = " << size << std::endl;
 			CU_Failure( "Retrieved invalid offset from buffer" );

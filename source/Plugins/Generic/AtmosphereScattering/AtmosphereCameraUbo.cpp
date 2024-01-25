@@ -17,7 +17,7 @@ namespace atmosphere_scattering
 	CameraData::CameraData( sdw::ShaderWriter & writer
 		, ast::expr::ExprPtr expr
 		, bool enabled )
-		: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+		: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
 	{
 	}
 
@@ -33,8 +33,8 @@ namespace atmosphere_scattering
 
 	//************************************************************************************************
 
-	castor::String const CameraUbo::Buffer = cuT( "C3D_ATM_Camera" );
-	castor::String const CameraUbo::Data = cuT( "d" );
+	castor::MbString const CameraUbo::Buffer = "C3D_ATM_Camera";
+	castor::MbString const CameraUbo::Data = "d";
 
 	CameraUbo::CameraUbo( castor3d::RenderDevice const & device
 		, bool & dirty )

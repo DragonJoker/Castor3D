@@ -19,7 +19,7 @@ namespace castor3d
 	class Viewport
 	{
 	public:
-		C3D_API static const std::array< castor::String, size_t( ViewportType::eCount ) > TypeName;
+		C3D_API static const castor::Array< castor::String, size_t( ViewportType::eCount ) > TypeName;
 
 	private:
 		C3D_API Viewport( Engine const & engine
@@ -270,9 +270,9 @@ namespace castor3d
 		*	Mutateurs.
 		*/
 		/**@{*/
-		void setPosition( castor::Position value )noexcept
+		void setPosition( castor::Position const & value )noexcept
 		{
-			m_position = std::move( value );
+			m_position = value;
 		}
 
 		void updateType( ViewportType value )noexcept
@@ -295,9 +295,9 @@ namespace castor3d
 			m_far = value;
 		}
 
-		void updateFovY( castor::Angle value )noexcept
+		void updateFovY( castor::Angle const & value )noexcept
 		{
-			m_fovY = std::move( value );
+			m_fovY = value;
 		}
 
 		void updateLeft( float value )noexcept

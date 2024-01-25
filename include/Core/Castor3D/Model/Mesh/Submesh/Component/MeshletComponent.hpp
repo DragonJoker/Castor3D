@@ -35,7 +35,7 @@ namespace castor3d
 				, Pass const & pass
 				, ObjectBufferOffset const & bufferOffsets
 				, ashes::BufferCRefArray & buffers
-				, std::vector< uint64_t > & offsets
+				, castor::Vector< uint64_t > & offsets
 				, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
 				, uint32_t & currentBinding
 				, uint32_t & currentLocation )override
@@ -60,18 +60,18 @@ namespace castor3d
 				return *m_descriptorLayout;
 			}
 
-			std::vector< Meshlet > const & getMeshletsData()const
+			castor::Vector< Meshlet > const & getMeshletsData()const
 			{
 				return m_meshlets;
 			}
 
-			std::vector< Meshlet > & getMeshletsData()
+			castor::Vector< Meshlet > & getMeshletsData()
 			{
 				needsUpdate();
 				return m_meshlets;
 			}
 
-			std::vector< MeshletCullData > & getCullData()
+			castor::Vector< MeshletCullData > & getCullData()
 			{
 				needsUpdate();
 				return m_cull;
@@ -100,12 +100,12 @@ namespace castor3d
 
 		private:
 			GpuBufferOffsetT< MeshletCullData > m_sourceCullBuffer;
-			std::unordered_map< size_t, GpuBufferOffsetT< MeshletCullData > > m_finalCullBuffers;
-			std::vector< Meshlet > m_meshlets;
-			std::vector< MeshletCullData > m_cull;
+			castor::UnorderedMap< size_t, GpuBufferOffsetT< MeshletCullData > > m_finalCullBuffers;
+			castor::Vector< Meshlet > m_meshlets;
+			castor::Vector< MeshletCullData > m_cull;
 			ashes::DescriptorSetLayoutPtr m_descriptorLayout;
 			ashes::DescriptorSetPoolPtr m_descriptorPool;
-			std::unordered_map< size_t, ashes::DescriptorSetPtr > m_descriptorSets;
+			castor::UnorderedMap< size_t, ashes::DescriptorSetPtr > m_descriptorSets;
 		};
 
 		class Plugin

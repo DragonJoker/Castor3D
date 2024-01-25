@@ -38,7 +38,7 @@ namespace castor3d::shader
 		ShadowData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+			: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
 		{
 		}
 
@@ -69,7 +69,7 @@ namespace castor3d::shader
 		DirectionalShadowData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+			: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
 		{
 		}
 		
@@ -88,7 +88,7 @@ namespace castor3d::shader
 		PointShadowData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+			: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
 		{
 		}
 		
@@ -104,7 +104,7 @@ namespace castor3d::shader
 		SpotShadowData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+			: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
 		{
 		}
 
@@ -122,7 +122,7 @@ namespace castor3d::shader
 		AllShadowData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+			: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
 		{
 		}
 
@@ -144,31 +144,31 @@ namespace castor3d::shader
 		C3D_API SpotShadowData getSpotShadows( sdw::Int const & index )const;
 
 	private:
-		std::unique_ptr< AllShadowData > m_data;
+		castor::RawUniquePtr< AllShadowData > m_data;
 	};
 
 	class Shadow
 	{
 	public:
-		C3D_API static castor::String const MapDepthDirectional;
-		C3D_API static castor::String const MapDepthSpot;
-		C3D_API static castor::String const MapDepthPoint;
-		C3D_API static castor::String const MapDepthCmpDirectional;
-		C3D_API static castor::String const MapDepthCmpSpot;
-		C3D_API static castor::String const MapDepthCmpPoint;
-		C3D_API static castor::String const MapVarianceDirectional;
-		C3D_API static castor::String const MapVarianceSpot;
-		C3D_API static castor::String const MapVariancePoint;
-		C3D_API static castor::String const MapNormalDirectional;
-		C3D_API static castor::String const MapNormalSpot;
-		C3D_API static castor::String const MapNormalPoint;
-		C3D_API static castor::String const MapPositionDirectional;
-		C3D_API static castor::String const MapPositionSpot;
-		C3D_API static castor::String const MapPositionPoint;
-		C3D_API static castor::String const MapFluxDirectional;
-		C3D_API static castor::String const MapFluxSpot;
-		C3D_API static castor::String const MapFluxPoint;
-		C3D_API static castor::String const RandomBuffer;
+		C3D_API static castor::MbString const MapDepthDirectional;
+		C3D_API static castor::MbString const MapDepthSpot;
+		C3D_API static castor::MbString const MapDepthPoint;
+		C3D_API static castor::MbString const MapDepthCmpDirectional;
+		C3D_API static castor::MbString const MapDepthCmpSpot;
+		C3D_API static castor::MbString const MapDepthCmpPoint;
+		C3D_API static castor::MbString const MapVarianceDirectional;
+		C3D_API static castor::MbString const MapVarianceSpot;
+		C3D_API static castor::MbString const MapVariancePoint;
+		C3D_API static castor::MbString const MapNormalDirectional;
+		C3D_API static castor::MbString const MapNormalSpot;
+		C3D_API static castor::MbString const MapNormalPoint;
+		C3D_API static castor::MbString const MapPositionDirectional;
+		C3D_API static castor::MbString const MapPositionSpot;
+		C3D_API static castor::MbString const MapPositionPoint;
+		C3D_API static castor::MbString const MapFluxDirectional;
+		C3D_API static castor::MbString const MapFluxSpot;
+		C3D_API static castor::MbString const MapFluxPoint;
+		C3D_API static castor::MbString const RandomBuffer;
 
 	public:
 		C3D_API Shadow( ShadowOptions shadowOptions
@@ -265,7 +265,7 @@ namespace castor3d::shader
 		ShadowOptions m_shadowOptions;
 		sdw::Vec2Array m_poissonSamples;
 		ShadowsBufferUPtr m_shadowsBuffer;
-		std::unique_ptr< sdw::Vec4Array > m_randomData;
+		castor::RawUniquePtr< sdw::Vec4Array > m_randomData;
 		sdw::Function< sdw::Float
 			, sdw::InVec3
 			, sdw::InVec3

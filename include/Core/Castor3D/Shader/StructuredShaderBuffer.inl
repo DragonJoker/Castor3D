@@ -51,8 +51,8 @@ namespace castor3d
 	{
 		if ( !m_dirty.empty() )
 		{
-			std::vector< ElementType const * > dirty;
-			std::swap( m_dirty, dirty );
+			castor::Vector< ElementType const * > dirty;
+			castor::swap( m_dirty, dirty );
 			auto end = std::unique( dirty.begin(), dirty.end() );
 
 			std::for_each( dirty.begin(), end, [this]( ElementType const * element )

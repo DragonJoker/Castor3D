@@ -18,10 +18,10 @@ namespace castor3d
 
 	public:
 		C3D_API DirectUploadData( RenderDevice const & device
-			, std::string debugName
+			, castor::String debugName
 			, ashes::CommandBuffer const & commandBuffer );
 		C3D_API DirectUploadData( RenderDevice const & device
-			, std::string debugName
+			, castor::String debugName
 			, ashes::CommandPool const & commandPool );
 
 	private:
@@ -32,7 +32,7 @@ namespace castor3d
 			, ashes::Fence const * fence
 			, castor::Milliseconds timeout )override;
 
-		std::vector< ashes::BufferBasePtr > m_buffers;
+		castor::Vector< ashes::BufferBasePtr > m_buffers;
 	};
 
 	using InstantDirectUploadData = InstantUploadDataT< DirectUploadData >;

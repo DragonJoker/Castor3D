@@ -48,9 +48,9 @@ namespace c3d_assimp
 
 			for ( auto & skeleton : scene.getSkeletonCache() )
 			{
-				auto skelRootNodeName = file.getExternalName( skeleton.second->getRootNode()->getName() );
+				auto skelRootNodeName = castor::toUtf8( file.getExternalName( skeleton.second->getRootNode()->getName() ) );
 
-				if ( makeString( sceneRootNode.mName ) == skelRootNodeName )
+				if ( toUtf8( sceneRootNode.mName ) == skelRootNodeName )
 				{
 					auto children = castor::makeArrayView( sceneRootNode.mChildren
 						, sceneRootNode.mNumChildren );
@@ -119,9 +119,9 @@ namespace c3d_assimp
 							, getOwner()->getDefaultLightingModel() );
 
 						if ( importer->import( *mat
-							, &file
-							, castor3d::Parameters{}
-						, std::map< castor3d::PassComponentTextureFlag, castor3d::TextureConfiguration >{} ) )
+								, &file
+								, castor3d::Parameters{}
+							, castor::Map< castor3d::PassComponentTextureFlag, castor3d::TextureConfiguration >{} ) )
 						{
 							scene.getMaterialView().add( matName, mat, true );
 						}
@@ -282,7 +282,7 @@ namespace c3d_assimp
 
 		if ( aiMesh.HasBones() )
 		{
-			std::vector< castor3d::VertexBoneData > bonesData( aiMesh.mNumVertices );
+			castor::Vector< castor3d::VertexBoneData > bonesData( aiMesh.mNumVertices );
 			auto meshNode = findMeshNode( aiMeshIndex, *aiScene.mRootNode );
 			auto rootNode = findRootSkeletonNode( *aiScene.mRootNode
 				, castor::makeArrayView( aiMesh.mBones, aiMesh.mNumBones )

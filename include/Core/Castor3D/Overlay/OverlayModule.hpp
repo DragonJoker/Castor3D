@@ -326,7 +326,7 @@ namespace castor3d
 		//!\~french
 		uint32_t pad{};
 
-		auto chars( std::array< TextChar, MaxCharsPerOverlay > & cont )const
+		auto chars( castor::Array< TextChar, MaxCharsPerOverlay > & cont )const
 		{
 			return castor::makeArrayView( cont.begin() + charBegin, charEnd - charBegin );
 		}
@@ -341,7 +341,7 @@ namespace castor3d
 	{
 		uint32_t count{};
 		uint32_t pad{};
-		std::array< TextWord, MaxTextsContsPerOverlay > elems{};
+		castor::Array< TextWord, MaxTextsContsPerOverlay > elems{};
 
 		auto & getNext()
 		{
@@ -398,7 +398,7 @@ namespace castor3d
 			return castor::makeArrayView( cont.elems.begin() + wordBegin, wordEnd - wordBegin );
 		}
 
-		auto chars( std::array< TextChar, MaxCharsPerOverlay > & cont )const
+		auto chars( castor::Array< TextChar, MaxCharsPerOverlay > & cont )const
 		{
 			return castor::makeArrayView( cont.begin() + charBegin, charEnd - charBegin );
 		}
@@ -414,7 +414,7 @@ namespace castor3d
 		castor::Point2f maxRange{};
 		float topOffset{};
 		uint32_t count{};
-		std::array< TextLine, MaxTextsContsPerOverlay > elems{};
+		castor::Array< TextLine, MaxTextsContsPerOverlay > elems{};
 
 		auto & getNext()
 		{

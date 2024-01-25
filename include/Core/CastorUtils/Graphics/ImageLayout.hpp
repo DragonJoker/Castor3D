@@ -28,35 +28,35 @@ namespace castor
 			CU_EnumBounds( Type, e1D, eCubeArray ),
 #pragma clang pop
 		};
-		static castor::StringView getName( Type t )
+		static StringView getName( Type t )
 		{
 			switch ( t )
 			{
 			case Type::e1D:
-				return "1D";
+				return cuT( "1D" );
 			case Type::e2D:
-				return "2D";
+				return cuT( "2D" );
 			case Type::e3D:
-				return "3D";
+				return cuT( "3D" );
 			case Type::eCube:
-				return "Cube";
+				return cuT( "Cube" );
 			case Type::e1DArray:
-				return "1DArray";
+				return cuT( "1DArray" );
 			case Type::e2DArray:
-				return "2DArray";
+				return cuT( "2DArray" );
 			case Type::eCubeArray:
-				return "CubeArray";
+				return cuT( "CubeArray" );
 			default:
-				return "UnknowImageType";
+				return cuT( "UnknowImageType" );
 			}
 		}
 
-		using Buffer = castor::ByteArrayView;
-		using ConstBuffer = castor::ConstByteArrayView;
+		using Buffer = ByteArrayView;
+		using ConstBuffer = ConstByteArrayView;
 		using DeviceSize = uint64_t;
-		using Range = castor::Range< DeviceSize >;
+		using SubresourceRange = Range< DeviceSize >;
 
-		ImageLayout( Type type = e2D
+		explicit ImageLayout( Type type = e2D
 			, PixelFormat format = PixelFormat::eR8G8B8A8_UNORM
 			, Point3ui extent = { 1u, 1u, 1u }
 			, uint32_t baseLayer = 0u
@@ -115,9 +115,9 @@ namespace castor
 			return std::max( extent->z, layers );
 		}
 
-		CU_API Range range()const noexcept;
-		CU_API Range slice( uint32_t index )const noexcept;
-		CU_API Range sliceMip( uint32_t index, uint32_t level )const noexcept;
+		CU_API SubresourceRange range()const noexcept;
+		CU_API SubresourceRange slice( uint32_t index )const noexcept;
+		CU_API SubresourceRange sliceMip( uint32_t index, uint32_t level )const noexcept;
 
 		CU_API DeviceSize size()const noexcept;
 		CU_API DeviceSize sliceSize()const noexcept;
@@ -139,12 +139,12 @@ namespace castor
 		CU_API bool hasSliceBuffer( PxBufferBase const & buffer, uint32_t index )const noexcept;
 		CU_API bool hasSliceMipBuffer( PxBufferBase const & buffer, uint32_t index, uint32_t level )const noexcept;
 
-		Range layer( uint32_t index )const noexcept
+		SubresourceRange layer( uint32_t index )const noexcept
 		{
 			return slice( index );
 		}
 
-		Range layerMip( uint32_t index
+		SubresourceRange layerMip( uint32_t index
 			, uint32_t level )const noexcept
 		{
 			return sliceMip( index, level );

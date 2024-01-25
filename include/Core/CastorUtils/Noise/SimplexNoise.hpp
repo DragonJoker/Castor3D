@@ -20,7 +20,7 @@ namespace castor
 		TypeT noise( TypeT x, TypeT y, TypeT z );
 
 	private:
-		std::array< uint32_t, 512u > m_permutations;
+		Array< uint32_t, 512u > m_permutations;
 
 		uint8_t hash( int32_t i );
 		int32_t fastfloor( TypeT fp );
@@ -31,7 +31,7 @@ namespace castor
 	SimplexNoiseT< TypeT >::SimplexNoiseT( std::default_random_engine rndEngine )
 	{
 		// Generate random lookup for permutations containing all numbers from 0..255
-		std::vector<uint8_t> plookup;
+		Vector< uint8_t > plookup;
 		plookup.resize( 256 );
 		std::iota( plookup.begin(), plookup.end(), 0 );
 		std::default_random_engine rndEngine( std::random_device{}( ) );

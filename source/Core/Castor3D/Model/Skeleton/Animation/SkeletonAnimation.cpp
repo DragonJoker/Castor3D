@@ -14,7 +14,7 @@ namespace castor3d
 
 	namespace sklanm
 	{
-		static std::map< SkeletonNodeType, castor::String > const MovingTypeNames
+		static castor::Map< SkeletonNodeType, castor::String > const MovingTypeNames
 		{
 			{ SkeletonNodeType::eNode, cuT( "Node_" ) },
 			{ SkeletonNodeType::eBone, cuT( "Bone_" ) },
@@ -60,7 +60,7 @@ namespace castor3d
 		if ( it == m_toMove.end() )
 		{
 			result = object.get();
-			m_toMove.try_emplace( name, std::move( object ) );
+			m_toMove.try_emplace( name, castor::move( object ) );
 
 			if ( !parent )
 			{

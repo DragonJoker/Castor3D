@@ -27,7 +27,7 @@ namespace CastorViewer
 
 	private:
 		MainFrame * m_mainFrame;
-		std::unique_ptr< wxLocale > m_locale;
+		castor::RawUniquePtr< wxLocale > m_locale;
 	};
 }
 

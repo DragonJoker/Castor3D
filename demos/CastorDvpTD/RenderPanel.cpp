@@ -52,7 +52,7 @@ namespace castortd
 	{
 		auto & engine = *wxGetApp().getCastor();
 		castor::Size sizeWnd = GuiCommon::makeSize( GetClientSize() );
-		m_renderWindow = castor::makeUnique< castor3d::RenderWindow >( "CastorTD"
+		m_renderWindow = castor::makeUnique< castor3d::RenderWindow >( cuT( "CastorTD" )
 			, engine
 			, sizeWnd
 			, GuiCommon::makeWindowHandle( this ) );
@@ -92,10 +92,10 @@ namespace castortd
 
 				m_listener = m_renderWindow->getListener();
 
-				using LockType = std::unique_lock< castor3d::CameraCache >;
+				using LockType = castor::UniqueLock< castor3d::CameraCache >;
 				LockType lock{ castor::makeUniqueLock( scene->getCameraCache() ) };
 				auto camera = scene->getCameraCache().begin()->second.get();
-				m_cameraState = std::make_unique< GuiCommon::NodeState >( scene->getListener(), camera->getParent(), true );
+				m_cameraState = castor::make_unique< GuiCommon::NodeState >( scene->getListener(), camera->getParent(), true );
 				m_timers[size_t( TimerID::eMouse )]->Start( 30 );
 			}
 		}
@@ -626,7 +626,7 @@ namespace castortd
 			m_listener->postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePostCpuStep
 				, [this]()
 				{
-					if ( m_game.buildTower( m_marker->getPosition(), std::make_unique< LongRangeTower >( m_longRange ) ) )
+					if ( m_game.buildTower( m_marker->getPosition(), castor::make_unique< LongRangeTower >( m_longRange ) ) )
 					{
 						doUpdateSelectedGeometry( nullptr );
 					}
@@ -641,7 +641,7 @@ namespace castortd
 			m_listener->postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePostCpuStep
 				, [this]()
 				{
-					if ( m_game.buildTower( m_marker->getPosition(), std::make_unique< ShortRangeTower >( m_shortRange ) ) )
+					if ( m_game.buildTower( m_marker->getPosition(), castor::make_unique< ShortRangeTower >( m_shortRange ) ) )
 					{
 						doUpdateSelectedGeometry( nullptr );
 					}

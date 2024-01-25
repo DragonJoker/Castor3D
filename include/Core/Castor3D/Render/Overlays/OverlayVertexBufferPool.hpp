@@ -21,14 +21,14 @@ namespace castor3d
 	template< typename VertexT, uint32_t CountT >
 	struct OverlayVertexBufferPoolT
 	{
-		using Quad = std::array< VertexT, CountT >;
+		using Quad = castor::Array< VertexT, CountT >;
 		static bool constexpr isPanel = std::is_same_v< VertexT, OverlayCategory::Vertex > && ( CountT == 6u );
 		static bool constexpr isBorder = std::is_same_v< VertexT, OverlayCategory::Vertex > && ( CountT == 48u );
 		static bool constexpr isText = !isPanel && !isBorder;
 		static bool constexpr isCpuFilled = isText;
 
 		OverlayVertexBufferPoolT( Engine & engine
-			, std::string const & debugName
+			, castor::String const & debugName
 			, RenderDevice const & device
 			, CameraUbo const & cameraUbo
 			, HdrConfigUbo const & hdrConfigUbo
@@ -57,7 +57,7 @@ namespace castor3d
 		CameraUbo const & cameraUbo;
 		HdrConfigUbo const & hdrConfigUbo;
 		ashes::DescriptorSetLayout const & descriptorLayout;
-		std::string name;
+		castor::String name;
 		ashes::BufferPtr< OverlayUboConfiguration > overlaysData;
 		castor::ArrayView< OverlayUboConfiguration > overlaysBuffer;
 		GpuBufferBase vertexBuffer;
@@ -67,12 +67,12 @@ namespace castor3d
 		OverlayTextBufferPoolUPtr textBuffer;
 
 	private:
-		using PipelineDataMap = std::map< OverlayDrawPipeline const *, OverlayPipelineData >;
-		std::map< FontTexture const *, PipelineDataMap > m_pipelines;
-		std::vector< OverlayPipelineData > m_retired;
+		using PipelineDataMap = castor::Map< OverlayDrawPipeline const *, OverlayPipelineData >;
+		castor::Map< FontTexture const *, PipelineDataMap > m_pipelines;
+		castor::Vector< OverlayPipelineData > m_retired;
 
 	private:
-		ashes::DescriptorSetPtr doCreateDescriptorSet( std::string debugName
+		ashes::DescriptorSetPtr doCreateDescriptorSet( castor::String debugName
 			, FontTexture const * fontTexture
 			, ashes::BufferBase const & idsBuffer )const;
 	};

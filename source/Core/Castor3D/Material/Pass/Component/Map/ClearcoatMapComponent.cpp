@@ -109,7 +109,7 @@ namespace castor3d
 		, shader::BlendComponents & components
 		, shader::SampleTexture const & sampleTexture )const
 	{
-		applyFloatComponent( "clearcoatFactor"
+		applyFloatComponent( cuT( "clearcoatFactor" )
 			, passShaders
 			, textureConfigs
 			, textureAnims
@@ -123,7 +123,7 @@ namespace castor3d
 	void ClearcoatMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		channelFillers.try_emplace( "clearcoat"
+		channelFillers.try_emplace( cuT( "clearcoat" )
 			, getTextureFlags()
 			, []( TextureContext & blockContext )
 			{
@@ -164,7 +164,7 @@ namespace castor3d
 	}
 
 	void ClearcoatMapComponent::Plugin::createMapComponent( Pass & pass
-		, std::vector< PassComponentUPtr > & result )const
+		, castor::Vector< PassComponentUPtr > & result )const
 	{
 		result.push_back( castor::makeUniqueDerived< PassComponent, ClearcoatMapComponent >( pass ) );
 	}

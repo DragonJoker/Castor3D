@@ -161,7 +161,7 @@ namespace castor3d
 		 *\return			\p false si une erreur quelconque est arrivée.
 		 */
 		template< typename T, size_t Count >
-		inline bool doWriteChunk( std::array< T, Count > const & values
+		inline bool doWriteChunk( castor::Array< T, Count > const & values
 			, ChunkType chunkType
 			, BinaryChunk & chunk )const
 		{
@@ -182,7 +182,7 @@ namespace castor3d
 		 *\return			\p false si une erreur quelconque est arrivée.
 		 */
 		template< typename T >
-		inline bool doWriteChunk( std::vector< T > const & values
+		inline bool doWriteChunk( castor::Vector< T > const & values
 			, ChunkType chunkType
 			, BinaryChunk & chunk )const
 		{

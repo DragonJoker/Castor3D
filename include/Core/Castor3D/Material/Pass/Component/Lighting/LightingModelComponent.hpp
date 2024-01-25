@@ -43,7 +43,7 @@ namespace castor3d
 
 			shader::PassMaterialShaderPtr createMaterialShader()const override
 			{
-				return std::make_unique< MaterialShader >();
+				return castor::make_unique< MaterialShader >();
 			}
 		};
 

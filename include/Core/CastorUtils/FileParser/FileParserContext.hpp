@@ -22,7 +22,7 @@ namespace castor
 		CU_API virtual void destroy( void * data )noexcept = 0;
 	};
 
-	using ContextDeleterPtr = std::unique_ptr< ContextDeleter >;
+	using ContextDeleterPtr = castor::RawUniquePtr< ContextDeleter >;
 
 	template< typename ContextT >
 	struct ContextDeleterT
@@ -39,7 +39,7 @@ namespace castor
 	template< typename ContextT >
 	ContextDeleterPtr makeContextDeleter()
 	{
-		return std::make_unique< ContextDeleterT< ContextT > >();
+		return castor::make_unique< ContextDeleterT< ContextT > >();
 	}
 
 	struct BlockContext
@@ -52,7 +52,7 @@ namespace castor
 		BlockContext( void * pcontext
 			, ContextDeleterPtr pdtor )
 			: context{ pcontext }
-			, dtor{ std::move( pdtor ) }
+			, dtor{ castor::move( pdtor ) }
 		{
 		}
 
@@ -145,10 +145,10 @@ namespace castor
 		unsigned long long line{};
 		//!\~english	The sections stack.
 		//!\~french		La pile de sections.
-		std::deque< SectionId > sections{};
+		Deque< SectionId > sections{};
 		//!\~english	The context blocks stack.
 		//!\~french		La pile de contextes de blocs.
-		std::deque< void * > blocks{};
+		Deque< void * > blocks{};
 		//!\~english	The section to push on the stack.
 		//!\~french		La section à mettre sur la pile.
 		SectionId pendingSection{};
@@ -172,7 +172,7 @@ namespace castor
 		PreprocessedFile * preprocessed{};
 		//!\~english	The allocated block contexts.
 		//!\~french		Les contextes de bloc alloués.
-		std::vector< BlockContext > allocatedBlocks;
+		Vector< BlockContext > allocatedBlocks;
 	};
 }
 

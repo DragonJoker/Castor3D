@@ -28,8 +28,8 @@ namespace castor3d
 		C3D_API void setTitle( castor::U32String value );
 		C3D_API void setRange( castor::Range< int32_t > const & value );
 		C3D_API void setProgress( int32_t value );
-		C3D_API void setContainerBorderSize( castor::Point4ui value );
-		C3D_API void setBarBorderSize( castor::Point4ui value );
+		C3D_API void setContainerBorderSize( castor::Point4ui const & value );
+		C3D_API void setBarBorderSize( castor::Point4ui const & value );
 		C3D_API void setLeftToRight()noexcept;
 		C3D_API void setRightToLeft()noexcept;
 		C3D_API void setTopToBottom()noexcept;

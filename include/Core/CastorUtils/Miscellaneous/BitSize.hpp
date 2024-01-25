@@ -10,7 +10,7 @@ namespace castor
 {
 	static constexpr uint32_t getBitSize( uint64_t value )
 	{
-		std::array< int, 128 > constexpr bitPatternToLog2
+		Array< int, 128 > constexpr bitPatternToLog2
 		{
 			0, // change to 0 if you want bitSize(0) = 0
 			48, -1, -1, 31, -1, 15, 51, -1, 63, 5, -1, -1, -1, 19, -1,

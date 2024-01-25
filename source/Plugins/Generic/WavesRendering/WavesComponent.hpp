@@ -68,7 +68,7 @@ namespace waves
 
 		private:
 			WavesRenderComponent const & m_component;
-			std::unique_ptr< WavesUbo > m_ubo;
+			castor::RawUniquePtr< WavesUbo > m_ubo;
 		};
 
 		struct RenderShader
@@ -76,7 +76,7 @@ namespace waves
 		{
 			castor3d::SubmeshRenderDataPtr createData( castor3d::SubmeshComponent const & component )override
 			{
-				return std::make_unique< RenderData >( component );
+				return castor::make_unique< RenderData >( component );
 			}
 			/**
 			 *\copydoc	castor3d::shader::SubmeshRenderShader::getShaderSource
@@ -100,7 +100,7 @@ namespace waves
 
 			castor3d::SubmeshRenderShaderPtr createRenderShader()const override
 			{
-				return std::make_unique< RenderShader >();
+				return castor::make_unique< RenderShader >();
 			}
 
 			castor3d::SubmeshComponentFlag getRenderFlag()const noexcept override
@@ -132,7 +132,7 @@ namespace waves
 
 		void setConfig( WavesConfiguration config )noexcept
 		{
-			m_config = std::move( config );
+			m_config = castor::move( config );
 		}
 
 		WavesConfiguration const & getConfig()const noexcept
@@ -142,11 +142,10 @@ namespace waves
 
 	public:
 		static castor::String const TypeName;
-		static castor::String const FullName;
+		static castor::MbString const FullName;
 
 	private:
 		WavesConfiguration m_config;
-		std::unique_ptr< RenderData > m_data;
 	};
 
 	CU_DeclareSmartPtr( waves, WavesRenderComponent, );

@@ -35,7 +35,7 @@ namespace castor3d
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 					, VK_SHADER_STAGE_COMPUTE_BIT ) };
 			return device->createDescriptorSetLayout( "ComputeDepthRange"
-				, std::move( bindings ) );
+				, castor::move( bindings ) );
 		}
 
 		static ashes::DescriptorSetPtr createDescriptorSet( crg::RunnableGraph & graph
@@ -146,7 +146,7 @@ namespace castor3d
 		, m_device{ device }
 		, m_descriptorSetLayout{ passcompdr::createDescriptorLayout( m_device ) }
 		, m_pipelineLayout{ passcompdr::createPipelineLayout( m_device, *m_descriptorSetLayout ) }
-		, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, "ComputeDepthRange", passcompdr::createShader( device ) }
+		, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, cuT( "ComputeDepthRange" ), passcompdr::createShader( device ) }
 		, m_pipeline{ passcompdr::createPipeline( device, *m_pipelineLayout, m_shader ) }
 		, m_descriptorSetPool{ m_descriptorSetLayout->createPool( 1u ) }
 		, m_descriptorSet{ passcompdr::createDescriptorSet( m_graph, *m_descriptorSetPool, m_pass ) }

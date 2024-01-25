@@ -4,7 +4,7 @@ namespace castor3d
 {
 	castor::String getName( GlobalIlluminationType giType )
 	{
-		static std::array< castor::String, size_t( GlobalIlluminationType::eCount ) > const Values
+		static castor::Array< castor::String, size_t( GlobalIlluminationType::eCount ) > const Values
 		{
 			{
 				cuT( "none" ),

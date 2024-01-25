@@ -55,8 +55,8 @@ namespace Bloom
 
 	//*********************************************************************************************
 
-	castor::String const CombinePass::CombineMapPasses = cuT( "c3d_mapPasses" );
-	castor::String const CombinePass::CombineMapScene = cuT( "c3d_mapScene" );
+	castor::MbString const CombinePass::CombineMapPasses = "c3d_mapPasses";
+	castor::MbString const CombinePass::CombineMapScene = "c3d_mapScene";
 
 	CombinePass::CombinePass( crg::FramePassGroup & graph
 		, crg::FramePassArray const & previousPasses
@@ -68,7 +68,7 @@ namespace Bloom
 		, uint32_t blurPassesCount
 		, bool const * enabled
 		, uint32_t const * passIndex )
-		: m_shader{ "BloomCombine", combine::getProgram( device, blurPassesCount ) }
+		: m_shader{ cuT( "BloomCombine" ), combine::getProgram( device, blurPassesCount ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
 		, m_pass{ graph.createPass( "Combine"
 			, [this, &device, size, enabled, passIndex]( crg::FramePass const & framePass
@@ -85,7 +85,7 @@ namespace Bloom
 						, context
 						, graph
 						, crg::ru::Config{ 2u } );
-				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 							, result->getTimer() );
 				return result;
 			} ) }

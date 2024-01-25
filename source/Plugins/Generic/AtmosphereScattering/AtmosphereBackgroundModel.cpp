@@ -12,7 +12,7 @@ namespace atmosphere_scattering
 	{
 		template< typename DataT >
 		DataT getData( sdw::UniformBuffer & ubo
-			, std::string const & name
+			, castor::MbString const & name
 			, bool enabled = true )
 		{
 			auto result = ubo.declMember< DataT >( name, enabled );
@@ -22,8 +22,8 @@ namespace atmosphere_scattering
 	}
 
 	castor::String const AtmosphereBackgroundModel::Name = cuT( "c3d.atmosphere" );
-	castor::String const AtmosphereBackgroundModel::PluginType = "atmospheric_scattering";
-	castor::String const AtmosphereBackgroundModel::PluginName = "Atmospheric Scattering";
+	castor::String const AtmosphereBackgroundModel::PluginType = cuT( "atmospheric_scattering" );
+	castor::MbString const AtmosphereBackgroundModel::PluginName = "Atmospheric Scattering";
 
 	AtmosphereBackgroundModel::AtmosphereBackgroundModel( castor3d::Engine const & engine
 		, sdw::ShaderWriter & writer
@@ -32,7 +32,7 @@ namespace atmosphere_scattering
 		, bool needsForeground
 		, uint32_t & binding
 		, uint32_t set )
-		: castor3d::shader::BackgroundModel{ writer, utils, std::move( targetSize ) }
+		: castor3d::shader::BackgroundModel{ writer, utils, castor::move( targetSize ) }
 		, cameraBuffer{ writer.declUniformBuffer<>( CameraUbo::Buffer
 			, binding++
 			, set ) }
@@ -77,10 +77,10 @@ namespace atmosphere_scattering
 		, uint32_t & binding
 		, uint32_t set )
 	{
-		return std::make_unique< AtmosphereBackgroundModel >( engine
+		return castor::make_unique< AtmosphereBackgroundModel >( engine
 			, writer
 			, utils
-			, std::move( targetSize )
+			, castor::move( targetSize )
 			, needsForeground
 			, binding
 			, set );

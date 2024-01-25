@@ -11,10 +11,10 @@ See LICENSE file in root folder
 namespace castor
 {
 	class UnsupportedFormatException
-		: public castor::Exception
+		: public Exception
 	{
 	public:
-		using castor::Exception::Exception;
+		using Exception::Exception;
 	};
 }
 /**

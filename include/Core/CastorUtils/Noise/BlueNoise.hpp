@@ -58,7 +58,7 @@ namespace castor
 			if ( ( ( x ^ y ) & 4u ) == 0u )
 			{
 				// flip every other tile to reduce anisotropy
-				std::swap( x, y );
+				castor::swap( x, y );
 			}
 
 			if ( ( y & 4u ) == 0u )

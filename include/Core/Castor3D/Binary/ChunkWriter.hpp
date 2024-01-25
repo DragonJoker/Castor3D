@@ -82,7 +82,7 @@ namespace castor3d
 			, ChunkType type
 			, BinaryChunk & chunk )
 		{
-			std::vector< T > values{ begin, end };
+			castor::Vector< T > values{ begin, end };
 
 			for ( auto & value : values )
 			{
@@ -152,7 +152,7 @@ namespace castor3d
 
 			try
 			{
-				auto svalue = castor::string::stringCast< char >( value );
+				auto svalue = castor::toUtf8( value );
 				auto buffer = ByteCPtr( svalue.data() );
 				ChunkWriterBase::write( buffer, buffer + svalue.size(), type, chunk );
 			}
@@ -197,7 +197,7 @@ namespace castor3d
 
 			try
 			{
-				auto svalue = castor::string::stringCast< char >( value );
+				auto svalue = castor::toUtf8( value );
 				auto buffer = ByteCPtr( svalue.data() );
 				ChunkWriterBase::write( buffer, buffer + svalue.size(), type, chunk );
 			}

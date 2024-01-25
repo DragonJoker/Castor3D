@@ -13,16 +13,16 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	using TextureSourceSet = std::unordered_set< TextureSourceInfo, TextureSourceInfoHasher >;
+	using TextureSourceSet = castor::UnorderedSet< TextureSourceInfo, TextureSourceInfoHasher >;
 
 	namespace shader
 	{
 		struct PassMapMaterialShader
 			: shader::PassMaterialShader
 		{
-			C3D_API explicit PassMapMaterialShader( std::string const & mapMemberName )
+			C3D_API explicit PassMapMaterialShader( castor::String const & mapMemberName )
 				: shader::PassMaterialShader{ sizeof( uint32_t ) }
-				, m_mapMemberName{ mapMemberName + "MapAndMask" }
+				, m_mapMemberName{ castor::toUtf8( mapMemberName + cuT( "MapAndMask" ) ) }
 			{
 			}
 
@@ -30,7 +30,7 @@ namespace castor3d
 				, sdw::expr::ExprList & inits )const override;
 
 		private:
-			std::string m_mapMemberName;
+			castor::MbString m_mapMemberName;
 		};
 
 		struct PassMapComponentsShader

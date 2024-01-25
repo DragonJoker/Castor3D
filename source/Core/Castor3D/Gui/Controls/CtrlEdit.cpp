@@ -55,7 +55,7 @@ namespace castor3d
 			, visible }
 		, ScrollableCtrl{ static_cast< Control & >( *this )
 			, style }
-		, m_caption{ castor::string::toU32String( caption ) }
+		, m_caption{ castor::toUtf8U32String( caption ) }
 		, m_onScrollContent{ onScrollContent.connect( [this]( castor::Position const & pos )
 			{
 				doScrollContent( pos );
@@ -174,7 +174,7 @@ namespace castor3d
 
 	void EditCtrl::updateCaption( castor::String const & value )
 	{
-		m_caption = castor::string::toU32String( value );
+		m_caption = castor::toUtf8U32String( value );
 	}
 
 	void EditCtrl::doUpdateStyle()
@@ -510,7 +510,7 @@ namespace castor3d
 	{
 		auto diff = size_t( std::distance( m_caption.cbegin(), m_caret.indices.captionIt ) );
 		m_caption = castor::U32String( m_caption.cbegin(), m_caret.indices.captionIt )
-			+ castor::string::toU32String( c )
+			+ castor::toUtf8U32String( c )
 			+ castor::U32String( m_caret.indices.captionIt, m_caption.cend() );
 		m_caret.indices.updateIndex( diff + 1, m_caption );
 		doUpdateCaption();
@@ -1020,7 +1020,7 @@ namespace castor3d
 		{
 			auto fontTexture = text->getFontTexture();
 			auto font = fontTexture->getFont();
-			std::vector< char32_t > newCaption;
+			castor::Vector< char32_t > newCaption;
 
 			for ( auto c : m_caption )
 			{
@@ -1234,7 +1234,7 @@ namespace castor3d
 			|| ( selBegin.lineIndex == selEnd.lineIndex
 				&& selBegin.charIndex > selEnd.charIndex ) )
 		{
-			std::swap( selBegin, selEnd );
+			castor::swap( selBegin, selEnd );
 		}
 
 		return { selBegin, selEnd };

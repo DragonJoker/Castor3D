@@ -18,13 +18,13 @@ namespace castor
 	{
 	public:
 		struct Folder;
-		using FolderList = std::list< Folder >;
+		using FolderList = List< Folder >;
 
 		struct Folder
 		{
 			String name;
 			FolderList folders;
-			std::list< String > files;
+			List< String > files;
 
 			Folder() = default;
 			Folder( String const & name, Path const & path );
@@ -118,7 +118,7 @@ namespace castor
 		CU_API bool findFile( String const & file )const;
 
 	private:
-		std::unique_ptr< ZipImpl > m_impl;
+		castor::RawUniquePtr< ZipImpl > m_impl;
 		Folder m_uncompressed;
 		Path m_rootFolder;
 	};

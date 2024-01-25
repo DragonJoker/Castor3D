@@ -133,28 +133,28 @@ namespace castor
 	template< typename T, uint32_t TCount >
 	template< typename ValueA >
 	constexpr Point< T, TCount >::Point( ValueA a )noexcept
-		: m_data{ std::array< T, TCount >{ T( a ) } }
+		: m_data{ Array< T, TCount >{ T( a ) } }
 	{
 	}
 
 	template< typename T, uint32_t TCount >
 	template< typename ValueA, typename ValueB >
 	constexpr Point< T, TCount >::Point( ValueA a, ValueB b )noexcept
-		: m_data{ std::array< T, TCount >{ T( a ), T( b ) } }
+		: m_data{ Array< T, TCount >{ T( a ), T( b ) } }
 	{
 	}
 
 	template< typename T, uint32_t TCount >
 	template< typename ValueA, typename ValueB, typename ValueC >
 	constexpr Point< T, TCount >::Point( ValueA a, ValueB b, ValueC c )noexcept
-		: m_data{ std::array< T, TCount >{ T( a ), T( b ), T( c ) } }
+		: m_data{ Array< T, TCount >{ T( a ), T( b ), T( c ) } }
 	{
 	}
 
 	template< typename T, uint32_t TCount >
 	template< typename ValueA, typename ValueB, typename ValueC, typename ValueD >
 	constexpr Point< T, TCount >::Point( ValueA a, ValueB b, ValueC c, ValueD d )noexcept
-		: m_data{ std::array< T, TCount >{ T( a ), T( b ), T( c ), T( d ) } }
+		: m_data{ Array< T, TCount >{ T( a ), T( b ), T( c ), T( d ) } }
 	{
 	}
 
@@ -289,7 +289,7 @@ namespace castor
 	{
 		for ( uint32_t i = 0; i < TCount; i++ )
 		{
-			std::swap( m_data.coords[i], rhs.m_data.coords[i] );
+			castor::swap( m_data.coords[i], rhs.m_data.coords[i] );
 		}
 	}
 

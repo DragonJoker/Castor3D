@@ -85,7 +85,7 @@ namespace castor3d
 
 			template< typename DataT, size_t SizeT >
 			VkDeviceSize write( MemChunk const & chunk
-				, std::array< DataT, SizeT > const & v
+				, castor::Array< DataT, SizeT > const & v
 				, VkDeviceSize offset )
 			{
 				auto base = offset;
@@ -319,13 +319,13 @@ namespace castor3d
 		uint32_t m_stride;
 		uint32_t m_maxCount;
 		ShaderBuffer m_buffer;
-		std::vector< Pass * > m_passes;
-		std::vector< Pass const * > m_dirty;
-		std::vector< OnPassChangedConnection > m_connections;
+		castor::Vector< Pass * > m_passes;
+		castor::Vector< Pass const * > m_dirty;
+		castor::Vector< OnPassChangedConnection > m_connections;
 		uint32_t m_passID{ 1u };
-		std::unordered_map< uint32_t, PassTypeData > m_passTypeIndices;
+		castor::UnorderedMap< uint32_t, PassTypeData > m_passTypeIndices;
 		castor::ByteArrayView m_data;
-		std::mutex m_mutex;
+		castor::Mutex m_mutex;
 	};
 }
 

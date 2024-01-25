@@ -19,11 +19,11 @@ namespace castor
 		log::info << tabs() << cuT( "Writing ShadowConfig" ) << std::endl;
 		bool result = false;
 
-		if ( auto block{ beginBlock( file, "shadows" ) } )
+		if ( auto block{ beginBlock( file, cuT( "shadows" ) ) } )
 		{
-			result = write( file, "filter", getName( object.filterType ) )
-				&& write( file, "producer", object.filterType != ShadowType::eNone )
-				&& write( file, "global_illumination", getName( object.globalIllumination ) );
+			result = write( file, cuT( "filter" ), getName( object.filterType ) )
+				&& write( file, cuT( "producer" ), object.filterType != ShadowType::eNone )
+				&& write( file, cuT( "global_illumination" ), getName( object.globalIllumination ) );
 
 			if ( object.volumetricSteps )
 			{
@@ -32,14 +32,14 @@ namespace castor
 					&& write( file, cuT( "volumetric_scattering" ), object.volumetricScattering );
 			}
 
-			if ( auto rawBlock{ beginBlock( file, "raw_config" ) } )
+			if ( auto rawBlock{ beginBlock( file, cuT( "raw_config" ) ) } )
 			{
 				result = result
 					&& write( file, cuT( "min_offset" ), object.rawOffsets[0] )
 					&& write( file, cuT( "max_slope_offset" ), object.rawOffsets[1] );
 			}
 
-			if ( auto pcfBlock{ beginBlock( file, "pcf_config" ) } )
+			if ( auto pcfBlock{ beginBlock( file, cuT( "pcf_config" ) ) } )
 			{
 				result = result
 					&& write( file, cuT( "min_offset" ), object.pcfOffsets[0] )
@@ -48,7 +48,7 @@ namespace castor
 					&& write( file, cuT( "sample_count" ), object.pcfSampleCount );
 			}
 
-			if ( auto vsmBlock{ beginBlock( file, "vsm_config" ) } )
+			if ( auto vsmBlock{ beginBlock( file, cuT( "vsm_config" ) ) } )
 			{
 				result = result
 					&& write( file, cuT( "min_variance" ), object.vsmMinVariance )

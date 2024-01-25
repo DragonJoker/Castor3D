@@ -37,8 +37,8 @@ namespace castor3d
 			NodeData( castor::String pparent
 				, castor::String pname
 				, bool pisCamera )
-				: parent{ std::move( pparent ) }
-				, name{ std::move( pname ) }
+				: parent{ castor::move( pparent ) }
+				, name{ castor::move( pname ) }
 				, isCamera{ pisCamera }
 			{
 			}
@@ -53,9 +53,9 @@ namespace castor3d
 			GeometryData( castor::String pname
 				, castor::String pnode
 				, castor::String pmesh )
-				: name{ std::move( pname ) }
-				, node{ std::move( pnode ) }
-				, mesh{ std::move( pmesh ) }
+				: name{ castor::move( pname ) }
+				, node{ castor::move( pnode ) }
+				, mesh{ castor::move( pmesh ) }
 			{
 			}
 
@@ -68,8 +68,8 @@ namespace castor3d
 		{
 			MeshData( castor::String pname
 				, castor::String pskeleton )
-				: name{ std::move( pname ) }
-				, skeleton{ std::move( pskeleton ) }
+				: name{ castor::move( pname ) }
+				, skeleton{ castor::move( pskeleton ) }
 			{
 			}
 
@@ -81,8 +81,8 @@ namespace castor3d
 		{
 			LightData( castor::String pname
 				, LightType ptype )
-				: name{ std::move( pname ) }
-				, type{ std::move( ptype ) }
+				: name{ castor::move( pname ) }
+				, type{ castor::move( ptype ) }
 			{
 			}
 
@@ -94,7 +94,7 @@ namespace castor3d
 		{
 			CameraData( castor::String pname
 				, ViewportType ptype )
-				: name{ std::move( pname ) }
+				: name{ castor::move( pname ) }
 				, type{ ptype }
 			{
 			}
@@ -113,19 +113,19 @@ namespace castor3d
 	public:
 		C3D_API virtual ~ImporterFile() = default;
 
-		C3D_API virtual std::vector< castor::String > listMaterials() = 0;
-		C3D_API virtual std::vector< MeshData > listMeshes() = 0;
-		C3D_API virtual std::vector< castor::String > listSkeletons() = 0;
-		C3D_API virtual std::vector< NodeData > listSceneNodes() = 0;
-		C3D_API virtual std::vector< GeometryData > listGeometries() = 0;
-		C3D_API virtual std::vector< LightData > listLights() = 0;
-		C3D_API virtual std::vector< CameraData > listCameras() = 0;
-		C3D_API virtual std::vector< castor::String > listMeshAnimations( Mesh const & mesh ) = 0;
-		C3D_API virtual std::vector< castor::String > listSkeletonAnimations( Skeleton const & skeleton ) = 0;
-		C3D_API virtual std::vector< castor::String > listSceneNodeAnimations( SceneNode const & node ) = 0;
-		C3D_API virtual std::vector< castor::String > listAllMeshAnimations() = 0;
-		C3D_API virtual std::vector< castor::String > listAllSkeletonAnimations() = 0;
-		C3D_API virtual std::vector< castor::String > listAllSceneNodeAnimations() = 0;
+		C3D_API virtual castor::Vector< castor::String > listMaterials() = 0;
+		C3D_API virtual castor::Vector< MeshData > listMeshes() = 0;
+		C3D_API virtual castor::Vector< castor::String > listSkeletons() = 0;
+		C3D_API virtual castor::Vector< NodeData > listSceneNodes() = 0;
+		C3D_API virtual castor::Vector< GeometryData > listGeometries() = 0;
+		C3D_API virtual castor::Vector< LightData > listLights() = 0;
+		C3D_API virtual castor::Vector< CameraData > listCameras() = 0;
+		C3D_API virtual castor::Vector< castor::String > listMeshAnimations( Mesh const & mesh ) = 0;
+		C3D_API virtual castor::Vector< castor::String > listSkeletonAnimations( Skeleton const & skeleton ) = 0;
+		C3D_API virtual castor::Vector< castor::String > listSceneNodeAnimations( SceneNode const & node ) = 0;
+		C3D_API virtual castor::Vector< castor::String > listAllMeshAnimations() = 0;
+		C3D_API virtual castor::Vector< castor::String > listAllSkeletonAnimations() = 0;
+		C3D_API virtual castor::Vector< castor::String > listAllSceneNodeAnimations() = 0;
 
 		C3D_API virtual MaterialImporterUPtr createMaterialImporter() = 0;
 		C3D_API virtual AnimationImporterUPtr createAnimationImporter() = 0;
@@ -206,7 +206,7 @@ namespace castor3d
 
 	class ImporterFileFactory
 	{
-		using Creator = std::function< ImporterFileUPtr( Engine &, Scene *, castor::Path const &, Parameters const &, ProgressBar * ) >;
+		using Creator = castor::Function< ImporterFileUPtr( Engine &, Scene *, castor::Path const &, Parameters const &, ProgressBar * ) >;
 
 	public:
 		C3D_API ImporterFileFactory();

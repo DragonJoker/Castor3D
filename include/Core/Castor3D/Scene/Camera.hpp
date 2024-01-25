@@ -264,12 +264,12 @@ namespace castor3d
 
 		void setHdrConfig( HdrConfig value )
 		{
-			m_hdrConfig = std::move( value );
+			m_hdrConfig = castor::move( value );
 		}
 
 		void setColourGradingConfig( ColourGradingConfig config )noexcept
 		{
-			m_colourGradingConfig = std::move( config );
+			m_colourGradingConfig = castor::move( config );
 		}
 		/**@}*/
 

@@ -55,7 +55,7 @@ namespace castor3d
 
 	castor::Point3fArray const & SpotLight::generateVertices( uint32_t angle )
 	{
-		static std::map< uint32_t, castor::Point3fArray > cache;
+		static castor::Map< uint32_t, castor::Point3fArray > cache;
 		angle += 2u;
 		angle *= 2u;
 		auto & result = cache.try_emplace( angle ).first->second;
@@ -63,7 +63,7 @@ namespace castor3d
 		if ( result.empty() )
 		{
 			auto arcAngle = castor::Angle::fromDegrees( float( angle ) ) / ( 2.0f * float( lgtspot::FaceCount ) );
-			std::vector< castor::Point2f > arc( lgtspot::FaceCount + 1u );
+			castor::Vector< castor::Point2f > arc( lgtspot::FaceCount + 1u );
 			castor::Angle arcAlpha = 0.0_degrees;
 			float rAlphaI = 0;
 			auto rAngle = castor::PiMult2< float > / float( lgtspot::FaceCount );

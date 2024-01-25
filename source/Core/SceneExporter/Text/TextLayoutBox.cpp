@@ -19,7 +19,7 @@ namespace castor
 	{
 		auto & layoutName = layout.getContainer().getName();
 		log::info << tabs() << cuT( "Writing LayoutBox " ) << layoutName << std::endl;
-		bool result = writeOpt( file, "horizontal", layout.isHorizontal(), false );
+		bool result = writeOpt( file, cuT( "horizontal" ), layout.isHorizontal(), false );
 
 		for ( auto & item : layout )
 		{
@@ -29,18 +29,18 @@ namespace castor
 				{
 					if ( item.spacer()->isDynamic() )
 					{
-						result = write( file, "layout_dynspace" );
+						result = write( file, cuT( "layout_dynspace" ) );
 					}
 					else
 					{
-						result = write( file, "layout_staspace", item.spacer()->getSize() );
+						result = write( file, cuT( "layout_staspace" ), item.spacer()->getSize() );
 					}
 				}
 				else
 				{
 					auto name = item.control()->getName();
 
-					if ( name.find( layoutName + "/" ) == 0 )
+					if ( name.find( layoutName + cuT( "/" ) ) == 0 )
 					{
 						name = name.substr( layoutName.size() + 1u );
 					}
@@ -49,9 +49,9 @@ namespace castor
 					{
 						result = writeOpt( file, cuT( "horizontal_align" ), getName( item.flags().hAlign() ), getName( HAlign::eLeft ) )
 							&& writeOpt( file, cuT( "vertical_align" ), getName( item.flags().vAlign() ), getName( VAlign::eTop ) )
-							&& writeOpt( file, "stretch", item.flags().expand(), false )
-							&& writeOpt( file, "reserve_if_hidden", item.flags().reserveSpaceIfHidden(), false )
-							&& writeOpt( file, "padding", item.flags().padding(), castor::Point4ui{} );
+							&& writeOpt( file, cuT( "stretch" ), item.flags().expand(), false )
+							&& writeOpt( file, cuT( "reserve_if_hidden" ), item.flags().reserveSpaceIfHidden(), false )
+							&& writeOpt( file, cuT( "padding" ), item.flags().padding(), castor::Point4ui{} );
 					}
 				}
 			}

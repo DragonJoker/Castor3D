@@ -74,7 +74,7 @@ namespace castor
 		}
 
 		template< typename TypeT, typename GetRT, typename GetGT, typename GetBT, typename GetAT >
-		static std::vector< BlockTypeT< TypeT > > extractBlocks( std::atomic_bool const * interrupt
+		static Vector< BlockTypeT< TypeT > > extractBlocks( std::atomic_bool const * interrupt
 			, Size const & srcDimensions
 			, uint32_t srcPixelSize
 			, uint8_t const * srcBuffer
@@ -89,7 +89,7 @@ namespace castor
 #endif
 			auto w = srcDimensions.getWidth();
 			auto h = srcDimensions.getHeight();
-			std::vector< BlockTypeT< TypeT > > result;
+			Vector< BlockTypeT< TypeT > > result;
 			auto bw = uint32_t( ashes::getAlignedSize( w, 4u ) );
 			auto bh = uint32_t( ashes::getAlignedSize( h, 4u ) );
 			result.reserve( ( bw * bh ) / 16u );
@@ -172,7 +172,7 @@ namespace castor
 
 	//*****************************************************************************************
 
-	std::vector< cvtt::PixelBlockU8 > createBlocksU8( std::atomic_bool const * interrupt
+	Vector< cvtt::PixelBlockU8 > createBlocksU8( std::atomic_bool const * interrupt
 		, Size const & srcDimensions
 		, uint32_t srcPixelSize
 		, uint8_t const * srcBuffer
@@ -193,7 +193,7 @@ namespace castor
 			, getA );
 	}
 
-	std::vector< cvtt::PixelBlockS8 > createBlocksS8( std::atomic_bool const * interrupt
+	Vector< cvtt::PixelBlockS8 > createBlocksS8( std::atomic_bool const * interrupt
 		, Size const & srcDimensions
 		, uint32_t srcPixelSize
 		, uint8_t const * srcBuffer
@@ -214,7 +214,7 @@ namespace castor
 			, getA );
 	}
 
-	std::vector< cvtt::PixelBlockF16 > createBlocksF16( std::atomic_bool const * interrupt
+	Vector< cvtt::PixelBlockF16 > createBlocksF16( std::atomic_bool const * interrupt
 		, Size const & srcDimensions
 		, uint32_t srcPixelSize
 		, uint8_t const * srcBuffer
@@ -237,7 +237,7 @@ namespace castor
 
 	uint32_t compressBlocks( CVTTOptions  const & options
 		, std::atomic_bool const * interrupt
-		, std::vector< cvtt::PixelBlockU8 > const & blocksCont
+		, Vector< cvtt::PixelBlockU8 > const & blocksCont
 		, PixelFormat dstFormat
 		, uint8_t * dstBuffer
 		, CU_UnusedParam( uint32_t, dstSize ) )
@@ -310,7 +310,7 @@ namespace castor
 
 	uint32_t compressBlocks( CVTTOptions  const & options
 		, std::atomic_bool const * interrupt
-		, std::vector< cvtt::PixelBlockS8 > const & blocksCont
+		, Vector< cvtt::PixelBlockS8 > const & blocksCont
 		, PixelFormat dstFormat
 		, uint8_t * dstBuffer
 		, CU_UnusedParam( uint32_t, dstSize ) )
@@ -329,10 +329,10 @@ namespace castor
 
 			switch ( dstFormat )
 			{
-			case castor::PixelFormat::eBC4_SNORM_BLOCK:
+			case PixelFormat::eBC4_SNORM_BLOCK:
 				EncodeBC4S( dstBuffer, blocks, options.options );
 				break;
-			case castor::PixelFormat::eBC5_SNORM_BLOCK:
+			case PixelFormat::eBC5_SNORM_BLOCK:
 				EncodeBC5S( dstBuffer, blocks, options.options );
 				break;
 			default:
@@ -350,7 +350,7 @@ namespace castor
 
 	uint32_t compressBlocks( CVTTOptions  const & options
 		, std::atomic_bool const * interrupt
-		, std::vector< cvtt::PixelBlockF16 > const & blocksCont
+		, Vector< cvtt::PixelBlockF16 > const & blocksCont
 		, PixelFormat dstFormat
 		, uint8_t * dstBuffer
 		, CU_UnusedParam( uint32_t, dstSize ) )
@@ -369,10 +369,10 @@ namespace castor
 
 			switch ( dstFormat )
 			{
-			case castor::PixelFormat::eBC6H_UFLOAT_BLOCK:
+			case PixelFormat::eBC6H_UFLOAT_BLOCK:
 				EncodeBC6HU( dstBuffer, blocks, options.options );
 				break;
-			case castor::PixelFormat::eBC6H_SFLOAT_BLOCK:
+			case PixelFormat::eBC6H_SFLOAT_BLOCK:
 				EncodeBC6HS( dstBuffer, blocks, options.options );
 				break;
 			default:

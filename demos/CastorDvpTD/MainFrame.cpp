@@ -62,14 +62,14 @@ namespace castortd
 	{
 		auto & engine = *wxGetApp().getCastor();
 		auto window = GuiCommon::loadScene( engine
-			, "CastorDvpTD"
+			, cuT( "CastorDvpTD" )
 			, castor::File::getExecutableDirectory().getPath() / cuT( "share" ) / cuT( "CastorDvpTD" ) / cuT( "Data.zip" )
 			, nullptr );
 		castor::Logger::logInfo( cuT( "Scene file read" ) );
 
 		if ( auto target = window.renderTarget )
 		{
-			m_game = std::make_unique< Game >( *target->getScene() );
+			m_game = castor::make_unique< Game >( *target->getScene() );
 			m_panel = wxMakeWindowPtr< RenderPanel >( this, main::MainFrameSize, *m_game );
 			m_panel->updateRenderWindow( window );
 			auto & renderWindow = m_panel->getRenderWindow();

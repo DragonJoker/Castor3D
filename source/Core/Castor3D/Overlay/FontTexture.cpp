@@ -50,15 +50,15 @@ namespace castor3d
 	//*********************************************************************************************
 
 	void postPreRenderGpuEvent( Engine & engine
-		, std::function< void( RenderDevice const &, QueueData const & ) > event )
+		, castor::Function< void( RenderDevice const &, QueueData const & ) > event )
 	{
-		engine.postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload, std::move( event ) ) );
+		engine.postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload, castor::move( event ) ) );
 	}
 
 	void postQueueRenderCpuEvent( Engine & engine
-		, std::function< void() > event )
+		, castor::Function< void() > event )
 	{
-		engine.postEvent( makeCpuFunctorEvent( CpuEventType::ePreCpuStep, std::move( event ) ) );
+		engine.postEvent( makeCpuFunctorEvent( CpuEventType::ePreCpuStep, castor::move( event ) ) );
 	}
 
 	//*********************************************************************************************
@@ -229,7 +229,7 @@ namespace castor3d
 
 	void FontTexture::swapResources()
 	{
-		std::swap( m_frontGlyphsPositions, m_backGlyphsPositions );
+		castor::swap( m_frontGlyphsPositions, m_backGlyphsPositions );
 	}
 
 	//*********************************************************************************************

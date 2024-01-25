@@ -30,8 +30,8 @@ namespace castortd
 		}
 
 	private:
-		std::reference_wrapper< castor3d::SceneNode > m_node;
-		std::reference_wrapper< Enemy > m_target;
+		castor::ReferenceWrapper< castor3d::SceneNode > m_node;
+		castor::ReferenceWrapper< Enemy > m_target;
 		float m_speed{ 0.0f };
 		uint32_t m_damage{ 0u };
 	};

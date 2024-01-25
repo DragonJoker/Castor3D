@@ -59,7 +59,7 @@ namespace castor3d::exporter
 
 			if ( !result )
 			{
-				log::error << "Failed\n";
+				log::error << cuT( "Failed\n" );
 			}
 
 			return result;
@@ -72,7 +72,7 @@ namespace castor3d::exporter
 
 		castor::Path normalizePath( castor::Path path )
 		{
-			return castor::Path{ castor::string::replace( path, "|", "-" ) };
+			return castor::Path{ castor::string::replace( path, cuT( "|" ), cuT( "-" ) ) };
 		}
 
 		template< typename ObjType >
@@ -96,7 +96,7 @@ namespace castor3d::exporter
 				file << ( cuT( "// " ) + elemsName + cuT( "\n" ) );
 				log::info << cuT( "SceneExporter::write - " ) << elemsName << cuT( "\n" );
 				castor::TextWriter< ObjType > writer{ castor::cuEmptyString
-					, std::forward< Params >( params )... };
+					, castor::forward< Params >( params )... };
 
 				for ( auto const & name : view )
 				{
@@ -143,7 +143,7 @@ namespace castor3d::exporter
 				}
 
 				castor::TextWriter< ObjType > writer{ castor::cuEmptyString
-					, std::forward< Params >( params )... };
+					, castor::forward< Params >( params )... };
 				auto lock( castor::makeUniqueLock( cache ) );
 
 				for ( auto const & elemIt : cache )
@@ -200,7 +200,7 @@ namespace castor3d::exporter
 				file << ( cuT( "// " ) + elemsName + cuT( "\n" ) );
 				log::info << ( cuT( "SceneExporter::write - " ) + elemsName ) << cuT( "\n" );
 				castor::TextWriter< ObjType > writer{ castor::cuEmptyString
-					, std::forward< Params >( params )... };
+					, castor::forward< Params >( params )... };
 				auto lock( castor::makeUniqueLock( cache ) );
 
 				for ( auto const & elemIt : cache )
@@ -706,7 +706,7 @@ namespace castor3d::exporter
 
 							auto name = stream.str();
 							auto newPath = normalizePath( options.path / ( name + cuT( ".cmsh" ) ) );
-							auto mesh = std::make_unique< castor3d::Mesh >( name, *options.object.getScene() );
+							auto mesh = castor::make_unique< castor3d::Mesh >( name, *options.object.getScene() );
 
 							if ( auto skeleton = options.object.getSkeleton() )
 							{
@@ -872,7 +872,7 @@ namespace castor3d::exporter
 			for ( auto & [hash, textureData] : scene.getEngine()->getTextureUnitCache() )
 			{
 				auto name = textureData->sourceInfo.name();
-				if ( name.find( "C3D_Default" ) == castor::String::npos )
+				if ( name.find( cuT( "C3D_Default" ) ) == castor::String::npos )
 				{
 					sorted.emplace( name, textureData.get() );
 				}
@@ -894,7 +894,7 @@ namespace castor3d::exporter
 				options.sceneTexturesFile = cuT( "Helpers" ) / castor::Path( filePath.getFileName( false ) + cuT( "-Textures.cscn" ) );
 				castor::TextFile file{ folder / options.sceneTexturesFile
 					, castor::File::OpenMode::eWrite };
-				result = file.writeText( "// Textures\n" ) > 0
+				result = file.writeText( cuT( "// Textures\n" ) ) > 0
 					&& file.writeText( sceneStream.str() ) > 0;
 			}
 
@@ -910,8 +910,8 @@ namespace castor3d::exporter
 			log::info << cuT( "SceneExporter::write - Samplers\n" );
 			castor::StringStream sceneStream;
 			castor::StringStream globalStream;
-			std::set< ashes::Sampler const * > sceneSamplers;
-			std::set< ashes::Sampler const * > globalSamplers;
+			castor::Set< ashes::Sampler const * > sceneSamplers;
+			castor::Set< ashes::Sampler const * > globalSamplers;
 
 			for ( auto & materialIt : scene.getEngine()->getMaterialCache() )
 			{
@@ -968,7 +968,7 @@ namespace castor3d::exporter
 				options.sceneSamplersFile = cuT( "Helpers" ) / castor::Path( filePath.getFileName( false ) + cuT( "-Samplers.cscn" ) );
 				castor::TextFile file{ folder / options.sceneSamplersFile
 					, castor::File::OpenMode::eWrite };
-				result = file.writeText( "// Samplers\n" ) > 0
+				result = file.writeText( cuT( "// Samplers\n" ) ) > 0
 					&& file.writeText( sceneStream.str() ) > 0;
 			}
 
@@ -977,7 +977,7 @@ namespace castor3d::exporter
 				options.globalSamplersFile = cuT( "Helpers" ) / castor::Path( cuT( "Global-Samplers.cscn" ) );
 				castor::TextFile file{ folder / options.globalSamplersFile
 					, castor::File::OpenMode::eWrite };
-				result = file.writeText( "// Samplers\n" ) > 0
+				result = file.writeText( cuT( "// Samplers\n" ) ) > 0
 					&& file.writeText( globalStream.str() ) > 0;
 			}
 
@@ -1079,7 +1079,7 @@ namespace castor3d::exporter
 
 			for ( auto & theme : manager.getThemes() )
 			{
-				if ( theme.first == "Debug" )
+				if ( theme.first == cuT( "Debug" ) )
 				{
 					continue;
 				}
@@ -1100,7 +1100,7 @@ namespace castor3d::exporter
 				options.globalThemesFile = cuT( "Helpers" ) / castor::Path( cuT( "Global-GUI-Themes.cscn" ) );
 				castor::TextFile file{ folder / options.globalThemesFile
 					, castor::File::OpenMode::eWrite };
-				result = file.writeText( "// GUI Themes\n" ) > 0
+				result = file.writeText( cuT( "// GUI Themes\n" ) ) > 0
 					&& file.writeText( globalStream.str() ) > 0;
 			}
 
@@ -1109,7 +1109,7 @@ namespace castor3d::exporter
 				options.sceneThemesFile = cuT( "Helpers" ) / castor::Path( filePath.getFileName( false ) + cuT( "-GUI-Themes.cscn" ) );
 				castor::TextFile file{ folder / options.sceneThemesFile
 					, castor::File::OpenMode::eWrite };
-				result = file.writeText( "// GUI Themes\n" ) > 0
+				result = file.writeText( cuT( "// GUI Themes\n" ) ) > 0
 					&& file.writeText( sceneStream.str() ) > 0;
 			}
 
@@ -1124,8 +1124,8 @@ namespace castor3d::exporter
 		{
 			log::info << cuT( "SceneExporter::write - GUI Styles\n" );
 			auto & manager = static_cast< ControlsManager const & >( *scene.getEngine()->getUserInputListener() );
-			castor::TextWriter< StylesHolder > globalWriter{ castor::cuEmptyString, nullptr, "" };
-			castor::TextWriter< StylesHolder > sceneWriter{ castor::cuEmptyString, &scene, "" };
+			castor::TextWriter< StylesHolder > globalWriter{ castor::cuEmptyString, nullptr, cuT( "" ) };
+			castor::TextWriter< StylesHolder > sceneWriter{ castor::cuEmptyString, &scene, cuT( "" ) };
 			castor::StringStream sceneStream;
 			castor::StringStream globalStream;
 			bool result = true;
@@ -1145,7 +1145,7 @@ namespace castor3d::exporter
 				options.globalStylesFile = cuT( "Helpers" ) / castor::Path( cuT( "Global-GUI-Styles.cscn" ) );
 				castor::TextFile file{ folder / options.globalStylesFile
 					, castor::File::OpenMode::eWrite };
-				result = file.writeText( "// GUI Styles\n" ) > 0
+				result = file.writeText( cuT( "// GUI Styles\n" ) ) > 0
 					&& file.writeText( globalStream.str() ) > 0;
 			}
 
@@ -1154,7 +1154,7 @@ namespace castor3d::exporter
 				options.sceneStylesFile = cuT( "Helpers" ) / castor::Path( filePath.getFileName( false ) + cuT( "-GUI-Styles.cscn" ) );
 				castor::TextFile file{ folder / options.sceneStylesFile
 					, castor::File::OpenMode::eWrite };
-				result = file.writeText( "// GUI Styles\n" ) > 0
+				result = file.writeText( cuT( "// GUI Styles\n" ) ) > 0
 					&& file.writeText( sceneStream.str() ) > 0;
 			}
 
@@ -1169,13 +1169,13 @@ namespace castor3d::exporter
 		{
 			log::info << cuT( "SceneExporter::write - GUI Controls\n" );
 			auto & manager = static_cast< ControlsManager const & >( *scene.getEngine()->getUserInputListener() );
-			castor::TextWriter< StylesHolder > writer{ castor::cuEmptyString, nullptr, "" };
+			castor::TextWriter< StylesHolder > writer{ castor::cuEmptyString, nullptr, cuT( "" ) };
 			castor::StringStream sceneStream;
 			castor::StringStream globalStream;
 			auto filter = [&scene, &sceneStream, &globalStream]( Control const & control ) -> castor::StringStream *
 			{
-				if ( control.getName() == "Debug/Main"
-					|| control.getName() == "Debug/RenderPasses" )
+				if ( control.getName() == cuT( "Debug/Main" )
+					|| control.getName() == cuT( "Debug/RenderPasses" ) )
 				{
 					return nullptr;
 				}
@@ -1212,7 +1212,7 @@ namespace castor3d::exporter
 				options.globalControlsFile = cuT( "Helpers" ) / castor::Path( cuT( "Global-GUI-Controls.cscn" ) );
 				castor::TextFile file{ folder / options.globalControlsFile
 					, castor::File::OpenMode::eWrite };
-				result = file.writeText( "// GUI Controls\n" ) > 0
+				result = file.writeText( cuT( "// GUI Controls\n" ) ) > 0
 					&& file.writeText( globalStream.str() ) > 0;
 			}
 
@@ -1221,7 +1221,7 @@ namespace castor3d::exporter
 				options.sceneControlsFile = cuT( "Helpers" ) / castor::Path( filePath.getFileName( false ) + cuT( "-GUI-Controls.cscn" ) );
 				castor::TextFile file{ folder / options.sceneControlsFile
 					, castor::File::OpenMode::eWrite };
-				result = file.writeText( "// GUI Controls\n" ) > 0
+				result = file.writeText( cuT( "// GUI Controls\n" ) ) > 0
 					&& file.writeText( sceneStream.str() ) > 0;
 			}
 
@@ -1276,7 +1276,7 @@ namespace castor3d::exporter
 
 					if ( node->hasAnimation() )
 					{
-						auto found = node->getScene()->getAnimatedObjectGroupCache().findObject( node->getName() + "_Node" );
+						auto found = node->getScene()->getAnimatedObjectGroupCache().findObject( node->getName() + cuT( "_Node" ) );
 
 						if ( !found.empty() )
 						{
@@ -1511,12 +1511,12 @@ namespace castor3d::exporter
 						stream << "include \"" << options.globalControlsFile << "\"\n";
 					}
 
-					stream << "\n";
-					stream << "scene \"" << name << "\"\n";
-					stream << "{\n";
-					stream << "	// Scene configuration\n";
-					stream << "	ambient_light 1.0 1.0 1.0\n";
-					stream << "	background_colour 0.50000 0.50000 0.50000\n";
+					stream << cuT( "\n" );
+					stream << cuT( "scene \"" ) << name << cuT( "\"\n" );
+					stream << cuT( "{\n" );
+					stream << cuT( "	// Scene configuration\n" );
+					stream << cuT( "	ambient_light 1.0 1.0 1.0\n" );
+					stream << cuT( "	background_colour 0.50000 0.50000 0.50000\n" );
 
 					if ( !options.sceneSamplersFile.empty() )
 					{
@@ -1568,52 +1568,52 @@ namespace castor3d::exporter
 						stream << "	include \"Helpers/" << name << "-Objects.cscn\"\n";
 					}
 
-					stream << "\n";
-					stream << "\n";
-					stream << "	//Cameras nodes\n";
-					stream << "\n";
-					stream << "	scene_node \"MainCameraNode\"\n";
-					stream << "	{\n";
+					stream << cuT( "\n" );
+					stream << cuT( "\n" );
+					stream << cuT( "	//Cameras nodes\n" );
+					stream << cuT( "\n" );
+					stream << cuT( "	scene_node \"MainCameraNode\"\n" );
+					stream << cuT( "	{\n" );
 					float farPlane = 0.0f;
-					stream << "		position " << getCameraPosition( *singleMesh, farPlane ) << "\n";
-					stream << "	}\n";
-					stream << "\n";
-					stream << "	//Cameras\n";
-					stream << "\n";
-					stream << "	camera \"MainCamera\"\n";
-					stream << "	{\n";
-					stream << "		parent \"MainCameraNode\"\n";
-					stream << "\n";
-					stream << "		viewport\n";
-					stream << "		{\n";
-					stream << "			type perspective\n";
-					stream << "			near 0.100000\n";
-					stream << "			far " << farPlane << "\n";
-					stream << "			aspect_ratio 1.77800\n";
-					stream << "			fov_y 45.0000\n";
-					stream << "		}\n";
-					stream << "\n";
-					stream << "		hdr_config\n";
-					stream << "		{\n";
-					stream << "			exposure 1.00000\n";
-					stream << "			gamma 2.20000\n";
-					stream << "		}\n";
-					stream << "	}\n";
-					stream << "\n";
-					stream << "	scene_node \"LightNode\"\n";
-					stream << "	{\n";
-					stream << "		orientation 1 0 0 90\n";
-					stream << "	}\n";
-					stream << "\n";
-					stream << "	light \"SunLight\"\n";
-					stream << "	{\n";
-					stream << "		parent \"LightNode\"\n";
-					stream << "		type directional\n";
-					stream << "		colour 1.00000 1.00000 1.00000\n";
-					stream << "		intensity 8.0 10.0\n";
-					stream << "	}\n";
-					stream << "}\n";
-					printRenderWindow( name, "MainCamera", stream );
+					stream << cuT( "		position " ) << getCameraPosition( *singleMesh, farPlane ) << cuT( "\n" );
+					stream << cuT( "	}\n" );
+					stream << cuT( "\n" );
+					stream << cuT( "	//Cameras\n" );
+					stream << cuT( "\n" );
+					stream << cuT( "	camera \"MainCamera\"\n" );
+					stream << cuT( "	{\n" );
+					stream << cuT( "		parent \"MainCameraNode\"\n" );
+					stream << cuT( "\n" );
+					stream << cuT( "		viewport\n" );
+					stream << cuT( "		{\n" );
+					stream << cuT( "			type perspective\n" );
+					stream << cuT( "			near 0.100000\n" );
+					stream << cuT( "			far " ) << farPlane << cuT( "\n" );
+					stream << cuT( "			aspect_ratio 1.77800\n" );
+					stream << cuT( "			fov_y 45.0000\n" );
+					stream << cuT( "		}\n" );
+					stream << cuT( "\n" );
+					stream << cuT( "		hdr_config\n" );
+					stream << cuT( "		{\n" );
+					stream << cuT( "			exposure 1.00000\n" );
+					stream << cuT( "			gamma 2.20000\n" );
+					stream << cuT( "		}\n" );
+					stream << cuT( "	}\n" );
+					stream << cuT( "\n" );
+					stream << cuT( "	scene_node \"LightNode\"\n" );
+					stream << cuT( "	{\n" );
+					stream << cuT( "		orientation 1 0 0 90\n" );
+					stream << cuT( "	}\n" );
+					stream << cuT( "\n" );
+					stream << cuT( "	light \"SunLight\"\n" );
+					stream << cuT( "	{\n" );
+					stream << cuT( "		parent \"LightNode\"\n" );
+					stream << cuT( "		type directional\n" );
+					stream << cuT( "		colour 1.00000 1.00000 1.00000\n" );
+					stream << cuT( "		intensity 8.0 10.0\n" );
+					stream << cuT( "	}\n" );
+					stream << cuT( "}\n" );
+					printRenderWindow( name, cuT( "MainCamera" ), stream );
 				}
 				else
 				{
@@ -1646,7 +1646,7 @@ namespace castor3d::exporter
 	//*********************************************************************************************
 
 	CscnSceneExporter::CscnSceneExporter( ExportOptions options )
-		: SceneExporter{ std::move( options ) }
+		: SceneExporter{ castor::move( options ) }
 	{
 	}
 

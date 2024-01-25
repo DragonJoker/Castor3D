@@ -12,7 +12,7 @@ See LICENSE file in root folder
 namespace light_streaks
 {
 	using UboOffset = castor3d::UniformBufferOffsetT< castor3d::GaussianBlur::Configuration >;
-	using UboOffsetArray = std::vector< UboOffset >;
+	using UboOffsetArray = castor::Vector< UboOffset >;
 
 	class KawasePass
 	{
@@ -57,7 +57,7 @@ namespace light_streaks
 		castor3d::ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
 		crg::FramePassArray m_lastPasses;
-		std::vector< Subpass > m_subpasses;
+		castor::Vector< Subpass > m_subpasses;
 	};
 }
 

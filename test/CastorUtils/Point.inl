@@ -903,7 +903,7 @@ namespace Testing
 	Coords< T, Count >::Coords( Coords< T, Count > && rhs )
 		:	m_coords( NULL	)
 	{
-		m_coords		= std::move( rhs.m_coords );
+		m_coords		= castor::move( rhs.m_coords );
 		rhs.m_coords	= NULL;
 	}
 
@@ -924,7 +924,7 @@ namespace Testing
 	{
 		if ( this != &rhs )
 		{
-			m_coords		= std::move( rhs.m_coords );
+			m_coords		= castor::move( rhs.m_coords );
 			rhs.m_coords	= NULL;
 		}
 
@@ -1058,7 +1058,7 @@ namespace Testing
 	template< typename T, uint32_t Count >
 	void Coords< T, Count >::swap( Coords< T, Count > & rhs )
 	{
-		std::swap( m_coords, rhs.m_coords );
+		castor::swap( m_coords, rhs.m_coords );
 	}
 
 //*************************************************************************************************
@@ -1411,7 +1411,7 @@ namespace Testing
 	{
 		for ( uint32_t i = 0; i < Count; i++ )
 		{
-			std::swap( m_coords[i], rhs.m_coords[i] );
+			castor::swap( m_coords[i], rhs.m_coords[i] );
 		}
 	}
 

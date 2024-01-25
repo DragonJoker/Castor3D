@@ -32,7 +32,7 @@ namespace castor3d
 		m_bones.insert( m_bones.end(), begin, end );
 	}
 
-	void SkinComponent::ComponentData::addDatas( std::vector< VertexBoneData > const & boneData )
+	void SkinComponent::ComponentData::addDatas( castor::Vector< VertexBoneData > const & boneData )
 	{
 		addDatas( boneData.data(), boneData.data() + boneData.size() );
 	}
@@ -70,7 +70,7 @@ namespace castor3d
 
 	SkinComponent::SkinComponent( Submesh & submesh )
 		: SubmeshComponent{ submesh, TypeName
-			, std::make_unique< ComponentData >( submesh ) }
+			, castor::make_unique< ComponentData >( submesh ) }
 	{
 	}
 

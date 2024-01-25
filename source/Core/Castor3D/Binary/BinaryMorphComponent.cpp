@@ -98,7 +98,7 @@ namespace castor3d
 		bool result = true;
 		SubmeshAnimationBuffer buffer;
 		uint32_t count{ 0u };
-		std::set< MorphFlag > flags;
+		castor::Set< MorphFlag > flags;
 		castor::Point3fArray values;
 		BinaryChunk chunk{ doIsLittleEndian() };
 
@@ -109,18 +109,18 @@ namespace castor3d
 			case ChunkType::eMorphTargetBufferSize:
 				if ( count )
 				{
-					obj.getData().addMorphTarget( std::move( buffer ) );
+					obj.getData().addMorphTarget( castor::move( buffer ) );
 					buffer = {};
 					count = 0u;
 				}
 				result = doParseChunk( count, chunk );
 				values.resize( count );
-				checkError( result, "Couldn't parse keyframe buffers size." );
+				checkError( result, cuT( "Couldn't parse keyframe buffers size." ) );
 				break;
 			case ChunkType::eMorphTargetPositions:
 				flags.insert( MorphFlag::ePositions );
 				result = doParseChunk( values, chunk );
-				checkError( result, "Couldn't parse keyframe positions." );
+				checkError( result, cuT( "Couldn't parse keyframe positions." ) );
 
 				if ( result )
 				{
@@ -130,7 +130,7 @@ namespace castor3d
 			case ChunkType::eMorphTargetNormals:
 				flags.insert( MorphFlag::eNormals );
 				result = doParseChunk( values, chunk );
-				checkError( result, "Couldn't parse keyframe normals." );
+				checkError( result, cuT( "Couldn't parse keyframe normals." ) );
 
 				if ( result )
 				{
@@ -153,7 +153,7 @@ namespace castor3d
 					castor::Point4fArray tangents;
 					tangents.resize( count );
 					result = doParseChunk( tangents, chunk );
-					checkError( result, "Couldn't parse keyframe tangents." );
+					checkError( result, cuT( "Couldn't parse keyframe tangents." ) );
 
 					if ( result )
 					{
@@ -164,7 +164,7 @@ namespace castor3d
 			case ChunkType::eMorphTargetBitangents:
 				flags.insert( MorphFlag::eBitangents );
 				result = doParseChunk( values, chunk );
-				checkError( result, "Couldn't parse keyframe bitangents." );
+				checkError( result, cuT( "Couldn't parse keyframe bitangents." ) );
 
 				if ( result )
 				{
@@ -174,7 +174,7 @@ namespace castor3d
 			case ChunkType::eMorphTargetTexcoords0:
 				flags.insert( MorphFlag::eTexcoords0 );
 				result = doParseChunk( values, chunk );
-				checkError( result, "Couldn't parse keyframe texcoords0." );
+				checkError( result, cuT( "Couldn't parse keyframe texcoords0." ) );
 
 				if ( result )
 				{
@@ -184,7 +184,7 @@ namespace castor3d
 			case ChunkType::eMorphTargetTexcoords1:
 				flags.insert( MorphFlag::eTexcoords1 );
 				result = doParseChunk( values, chunk );
-				checkError( result, "Couldn't parse keyframe texcoords1." );
+				checkError( result, cuT( "Couldn't parse keyframe texcoords1." ) );
 
 				if ( result )
 				{
@@ -194,7 +194,7 @@ namespace castor3d
 			case ChunkType::eMorphTargetTexcoords2:
 				flags.insert( MorphFlag::eTexcoords2 );
 				result = doParseChunk( values, chunk );
-				checkError( result, "Couldn't parse keyframe texcoords2." );
+				checkError( result, cuT( "Couldn't parse keyframe texcoords2." ) );
 
 				if ( result )
 				{
@@ -204,7 +204,7 @@ namespace castor3d
 			case ChunkType::eMorphTargetTexcoords3:
 				flags.insert( MorphFlag::eTexcoords3 );
 				result = doParseChunk( values, chunk );
-				checkError( result, "Couldn't parse keyframe texcoords3." );
+				checkError( result, cuT( "Couldn't parse keyframe texcoords3." ) );
 
 				if ( result )
 				{
@@ -214,7 +214,7 @@ namespace castor3d
 			case ChunkType::eMorphTargetColours:
 				flags.insert( MorphFlag::eColours );
 				result = doParseChunk( values, chunk );
-				checkError( result, "Couldn't parse keyframe colours." );
+				checkError( result, cuT( "Couldn't parse keyframe colours." ) );
 
 				if ( result )
 				{
@@ -252,7 +252,7 @@ namespace castor3d
 
 		if ( result && count )
 		{
-			obj.getData().addMorphTarget( std::move( buffer ) );
+			obj.getData().addMorphTarget( castor::move( buffer ) );
 		}
 
 		return result;

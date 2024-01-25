@@ -37,7 +37,7 @@ namespace castor3d
 {
 	//*********************************************************************************************
 
-	castor::String const VisibilityPass::Type = "c3d.visibility";
+	castor::String const VisibilityPass::Type = cuT( "c3d.visibility" );
 
 	VisibilityPass::VisibilityPass( RenderTechnique * parent
 		, crg::FramePass const & pass
@@ -54,7 +54,7 @@ namespace castor3d
 			, device
 			, Type
 			, {}
-			, std::move( targetDepth )
+			, castor::move( targetDepth )
 			, renderPassDesc
 			, techniquePassDesc }
 	{

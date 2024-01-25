@@ -35,7 +35,7 @@ namespace GuiCommon
 	};
 	inline wxString const & getName( UniformType value )
 	{
-		static std::vector< wxString > const Names
+		static castor::Vector< wxString > const Names
 		{
 			wxT( "Float" ),
 			wxT( "Int" ),
@@ -337,28 +337,28 @@ namespace GuiCommon
 	};
 
 	template< typename ValueT >
-	std::unique_ptr< UniformValueBase > makeUniformValue( wxString const & name
+	castor::RawUniquePtr< UniformValueBase > makeUniformValue( wxString const & name
 		, ValueT & value )
 	{
-		return std::make_unique< UniformValue< ValueT > >( name, value );
+		return castor::make_unique< UniformValue< ValueT > >( name, value );
 	}
 	
 	template< typename ValueT, typename ControlT >
-	std::unique_ptr< UniformValueBase > makeUniformValue( wxString const & name
+	castor::RawUniquePtr< UniformValueBase > makeUniformValue( wxString const & name
 		, ValueT & value
 		, castor3d::ConfigurationVisitorBase::ControlsListT< ControlT > control )
 	{
-		return std::make_unique< UniformValue< ValueT > >( name, value );
+		return castor::make_unique< UniformValue< ValueT > >( name, value );
 	}
 
 	struct UniformBufferValues
 	{
 		explicit UniformBufferValues( castor::String pname
 			, VkShaderStageFlags pstages = {}
-			, std::vector< std::unique_ptr< UniformValueBase > > puniforms = {} )
-			: name{ std::move( pname ) }
-			, stages{ std::move( pstages ) }
-			, uniforms{ std::move( puniforms ) }
+			, castor::Vector< castor::RawUniquePtr< UniformValueBase > > puniforms = {} )
+			: name{ castor::move( pname ) }
+			, stages{ pstages }
+			, uniforms{ castor::move( puniforms ) }
 		{
 		}
 
@@ -369,7 +369,7 @@ namespace GuiCommon
 
 		wxString name;
 		VkShaderStageFlags stages;
-		std::vector< std::unique_ptr< UniformValueBase > > uniforms;
+		castor::Vector< castor::RawUniquePtr< UniformValueBase > > uniforms;
 	};
 
 	struct ShaderEntryPoint
@@ -382,11 +382,11 @@ namespace GuiCommon
 	struct ShaderSource
 	{
 		explicit ShaderSource( castor::String pname
-			, std::vector< ShaderEntryPoint > psources = {}
-			, std::vector< UniformBufferValues > pubos = {} )
-			: name{ std::move( pname ) }
-			, sources{ std::move( psources ) }
-			, ubos{ std::move( pubos ) }
+			, castor::Vector< ShaderEntryPoint > psources = {}
+			, castor::Vector< UniformBufferValues > pubos = {} )
+			: name{ castor::move( pname ) }
+			, sources{ castor::move( psources ) }
+			, ubos{ castor::move( pubos ) }
 		{
 		}
 
@@ -396,11 +396,11 @@ namespace GuiCommon
 		ShaderSource & operator=( ShaderSource && ) = default;
 
 		castor::String name;
-		std::vector< ShaderEntryPoint > sources;
-		std::vector< UniformBufferValues > ubos;
+		castor::Vector< ShaderEntryPoint > sources;
+		castor::Vector< UniformBufferValues > ubos;
 	};
 
-	using ShaderSources = std::vector< ShaderSource >;
+	using ShaderSources = castor::Vector< ShaderSource >;
 }
 
 #endif

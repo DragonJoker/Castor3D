@@ -14,6 +14,10 @@ namespace castor
 	struct BlockGuard
 		: public NonMovable
 	{
+		BlockGuard( BlockGuard const & ) = delete;
+		BlockGuard( BlockGuard && )noexcept = delete;
+		BlockGuard & operator=( BlockGuard const & ) = delete;
+		BlockGuard & operator=( BlockGuard && )noexcept = delete;
 		/**
 		 *\~english
 		 *\brief		Constructor.

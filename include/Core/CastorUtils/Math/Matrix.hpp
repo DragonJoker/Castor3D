@@ -53,7 +53,7 @@ namespace castor
 		template< typename Type >
 		explicit Matrix( Type const * matrix );
 		template< typename Type >
-		explicit Matrix( std::array< Type, Columns * Rows > const & rhs );
+		explicit Matrix( Array< Type, Columns * Rows > const & rhs );
 		template< typename Type >
 		explicit Matrix( Matrix< Type, Columns, Rows > const & matrix );
 		explicit Matrix( std::initializer_list< T > rhs );
@@ -193,8 +193,8 @@ namespace castor
 	protected:
 		union
 		{
-			std::array< T, Columns * Rows > m_data;
-			std::array< col_type, Columns > m_columns;
+			Array< T, Columns * Rows > m_data;
+			Array< col_type, Columns > m_columns;
 		};
 	};
 	/**
@@ -261,13 +261,13 @@ namespace castor
 	**/
 	/**@{*/
 	template< typename T, uint32_t Columns, uint32_t Rows >
-	castor::String & operator<<( castor::String & stream, castor::Matrix< T, Columns, Rows > const & matrix );
+	String & operator<<( String & stream, Matrix< T, Columns, Rows > const & matrix );
 	template< typename T, uint32_t Columns, uint32_t Rows >
-	castor::String & operator>>( castor::String & stream, castor::Matrix< T, Columns, Rows > & matrix );
+	String & operator>>( String & stream, Matrix< T, Columns, Rows > & matrix );
 	template< typename CharT, typename T, uint32_t Columns, uint32_t Rows >
-	std::basic_ostream< CharT > & operator<<( std::basic_ostream< CharT > & stream, castor::Matrix< T, Columns, Rows > const & matrix );
+	std::basic_ostream< CharT > & operator<<( std::basic_ostream< CharT > & stream, Matrix< T, Columns, Rows > const & matrix );
 	template< typename CharT, typename T, uint32_t Columns, uint32_t Rows >
-	std::basic_istream< CharT > & operator>>( std::basic_istream< CharT > & stream, castor::Matrix< T, Columns, Rows > & matrix );
+	std::basic_istream< CharT > & operator>>( std::basic_istream< CharT > & stream, Matrix< T, Columns, Rows > & matrix );
 	/**@}*/
 }
 

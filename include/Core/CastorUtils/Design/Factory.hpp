@@ -14,7 +14,7 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	static const std::string ERROR_UNKNOWN_OBJECT = "Unknown object type";
+	static const MbString ERROR_UNKNOWN_OBJECT = "Unknown object type";
 
 	template< class KeyT
 		, typename CreatorT
@@ -42,7 +42,7 @@ namespace castor
 		using PtrType = PtrTypeT;
 		using Creator = CreatorT;
 		using ObjPtr = PtrType;
-		using ObjCont = std::vector< Entry >;
+		using ObjCont = Vector< Entry >;
 		struct ListEntry
 		{
 			Key key;
@@ -167,9 +167,9 @@ namespace castor
 		 *\~french
 		 *\return		La liste des types enregistrés.
 		 */
-		std::vector< ListEntry > listRegisteredTypes()const
+		Vector< ListEntry > listRegisteredTypes()const
 		{
-			std::vector< ListEntry > result;
+			Vector< ListEntry > result;
 			result.reserve( m_registered.size() );
 
 			for ( auto const & entry : m_registered )
@@ -207,7 +207,7 @@ namespace castor
 				CU_Exception( ERROR_UNKNOWN_OBJECT );
 			}
 
-			return it->create( std::forward< Parameters >( params )... );
+			return it->create( castor::forward< Parameters >( params )... );
 		}
 
 	protected:

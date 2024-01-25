@@ -90,8 +90,8 @@ namespace castor3d::shader
 			, sdw::Vec3 const worldEye
 			, Utils & utils
 			, BlendComponents & components )const;
-		C3D_API std::map< uint32_t, PassComponentTextureFlag > getTexcoordModifs( PipelineFlags const & flags )const;
-		C3D_API std::map< uint32_t, PassComponentTextureFlag > getTexcoordModifs( TextureCombine const & combine )const;
+		C3D_API castor::Map< uint32_t, PassComponentTextureFlag > getTexcoordModifs( PipelineFlags const & flags )const;
+		C3D_API castor::Map< uint32_t, PassComponentTextureFlag > getTexcoordModifs( TextureCombine const & combine )const;
 		C3D_API bool enableParallaxOcclusionMapping( PipelineFlags const & flags )const;
 		C3D_API bool enableParallaxOcclusionMappingOne( PipelineFlags const & flags )const;
 		C3D_API sdw::Vec4 sampleMap( PipelineFlags const & flags
@@ -190,10 +190,10 @@ namespace castor3d::shader
 		TextureCombine m_texturesCombine;
 		Utils & m_utils;
 		PassComponentRegister const & m_compRegister;
-		std::vector< UpdateComponent > m_updateComponents;
-		std::vector< FinishComponent > m_finishComponents;
-		std::vector< PassComponentsShaderPtr > m_shaders;
-		std::vector< PassMapComponentsShader * > m_mapShaders;
+		castor::Vector< UpdateComponent > m_updateComponents;
+		castor::Vector< FinishComponent > m_finishComponents;
+		castor::Vector< PassComponentsShaderPtr > m_shaders;
+		castor::Vector< PassMapComponentsShader * > m_mapShaders;
 		PassReflRefrShaderPtr m_reflRefr;
 		ComponentModeFlags m_filter;
 		bool m_opacity{};

@@ -58,22 +58,22 @@ namespace castor
 		switch ( value )
 		{
 		case LengthUnit::eKilometre:
-			return "km";
+			return cuT( "km" );
 		case LengthUnit::eMetre:
-			return "m";
+			return cuT( "m" );
 		case LengthUnit::eCentimetre:
-			return "cm";
+			return cuT( "cm" );
 		case LengthUnit::eMillimetre:
-			return "mm";
+			return cuT( "mm" );
 		case LengthUnit::eYard:
-			return "yd";
+			return cuT( "yd" );
 		case LengthUnit::eFoot:
-			return "ft";
+			return cuT( "ft" );
 		case LengthUnit::eInch:
-			return "in";
+			return cuT( "in" );
 		default:
 			CU_Failure( "Unsupported LengthUnit" );
-			return "Unknown";
+			return cuT( "unknown" );
 		}
 	}
 
@@ -84,10 +84,10 @@ namespace castor
 
 	void cuFailure( char const * const description )
 	{
-		std::stringstream stream;
+		auto stream = makeStringStream();
 		stream << "Assertion failed: " << description << "\n";
-		stream << Debug::Backtrace{};
-		cuLogError( stream.str().c_str() );
+		stream << debug::Backtrace{};
+		cuLogError( toUtf8( stream.str() ).c_str() );
 		assert( false );
 	}
 }

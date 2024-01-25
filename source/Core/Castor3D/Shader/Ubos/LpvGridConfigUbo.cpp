@@ -23,7 +23,7 @@ namespace castor3d
 		LpvGridData::LpvGridData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstance{ writer, std::move( expr ), enabled }
+			: StructInstance{ writer, castor::move( expr ), enabled }
 			, minVolumeCornerSize{ getMember< sdw::Vec4 >( "minVolumeCornerSize" ) }
 			, gridSizeAtt{ getMember< sdw::Vec4 >( "gridSizeAtt" ) }
 			, cameraPos4{ getMember< sdw::Vec4 >( "cameraPosition" ) }
@@ -53,9 +53,9 @@ namespace castor3d
 			return result;
 		}
 
-		std::unique_ptr< sdw::Struct > LpvGridData::declare( sdw::ShaderWriter & writer )
+		castor::RawUniquePtr< sdw::Struct > LpvGridData::declare( sdw::ShaderWriter & writer )
 		{
-			return std::make_unique< sdw::Struct >( writer
+			return castor::make_unique< sdw::Struct >( writer
 				, makeType( writer.getTypesCache() ) );
 		}
 

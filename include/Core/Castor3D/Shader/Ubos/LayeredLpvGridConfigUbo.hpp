@@ -28,7 +28,7 @@ namespace castor3d
 			SDW_DeclStructInstance( C3D_API, LayeredLpvGridData );
 
 			C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
-			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
+			C3D_API static castor::RawUniquePtr< sdw::Struct > declare( sdw::ShaderWriter & writer );
 
 			// Raw values
 			sdw::Array< sdw::Vec4 > allMinVolumeCorners;
@@ -57,7 +57,7 @@ namespace castor3d
 		C3D_API explicit LayeredLpvGridConfigUbo( RenderDevice const & device );
 		C3D_API ~LayeredLpvGridConfigUbo()noexcept;
 
-		C3D_API void cpuUpdate( std::array< castor::Grid const *, LpvMaxCascadesCount > const & grids
+		C3D_API void cpuUpdate( castor::Array< castor::Grid const *, LpvMaxCascadesCount > const & grids
 			, float indirectAttenuation );
 
 		void createPassBinding( crg::FramePass & pass

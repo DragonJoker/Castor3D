@@ -12,7 +12,7 @@ namespace castor
 		template<>
 		struct LengthUnitConvertFactors< LengthUnit::eKilometre >
 		{
-			static constexpr std::array< double, size_t( LengthUnit::eCount ) > factors{ double( 1.0 )
+			static constexpr Array< double, size_t( LengthUnit::eCount ) > factors{ double( 1.0 )
 				, double( 1000.0 )
 				, double( 100000.0 )
 				, double( 1000000.0 )
@@ -24,7 +24,7 @@ namespace castor
 		template<>
 		struct LengthUnitConvertFactors< LengthUnit::eMetre >
 		{
-			static constexpr std::array< double, size_t( LengthUnit::eCount ) > factors{ double( 1.0 / 1000.0 )
+			static constexpr Array< double, size_t( LengthUnit::eCount ) > factors{ double( 1.0 / 1000.0 )
 				, double( 1.0 )
 				, double( 100.0 )
 				, double( 1000.0 )
@@ -36,7 +36,7 @@ namespace castor
 		template<>
 		struct LengthUnitConvertFactors< LengthUnit::eCentimetre >
 		{
-			static constexpr std::array< double, size_t( LengthUnit::eCount ) > factors{ double( 1.0 / 100000.0 )
+			static constexpr Array< double, size_t( LengthUnit::eCount ) > factors{ double( 1.0 / 100000.0 )
 				, double( 1.0 / 100.0 )
 				, double( 1.0 )
 				, double( 10.0 )
@@ -48,7 +48,7 @@ namespace castor
 		template<>
 		struct LengthUnitConvertFactors< LengthUnit::eMillimetre >
 		{
-			static constexpr std::array< double, size_t( LengthUnit::eCount ) > factors{ double( 1.0 / 1000000.0 )
+			static constexpr Array< double, size_t( LengthUnit::eCount ) > factors{ double( 1.0 / 1000000.0 )
 				, double( 1.0 / 1000.0 )
 				, double( 1.0 / 10.0 )
 				, double( 1.0 )
@@ -60,7 +60,7 @@ namespace castor
 		template<>
 		struct LengthUnitConvertFactors< LengthUnit::eYard >
 		{
-			static constexpr std::array< double, size_t( LengthUnit::eCount ) > factors{ double( 0.0009144 )
+			static constexpr Array< double, size_t( LengthUnit::eCount ) > factors{ double( 0.0009144 )
 				, double( 0.9144 )
 				, double( 91.44 )
 				, double( 914.4 )
@@ -72,7 +72,7 @@ namespace castor
 		template<>
 		struct LengthUnitConvertFactors< LengthUnit::eFoot >
 		{
-			static constexpr std::array< double, size_t( LengthUnit::eCount ) > factors{ double( 0.0003048 )
+			static constexpr Array< double, size_t( LengthUnit::eCount ) > factors{ double( 0.0003048 )
 				, double( 0.3048 )
 				, double( 30.48 )
 				, double( 304.8 )
@@ -84,7 +84,7 @@ namespace castor
 		template<>
 		struct LengthUnitConvertFactors< LengthUnit::eInch >
 		{
-			static constexpr std::array< double, size_t( LengthUnit::eCount ) > factors{ double( 0.0000254 )
+			static constexpr Array< double, size_t( LengthUnit::eCount ) > factors{ double( 0.0000254 )
 				, double( 0.0254 )
 				, double( 2.54 )
 				, double( 25.4 )

@@ -110,16 +110,16 @@ namespace castor3d
 			Pipeline * pipeline;
 		};
 
-		using PipelinePtr = std::unique_ptr< Pipeline >;
+		using PipelinePtr = castor::RawUniquePtr< Pipeline >;
 
 	private:
 		RenderDevice const & m_device;
-		std::unordered_map< size_t, PipelinePtr > m_pipelines;
+		castor::UnorderedMap< size_t, PipelinePtr > m_pipelines;
 		ashes::RenderPassPtr m_renderPass;
 		ashes::FrameBufferPtr m_framebuffer;
 		ashes::CommandPoolPtr m_commandPool;
-		std::array< CommandsSemaphore, 2u > m_commandBuffers;
-		std::vector< AABBBuffer > m_aabbs;
+		castor::Array< CommandsSemaphore, 2u > m_commandBuffers;
+		castor::Vector< AABBBuffer > m_aabbs;
 		uint32_t m_index{};
 	};
 }

@@ -50,7 +50,7 @@
 
 namespace castor3d
 {
-	castor::String const ForwardRenderTechniquePass::Type = "c3d.forward";
+	castor::String const ForwardRenderTechniquePass::Type = cuT( "c3d.forward" );
 
 	ForwardRenderTechniquePass::ForwardRenderTechniquePass( RenderTechnique * parent
 		, crg::FramePass const & pass
@@ -71,8 +71,8 @@ namespace castor3d
 			, graph
 			, device
 			, typeName
-			, std::move( targetImage )
-			, std::move( targetDepth )
+			, castor::move( targetImage )
+			, castor::move( targetDepth )
 			, renderPassDesc
 			, techniquePassDesc }
 		, m_mippedColour{ mippedColour }
@@ -356,11 +356,11 @@ namespace castor3d
 					occlusion *= components.occlusion;
 				}
 
-				output.registerOutput( "Surface", "Normal", fma( components.normal, vec3( 0.5_f ), vec3( 0.5_f ) ) );
-				output.registerOutput( "Surface", "Tangent", fma( in.tangent.xyz(), vec3( 0.5_f ), vec3( 0.5_f ) ) );
-				output.registerOutput( "Surface", "Bitangent", fma( in.bitangent, vec3( 0.5_f ), vec3( 0.5_f ) ) );
-				output.registerOutput( "Surface", "World Position", in.worldPosition );
-				output.registerOutput( "Surface", "View Position", in.viewPosition );
+				output.registerOutput( cuT( "Surface" ), cuT( "Normal" ), fma( components.normal, vec3( 0.5_f ), vec3( 0.5_f ) ) );
+				output.registerOutput( cuT( "Surface" ), cuT( "Tangent" ), fma( in.tangent.xyz(), vec3( 0.5_f ), vec3( 0.5_f ) ) );
+				output.registerOutput( cuT( "Surface" ), cuT( "Bitangent" ), fma( in.bitangent, vec3( 0.5_f ), vec3( 0.5_f ) ) );
+				output.registerOutput( cuT( "Surface" ), cuT( "World Position" ), in.worldPosition );
+				output.registerOutput( cuT( "Surface" ), cuT( "View Position" ), in.viewPosition );
 				auto incident = writer.declLocale( "incident"
 					, reflections.computeIncident( in.worldPosition.xyz(), c3d_cameraData.position() ) );
 
@@ -450,9 +450,9 @@ namespace castor3d
 							}
 
 							directLighting.ambient() = components.ambientColour * c3d_sceneData.ambientLight() * components.ambientFactor;
-							output.registerOutput( "Lighting", "Ambient", directLighting.ambient() );
-							output.registerOutput( "Lighting", "Occlusion", occlusion );
-							output.registerOutput( "Lighting", "Emissive", components.emissiveColour * components.emissiveFactor );
+							output.registerOutput( cuT( "Lighting" ), cuT( "Ambient" ), directLighting.ambient() );
+							output.registerOutput( cuT( "Lighting" ), cuT( "Occlusion" ), occlusion );
+							output.registerOutput( cuT( "Lighting" ), cuT( "Emissive" ), components.emissiveColour * components.emissiveFactor );
 
 							// Indirect Lighting
 							lightSurface.updateL( utils
@@ -513,7 +513,7 @@ namespace castor3d
 								, sheenReflected
 								, output );
 
-							output.registerOutput( "Reflections", "Incident", sdw::fma( incident, vec3( 0.5_f ), vec3( 0.5_f ) ) );
+							output.registerOutput( cuT( "Reflections" ), cuT( "Incident" ), sdw::fma( incident, vec3( 0.5_f ), vec3( 0.5_f ) ) );
 
 							// Combine
 							outColour = vec4( lightingModel->combine( output

@@ -26,7 +26,7 @@ namespace castor
 	void DataImageLoader::registerLoader( ImageLoader & reg )
 	{
 		reg.registerLoader( datal::listExtensions()
-			, std::make_unique< DataImageLoader >() );
+			, castor::make_unique< DataImageLoader >() );
 	}
 
 	void DataImageLoader::unregisterLoader( ImageLoader & reg )
@@ -42,7 +42,7 @@ namespace castor
 		auto format = getFormatByName( imageFormat );
 		auto bitsize = getBytesPerPixel( format );
 		auto dim = uint32_t( sqrt( double( size / bitsize ) ) );
-		outbuffer = PxBufferBase::create( castor::Size{ dim, dim }
+		outbuffer = PxBufferBase::create( Size{ dim, dim }
 			, format
 			, input
 			, format );

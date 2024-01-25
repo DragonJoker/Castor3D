@@ -32,7 +32,7 @@ namespace castor3d
 
 		void setTile( castor::Point2ui tile )noexcept
 		{
-			m_tile = std::move( tile );
+			m_tile = castor::move( tile );
 		}
 
 		castor::Point2ui const & getTile()const noexcept

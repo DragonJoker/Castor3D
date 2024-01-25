@@ -45,13 +45,13 @@ namespace castor3d
 			{
 			case ChunkType::eSceneNodeAnimationKeyFrameTime:
 				result = doParseChunk( time, chunk );
-				checkError( result, "Couldn't parse time index." );
+				checkError( result, cuT( "Couldn't parse time index." ) );
 				obj.doSetTimeIndex( castor::Milliseconds{ int64_t( time * 1000 ) } );
 				break;
 
 			case ChunkType::eSceneNodeAnimationKeyFrameTranslate:
 				result = doParseChunk( vec, chunk );
-				checkError( result, "Couldn't parse translate." );
+				checkError( result, cuT( "Couldn't parse translate." ) );
 
 				if ( result )
 				{
@@ -62,7 +62,7 @@ namespace castor3d
 
 			case ChunkType::eSceneNodeAnimationKeyFrameRotate:
 				result = doParseChunk( quat, chunk );
-				checkError( result, "Couldn't parse rotate." );
+				checkError( result, cuT( "Couldn't parse rotate." ) );
 
 				if ( result )
 				{
@@ -73,7 +73,7 @@ namespace castor3d
 
 			case ChunkType::eSceneNodeAnimationKeyFrameScale:
 				result = doParseChunk( vec, chunk );
-				checkError( result, "Couldn't parse scale." );
+				checkError( result, cuT( "Couldn't parse scale." ) );
 
 				if ( result )
 				{

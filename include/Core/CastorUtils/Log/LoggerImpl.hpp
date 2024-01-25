@@ -77,20 +77,11 @@ namespace castor
 		 *\param[in]	message		Le message
 		 *\param[in]	newLine		Dit si le caractère de nouvelle ligne doit être ajouté
 		 */
-		CU_API void printMessage( LogType logLevel, std::string const & message, bool newLine );
-		/**
-		 *\~english
-		 *\brief		Prints a message to the console
-		 *\param[in]	logLevel	The log level
-		 *\param[in]	message		The message
-		 *\param[in]	newLine		Tells if the new line character must be added
-		 *\~french
-		 *\brief		Affiche un message dans la console
-		 *\param[in]	logLevel	Le niveau de log
-		 *\param[in]	message		Le message
-		 *\param[in]	newLine		Dit si le caractère de nouvelle ligne doit être ajouté
-		 */
-		CU_API void printMessage( LogType logLevel, std::wstring const & message, bool newLine );
+		template< typename CharT >
+		void printMessage( LogType logLevel, std::basic_string< CharT > const & message, bool newLine )
+		{
+			doPrintMessage( logLevel, toUtf8( message ), newLine );
+		}
 		/**
 		 *\~english
 		 *\brief		Logs a message queue
@@ -114,7 +105,7 @@ namespace castor
 		 *\param[in]	message		Le message
 		 *\param[in]	newLine		Dit si le caractère de nouvelle ligne doit être ajouté
 		 */
-		void doPrintMessage( LogType logLevel, String const & message, bool newLine );
+		void doPrintMessage( LogType logLevel, MbString const & message, bool newLine );
 		/**
 		 *\~english
 		 *\brief		Prints a line to the console
@@ -127,7 +118,7 @@ namespace castor
 		 *\param[in]	logLevel	Le niveau de log
 		 *\param[in]	newLine		Dit si le caractère de nouvelle ligne doit être ajouté
 		 */
-		void doPrintLine( String const & line, LogType logLevel, bool newLine );
+		void doPrintLine( MbString const & line, LogType logLevel, bool newLine );
 		/**
 		 *\~english
 		 *\brief		Logs a line in the given stream
@@ -144,15 +135,15 @@ namespace castor
 		 *\param[in]	logLevel	Le niveau de log
 		 *\param[in]	newLine		Dit si le caractère de nouvelle ligne doit être ajouté
 		 */
-		void doLogLine( String const & timestamp, String const & line, StringStream & stream, LogType logLevel, bool newLine );
+		void doLogLine( MbString const & timestamp, MbString const & line, MbStringStream & stream, LogType logLevel, bool newLine );
 
 	private:
 		LoggerInstance & m_parent;
 		ProgramConsole * m_console;
-		std::array< String, size_t( LogType::eCount ) > m_logFilePath;
-		std::mutex m_mutexFiles;
+		Array< String, size_t( LogType::eCount ) > m_logFilePath;
+		castor::Mutex m_mutexFiles;
 		LoggerCallbackMap m_mapCallbacks;
-		std::mutex m_mutexCallbacks;
+		castor::Mutex m_mutexCallbacks;
 	};
 }
 

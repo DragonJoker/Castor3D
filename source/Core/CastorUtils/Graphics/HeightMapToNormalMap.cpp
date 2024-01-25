@@ -29,7 +29,7 @@ namespace castor
 			return size_t( y * width + x );
 		}
 
-		static float getHeight( castor::ArrayView< uint8_t const > const & data
+		static float getHeight( ArrayView< uint8_t const > const & data
 			, int width
 			, int height
 			, int x
@@ -45,8 +45,8 @@ namespace castor
 			return uint8_t( ( value * 0.5 + 0.5 ) * 255.0 );
 		}
 
-		static castor::Point4f calculateNormal( float strength
-			, castor::ArrayView< uint8_t const > const & data
+		static Point4f calculateNormal( float strength
+			, ArrayView< uint8_t const > const & data
 			, int width
 			, int height
 			, int x
@@ -68,16 +68,16 @@ namespace castor
 			const auto dY = float( ( bl + 2.0 * b + br ) - ( tl + 2.0 * t + tr ) );
 			const auto dZ = float( 1.0 / strength );
 
-			castor::Point3f n{ dX, dY, dZ };
-			castor::point::normalise( n );
+			Point3f n{ dX, dY, dZ };
+			point::normalise( n );
 			return { n->x, n->y, n->z, c };
 		}
 
-		static castor::ByteArray calculateNormals( float strength
-			, castor::ArrayView< uint8_t const > const & data
-			, castor::Size const & size )
+		static ByteArray calculateNormals( float strength
+			, ArrayView< uint8_t const > const & data
+			, Size const & size )
 		{
-			castor::ByteArray result;
+			ByteArray result;
 			result.resize( data.size() * 4u );
 			auto width = int( size.getWidth() );
 			auto height = int( size.getHeight() );
@@ -102,42 +102,42 @@ namespace castor
 	}
 
 	bool convertToNormalMap( float strength
-		, castor::Image & image )noexcept
+		, Image & image )noexcept
 	{
 		try
 		{
-			castor::Size origDimensions{ image.getDimensions() };
-			castor::Size dimensions{ origDimensions.getWidth() * 4u
+			Size origDimensions{ image.getDimensions() };
+			Size dimensions{ origDimensions.getWidth() * 4u
 				, origDimensions.getHeight() * 4u };
 			image.resample( dimensions );
-			auto buffer = castor::PxBufferBase::create( dimensions
-				, castor::PixelFormat::eR8_UNORM
+			auto buffer = PxBufferBase::create( dimensions
+				, PixelFormat::eR8_UNORM
 				, image.getPxBuffer().getConstPtr()
 				, image.getPixelFormat()
 				, image.getPxBuffer().getAlign() );
 			auto normals = hgttonml::calculateNormals( strength
-				, castor::makeArrayView( buffer->getConstPtr(), buffer->getSize() )
+				, makeArrayView( buffer->getConstPtr(), buffer->getSize() )
 				, dimensions );
-			auto nmlHeights = castor::PxBufferBase::create( buffer->getDimensions()
-				, castor::PixelFormat::eR8G8B8A8_UNORM
+			auto nmlHeights = PxBufferBase::create( buffer->getDimensions()
+				, PixelFormat::eR8G8B8A8_UNORM
 				, normals.data()
-				, castor::PixelFormat::eR8G8B8A8_UNORM );
-			image = castor::Image{ image.getName(), image.getPath(), *nmlHeights };
+				, PixelFormat::eR8G8B8A8_UNORM );
+			image = Image{ image.getName(), image.getPath(), *nmlHeights };
 			image.resample( origDimensions );
 		}
-		catch ( castor::Exception & exc )
+		catch ( Exception & exc )
 		{
-			std::cerr << cuT( "Error encountered while converting image [" ) << image.getName() << cuT( "] to a normal map: " ) << exc.what() << std::endl;
+			std::cerr << "Error encountered while converting image [" << toUtf8( image.getName() ) << "] to a normal map: " << exc.what() << std::endl;
 			return false;
 		}
 		catch ( std::exception & exc )
 		{
-			std::cerr << cuT( "Error encountered while converting image [" ) << image.getName() << cuT( "] to a normal map: " ) << exc.what() << std::endl;
+			std::cerr << "Error encountered while converting image [" << toUtf8( image.getName() ) << "] to a normal map: " << exc.what() << std::endl;
 			return false;
 		}
 		catch ( ... )
 		{
-			std::cerr << cuT( "Error encountered while converting image [" ) << image.getName() << cuT( "] to a normal map: Unknown error" ) << std::endl;
+			std::cerr << "Error encountered while converting image [" << toUtf8( image.getName() ) << "] to a normal map: Unknown error" << std::endl;
 			return false;
 		}
 

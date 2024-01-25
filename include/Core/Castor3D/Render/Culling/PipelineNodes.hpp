@@ -17,13 +17,13 @@ namespace castor3d
 
 	void registerPipelineNodes( PipelineBaseHash hash
 		, ashes::BufferBase const & buffer
-		, std::vector< PipelineBuffer > & nodesIds );
+		, castor::Vector< PipelineBuffer > & nodesIds );
 	uint32_t getPipelineNodeIndex( PipelineBaseHash hash
 		, ashes::BufferBase const & buffer
-		, std::vector< PipelineBuffer > const & cont );
+		, castor::Vector< PipelineBuffer > const & cont );
 	PipelineNodes & getPipelineNodes( PipelineBaseHash hash
 		, ashes::BufferBase const & buffer
-		, std::vector< PipelineBuffer > const & cont
+		, castor::Vector< PipelineBuffer > const & cont
 		, PipelineNodes * nodes
 		, VkDeviceSize maxNodesCount );
 }

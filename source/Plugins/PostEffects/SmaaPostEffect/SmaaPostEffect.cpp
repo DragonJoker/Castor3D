@@ -161,14 +161,14 @@ namespace smaa
 	//*********************************************************************************************
 
 	castor::String PostEffect::Type = cuT( "smaa" );
-	castor::String PostEffect::Name = cuT( "SMAA PostEffect" );
+	castor::MbString PostEffect::Name = "SMAA PostEffect";
 
 	PostEffect::PostEffect( castor3d::RenderTarget & renderTarget
 		, castor3d::RenderSystem & renderSystem
 		, castor3d::Parameters const & parameters )
 		: castor3d::PostEffect{ PostEffect::Type
-			, "SMAA"
-			, PostEffect::Name
+			, cuT( "SMAA" )
+			, castor::makeString( PostEffect::Name )
 			, renderTarget
 			, renderSystem
 			, parameters
@@ -176,7 +176,7 @@ namespace smaa
 			, Kind::eSRGB }
 		, m_config{ parameters }
 		, m_ubo{ renderSystem.getRenderDevice() }
-		, m_shader{ "SmaaCopy", copy::getProgram( renderSystem.getRenderDevice(), m_config ) }
+		, m_shader{ cuT( "SmaaCopy" ), copy::getProgram( renderSystem.getRenderDevice(), m_config ) }
 		, m_stages{ makeProgramStates( renderSystem.getRenderDevice(), m_shader ) }
 	{
 		if ( m_config.data.mode == Mode::eT2X )
@@ -218,7 +218,7 @@ namespace smaa
 
 		visitor.visit( cuT( "Preset" )
 			, m_config.data.preset
-			, castor::StringArray{ "Low", "Medium", "High", "Ultra", "Custom" }
+			, castor::StringArray{ cuT( "Low" ), cuT( "Medium" ), cuT( "High" ), cuT( "Ultra" ), cuT( "Custom" ) }
 			, castor3d::ConfigurationVisitorBase::OnEnumValueChangeT< Preset >( [this]( Preset oldV, Preset newV )
 			{
 				m_config.updatePreset();
@@ -256,7 +256,7 @@ namespace smaa
 		switch ( m_config.data.edgeDetection )
 		{
 		case EdgeDetectionType::eDepth:
-			m_edgeDetection = std::make_unique< DepthEdgeDetection >( m_graph
+			m_edgeDetection = castor::make_unique< DepthEdgeDetection >( m_graph
 				, *previous
 				, m_renderTarget
 				, device
@@ -267,7 +267,7 @@ namespace smaa
 			break;
 
 		case EdgeDetectionType::eColour:
-			m_edgeDetection = std::make_unique< ColourEdgeDetection >( m_graph
+			m_edgeDetection = castor::make_unique< ColourEdgeDetection >( m_graph
 				, *previous
 				, m_renderTarget
 				, device
@@ -280,7 +280,7 @@ namespace smaa
 			break;
 
 		case EdgeDetectionType::eLuma:
-			m_edgeDetection = std::make_unique< LumaEdgeDetection >( m_graph
+			m_edgeDetection = castor::make_unique< LumaEdgeDetection >( m_graph
 				, *previous
 				, m_renderTarget
 				, device
@@ -298,7 +298,7 @@ namespace smaa
 
 		if constexpr ( !C3D_DebugEdgeDetection )
 		{
-			m_blendingWeightCalculation = std::make_unique< BlendingWeightCalculation >( m_graph
+			m_blendingWeightCalculation = castor::make_unique< BlendingWeightCalculation >( m_graph
 				, *previous
 				, m_renderTarget
 				, device
@@ -313,7 +313,7 @@ namespace smaa
 			if constexpr ( !C3D_DebugBlendingWeightCalculation )
 			{
 				auto * velocityView = doGetVelocityView();
-				m_neighbourhoodBlending = std::make_unique< NeighbourhoodBlending >( m_graph
+				m_neighbourhoodBlending = castor::make_unique< NeighbourhoodBlending >( m_graph
 					, *previous
 					, m_renderTarget
 					, device
@@ -341,7 +341,7 @@ namespace smaa
 								: currentViews[i - 1u] );
 						}
 
-						m_reproject = std::make_unique< Reproject >( m_graph
+						m_reproject = castor::make_unique< Reproject >( m_graph
 							, *previous
 							, m_renderTarget
 							, device
@@ -371,7 +371,7 @@ namespace smaa
 					.passIndex( &m_subsamplePassIndex )
 					.enabled( &m_enabled )
 					.build( framePass, context, graph, { m_config.maxSubsampleIndices * 2u } );
-				getOwner()->getEngine()->registerTimer( framePass.getFullName()
+				getOwner()->getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );

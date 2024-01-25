@@ -45,7 +45,7 @@ namespace PbrBloom
 	{
 		if ( params.empty() )
 		{
-			CU_ParsingError( "Missing parameter" );
+			CU_ParsingError( cuT( "Missing parameter" ) );
 		}
 		else
 		{
@@ -58,7 +58,7 @@ namespace PbrBloom
 	{
 		if ( params.empty() )
 		{
-			CU_ParsingError( "Missing parameter" );
+			CU_ParsingError( cuT( "Missing parameter" ) );
 		}
 		else
 		{
@@ -71,7 +71,7 @@ namespace PbrBloom
 	{
 		if ( params.empty() )
 		{
-			CU_ParsingError( "Missing parameter" );
+			CU_ParsingError( cuT( "Missing parameter" ) );
 		}
 		else
 		{

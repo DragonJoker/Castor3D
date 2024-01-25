@@ -6,10 +6,9 @@ See LICENSE file in root folder
 
 #include "CastorUtils/FileParser/FileParserModule.hpp"
 
+#if defined( CU_CompilerMSVC )
 namespace castor
 {
-#if defined( CU_CompilerMSVC )
-
 	class AttributeParserMap
 	{
 	private:
@@ -56,8 +55,7 @@ namespace castor
 			return m_map.end();
 		}
 	};
-
-#endif
 }
+#endif
 
 #endif

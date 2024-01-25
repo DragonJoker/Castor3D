@@ -14,7 +14,7 @@ namespace Reinhard
 {
 	namespace c3d = castor3d::shader;
 	castor::String ToneMapping::Type = cuT( "reinhard" );
-	castor::String ToneMapping::Name = cuT( "Reinhard Tone Mapping" );
+	castor::MbString ToneMapping::Name = "Reinhard Tone Mapping";
 
 	void ToneMapping::create( ast::ShaderBuilder & builder )
 	{

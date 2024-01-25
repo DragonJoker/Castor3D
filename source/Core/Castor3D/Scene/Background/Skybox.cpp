@@ -53,7 +53,7 @@ namespace castor
 			auto result = true;
 			file << ( cuT( "\n" ) + tabs() + cuT( "//Skybox\n" ) );
 
-			if ( auto block{ beginBlock( file, "skybox" ) } )
+			if ( auto block{ beginBlock( file, cuT( "skybox" ) ) } )
 			{
 				result = writeOpt( file, cuT( "visible" ), background.isVisible(), true );
 
@@ -69,7 +69,7 @@ namespace castor
 						file << ( tabs() + cuT( "equirectangular" )
 							+ cuT( " \"" ) + relative + cuT( "\" " )
 							+ string::toString( size.getWidth() ) + cuT( "\n" ) );
-						castor::TextWriter< SkyboxBackground >::checkError( result, "Skybox equi-texture" );
+						castor::TextWriter< SkyboxBackground >::checkError( result, cuT( "Skybox equi-texture" ) );
 				}
 				else if ( !background.getCrossTexturePath().empty()
 					&& castor::File::fileExists( background.getCrossTexturePath() ) )
@@ -227,7 +227,7 @@ namespace castor3d
 			, ( VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) };
 		m_equiTexture = castor::makeUnique< TextureLayout >( *getScene().getEngine()->getRenderSystem()
-			, std::move( image )
+			, castor::move( image )
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, cuT( "SkyboxBackgroundEquirectangular" ) );
 		m_equiTexture->setSource( folder, relative );
@@ -472,10 +472,10 @@ namespace castor3d
 		return castor::makeUnique< castor::Image >( lines.getName()
 			, lines.getPath()
 			, layout
-			, std::move( buffer ) );
+			, castor::move( buffer ) );
 	}
 
-	std::array< castor::ImageUPtr, 6u > SkyboxBackground::splitCrossImageBuffer( Engine & engine
+	castor::Array< castor::ImageUPtr, 6u > SkyboxBackground::splitCrossImageBuffer( Engine & engine
 		, castor::Image const & cross )
 	{
 		auto height = cross.getHeight() / 3u;

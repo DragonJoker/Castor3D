@@ -77,9 +77,9 @@ namespace castor3d
 				, int32_t rangeMax
 				, int32_t value );
 
-			FrameListenerRPtr listener;
-			ProgressCtrlRPtr progress;
-			ProgressData data;
+			FrameListenerRPtr listener{};
+			ProgressCtrlRPtr progress{};
+			ProgressData data{};
 			CpuFrameEvent * updateEvent{};
 
 		private:
@@ -87,10 +87,10 @@ namespace castor3d
 		};
 
 	private:
-		FrameListenerRPtr m_listener;
-		ProgressLabel m_global;
-		ProgressLabel m_local;
-		std::mutex m_mutex;
+		FrameListenerRPtr m_listener{};
+		ProgressLabel m_global{};
+		ProgressLabel m_local{};
+		castor::Mutex m_mutex{};
 	};
 }
 

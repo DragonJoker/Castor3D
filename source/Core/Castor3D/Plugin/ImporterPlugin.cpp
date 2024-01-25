@@ -7,7 +7,7 @@ CU_ImplementSmartPtr( castor3d, ImporterPlugin )
 namespace castor3d
 {
 	ImporterPlugin::ImporterPlugin( castor::DynamicLibraryUPtr library, Engine * engine )
-		: Plugin( PluginType::eImporter, std::move( library ), *engine )
+		: Plugin( PluginType::eImporter, castor::move( library ), *engine )
 	{
 		load();
 	}

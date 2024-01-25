@@ -619,7 +619,7 @@ namespace castor
 		return setS8U< PF >( pixel.ptr(), value );
 	}
 
-	castor::PixelComponents getPixelComponents( castor::PixelFormat format );
+	PixelComponents getPixelComponents( PixelFormat format );
 }
 
 #include "PixelComponents.inl"

@@ -66,16 +66,16 @@ namespace castor3d
 			{
 			case ChunkType::eSkeletonAnimationKeyFrameTime:
 				result = doParseChunk( time, chunk );
-				checkError( result, "Couldn't parse time index." );
+				checkError( result, cuT( "Couldn't parse time index." ) );
 				obj.doSetTimeIndex( castor::Milliseconds{ int64_t( time * 1000 ) } );
 				break;
 			case ChunkType::eSkeletonAnimationKeyFrameObjectType:
 				result = doParseChunk( type, chunk );
-				checkError( result, "Couldn't parse object type." );
+				checkError( result, cuT( "Couldn't parse object type." ) );
 				break;
 			case ChunkType::eSkeletonAnimationKeyFrameObjectName:
 				result = doParseChunk( name, chunk );
-				checkError( result, "Couldn't parse object name." );
+				checkError( result, cuT( "Couldn't parse object name." ) );
 				break;
 #pragma warning( push )
 #pragma warning( disable: 4996 )
@@ -88,7 +88,7 @@ namespace castor3d
 				{
 					castor::Matrix4x4f matrix;
 					result = doParseChunk( matrix, chunk );
-					checkError( result, "Couldn't parse object transform." );
+					checkError( result, cuT( "Couldn't parse object transform." ) );
 
 					if ( result )
 					{
@@ -102,15 +102,15 @@ namespace castor3d
 				break;
 			case ChunkType::eSkeletonAnimationKeyFrameObjectTranslate:
 				result = doParseChunk( translate, chunk );
-				checkError( result, "Couldn't parse object translate." );
+				checkError( result, cuT( "Couldn't parse object translate." ) );
 				break;
 			case ChunkType::eSkeletonAnimationKeyFrameObjectRotate:
 				result = doParseChunk( rotate, chunk );
-				checkError( result, "Couldn't parse object rotate." );
+				checkError( result, cuT( "Couldn't parse object rotate." ) );
 				break;
 			case ChunkType::eSkeletonAnimationKeyFrameObjectScale:
 				result = doParseChunk( scale, chunk );
-				checkError( result, "Couldn't parse object scale." );
+				checkError( result, cuT( "Couldn't parse object scale." ) );
 				if ( result )
 				{
 					obj.addAnimationObject( *obj.getOwner()->getObject( SkeletonNodeType( type )
@@ -145,11 +145,11 @@ namespace castor3d
 				{
 				case ChunkType::eSkeletonAnimationKeyFrameObjectType:
 					result = doParseChunk( type, chunk );
-					checkError( result, "Couldn't parse object type." );
+					checkError( result, cuT( "Couldn't parse object type." ) );
 					break;
 				case ChunkType::eSkeletonAnimationKeyFrameObjectName:
 					result = doParseChunk( name, chunk );
-					checkError( result, "Couldn't parse object name." );
+					checkError( result, cuT( "Couldn't parse object name." ) );
 					break;
 #pragma warning( push )
 #pragma warning( disable: 4996 )
@@ -159,7 +159,7 @@ namespace castor3d
 #pragma GCC diagnostic pop
 #pragma warning( pop )
 					result = doParseChunk( matrix, chunk );
-					checkError( result, "Couldn't parse object transform." );
+					checkError( result, cuT( "Couldn't parse object transform." ) );
 					if ( result )
 					{
 						castor::Point3f translate;
@@ -198,11 +198,11 @@ namespace castor3d
 				{
 				case ChunkType::eSkeletonAnimationKeyFrameObjectType:
 					result = doParseChunk( type, chunk );
-					checkError( result, "Couldn't parse object type." );
+					checkError( result, cuT( "Couldn't parse object type." ) );
 					break;
 				case ChunkType::eSkeletonAnimationKeyFrameObjectName:
 					result = doParseChunk( name, chunk );
-					checkError( result, "Couldn't parse object name." );
+					checkError( result, cuT( "Couldn't parse object name." ) );
 					break;
 #pragma warning( push )
 #pragma warning( disable: 4996 )
@@ -214,7 +214,7 @@ namespace castor3d
 					if ( m_fileVersion > Version{ 1, 3, 0 } )
 					{
 						result = doParseChunk( matrix, chunk );
-						checkError( result, "Couldn't parse object transform." );
+						checkError( result, cuT( "Couldn't parse object transform." ) );
 
 						if ( result )
 						{

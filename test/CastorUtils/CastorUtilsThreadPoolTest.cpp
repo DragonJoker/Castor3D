@@ -4,8 +4,6 @@
 
 #include <atomic>
 
-using namespace castor;
-
 namespace Testing
 {
 	CastorUtilsThreadPoolTest::CastorUtilsThreadPoolTest()
@@ -23,8 +21,8 @@ namespace Testing
 	void CastorUtilsThreadPoolTest::Underload()
 	{
 		static constexpr size_t count = 1000000u;
-		ThreadPool pool( 5u );
-		std::vector< size_t > data;
+		castor::ThreadPool pool( 5u );
+		castor::Vector< size_t > data;
 		pool.pushJob( [&data]()
 		{
 			while ( data.size() < count )
@@ -42,7 +40,7 @@ namespace Testing
 	void CastorUtilsThreadPoolTest::Exactload()
 	{
 		static constexpr size_t count = 1000000u;
-		ThreadPool pool( 5u );
+		castor::ThreadPool pool( 5u );
 		std::atomic_int value{ 0 };
 
 		auto job = [&value]()
@@ -71,7 +69,7 @@ namespace Testing
 	void CastorUtilsThreadPoolTest::Overload()
 	{
 		static constexpr size_t count = 1000000u;
-		ThreadPool pool( 5u );
+		castor::ThreadPool pool( 5u );
 		std::atomic_int value{ 0 };
 
 		auto job = [&value]()

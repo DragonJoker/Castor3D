@@ -48,7 +48,7 @@ namespace atmosphere_scattering
 		SingleScatteringResult( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+			: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
 		{
 		}
 
@@ -86,7 +86,7 @@ namespace atmosphere_scattering
 		MediumSampleRGB( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+			: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
 		{
 		}
 
@@ -111,7 +111,7 @@ namespace atmosphere_scattering
 		struct Settings
 		{
 			explicit Settings( castor::Length l )
-				: length{ std::move( l ) }
+				: length{ castor::move( l ) }
 			{
 			}
 

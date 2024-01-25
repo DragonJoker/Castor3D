@@ -38,10 +38,10 @@ namespace castor
 		using ElementInitialiserT = typename ElementCacheT::ElementInitialiserT;
 		using ElementCleanerT = typename ElementCacheT::ElementCleanerT;
 		using ElementMergerT = typename ElementCacheT::ElementMergerT;
-		using iterator = std::map< ElementT, ElementKeyT >::iterator;
-		using const_iterator = std::map< ElementT, ElementKeyT >::const_iterator;
+		using iterator = castor::Map< ElementT, ElementKeyT >::iterator;
+		using const_iterator = castor::Map< ElementT, ElementKeyT >::const_iterator;
 		CU_DeclareMap( ElementKeyT, castor3d::FontTextureUPtr, FontTextureStr );
-		using OverlayCategories = std::vector< castor3d::OverlayCategoryRPtr >;
+		using OverlayCategories = castor::Vector< castor3d::OverlayCategoryRPtr >;
 
 	public:
 		/**
@@ -134,7 +134,7 @@ namespace castor
 		castor3d::Viewport m_viewport;
 		Matrix4x4f m_projection;
 		FontTextureStrMap m_fontTextures;
-		std::map< uint32_t, std::map< uint32_t, uint32_t > > m_overlayCountPerLevel;
+		castor::Map< uint32_t, castor::Map< uint32_t, uint32_t > > m_overlayCountPerLevel;
 	};
 }
 

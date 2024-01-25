@@ -40,7 +40,7 @@ namespace water
 			, castor::StringStream & file )override
 		{
 			castor3d::log::info << this->tabs() << cuT( "Writing Water data " ) << std::endl;
-			return this->writeOpt( file, "dampeningFactor", pass.getDampeningFactor(), 5.0f )
+			return this->writeOpt( file, cuT( "dampeningFactor" ), pass.getDampeningFactor(), 5.0f )
 				&& this->writeOpt( file, cuT( "depthSofteningDistance" ), pass.getDepthSofteningDistance(), 0.5f )
 				&& this->writeOpt( file, cuT( "noiseTiling" ), pass.getNoiseTiling(), 1.0f )
 				&& this->writeOpt( file, cuT( "refractionDistortionFactor" ), pass.getRefractionDistortionFactor(), 0.04f )
@@ -65,7 +65,7 @@ namespace water
 			}
 			else if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -83,7 +83,7 @@ namespace water
 			}
 			else if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -101,7 +101,7 @@ namespace water
 			}
 			else if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -119,7 +119,7 @@ namespace water
 			}
 			else if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -137,7 +137,7 @@ namespace water
 			}
 			else if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -155,7 +155,7 @@ namespace water
 			}
 			else if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -173,7 +173,7 @@ namespace water
 			}
 			else if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -191,7 +191,7 @@ namespace water
 			}
 			else if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -209,7 +209,7 @@ namespace water
 			}
 			else if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -227,7 +227,7 @@ namespace water
 			}
 			else if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -245,7 +245,7 @@ namespace water
 			}
 			else if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -263,7 +263,7 @@ namespace water
 			}
 			else if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -281,7 +281,7 @@ namespace water
 			}
 			else if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -299,7 +299,7 @@ namespace water
 			}
 			else if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -317,7 +317,7 @@ namespace water
 			}
 			else if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -335,7 +335,7 @@ namespace water
 			}
 			else if ( params.empty() )
 			{
-				CU_ParsingError( "Missing parameter" );
+				CU_ParsingError( cuT( "Missing parameter" ) );
 			}
 			else
 			{
@@ -603,9 +603,18 @@ namespace water
 
 	void WaterComponent::onAddToPass()const
 	{
-		auto & pass = *getOwner();
-		pass.getComponent< castor3d::BlendComponent >()->setAlphaBlendMode( castor3d::BlendMode::eInterpolative );
-		pass.getComponent< castor3d::TransmissionComponent >()->setTransmission( 1.0f );
+		if ( auto pass = getOwner() )
+		{
+			if ( auto blend = pass->getComponent< castor3d::BlendComponent >() )
+			{
+				blend->setAlphaBlendMode( castor3d::BlendMode::eInterpolative );
+			}
+
+			if ( auto transmission = pass->getComponent< castor3d::TransmissionComponent >() )
+			{
+				transmission->setTransmission( 1.0f );
+			}
+		}
 	}
 
 	void WaterComponent::accept( castor3d::ConfigurationVisitorBase & vis )

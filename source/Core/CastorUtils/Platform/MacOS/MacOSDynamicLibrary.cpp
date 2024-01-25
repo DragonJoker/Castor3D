@@ -14,7 +14,7 @@ namespace castor
 	{
 		if ( !m_library )
 		{
-			std::string name( string::stringCast< char >( m_pathLibrary ) );
+			MbString name( toUtf8( m_pathLibrary ) );
 
 			try
 			{
@@ -22,7 +22,7 @@ namespace castor
 			}
 			catch ( ... )
 			{
-				Logger::logError( std::string( "Can't load dynamic library at [" ) + m_pathLibrary + std::string( "]" ) );
+				Logger::logError( makeStringStream() << cuT( "Can't load dynamic library at [" ) << m_pathLibrary << cuT( "]" ) );
 				m_library = nullptr;
 				m_pathLibrary.clear();
 			}
@@ -35,7 +35,7 @@ namespace castor
 
 		if ( m_library )
 		{
-			std::string stdname( string::stringCast< char >( name ) );
+			MbString stdname( toUtf8( name ) );
 
 			try
 			{
@@ -45,23 +45,23 @@ namespace castor
 
 				if ( error != nullptr )
 				{
-					throw std::runtime_error( std::string( error ) );
+					throw std::runtime_error( MbString( error ) );
 				}
 			}
 			catch ( std::exception & exc )
 			{
 				result = nullptr;
-				Logger::logError( std::string( "Can't load function [" ) + stdname + std::string( "]: " ) + exc.what() );
+				Logger::logError( makeStringStream() << cuT( "Can't load function [" ) << name << cuT( "]: " ) << exc.what() );
 			}
 			catch ( ... )
 			{
 				result = nullptr;
-				Logger::logError( std::string( "Can't load function [" ) + stdname + std::string( "]: Unknown error." ) );
+				Logger::logError( makeStringStream() << cuT( "Can't load function [" ) << name << cuT( "]: Unknown error." ) );
 			}
 		}
 		else
 		{
-			Logger::logError( cuT( "Can't load function [" ) + name + cuT( "] because dynamic library is not loaded" ) );
+			Logger::logError( makeStringStream() << cuT( "Can't load function [" ) << name << cuT( "] because dynamic library is not loaded" ) );
 		}
 
 		return result;
@@ -77,7 +77,7 @@ namespace castor
 			}
 			catch ( ... )
 			{
-				Logger::logError( std::string( "Can't unload dynamic library" ) );
+				Logger::logError( cuT( "Can't unload dynamic library" ) );
 			}
 
 			m_library = nullptr;

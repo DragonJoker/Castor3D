@@ -280,7 +280,7 @@ namespace fireworks
 	//*********************************************************************************************
 
 	castor::String const ParticleSystem::Type = cuT( "fireworks" );
-	castor::String const ParticleSystem::Name = cuT( "Fireworks Particle" );
+	castor::MbString const ParticleSystem::Name = "Fireworks Particle";
 
 	ParticleSystem::ParticleSystem( castor3d::ParticleSystem & parent )
 		: CpuParticleSystem( parent )
@@ -309,7 +309,7 @@ namespace fireworks
 
 			if ( particle.getValue< castor3d::ParticleFormat::eFloat >( eType ) == 0.0f )
 			{
-				particle = std::move( m_particles[m_firstUnused - 1] );
+				particle = castor::move( m_particles[m_firstUnused - 1] );
 				--m_firstUnused;
 			}
 		}

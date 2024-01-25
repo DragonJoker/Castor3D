@@ -120,7 +120,7 @@ namespace castor3d
 		: public castor::Named
 	{
 		explicit MovableMergerT( castor::String name )
-			: castor::Named{ std::move( name ) }
+			: castor::Named{ castor::move( name ) }
 		{
 		}
 
@@ -152,7 +152,7 @@ namespace castor3d
 				ires = destination.emplace( name, ElementPtrT{} );
 			}
 
-			ires.first->second = std::move( element );
+			ires.first->second = castor::move( element );
 			ires.first->second->rename( name );
 		}
 	};
@@ -164,9 +164,9 @@ namespace castor3d
 
 		void operator()( ElementT & element
 			, SceneNode & parent
-			, SceneNodeRPtr rootNode
-			, SceneNodeRPtr rootCameraNode
-			, SceneNodeRPtr rootObjectNode )const
+			, [[maybe_unused]] SceneNodeRPtr rootNode
+			, [[maybe_unused]] SceneNodeRPtr rootCameraNode
+			, [[maybe_unused]] SceneNodeRPtr rootObjectNode )const
 		{
 			parent.attachObject( element );
 		}

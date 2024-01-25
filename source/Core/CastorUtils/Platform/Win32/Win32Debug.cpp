@@ -16,7 +16,7 @@
 #	pragma warning( pop )
 #endif
 
-namespace castor::Debug
+namespace castor::debug
 {
 #if !defined( NDEBUG )
 
@@ -24,6 +24,10 @@ namespace castor::Debug
 	{
 		struct DbgHelpContext
 		{
+			DbgHelpContext( DbgHelpContext const & ) = delete;
+			DbgHelpContext( DbgHelpContext && )noexcept = delete;
+			DbgHelpContext & operator=( DbgHelpContext const & ) = delete;
+			DbgHelpContext & operator=( DbgHelpContext && )noexcept = delete;
 			DbgHelpContext()
 				: process{ ::GetCurrentProcess() }
 			{
@@ -32,7 +36,7 @@ namespace castor::Debug
 
 				if ( !initialised )
 				{
-					std::cerr << "SymInitialize failed: " << system::getLastErrorText() << std::endl;
+					std::cerr << "SymInitialize failed: " << toUtf8( system::getLastErrorText() ) << std::endl;
 				}
 			}
 
@@ -41,7 +45,7 @@ namespace castor::Debug
 				::SymCleanup( process );
 			}
 
-			void loadModule( CU_UnusedParam( DynamicLibrary const &, library ) )
+			void loadModule( CU_UnusedParam( DynamicLibrary const &, library ) )const
 			{
 /**
 				auto result = ::SymLoadModuleEx( doGetProcess()    // target process 
@@ -64,7 +68,7 @@ namespace castor::Debug
 */
 			}
 
-			void unloadModule( CU_UnusedParam( DynamicLibrary const &, library ) )
+			void unloadModule( CU_UnusedParam( DynamicLibrary const &, library ) )const
 			{
 /**
 				auto address = libraryBaseAddress[&library];
@@ -76,14 +80,13 @@ namespace castor::Debug
 */
 			}
 
-			template< typename CharU, typename CharT >
-			inline std::basic_string< CharU > demangle( std::basic_string< CharT > const & name )const
+			inline MbString demangle( MbString const & name )const
 			{
-				std::string ret = string::stringCast< char >( name );
+				MbString ret = name;
 
 				try
 				{
-					if ( std::array< char, 2048 > real{};
+					if ( Array< char, 2048 > real{};
 						::UnDecorateSymbolName( ret.c_str(), real.data(), DWORD( real.size() ), UNDNAME_COMPLETE ) )
 					{
 						ret = real.data();
@@ -94,40 +97,39 @@ namespace castor::Debug
 					// What to do...
 				}
 
-				return string::stringCast< CharU >( ret );
+				return ret;
 			}
 
 			HANDLE process{};
 			bool initialised{};
 
 		private:
-			std::map< DynamicLibrary const *, DWORD64 > libraryBaseAddress;
+			Map< DynamicLibrary const *, DWORD64 > libraryBaseAddress;
 		};
 
-		using DbgHelpContextPtr = std::unique_ptr< DbgHelpContext >;
+		using DbgHelpContextPtr = castor::RawUniquePtr< DbgHelpContext >;
 
 		static DbgHelpContextPtr & getContext()
 		{
-			static DbgHelpContextPtr result{ std::make_unique< DbgHelpContext >() };
+			static DbgHelpContextPtr result{ castor::make_unique< DbgHelpContext >() };
 			return result;
 		}
 
-		template< typename CharT >
 		static void showSymbol( DbgHelpContext const & context
 			, DWORD64 symbolAddress
 			, SYMBOL_INFO * symbolInfo
-			, std::basic_ostream< CharT > & stream )
+			, OutputStream & stream )
 		{
 			if ( ::SymFromAddr( context.process, symbolAddress, nullptr, symbolInfo ) )
 			{
-				stream << "== " << context.demangle< CharT >( string::stringCast< char >( symbolInfo->Name, symbolInfo->Name + symbolInfo->NameLen ) );
+				stream << "== " << makeString( context.demangle( std::string{ symbolInfo->Name, symbolInfo->Name + symbolInfo->NameLen } ) );
 				IMAGEHLP_LINE64 line{};
 				DWORD displacement{};
 				line.SizeOfStruct = sizeof( IMAGEHLP_LINE64 );
 
 				if ( ::SymGetLineFromAddr64( context.process, symbolInfo->Address, &displacement, &line ) )
 				{
-					stream << "(" << string::stringCast< CharT >( line.FileName ) << ":" << line.LineNumber << ":" << displacement << ")";
+					stream << "(" << makeString( line.FileName ) << ":" << line.LineNumber << ":" << displacement << ")";
 				}
 
 				stream << std::endl;
@@ -138,32 +140,31 @@ namespace castor::Debug
 			}
 		}
 
-		template< typename CharT >
-		static void showBacktrace( std::basic_ostream< CharT > & stream
+		static void showBacktrace( OutputStream & stream
 			, int toCapture
 			, int toSkip )
 		{
-			static std::mutex mutex;
-			using LockType = std::unique_lock< std::mutex >;
+			static castor::Mutex mutex;
+			using LockType = castor::UniqueLock< castor::Mutex >;
 
-			if ( auto & context = getContext();
+			if ( auto const & context = getContext();
 				context && context->initialised )
 			{
 				LockType lock{ makeUniqueLock( mutex ) };
 				const int MaxFnNameLen( 255 );
 
-				std::vector< void * > backTrace( size_t( toCapture - toSkip ) );
+				Vector< void * > backTrace( size_t( toCapture - toSkip ) );
 				auto num( ::RtlCaptureStackBackTrace( DWORD( toSkip )
 					, DWORD( toCapture - toSkip )
 					, backTrace.data()
 					, nullptr ) );
 
-				stream << "CALL STACK:" << std::endl;
+				stream << cuT( "CALL STACK:" ) << std::endl;
 
 				// symbol->Name type is char [1] so there is space for \0 already
 				auto size = sizeof( SYMBOL_INFO ) + ( MaxFnNameLen * sizeof( char ) );
 
-				if ( auto symbol = ( ( SYMBOL_INFO * )malloc( size ) ) )
+				if ( auto symbol = static_cast< SYMBOL_INFO * >( malloc( size ) ) )
 				{
 					memset( symbol, 0, size );
 					symbol->MaxNameLen = MaxFnNameLen;
@@ -179,7 +180,7 @@ namespace castor::Debug
 			}
 			else
 			{
-				stream << "== Unable to retrieve the call stack: " << string::stringCast< CharT >( system::getLastErrorText() ) << std::endl;
+				stream << cuT( "== Unable to retrieve the call stack: " ) << system::getLastErrorText() << std::endl;
 			}
 		}
 	}
@@ -232,19 +233,12 @@ namespace castor::Debug
 
 #endif
 
-	std::wostream & operator<<( std::wostream & stream, Backtrace const & backtrace )
+	OutputStream & operator<<( OutputStream & stream, Backtrace const & backtrace )
 	{
 		static std::locale const loc{ "C" };
-		stream.imbue( loc );
+		auto oldLoc = stream.imbue( loc );
 		dbg::showBacktrace( stream, backtrace.m_toCapture, backtrace.m_toSkip );
-		return stream;
-	}
-
-	std::ostream & operator<<( std::ostream & stream, Backtrace const & backtrace )
-	{
-		static std::locale const loc{ "C" };
-		stream.imbue( loc );
-		dbg::showBacktrace( stream, backtrace.m_toCapture, backtrace.m_toSkip );
+		stream.imbue( oldLoc );
 		return stream;
 	}
 }

@@ -317,7 +317,7 @@ namespace castor3d
 				};
 				crg::cp::ConfigData cpConfig;
 				crg::PipelineHolder pipeline;
-				std::map< uint32_t, ProgramData > programs;
+				castor::Map< uint32_t, ProgramData > programs;
 
 				Pipeline( crg::FramePass const & framePass
 					, crg::GraphContext & context
@@ -360,7 +360,7 @@ namespace castor3d
 					{
 						auto & program = it->second;
 						program.shaderModule = ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT
-							, "BuildLightsBVH/" + ( bottomLevel ? castor::String{ "Bottom/" } : castor::String{ "Top/" } ) + getName( lightType )
+							, cuT( "BuildLightsBVH/" ) + ( bottomLevel ? castor::String{ cuT( "Bottom/" ) } : castor::String{ cuT( "Top/" ) } ) + getName( lightType )
 							, createShader( device, config, lightType, bottomLevel ) };
 						program.stages = ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, program.shaderModule ) };
 					}
@@ -495,7 +495,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	crg::FramePassArray createBuildLightsBVHPass( crg::FramePassGroup & graph
-		, crg::FramePassArray previousPasses
+		, crg::FramePassArray const & previousPasses
 		, RenderDevice const & device
 		, FrustumClusters & clusters )
 	{
@@ -505,24 +505,24 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = std::make_unique< lgtbvh::FramePass >( framePass
+				auto result = castor::make_unique< lgtbvh::FramePass >( framePass
 					, context
 					, graph
 					, device
 					, clusters
 					, LightType::ePoint );
-				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
 		point.addDependency( *previousPasses.front() );
 		clusters.getClustersUbo().createPassBinding( point, lgtbvh::eClusters );
-		createInputStoragePassBinding( point, uint32_t( lgtbvh::eAllLightsAABB ), "C3D_AllLightsAABB", clusters.getAllLightsAABBBuffer(), 0u, ashes::WholeSize );
-		createInputStoragePassBinding( point, uint32_t( lgtbvh::eLightIndices ), "C3D_PointLightIndices"
+		createInputStoragePassBinding( point, uint32_t( lgtbvh::eAllLightsAABB ), cuT( "C3D_AllLightsAABB" ), clusters.getAllLightsAABBBuffer(), 0u, ashes::WholeSize );
+		createInputStoragePassBinding( point, uint32_t( lgtbvh::eLightIndices ), cuT( "C3D_PointLightIndices" )
 			, { &clusters.getOutputPointLightIndicesBuffer(), &clusters.getInputPointLightIndicesBuffer(), &clusters.getOutputPointLightIndicesBuffer()
 				, &clusters.getOutputPointLightIndicesBuffer(), &clusters.getInputPointLightIndicesBuffer(), &clusters.getOutputPointLightIndicesBuffer() }
 			, 0u, ashes::WholeSize );
-		createClearableOutputStorageBinding( point, uint32_t( lgtbvh::eLightBVH ), "C3D_PointLightBVH", clusters.getPointLightBVHBuffer(), 0u, ashes::WholeSize );
+		createClearableOutputStorageBinding( point, uint32_t( lgtbvh::eLightBVH ), cuT( "C3D_PointLightBVH" ), clusters.getPointLightBVHBuffer(), 0u, ashes::WholeSize );
 
 		// Spot lights
 		auto & spot = graph.createPass( "BuildLightsBVH/Spot"
@@ -530,24 +530,24 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = std::make_unique< lgtbvh::FramePass >( framePass
+				auto result = castor::make_unique< lgtbvh::FramePass >( framePass
 					, context
 					, graph
 					, device
 					, clusters
 					, LightType::eSpot );
-				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );
 		spot.addDependency( *previousPasses.back() );
 		clusters.getClustersUbo().createPassBinding( spot, lgtbvh::eClusters );
-		createInputStoragePassBinding( spot, uint32_t( lgtbvh::eAllLightsAABB ), "C3D_AllLightsAABB", clusters.getAllLightsAABBBuffer(), 0u, ashes::WholeSize );
-		createInputStoragePassBinding( spot, uint32_t( lgtbvh::eLightIndices ), "C3D_SpotLightIndices"
+		createInputStoragePassBinding( spot, uint32_t( lgtbvh::eAllLightsAABB ), cuT( "C3D_AllLightsAABB" ), clusters.getAllLightsAABBBuffer(), 0u, ashes::WholeSize );
+		createInputStoragePassBinding( spot, uint32_t( lgtbvh::eLightIndices ), cuT( "C3D_SpotLightIndices" )
 			, { &clusters.getOutputSpotLightIndicesBuffer(), &clusters.getInputSpotLightIndicesBuffer(), &clusters.getOutputSpotLightIndicesBuffer()
 				, &clusters.getOutputSpotLightIndicesBuffer(), &clusters.getInputSpotLightIndicesBuffer(), &clusters.getOutputSpotLightIndicesBuffer() }
 			, 0u, ashes::WholeSize );
-		createClearableOutputStorageBinding( spot, uint32_t( lgtbvh::eLightBVH ), "C3D_SpotLightBVH", clusters.getSpotLightBVHBuffer(), 0u, ashes::WholeSize );
+		createClearableOutputStorageBinding( spot, uint32_t( lgtbvh::eLightBVH ), cuT( "C3D_SpotLightBVH" ), clusters.getSpotLightBVHBuffer(), 0u, ashes::WholeSize );
 
 		return { &point, &spot };
 	}

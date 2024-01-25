@@ -36,7 +36,7 @@ namespace toon
 			, castor::StringStream & file )override
 		{
 			castor3d::log::info << this->tabs() << cuT( "Writing Toon data " ) << std::endl;
-			return this->writeOpt( file, "smooth_band_width", pass.getSmoothBandWidth(), 1.0f )
+			return this->writeOpt( file, cuT( "smooth_band_width" ), pass.getSmoothBandWidth(), 1.0f )
 				&& this->writeOpt( file, cuT( "edge_width" ), pass.getEdgeWidth(), 1.0f )
 				&& this->writeOpt( file, cuT( "edge_depth_factor" ), pass.getDepthFactor(), 1.0f )
 				&& this->writeOpt( file, cuT( "edge_normal_factor" ), pass.getNormalFactor(), 1.0f )

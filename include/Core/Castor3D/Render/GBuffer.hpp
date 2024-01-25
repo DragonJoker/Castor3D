@@ -74,16 +74,16 @@ namespace castor3d
 		*	Le nombre de samples des images.
 		*/
 		template< typename TextureEnumT >
-		std::vector< Texture const * > doCreateTextures( crg::ResourcesCache & resources
-			, std::array< Texture const *, size_t( TextureEnumT::eCount ) > const & inputs
+		castor::Vector< Texture const * > doCreateTextures( crg::ResourcesCache & resources
+			, castor::Array< Texture const *, size_t( TextureEnumT::eCount ) > const & inputs
 			, castor::String const & prefix
 			, VkImageCreateFlags createFlags
 			, castor::Size const & size
 			, uint32_t layerCount
 			, VkSampleCountFlagBits sampleCount
-			, std::vector< TextureUPtr > & owned )const
+			, castor::Vector< TextureUPtr > & owned )const
 		{
-			std::vector< Texture const * > result;
+			castor::Vector< Texture const * > result;
 
 			for ( uint32_t i = 0u; i < inputs.size(); ++i )
 			{
@@ -144,15 +144,15 @@ namespace castor3d
 		*	Le nombre de samples des images.
 		*/
 		template< typename TextureEnumT >
-		std::vector< Texture const * > doCreateTextures( crg::ResourcesCache & resources
-			, std::array< Texture const *, size_t( TextureEnumT::eCount ) > const & inputs
+		castor::Vector< Texture const * > doCreateTextures( crg::ResourcesCache & resources
+			, castor::Array< Texture const *, size_t( TextureEnumT::eCount ) > const & inputs
 			, castor::String const & prefix
 			, VkImageCreateFlags createFlags
 			, VkExtent3D const & size
 			, VkSampleCountFlagBits sampleCount
-			, std::vector< TextureUPtr > & owned )const
+			, castor::Vector< TextureUPtr > & owned )const
 		{
-			std::vector< Texture const * > result;
+			castor::Vector< Texture const * > result;
 
 			for ( uint32_t i = 0u; i < inputs.size(); ++i )
 			{
@@ -237,12 +237,12 @@ namespace castor3d
 		GBufferT( crg::ResourcesCache & resources
 			, RenderDevice const & device
 			, castor::String name
-			, std::array< Texture const *, size_t( TextureEnumT::eCount ) > const & inputs
+			, castor::Array< Texture const *, size_t( TextureEnumT::eCount ) > const & inputs
 			, VkImageCreateFlags createFlags
 			, castor::Size const & size
 			, uint32_t layerCount = 1u
 			, VkSampleCountFlagBits sampleCount = VK_SAMPLE_COUNT_1_BIT )
-			: GBufferBase{ device, std::move( name ) }
+			: GBufferBase{ device, castor::move( name ) }
 			, m_result{ doCreateTextures< TextureEnumT >( resources
 				, inputs
 				, getName()
@@ -292,11 +292,11 @@ namespace castor3d
 		GBufferT( crg::ResourcesCache & resources
 			, RenderDevice const & device
 			, castor::String name
-			, std::array< Texture const *, size_t( TextureEnumT::eCount ) > const & inputs
+			, castor::Array< Texture const *, size_t( TextureEnumT::eCount ) > const & inputs
 			, VkImageCreateFlags createFlags
 			, VkExtent3D const & size
 			, VkSampleCountFlagBits sampleCount = VK_SAMPLE_COUNT_1_BIT )
-			: GBufferBase{ device, std::move( name ) }
+			: GBufferBase{ device, castor::move( name ) }
 			, m_result{ doCreateTextures< TextureEnumT >( resources
 				, inputs
 				, getName()
@@ -373,8 +373,8 @@ namespace castor3d
 		/**@}*/
 
 	protected:
-		std::vector< TextureUPtr > m_owned;
-		std::vector< Texture const * > m_result;
+		castor::Vector< TextureUPtr > m_owned;
+		castor::Vector< Texture const * > m_result;
 	};
 }
 

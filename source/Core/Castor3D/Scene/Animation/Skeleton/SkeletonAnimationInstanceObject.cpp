@@ -25,7 +25,7 @@ namespace castor3d
 						, static_cast< SkeletonAnimationNode & >( *moving )
 						, allObjects );
 					addChild( *instance );
-					allObjects.push_back( std::move( instance ) );
+					allObjects.push_back( castor::move( instance ) );
 				}
 				break;
 
@@ -35,7 +35,7 @@ namespace castor3d
 						, static_cast< SkeletonAnimationBone & >( *moving )
 						, allObjects );
 					addChild( *instance );
-					allObjects.push_back( std::move( instance ) );
+					allObjects.push_back( castor::move( instance ) );
 				}
 				break;
 

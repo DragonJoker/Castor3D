@@ -19,9 +19,9 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	C3D_API void postPreRenderGpuEvent( Engine & engine
-		, std::function< void( RenderDevice const &, QueueData const & ) > event );
+		, castor::Function< void( RenderDevice const &, QueueData const & ) > event );
 	C3D_API void postQueueRenderCpuEvent( Engine & engine
-		, std::function< void() > event );
+		, castor::Function< void() > event );
 
 	template< typename ResourceT, template< typename ResT > typename PointerT >
 	class DoubleBufferedResourceT
@@ -29,7 +29,7 @@ namespace castor3d
 	{
 	public:
 		using ResourcePtrT = PointerT< ResourceT >;
-		using OnChangedFunction = std::function< void( DoubleBufferedResourceT const & ) >;
+		using OnChangedFunction = castor::Function< void( DoubleBufferedResourceT const & ) >;
 		using OnChanged = castor::SignalT< OnChangedFunction >;
 
 		struct Resource
@@ -43,8 +43,8 @@ namespace castor3d
 			, ResourcePtrT back
 			, ResourcePtrT front )
 			: OwnedBy{ parent }
-			, m_back{ std::move( back ) }
-			, m_front{ std::move( front ) }
+			, m_back{ castor::move( back ) }
+			, m_front{ castor::move( front ) }
 		{
 		}
 
@@ -129,7 +129,7 @@ namespace castor3d
 						postQueueRenderCpuEvent( *getEngine()
 							, [this]()
 							{
-								std::swap( m_front, m_back );
+								castor::swap( m_front, m_back );
 								swapResources();
 								onResourceChanged( *this );
 							} );
@@ -283,7 +283,7 @@ namespace castor3d
 		GlyphPositionMap m_backGlyphsPositions;
 		uint32_t m_id;
 		FontGlyphBufferUPtr m_buffer;
-		std::map< char32_t, uint32_t > m_charIndices;
+		castor::Map< char32_t, uint32_t > m_charIndices;
 	};
 }
 

@@ -84,7 +84,7 @@ namespace GuiCommon
 	}
 
 	void FrameVariablesList::loadVariables( VkShaderStageFlagBits stage
-		, std::vector< UniformBufferValues > & ubos )
+		, castor::Vector< UniformBufferValues > & ubos )
 	{
 		wxTreeItemId root = AddRoot( _( "Root" ) );
 

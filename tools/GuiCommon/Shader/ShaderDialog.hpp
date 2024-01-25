@@ -16,7 +16,7 @@ namespace GuiCommon
 	{
 	public:
 		ShaderDialog( castor3d::Engine * engine
-			, ShaderSources && sources
+			, ShaderSources sources
 			, wxString const & title
 			, wxWindow * parent
 			, wxPoint const & position = wxDefaultPosition
@@ -50,8 +50,8 @@ namespace GuiCommon
 		castor3d::Engine * m_engine;
 		wxAuiManager m_auiManager;
 		wxAuiNotebook * m_programs;
-		std::unique_ptr< StcContext > m_stcContext;
-		std::vector< ShaderProgramPage * > m_pages;
+		castor::RawUniquePtr< StcContext > m_stcContext;
+		castor::Vector< ShaderProgramPage * > m_pages;
 		ShaderSources m_sources;
 		wxMenuItem * m_glslRadio;
 		wxMenuItem * m_hlslRadio;

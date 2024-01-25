@@ -55,7 +55,7 @@ namespace castortd
 
 		if ( m_enemiesCache.empty() )
 		{
-			castor::String name = cuT( "EnemyCube_" ) + std::to_string( m_totalSpawned );
+			castor::String name = cuT( "EnemyCube_" ) + castor::string::toString( m_totalSpawned );
 			auto baseNode = game.getScene().addNewSceneNode( name + cuT( "_Base" ) );
 			baseNode->setPosition( game.convert( castor::Point2i{ cell.m_x, cell.m_y - 1 } ) + castor::Point3f{ 0, game.getCellHeight(), 0 } );
 			baseNode->attachTo( *game.getMapNode() );
@@ -72,7 +72,7 @@ namespace castortd
 				geometry->setMaterial( *submesh, game.getEnemyMaterial() );
 			}
 
-			game.getScene().addGeometry( std::move( geometry ) );
+			game.getScene().addGeometry( castor::move( geometry ) );
 
 			auto light = game.getScene().createLight( name
 				, game.getScene()
@@ -83,7 +83,7 @@ namespace castortd
 			light->setIntensity( 0.8f, 1.0f );
 			light->getPointLight()->setAttenuation( castor::Point3f{ 1.0f, 0.1f, 0.0f } );
 			game.getScene().addLight( name, light );
-			result = std::make_shared< Enemy >( *baseNode, game, path, m_category );
+			result = castor::make_shared< Enemy >( *baseNode, game, path, m_category );
 		}
 		else
 		{
@@ -99,6 +99,6 @@ namespace castortd
 	void EnemySpawner::killEnemy( Game & game, EnemyPtr && enemy )
 	{
 		enemy->getNode().setPosition( castor::Point3f{ 0, -1000, 0 } );
-		m_enemiesCache.push_back( std::move( enemy ) );
+		m_enemiesCache.push_back( castor::move( enemy ) );
 	}
 }

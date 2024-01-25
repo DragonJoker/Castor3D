@@ -12,8 +12,8 @@ namespace castor
 	class ThreadPool
 		: public NonMovable
 	{
-		using WorkerPtr = std::unique_ptr< WorkerThread >;
-		using WorkerArray = std::vector< WorkerPtr >;
+		using WorkerPtr = castor::RawUniquePtr< WorkerThread >;
+		using WorkerArray = Vector< WorkerPtr >;
 
 	public:
 		/**
@@ -56,7 +56,7 @@ namespace castor
 		 *\param[in]	timeout	Le temps d'attente maximum.
 		 *\return		\p true Si tous les threads on terminé.
 		 */
-		CU_API bool waitAll( castor::Milliseconds const & timeout )const;
+		CU_API bool waitAll( Milliseconds const & timeout )const;
 		/**
 		 *\~english
 		 *\brief		Feeds a worker thread with the given job.
@@ -87,8 +87,8 @@ namespace castor
 		size_t const m_count;
 		WorkerArray m_available;
 		WorkerArray m_busy;
-		mutable std::mutex m_mutex;
-		std::vector< WorkerThread::OnEnded::connection > m_endConnections;
+		mutable castor::Mutex m_mutex;
+		Vector< WorkerThread::OnEnded::connection > m_endConnections;
 	};
 }
 

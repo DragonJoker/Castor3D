@@ -24,9 +24,9 @@ namespace castor
 	{
 		log::info << tabs() << cuT( "Writing FrameCtrl " ) << control.getName() << std::endl;
 		auto result = writeSub< Control >( file, control )
-			&& writeName( file, "header_caption", string::stringCast< xchar >( control.getHeaderCaption() ) )
-			&& writeOpt( file, "header_horizontal_align", getName( control.getHeaderHAlign() ), getName( HAlign::eLeft ) )
-			&& writeOpt( file, "header_vertical_align", getName( control.getHeaderVAlign() ), getName( VAlign::eTop ) );
+			&& writeName( file, cuT( "header_caption" ), makeString( control.getHeaderCaption() ) )
+			&& writeOpt( file, cuT( "header_horizontal_align" ), getName( control.getHeaderHAlign() ), getName( HAlign::eLeft ) )
+			&& writeOpt( file, cuT( "header_vertical_align" ), getName( control.getHeaderVAlign() ), getName( VAlign::eTop ) );
 
 		if ( result )
 		{
@@ -53,8 +53,8 @@ namespace castor
 	{
 		log::info << tabs() << cuT( "Writing FrameStyle " ) << style.getName() << std::endl;
 		return writeSub< ControlStyle >( file, style )
-			&& writeNameOpt( file, "header_font", style.getHeaderFontName(), m_fontName )
-			&& writeName( file, "header_text_material", style.getHeaderTextMaterial()->getName() );
+			&& writeNameOpt( file, cuT( "header_font" ), style.getHeaderFontName(), m_fontName )
+			&& writeName( file, cuT( "header_text_material" ), style.getHeaderTextMaterial()->getName() );
 	}
 
 	//*********************************************************************************************

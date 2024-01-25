@@ -12,7 +12,7 @@ namespace castor3d
 		: public Plugin
 	{
 	public:
-		using Extension = std::pair< castor::String, castor::String >;
+		using Extension = castor::Pair< castor::String, castor::String >;
 		CU_DeclareVector( Extension, Extension );
 
 	public:

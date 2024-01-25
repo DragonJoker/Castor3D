@@ -224,8 +224,8 @@ namespace castor::matrix
 	}
 
 	template< typename T, typename U >
-	Point3< U > getTransformed( castor::Matrix4x4< T > const & matrix
-		, castor::Point3< U > const & value )
+	Point3< U > getTransformed( Matrix4x4< T > const & matrix
+		, Point3< U > const & value )
 	{
 		Point3< U > result;
 
@@ -242,8 +242,8 @@ namespace castor::matrix
 	}
 
 	template< typename T, typename U >
-	static Quaternion getTransformed( castor::Matrix4x4< T > const & matrix
-		, castor::QuaternionT< U > const & value )
+	static Quaternion getTransformed( Matrix4x4< T > const & matrix
+		, QuaternionT< U > const & value )
 	{
 		return matrix * value;
 	}
@@ -260,7 +260,7 @@ namespace castor::matrix
 		position->z = U( matrix[3][2] );
 
 		/* extract the columns of the matrix. */
-		std::array< Point3< U >, 3u > cols{ Point3< U >{ matrix[0] }
+		Array< Point3< U >, 3u > cols{ Point3< U >{ matrix[0] }
 			, Point3< U >{ matrix[1] }
 			, Point3< U >{ matrix[2] } };
 
@@ -448,8 +448,8 @@ namespace castor::matrix
 	{
 		// OpenGL right handed (cf. https://www.opengl.org/sdk/docs/man2/xhtml/gluLookAt.xml)
 		Point3< T > f( point::getNormalised( center - eye ) );
-		Point3< T > s( point::getNormalised( castor::point::cross( f, up ) ) );
-		Point3< T > u( castor::point::cross( s, f ) );
+		Point3< T > s( point::getNormalised( point::cross( f, up ) ) );
+		Point3< T > u( point::cross( s, f ) );
 		matrix.setIdentity();
 		matrix[0][0] = s->x;
 		matrix[1][0] = s->y;
@@ -481,10 +481,10 @@ namespace castor::matrix
 	{
 		auto col2 = matrix[2];
 		auto col3 = matrix[3];
-		std::swap( col2[0], col3[0] );
-		std::swap( col2[1], col3[1] );
-		std::swap( col2[2], col3[2] );
-		std::swap( col2[3], col3[3] );
+		castor::swap( col2[0], col3[0] );
+		castor::swap( col2[1], col3[1] );
+		castor::swap( col2[2], col3[2] );
+		castor::swap( col2[3], col3[3] );
 		return matrix;
 	}
 	template< typename T >

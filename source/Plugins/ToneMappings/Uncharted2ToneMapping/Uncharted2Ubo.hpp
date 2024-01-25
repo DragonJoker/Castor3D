@@ -21,7 +21,7 @@ namespace Uncharted2
 			, bool enabled );
 
 		static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
-		static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
+		static castor::RawUniquePtr< sdw::Struct > declare( sdw::ShaderWriter & writer );
 
 	private:
 		using sdw::StructInstance::getMember;

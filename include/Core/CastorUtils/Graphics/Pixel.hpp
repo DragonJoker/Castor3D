@@ -76,7 +76,7 @@ namespace castor
 		 *\param[in]	components	Initialise les données à celles-ci
 		 */
 		template< PixelFormat FU >
-		explicit Pixel( std::array< uint8_t, PixelDefinitionsT< FU >::Size > const & components );
+		explicit Pixel( Array< uint8_t, PixelDefinitionsT< FU >::Size > const & components );
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -184,7 +184,7 @@ namespace castor
 		 *\param[in]	components	Les données à convertir
 		 */
 		template< PixelFormat FU >
-		void set( std::array< uint8_t, PixelDefinitionsT< FU >::Size > const & components );
+		void set( Array< uint8_t, PixelDefinitionsT< FU >::Size > const & components );
 		/**
 		 *\~english
 		 *\brief		Converts given data and copies it into this pixel's components

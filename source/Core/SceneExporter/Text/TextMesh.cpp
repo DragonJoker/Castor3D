@@ -22,32 +22,32 @@ namespace castor
 		log::info << tabs() << cuT( "Writing Mesh " ) << object.getName() << std::endl;
 		bool result{ false };
 
-		if ( auto block{ beginBlock( file, "mesh", object.getName() ) } )
+		if ( auto block{ beginBlock( file, cuT( "mesh" ), object.getName() ) } )
 		{
 			if ( !m_subfolder.empty() )
 			{
-				result = writeName( file, "import", "Meshes/" + m_subfolder + "/" + object.getName() + ".cmsh" );
+				result = writeName( file, cuT( "import" ), cuT( "Meshes/" ) + m_subfolder + cuT( "/" ) + object.getName() + cuT( ".cmsh" ) );
 			}
 			else
 			{
-				result = writeName( file, "import", "Meshes/" + object.getName() + ".cmsh" );
+				result = writeName( file, cuT( "import" ), cuT( "Meshes/" ) + object.getName() + cuT( ".cmsh" ) );
 			}
 
 			for ( auto & animation : object.getAnimations() )
 			{
 				if ( !m_subfolder.empty() )
 				{
-					result = result && writeName( file, "import_anim", "Meshes/" + m_subfolder + "/" + object.getName() + "-" + animation.first + ".cmsa" );
+					result = result && writeName( file, cuT( "import_anim" ), cuT( "Meshes/" ) + m_subfolder + cuT( "/" ) + object.getName() + cuT( "-" ) + animation.first + cuT( ".cmsa" ) );
 				}
 				else
 				{
-					result = result && writeName( file, "import_anim", "Meshes/" + object.getName() + "-" + animation.first + ".cmsa" );
+					result = result && writeName( file, cuT( "import_anim" ), cuT( "Meshes/" ) + object.getName() + cuT( "-" ) + animation.first + cuT( ".cmsa" ) );
 				}
 			}
 
 			if ( auto skeleton = object.getSkeleton() )
 			{
-				result = result && writeName( file, "skeleton", skeleton->getName() );
+				result = result && writeName( file, cuT( "skeleton" ), skeleton->getName() );
 			}
 
 			auto it = std::find_if( object.begin()
@@ -63,7 +63,7 @@ namespace castor
 				{
 					result = writeName( file, cuT( "default_material" ), object.getSubmesh( 0u )->getDefaultMaterial()->getName() );
 				}
-				else if ( auto matsBlock{ beginBlock( file, "default_materials" ) } )
+				else if ( auto matsBlock{ beginBlock( file, cuT( "default_materials" ) ) } )
 				{
 					for ( auto & submesh : object )
 					{

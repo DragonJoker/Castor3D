@@ -28,68 +28,68 @@ namespace castor3d
 
 			if ( isGpuComputed )
 			{
-				result += "G";
+				result += cuT( "G" );
 			}
 			
 			if ( components.hasTriangleIndexFlag
 				|| components.hasLineIndexFlag )
 			{
-				result += "I";
+				result += cuT( "I" );
 			}
 
 			if ( components.hasPositionFlag )
 			{
-				result += "P";
+				result += cuT( "P" );
 			}
 
 			if ( components.hasTangentFlag )
 			{
-				result += "T";
+				result += cuT( "T" );
 			}
 
 			if ( components.hasBitangentFlag )
 			{
-				result += "B";
+				result += cuT( "B" );
 			}
 
 			if ( components.hasNormalFlag )
 			{
-				result += "N";
+				result += cuT( "N" );
 			}
 
 			if ( components.hasTexcoord0Flag )
 			{
-				result += "T0";
+				result += cuT( "T0" );
 			}
 
 			if ( components.hasTexcoord1Flag )
 			{
-				result += "1";
+				result += cuT( "T1" );
 			}
 
 			if ( components.hasTexcoord2Flag )
 			{
-				result += "2";
+				result += cuT( "T2" );
 			}
 
 			if ( components.hasTexcoord3Flag )
 			{
-				result += "3";
+				result += cuT( "T3" );
 			}
 
 			if ( components.hasColourFlag )
 			{
-				result += "C";
+				result += cuT( "C" );
 			}
 
 			if ( components.hasSkinFlag )
 			{
-				result += "S";
+				result += cuT( "S" );
 			}
 
 			if ( components.hasPassMaskFlag )
 			{
-				result += "M";
+				result += cuT( "M" );
 			}
 
 			return result;
@@ -102,7 +102,7 @@ namespace castor3d
 		, castor::String debugName )
 		: OwnedBy< RenderSystem >{ device.renderSystem }
 		, m_device{ device }
-		, m_debugName{ std::move( debugName ) }
+		, m_debugName{ castor::move( debugName ) }
 	{
 	}
 
@@ -144,7 +144,7 @@ namespace castor3d
 		, castor::String debugName )
 		: OwnedBy< RenderSystem >{ device.renderSystem }
 		, m_device{ device }
-		, m_debugName{ std::move( debugName ) }
+		, m_debugName{ castor::move( debugName ) }
 	{
 	}
 
@@ -186,7 +186,7 @@ namespace castor3d
 		, castor::String debugName )
 		: OwnedBy< RenderSystem >{ device.renderSystem }
 		, m_device{ device }
-		, m_debugName{ std::move( debugName ) }
+		, m_debugName{ castor::move( debugName ) }
 	{
 	}
 
@@ -232,7 +232,7 @@ namespace castor3d
 
 		if ( auto mit = std::find_if( m_buffers.begin()
 			, m_buffers.end()
-			, [&buffer, &result]( std::unordered_map< size_t, BufferArray >::value_type const & mapLookup )
+			, [&buffer, &result]( castor::UnorderedMap< size_t, BufferArray >::value_type const & mapLookup )
 			{
 				if ( auto bit = std::find_if( mapLookup.second.begin()
 					, mapLookup.second.end()
@@ -338,7 +338,7 @@ namespace castor3d
 							, indexCount
 							, VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 							, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-							, m_debugName + name + getName( data ) + std::to_string( buffers.size() )
+							, m_debugName + name + getName( data ) + castor::string::toString( buffers.size() )
 							, align );
 					}
 				}
@@ -350,7 +350,7 @@ namespace castor3d
 							, meshletCount
 							, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 							, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-							, m_debugName + name + getName( data ) + std::to_string( buffers.size() )
+							, m_debugName + name + getName( data ) + castor::string::toString( buffers.size() )
 							, align );
 					}
 				}
@@ -363,7 +363,7 @@ namespace castor3d
 							, vertexCount
 							, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 							, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-							, m_debugName + name + getName( data ) + std::to_string( buffers.size() )
+							, m_debugName + name + getName( data ) + castor::string::toString( buffers.size() )
 							, align );
 						break;
 					case SubmeshData::ePassMasks:
@@ -371,7 +371,7 @@ namespace castor3d
 							, vertexCount
 							, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 							, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-							, m_debugName + name + getName( data ) + std::to_string( buffers.size() )
+							, m_debugName + name + getName( data ) + castor::string::toString( buffers.size() )
 							, align );
 						break;
 					default:
@@ -379,14 +379,14 @@ namespace castor3d
 							, vertexCount
 							, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 							, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-							, m_debugName + name + getName( data ) + std::to_string( buffers.size() )
+							, m_debugName + name + getName( data ) + castor::string::toString( buffers.size() )
 							, align );
 						break;
 					}
 				}
 			}
 
-			buffers.emplace_back( std::move( modelBuffers ) );
+			buffers.emplace_back( castor::move( modelBuffers ) );
 			it = std::next( buffers.begin()
 				, ptrdiff_t( buffers.size() - 1u ) );
 		}

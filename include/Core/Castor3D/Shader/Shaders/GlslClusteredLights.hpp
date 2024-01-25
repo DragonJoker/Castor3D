@@ -67,11 +67,11 @@ namespace castor3d::shader
 		sdw::ShaderWriter & m_writer;
 		bool m_enabled;
 		ClustersDataUPtr m_clusterData;
-		std::unique_ptr< sdw::Vec4 > m_clustersLightsData;
-		std::unique_ptr< sdw::UInt32Array > m_pointLightIndices;
-		std::unique_ptr< sdw::U32Vec2Array > m_pointLightClusters;
-		std::unique_ptr< sdw::UInt32Array > m_spotLightIndices;
-		std::unique_ptr< sdw::U32Vec2Array > m_spotLightClusters;
+		castor::RawUniquePtr< sdw::Vec4 > m_clustersLightsData;
+		castor::RawUniquePtr< sdw::UInt32Array > m_pointLightIndices;
+		castor::RawUniquePtr< sdw::U32Vec2Array > m_pointLightClusters;
+		castor::RawUniquePtr< sdw::UInt32Array > m_spotLightIndices;
+		castor::RawUniquePtr< sdw::U32Vec2Array > m_spotLightClusters;
 	};
 
 #define C3D_ClustersAABB( writer, binding, set ) \

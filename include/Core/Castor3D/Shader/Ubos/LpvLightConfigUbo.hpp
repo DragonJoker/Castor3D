@@ -30,7 +30,7 @@ namespace castor3d
 			C3D_API LpvLightData( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr
 				, bool enabled )
-				: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+				: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
 			{
 			}
 

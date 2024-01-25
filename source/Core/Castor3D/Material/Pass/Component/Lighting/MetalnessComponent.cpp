@@ -31,7 +31,7 @@ namespace castor
 		bool operator()( castor3d::MetalnessComponent const & object
 			, StringStream & file )override
 		{
-			return writeOpt( file, "metalness", object.getMetalness(), castor3d::MetalnessComponent::Default );
+			return writeOpt( file, cuT( "metalness" ), object.getMetalness(), castor3d::MetalnessComponent::Default );
 		}
 	};
 }

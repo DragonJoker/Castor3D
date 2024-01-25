@@ -75,19 +75,19 @@ namespace grayscale
 	//*********************************************************************************************
 
 	castor::String PostEffect::Type = cuT( "grayscale" );
-	castor::String PostEffect::Name = cuT( "GrayScale PostEffect" );
+	castor::MbString PostEffect::Name = "GrayScale PostEffect";
 
 	PostEffect::PostEffect( castor3d::RenderTarget & renderTarget
 		, castor3d::RenderSystem & renderSystem
 		, castor3d::Parameters const & params )
 		: castor3d::PostEffect{ PostEffect::Type
-			, "GrayScale"
-			, PostEffect::Name
+			, cuT( "GrayScale" )
+			, castor::makeString( PostEffect::Name )
 			, renderTarget
 			, renderSystem
 			, params }
 		, m_configUbo{ renderSystem.getRenderDevice().uboPool->getBuffer< castor::Point3f >( 0u ) }
-		, m_shader{ "GrayScale", postfx::getProgram( *renderTarget.getEngine() ) }
+		, m_shader{ cuT( "GrayScale" ), postfx::getProgram( *renderTarget.getEngine() ) }
 		, m_stages{ makeProgramStates( renderSystem.getRenderDevice(), m_shader ) }
 	{
 		setParameters( params );
@@ -140,7 +140,7 @@ namespace grayscale
 						, context
 						, graph
 						, crg::ru::Config{ 2u } );
-				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} );

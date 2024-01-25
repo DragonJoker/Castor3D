@@ -20,7 +20,7 @@ namespace castor
 				{
 					CU_ParserParameterException( expected, given );
 				}
-				else if ( given != ParameterType::eText || parameter.get< castor::String >() != "screen_size" )
+				else if ( given != ParameterType::eText || parameter.get< String >() != cuT( "screen_size" ) )
 				{
 					CU_ParserParameterException( expected, given );
 				}

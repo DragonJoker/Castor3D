@@ -37,10 +37,10 @@ namespace castor
 	{
 	public:
 		using RangeType = IndexedRangeT< T >;
-		using SequenceType = std::vector< RangeType >;
+		using SequenceType = Vector< RangeType >;
 
 	public:
-		explicit RangeSequenceT( std::vector< T > const & sequence )
+		explicit RangeSequenceT( Vector< T > const & sequence )
 			: Range{ sequence.front(), sequence.back() }
 			, m_sequence{ convert( sequence ) }
 		{
@@ -63,7 +63,7 @@ namespace castor
 		}
 
 	private:
-		SequenceType convert( std::vector< T > const & sequence )
+		SequenceType convert( Vector< T > const & sequence )
 		{
 			assert( sequence.size() >= 2u );
 			SequenceType result;
@@ -90,7 +90,7 @@ namespace castor
 	};
 
 	template< typename T >
-	inline RangeSequenceT< T > makeRangeSequence( std::vector< T > const & sequence )
+	inline RangeSequenceT< T > makeRangeSequence( Vector< T > const & sequence )
 	{
 		return RangeSequenceT< T >{ sequence };
 	}

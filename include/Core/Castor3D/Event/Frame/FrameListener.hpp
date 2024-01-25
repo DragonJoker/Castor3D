@@ -115,13 +115,13 @@ namespace castor3d
 	protected:
 		//!\~english	The CPU events arrays.
 		//!\~french		Les tableaux d'évènements CPU.
-		std::array< CpuFrameEventPtrArray,	size_t( CpuEventType::eCount ) > m_cpuEvents;
+		castor::Array< CpuFrameEventPtrArray,	size_t( CpuEventType::eCount ) > m_cpuEvents;
 		//!\~english	The GPU events arrays.
 		//!\~french		Les tableaux d'évènements GPU.
-		std::array< GpuFrameEventPtrArray,	size_t( GpuEventType::eCount ) > m_gpuEvents;
+		castor::Array< GpuFrameEventPtrArray,	size_t( GpuEventType::eCount ) > m_gpuEvents;
 		//!\~english	Mutex to make this class thread safe.
 		//!\~french		Mutex pour rendre cette classe thread safe.
-		std::recursive_mutex m_mutex;
+		castor::RecursiveMutex m_mutex;
 	};
 }
 

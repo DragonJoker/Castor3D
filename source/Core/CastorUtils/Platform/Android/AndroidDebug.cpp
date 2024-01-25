@@ -34,13 +34,7 @@ namespace castor::debug
 	{
 	}
 
-	std::wostream & operator<<( std::wostream & p_stream, Backtrace const & p_backtrace )
-	{
-		backtrace::showBacktrace( p_stream, p_backtrace.m_toCapture, p_backtrace.m_toSkip );
-		return p_stream;
-	}
-
-	std::ostream & operator<<( std::ostream & p_stream, Backtrace const & p_backtrace )
+	OutputStream & operator<<( OutputStream & p_stream, Backtrace const & p_backtrace )
 	{
 		backtrace::showBacktrace( p_stream, p_backtrace.m_toCapture, p_backtrace.m_toSkip );
 		return p_stream;

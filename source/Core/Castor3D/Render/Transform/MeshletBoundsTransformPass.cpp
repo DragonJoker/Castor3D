@@ -44,7 +44,7 @@ namespace castor3d
 				, MeshletBoundsTransformPass::eMeshlets ) );
 			writes.push_back( output.getStorageBinding( MeshletBoundsTransformPass::eOutCullData ) );
 
-			auto descriptorSet = pipeline.descriptorSetPool->createDescriptorSet( pipeline.getName() );
+			auto descriptorSet = pipeline.descriptorSetPool->createDescriptorSet( castor::toUtf8(  pipeline.getName() ) );
 			descriptorSet->setBindings( writes );
 			descriptorSet->update();
 			return descriptorSet;

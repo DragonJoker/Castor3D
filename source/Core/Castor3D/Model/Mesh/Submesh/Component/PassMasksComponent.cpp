@@ -44,7 +44,7 @@ namespace castor3d
 				| ( uint32_t( a ) << 0u );
 		}
 
-		static castor::Point4uiArray convert( std::vector< PassMasks > const & src )
+		static castor::Point4uiArray convert( castor::Vector< PassMasks > const & src )
 		{
 			castor::Point4uiArray result;
 			result.reserve( src.size() );
@@ -90,7 +90,7 @@ namespace castor3d
 		, Pass const & pass
 		, ObjectBufferOffset const & bufferOffsets
 		, ashes::BufferCRefArray & buffers
-		, std::vector< uint64_t > & offsets
+		, castor::Vector< uint64_t > & offsets
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
 		, uint32_t & currentBinding
 		, uint32_t & currentLocation )
@@ -128,7 +128,7 @@ namespace castor3d
 		m_data.insert( m_data.end(), begin, end );
 	}
 
-	void PassMasksComponent::ComponentData::addDatas( std::vector< PassMasks > const & boneData )
+	void PassMasksComponent::ComponentData::addDatas( castor::Vector< PassMasks > const & boneData )
 	{
 		addDatas( boneData.data(), boneData.data() + boneData.size() );
 	}
@@ -168,7 +168,7 @@ namespace castor3d
 
 	PassMasksComponent::PassMasksComponent( Submesh & submesh )
 		: SubmeshComponent{ submesh, TypeName
-			, std::make_unique< ComponentData >( submesh ) }
+			, castor::make_unique< ComponentData >( submesh ) }
 	{
 	}
 

@@ -46,7 +46,7 @@ namespace Bloom
 					, graph
 					, crg::ru::Config{ 2u }
 					, crg::rq::Config{}
-						.baseConfig( crg::pp::Config{ std::vector< crg::VkPipelineShaderStageCreateInfoArray >{ std::move( program ) }, {}, {} } )
+						.baseConfig( crg::pp::Config{ castor::Vector< crg::VkPipelineShaderStageCreateInfoArray >{ castor::move( program ) }, {}, {} } )
 						.texcoordConfig( crg::Texcoord{} )
 						.enabled( enabled )
 						.passIndex( passIndex )
@@ -56,7 +56,7 @@ namespace Bloom
 #if !Bloom_DebugHiPass
 				uint32_t dataIndex{};
 
-				for ( auto & data : m_passes )
+				for ( auto & data : m_hiPasses )
 				{
 					data.viewDesc = pass.images.back().view( dataIndex );
 					data.imageDesc = data.viewDesc.data->image;
@@ -91,7 +91,7 @@ namespace Bloom
 				, uint32_t index )
 			{
 #if !Bloom_DebugHiPass
-				auto & data = m_passes[index];
+				auto & data = m_hiPasses[index];
 				auto const width = int32_t( data.imageDesc.data->info.extent.width );
 				auto const height = int32_t( data.imageDesc.data->info.extent.height );
 				auto const depth = int32_t( data.imageDesc.data->info.extent.depth );
@@ -188,9 +188,9 @@ namespace Bloom
 				crg::ImageViewId viewDesc;
 				crg::ImageId imageDesc;
 				VkImage image{};
-				std::vector< LevelMipGen > mipGens;
+				castor::Vector< LevelMipGen > mipGens;
 			};
-			std::array< PassData, 2u > m_passes;
+			castor::Array< PassData, 2u > m_hiPasses;
 #endif
 		};
 
@@ -236,7 +236,7 @@ namespace Bloom
 		, bool const * enabled
 		, uint32_t const * passIndex )
 		: m_graph{ graph }
-		, m_shader{ "BloomHiPass", hi::getProgram( device ) }
+		, m_shader{ cuT( "BloomHiPass" ), hi::getProgram( device ) }
 		, m_stages{ makeProgramStates( device, m_shader ) }
 #if !Bloom_DebugHiPass
 		, m_resultImg{ graph.createImage( crg::ImageData{ "BLHi"
@@ -264,21 +264,21 @@ namespace Bloom
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = std::make_unique< hi::HiPassQuad >( framePass
+				auto result = castor::make_unique< hi::HiPassQuad >( framePass
 					, context
 					, graph
 					, ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages )
 					, VkExtent2D{ m_resultImg.data->info.extent.width, m_resultImg.data->info.extent.height }
 					, enabled
 					, passIndex );
-				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
 			} ) }
 	{
 		for ( uint32_t i = 0u; i < blurPassesCount; ++i )
 		{
-			m_resultViews.push_back( graph.createView( crg::ImageViewData{ m_resultImg.data->name + castor::string::toString( i )
+			m_resultViews.push_back( graph.createView( crg::ImageViewData{ m_resultImg.data->name + castor::string::toMbString( i )
 				, m_resultImg
 				, 0u
 				, VK_IMAGE_VIEW_TYPE_2D
@@ -297,7 +297,7 @@ namespace Bloom
 
 		for ( auto & view : m_resultViews )
 		{
-			visitor.visit( "PostFX: HDRB - Hi " + std::to_string( view.data->info.subresourceRange.baseMipLevel )
+			visitor.visit( cuT( "PostFX: HDRB - Hi " ) + castor::string::toString( view.data->info.subresourceRange.baseMipLevel )
 				, view
 				, m_graph.getFinalLayoutState( view ).layout
 				, castor3d::TextureFactors{}.invert( true ) );
