@@ -67,7 +67,7 @@ namespace Testing
 		}
 		{
 			CT_ON("	Check build buffer part" );
-			size_t const size = 0;
+			uint32_t const size = 0;
 			int * tmp = new int[size + 1];
 			castor::ArrayView< int > view1 = castor::makeArrayView( tmp, size );
 			CT_CHECK( view1.size() == size );

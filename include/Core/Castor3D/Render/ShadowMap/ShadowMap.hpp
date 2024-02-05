@@ -237,7 +237,6 @@ namespace castor3d
 		ShadowMapResult m_staticsResult;
 		ShadowMapResult m_result;
 		uint32_t m_count;
-		castor::Set< castor::ReferenceWrapper< GeometryBuffers > > m_geometryBuffers;
 		castor::Array< AllPasses, 4u > m_passes;
 		uint32_t m_passesIndex{};
 	};

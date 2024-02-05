@@ -20,7 +20,7 @@ namespace GuiCommon
 			return *static_cast< LanguageFileContext * >( context.getUserContext( ParsersName ) );
 		}
 
-		CU_ImplementAttributeParser( Root_Language )
+		static CU_ImplementAttributeParser( Root_Language )
 		{
 			auto & langContext = getParserContext( context );
 

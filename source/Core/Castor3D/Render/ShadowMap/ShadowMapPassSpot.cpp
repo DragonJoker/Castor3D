@@ -153,6 +153,7 @@ namespace castor3d
 
 		sdw::PushConstantBuffer pcb{ writer, "C3D_DrawData", "c3d_drawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
+		auto drawID = pcb.declMember< sdw::Int >( "drawID", !getEngine()->getRenderDevice()->hasDrawId() );
 		pcb.end();
 
 		writer.implementMainT< shader::MeshVertexT, shader::FragmentSurfaceT >( sdw::VertexInT< shader::MeshVertexT >{ writer, submeshShaders }
@@ -164,7 +165,7 @@ namespace castor3d
 					, shader::getNodeId( c3d_objectIdsData
 						, in
 						, pipelineID
-						, writer.cast< sdw::UInt >( in.drawID )
+						, writer.cast< sdw::UInt >( getEngine()->getRenderDevice()->hasDrawId() ? in.drawID : drawID )
 						, flags ) );
 				auto curPosition = writer.declLocale( "curPosition"
 					, in.position );

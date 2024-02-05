@@ -323,6 +323,8 @@ namespace castor3d
 		C3D_API uint32_t getMaxBindlessSampled()const noexcept;
 		C3D_API uint32_t getMaxBindlessStorage()const noexcept;
 		C3D_API void fillGPUMeshInformations( GpuInformations & gpuInformations )const noexcept;
+		C3D_API bool hasGeometryShader()const noexcept;
+		C3D_API bool hasDrawId()const noexcept;
 
 		bool prefersMeshShaderEXT()const noexcept
 		{
@@ -445,6 +447,10 @@ namespace castor3d
 		VkPhysicalDeviceProperties2 m_properties2{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2
 			, nullptr
 			, {} };
+#endif
+#if VK_KHR_portability_subset
+		VkPhysicalDevicePortabilitySubsetFeaturesKHR m_portabilitySubsetFeatures{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PORTABILITY_SUBSET_FEATURES_KHR };
+		VkPhysicalDevicePortabilitySubsetPropertiesKHR m_portabilitySubsetProperties{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PORTABILITY_SUBSET_PROPERTIES_KHR };
 #endif
 #if VK_KHR_8bit_storage
 		VkPhysicalDevice8BitStorageFeaturesKHR m_8bitFeatures{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_8BIT_STORAGE_FEATURES_KHR };

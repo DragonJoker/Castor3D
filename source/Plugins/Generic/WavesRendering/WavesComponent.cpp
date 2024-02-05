@@ -353,6 +353,7 @@ namespace waves
 
 		sdw::PushConstantBuffer pcb{ writer, "C3D_DrawData", "c3d_drawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
+		auto drawID = pcb.declMember< sdw::Int >( "drawID", !engine.getRenderDevice()->hasDrawId() );
 		pcb.end();
 
 		auto calculateWave = writer.implementFunction< shd::WaveResult >( "calculateWave"
@@ -428,7 +429,7 @@ namespace waves
 					auto nodeId = writer.declLocale( "nodeId"
 						, shader::getNodeId( c3d_objectIdsData
 							, pipelineID
-							, writer.cast< sdw::UInt >( in.drawID ) ) );
+							, writer.cast< sdw::UInt >( engine.getRenderDevice()->hasDrawId() ? in.drawID : drawID ) ) );
 					auto modelData = writer.declLocale( "modelData"
 						, c3d_modelsData[nodeId - 1u] );
 					out.nodeId = writer.cast< sdw::Int >( nodeId );
@@ -475,7 +476,7 @@ namespace waves
 						, shader::getNodeId( c3d_objectIdsData
 							, in
 							, pipelineID
-							, writer.cast< sdw::UInt >( in.drawID )
+							, writer.cast< sdw::UInt >( engine.getRenderDevice()->hasDrawId() ? in.drawID : drawID )
 							, flags ) );
 					out.vtx.position = in.position;
 					out.texture0 = in.texture0;

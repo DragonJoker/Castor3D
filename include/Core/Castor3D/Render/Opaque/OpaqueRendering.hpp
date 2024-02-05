@@ -20,7 +20,6 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/Background/BackgroundModule.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
-#include <CastorUtils/Design/DelayedInitialiser.hpp>
 #include <CastorUtils/Design/Named.hpp>
 
 #include <RenderGraph/Attachment.hpp>

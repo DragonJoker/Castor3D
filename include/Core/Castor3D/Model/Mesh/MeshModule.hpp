@@ -124,6 +124,7 @@ namespace castor3d
 	struct MeshletDrawConstants
 	{
 		uint32_t pipelineId;
+		uint32_t drawId;
 		uint32_t drawOffset;
 		uint32_t meshletOffset;
 	};

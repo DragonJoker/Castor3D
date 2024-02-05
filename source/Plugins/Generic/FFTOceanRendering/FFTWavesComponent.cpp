@@ -514,6 +514,7 @@ namespace ocean_fft
 
 		sdw::PushConstantBuffer pcb{ writer, "C3D_DrawData", "c3d_drawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
+		auto drawID = pcb.declMember< sdw::Int >( "drawID", !engine.getRenderDevice()->hasDrawId() );
 		pcb.end();
 
 		auto tessLevel1f = writer.implementFunction< sdw::Float >( "tessLevel1f"
@@ -613,7 +614,7 @@ namespace ocean_fft
 					auto nodeId = writer.declLocale( "nodeId"
 						, shader::getNodeId( c3d_objectIdsData
 							, pipelineID
-							, writer.cast< sdw::UInt >( in.drawID ) ) );
+							, writer.cast< sdw::UInt >( engine.getRenderDevice()->hasDrawId() ? in.drawID : drawID ) ) );
 					auto modelData = writer.declLocale( "modelData"
 						, c3d_modelsData[nodeId - 1u] );
 
@@ -660,7 +661,7 @@ namespace ocean_fft
 						, shader::getNodeId( c3d_objectIdsData
 							, in
 							, pipelineID
-							, writer.cast< sdw::UInt >( in.drawID )
+							, writer.cast< sdw::UInt >( engine.getRenderDevice()->hasDrawId() ? in.drawID : drawID )
 							, flags ) );
 					auto modelData = writer.declLocale( "modelData"
 						, c3d_modelsData[nodeId - 1u] );

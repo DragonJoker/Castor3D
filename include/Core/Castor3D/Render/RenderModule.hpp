@@ -142,6 +142,7 @@ namespace castor3d
 	struct DrawConstants
 	{
 		uint32_t pipelineId;
+		int32_t drawId;
 	};
 	/**
 	*\~english

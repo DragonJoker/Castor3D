@@ -84,17 +84,18 @@ namespace castor3d
 
 		sdw::PushConstantBuffer pcb{ writer, "C3D_DrawData", "c3d_drawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
+		auto drawID = pcb.declMember< sdw::Int >( "drawID", !engine.getRenderDevice()->hasDrawId() );
 		pcb.end();
 
 		writer.implementMainT< shader::BillboardSurfaceT, shader::FragmentSurfaceT >( sdw::VertexInT< shader::BillboardSurfaceT >{ writer, flags }
 			, sdw::VertexOutT< shader::FragmentSurfaceT >{ writer, submeshShaders, passShaders, flags }
-			, [&writer, &pipelineID, &c3d_billboardData, &c3d_cameraData, &c3d_modelsData, &c3d_objectIdsData, flags]( sdw::VertexInT< shader::BillboardSurfaceT > const & in
+			, [&engine, &writer, &drawID, &pipelineID, &c3d_billboardData, &c3d_cameraData, &c3d_modelsData, &c3d_objectIdsData, flags]( sdw::VertexInT< shader::BillboardSurfaceT > const & in
 				, sdw::VertexOutT< shader::FragmentSurfaceT > out )
 			{
 				auto nodeId = writer.declLocale( "nodeId"
 					,  shader::getNodeId( c3d_objectIdsData
 						, pipelineID
-						, writer.cast< sdw::UInt >( in.drawID ) ) );
+						, writer.cast< sdw::UInt >( engine.getRenderDevice()->hasDrawId() ? in.drawID : drawID ) ) );
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[nodeId - 1u] );
 				auto passMultipliers = castor::Vector< sdw::Vec4 >{ vec4( 1.0_f, 0.0_f, 0.0_f, 0.0_f )
@@ -185,18 +186,19 @@ namespace castor3d
 
 		sdw::PushConstantBuffer pcb{ writer, "C3D_DrawData", "c3d_drawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
+		auto drawID = pcb.declMember< sdw::Int >( "drawID", !engine.getRenderDevice()->hasDrawId() );
 		pcb.end();
 
 		writer.implementMainT< shader::MeshVertexT, shader::FragmentSurfaceT >( sdw::VertexInT< shader::MeshVertexT >{ writer, submeshShaders }
 			, sdw::VertexOutT< shader::FragmentSurfaceT >{ writer, submeshShaders, passShaders, flags }
-			, [&writer, &materials, &c3d_cameraData, &c3d_modelsData, &c3d_objectIdsData, &pipelineID, &flags]( sdw::VertexInT< shader::MeshVertexT > const & in
+			, [&engine, &writer, &materials, &c3d_cameraData, &c3d_modelsData, &c3d_objectIdsData, &drawID, &pipelineID, &flags]( sdw::VertexInT< shader::MeshVertexT > const & in
 				, sdw::VertexOutT< shader::FragmentSurfaceT > out )
 			{
 				auto nodeId = writer.declLocale( "nodeId"
 					, shader::getNodeId( c3d_objectIdsData
 						, in
 						, pipelineID
-						, writer.cast< sdw::UInt >( in.drawID )
+						, writer.cast< sdw::UInt >( engine.getRenderDevice()->hasDrawId() ? in.drawID : drawID )
 						, flags ) );
 				auto curPosition = writer.declLocale( "curPosition"
 					, in.position );
@@ -298,6 +300,7 @@ namespace castor3d
 
 		sdw::PushConstantBuffer pcb{ writer, "C3D_DrawData", "c3d_drawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
+		auto drawID = pcb.declMember< sdw::UInt >( "drawID", !engine.getRenderDevice()->hasDrawId() );
 		auto drawOffset = pcb.declMember< sdw::UInt >( "drawOffset" );
 		auto meshletOffset = pcb.declMember< sdw::UInt >( "meshletOffset" );
 		pcb.end();
@@ -320,7 +323,7 @@ namespace castor3d
 			auto laneId = writer.declLocale( "laneId"
 				, in.localInvocationID.x() );
 			auto drawId = writer.declLocale( "drawId"
-				, in.drawID + drawOffset );
+				, ( engine.getRenderDevice()->hasDrawId() ? in.drawID : drawID ) + drawOffset );
 			auto nodeId = writer.declLocale( "nodeId"
 				, shader::getNodeId( c3d_objectIdsData
 					, meshlets.instances
@@ -530,7 +533,7 @@ namespace castor3d
 
 			writer.implementEntryPointT< shader::PayloadT >( 32u, 1u, 1u
 				, sdw::TaskPayloadOutEXTT< shader::PayloadT >{ writer }
-				, [&writer, &drawOffset, &meshlets, &pipelineID, &c3d_objectIdsData, &checkVisible, &flags]( sdw::TaskSubgroupInEXT const & in
+				, [&engine, &writer, &drawOffset, &meshlets, &drawID, &pipelineID, &c3d_objectIdsData, &checkVisible, &flags]( sdw::TaskSubgroupInEXT const & in
 					, sdw::TaskPayloadOutEXTT< shader::PayloadT > const & payload )
 				{
 					auto laneId = in.localInvocationID.x();
@@ -538,7 +541,7 @@ namespace castor3d
 					auto meshletId = writer.declLocale( "meshletId"
 						, ( baseId * 32u + laneId ) );
 					auto drawId = writer.declLocale( "drawId"
-						, in.drawID + drawOffset );
+						, ( engine.getRenderDevice()->hasDrawId() ? in.drawID : drawID ) + drawOffset );
 					auto nodeId = writer.declLocale( "nodeId"
 						, shader::getNodeId( c3d_objectIdsData
 							, meshlets.instances
@@ -629,6 +632,7 @@ namespace castor3d
 
 		sdw::PushConstantBuffer pcb{ writer, "C3D_DrawData", "c3d_drawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
+		auto drawID = pcb.declMember< sdw::UInt >( "drawID", !engine.getRenderDevice()->hasDrawId() );
 		auto drawOffset = pcb.declMember< sdw::UInt >( "drawOffset" );
 		auto meshletOffset = pcb.declMember< sdw::UInt >( "meshletOffset" );
 		pcb.end();
@@ -651,7 +655,7 @@ namespace castor3d
 			auto laneId = writer.declLocale( "laneId"
 				, in.localInvocationID );
 			auto drawId = writer.declLocale( "drawId"
-				, in.drawID + drawOffset );
+				, ( engine.getRenderDevice()->hasDrawId() ? in.drawID : drawID ) + drawOffset );
 			auto nodeId = writer.declLocale( "nodeId"
 				, shader::getNodeId( c3d_objectIdsData
 					, meshlets.instances
@@ -861,7 +865,7 @@ namespace castor3d
 
 			writer.implementEntryPointT< shader::PayloadT >( 32u
 				, sdw::TaskPayloadOutNVT< shader::PayloadT >{ writer }
-				, [&writer, &meshlets, &drawOffset, &c3d_objectIdsData, &pipelineID, &flags, &checkVisible]( sdw::TaskSubgroupInNV const & in
+				, [&engine, &writer, &meshlets, &drawOffset, &c3d_objectIdsData, &drawID, &pipelineID, &flags, &checkVisible]( sdw::TaskSubgroupInNV const & in
 					, sdw::TaskPayloadOutNVT< shader::PayloadT > const & payload )
 				{
 					auto const & laneId = in.localInvocationID;
@@ -869,7 +873,7 @@ namespace castor3d
 					auto meshletId = writer.declLocale( "meshletId"
 						, ( baseId * 32u + laneId ) );
 					auto drawId = writer.declLocale( "drawId"
-						, in.drawID + drawOffset );
+						, ( engine.getRenderDevice()->hasDrawId() ? in.drawID : drawID ) + drawOffset );
 					auto nodeId = writer.declLocale( "nodeId"
 						, shader::getNodeId( c3d_objectIdsData
 							, meshlets.instances

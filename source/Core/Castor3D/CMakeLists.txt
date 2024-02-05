@@ -2211,6 +2211,7 @@ else ()
 	endif ()
 endif ()
 
+set( mikktspace_DIR ${VCPKG_SHARE_DIR}/mikktspace )
 find_package( mikktspace CONFIG REQUIRED )
 
 target_link_libraries( ${PROJECT_NAME}

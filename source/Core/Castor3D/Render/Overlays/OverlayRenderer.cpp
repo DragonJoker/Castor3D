@@ -902,6 +902,7 @@ namespace castor3d
 
 			sdw::PushConstantBuffer pcb{ writer, "C3D_DrawData", "c3d_drawData" };
 			auto pipelineBaseIndex = pcb.declMember< sdw::UInt >( "pipelineBaseIndex" );
+			auto drawID = pcb.declMember< sdw::Int >( "drawID" );
 			pcb.end();
 
 			// Vertex shader
@@ -911,7 +912,7 @@ namespace castor3d
 					, sdw::VertexOutT< shader::OverlaySurfaceT > out )
 				{
 					auto overlaySubID = writer.declLocale( "overlaySubID"
-						, pipelineBaseIndex + ( writer.cast< sdw::UInt >( in.drawID ) ) );
+						, pipelineBaseIndex + ( writer.cast< sdw::UInt >( engine.getRenderDevice()->hasDrawId() ? in.drawID : drawID ) ) );
 					auto overlayID = writer.declLocale( "overlayID"
 						, c3d_overlaysIDs[overlaySubID] );
 					auto overlay = writer.declLocale( "overlay"

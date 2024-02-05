@@ -7,6 +7,7 @@ find_package( unofficial-convectionkernels CONFIG REQUIRED )
 find_package( gli CONFIG REQUIRED )
 
 if ( VCPKG_TOOLCHAIN )
+	set( unofficial-minizip_DIR ${VCPKG_SHARE_DIR}/unofficial-minizip )
 	find_package( unofficial-minizip CONFIG REQUIRED )
 	set( minizip_LIB unofficial::minizip::minizip )
 else ()
@@ -77,7 +78,6 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 	endif ()
 
 	option( CASTOR_USE_TRACK "Enable function tracking" OFF )
-	option( CASTOR_DISABLE_DELAYED_INITIALISATION "Replaces castor::DelayedInitialiserT implementation by a dummy one." OFF )
 
 	set( CastorBinsDependencies
 		${CastorBinsDependencies}
@@ -223,7 +223,6 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/BlockGuard.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/ChangeTracked.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/DataHolder.hpp
-		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/DelayedInitialiser.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/DesignModule.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/DynamicBitset.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/DynamicBitset.inl
@@ -653,12 +652,6 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		PRIVATE
 			${CASTOR_EDITORCONFIG_FILE}
 	)
-	if ( CASTOR_DISABLE_DELAYED_INITIALISATION )
-		target_compile_definitions( ${PROJECT_NAME}
-			PUBLIC
-				CU_NoDelayedInit=1
-		)
-	endif ()
 	target_compile_definitions( ${PROJECT_NAME}
 		PUBLIC
 			_UNICODE
