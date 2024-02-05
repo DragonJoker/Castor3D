@@ -126,12 +126,35 @@ namespace castor3d
 							}
 						}
 #endif
-						doRegisterDrawCommands( data.node->pipeline
-							, pipelineData->descriptorSets->all
-							, pipelineData->indirectCommandsBuffer->getBuffer()
-							, uint32_t( overlayDatas.size() )
-							, count
-							, commandBuffer );
+						if ( m_device.hasDrawId() )
+						{
+							doRegisterDrawCommands( data.node->pipeline
+								, pipelineData->descriptorSets->all
+								, pipelineData->indirectCommandsBuffer->getBuffer()
+								, uint32_t( overlayDatas.size() )
+								, count
+								, commandBuffer );
+						}
+						else
+						{
+							commandBuffer.bindPipeline( *data.node->pipeline.pipeline );
+							commandBuffer.bindDescriptorSets( pipelineData->descriptorSets->all
+								, *data.node->pipeline.pipelineLayout );
+							uint32_t index{};
+
+							for ( auto const & command : castor::makeArrayView( pipelineData->indirectCommands.begin() + count
+								, uint32_t( overlayDatas.size() ) ) )
+							{
+								doRegisterDrawCommands( data.node->pipeline
+									, command
+									, index
+									, count
+									, commandBuffer );
+								++index;
+							}
+
+							count += uint32_t( overlayDatas.size() );
+						}
 					}
 				}
 			}
@@ -307,7 +330,7 @@ namespace castor3d
 	{
 		commandBuffer.bindPipeline( *pipeline.pipeline );
 		commandBuffer.bindDescriptorSets( descriptorSets, *pipeline.pipelineLayout );
-		DrawConstants constants{ offset };
+		DrawConstants constants{ offset, 0u };
 		commandBuffer.pushConstants( *pipeline.pipelineLayout
 			, VK_SHADER_STAGE_VERTEX_BIT
 			, 0u
@@ -318,6 +341,29 @@ namespace castor3d
 			, drawCount
 			, sizeof( VkDrawIndirectCommand ) );
 		offset += drawCount;
+
+		if ( m_drawCounts )
+		{
+			++( *m_drawCounts );
+		}
+	}
+
+	void OverlayPreparer::doRegisterDrawCommands( OverlayDrawPipeline const & pipeline
+		, VkDrawIndirectCommand const & command
+		, uint32_t drawId
+		, uint32_t & offset
+		, ashes::CommandBuffer const & commandBuffer )noexcept
+	{
+		DrawConstants constants{ offset, int32_t( drawId ) };
+		commandBuffer.pushConstants( *pipeline.pipelineLayout
+			, VK_SHADER_STAGE_VERTEX_BIT
+			, 0u
+			, sizeof( constants )
+			, &constants );
+		commandBuffer.draw( command.vertexCount
+			, command.instanceCount
+			, command.firstVertex
+			, command.firstInstance );
 
 		if ( m_drawCounts )
 		{

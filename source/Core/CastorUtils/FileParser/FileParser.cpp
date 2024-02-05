@@ -91,6 +91,11 @@ namespace castor
 			, uint64_t & lineIndex
 			, size_t & offset )
 		{
+			if ( offset == content.size() )
+			{
+				return StringView{};
+			}
+
 			auto current = std::next( content.begin(), ptrdiff_t( offset ) );
 			auto it = std::find_if( current
 				, content.end()

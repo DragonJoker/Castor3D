@@ -72,9 +72,9 @@ namespace Testing
 	};
 
 	template<>
-	struct Stringifier< int8_t >
+	struct Stringifier< signed char >
 	{
-		static std::string get( int8_t const & value )
+		static std::string get( signed char const & value )
 		{
 			std::stringstream stream;
 			stream << int16_t( value );
@@ -83,9 +83,9 @@ namespace Testing
 	};
 
 	template<>
-	struct Stringifier< uint8_t >
+	struct Stringifier< unsigned char >
 	{
-		static std::string get( uint8_t const & value )
+		static std::string get( unsigned char const & value )
 		{
 			std::stringstream stream;
 			stream << uint16_t( value );
@@ -94,9 +94,9 @@ namespace Testing
 	};
 
 	template<>
-	struct Stringifier< int16_t >
+	struct Stringifier< signed short >
 	{
-		static std::string get( int16_t const & value )
+		static std::string get( signed short const & value )
 		{
 			std::stringstream stream;
 			stream << value;
@@ -105,9 +105,9 @@ namespace Testing
 	};
 
 	template<>
-	struct Stringifier< uint16_t >
+	struct Stringifier< unsigned short >
 	{
-		static std::string get( uint16_t const & value )
+		static std::string get( unsigned short const & value )
 		{
 			std::stringstream stream;
 			stream << value;
@@ -116,9 +116,9 @@ namespace Testing
 	};
 
 	template<>
-	struct Stringifier< int32_t >
+	struct Stringifier< signed int >
 	{
-		static std::string get( int32_t const & value )
+		static std::string get( signed int const & value )
 		{
 			std::stringstream stream;
 			stream << value;
@@ -127,9 +127,9 @@ namespace Testing
 	};
 
 	template<>
-	struct Stringifier< uint32_t >
+	struct Stringifier< unsigned int >
 	{
-		static std::string get( uint32_t const & value )
+		static std::string get( unsigned int const & value )
 		{
 			std::stringstream stream;
 			stream << value;
@@ -138,9 +138,9 @@ namespace Testing
 	};
 
 	template<>
-	struct Stringifier< int64_t >
+	struct Stringifier< signed long >
 	{
-		static std::string get( int64_t const & value )
+		static std::string get( signed long const & value )
 		{
 			std::stringstream stream;
 			stream << value;
@@ -149,9 +149,31 @@ namespace Testing
 	};
 
 	template<>
-	struct Stringifier< uint64_t >
+	struct Stringifier< unsigned long >
 	{
-		static std::string get( uint64_t const & value )
+		static std::string get( unsigned long const & value )
+		{
+			std::stringstream stream;
+			stream << value;
+			return stream.str();
+		}
+	};
+
+	template<>
+	struct Stringifier< signed long long >
+	{
+		static std::string get( signed long long const & value )
+		{
+			std::stringstream stream;
+			stream << value;
+			return stream.str();
+		}
+	};
+
+	template<>
+	struct Stringifier< unsigned long long >
+	{
+		static std::string get( unsigned long long const & value )
 		{
 			std::stringstream stream;
 			stream << value;

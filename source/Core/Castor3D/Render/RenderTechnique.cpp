@@ -393,7 +393,7 @@ namespace castor3d
 				, progress )
 			: nullptr ) }
 #endif
-		, m_voxelizer{ ( ( m_renderTarget.isFullLoadingEnabled() || m_renderTarget.getScene()->getVoxelConeTracingConfig().enabled )
+		, m_voxelizer{ ( ( ( m_renderTarget.isFullLoadingEnabled() || m_renderTarget.getScene()->getVoxelConeTracingConfig().enabled ) && m_device.hasGeometryShader() )
 			? castor::makeUnique< Voxelizer >( m_renderTarget.getResources()
 				, m_device
 				, progress

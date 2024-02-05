@@ -130,7 +130,8 @@ namespace castor3d
 			, RenderPipeline const & pipeline
 			, ashes::BufferBase const & buffer
 			, ashes::Optional< VkViewport > const & viewport
-			, ashes::Optional< VkRect2D > const & scissor )
+			, ashes::Optional< VkRect2D > const & scissor
+			, bool hasDrawId )
 		{
 			commandBuffer.bindPipeline( pipeline.getPipeline() );
 
@@ -159,9 +160,10 @@ namespace castor3d
 				pipelineId = queueNodes.getPipelineNodesIndex( pipeline.getFlagsHash()
 					, buffer );
 
-				if ( !pipeline.hasMeshletDescriptorSetLayout() )
+				if ( hasDrawId
+					&& !pipeline.hasMeshletDescriptorSetLayout() )
 				{
-					DrawConstants constants{ pipelineId };
+					DrawConstants constants{ pipelineId, 0u };
 					commandBuffer.pushConstants( pipeline.getPipelineLayout()
 						, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT
 						, 0u
@@ -210,6 +212,83 @@ namespace castor3d
 			}
 		}
 
+		static void registerNodeCommands( RenderPipeline const & pipeline
+			, RenderedNodeT< SubmeshRenderNode > const & node
+			, ashes::CommandBuffer const & commandBuffer
+			, uint32_t instanceCount
+			, uint32_t pipelineId
+			, uint32_t drawId
+			, uint32_t *& pipelinesBuffer
+			, uint32_t & idxIndex
+			, uint32_t & nidxIndex )
+		{
+			if ( pipelinesBuffer )
+			{
+				( *pipelinesBuffer ) = node.node->getId();
+				++pipelinesBuffer;
+			}
+
+			auto & geometryBuffers = node.node->getGeometryBuffers( pipeline.getFlags() );
+			commandBuffer.bindVertexBuffers( geometryBuffers.layouts[0].get().vertexBindingDescriptions[0].binding
+				, geometryBuffers.buffers
+				, geometryBuffers.offsets );
+			DrawConstants constants{ pipelineId, int32_t( drawId ) };
+			commandBuffer.pushConstants( pipeline.getPipelineLayout()
+				, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT
+				, 0u
+				, sizeof( DrawConstants )
+				, &constants );
+
+			if ( geometryBuffers.indexOffset.hasData() )
+			{
+				commandBuffer.bindIndexBuffer( geometryBuffers.indexOffset.getBuffer()
+					, 0u
+					, VK_INDEX_TYPE_UINT32 );
+				commandBuffer.drawIndexed( node.command.indexCount
+					, instanceCount
+					, geometryBuffers.indexOffset.getFirst< uint32_t >()
+					, node.node->getFinalBufferOffsets().getBufferChunk( SubmeshData::ePositions ).getFirst< castor::Point4f >()
+					, 0u );
+				++idxIndex;
+			}
+			else
+			{
+				commandBuffer.draw( node.command.indexCount
+					, instanceCount
+					, node.node->getFinalBufferOffsets().getBufferChunk( SubmeshData::ePositions ).getFirst< castor::Point4f >()
+					, 0u );
+				++nidxIndex;
+			}
+		}
+
+		static void registerNodeCommands( RenderPipeline const & pipeline
+			, RenderedNodeT< BillboardRenderNode > const & node
+			, ashes::CommandBuffer const & commandBuffer
+			, uint32_t instanceCount
+			, uint32_t pipelineId
+			, uint32_t drawId
+			, uint32_t *& pipelinesBuffer
+			, uint32_t & index )
+		{
+			( *pipelinesBuffer ) = node.node->getId();
+			++pipelinesBuffer;
+			auto & geometryBuffers = node.node->getGeometryBuffers( pipeline.getFlags() );
+			commandBuffer.bindVertexBuffers( geometryBuffers.layouts[0].get().vertexBindingDescriptions[0].binding
+				, geometryBuffers.buffers
+				, geometryBuffers.offsets );
+			DrawConstants constants{ pipelineId, int32_t( drawId ) };
+			commandBuffer.pushConstants( pipeline.getPipelineLayout()
+				, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT
+				, 0u
+				, sizeof( DrawConstants )
+				, &constants );
+			commandBuffer.draw( node.command.vertexCount
+				, instanceCount
+				, 0u
+				, 0u );
+			++index;
+		}
+
 #if VK_NV_mesh_shader
 
 		static void registerNodeCommands( RenderPipeline const & pipeline
@@ -224,6 +303,7 @@ namespace castor3d
 			commandBuffer.bindDescriptorSet( node.getMeshletDescriptorSet()
 				, pipeline.getPipelineLayout() );
 			MeshletDrawConstants constants{ pipelineId
+				, 0u
 				, drawOffset
 				, node.getSourceBufferOffsets().getFirst< Meshlet >( SubmeshData::eMeshlets ) };
 			commandBuffer.pushConstants( pipeline.getPipelineLayout()
@@ -253,6 +333,7 @@ namespace castor3d
 			commandBuffer.bindDescriptorSet( node.getMeshletDescriptorSet()
 				, pipeline.getPipelineLayout() );
 			MeshletDrawConstants constants{ pipelineId
+				, 0u
 				, drawOffset
 				, node.getSourceBufferOffsets().getFirst< Meshlet >( SubmeshData::eMeshlets ) };
 			commandBuffer.pushConstants( pipeline.getPipelineLayout()
@@ -1051,14 +1132,26 @@ namespace castor3d
 					}
 					else
 #endif
+					if ( renderPass.getEngine()->getRenderDevice()->hasDrawId() )
 					{
 						result += doPrepareMeshTraditionalCommandBuffers( commandBuffer, viewport, scissors, nodesIdsBuffer, maxNodesCount );
+					}
+					else 
+					{
+						result += doPrepareMeshTraditionalNoDrawIDCommandBuffers( commandBuffer, viewport, scissors, nodesIdsBuffer, maxNodesCount );
 					}
 				}
 
 				if ( !m_billboardNodes.empty() )
 				{
-					result += doPrepareBillboardCommandBuffers( commandBuffer, viewport, scissors, nodesIdsBuffer, maxNodesCount );
+					if ( renderPass.getEngine()->getRenderDevice()->hasDrawId() )
+					{
+						result += doPrepareBillboardCommandBuffers( commandBuffer, viewport, scissors, nodesIdsBuffer, maxNodesCount );
+					}
+					else
+					{
+						result += doPrepareBillboardNoDrawIDCommandBuffers( commandBuffer, viewport, scissors, nodesIdsBuffer, maxNodesCount );
+					}
 				}
 
 				m_pipelinesNodes->flush( 0u, ashes::WholeSize );
@@ -1342,6 +1435,108 @@ namespace castor3d
 		}
 	}
 
+	uint32_t QueueRenderNodes::doPrepareMeshTraditionalNoDrawIDCommandBuffers( ashes::CommandBuffer const & commandBuffer
+		, ashes::Optional< VkViewport > const & viewport
+		, ashes::Optional< VkRect2D > const & scissors
+		, PipelineNodes * nodesIdsBuffer
+		, VkDeviceSize maxNodesCount )
+	{
+		uint32_t result{};
+		uint32_t idxIndex{};
+		uint32_t nidxIndex{};
+		{
+			C3D_DebugTime( getOwner()->getOwner()->getTypeName() + " - Single" );
+			for ( auto const & [_, pipelinesNodes] : m_submeshNodes )
+			{
+				auto const & pipeline = pipelinesNodes.pipeline;
+
+				for ( auto const & [buffer, nodes] : pipelinesNodes.nodes )
+				{
+					if ( auto firstVisibleNode = queuerndnd::hasVisibleNode( nodes ) )
+					{
+						auto & pipelineNodes = getPipelineNodes( pipeline.pipeline->getFlagsHash()
+							, *buffer
+							, m_nodesIds
+							, nodesIdsBuffer
+							, maxNodesCount );
+						auto pipelinesBuffer = pipelineNodes.data();
+						auto pipelineId = queuerndnd::bindPipeline( commandBuffer
+							, *this
+							, *pipeline.pipeline
+							, *buffer
+							, viewport
+							, scissors
+							, false );
+						uint32_t visibleNodesCount{};
+
+						for ( auto const & node : nodes )
+						{
+							if ( node.visible )
+							{
+								auto instanceCount = node.node->getInstanceCount();
+								queuerndnd::registerNodeCommands( *pipeline.pipeline
+									, node
+									, commandBuffer
+									, instanceCount
+									, pipelineId
+									, visibleNodesCount
+									, pipelinesBuffer
+									, idxIndex
+									, nidxIndex );
+								CU_Require( size_t( std::distance( pipelineNodes.data(), pipelinesBuffer ) ) <= pipelineNodes.size() );
+								m_visible.objectCount += instanceCount;
+								m_visible.faceCount += node.node->data.getFaceCount() * instanceCount;
+								m_visible.vertexCount += node.node->data.getPointsCount() * instanceCount;
+								++visibleNodesCount;
+							}
+						}
+
+						++result;
+					}
+				}
+			}
+		}
+		{
+			C3D_DebugTime( getOwner()->getOwner()->getTypeName() + " - Instantiated" );
+			for ( auto const & [_, pipelinesNodes] : m_instancedSubmeshNodes )
+			{
+				auto const & pipeline = pipelinesNodes.pipeline;
+				auto const & buffers = pipelinesNodes.nodes;
+				uint32_t * pipelinesBuffer = nullptr;
+
+				for ( auto const & [buffer, submeshes] : buffers )
+				{
+					auto pipelineId = queuerndnd::bindPipeline( commandBuffer
+						, *this
+						, *pipeline.pipeline
+						, *buffer
+						, viewport
+						, scissors
+						, false );
+
+					for ( auto const & [submesh, node] : submeshes )
+					{
+						auto instanceCount = node.node->getInstanceCount();
+						queuerndnd::registerNodeCommands( *pipeline.pipeline
+							, node
+							, commandBuffer
+							, instanceCount
+							, pipelineId
+							, 0u
+							, pipelinesBuffer
+							, idxIndex
+							, nidxIndex );
+						m_visible.objectCount += instanceCount;
+						m_visible.faceCount += uint32_t( submesh->getFaceCount() * instanceCount );
+						m_visible.vertexCount += uint32_t( submesh->getPointsCount() * instanceCount );
+						++result;
+					}
+				}
+			}
+		}
+		return result;
+	}
+
 	uint32_t QueueRenderNodes::doPrepareMeshTraditionalCommandBuffers( ashes::CommandBuffer const & commandBuffer
 		, ashes::Optional< VkViewport > const & viewport
 		, ashes::Optional< VkRect2D > const & scissors
@@ -1380,7 +1575,8 @@ namespace castor3d
 							, *pipeline.pipeline
 							, *buffer
 							, viewport
-							, scissors );
+							, scissors
+							, true );
 						uint32_t visibleNodesCount{};
 
 						for ( auto const & node : nodes )
@@ -1430,7 +1626,8 @@ namespace castor3d
 						, *pipeline.pipeline
 						, *buffer
 						, viewport
-						, scissors );
+						, scissors
+						, true );
 
 					for ( auto const & [submesh, node] : submeshes )
 					{
@@ -1508,7 +1705,8 @@ namespace castor3d
 							, *pipeline.pipeline
 							, *buffer
 							, viewport
-							, scissors );
+							, scissors
+							, true );
 
 						if ( pipeline.pipeline->hasMeshletDescriptorSetLayout() )
 						{
@@ -1597,7 +1795,8 @@ namespace castor3d
 						, *pipelinesNodes.pipeline.pipeline
 						, *buffer
 						, viewport
-						, scissors );
+						, scissors
+						, true );
 
 					if ( pipeline.pipeline->hasMeshletDescriptorSetLayout() )
 					{
@@ -1710,7 +1909,8 @@ namespace castor3d
 							, *pipeline.pipeline
 							, *buffer
 							, viewport
-							, scissors );
+							, scissors
+							, true );
 
 						if ( pipeline.pipeline->hasMeshletDescriptorSetLayout() )
 						{
@@ -1799,7 +1999,8 @@ namespace castor3d
 						, *pipelinesNodes.pipeline.pipeline
 						, *buffer
 						, viewport
-						, scissors );
+						, scissors
+						, true );
 
 					if ( pipeline.pipeline->hasMeshletDescriptorSetLayout() )
 					{
@@ -1869,6 +2070,67 @@ namespace castor3d
 	}
 #endif
 
+	uint32_t QueueRenderNodes::doPrepareBillboardNoDrawIDCommandBuffers( ashes::CommandBuffer const & commandBuffer
+		, ashes::Optional< VkViewport > const & viewport
+		, ashes::Optional< VkRect2D > const & scissors
+		, PipelineNodes * nodesIdsBuffer
+		, VkDeviceSize maxNodesCount )
+	{
+		C3D_DebugTime( getOwner()->getOwner()->getTypeName() + " - Billboards" );
+		uint32_t result{};
+		uint32_t idxIndex{};
+		uint32_t nidxIndex{};
+
+		for ( auto const & [_, pipelinesNodes] : m_billboardNodes )
+		{
+			auto const & pipeline = pipelinesNodes.pipeline;
+
+			for ( auto const & [buffer, nodes] : pipelinesNodes.nodes )
+			{
+				if ( auto firstVisibleNode = queuerndnd::hasVisibleNode( nodes ) )
+				{
+					auto & pipelineNodes = getPipelineNodes( pipeline.pipeline->getFlagsHash()
+						, *buffer
+						, m_nodesIds
+						, nodesIdsBuffer
+						, maxNodesCount );
+					auto pipelinesBuffer = pipelineNodes.data();
+					auto pipelineId = queuerndnd::bindPipeline( commandBuffer
+						, *this
+						, *pipeline.pipeline
+						, *buffer
+						, viewport
+						, scissors
+						, true );
+					uint32_t visibleNodesCount{};
+
+					for ( auto const & node : nodes )
+					{
+						if ( node.visible )
+						{
+							auto instanceCount = node.node->getInstanceCount();
+							queuerndnd::registerNodeCommands( *pipeline.pipeline
+								, node
+								, commandBuffer
+								, instanceCount
+								, pipelineId
+								, visibleNodesCount
+								, pipelinesBuffer
+								, nidxIndex );
+							CU_Require( size_t( std::distance( pipelineNodes.data(), pipelinesBuffer ) ) <= pipelineNodes.size() );
+							m_visible.billboardCount += node.node->data.getCount();
+							++visibleNodesCount;
+						}
+					}
+
+					++result;
+				}
+			}
+		}
+
+		return result;
+	}
+
 	uint32_t QueueRenderNodes::doPrepareBillboardCommandBuffers( ashes::CommandBuffer const & commandBuffer
 		, ashes::Optional< VkViewport > const & viewport
 		, ashes::Optional< VkRect2D > const & scissors
@@ -1904,7 +2166,8 @@ namespace castor3d
 						, *pipeline.pipeline
 						, *buffer
 						, viewport
-						, scissors );
+						, scissors
+						, true );
 					uint32_t visibleNodesCount{};
 
 					for ( auto const & node : nodes )

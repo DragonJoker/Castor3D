@@ -63,8 +63,6 @@ namespace castor3d
 	namespace eng
 	{
 		static bool constexpr C3D_GenerateBRDFIntegration = false;
-
-		static constexpr bool C3D_EnableAPITrace = false;
 		static castor::StringView constexpr noRenderSystem{ cuT( "No RenderSystem loaded, call castor3d::Engine::loadRenderer before castor3d::Engine::Initialise" ) };
 		static castor::StringView constexpr defaultName{ cuT( "C3D_Default" ) };
 		static castor::StringView constexpr samplerName{ cuT( "C3D_Lights" ) };

@@ -12,6 +12,10 @@
 #include <Castor3D/Shader/GlslToSpv.hpp>
 #include <Castor3D/Shader/ShaderModule.hpp>
 
+#include <ashespp/Descriptor/DescriptorSetLayout.hpp>
+#include <ashespp/Descriptor/DescriptorSetPool.hpp>
+#include <ashespp/Pipeline/ComputePipeline.hpp>
+#include <ashespp/Pipeline/PipelineLayout.hpp>
 #include <ashespp/Sync/Fence.hpp>
 
 #include <RenderGraph/RunnablePasses/BufferToImageCopy.hpp>

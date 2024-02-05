@@ -57,6 +57,17 @@
 			}
 		},
 		{
+			"name": "user-osx",
+			"displayName": "Castor3D User OSX Ninja Config",
+			"description": "Build configuration using Ninja, on OSX, for Castor3D users",
+			"inherits": "user-base",
+			"generator": "Ninja",
+			"cacheVariables": {
+				"VCPKG_MANIFEST_FEATURES": "assimp;freeimage;glsl;gltf;vkfft;tools",
+				"CMAKE_BUILD_TYPE": "Release"
+			}
+		},
+		{
 			"name": "dev-base",
 			"hidden": true,
 			"installDir": "${sourceDir}/package/Castor3D",
@@ -67,7 +78,6 @@
 				"CASTOR_BUILDGRP_INTEROP": false,
 				"CASTOR_BUILDGRP_TEST": true,
 				"CASTOR_BUILDGRP_TOOL": true,
-				"CASTOR_DEBUG_TARGETS": true,
 				"CASTOR_DISABLE_DELAYED_INITIALISATION": true,
 				"CASTOR_FORCE_VCPKG_SUBMODULES": false,
 				"CASTOR_GUICOMMON_NEEDS_HLSL": true,
@@ -153,6 +163,74 @@
 			"displayName": "Castor3D Developer Ninja Config, using vcpkg, Release",
 			"description": "Build configuration using Ninja, for Castor3D developers, Release",
 			"inherits": "dev-vcpkg-ninja",
+			"cacheVariables": {
+				"CMAKE_BUILD_TYPE": "Release"
+			}
+		},
+		{
+			"name": "dev-osx-base",
+			"hidden": true,
+			"generator": "Ninja",
+			"installDir": "${sourceDir}/package/Castor3D",
+			"cacheVariables": {
+				"VCPKG_MANIFEST_FEATURES": "assimp;freeimage;glsl;gltf;vkfft;tools",
+				"CASTOR_BUILD_PLUGINS": true,
+				"CASTOR_BUILDGRP_DEMO": true,
+				"CASTOR_BUILDGRP_INTEROP": false,
+				"CASTOR_BUILDGRP_TEST": false,
+				"CASTOR_BUILDGRP_TOOL": true,
+				"CASTOR_DISABLE_DELAYED_INITIALISATION": true,
+				"CASTOR_FORCE_VCPKG_SUBMODULES": false,
+				"CASTOR_GUICOMMON_NEEDS_HLSL": true,
+				"CASTOR_USE_GLSLANG": true,
+				"CASTOR_USE_MESH_SHADERS": false,
+				"CASTOR_USE_TASK_SHADERS": false,
+				"PROJECTS_UNITY_BUILD": false,
+				"PROJECTS_USE_PRECOMPILED_HEADERS": true
+			}
+		},
+		{
+			"name": "dev-osx-debug",
+			"displayName": "Castor3D Developer OSX Config, Debug",
+			"description": "Build configuration using Ninja, for Castor3D developers, OSX Debug",
+			"inherits": "dev-osx-base",
+			"cacheVariables": {
+				"CMAKE_BUILD_TYPE": "Debug"
+			}
+		},
+		{
+			"name": "dev-osx-release",
+			"displayName": "Castor3D Developer OSX Config, Release",
+			"description": "Build configuration using Ninja, for Castor3D developers, OSX Release",
+			"inherits": "dev-osx-base",
+			"cacheVariables": {
+				"CMAKE_BUILD_TYPE": "Release"
+			}
+		},
+		{
+			"name": "dev-osx-vcpkg-base",
+			"inherits": "dev-osx-base",
+			"hidden": true,
+			"cacheVariables": {
+				"PROJECTS_UNITY_BUILD": false,
+				"VCPKG_MANIFEST_FEATURES": "assimp;freeimage;glsl;gltf;vkfft;tools",
+				"CMAKE_TOOLCHAIN_FILE": "${sourceDir}/external/vcpkg/scripts/buildsystems/vcpkg.cmake"
+			}
+		},
+		{
+			"name": "dev-osx-vcpkg-debug",
+			"displayName": "Castor3D Developer OSX Config, using vcpkg, Debug",
+			"description": "Build configuration using Ninja, for Castor3D developers, OSX Debug",
+			"inherits": "dev-osx-vcpkg-base",
+			"cacheVariables": {
+				"CMAKE_BUILD_TYPE": "Debug"
+			}
+		},
+		{
+			"name": "dev-osx-vcpkg-release",
+			"displayName": "Castor3D Developer OSX Config, using vcpkg, Release",
+			"description": "Build configuration using Ninja, for Castor3D developers,OSX Release",
+			"inherits": "dev-osx-vcpkg-base",
 			"cacheVariables": {
 				"CMAKE_BUILD_TYPE": "Release"
 			}

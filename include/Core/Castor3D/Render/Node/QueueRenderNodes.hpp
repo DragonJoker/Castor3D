@@ -123,6 +123,11 @@ namespace castor3d
 		void doAddBillboard( CulledNodeT< BillboardRenderNode > const & node );
 		void doRemoveSubmesh( CulledNodeT< SubmeshRenderNode > const & node );
 		void doRemoveBillboard( CulledNodeT< BillboardRenderNode > const & node );
+		uint32_t doPrepareMeshTraditionalNoDrawIDCommandBuffers( ashes::CommandBuffer const & commandBuffer
+			, ashes::Optional< VkViewport > const & viewport
+			, ashes::Optional< VkRect2D > const & scissors
+			, PipelineNodes * nodesIdsBuffer
+			, VkDeviceSize maxNodesCount );
 		uint32_t doPrepareMeshTraditionalCommandBuffers( ashes::CommandBuffer const & commandBuffer
 			, ashes::Optional< VkViewport > const & viewport
 			, ashes::Optional< VkRect2D > const & scissors
@@ -142,6 +147,11 @@ namespace castor3d
 			, PipelineNodes * nodesIdsBuffer
 			, VkDeviceSize maxNodesCount );
 #endif
+		uint32_t doPrepareBillboardNoDrawIDCommandBuffers( ashes::CommandBuffer const & commandBuffer
+			, ashes::Optional< VkViewport > const & viewport
+			, ashes::Optional< VkRect2D > const & scissors
+			, PipelineNodes * nodesIdsBuffer
+			, VkDeviceSize maxNodesCount );
 		uint32_t doPrepareBillboardCommandBuffers( ashes::CommandBuffer const & commandBuffer
 			, ashes::Optional< VkViewport > const & viewport
 			, ashes::Optional< VkRect2D > const & scissors

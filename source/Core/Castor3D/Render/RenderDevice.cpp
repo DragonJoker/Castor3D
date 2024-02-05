@@ -389,6 +389,9 @@ namespace castor3d
 #endif
 		if ( hasFeatures2 )
 		{
+#if defined( VK_KHR_portability_subset )
+			doTryAddExtension( VK_KHR_PORTABILITY_SUBSET_EXTENSION_NAME, &m_portabilitySubsetFeatures, &m_portabilitySubsetProperties );
+#endif
 #if VK_KHR_shader_float_controls
 			if ( !hasFloatControls )
 			{
@@ -1010,6 +1013,20 @@ namespace castor3d
 			gpuInformations.setValue( GpuMax::eTaskWorkGroupSizeZ, meshLimits.maxTaskWorkGroupSize[2] );
 		}
 #	endif
+#endif
+	}
+
+	bool RenderDevice::hasGeometryShader()const noexcept
+	{
+		return features.geometryShader == VK_TRUE;
+	}
+
+	bool RenderDevice::hasDrawId()const noexcept
+	{
+#if VK_VERSION_1_1
+			return m_features11.shaderDrawParameters == VK_TRUE;
+#elif VK_KHR_draw_parameters
+			return m_drawParamsFeatures.shaderDrawParameters == VK_TRUE;
 #endif
 	}
 

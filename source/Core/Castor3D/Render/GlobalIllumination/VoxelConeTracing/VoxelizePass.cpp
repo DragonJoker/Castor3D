@@ -277,6 +277,7 @@ namespace castor3d
 
 		sdw::PushConstantBuffer pcb{ writer, "C3D_DrawData", "c3d_drawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
+		auto drawID = pcb.declMember< sdw::Int >( "drawID", !getEngine()->getRenderDevice()->hasDrawId() );
 		pcb.end();
 
 		if ( flags.isBillboard() )
@@ -293,7 +294,7 @@ namespace castor3d
 					auto nodeId = writer.declLocale( "nodeId"
 						, shader::getNodeId( c3d_objectIdsData
 							, pipelineID
-							, writer.cast< sdw::UInt >( in.drawID ) ) );
+							, writer.cast< sdw::UInt >( getEngine()->getRenderDevice()->hasDrawId() ? in.drawID : drawID ) ) );
 					auto modelData = writer.declLocale( "modelData"
 						, c3d_modelsData[nodeId - 1u] );
 					out.nodeId = writer.cast< sdw::Int >( nodeId );
@@ -347,7 +348,7 @@ namespace castor3d
 						, shader::getNodeId( c3d_objectIdsData
 							, in
 							, pipelineID
-							, writer.cast< sdw::UInt >( in.drawID )
+							, writer.cast< sdw::UInt >( getEngine()->getRenderDevice()->hasDrawId() ? in.drawID : drawID )
 							, flags ) );
 					auto curPosition = writer.declLocale( "curPosition"
 						, in.position );

@@ -53,6 +53,11 @@ namespace castor3d
 			, uint32_t drawCount
 			, uint32_t & offset
 			, ashes::CommandBuffer const & commandBuffer )noexcept;
+		void doRegisterDrawCommands( OverlayDrawPipeline const & pipeline
+			, VkDrawIndirectCommand const & command
+			, uint32_t drawId
+			, uint32_t & offset
+			, ashes::CommandBuffer const & commandBuffer )noexcept;
 		void doUpdateUbo( OverlayUboConfiguration & data
 			, PanelOverlay const & overlay
 			, Pass const & pass

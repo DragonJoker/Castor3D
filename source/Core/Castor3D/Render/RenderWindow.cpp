@@ -617,7 +617,11 @@ namespace castor3d
 						updater.gridCenter = {};
 					}
 
-					m_texture3Dto2D->update( updater );
+					if (m_texture3Dto2D )
+					{
+						m_texture3Dto2D->update( updater );
+					}
+
 					auto & config = m_configUbo.getData();
 					config.multiply = castor::Point4f{ intermediate.factors.multiply };
 					config.add = castor::Point4f{ intermediate.factors.add };
@@ -1461,20 +1465,24 @@ namespace castor3d
 			return;
 		}
 
-		VkExtent2D extent{ m_size.getWidth(), m_size.getHeight() };
-		m_texture3Dto2D = castor::makeUnique< Texture3DTo2D >( m_device
-			, m_resources
-			, extent
-			, target->getCameraUbo() );
+		auto intermediates = getEngine()->areDebugTargetsEnabled()
+			? target->getIntermediateViews()
+			: IntermediateViewArray{ target->getIntermediateViews()[0] };
+				
+		if ( m_device.hasGeometryShader() )
+		{
+			VkExtent2D extent{ m_size.getWidth(), m_size.getHeight() };
+			m_texture3Dto2D = castor::makeUnique< Texture3DTo2D >( m_device
+				, m_resources
+				, extent
+				, target->getCameraUbo() );
+			m_texture3Dto2D->createPasses( queueData, intermediates );
+		}
+
 		m_tex3DTo2DIntermediate = { cuT( "Texture3DTo2DResult" )
 			, m_texture3Dto2D->getTarget().sampledViewId
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, castor3d::TextureFactors{}.invert( true ) };
-		auto intermediates = getEngine()->areDebugTargetsEnabled()
-			? target->getIntermediateViews()
-			: IntermediateViewArray{ target->getIntermediateViews()[0] };
-		m_texture3Dto2D->createPasses( queueData, intermediates );
-
 		m_intermediateBarrierViews = rendwndw::doCreateBarrierViews( m_device
 			, m_tex3DTo2DIntermediate
 			, intermediates );
@@ -1844,7 +1852,7 @@ namespace castor3d
 		doRecordCommandBuffer( passIndex );
 
 #if !C3D_DebugPicking && !C3D_DebugBackgroundPicking
-		if ( getEngine()->areDebugTargetsEnabled() )
+		if ( getEngine()->areDebugTargetsEnabled() && m_texture3Dto2D )
 		{
 			m_texture3Dto2D->render( *queueData.queue
 				, semaphores

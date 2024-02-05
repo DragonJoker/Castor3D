@@ -27,8 +27,6 @@
 
 #include <limits>
 
-#define C3D_DebugEnableWarpOptimisation 0
-
 namespace castor3d
 {
 	//*********************************************************************************************
