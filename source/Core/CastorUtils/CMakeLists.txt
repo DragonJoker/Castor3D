@@ -2,7 +2,6 @@ project( CastorUtils )
 
 set( unofficial-convectionkernels_DIR ${VCPKG_SHARE_DIR}/unofficial-convectionkernels )
 set( gli_DIR ${VCPKG_SHARE_DIR}/gli )
-set( minizip_DIR ${VCPKG_SHARE_DIR}/minizip )
 find_package( unofficial-convectionkernels CONFIG REQUIRED )
 find_package( gli CONFIG REQUIRED )
 
