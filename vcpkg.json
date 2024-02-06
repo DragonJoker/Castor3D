@@ -23,11 +23,9 @@
   "vcpkg-configuration": {
     "overlay-ports": [
       "./data/vcpkg/ports/ashes",
-      "./data/vcpkg/ports/draco",
       "./data/vcpkg/ports/fastgltf",
       "./data/vcpkg/ports/rendergraph",
-      "./data/vcpkg/ports/shaderwriter",
-      "./data/vcpkg/ports/vkfft"
+      "./data/vcpkg/ports/shaderwriter"
     ]
   },
   "features": {
@@ -53,14 +51,8 @@
     "gltf": {
       "description": "Use fastgltf library to import glTF scenes.",
       "dependencies": [
-        {
-          "name": "fastgltf",
-          "platform": "!osx"
-        },
-        {
-          "name": "simdjson",
-          "platform": "!osx"
-        }
+        "fastgltf",
+        "simdjson"
       ]
     },
     "vkfft": {

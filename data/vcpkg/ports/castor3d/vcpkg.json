@@ -10,6 +10,7 @@
     "freetype",
     "gli",
     "meshoptimizer",
+    "mikktspace",
     "minizip",
     "rendergraph",
     {
@@ -28,12 +29,14 @@
       "name": "vcpkg-cmake-config",
       "host": true
     },
+    "vulkan-headers",
     "zlib"
   ],
   "default-features": [
     "assimp",
     "freeimage",
     "glsl",
+    "gltf",
     "vkfft"
   ],
   "features": {
@@ -54,6 +57,13 @@
       "dependencies": [
         "glslang",
         "spirv-cross"
+      ]
+    },
+    "gltf": {
+      "description": "Use fastgltf library to import glTF scenes.",
+      "dependencies": [
+        "fastgltf",
+        "simdjson"
       ]
     },
     "vkfft": {
