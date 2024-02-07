@@ -156,8 +156,8 @@ namespace castor3d
 						}
 						ROF
 
-						indirectCounts[pipelineId * 3u + 0u] = writer.cast< sdw::UInt >( ceil( writer.cast< sdw::Float >( materialsCounts[pipelineId] ) / 16.0_f ) );
-						indirectCounts[pipelineId * 3u + 1u] = 1u;
+						indirectCounts[pipelineId * 3u + 0u] = writer.cast< sdw::UInt >( ceil( writer.cast< sdw::Float >( materialsCounts[pipelineId] ) / 64.0_f ) );
+						indirectCounts[pipelineId * 3u + 1u] = 4u;
 						indirectCounts[pipelineId * 3u + 2u] = 1u;
 						materialStarts[pipelineId] = result;
 					}

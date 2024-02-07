@@ -92,6 +92,7 @@ See LICENSE file in root folder
 #include <CastorUtils/Pool/BuddyAllocator.hpp>
 #include <CastorUtils/Stream/StreamPrefixManipulators.hpp>
 
+#include <CastorUtils/Config/BeginExternHeaderGuard.hpp>
 #include <ShaderAST/Shader.hpp>
 #include <ShaderAST/Expr/ExprComma.hpp>
 
@@ -197,5 +198,7 @@ See LICENSE file in root folder
 #include <unordered_set>
 #include <utility>
 #include <vector>
+
+#include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
 #endif

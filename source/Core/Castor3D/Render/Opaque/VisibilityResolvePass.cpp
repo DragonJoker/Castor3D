@@ -236,7 +236,7 @@ namespace castor3d
 				auto c3d_imgOutResult = writer.declStorageImg< sdw::WImage2DRgba32 >( "c3d_imgOutResult", uint32_t( InOutBindings::eOutResult ), Sets::eInOuts );
 				auto c3d_imgOutScattering = writer.declStorageImg< sdw::WImage2DRgba32 >( "c3d_imgOutScattering", uint32_t( InOutBindings::eOutScattering ), Sets::eInOuts, outputScattering );
 
-				writer.implementMainT< sdw::VoidT >( sdw::ComputeIn{ writer, 16u, 4u, 1u }
+				writer.implementMainT< sdw::VoidT >( sdw::ComputeIn{ writer, 4u, 4u, 1u }
 					, [&]( sdw::ComputeIn const & in )
 					{
 						auto pos = in.globalInvocationID.xy();
@@ -247,7 +247,7 @@ namespace castor3d
 						IF( writer, index < materialsCounts[pipelineId] )
 						{
 							auto pixelIndex = writer.declLocale( "pixelIndex"
-								, materialsStart + pos.x() );
+								, materialsStart + index );
 							auto pixel = writer.declLocale( "pixel"
 								, pixelsXY[pixelIndex] );
 							auto ipixel = writer.declLocale( "ipixel"
