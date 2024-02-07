@@ -36,7 +36,14 @@ namespace castor3d
 	class Pass
 		: public castor::OwnedBy< Material >
 	{
+	private:
 		friend struct PassComponent;
+
+		C3D_API Pass( Material & parent
+			, LightingModelID lightingModelId
+			, RenderPassRegisterInfo * renderPassInfo
+			, bool implicit = false
+			, bool automaticShader = true );
 
 	public:
 		using UnitArray = castor::Vector< TextureUnitRPtr >;
@@ -53,7 +60,7 @@ namespace castor3d
 		 *\param[in]	parent			Le matériau parent.
 		 *\param[in]	lightingModelId	L'ID du modèle d'éclairage du matériau.
 		 */
-		C3D_API explicit Pass( Material & parent
+		C3D_API Pass( Material & parent
 			, LightingModelID lightingModelId );
 		/**
 		 *\~english
@@ -487,8 +494,8 @@ namespace castor3d
 		*	Mutateurs.
 		*/
 		/**@{*/
-		C3D_API void enableLighting( bool value );
-		C3D_API void enablePicking( bool value );
+		C3D_API void enableLighting( bool value )const;
+		C3D_API void enablePicking( bool value )const;
 
 		void setId( uint32_t value )noexcept
 		{

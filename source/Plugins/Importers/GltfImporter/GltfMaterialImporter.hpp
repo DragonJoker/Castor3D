@@ -40,9 +40,9 @@ namespace c3d_gltf
 		void doImportEmissiveData( fastgltf::Material const & impMaterial
 			, castor3d::Pass & pass );
 		void doImportAlphaModeData( fastgltf::Material const & impMaterial
-			, castor3d::Pass & pass );
+			, castor3d::Pass & pass )const;
 		void doImportIorData( fastgltf::Material const & impMaterial
-			, castor3d::Pass & pass );
+			, castor3d::Pass & pass )const;
 	};
 }
 

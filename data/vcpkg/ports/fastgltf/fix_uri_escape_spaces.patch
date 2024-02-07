@@ -1,24 +1,14 @@
 diff --git a/src/fastgltf.cpp b/src/fastgltf.cpp
-index 9244fe1..f968f59 100644
+index 775c9bd..7cd12d0 100644
 --- a/src/fastgltf.cpp
 +++ b/src/fastgltf.cpp
-@@ -1487,7 +1487,8 @@ fg::Error fg::Parser::parseBuffers(simdjson::dom::array& buffers, Asset& asset)
+@@ -1733,7 +1733,8 @@ fg::Error fg::Parser::parseBuffers(simdjson::dom::array& buffers, Asset& asset)
          // file. Otherwise, data must be specified in the "uri" field.
          std::string_view uriString;
-         if (bufferObject["uri"].get_string().get(uriString) == SUCCESS) {
+         if (bufferObject["uri"].get_string().get(uriString) == SUCCESS) FASTGLTF_LIKELY {
 -			URIView uriView(uriString);
 +            fg::URI uri(uriString);
 +            fg::URIView uriView(uri.string());
  
              if (!uriView.valid()) {
                  return Error::InvalidURI;
-@@ -1821,7 +1822,8 @@ fg::Error fg::Parser::parseImages(simdjson::dom::array& images, Asset& asset) {
-                 return Error::InvalidGltf;
-             }
- 
--            URIView uriView(uriString);
-+            fg::URI uri(uriString);
-+            fg::URIView uriView(uri.string());
-             if (!uriView.valid()) {
-                 return Error::InvalidURI;
-             }
