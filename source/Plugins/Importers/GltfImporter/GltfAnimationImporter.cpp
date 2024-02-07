@@ -335,12 +335,17 @@ namespace c3d_gltf
 						, lookup.second.end()
 						, [&result, meshIndex, &file]( AnimationChannelSampler const & channelSampler )
 						{
-							auto & node = file.getAsset().nodes[channelSampler.first.nodeIndex];
-							bool ret{ node.meshIndex && *node.meshIndex == meshIndex };
+							bool ret = bool( channelSampler.first.nodeIndex );
 
 							if ( ret )
 							{
-								result = channelSampler.first.nodeIndex;
+								auto & node = file.getAsset().nodes[*channelSampler.first.nodeIndex];
+								ret = node.meshIndex && ( *node.meshIndex == meshIndex );
+
+								if ( ret )
+								{
+									result = *channelSampler.first.nodeIndex;
+								}
 							}
 
 							return ret;

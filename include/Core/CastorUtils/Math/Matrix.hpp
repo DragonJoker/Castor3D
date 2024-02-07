@@ -18,6 +18,8 @@ namespace castor
 	protected:
 		static const std::size_t count = Rows * Columns;
 		static const std::size_t size = sizeof( T ) * Rows * Columns;
+		template< typename ... Types >
+		static bool constexpr isRightSize = sizeof...( Types ) == count;
 
 	public:
 		//!\~english	The data type.
@@ -56,6 +58,8 @@ namespace castor
 		explicit Matrix( Array< Type, Columns * Rows > const & rhs );
 		template< typename Type >
 		explicit Matrix( Matrix< Type, Columns, Rows > const & matrix );
+		template< typename ... Types >
+		explicit Matrix( Types && ... inits ) requires isRightSize< Types... >;
 		explicit Matrix( std::initializer_list< T > rhs );
 		~Matrix()noexcept = default;
 		/**@}*/

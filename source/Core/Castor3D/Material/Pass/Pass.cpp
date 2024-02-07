@@ -166,10 +166,15 @@ namespace castor3d
 	//*********************************************************************************************
 
 	Pass::Pass( Material & parent
-		, LightingModelID lightingModelId )
+		, LightingModelID lightingModelId
+		, RenderPassRegisterInfo * renderPassInfo
+		, bool implicit
+		, bool automaticShader )
 		: OwnedBy< Material >{ parent }
 		, m_index{ parent.getPassCount() }
-		, m_renderPassInfo{ getOwner()->getRenderPassInfo() }
+		, m_implicit{ implicit }
+		, m_automaticShader{ automaticShader }
+		, m_renderPassInfo{ renderPassInfo }
 	{
 		createComponent< BlendComponent >();
 		createComponent< PassHeaderComponent >();
@@ -182,13 +187,15 @@ namespace castor3d
 	}
 
 	Pass::Pass( Material & parent
-		, Pass const & rhs )
-		: Pass{ parent, rhs.getLightingModelId() }
+		, LightingModelID lightingModelId )
+		: Pass{ parent, lightingModelId, parent.getRenderPassInfo() }
 	{
-		m_implicit = rhs.m_implicit;
-		m_automaticShader = rhs.m_automaticShader;
-		m_renderPassInfo = rhs.m_renderPassInfo;
+	}
 
+	Pass::Pass( Material & parent
+		, Pass const & rhs )
+		: Pass{ parent, rhs.getLightingModelId(), rhs.m_renderPassInfo, rhs.m_implicit, rhs.m_automaticShader }
+	{
 		for ( auto & [id, component] : rhs.m_components )
 		{
 			addComponent( component->clone( *this ) );
@@ -304,7 +311,7 @@ namespace castor3d
 
 		if ( m_dirty.exchange( false ) )
 		{
-			auto oldComponents = m_componentCombine;
+			auto const & oldComponents = m_componentCombine;
 			m_componentCombine = getOwner()->getOwner()->getPassComponentsRegister().registerPassComponentCombine( *this );
 			onChanged( *this, oldComponents.baseId, m_componentCombine.baseId );
 		}
@@ -424,7 +431,7 @@ namespace castor3d
 			} );
 			it != m_components.end() )
 		{
-			auto tmp = castor::move( it->second );
+			PassComponentUPtr tmp = castor::move( it->second );
 			m_components.erase( it );
 
 			if ( tmp->getPlugin().getComponentFlags() == m_reflRefrFlag )
@@ -506,6 +513,8 @@ namespace castor3d
 	void Pass::registerTexture( TextureSourceInfo sourceInfo
 		, PassTextureConfig configuration )
 	{
+		auto texcoordSet = configuration.texcoordSet;
+
 		if ( auto it = std::find_if( m_sources.begin()
 			, m_sources.end()
 			, [&sourceInfo, &configuration]( PassTextureSource const & lookup )
@@ -521,7 +530,7 @@ namespace castor3d
 		}
 		else
 		{
-			auto resConfig = it->first.textureConfig();
+			TextureConfiguration resConfig = it->first.textureConfig();
 
 			for ( auto const & flagConfig : sourceInfo.textureConfig().components )
 			{
@@ -534,7 +543,7 @@ namespace castor3d
 			it->first = TextureSourceInfo{ it->first, resConfig };
 		}
 
-		m_maxTexcoordSet = std::max( m_maxTexcoordSet, configuration.texcoordSet );
+		m_maxTexcoordSet = std::max( m_maxTexcoordSet, texcoordSet );
 		doUpdateTextureFlags();
 	}
 
@@ -894,7 +903,7 @@ namespace castor3d
 		return result;
 	}
 
-	void Pass::enableLighting( bool value )
+	void Pass::enableLighting( bool value )const
 	{
 		if ( auto component = getComponent< PassHeaderComponent >() )
 		{
@@ -902,7 +911,7 @@ namespace castor3d
 		}
 	}
 
-	void Pass::enablePicking( bool value )
+	void Pass::enablePicking( bool value )const
 	{
 		if ( auto component = getComponent< PickableComponent >() )
 		{

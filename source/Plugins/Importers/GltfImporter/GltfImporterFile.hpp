@@ -11,7 +11,7 @@ See LICENSE file in root folder
 #	undef None
 #endif
 #pragma warning( disable: 4715 )
-#include <fastgltf/parser.hpp>
+#include <fastgltf/core.hpp>
 #include <fastgltf/tools.hpp>
 #include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
@@ -61,7 +61,7 @@ namespace c3d_gltf
 {
 	inline const castor::String DefaultMaterial = cuT( "GLTF_DefaultMaterial" );
 
-	castor3d::NodeTransform convert( std::variant< fastgltf::Node::TRS, fastgltf::Node::TransformMatrix > const & transform );
+	castor3d::NodeTransform convert( std::variant< fastgltf::TRS, fastgltf::Node::TransformMatrix > const & transform );
 	castor::Point3f convert( castor::Array< float, 3u > const & value );
 	castor::Quaternion convert( castor::Array< float, 4u > const & value );
 

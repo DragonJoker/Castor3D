@@ -22,6 +22,8 @@ namespace castor
 		using /*value_type = */typename Matrix< T, Count, Count >::value_type;
 		using /*col_type = */typename Matrix< T, Count, Count >::col_type;
 		using /*row_type = */typename Matrix< T, Count, Count >::row_type;
+		template< typename ... Types >
+		static bool constexpr isRightSize = sizeof...( Types ) == Count * Count;
 
 		//!\~english	This matrix type
 		//!\~french		Le type de cette matrice
@@ -56,6 +58,8 @@ namespace castor
 		explicit SquareMatrix( Array< Type, Count * Count > const & rhs );
 		template< typename Type >
 		explicit SquareMatrix( Type const * rhs );
+		template< typename ... Types >
+		explicit SquareMatrix( Types && ... inits ) requires isRightSize< Types... >;
 		explicit SquareMatrix( std::initializer_list< T > rhs );
 		/**@}*/
 		/**

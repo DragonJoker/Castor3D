@@ -62,18 +62,14 @@ namespace c3d_gltf
 				return fastgltf::Expected< fastgltf::Asset >( fastgltf::Error::InvalidPath );
 			}
 
-			auto type = fastgltf::determineGltfFileType( &data );
-
-			if ( type != fastgltf::GltfType::glTF
-				&& type != fastgltf::GltfType::GLB )
+			if ( auto type = fastgltf::determineGltfFileType( &data );
+				type != fastgltf::GltfType::glTF && type != fastgltf::GltfType::GLB )
 			{
 				castor3d::log::error << "Failed to determine glTF container" << std::endl;
 				return fastgltf::Expected< fastgltf::Asset >( fastgltf::Error::InvalidPath );
 			}
 
-			auto result = type == fastgltf::GltfType::glTF
-				? parser.loadGLTF( &data, path.parent_path(), gltfOptions )
-				: parser.loadBinaryGLTF( &data, path.parent_path(), gltfOptions );
+			auto result = parser.loadGltf( &data, path.parent_path(), gltfOptions );
 
 			if ( result.error() != fastgltf::Error::None )
 			{
@@ -334,9 +330,10 @@ namespace c3d_gltf
 			, fastgltf::AnimationChannel const & channel
 			, GltfSubmeshData const & submeshData )
 		{
-			return *asset.nodes[channel.nodeIndex].meshIndex == submeshData.meshIndex
+			return channel.nodeIndex
+				&& ( *asset.nodes[*channel.nodeIndex].meshIndex == submeshData.meshIndex )
 				&& channel.path == fastgltf::AnimationPath::Weights
-				&& asset.nodes[channel.nodeIndex].meshIndex;
+				&& asset.nodes[*channel.nodeIndex].meshIndex;
 		}
 
 		template< typename DataT >
@@ -519,11 +516,11 @@ namespace c3d_gltf
 
 	//*********************************************************************************************
 
-	castor3d::NodeTransform convert( std::variant< fastgltf::Node::TRS, fastgltf::Node::TransformMatrix > const & transform )
+	castor3d::NodeTransform convert( std::variant< fastgltf::TRS, fastgltf::Node::TransformMatrix > const & transform )
 	{
 		if ( transform.index() == 0u )
 		{
-			fastgltf::Node::TRS const & trs = std::get< 0 >( transform );
+			fastgltf::TRS const & trs = std::get< 0 >( transform );
 			return { convert( trs.translation )
 				, convert( trs.scale )
 				, convert( trs.rotation ) };
@@ -757,8 +754,9 @@ namespace c3d_gltf
 				if ( ( channel.path == fastgltf::AnimationPath::Rotation
 						|| channel.path == fastgltf::AnimationPath::Scale
 						|| channel.path == fastgltf::AnimationPath::Translation )
-					&& isSkeletonNode( channel.nodeIndex )
-					&& skeleton.findNode( getNodeName( channel.nodeIndex, 0u ) ) != nullptr )
+					&& channel.nodeIndex
+					&& isSkeletonNode( *channel.nodeIndex )
+					&& skeleton.findNode( getNodeName( *channel.nodeIndex, 0u ) ) != nullptr )
 				{
 					auto & channelSamplers = result.emplace( getAnimationName( index ), AnimationChannelSamplers{} ).first->second;
 					auto & nodeSamplers = channelSamplers.emplace( channel.path, NodeAnimationChannelSampler{} ).first->second;
@@ -971,7 +969,8 @@ namespace c3d_gltf
 					if ( ( channel.path == fastgltf::AnimationPath::Rotation
 							|| channel.path == fastgltf::AnimationPath::Scale
 							|| channel.path == fastgltf::AnimationPath::Translation )
-						&& isSkeletonNode( channel.nodeIndex ) )
+						&& channel.nodeIndex
+						&& isSkeletonNode( *channel.nodeIndex ) )
 					{
 						result.insert( getAnimationName( index ) );
 					}
@@ -1039,7 +1038,8 @@ namespace c3d_gltf
 					if ( ( channel.path == fastgltf::AnimationPath::Rotation
 						|| channel.path == fastgltf::AnimationPath::Scale
 						|| channel.path == fastgltf::AnimationPath::Translation )
-						&& isSkeletonNode( channel.nodeIndex ) )
+						&& channel.nodeIndex
+						&& isSkeletonNode( *channel.nodeIndex ) )
 					{
 						result.insert( getAnimationName( index ) );
 					}
