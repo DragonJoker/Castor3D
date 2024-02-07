@@ -19,7 +19,6 @@ See LICENSE file in root folder
 #include <CastorUtils/Design/ArrayView.hpp>
 #include <CastorUtils/Design/BlockGuard.hpp>
 #include <CastorUtils/Design/ChangeTracked.hpp>
-#include <CastorUtils/Design/DelayedInitialiser.hpp>
 #include <CastorUtils/Design/Factory.hpp>
 #include <CastorUtils/Design/FlagCombination.hpp>
 #include <CastorUtils/Design/GroupChangeTracked.hpp>
