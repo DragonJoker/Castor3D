@@ -16,11 +16,8 @@ See LICENSE file in root folder
 #	define __FUNCTION__ ""
 #endif
 
-#define CU_Coucou std::clog << "Coucou " << __COUNTER__ << " : " << __FUNCTION__ << " @ line " << __LINE__ << std::endl;
-
 #if defined( CU_CompilerMSVC )
 #	include <tchar.h>
-#	define cvsnprintf _vsntprintf_s
 #	if CU_CompilerVersion < 1900
 #		define sscanf sscanf_s
 #	endif
@@ -28,26 +25,20 @@ See LICENSE file in root folder
 #	pragma clang diagnostic ignored "-Wduplicate-enum"
 #	if !defined( CU_PlatformWindows )
 #		define _FILE_OFFSET_BITS 64
-#		define cvsnprintf( buf, sz, cnt, fmt, arg ) vsnprintf( buf, cnt, fmt, arg )
 #	else
 #		define _FILE_OFFSET_BITS 64
-#		define cvsnprintf( buf, sz, cnt, fmt, arg ) vsnprintf( buf, cnt, fmt, arg )
 #	endif
 #elif defined( CU_CompilerGNUC )
 #	if !defined( CU_PlatformWindows )
 #		define _FILE_OFFSET_BITS 64
-#		define cvsnprintf( buf, sz, cnt, fmt, arg ) vsnprintf( buf, cnt, fmt, arg )
 #	else
 #		define _FILE_OFFSET_BITS 64
-#		define cvsnprintf( buf, sz, cnt, fmt, arg ) vsnprintf( buf, cnt, fmt, arg )
 #	endif
 #elif defined( CU_CompilerBORLAND )
 #	if !defined( CU_PlatformWindows )
 #		define _FILE_OFFSET_BITS 64
-#		define cvsnprintf( buf, sz, cnt, fmt, arg ) vsnprintf( buf, cnt, fmt, arg )
 #	else
 #		define _FILE_OFFSET_BITS 64
-#		define cvsnprintf( buf, sz, cnt, fmt, arg ) vsnprintf( buf, cnt, fmt, arg )
 #	endif
 #endif
 

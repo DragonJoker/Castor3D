@@ -263,7 +263,7 @@ namespace GuiCommon
 
 			void read( CastorApplication::Config & config )
 			{
-#if defined( _MSC_VER )
+#if defined( CU_CompilerMSVC )
 				if ( has( option::st::WaitDebugger ) )
 				{
 					while ( !::IsDebuggerPresent() )

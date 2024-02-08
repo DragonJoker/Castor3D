@@ -804,13 +804,11 @@ namespace castor3d
 			instanceExtensions.addExtension( VK_KHR_WIN32_SURFACE_EXTENSION_NAME );
 		}
 #endif
-#if defined( __APPLE__ )
-#	if VK_KHR_portability_enumeration
+#if VK_KHR_portability_enumeration
 		if ( rendsys::isExtensionAvailable( globalLayerExtensions, VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME ) )
 		{
 			instanceExtensions.addExtension( VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME );
 		}
-#	endif
 #endif
 		if ( engine.isValidationEnabled() )
 		{
