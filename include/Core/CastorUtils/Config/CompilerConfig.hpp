@@ -46,10 +46,4 @@ See LICENSE file in root folder
 #	error "Yet unsupported compiler"
 #endif
 
-#if defined( CU_CompilerMSVC )
-#	define CU_SharedLibPrefix cuT( "")
-#else
-#	define CU_SharedLibPrefix cuT( "lib")
-#endif
-
 #endif

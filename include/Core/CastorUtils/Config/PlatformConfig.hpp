@@ -21,19 +21,21 @@ See LICENSE file in root folder
 #		define CU_API __declspec(dllimport)
 #	endif
 #	define CU_SharedLibExt cuT( "dll" )
+#	define CU_SharedLibPrefix cuT( "")
 #   define CU_LibPrefix cuT( "" )
-#	define dlerror() ::getLastError()
 #	define CU_stdcall __stdcall
 #	ifndef NOMINMAX
 #		define NOMINMAX
 #	endif
 #elif defined( CU_PlatformApple )
 #	define CU_SharedLibExt cuT( "dylib" )
+#	define CU_SharedLibPrefix cuT( "lib")
 #   define CU_LibPrefix cuT( "lib" )
 #	define CU_API
 #	define CU_stdcall
 #else
 #	define CU_SharedLibExt cuT( "so" )
+#	define CU_SharedLibPrefix cuT( "lib")
 #   define CU_LibPrefix cuT( "lib" )
 #	define CU_API
 #	define CU_stdcall
