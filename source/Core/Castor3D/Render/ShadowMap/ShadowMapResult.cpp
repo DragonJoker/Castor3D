@@ -34,12 +34,12 @@ namespace castor3d
 		static castor::Array< VkFormat, size_t( SmTexture::eCount ) > Values
 		{
 			{
-				VK_FORMAT_D16_UNORM,							// Depth
-				VK_FORMAT_R32_SFLOAT,							// Linear
-				VK_FORMAT_R32G32_SFLOAT,						// Variance
-				device.selectSmallestFormatRGBSFloatFormat( getFeatureFlags( getUsageFlags( SmTexture::eNormal ) ) ),	// Normal
-				device.selectSmallestFormatRGBSFloatFormat( getFeatureFlags( getUsageFlags( SmTexture::ePosition ) ) ),	// Position
-				device.selectSmallestFormatRGBUFloatFormat( getFeatureFlags( getUsageFlags( SmTexture::eFlux ) ) ),	// Flux
+				VK_FORMAT_D16_UNORM, // Depth
+				VK_FORMAT_R32_SFLOAT, // Linear
+				VK_FORMAT_R32G32_SFLOAT, // Variance
+				device.selectSmallestFormatRGBSFloatFormat( getFeatureFlags( getUsageFlags( SmTexture::eNormal ) ) ), // Normal
+				device.selectSmallestFormatRGBSFloatFormat( getFeatureFlags( getUsageFlags( SmTexture::ePosition ) ) ), // Position
+				device.selectSmallestFormatRGBUFloatFormat( getFeatureFlags( getUsageFlags( SmTexture::eFlux ) ) ), // Flux
 			}
 		};
 		return Values[size_t( texture )];
