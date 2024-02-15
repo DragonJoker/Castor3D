@@ -1044,7 +1044,7 @@ namespace castor3d::shader
 			auto cascadeFactors = m_writer.declLocale( "cascadeFactors"
 				, m_lights.getCascadeFactors( shadows
 					, lightSurface.viewPosition()
-					, m_writer.getVariable< sdw::UInt >( "c3d_maxCascadeCount" ) ) );
+					, m_shadowModel.getMaxCascadeCount() ) );
 			*m_directionalCascadeIndex = m_writer.cast< sdw::UInt >( cascadeFactors.x() );
 			*m_directionalCascadeCount = shadows.cascadeCount();
 			m_directionalTransform = castor::make_unique< sdw::Mat4 >( m_writer.declLocale( "directionalTransform"

@@ -17,11 +17,13 @@ CU_ImplementSmartPtr( castor3d::shader, SssTransmittance )
 namespace castor3d::shader
 {
 	SssTransmittance::SssTransmittance( sdw::ShaderWriter & writer
+		, Shadow const & shadows
 		, ShadowOptions shadowOptions
 		, SssProfiles const & sssProfiles )
 		: m_writer{ writer }
+		, m_shadows{ shadows }
 		, m_sssProfiles{ sssProfiles }
-		, m_shadows{ shadowOptions.type }
+		, m_shadowsType{ shadowOptions.type }
 	{
 	}
 		
@@ -31,8 +33,8 @@ namespace castor3d::shader
 		, DirectionalShadowData const & pshadow
 		, LightSurface const & plightSurface )
 	{
-		if ( !checkFlag( m_shadows, SceneFlag::eShadowDirectional )
-			|| !m_writer.hasGlobalVariable( Shadow::MapDepthDirectional ) )
+		if ( !checkFlag( m_shadowsType, SceneFlag::eShadowDirectional )
+			|| !m_shadows.hasMapDepthDirectional() )
 		{
 			return vec3( 0.0_f );
 		}
@@ -49,7 +51,7 @@ namespace castor3d::shader
 				{
 					auto result = m_writer.declLocale( "result"
 						, vec3( 0.0_f ) );
-					auto c3d_mapNormalDepthDirectional = m_writer.getVariable< sdw::CombinedImage2DArrayR32 >( Shadow::MapDepthDirectional );
+					auto c3d_mapNormalDepthDirectional = m_shadows.getMapDepthDirectional();
 
 					// We shrink the position inwards the surface to avoid artifacts.
 					auto shrinkedPos = m_writer.declLocale( "shrinkedPos"
@@ -102,8 +104,8 @@ namespace castor3d::shader
 		, PointShadowData const & pshadow
 		, LightSurface const & plightSurface )
 	{
-		if ( !checkFlag( m_shadows, SceneFlag::eShadowPoint )
-			|| !m_writer.hasGlobalVariable( Shadow::MapDepthPoint ) )
+		if ( !checkFlag( m_shadowsType, SceneFlag::eShadowPoint )
+			|| !m_shadows.hasMapDepthPoint() )
 		{
 			return vec3( 0.0_f );
 		}
@@ -120,7 +122,7 @@ namespace castor3d::shader
 				{
 					auto result = m_writer.declLocale( "result"
 						, vec3( 0.0_f ) );
-					auto c3d_mapNormalDepthPoint = m_writer.getVariable< sdw::CombinedImageCubeArrayR32 >( Shadow::MapDepthPoint );
+					auto c3d_mapNormalDepthPoint = m_shadows.getMapDepthPoint();
 
 					// We shrink the position inwards the surface to avoid artifacts.
 					auto shrinkedPos = m_writer.declLocale( "shrinkedPos"
@@ -166,8 +168,8 @@ namespace castor3d::shader
 		, SpotShadowData const & pshadow
 		, LightSurface const & plightSurface )
 	{
-		if ( !checkFlag( m_shadows, SceneFlag::eShadowSpot )
-			|| !m_writer.hasGlobalVariable( Shadow::MapDepthSpot ) )
+		if ( !checkFlag( m_shadowsType, SceneFlag::eShadowSpot )
+			|| !m_shadows.hasMapDepthSpot() )
 		{
 			return vec3( 0.0_f );
 		}
@@ -185,7 +187,7 @@ namespace castor3d::shader
 				{
 					auto result = m_writer.declLocale( "result"
 						, vec3( 0.0_f ) );
-					auto c3d_mapDepthSpot = m_writer.getVariable< sdw::CombinedImage2DArrayR32 >( Shadow::MapDepthSpot );
+					auto c3d_mapDepthSpot = m_shadows.getMapDepthSpot();
 
 					// We shrink the position inwards the surface to avoid artifacts.
 					auto shrinkedPos = m_writer.declLocale( "shrinkedPos"
