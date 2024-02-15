@@ -220,6 +220,7 @@ namespace castor3d::shader
 		, m_shadowModel{ castor::makeUnique< Shadow >( shadowOptions, m_writer ) }
 		, m_sssTransmittance{ ( ( sssProfiles && sssProfiles->isEnabled() )
 			? castor::makeUnique< SssTransmittance >( m_writer
+				, *m_shadowModel
 				, castor::move( shadowOptions )
 				, *sssProfiles )
 			: nullptr ) }

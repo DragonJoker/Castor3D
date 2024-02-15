@@ -150,27 +150,6 @@ namespace castor3d::shader
 	class Shadow
 	{
 	public:
-		C3D_API static castor::MbString const MapDepthDirectional;
-		C3D_API static castor::MbString const MapDepthSpot;
-		C3D_API static castor::MbString const MapDepthPoint;
-		C3D_API static castor::MbString const MapDepthCmpDirectional;
-		C3D_API static castor::MbString const MapDepthCmpSpot;
-		C3D_API static castor::MbString const MapDepthCmpPoint;
-		C3D_API static castor::MbString const MapVarianceDirectional;
-		C3D_API static castor::MbString const MapVarianceSpot;
-		C3D_API static castor::MbString const MapVariancePoint;
-		C3D_API static castor::MbString const MapNormalDirectional;
-		C3D_API static castor::MbString const MapNormalSpot;
-		C3D_API static castor::MbString const MapNormalPoint;
-		C3D_API static castor::MbString const MapPositionDirectional;
-		C3D_API static castor::MbString const MapPositionSpot;
-		C3D_API static castor::MbString const MapPositionPoint;
-		C3D_API static castor::MbString const MapFluxDirectional;
-		C3D_API static castor::MbString const MapFluxSpot;
-		C3D_API static castor::MbString const MapFluxPoint;
-		C3D_API static castor::MbString const RandomBuffer;
-
-	public:
 		C3D_API Shadow( ShadowOptions shadowOptions
 			, sdw::ShaderWriter & writer );
 
@@ -182,6 +161,15 @@ namespace castor3d::shader
 			, uint32_t set );
 		C3D_API void declareSpot( uint32_t & index
 			, uint32_t set );
+
+		C3D_API bool hasMapDepthDirectional()const;
+		C3D_API bool hasMapDepthPoint()const;
+		C3D_API bool hasMapDepthSpot()const;
+
+		C3D_API sdw::CombinedImage2DArrayR32 getMapDepthDirectional()const;
+		C3D_API sdw::CombinedImageCubeArrayR32 getMapDepthPoint()const;
+		C3D_API sdw::CombinedImage2DArrayR32 getMapDepthSpot()const;
+		C3D_API sdw::UInt getMaxCascadeCount()const;
 
 		C3D_API DirectionalShadowData getDirectionalShadows();
 		C3D_API PointShadowData getPointShadows( sdw::Int const & index );
@@ -255,6 +243,21 @@ namespace castor3d::shader
 			, sdw::Float const & depthBias
 			, sdw::UInt const & sampleCount
 			, sdw::Float const & filterSize );
+		sdw::RetFloat filterPCF( sdw::Vec3 const & lightSpacePosition
+			, sdw::CombinedImage2DArrayShadowR32 const & shadowMap
+			, sdw::Vec2 const & invTexDim
+			, sdw::UInt const & arrayIndex
+			, sdw::Float const & depthBias
+			, sdw::UInt const & sampleCount
+			, sdw::Float const & filterSize );
+		sdw::RetFloat filterPCF( sdw::Vec3 const & lightToVertex
+			, sdw::CombinedImageCubeArrayShadowR32 const & shadowMap
+			, sdw::Vec2 const & invTexDim
+			, sdw::UInt const & cubeIndex
+			, sdw::Float const & depth
+			, sdw::Float const & depthBias
+			, sdw::UInt const & sampleCount
+			, sdw::Float const & filterSize );
 		sdw::RetFloat chebyshevUpperBound( sdw::Vec2 const & moments
 			, sdw::Float const & depth
 			, sdw::Float const & minVariance
@@ -293,6 +296,23 @@ namespace castor3d::shader
 			, sdw::InFloat
 			, sdw::InUInt
 			, sdw::InFloat > m_filterPCFCube;
+		sdw::Function< sdw::Float
+			, sdw::InVec3
+			, sdw::InCombinedImage2DArrayShadowR32
+			, sdw::InVec2
+			, sdw::InUInt
+			, sdw::InFloat
+			, sdw::InUInt
+			, sdw::InFloat > m_filterPCFArrayShadow;
+		sdw::Function< sdw::Float
+			, sdw::InVec3
+			, sdw::InCombinedImageCubeArrayShadowR32
+			, sdw::InVec2
+			, sdw::InUInt
+			, sdw::InFloat
+			, sdw::InFloat
+			, sdw::InUInt
+			, sdw::InFloat > m_filterPCFCubeShadow;
 		sdw::Function< sdw::Vec4
 			, sdw::InMat4
 			, sdw::InVec3 > m_getLightSpacePosition;

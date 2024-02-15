@@ -126,7 +126,8 @@ namespace castor3d
 
 	bool PrepassRendering::hasVisibility()const noexcept
 	{
-		return bool( m_result[PpTexture::eVisibility] );
+		return m_device.hasBindless()
+			&& bool( m_result[PpTexture::eVisibility] );
 	}
 
 	crg::FramePass & PrepassRendering::doCreateVisibilityPass( ProgressBar * progress

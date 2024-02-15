@@ -16,6 +16,7 @@ namespace castor3d::shader
 	{
 	public:
 		C3D_API SssTransmittance( sdw::ShaderWriter & writer
+			, Shadow const & shadows
 			, ShadowOptions shadowOptions
 			, SssProfiles const & sssProfiles );
 
@@ -45,9 +46,10 @@ namespace castor3d::shader
 			, sdw::Vec3 const & lightToVertex );
 
 		sdw::ShaderWriter & m_writer;
+		Shadow const & m_shadows;
 		SssProfiles const & m_sssProfiles;
 
-		SceneFlags m_shadows;
+		SceneFlags m_shadowsType;
 
 		sdw::Function< sdw::Vec3
 			, sdw::InFloat
