@@ -25,7 +25,8 @@ namespace castor3d
 		, VkSamplerMipmapMode mipFilter
 		, VkSamplerAddressMode U
 		, VkSamplerAddressMode V
-		, VkSamplerAddressMode W );
+		, VkSamplerAddressMode W
+		, VkBorderColor borderColor = VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK );
 
 	class Sampler
 		: public castor::Named

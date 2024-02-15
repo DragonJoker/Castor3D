@@ -56,7 +56,8 @@ namespace castor3d
 					, mipFilter
 					, addressMode
 					, addressMode
-					, addressMode );
+					, addressMode
+					, borderColor );
 				engine.hasSampler( splName ) )
 			{
 				c3dSampler = engine.findSampler( splName );

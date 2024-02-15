@@ -90,6 +90,32 @@ namespace castor3d
 				return cuT( "Unsupported VkSamplerAddressMode" );
 			}
 		}
+
+		static castor::String getName( VkBorderColor value )
+		{
+			switch ( value )
+			{
+			case VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK:
+				return cuT( "Ftb" );
+			case VK_BORDER_COLOR_INT_TRANSPARENT_BLACK:
+				return cuT( "Itb" );
+			case VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK:
+				return cuT( "Fob" );
+			case VK_BORDER_COLOR_INT_OPAQUE_BLACK:
+				return cuT( "Iob" );
+			case VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE:
+				return cuT( "Fow" );
+			case VK_BORDER_COLOR_INT_OPAQUE_WHITE:
+				return cuT( "Iow" );
+			case VK_BORDER_COLOR_FLOAT_CUSTOM_EXT:
+				return cuT( "Fc" );
+			case VK_BORDER_COLOR_INT_CUSTOM_EXT:
+				return cuT( "Ic" );
+			default:
+				assert( false && "Unsupported VkBorderColor." );
+				return cuT( "Unsupported VkBorderColor" );
+			}
+		}
 	}
 
 	SamplerObs createSampler( Engine & engine
@@ -149,7 +175,8 @@ namespace castor3d
 		, VkSamplerMipmapMode mipFilter
 		, VkSamplerAddressMode U
 		, VkSamplerAddressMode V
-		, VkSamplerAddressMode W )
+		, VkSamplerAddressMode W
+		, VkBorderColor borderColor )
 	{
 		return sampler::getName( compareOp )
 			+ sampler::getName( minFilter )
@@ -157,7 +184,8 @@ namespace castor3d
 			+ sampler::getName( mipFilter )
 			+ cuT( "U" ) + sampler::getName( U )
 			+ cuT( "V" ) + sampler::getName( V )
-			+ cuT( "W" ) + sampler::getName( W );
+			+ cuT( "W" ) + sampler::getName( W )
+			+ sampler::getName( borderColor );
 	}
 
 	//*********************************************************************************************
