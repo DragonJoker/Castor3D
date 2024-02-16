@@ -106,7 +106,7 @@ namespace castor3d::shader
 
 		sdw::Vec2 getUv( DerivTex const & uvw )const
 		{
-			return uvw.uv();
+			return uvw.value();
 		}
 
 		DerivTex toUv( DerivTex const & uvw )const
@@ -117,7 +117,7 @@ namespace castor3d::shader
 		void setUv( DerivTex & lhs
 			, DerivTex const & rhs )const
 		{
-			lhs.uv() = rhs.uv();
+			lhs.value() = rhs.value();
 		}
 
 		sdw::Float fneedYI;

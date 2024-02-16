@@ -37,7 +37,7 @@ namespace castor3d
 			, shader::DerivTex const & texCoords
 			, shader::BlendComponents const & components )const
 		{
-			return map.grad( texCoords.uv()
+			return map.grad( texCoords.value()
 				, texCoords.dPdx()
 				, texCoords.dPdy() );
 		}

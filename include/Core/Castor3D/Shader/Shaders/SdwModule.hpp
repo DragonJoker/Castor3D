@@ -84,7 +84,6 @@ namespace castor3d::shader
 
 	struct AABB;
 	struct Cone;
-	struct DerivTex;
 	struct DirectionalLight;
 	struct DirectionalShadowData;
 	struct DirectLighting;
@@ -132,6 +131,10 @@ namespace castor3d::shader
 	struct PosUvT;
 	template< typename UvTypeT, sdw::var::Flag FlagT >
 	struct UvT;
+	template< typename ValueT, sdw::StringLiteralT StructNameT >
+	struct DerivativeValueT;
+
+	using DerivTex = DerivativeValueT< sdw::Vec2, "C3D_DerivTex" >;
 
 	template< ast::var::Flag FlagT >
 	using FragmentSurfaceT = RasterizerSurfaceT< sdw::Vec3, FlagT >;
@@ -268,25 +271,31 @@ namespace castor3d::shader
 	C3D_API castor::String concatModelNames( castor::String lhs
 		, castor::String rhs );
 
-	struct DerivTex
-		: public sdw::StructInstanceHelperT< "C3D_DerivTex"
+	template< typename ValueT
+		, sdw::StringLiteralT StructNameT >
+	using DerivativeValueHelperT = sdw::StructInstanceHelperT < StructNameT
 		, sdw::type::MemoryLayout::eC
-		, sdw::Vec2Field< "uv" >
-		, sdw::Vec2Field< "dPdx" >
-		, sdw::Vec2Field< "dPdy" > >
+		, sdw::StructFieldT< ValueT, "value" >
+		, sdw::StructFieldT< ValueT, "dPdx" >
+		, sdw::StructFieldT< ValueT, "dPdy" > >;
+
+	template< typename ValueT
+		, sdw::StringLiteralT StructNameT >
+	struct DerivativeValueT
+		: public DerivativeValueHelperT< ValueT, StructNameT >
 	{
-		DerivTex( sdw::ShaderWriter & writer
+		DerivativeValueT( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
-			: StructInstanceHelperT{ writer, castor::move( expr ), enabled }
+			: DerivativeValueHelperT< ValueT, StructNameT >{ writer, castor::move( expr ), enabled }
 		{
 		}
 
-		DerivTex( sdw::Vec2 const & puv
+		DerivativeValueT( sdw::Vec2 const & puv
 			, sdw::Vec2 const & pdPdx
 			, sdw::Vec2 const & pdPdy )
-			: DerivTex{ sdw::findWriterMandat( puv, pdPdx, pdPdy )
-				, sdw::makeAggrInit( makeType( puv.getType()->getTypesCache() )
+			: DerivativeValueT{ sdw::findWriterMandat( puv, pdPdx, pdPdy )
+				, sdw::makeAggrInit( DerivativeValueHelperT< ValueT, StructNameT >::makeType( puv.getType()->getTypesCache() )
 					, [&puv, &pdPdx, &pdPdy]()
 					{
 						sdw::expr::ExprList result;
@@ -299,11 +308,9 @@ namespace castor3d::shader
 		{
 		}
 
-		C3D_API sdw::Float computeMip( sdw::Vec2 const & texSize )const;
-
-		auto uv()const { return getMember< "uv" >(); }
-		auto dPdx()const { return getMember< "dPdx" >(); }
-		auto dPdy()const { return getMember< "dPdy" >(); }
+		auto value()const { return this->getMember< "value" >(); }
+		auto dPdx()const { return this->getMember< "dPdx" >(); }
+		auto dPdy()const { return this->getMember< "dPdy" >(); }
 	};
 
 	struct BufferData

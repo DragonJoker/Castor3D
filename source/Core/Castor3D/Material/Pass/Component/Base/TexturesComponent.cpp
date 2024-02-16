@@ -206,28 +206,28 @@ namespace castor3d
 		{
 			if ( res.hasMember( "texture0" ) && src.hasMember( "texture0" ) )
 			{
-				res.getMember< shader::DerivTex >( "texture0", true ).uv() += src.getMember< shader::DerivTex >( "texture0", true ).uv() * passMultiplier;
+				res.getMember< shader::DerivTex >( "texture0", true ).value() += src.getMember< shader::DerivTex >( "texture0", true ).value() * passMultiplier;
 				res.getMember< shader::DerivTex >( "texture0", true ).dPdx() += src.getMember< shader::DerivTex >( "texture0", true ).dPdx() * passMultiplier;
 				res.getMember< shader::DerivTex >( "texture0", true ).dPdy() += src.getMember< shader::DerivTex >( "texture0", true ).dPdy() * passMultiplier;
 			}
 
 			if ( res.hasMember( "texture1" ) && src.hasMember( "texture1" ) )
 			{
-				res.getMember< shader::DerivTex >( "texture1", true ).uv() += src.getMember< shader::DerivTex >( "texture1", true ).uv() * passMultiplier;
+				res.getMember< shader::DerivTex >( "texture1", true ).value() += src.getMember< shader::DerivTex >( "texture1", true ).value() * passMultiplier;
 				res.getMember< shader::DerivTex >( "texture1", true ).dPdx() += src.getMember< shader::DerivTex >( "texture1", true ).dPdx() * passMultiplier;
 				res.getMember< shader::DerivTex >( "texture1", true ).dPdy() += src.getMember< shader::DerivTex >( "texture1", true ).dPdy() * passMultiplier;
 			}
 
 			if ( res.hasMember( "texture2" ) && src.hasMember( "texture2" ) )
 			{
-				res.getMember< shader::DerivTex >( "texture2", true ).uv() += src.getMember< shader::DerivTex >( "texture2", true ).uv() * passMultiplier;
+				res.getMember< shader::DerivTex >( "texture2", true ).value() += src.getMember< shader::DerivTex >( "texture2", true ).value() * passMultiplier;
 				res.getMember< shader::DerivTex >( "texture2", true ).dPdx() += src.getMember< shader::DerivTex >( "texture2", true ).dPdx() * passMultiplier;
 				res.getMember< shader::DerivTex >( "texture2", true ).dPdy() += src.getMember< shader::DerivTex >( "texture2", true ).dPdy() * passMultiplier;
 			}
 
 			if ( res.hasMember( "texture3" ) && src.hasMember( "texture3" ) )
 			{
-				res.getMember< shader::DerivTex >( "texture3", true ).uv() += src.getMember< shader::DerivTex >( "texture3", true ).uv() * passMultiplier;
+				res.getMember< shader::DerivTex >( "texture3", true ).value() += src.getMember< shader::DerivTex >( "texture3", true ).value() * passMultiplier;
 				res.getMember< shader::DerivTex >( "texture3", true ).dPdx() += src.getMember< shader::DerivTex >( "texture3", true ).dPdx() * passMultiplier;
 				res.getMember< shader::DerivTex >( "texture3", true ).dPdy() += src.getMember< shader::DerivTex >( "texture3", true ).dPdy() * passMultiplier;
 			}

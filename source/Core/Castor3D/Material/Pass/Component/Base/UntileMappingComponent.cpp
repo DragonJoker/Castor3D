@@ -75,7 +75,7 @@ namespace castor3d
 		, shader::BlendComponents const & components )const
 	{
 		return sampleUntiled( map
-			, texCoords.uv()
+			, texCoords.value()
 			, texCoords.dPdx()
 			, texCoords.dPdy() );
 	}

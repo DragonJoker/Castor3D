@@ -365,7 +365,7 @@ namespace castor3d
 		, shader::TextureConfigData const & textureConfig
 		, sdw::UInt const & mask )const
 	{
-		parallaxMapping( texCoords.uv()
+		parallaxMapping( texCoords.value()
 			, texCoords.dPdx()
 			, texCoords.dPdy()
 			, viewDir
