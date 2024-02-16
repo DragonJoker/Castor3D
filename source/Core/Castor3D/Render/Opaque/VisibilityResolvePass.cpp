@@ -65,7 +65,7 @@ namespace castor3d
 
 	namespace visres
 	{
-		static constexpr bool useCompute{ false };
+		static constexpr bool useCompute{ true };
 
 		enum Sets : uint32_t
 		{
