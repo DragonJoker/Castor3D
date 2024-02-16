@@ -181,7 +181,7 @@ namespace water
 		if ( checkFlag( passShaders.getFilter(), ComponentModeFlag::eDerivTex ) )
 		{
 			auto texCoords = components.getMember< castor3d::shader::DerivTex >( "texCoords" );
-			waterFoamNoiseUV = texCoords.uv();
+			waterFoamNoiseUV = texCoords.value();
 		}
 		else if ( passShaders.getPassCombine().baseId == 0u )
 		{

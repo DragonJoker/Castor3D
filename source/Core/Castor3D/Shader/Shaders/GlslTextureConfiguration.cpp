@@ -39,7 +39,7 @@ namespace castor3d::shader
 		, TextureTransformData const & anim
 		, DerivTex & uv )const
 	{
-		uv.uv() = utils.transformUV( *this, anim, uv.uv() );
+		uv.value() = utils.transformUV( *this, anim, uv.value() );
 	}
 
 	sdw::Float TextureConfigData::getFloat( sdw::Vec4 const & sampled

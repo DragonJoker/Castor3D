@@ -362,7 +362,7 @@ namespace castor3d
 							auto resultsY = writer.declLocale( "results0Y"
 								, derivatives.computeGradient( mergedY ) );
 							auto result = writer.declLocale< shader::DerivTex >( "result" );
-							result.uv() = vec2( resultsX.x(), resultsY.x() );
+							result.value() = vec2( resultsX.x(), resultsY.x() );
 							result.dPdx() = vec2( resultsX.y(), resultsY.y() );
 							result.dPdy() = vec2( resultsX.z(), resultsY.z() );
 							writer.returnStmt( result );
@@ -745,10 +745,10 @@ namespace castor3d
 							result.normal = vec3( 0.0_f );
 							result.tangent = vec4( 0.0_f );
 							result.bitangent = vec3( 0.0_f );
-							result.texture0.uv() = vec2( 0.0_f );
-							result.texture1.uv() = vec2( 0.0_f );
-							result.texture2.uv() = vec2( 0.0_f );
-							result.texture3.uv() = vec2( 0.0_f );
+							result.texture0.value() = vec2( 0.0_f );
+							result.texture1.value() = vec2( 0.0_f );
+							result.texture2.value() = vec2( 0.0_f );
+							result.texture3.value() = vec2( 0.0_f );
 							result.texture0.dPdx() = vec2( 0.0_f );
 							result.texture1.dPdx() = vec2( 0.0_f );
 							result.texture2.dPdx() = vec2( 0.0_f );

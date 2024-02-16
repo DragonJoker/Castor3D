@@ -184,7 +184,7 @@ namespace water
 		if ( checkFlag( passShaders.getFilter(), ComponentModeFlag::eDerivTex ) )
 		{
 			auto texCoords = components.getMember< castor3d::shader::DerivTex >( "texCoords" );
-			texCoords.uv() *= 0.5_f * tiling;
+			texCoords.value() *= 0.5_f * tiling;
 		}
 		else if ( passShaders.getPassCombine().baseId == 0u )
 		{

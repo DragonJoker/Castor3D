@@ -130,7 +130,7 @@ namespace castor3d
 		}
 
 		return sampleFractal( map
-			, texCoords.uv()
+			, texCoords.value()
 			, texCoords.dPdx()
 			, texCoords.dPdy()
 			, components.getMember< sdw::Float >( "viewDepth" ) );

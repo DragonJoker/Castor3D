@@ -290,7 +290,7 @@ namespace castor3d::shader
 		return it != m_shaders.end()
 			? ( *it )->sampleMap( map, texCoords, components )
 			: ( m_forceLod0
-				? m_utils.sampleMap( map, texCoords.uv(), 0.0_f )
+				? m_utils.sampleMap( map, texCoords.value(), 0.0_f )
 				: m_utils.sampleMap( map, texCoords ) );
 	}
 
@@ -316,7 +316,7 @@ namespace castor3d::shader
 		, shader::BlendComponents const & components )const
 	{
 		return ( m_forceLod0
-			? m_utils.sampleMap( map, texCoords.uv(), 0.0_f )
+			? m_utils.sampleMap( map, texCoords.value(), 0.0_f )
 			: m_utils.sampleMap( map, texCoords ) );
 	}
 
