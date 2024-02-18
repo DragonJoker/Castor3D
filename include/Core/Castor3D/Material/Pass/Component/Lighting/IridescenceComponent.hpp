@@ -93,7 +93,7 @@ namespace castor3d
 			}
 
 		private:
-			static void finishComponent( shader::SurfaceBase const & surface
+			static void finishComponent( shader::DerivSurfaceBase const & surface
 				, sdw::Vec3 const worldEye
 				, shader::Utils & utils
 				, shader::BlendComponents & components );

@@ -3,6 +3,7 @@
 #include "Castor3D/Shader/Shaders/GlslBackground.hpp"
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslDebugOutput.hpp"
+#include "Castor3D/Shader/Shaders/GlslDerivativeValue.hpp"
 #include "Castor3D/Shader/Shaders/GlslLightSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
@@ -46,11 +47,11 @@ namespace castor3d::shader
 		, DebugOutputCategory & debugOutput )
 	{
 		computeCombined( components
-			, lightSurface.N()
-			, lightSurface.difF()
-			, lightSurface.spcF()
-			, lightSurface.V()
-			, lightSurface.NdotV()
+			, lightSurface.N().value()
+			, lightSurface.difF().value()
+			, lightSurface.spcF().value()
+			, lightSurface.V().value()
+			, lightSurface.NdotV().value()
 			, position
 			, background
 			, mippedScene
@@ -240,11 +241,11 @@ namespace castor3d::shader
 		, DebugOutputCategory & debugOutput )
 	{
 		computeCombined( pcomponents
-			, lightSurface.N()
-			, lightSurface.difF()
-			, lightSurface.spcF()
-			, lightSurface.V()
-			, lightSurface.NdotV()
+			, lightSurface.N().value()
+			, lightSurface.difF().value()
+			, lightSurface.spcF().value()
+			, lightSurface.V().value()
+			, lightSurface.NdotV().value()
 			, background
 			, envMapIndex
 			, hasReflection
@@ -401,11 +402,11 @@ namespace castor3d::shader
 		, DebugOutputCategory & debugOutput )
 	{
 		computeReflections( components
-			, lightSurface.N()
-			, lightSurface.difF()
-			, lightSurface.spcF()
-			, lightSurface.V()
-			, lightSurface.NdotV()
+			, lightSurface.N().value()
+			, lightSurface.difF().value()
+			, lightSurface.spcF().value()
+			, lightSurface.V().value()
+			, lightSurface.NdotV().value()
 			, background
 			, envMapIndex
 			, reflection
@@ -459,8 +460,8 @@ namespace castor3d::shader
 		, DebugOutputCategory & debugOutput )
 	{
 		return computeRefractions( components
-			, lightSurface.N()
-			, lightSurface.V()
+			, lightSurface.N().value()
+			, lightSurface.V().value()
 			, background
 			, envMapIndex
 			, refractionRatio
@@ -495,6 +496,12 @@ namespace castor3d::shader
 	}
 
 	sdw::RetVec3 ReflectionModel::computeIncident( sdw::Vec3 const & wsPosition
+		, sdw::Vec3 const & wsCamera )const
+	{
+		return normalize( wsPosition - wsCamera );
+	}
+
+	DerivVec3 ReflectionModel::computeIncident( DerivVec3 const & wsPosition
 		, sdw::Vec3 const & wsCamera )const
 	{
 		return normalize( wsPosition - wsCamera );

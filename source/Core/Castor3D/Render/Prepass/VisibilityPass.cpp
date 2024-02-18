@@ -216,7 +216,7 @@ namespace castor3d
 				}
 
 				out.velocity = in.getVelocity();
-				out.nmlOcc = vec4( components.normal, components.occlusion );
+				out.nmlOcc = vec4( components.getRawNormal(), components.occlusion );
 			} );
 	}
 }

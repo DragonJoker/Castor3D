@@ -364,9 +364,9 @@ namespace castor3d
 					out.flux.rgb() = ( components.colour
 							* light.base().colour()
 							* light.base().intensity().x()
-							* clamp( dot( L, components.normal ), 0.0_f, 1.0_f ) )
+							* clamp( dot( L, components.getRawNormal() ), 0.0_f, 1.0_f ) )
 						* attenuation;
-					out.normal.xyz() = components.normal;
+					out.normal.xyz() = components.getRawNormal();
 					out.position.xyz() = in.worldPosition.xyz();
 				}
 			} );

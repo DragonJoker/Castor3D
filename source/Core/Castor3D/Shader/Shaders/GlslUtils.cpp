@@ -1,6 +1,7 @@
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Shader/Shaders/GlslDerivativeValue.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
@@ -581,6 +582,41 @@ namespace castor3d::shader
 	}
 
 	sdw::RetVec3 Utils::conductorFresnel( sdw::Float const & product
+		, sdw::Vec3 const & f0 )
+	{
+		return conductorFresnel( product
+			, f0
+			, clamp( f0 * 50.0_f, vec3( 0.0_f ), vec3( 1.0_f ) ) );
+	}
+
+	shader::RetDerivVec3 Utils::conductorFresnel( DerivFloat const & pproduct
+		, sdw::Vec3 const & pf0
+		, sdw::Vec3 const & pf90 )
+	{
+		if ( !m_conductorFresnelDeriv3 )
+		{
+			m_conductorFresnelDeriv3 = m_writer.implementFunction< DerivVec3 >( "c3d_conductorFresnelDeriv3"
+				, [this]( DerivFloat const & product
+					, sdw::Vec3 const & f0
+					, sdw::Vec3 const & f90 )
+				{
+					auto r00 = m_writer.declLocale( "r00"
+						, conductorFresnel( product.value(), f0, f90 ) );
+					auto r10 = m_writer.declLocale( "r10"
+						, conductorFresnel( product.value() + product.dPdx(), f0, f90 ) );
+					auto r01 = m_writer.declLocale( "r01"
+						, conductorFresnel( product.value() + product.dPdy(), f0, f90 ) );
+					m_writer.returnStmt( DerivVec3{ r00, r10 - r00, r01 - r00 } );
+				}
+				, InDerivFloat{ m_writer, "product" }
+				, sdw::InVec3{ m_writer, "f0" }
+				, sdw::InVec3{ m_writer, "f90" } );
+		}
+
+		return m_conductorFresnelDeriv3( pproduct, pf0, pf90 );
+	}
+
+	RetDerivVec3 Utils::conductorFresnel( DerivFloat const & product
 		, sdw::Vec3 const & f0 )
 	{
 		return conductorFresnel( product

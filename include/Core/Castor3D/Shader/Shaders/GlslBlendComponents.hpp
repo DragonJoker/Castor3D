@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_GlslBlendComponents_H___
@@ -43,7 +43,14 @@ namespace castor3d::shader
 			, SurfaceBase const & surface );
 		BlendComponents( Materials const & materials
 			, Material const & material
+			, DerivSurfaceBase const & surface );
+		BlendComponents( Materials const & materials
+			, Material const & material
 			, SurfaceBase const & surface
+			, sdw::Vec4 const & clrCot );
+		BlendComponents( Materials const & materials
+			, Material const & material
+			, DerivSurfaceBase const & surface
 			, sdw::Vec4 const & clrCot );
 		BlendComponents( Materials const & materials
 			, bool zeroInit = false );
@@ -51,9 +58,23 @@ namespace castor3d::shader
 		SDW_DeclStructInstance( , BlendComponents );
 
 		void finish( PassShaders const & passShaders
-			, SurfaceBase const & surface
+			, DerivSurfaceBase const & surface
 			, Utils & utils
 			, sdw::Vec3 const worldEye );
+
+		void setNormal( sdw::Vec3 const v );
+		void normalizeNormal();
+		sdw::Vec3 getRawNormal()const;
+		sdw::Vec4 getRawTangent()const;
+		sdw::Vec3 getRawBitangent()const;
+		shader::DerivVec3 getDerivNormal()const;
+		shader::DerivVec4 getDerivTangent()const;
+		shader::DerivVec3 getDerivBitangent()const;
+
+		bool usesDerivativeValues()const noexcept
+		{
+			return m_derivativeValues;
+		}
 
 		static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache
 			, Materials const & materials
@@ -104,7 +125,6 @@ namespace castor3d::shader
 	public:
 		sdw::DefaultedT< sdw::Vec3 > f0;
 		sdw::DefaultedT< sdw::Vec3 > f90;
-		sdw::DefaultedT< sdw::Vec3 > normal;
 		sdw::DefaultedT< sdw::Vec3 > colour;
 		sdw::DefaultedT< sdw::Vec3 > emissiveColour;
 		sdw::DefaultedT< sdw::Float > emissiveFactor;
@@ -164,6 +184,9 @@ namespace castor3d::shader
 			, Material const & material
 			, sdw::StructInstance const & surface
 			, sdw::Vec4 const * clrCot );
+
+	private:
+		bool m_derivativeValues{};
 	};
 }
 

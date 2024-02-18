@@ -5,6 +5,7 @@
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
 #include "Castor3D/Scene/SceneFileParserData.hpp"
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
+#include "Castor3D/Shader/Shaders/GlslDerivativeValue.hpp"
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
@@ -92,7 +93,26 @@ namespace castor3d
 
 		if ( surface )
 		{
-			inits.emplace_back( sdw::makeExpr( abs( surface->getMember< sdw::Vec3 >( "viewPosition", vec3( 0.0_f ) ).z() ) ) );
+			auto & structType = static_cast< ast::type::Struct const & >( *surface->getType() );
+			auto index = structType.findMember( "viewPosition" );
+
+			if ( index != ast::type::Struct::NotFound )
+			{
+				auto member = structType.getMember( index );
+
+				if ( member.type->getKind() == ast::type::Kind::eStruct )
+				{
+					inits.emplace_back( sdw::makeExpr( abs( surface->getMember< shader::DerivVec3 >( "viewPosition" ).value().z() ) ) );
+				}
+				else
+				{
+					inits.emplace_back( sdw::makeExpr( abs( surface->getMember< sdw::Vec3 >( "viewPosition" ).z() ) ) );
+				}
+			}
+			else
+			{
+				inits.emplace_back( sdw::makeExpr( 0.0_f ) );
+			}
 		}
 		else
 		{

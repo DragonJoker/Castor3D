@@ -86,7 +86,7 @@ namespace castor3d::shader
 			, Material const & material
 			, BlendComponents & components
 			, bool isFrontCulled = false )const;
-		C3D_API void finishComponents( SurfaceBase const & surface
+		C3D_API void finishComponents( DerivSurfaceBase const & surface
 			, sdw::Vec3 const worldEye
 			, Utils & utils
 			, BlendComponents & components )const;

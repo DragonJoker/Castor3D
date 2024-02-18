@@ -44,8 +44,7 @@ namespace castor3d::shader
 		}
 
 		C3D_API void finish( PassShaders const & passShaders
-			, RasterizerSurfaceBase const & rasterSurface
-			, SurfaceBase const & surface
+			, DerivSurfaceBase const & surface
 			, Utils & utils
 			, sdw::Vec3 const worldEye
 			, BlendComponents & components );
@@ -226,13 +225,12 @@ namespace castor3d::shader
 			, sdw::Vec3 output );
 		C3D_API virtual void doInitLightSpecifics( LightSurface const & lightSurface
 			, BlendComponents const & components );
-		C3D_API virtual sdw::Float doGetNdotL( LightSurface const & lightSurface
+		C3D_API virtual DerivFloat doGetNdotL( LightSurface const & lightSurface
 			, BlendComponents const & components );
-		C3D_API virtual sdw::Float doGetNdotH( LightSurface const & lightSurface
+		C3D_API virtual DerivFloat doGetNdotH( LightSurface const & lightSurface
 			, BlendComponents const & components );
 
 		C3D_API virtual void doFinish( PassShaders const & passShaders
-			, RasterizerSurfaceBase const & rasterSurface
 			, BlendComponents & components ) = 0;
 		C3D_API virtual sdw::Vec3 doComputeDiffuseTerm( sdw::Vec3 const & radiance
 			, sdw::Float const & intensity

@@ -40,7 +40,6 @@ namespace castor3d::shader
 
 	protected:
 		C3D_API void doFinish( PassShaders const & passShaders
-			, RasterizerSurfaceBase const & surface
 			, BlendComponents & components )override;
 		C3D_API sdw::Vec3 doComputeDiffuseTerm( sdw::Vec3 const & radiance
 			, sdw::Float const & intensity

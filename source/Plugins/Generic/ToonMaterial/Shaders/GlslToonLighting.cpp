@@ -22,26 +22,32 @@ namespace toon::shader
 	{
 		auto & writer = *lightSurface.getWriter();
 		auto smoothBand = components.getMember< sdw::Float >( "smoothBand", true );
-		auto ndotl = smoothStep( 0.0_f
-			, fwidth( lightSurface.NdotL() ) * smoothBand
-			, lightSurface.NdotL() );
+		auto ndotl = c3d::DerivFloat{ smoothStep( 0.0_f
+				, fwidth( lightSurface.NdotL() ) * smoothBand
+				, lightSurface.NdotL().value() )
+			, lightSurface.NdotL().dPdx()
+			, lightSurface.NdotL().dPdy() };
 
 		if ( !m_NdotL )
 		{
-			m_NdotL = castor::make_unique< sdw::Float >( writer.declLocale( "toonNdotL", castor::move( ndotl ) ) );
+			m_NdotL = castor::make_unique< c3d::DerivFloat >( writer.declLocale( "toonNdotL"
+				, castor::move( ndotl ) ) );
 		}
 		else
 		{
 			*m_NdotL = ndotl;
 		}
 
-		auto ndoth = smoothStep( 0.0_f
-			, 0.01_f * smoothBand
-			, lightSurface.NdotH() * getNdotL( lightSurface, components ) );
+		auto ndoth = c3d::DerivFloat{ smoothStep( 0.0_f
+				, 0.01_f * smoothBand
+				, ( lightSurface.NdotH() * getNdotL( lightSurface, components ) ).value() )
+			, lightSurface.NdotH().dPdx()
+			, lightSurface.NdotH().dPdy() };
 
 		if ( !m_NdotH )
 		{
-			m_NdotH = castor::make_unique< sdw::Float >( writer.declLocale( "toonNdotH", castor::move( ndoth ) ) );
+			m_NdotH = castor::make_unique< c3d::DerivFloat >( writer.declLocale( "toonNdotH"
+				, castor::move( ndoth ) ) );
 		}
 		else
 		{
@@ -49,13 +55,13 @@ namespace toon::shader
 		}
 	}
 
-	sdw::Float ToonLightingModel::getNdotL( c3d::LightSurface const & lightSurface
+	c3d::DerivFloat ToonLightingModel::getNdotL( c3d::LightSurface const & lightSurface
 		, c3d::BlendComponents const & components )
 	{
 		return *m_NdotL;
 	}
 
-	sdw::Float ToonLightingModel::getNdotH( c3d::LightSurface const & lightSurface
+	c3d::DerivFloat ToonLightingModel::getNdotH( c3d::LightSurface const & lightSurface
 		, c3d::BlendComponents const & components )
 	{
 		return *m_NdotH;
@@ -110,19 +116,36 @@ namespace toon::shader
 	void ToonPhongLightingModel::doInitLightSpecifics( c3d::LightSurface const & lightSurface
 		, c3d::BlendComponents const & components )
 	{
-		initLightSpecifics( lightSurface, components );
+		if ( components.hasMember( "smoothBand" ) )
+		{
+			initLightSpecifics( lightSurface, components );
+		}
+		else
+		{
+			c3d::PhongLightingModel::doInitLightSpecifics( lightSurface, components );
+		}
 	}
 
-	sdw::Float ToonPhongLightingModel::doGetNdotL( c3d::LightSurface const & lightSurface
+	c3d::DerivFloat ToonPhongLightingModel::doGetNdotL( c3d::LightSurface const & lightSurface
 		, c3d::BlendComponents const & components )
 	{
-		return getNdotL( lightSurface, components );
+		if ( components.hasMember( "smoothBand" ) )
+		{
+			return getNdotL( lightSurface, components );
+		}
+
+		return c3d::PhongLightingModel::doGetNdotL( lightSurface, components );
 	}
 
-	sdw::Float ToonPhongLightingModel::doGetNdotH( c3d::LightSurface const & lightSurface
+	c3d::DerivFloat ToonPhongLightingModel::doGetNdotH( c3d::LightSurface const & lightSurface
 		, c3d::BlendComponents const & components )
 	{
-		return getNdotH( lightSurface, components );
+		if ( components.hasMember( "smoothBand" ) )
+		{
+			return getNdotH( lightSurface, components );
+		}
+
+		return c3d::PhongLightingModel::doGetNdotH( lightSurface, components );
 	}
 
 	//*********************************************************************************************
@@ -174,19 +197,36 @@ namespace toon::shader
 	void ToonPbrLightingModel::doInitLightSpecifics( c3d::LightSurface const & lightSurface
 		, c3d::BlendComponents const & components )
 	{
-		initLightSpecifics( lightSurface, components );
+		if ( components.hasMember( "smoothBand" ) )
+		{
+			initLightSpecifics( lightSurface, components );
+		}
+		else
+		{
+			c3d::PbrLightingModel::doInitLightSpecifics( lightSurface, components );
+		}
 	}
 
-	sdw::Float ToonPbrLightingModel::doGetNdotL( c3d::LightSurface const & lightSurface
+	c3d::DerivFloat ToonPbrLightingModel::doGetNdotL( c3d::LightSurface const & lightSurface
 		, c3d::BlendComponents const & components )
 	{
-		return getNdotL( lightSurface, components );
+		if ( components.hasMember( "smoothBand" ) )
+		{
+			return getNdotL( lightSurface, components );
+		}
+
+		return c3d::PbrLightingModel::doGetNdotL( lightSurface, components );
 	}
 
-	sdw::Float ToonPbrLightingModel::doGetNdotH( c3d::LightSurface const & lightSurface
+	c3d::DerivFloat ToonPbrLightingModel::doGetNdotH( c3d::LightSurface const & lightSurface
 		, c3d::BlendComponents const & components )
 	{
-		return getNdotH( lightSurface, components );
+		if ( components.hasMember( "smoothBand" ) )
+		{
+			return getNdotH( lightSurface, components );
+		}
+
+		return c3d::PbrLightingModel::doGetNdotH( lightSurface, components );
 	}
 
 	//*********************************************************************************************

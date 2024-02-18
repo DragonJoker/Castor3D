@@ -94,8 +94,8 @@ namespace castor3d::shader
 			, sssTransmittance
 			, plight
 			, pshadow.transforms()[0]
-			, plightSurface.N()
-			, plightSurface.worldPosition().xyz() );
+			, plightSurface.N().value()
+			, plightSurface.worldPosition().value().xyz() );
 	}
 
 	sdw::Vec3 SssTransmittance::compute( DebugOutput & debugOutput
@@ -158,8 +158,8 @@ namespace castor3d::shader
 			, sssTransmittance
 			, plight
 			, plight.shadowMapIndex()
-			, plightSurface.N()
-			, plightSurface.worldPosition().xyz() );
+			, plightSurface.N().value()
+			, plightSurface.worldPosition().value().xyz() );
 	}
 
 	sdw::Vec3 SssTransmittance::compute( DebugOutput & debugOutput
@@ -238,8 +238,8 @@ namespace castor3d::shader
 			, plight
 			, pshadow.transform()
 			, plight.shadowMapIndex()
-			, plightSurface.N()
-			, plightSurface.worldPosition().xyz() );
+			, plightSurface.N().value()
+			, plightSurface.worldPosition().value().xyz() );
 	}
 
 	sdw::Vec3 SssTransmittance::doCompute( DebugOutput & debugOutput

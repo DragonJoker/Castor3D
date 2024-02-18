@@ -51,14 +51,17 @@ namespace castor3d
 			}
 
 			C3D_API sdw::Vec4 projToView( sdw::Vec4 const & psPosition )const;
+			C3D_API DerivVec4 projToView( DerivVec4 const & psPosition )const;
 			C3D_API sdw::Vec4 viewToProj( sdw::Vec4 const & vsPosition )const;
 			C3D_API sdw::Vec3 worldToCurView( sdw::Vec3 const & wsPosition )const;
 			C3D_API sdw::Vec4 worldToCurView( sdw::Vec4 const & wsPosition )const;
 			C3D_API sdw::Vec4 worldToPrvView( sdw::Vec4 const & wsPosition )const;
 			C3D_API sdw::Vec4 curViewToWorld( sdw::Vec4 const & vsPosition )const;
+			C3D_API DerivVec4 curViewToWorld( DerivVec4 const & vsPosition )const;
 			C3D_API sdw::Vec4 prvViewToWorld( sdw::Vec4 const & vsPosition )const;
 			C3D_API sdw::Vec4 worldToCurProj( sdw::Vec4 const & wsPosition )const;
 			C3D_API sdw::Vec4 worldToPrvProj( sdw::Vec4 const & wsPosition )const;
+			C3D_API DerivVec4 worldToPrvProj( DerivVec4 const & wsPosition )const;
 			C3D_API sdw::Vec2 viewToScreenUV( Utils & utils
 				, sdw::Vec4 vsPosition )const;
 			C3D_API sdw::Vec2 worldToCurScreenUV( Utils & utils
@@ -86,6 +89,7 @@ namespace castor3d
 			C3D_API sdw::Vec3 getPrvViewCenter()const;
 			C3D_API sdw::Mat4 getInvViewProjMtx()const;
 			C3D_API void jitter( sdw::Vec4 & csPosition )const;
+			C3D_API void jitter( DerivVec4 & csPosition )const;
 			C3D_API sdw::Vec3 transformCamera( sdw::Mat3 const & transform )const;
 			C3D_API sdw::Vec3 getPosToCamera( sdw::Vec3 const & position )const;
 			C3D_API sdw::Vec3 getCameraToPos( sdw::Vec3 const & position )const;

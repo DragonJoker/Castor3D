@@ -6,6 +6,8 @@ See LICENSE file in root folder
 
 #include "SdwModule.hpp"
 
+#include "GlslDerivativeValue.hpp"
+
 #include <ShaderWriter/VecTypes/Vec3.hpp>
 #include <ShaderWriter/CompositeTypes/StructInstance.hpp>
 
@@ -18,10 +20,10 @@ namespace castor3d::shader
 			, sdw::expr::ExprPtr expr
 			, bool enabled );
 		C3D_API LightSurface( sdw::Vec3 const eye
-			, sdw::Vec4 const world
-			, sdw::Vec3 const view
+			, DerivVec4 const world
+			, DerivVec3 const view
 			, sdw::Vec3 const clip
-			, sdw::Vec3 const normal
+			, DerivVec3 const normal
 			, bool enableDotProducts
 			, bool enableFresnel
 			, bool enableIridescence );
@@ -36,18 +38,18 @@ namespace castor3d::shader
 		C3D_API static LightSurface create( sdw::ShaderWriter & writer
 			, castor::MbString const & name
 			, sdw::Vec3 const eye
-			, sdw::Vec4 const world
-			, sdw::Vec3 const view
+			, DerivVec4 const world
+			, DerivVec3 const view
 			, sdw::Vec3 const clip
-			, sdw::Vec3 const normal
+			, DerivVec3 const normal
 			, bool enableDotProducts = true
 			, bool enableFresnel = true
 			, bool enableIridescence = true );
 		C3D_API static LightSurface create( sdw::ShaderWriter & writer
 			, castor::MbString const & name
-			, sdw::Vec4 const world
+			, DerivVec4 const world
 			, sdw::Vec3 const clip
-			, sdw::Vec3 const normal
+			, DerivVec3 const normal
 			, bool enableDotProducts = false
 			, bool enableFresnel = false
 			, bool enableIridescence = false );
@@ -55,25 +57,25 @@ namespace castor3d::shader
 			, Utils & utils
 			, castor::MbString const & name
 			, sdw::Vec3 const eye
-			, sdw::Vec4 const world
-			, sdw::Vec3 const view
+			, DerivVec4 const world
+			, DerivVec3 const view
 			, sdw::Vec3 const clip
-			, sdw::Vec3 const normal
+			, DerivVec3 const normal
 			, sdw::Vec3 const f0
 			, BlendComponents const & components
 			, bool enableDotProducts = true
 			, bool enableFresnel = true
 			, bool enableIridescence = true );
 
-		C3D_API void updateN( sdw::Vec3 const N )const;
-		C3D_API void updateL( sdw::Vec3 const VtoL )const;
+		C3D_API void updateN( DerivVec3 const N )const;
+		C3D_API void updateL( DerivVec3 const VtoL )const;
 
 		C3D_API void updateN( Utils & utils
-			, sdw::Vec3 const N
+			, DerivVec3 const N
 			, sdw::Vec3 const f0
 			, BlendComponents const & components )const;
 		C3D_API void updateL( Utils & utils
-			, sdw::Vec3 const VtoL
+			, DerivVec3 const VtoL
 			, sdw::Vec3 const f0
 			, BlendComponents const & components )const;
 
@@ -89,33 +91,33 @@ namespace castor3d::shader
 		auto lengthV()const { return m_lengthV; }
 		auto lengthL()const { return m_lengthL; }
 		auto NdotV()const { return m_NdotV; }
-		sdw::Float NdotL()const { return m_NdotL; }
-		sdw::Float NdotH()const { return m_NdotH; }
-		sdw::Vec3 F()const { return m_F; }
-		sdw::Vec3 spcF()const { return m_spcF; }
-		sdw::Vec3 difF()const { return m_difF; }
+		DerivFloat NdotL()const { return m_NdotL; }
+		DerivFloat NdotH()const { return m_NdotH; }
+		DerivVec3 F()const { return m_F; }
+		DerivVec3 spcF()const { return m_spcF; }
+		DerivVec3 difF()const { return m_difF; }
 
 	private:
 		sdw::Vec3 m_eyePosition;
-		sdw::Vec4 m_worldPosition;
-		sdw::Vec3 m_viewPosition;
+		DerivVec4 m_worldPosition;
+		DerivVec3 m_viewPosition;
 		sdw::Vec3 m_clipPosition;
-		sdw::Vec3 m_vertexToLight;
-		sdw::Vec3 m_V;
-		sdw::Vec3 m_N;
-		sdw::Vec3 m_L;
-		sdw::Vec3 m_H;
-		sdw::Float m_lengthV;
-		sdw::Float m_lengthL;
-		mutable sdw::Float m_NdotV;
+		DerivVec3 m_vertexToLight;
+		DerivVec3 m_V;
+		DerivVec3 m_N;
+		DerivVec3 m_L;
+		DerivVec3 m_H;
+		DerivFloat m_lengthV;
+		DerivFloat m_lengthL;
+		mutable DerivFloat m_NdotV;
 
-		mutable sdw::DefaultedT< sdw::Float > m_NdotL;
-		mutable sdw::DefaultedT< sdw::Float > m_NdotH;
-		mutable sdw::DefaultedT< sdw::Float > m_HdotV;
+		mutable sdw::DefaultedT< DerivFloat > m_NdotL;
+		mutable sdw::DefaultedT< DerivFloat > m_NdotH;
+		mutable sdw::DefaultedT< DerivFloat > m_HdotV;
 
-		mutable sdw::DefaultedT< sdw::Vec3 > m_F;
-		mutable sdw::DefaultedT< sdw::Vec3 > m_spcF;
-		mutable sdw::DefaultedT< sdw::Vec3 > m_difF;
+		mutable sdw::DefaultedT< DerivVec3 > m_F;
+		mutable sdw::DefaultedT< DerivVec3 > m_spcF;
+		mutable sdw::DefaultedT< DerivVec3 > m_difF;
 
 	private:
 		auto HdotV()const { return m_HdotV; }
@@ -123,13 +125,13 @@ namespace castor3d::shader
 		C3D_API void doUpdateF( Utils & utils
 			, sdw::Vec3 const f0
 			, BlendComponents const & components
-			, sdw::Float const & dotProduct )const;
+			, DerivFloat const & dotProduct )const;
 		C3D_API static sdw::expr::ExprPtr makeInit( sdw::type::BaseStructPtr type
 			, sdw::Vec3 const eye
-			, sdw::Vec4 const world
-			, sdw::Vec3 const view
+			, DerivVec4 const world
+			, DerivVec3 const view
 			, sdw::Vec3 const clip
-			, sdw::Vec3 const normal
+			, DerivVec3 const normal
 			, bool enableDotProducts
 			, bool enableFresnel
 			, bool enableIridescence );

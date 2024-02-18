@@ -7,6 +7,7 @@
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
 #include "Castor3D/Material/Texture/Animation/TextureAnimation.hpp"
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
+#include "Castor3D/Shader/Shaders/GlslDerivativeValue.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 
 #include <ShaderWriter/BaseTypes/CombinedImage.hpp>

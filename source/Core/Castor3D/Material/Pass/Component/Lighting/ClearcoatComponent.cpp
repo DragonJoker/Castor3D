@@ -123,7 +123,14 @@ namespace castor3d
 		{
 			if ( surface )
 			{
-				inits.emplace_back( sdw::makeExpr( surface->getMember< sdw::Vec3 >( "normal" ) ) );
+				if ( checkFlag( materials.getFilter(), ComponentModeFlag::eDerivTex ) )
+				{
+					inits.emplace_back( shader::makeRawExpr( surface->getMember< shader::DerivVec3 >( "normal", shader::derivVec3( 0.0_f ) ) ) );
+				}
+				else
+				{
+					inits.emplace_back( sdw::makeExpr( surface->getMember< sdw::Vec3 >( "normal", vec3( 0.0_f ) ) ) );
+				}
 			}
 			else
 			{

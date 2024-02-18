@@ -13,6 +13,7 @@ See LICENSE file in root folder
 #include <CastorUtils/FileParser/FileParserModule.hpp>
 
 #include <ShaderWriter/ShaderWriterPrerequisites.hpp>
+#include <ShaderWriter/CompositeTypes/StructHelper.hpp>
 
 #define C3D_PluginMakePassComponentName( p, x ) C3D_Join3Strings( cuT( p ), cuT( "pass" ), cuT( x ) )
 #define C3D_MakePassComponentName( x ) C3D_PluginMakePassComponentName( "c3d", x )
@@ -541,8 +542,17 @@ namespace castor3d
 	namespace shader
 	{
 		struct BlendComponents;
-		struct SurfaceBase;
 		class Utils;
+
+		template< typename ValueT, sdw::StringLiteralT StructNameT >
+		struct DerivativeValueT;
+		template< typename Position3T, typename Position4T, typename NormalT >
+		struct SurfaceBaseT;
+
+		using DerivVec3 = DerivativeValueT< sdw::Vec3, "C3D_DerivVec3" >;
+		using DerivVec4 = DerivativeValueT< sdw::Vec4, "C3D_DerivVec4" >;
+		using SurfaceBase = SurfaceBaseT< sdw::Vec3, sdw::Vec4, sdw::Vec3 >;
+		using DerivSurfaceBase = SurfaceBaseT< DerivVec3, DerivVec4, DerivVec3 >;
 		/**
 		\~english
 		\brief		Base class for all component shaders.
@@ -648,7 +658,7 @@ namespace castor3d
 		, TextureCombine const & combine
 		, shader::BlendComponents & components
 		, bool isFrontCulled ) >;
-	using FinishComponent = castor::Function< void( shader::SurfaceBase const & surface
+	using FinishComponent = castor::Function< void( shader::DerivSurfaceBase const & surface
 		, sdw::Vec3 const worldEye
 		, shader::Utils & utils
 		, shader::BlendComponents & components ) >;

@@ -361,7 +361,7 @@ namespace castor3d
 					, modelData.getMaterialId()
 					, in.passMultipliers
 					, components );
-				output.registerOutput( cuT( "Surface" ), cuT( "Normal" ), fma( components.normal, vec3( 0.5_f ), vec3( 0.5_f ) ) );
+				output.registerOutput( cuT( "Surface" ), cuT( "Normal" ), fma( components.getRawNormal(), vec3( 0.5_f ), vec3( 0.5_f ) ) );
 				output.registerOutput( cuT( "Surface" ), cuT( "Tangent" ), fma( in.tangent.xyz(), vec3( 0.5_f ), vec3( 0.5_f ) ) );
 				output.registerOutput( cuT( "Surface" ), cuT( "Bitangent" ), fma( in.bitangent, vec3( 0.5_f ), vec3( 0.5_f ) ) );
 				output.registerOutput( cuT( "Surface" ), cuT( "World Position" ), in.worldPosition );
@@ -383,12 +383,11 @@ namespace castor3d
 							, shader::DirectLighting{ writer } );
 						// Direct Lighting
 						auto surface = writer.declLocale( "surface"
-							, shader::Surface{ in.fragCoord.xyz()
-								, in.viewPosition
-								, in.worldPosition
-								, normalize( components.normal ) } );
+							, shader::DerivSurface{ in.fragCoord.xyz()
+								, { in.viewPosition, dFdx( in.viewPosition ), dFdy( in.viewPosition ) }
+								, { in.worldPosition, dFdx( in.worldPosition ), dFdy( in.worldPosition ) }
+								, normalize( components.getDerivNormal() ) } );
 						lightingModel->finish( passShaders
-							, in
 							, surface
 							, utils
 							, c3d_cameraData.position()
@@ -397,7 +396,7 @@ namespace castor3d
 							, "lightSurface"
 							, c3d_cameraData.position()
 							, surface.worldPosition
-							, surface.viewPosition.xyz()
+							, getXYZ( surface.viewPosition )
 							, surface.clipPosition
 							, surface.normal );
 						lights.computeCombinedDifSpec( clusteredLights
@@ -406,7 +405,7 @@ namespace castor3d
 							, lightSurface
 							, modelData.isShadowReceiver()
 							, lightSurface.clipPosition().xy()
-							, lightSurface.viewPosition().z()
+							, lightSurface.viewPosition().value().z()
 							, output
 							, directLighting );
 						directLighting.ambient() = components.ambientColour * c3d_sceneData.ambientLight() * components.ambientFactor;
@@ -416,7 +415,7 @@ namespace castor3d
 
 						// Indirect Lighting
 						lightSurface.updateL( utils
-							, components.normal
+							, components.getDerivNormal()
 							, components.f0
 							, components );
 						auto indirectLighting = writer.declLocale( "indirectLighting"
@@ -448,15 +447,15 @@ namespace castor3d
 						}
 
 						auto incident = writer.declLocale( "incident"
-							, reflections.computeIncident( lightSurface.worldPosition().xyz(), c3d_cameraData.position() ) );
+							, reflections.computeIncident( lightSurface.worldPosition().value().xyz(), c3d_cameraData.position() ) );
 						lightSurface.updateN( utils
-							, components.normal
+							, components.getDerivNormal()
 							, components.f0
 							, components );
 						passShaders.computeReflRefr( reflections
 							, components
 							, lightSurface
-							, lightSurface.worldPosition()
+							, lightSurface.worldPosition().value()
 							, *backgroundModel
 							, c3d_mapScene
 							, c3d_cameraData

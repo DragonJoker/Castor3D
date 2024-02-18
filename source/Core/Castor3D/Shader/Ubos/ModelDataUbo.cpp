@@ -1,6 +1,7 @@
 #include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
 
 #include "Castor3D/Limits.hpp"
+#include "Castor3D/Shader/Shaders/GlslDerivativeValue.hpp"
 #include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
 
 #include <ShaderWriter/Source.hpp>
@@ -42,6 +43,11 @@ namespace castor3d::shader
 	}
 
 	sdw::Vec4 ModelData::worldToModel( sdw::Vec4 const & pos )const
+	{
+		return inverse( getModelMtx() ) * pos;
+	}
+
+	DerivVec4 ModelData::worldToModel( DerivVec4 const & pos )const
 	{
 		return inverse( getModelMtx() ) * pos;
 	}
