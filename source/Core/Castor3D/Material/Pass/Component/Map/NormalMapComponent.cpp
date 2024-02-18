@@ -218,16 +218,47 @@ namespace castor3d
 		, sdw::Vec4 const & sampled )
 	{
 		auto & writer{ *sampled.getWriter() };
-		auto tbn = shader::Utils::getTBN( components.getMember< sdw::Vec3 >( "normal" )
-			, components.getMember< sdw::Vec4 >( "tangent" ).xyz()
-			, components.getMember< sdw::Vec3 >( "bitangent" ) );
-		sampled[mask + 1u] = nmlGMul * sampled[mask + 1u];
-		components.getMember< sdw::Vec3 >( "normal" ) = normalize( tbn
-			* fma( vec3( 2.0_f )
+
+		if ( components.usesDerivativeValues() )
+		{
+			auto normal = components.getMember< shader::DerivVec3 >( "normal" );
+			auto tangent = components.getMember< shader::DerivVec4 >( "tangent" );
+			auto bitangent = components.getMember< shader::DerivVec3 >( "bitangent" );
+			auto tbn00 = shader::Utils::getTBN( normal.value(), tangent.value().xyz(), bitangent.value() );
+			auto tbn10 = shader::Utils::getTBN( normal.value() + normal.dPdx(), tangent.value().xyz() + tangent.dPdx().xyz(), bitangent.value() + bitangent.dPdx() );
+			auto tbn01 = shader::Utils::getTBN( normal.value() + normal.dPdy(), tangent.value().xyz() + tangent.dPdy().xyz(), bitangent.value() + bitangent.dPdy() );
+
+			sampled[mask + 1u] = nmlGMul * sampled[mask + 1u];
+			auto reconstructedNormal = writer.declLocale( "c3d_reconstructedNormalMikkt"
 				, writer.ternary( nml2Chan != 0_u
 					, shader::Utils::reconstructNormal( sampled[mask], sampled[mask + 1u] )
-					, shader::TextureConfigData::getVec3( sampled, mask ) )
-				, -vec3( 1.0_f ) ) );
+					, shader::TextureConfigData::getVec3( sampled, mask ) ) );
+			reconstructedNormal = fma( vec3( 2.0_f ), reconstructedNormal, -vec3( 1.0_f ) );
+
+			auto res00 = writer.declLocale( "c3d_mikktDerivRes00"
+				, normalize( tbn00 * reconstructedNormal ) );
+			auto res10 = writer.declLocale( "c3d_mikktDerivRes10"
+				, normalize( tbn10 * reconstructedNormal ) );
+			auto res01 = writer.declLocale( "c3d_mikktDerivRes01"
+				, normalize( tbn01 * reconstructedNormal ) );
+			normal.value() = res00;
+			normal.dPdx() = res10 - res00;
+			normal.dPdy() = res01 - res00;
+		}
+		else
+		{
+			auto normal = components.getMember< sdw::Vec3 >( "normal" );
+			auto tangent = components.getMember< sdw::Vec4 >( "tangent" );
+			auto bitangent = components.getMember< sdw::Vec3 >( "bitangent" );
+			auto tbn = shader::Utils::getTBN( normal, tangent.xyz(), bitangent );
+			sampled[mask + 1u] = nmlGMul * sampled[mask + 1u];
+			normal = normalize( tbn
+				* fma( vec3( 2.0_f )
+					, writer.ternary( nml2Chan != 0_u
+						, shader::Utils::reconstructNormal( sampled[mask], sampled[mask + 1u] )
+						, shader::TextureConfigData::getVec3( sampled, mask ) )
+					, -vec3( 1.0_f ) ) );
+		}
 	}
 
 	//*********************************************************************************************

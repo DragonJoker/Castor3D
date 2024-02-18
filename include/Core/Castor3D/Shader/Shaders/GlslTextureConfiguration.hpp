@@ -88,6 +88,11 @@ namespace castor3d::shader
 		auto isTileAnim()const { return getMember< "isTileAnim" >() != 0_u; }
 		auto texSet()const { return getMember< "texSet" >(); }
 
+		C3D_API sdw::Vec2 getUv( DerivTex const & uvw )const;
+		C3D_API void setUv( DerivTex & lhs
+			, DerivTex const & rhs )const;
+		C3D_API DerivTex toUv( DerivTex const & uvw )const;
+
 		sdw::Vec2 getUv( sdw::Vec3 const & uvw )const
 		{
 			return uvw.xy();
@@ -102,22 +107,6 @@ namespace castor3d::shader
 			, sdw::Vec2 const & rhs )const
 		{
 			lhs.xy() = rhs;
-		}
-
-		sdw::Vec2 getUv( DerivTex const & uvw )const
-		{
-			return uvw.value();
-		}
-
-		DerivTex toUv( DerivTex const & uvw )const
-		{
-			return uvw;
-		}
-
-		void setUv( DerivTex & lhs
-			, DerivTex const & rhs )const
-		{
-			lhs.value() = rhs.value();
 		}
 
 		sdw::Float fneedYI;

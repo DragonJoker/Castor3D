@@ -68,7 +68,6 @@ namespace castor3d::shader
 	}
 
 	void PbrLightingModel::doFinish( PassShaders const & passShaders
-		, RasterizerSurfaceBase const & surface
 		, BlendComponents & components )
 	{
 		auto ior = m_writer.declLocale( "ior"
@@ -97,8 +96,8 @@ namespace castor3d::shader
 		auto rawDiffuse = m_writer.declLocale( "rawDiffuse"
 			, m_cookTorrance.computeDiffuse( radiance
 				, intensity
-				, lightSurface.difF() ) );
-		output = doGetNdotL( lightSurface, components ) * rawDiffuse;
+				, lightSurface.difF().value() ) );
+		output = doGetNdotL( lightSurface, components ).value() * rawDiffuse;
 		return rawDiffuse;
 	}
 
@@ -111,12 +110,12 @@ namespace castor3d::shader
 	{
 		output = m_cookTorrance.computeSpecular( radiance
 			, intensity
-			, doGetNdotL( lightSurface, components )
-			, doGetNdotH( lightSurface, components )
-			, lightSurface.NdotV()
-			, lightSurface.spcF()
+			, doGetNdotL( lightSurface, components ).value()
+			, doGetNdotH( lightSurface, components ).value()
+			, lightSurface.NdotV().value()
+			, lightSurface.spcF().value()
 			, components.roughness * components.roughness );
-		output *= doGetNdotL( lightSurface, components );
+		output *= doGetNdotL( lightSurface, components ).value();
 	}
 
 	void PbrLightingModel::doComputeCoatingTerm( sdw::Vec3 const & radiance
@@ -128,15 +127,15 @@ namespace castor3d::shader
 	{
 		IF( m_writer, components.clearcoatFactor != 0.0_f )
 		{
-			lightSurface.updateN( components.clearcoatNormal );
+			lightSurface.updateN( derivVec3( components.clearcoatNormal ) );
 			output = m_cookTorrance.computeSpecular( radiance
 				, intensity
-				, doGetNdotL( lightSurface, components )
-				, doGetNdotH( lightSurface, components )
-				, lightSurface.NdotV()
-				, lightSurface.F()
+				, doGetNdotL( lightSurface, components ).value()
+				, doGetNdotH( lightSurface, components ).value()
+				, lightSurface.NdotV().value()
+				, lightSurface.F().value()
 				, components.clearcoatRoughness );
-			output *= doGetNdotL( lightSurface, components );
+			output *= doGetNdotL( lightSurface, components ).value();
 		}
 		FI;
 	}
@@ -151,8 +150,8 @@ namespace castor3d::shader
 		IF( m_writer, !all( components.sheenFactor == vec3( 0.0_f ) ) )
 		{
 			output = m_sheen.compute( lightSurface
-				, doGetNdotL( lightSurface, components )
-				, doGetNdotH( lightSurface, components )
+				, doGetNdotL( lightSurface, components ).value()
+				, doGetNdotH( lightSurface, components ).value()
 				, components.sheenRoughness );
 		}
 		FI;

@@ -31,6 +31,7 @@
 #include "Castor3D/Shader/Shaders/GlslClusteredLights.hpp"
 #include "Castor3D/Shader/Shaders/GlslCookTorranceBRDF.hpp"
 #include "Castor3D/Shader/Shaders/GlslDebugOutput.hpp"
+#include "Castor3D/Shader/Shaders/GlslDerivativeValue.hpp"
 #include "Castor3D/Shader/Shaders/GlslFog.hpp"
 #include "Castor3D/Shader/Shaders/GlslGlobalIllumination.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
@@ -340,48 +341,142 @@ namespace castor3d
 					, dot( mergedV, dy() ) );
 			}
 
-			shader::DerivTex computeGradient( sdw::Vec3 const & pv0tex
-				, sdw::Vec3 const & pv1tex
-				, sdw::Vec3 const & pv2tex )
+			shader::DerivVec2 computeGradient( sdw::Vec2 const & pv0
+				, sdw::Vec2 const & pv1
+				, sdw::Vec2 const & pv2 )
 			{
-				if ( !m_computeGradient )
+				if ( !m_computeGradient2 )
 				{
 					auto & writer = *getWriter();
-					m_computeGradient = writer.implementFunction< shader::DerivTex >( "computeGradient"
+					m_computeGradient2 = writer.implementFunction< shader::DerivVec2 >( "computeGradient2"
 						, [&writer]( BarycentricFullDerivatives const & derivatives
-							, sdw::Vec2 const & v0tex
-							, sdw::Vec2 const & v1tex
-							, sdw::Vec2 const & v2tex )
+							, sdw::Vec2 const & v0
+							, sdw::Vec2 const & v1
+							, sdw::Vec2 const & v2 )
 						{
-							auto mergedX = writer.declLocale( "merged0X"
-								, vec3( v0tex.x(), v1tex.x(), v2tex.x() ) );
-							auto mergedY = writer.declLocale( "merged0Y"
-								, vec3( v0tex.y(), v1tex.y(), v2tex.y() ) );
-							auto resultsX = writer.declLocale( "results0X"
+							auto mergedX = writer.declLocale( "mergedX"
+								, vec3( v0.x(), v1.x(), v2.x() ) );
+							auto mergedY = writer.declLocale( "mergedY"
+								, vec3( v0.y(), v1.y(), v2.y() ) );
+							auto resultsX = writer.declLocale( "resultsX"
 								, derivatives.computeGradient( mergedX ) );
-							auto resultsY = writer.declLocale( "results0Y"
+							auto resultsY = writer.declLocale( "resultsY"
 								, derivatives.computeGradient( mergedY ) );
-							auto result = writer.declLocale< shader::DerivTex >( "result" );
+							auto result = writer.declLocale< shader::DerivVec2 >( "result" );
 							result.value() = vec2( resultsX.x(), resultsY.x() );
 							result.dPdx() = vec2( resultsX.y(), resultsY.y() );
 							result.dPdy() = vec2( resultsX.z(), resultsY.z() );
 							writer.returnStmt( result );
 						}
 						, InBarycentricFullDerivatives{ writer, "derivatives" }
-						, sdw::InVec2{ writer, "v0tex" }
-						, sdw::InVec2{ writer, "v1tex" }
-						, sdw::InVec2{ writer, "v2tex" } );
+						, sdw::InVec2{ writer, "v0" }
+						, sdw::InVec2{ writer, "v1" }
+						, sdw::InVec2{ writer, "v2" } );
 				}
 
-				return m_computeGradient( *this, pv0tex.xy(), pv1tex.xy(), pv2tex.xy() );
+				return m_computeGradient2( *this, pv0, pv1, pv2 );
+			}
+
+			shader::DerivVec3 computeGradient( sdw::Vec3 const & pv0
+				, sdw::Vec3 const & pv1
+				, sdw::Vec3 const & pv2 )
+			{
+				if ( !m_computeGradient3 )
+				{
+					auto & writer = *getWriter();
+					m_computeGradient3 = writer.implementFunction< shader::DerivVec3 >( "computeGradient3"
+						, [&writer]( BarycentricFullDerivatives const & derivatives
+							, sdw::Vec3 const & v0
+							, sdw::Vec3 const & v1
+							, sdw::Vec3 const & v2 )
+						{
+							auto mergedX = writer.declLocale( "mergedX"
+								, vec3( v0.x(), v1.x(), v2.x() ) );
+							auto mergedY = writer.declLocale( "mergedY"
+								, vec3( v0.y(), v1.y(), v2.y() ) );
+							auto mergedZ = writer.declLocale( "mergedZ"
+								, vec3( v0.z(), v1.z(), v2.z() ) );
+							auto resultsX = writer.declLocale( "resultsX"
+								, derivatives.computeGradient( mergedX ) );
+							auto resultsY = writer.declLocale( "resultsY"
+								, derivatives.computeGradient( mergedY ) );
+							auto resultsZ = writer.declLocale( "resultsZ"
+								, derivatives.computeGradient( mergedZ ) );
+							auto result = writer.declLocale< shader::DerivVec3 >( "result" );
+							result.value() = vec3( resultsX.x(), resultsY.x(), resultsZ.x() );
+							result.dPdx() = vec3( resultsX.y(), resultsY.y(), resultsZ.y() );
+							result.dPdy() = vec3( resultsX.z(), resultsY.z(), resultsZ.z() );
+							writer.returnStmt( result );
+						}
+						, InBarycentricFullDerivatives{ writer, "derivatives" }
+						, sdw::InVec3{ writer, "v0" }
+						, sdw::InVec3{ writer, "v1" }
+						, sdw::InVec3{ writer, "v2" } );
+				}
+
+				return m_computeGradient3( *this, pv0, pv1, pv2 );
+			}
+
+			shader::DerivVec4 computeGradient( sdw::Vec4 const & pv0
+				, sdw::Vec4 const & pv1
+				, sdw::Vec4 const & pv2 )
+			{
+				if ( !m_computeGradient4 )
+				{
+					auto & writer = *getWriter();
+					m_computeGradient4 = writer.implementFunction< shader::DerivVec4 >( "computeGradient4"
+						, [&writer]( BarycentricFullDerivatives const & derivatives
+							, sdw::Vec4 const & v0
+							, sdw::Vec4 const & v1
+							, sdw::Vec4 const & v2 )
+						{
+							auto mergedX = writer.declLocale( "mergedX"
+								, vec3( v0.x(), v1.x(), v2.x() ) );
+							auto mergedY = writer.declLocale( "mergedY"
+								, vec3( v0.y(), v1.y(), v2.y() ) );
+							auto mergedZ = writer.declLocale( "mergedZ"
+								, vec3( v0.z(), v1.z(), v2.z() ) );
+							auto mergedW = writer.declLocale( "mergedW"
+								, vec3( v0.w(), v1.w(), v2.w() ) );
+							auto resultsX = writer.declLocale( "resultsX"
+								, derivatives.computeGradient( mergedX ) );
+							auto resultsY = writer.declLocale( "resultsY"
+								, derivatives.computeGradient( mergedY ) );
+							auto resultsZ = writer.declLocale( "resultsZ"
+								, derivatives.computeGradient( mergedZ ) );
+							auto resultsW = writer.declLocale( "resultsW"
+								, derivatives.computeGradient( mergedW ) );
+							auto result = writer.declLocale< shader::DerivVec4 >( "result" );
+							result.value() = vec4( resultsX.x(), resultsY.x(), resultsZ.x(), resultsW.x() );
+							result.dPdx() = vec4( resultsX.y(), resultsY.y(), resultsZ.y(), resultsW.y() );
+							result.dPdy() = vec4( resultsX.z(), resultsY.z(), resultsZ.z(), resultsW.z() );
+							writer.returnStmt( result );
+						}
+						, InBarycentricFullDerivatives{ writer, "derivatives" }
+						, sdw::InVec4{ writer, "v0" }
+						, sdw::InVec4{ writer, "v1" }
+						, sdw::InVec4{ writer, "v2" } );
+				}
+
+				return m_computeGradient4( *this, pv0, pv1, pv2 );
 			}
 
 		private:
-			sdw::Function< shader::DerivTex
+			sdw::Function< shader::DerivVec2
 				, InBarycentricFullDerivatives
 				, sdw::InVec2
 				, sdw::InVec2
-				, sdw::InVec2 > m_computeGradient;
+				, sdw::InVec2 > m_computeGradient2;
+			sdw::Function< shader::DerivVec3
+				, InBarycentricFullDerivatives
+				, sdw::InVec3
+				, sdw::InVec3
+				, sdw::InVec3 > m_computeGradient3;
+			sdw::Function< shader::DerivVec4
+				, InBarycentricFullDerivatives
+				, sdw::InVec4
+				, sdw::InVec4
+				, sdw::InVec4 > m_computeGradient4;
 		};
 
 		struct Position
@@ -722,7 +817,7 @@ namespace castor3d
 				, sdw::Float const & pdepth
 				, shader::CameraData const & c3d_cameraData
 				, sdw::Array< shader::BillboardData > const & c3d_billboardData
-				, shader::DerivFragmentSurface const & presult )
+				, shader::AllDerivFragmentSurface const & presult )
 			{
 				if ( !m_loadSurface )
 				{
@@ -734,29 +829,21 @@ namespace castor3d
 							, shader::ModelData const & modelData
 							, shader::Material const & material
 							, sdw::Float depth
-							, shader::DerivFragmentSurface result )
+							, shader::AllDerivFragmentSurface result )
 						{
-							result.worldPosition = vec4( 0.0_f );
-							result.viewPosition = vec4( 0.0_f );
-							result.curPosition = vec4( 0.0_f );
-							result.prvPosition = vec4( 0.0_f );
-							result.tangentSpaceFragPosition = vec3( 0.0_f );
+							result.worldPosition = shader::derivVec4( 0.0_f );
+							result.viewPosition = shader::derivVec4( 0.0_f );
+							result.curPosition = shader::derivVec4( 0.0_f );
+							result.prvPosition = shader::derivVec4( 0.0_f );
+							result.tangentSpaceFragPosition = shader::derivVec3( 0.0_f );
 							result.tangentSpaceViewPosition = vec3( 0.0_f );
-							result.normal = vec3( 0.0_f );
-							result.tangent = vec4( 0.0_f );
-							result.bitangent = vec3( 0.0_f );
-							result.texture0.value() = vec2( 0.0_f );
-							result.texture1.value() = vec2( 0.0_f );
-							result.texture2.value() = vec2( 0.0_f );
-							result.texture3.value() = vec2( 0.0_f );
-							result.texture0.dPdx() = vec2( 0.0_f );
-							result.texture1.dPdx() = vec2( 0.0_f );
-							result.texture2.dPdx() = vec2( 0.0_f );
-							result.texture3.dPdx() = vec2( 0.0_f );
-							result.texture0.dPdy() = vec2( 0.0_f );
-							result.texture1.dPdy() = vec2( 0.0_f );
-							result.texture2.dPdy() = vec2( 0.0_f );
-							result.texture3.dPdy() = vec2( 0.0_f );
+							result.normal = shader::derivVec3( 0.0_f );
+							result.tangent = shader::derivVec4( 0.0_f );
+							result.bitangent = shader::derivVec3( 0.0_f );
+							result.texture0 = shader::derivVec2( 0.0_f );
+							result.texture1 = shader::derivVec2( 0.0_f );
+							result.texture2 = shader::derivVec2( 0.0_f );
+							result.texture3 = shader::derivVec2( 0.0_f );
 							result.colour = vec3( 1.0_f );
 
 							auto hdrCoords = m_writer.declLocale( "hdrCoords"
@@ -802,30 +889,30 @@ namespace castor3d
 							// Interpolate texture coordinates and calculate the gradients for texture sampling with mipmapping support
 							if ( m_flags.enableTexcoord0() )
 							{
-								result.texture0 = derivatives.computeGradient( v0.texture0
-									, v1.texture0
-									, v2.texture0 );
+								result.texture0 = derivatives.computeGradient( v0.texture0.xy()
+									, v1.texture0.xy()
+									, v2.texture0.xy() );
 							}
 
 							if ( m_flags.enableTexcoord1() )
 							{
-								result.texture1 = derivatives.computeGradient( v0.texture1
-									, v1.texture1
-									, v2.texture1 );
+								result.texture1 = derivatives.computeGradient( v0.texture1.xy()
+									, v1.texture1.xy()
+									, v2.texture1.xy() );
 							}
 
 							if ( m_flags.enableTexcoord2() )
 							{
-								result.texture2 = derivatives.computeGradient( v0.texture2
-									, v1.texture2
-									, v2.texture2 );
+								result.texture2 = derivatives.computeGradient( v0.texture2.xy()
+									, v1.texture2.xy()
+									, v2.texture2.xy() );
 							}
 
 							if ( m_flags.enableTexcoord3() )
 							{
-								result.texture3 = derivatives.computeGradient( v0.texture3
-									, v1.texture3
-									, v2.texture3 );
+								result.texture3 = derivatives.computeGradient( v0.texture3.xy()
+									, v1.texture3.xy()
+									, v2.texture3.xy() );
 							}
 
 							if ( m_flags.enableColours() )
@@ -836,37 +923,26 @@ namespace castor3d
 							}
 
 							auto normal = m_writer.declLocale( "normal"
-								, vec3( 0.0_f )
+								, ( m_flags.enableNormal()
+									? normalize( derivatives.computeGradient( v0.normal, v1.normal, v2.normal ) )
+									: shader::derivVec3( 0.0_f ) )
 								, m_flags.enableNormal() );
-
-							if ( m_flags.enableNormal() )
-							{
-								normal = normalize( derivatives.interpolate( v0.normal.xyz()
-									, v1.normal.xyz()
-									, v2.normal.xyz() ) );
-							}
-
 							auto tangent = m_writer.declLocale( "tangent"
-								, vec4( 0.0_f )
+								, ( m_flags.enableTangentSpace()
+									? derivatives.computeGradient( v0.tangent, v1.tangent, v2.tangent )
+									: shader::derivVec4( 0.0_f ) )
 								, m_flags.enableTangentSpace() );
 
 							if ( m_flags.enableTangentSpace() )
 							{
-								tangent = normalize( derivatives.interpolate( v0.tangent
-									, v1.tangent
-									, v2.tangent ) );
+								tangent = derivVec4( normalize( getXYZ( tangent ) ), getW( tangent ) );
 							}
 
 							auto bitangent = m_writer.declLocale( "bitangent"
-								, vec3( 0.0_f )
+								, ( m_flags.enableBitangent()
+									? normalize( derivatives.computeGradient( v0.bitangent, v1.bitangent, v2.bitangent ) )
+									: shader::derivVec3( 0.0_f ) )
 								, m_flags.enableBitangent() );
-
-							if ( m_flags.enableBitangent() )
-							{
-								bitangent = normalize( derivatives.interpolate( v0.bitangent
-									, v1.bitangent
-									, v2.bitangent ) );
-							}
 
 							if ( m_flags.enablePassMasks() )
 							{
@@ -892,15 +968,17 @@ namespace castor3d
 							}
 
 							auto curProjPosition = m_writer.declLocale( "curProjPosition"
-								, derivatives.interpolate( p0, p1, p2 ) );
+								, derivatives.computeGradient( p0, p1, p2 ) );
 
-							IF( m_writer, curProjPosition.w() == 0.0_f )
+							IF( m_writer, curProjPosition.value().w() == 0.0_f )
 							{
-								curProjPosition.w() = 1.0_f;
+								curProjPosition.value().w() = 1.0_f;
+								curProjPosition.dPdx().w() = 0.0_f;
+								curProjPosition.dPdy().w() = 0.0_f;
 							}
 							FI
 
-							depth = ( curProjPosition.z() / curProjPosition.w() );
+							depth = ( curProjPosition.value().z() / curProjPosition.value().w() );
 							auto curPosition = m_writer.declLocale( "curPosition"
 								, c3d_cameraData.projToView( curProjPosition ) );
 							result.viewPosition = curPosition;
@@ -916,10 +994,10 @@ namespace castor3d
 								if ( m_flags.hasWorldPosInputs() )
 								{
 									auto velocity = m_writer.declLocale( "velocity"
-										, derivatives.interpolate( v0.velocity.xyz()
+										, derivatives.computeGradient( v0.velocity.xyz()
 											, v1.velocity.xyz()
 											, v2.velocity.xyz() ) );
-									prvPosition.xyz() += velocity;
+									shader::addXYZ( prvPosition, velocity );
 								}
 								else if ( m_flags.enableNormal() )
 								{
@@ -934,7 +1012,7 @@ namespace castor3d
 										auto prvMtxModel = m_writer.declLocale( "prvMtxModel"
 											, modelData.getPrvModelMtx( m_flags, curMtxModel ) );
 										prvPosition = prvMtxModel * curPosition;
-										tangent = vec4( normalize( mtxNormal * tangent.xyz() ), tangent.w() );
+										tangent = derivVec4( normalize( mtxNormal * shader::getXYZ( tangent ) ), shader::getW( tangent ) );
 										bitangent = normalize( mtxNormal * bitangent );
 									}
 								}
@@ -949,7 +1027,7 @@ namespace castor3d
 							{
 								result.computeTangentSpace( m_flags
 									, c3d_cameraData.position()
-									, result.worldPosition.xyz()
+									, shader::getXYZ( result.worldPosition )
 									, normal
 									, tangent
 									, bitangent );
@@ -962,7 +1040,7 @@ namespace castor3d
 						, shader::InModelData{ m_writer, "modelData" }
 						, shader::InMaterial{ m_writer, "material", m_passShaders }
 						, sdw::OutFloat{ m_writer, "depth" }
-						, shader::OutDerivFragmentSurface{ m_writer, "result", m_submeshShaders } );
+						, shader::OutAllDerivFragmentSurface{ m_writer, "result", m_submeshShaders } );
 				}
 
 				m_loadSurface( pnodeId, pprimitiveId, pmeshletId, ppixelCoord, pmodelData, pmaterial, pdepth, presult );
@@ -998,7 +1076,7 @@ namespace castor3d
 				, shader::InModelData
 				, shader::InMaterial
 				, sdw::OutFloat
-				, shader::OutDerivFragmentSurface > m_loadSurface;
+				, shader::OutAllDerivFragmentSurface > m_loadSurface;
 		};
 
 		static ShaderPtr getProgram( RenderDevice const & device
@@ -1159,7 +1237,7 @@ namespace castor3d
 							, ( hasSsao
 								? c3d_mapOcclusion.fetch( ipixel, 0_i )
 								: 1.0_f ) );
-						auto baseSurface = writer.declLocale< shader::DerivFragmentSurface >( "baseSurface"
+						auto baseSurface = writer.declLocale< shader::AllDerivFragmentSurface >( "baseSurface"
 							, true
 							, submeshShaders );
 						visHelpers.loadSurface( curNodeId
@@ -1186,11 +1264,11 @@ namespace castor3d
 							, modelData.getMaterialId()
 							, baseSurface.passMultipliers
 							, components );
-						output.registerOutput( cuT( "Surface" ), cuT( "Normal" ), fma( components.normal, vec3( 0.5_f ), vec3( 0.5_f ) ) );
-						output.registerOutput( cuT( "Surface" ), cuT( "Tangent" ), fma( baseSurface.tangent.xyz(), vec3( 0.5_f ), vec3( 0.5_f ) ) );
-						output.registerOutput( cuT( "Surface" ), cuT( "Bitangent" ), fma( baseSurface.bitangent, vec3( 0.5_f ), vec3( 0.5_f ) ) );
-						output.registerOutput( cuT( "Surface" ), cuT( "World Position" ), baseSurface.worldPosition );
-						output.registerOutput( cuT( "Surface" ), cuT( "View Position" ), baseSurface.viewPosition );
+						output.registerOutput( cuT( "Surface" ), cuT( "Normal" ), fma( shader::getRawXYZ( components.getRawNormal() ), vec3( 0.5_f ), vec3( 0.5_f ) ) );
+						output.registerOutput( cuT( "Surface" ), cuT( "Tangent" ), fma( shader::getRawXYZ( baseSurface.tangent ), vec3( 0.5_f ), vec3( 0.5_f ) ) );
+						output.registerOutput( cuT( "Surface" ), cuT( "Bitangent" ), fma( shader::getRawXYZ( baseSurface.bitangent ), vec3( 0.5_f ), vec3( 0.5_f ) ) );
+						output.registerOutput( cuT( "Surface" ), cuT( "World Position" ), shader::getRaw( baseSurface.worldPosition ) );
+						output.registerOutput( cuT( "Surface" ), cuT( "View Position" ), shader::getRaw( baseSurface.viewPosition ) );
 
 						if ( components.occlusion )
 						{
@@ -1198,7 +1276,7 @@ namespace castor3d
 						}
 
 						auto incident = writer.declLocale( "incident"
-							, reflections.computeIncident( baseSurface.worldPosition.xyz(), c3d_cameraData.position() ) );
+							, reflections.computeIncident( shader::getXYZ( baseSurface.worldPosition ), c3d_cameraData.position() ) );
 
 						if ( components.transmission )
 						{
@@ -1215,13 +1293,12 @@ namespace castor3d
 							IF( writer, material.lighting )
 							{
 								auto surface = writer.declLocale( "surface"
-									, shader::Surface{ vec3( vec2( ipixel ), depth )
+									, shader::DerivSurface{ vec3( vec2( ipixel ), depth )
 										, baseSurface.viewPosition
 										, baseSurface.worldPosition
-										, normalize( components.normal ) } );
+										, components.getDerivNormal() } );
 
 								lightingModel->finish( passShaders
-									, baseSurface
 									, surface
 									, utils
 									, c3d_cameraData.position()
@@ -1230,7 +1307,7 @@ namespace castor3d
 									, "lightSurface"
 									, c3d_cameraData.position()
 									, surface.worldPosition
-									, surface.viewPosition.xyz()
+									, getXYZ( surface.viewPosition )
 									, surface.clipPosition
 									, surface.normal );
 
@@ -1244,7 +1321,7 @@ namespace castor3d
 										, lightSurface
 										, modelData.isShadowReceiver()
 										, lightSurface.clipPosition().xy()
-										, lightSurface.viewPosition().z()
+										, lightSurface.viewPosition().value().z()
 										, output
 										, diffuse );
 									inoutDiffuse = vec4( diffuse, components.transmittance );
@@ -1263,7 +1340,7 @@ namespace castor3d
 											, lightSurface
 											, modelData.isShadowReceiver()
 											, lightSurface.clipPosition().xy()
-											, lightSurface.viewPosition().z()
+											, lightSurface.viewPosition().value().z()
 											, inoutDiffuse.rgb()
 											, output
 											, directLighting );
@@ -1276,7 +1353,7 @@ namespace castor3d
 											, lightSurface
 											, modelData.isShadowReceiver()
 											, lightSurface.clipPosition().xy()
-											, lightSurface.viewPosition().z()
+											, lightSurface.viewPosition().value().z()
 											, output
 											, directLighting );
 									}
@@ -1288,7 +1365,7 @@ namespace castor3d
 
 									// Indirect Lighting
 									lightSurface.updateL( utils
-										, components.normal
+										, components.getDerivNormal()
 										, components.f0
 										, components );
 									auto indirectLighting = writer.declLocale( "indirectLighting"
@@ -1320,7 +1397,7 @@ namespace castor3d
 									}
 
 									lightSurface.updateN( utils
-										, components.normal
+										, components.getDerivNormal()
 										, components.f0
 										, components );
 									passShaders.computeReflRefr( reflections
@@ -1332,7 +1409,7 @@ namespace castor3d
 										, indirectLighting
 										, vec2( ipixel )
 										, modelData.getEnvMapIndex()
-										, incident
+										, shader::getRaw( incident )
 										, components.hasReflection
 										, components.hasRefraction
 										, components.refractionRatio
@@ -1342,12 +1419,12 @@ namespace castor3d
 										, coatReflected
 										, sheenReflected
 										, output );
-									output.registerOutput( cuT( "Reflections" ), cuT( "Incident" ), sdw::fma( incident, vec3( 0.5_f ), vec3( 0.5_f ) ) );
+									output.registerOutput( cuT( "Reflections" ), cuT( "Incident" ), sdw::fma( shader::getRaw( incident ), vec3( 0.5_f ), vec3( 0.5_f ) ) );
 
 									// Combine
 									outResult = vec4( lightingModel->combine( output
 											, components
-											, incident
+											, shader::getRaw( incident )
 											, directLighting
 											, indirectLighting
 											, occlusion
@@ -1393,7 +1470,7 @@ namespace castor3d
 							{
 								outResult = fog.apply( c3d_sceneData.getBackgroundColour( utils, c3d_cameraData.gamma() )
 									, outResult
-									, baseSurface.worldPosition.xyz()
+									, shader::getRawXYZ( baseSurface.worldPosition )
 									, c3d_cameraData.position()
 									, c3d_sceneData );
 
@@ -1401,7 +1478,7 @@ namespace castor3d
 								{
 									outScattering = fog.apply( c3d_sceneData.getBackgroundColour( utils, c3d_cameraData.gamma() )
 										, outScattering
-										, baseSurface.worldPosition.xyz()
+										, shader::getRawXYZ( baseSurface.worldPosition )
 										, c3d_cameraData.position()
 										, c3d_sceneData );
 								}

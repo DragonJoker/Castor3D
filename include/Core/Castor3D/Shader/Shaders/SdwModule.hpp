@@ -111,11 +111,16 @@ namespace castor3d::shader
 	struct VoxelData;
 
 	struct BlendComponents;
-	struct SurfaceBase;
-	struct RasterizerSurfaceBase;
 
-	struct Surface;
-	template< typename TexcoordT, ast::var::Flag FlagT >
+	template< typename Position3T, typename Position4T, typename NormalT >
+	struct SurfaceBaseT;
+
+	template< typename Position3T, typename Position4T, typename Normal3T, typename Normal4T >
+	struct RasterizerSurfaceBaseT;
+
+	template< typename Position3T, typename Position4T, typename NormalT >
+	struct SurfaceT;
+	template< typename Position3T, typename Position4T, typename Normal3T, typename Normal4T, typename TexcoordT, ast::var::Flag FlagT >
 	struct RasterizerSurfaceT;
 	template< ast::var::Flag FlagT >
 	struct MeshVertexT;
@@ -134,14 +139,26 @@ namespace castor3d::shader
 	template< typename ValueT, sdw::StringLiteralT StructNameT >
 	struct DerivativeValueT;
 
-	using DerivTex = DerivativeValueT< sdw::Vec2, "C3D_DerivTex" >;
+	using DerivFloat = DerivativeValueT< sdw::Float, "C3D_DerivFloat" >;
+	using DerivVec2 = DerivativeValueT< sdw::Vec2, "C3D_DerivVec2" >;
+	using DerivVec3 = DerivativeValueT< sdw::Vec3, "C3D_DerivVec3" >;
+	using DerivVec4 = DerivativeValueT< sdw::Vec4, "C3D_DerivVec4" >;
+	using DerivTex = DerivVec2;
+
+	using SurfaceBase = SurfaceBaseT< sdw::Vec3, sdw::Vec4, sdw::Vec3 >;
+	using Surface = SurfaceT< sdw::Vec3, sdw::Vec4, sdw::Vec3 >;
+	using DerivSurfaceBase = SurfaceBaseT< DerivVec3, DerivVec4, DerivVec3 >;
+	using DerivSurface = SurfaceT< DerivVec3, DerivVec4, DerivVec3 >;
+	using RasterizerSurfaceBase = RasterizerSurfaceBaseT< sdw::Vec3, sdw::Vec4, sdw::Vec3, sdw::Vec4 >;
+	using DerivRasterizerSurfaceBase = RasterizerSurfaceBaseT< DerivVec3, DerivVec4, DerivVec3, DerivVec4 >;
 
 	template< ast::var::Flag FlagT >
-	using FragmentSurfaceT = RasterizerSurfaceT< sdw::Vec3, FlagT >;
-	using RasterizerSurface = RasterizerSurfaceT< sdw::Vec3, ast::var::Flag::eNone >;
-	using DerivFragmentSurface = RasterizerSurfaceT< DerivTex, ast::var::Flag::eNone >;
+	using FragmentSurfaceT = RasterizerSurfaceT< sdw::Vec3, sdw::Vec4, sdw::Vec3, sdw::Vec4, sdw::Vec3, FlagT >;
+	using RasterizerSurface = RasterizerSurfaceT< sdw::Vec3, sdw::Vec4, sdw::Vec3, sdw::Vec4, sdw::Vec3, ast::var::Flag::eNone >;
+	using DerivFragmentSurface = RasterizerSurfaceT< sdw::Vec3, sdw::Vec4, sdw::Vec3, sdw::Vec4, DerivTex, ast::var::Flag::eNone >;
+	using AllDerivFragmentSurface = RasterizerSurfaceT< DerivVec3, DerivVec4, DerivVec3, DerivVec4, DerivTex, ast::var::Flag::eNone >;
 	template< typename TexcoordT >
-	using RasterSurfaceT = RasterizerSurfaceT< TexcoordT, ast::var::Flag::eNone >;
+	using RasterSurfaceT = RasterizerSurfaceT< sdw::Vec3, sdw::Vec4, sdw::Vec3, sdw::Vec4, TexcoordT, ast::var::Flag::eNone >;
 	using MeshVertex = MeshVertexT< sdw::var::Flag::eNone >;
 	using VoxelSurface = VoxelSurfaceT< sdw::var::Flag::eNone >;
 	using OverlaySurface = OverlaySurfaceT< sdw::var::Flag::eNone >;
@@ -235,9 +252,14 @@ namespace castor3d::shader
 		, BackgroundModelID >;
 
 	Writer_Parameter( AABB );
+	Writer_Parameter( AllDerivFragmentSurface );
 	Writer_Parameter( BlendComponents );
 	Writer_Parameter( Cone );
+	Writer_Parameter( DerivFloat );
 	Writer_Parameter( DerivTex );
+	Writer_Parameter( DerivVec2 );
+	Writer_Parameter( DerivVec3 );
+	Writer_Parameter( DerivVec4 );
 	Writer_Parameter( DerivFragmentSurface );
 	Writer_Parameter( DirectionalLight );
 	Writer_Parameter( DirectionalShadowData );
@@ -270,48 +292,6 @@ namespace castor3d::shader
 
 	C3D_API castor::String concatModelNames( castor::String lhs
 		, castor::String rhs );
-
-	template< typename ValueT
-		, sdw::StringLiteralT StructNameT >
-	using DerivativeValueHelperT = sdw::StructInstanceHelperT < StructNameT
-		, sdw::type::MemoryLayout::eC
-		, sdw::StructFieldT< ValueT, "value" >
-		, sdw::StructFieldT< ValueT, "dPdx" >
-		, sdw::StructFieldT< ValueT, "dPdy" > >;
-
-	template< typename ValueT
-		, sdw::StringLiteralT StructNameT >
-	struct DerivativeValueT
-		: public DerivativeValueHelperT< ValueT, StructNameT >
-	{
-		DerivativeValueT( sdw::ShaderWriter & writer
-			, ast::expr::ExprPtr expr
-			, bool enabled )
-			: DerivativeValueHelperT< ValueT, StructNameT >{ writer, castor::move( expr ), enabled }
-		{
-		}
-
-		DerivativeValueT( sdw::Vec2 const & puv
-			, sdw::Vec2 const & pdPdx
-			, sdw::Vec2 const & pdPdy )
-			: DerivativeValueT{ sdw::findWriterMandat( puv, pdPdx, pdPdy )
-				, sdw::makeAggrInit( DerivativeValueHelperT< ValueT, StructNameT >::makeType( puv.getType()->getTypesCache() )
-					, [&puv, &pdPdx, &pdPdy]()
-					{
-						sdw::expr::ExprList result;
-						result.emplace_back( makeExpr( puv ) );
-						result.emplace_back( makeExpr( pdPdx ) );
-						result.emplace_back( makeExpr( pdPdy ) );
-						return result;
-					}() )
-				, true }
-		{
-		}
-
-		auto value()const { return this->getMember< "value" >(); }
-		auto dPdx()const { return this->getMember< "dPdx" >(); }
-		auto dPdy()const { return this->getMember< "dPdy" >(); }
-	};
 
 	struct BufferData
 		: public sdw::StructInstanceHelperT < "C3D_BufferData"

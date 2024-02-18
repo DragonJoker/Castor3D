@@ -1,5 +1,6 @@
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 
+#include "Castor3D/Shader/Shaders/GlslDerivativeValue.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
@@ -54,6 +55,22 @@ namespace castor3d::shader
 		return vec3( sampled[mask]
 			, sampled[mask + 1u]
 			, sampled[mask + 2u] );
+	}
+
+	sdw::Vec2 TextureConfigData::getUv( DerivTex const & uvw )const
+	{
+		return uvw.value();
+	}
+
+	void TextureConfigData::setUv( DerivTex & lhs
+		, DerivTex const & rhs )const
+	{
+		lhs.value() = rhs.value();
+	}
+
+	DerivTex TextureConfigData::toUv( DerivTex const & uvw )const
+	{
+		return uvw;
 	}
 
 	//*********************************************************************************************

@@ -71,7 +71,6 @@ namespace castor3d::shader
 	}
 
 	void PhongLightingModel::doFinish( PassShaders const & passShaders
-		, RasterizerSurfaceBase const & surface
 		, BlendComponents & components )
 	{
 		components.f0 = components.specular;
@@ -84,12 +83,12 @@ namespace castor3d::shader
 		, sdw::Float & isLit
 		, sdw::Vec3 output )
 	{
-		isLit = 1.0_f - step( doGetNdotL( lightSurface, components ), 0.0_f );
+		isLit = 1.0_f - step( doGetNdotL( lightSurface, components ).value(), 0.0_f );
 		auto rawDiffuse = m_writer.declLocale( "rawDiffuse"
 			, radiance * intensity );
 		output = isLit
 			* rawDiffuse
-			* doGetNdotL( lightSurface, components );
+			* doGetNdotL( lightSurface, components ).value();
 		return rawDiffuse;
 	}
 
@@ -103,7 +102,7 @@ namespace castor3d::shader
 		output = isLit
 			* radiance
 			* intensity
-			* pow( doGetNdotH( lightSurface, components )
+			* pow( doGetNdotH( lightSurface, components ).value()
 				, clamp( components.shininess, 1.0_f, 256.0_f ) );
 	}
 
@@ -116,11 +115,11 @@ namespace castor3d::shader
 	{
 		IF( m_writer, components.clearcoatFactor != 0.0_f )
 		{
-			lightSurface.updateN( components.clearcoatNormal );
+			lightSurface.updateN( derivVec3( components.clearcoatNormal ) );
 			output = isLit
 				* radiance
 				* intensity
-				* pow( doGetNdotH( lightSurface, components )
+				* pow( doGetNdotH( lightSurface, components ).value()
 					, clamp( components.shininess, 1.0_f, 256.0_f ) );
 		}
 		FI;

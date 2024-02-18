@@ -7,6 +7,7 @@
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 
 #include <ShaderWriter/Source.hpp>
+#include <ShaderAST/Type/TypeStruct.hpp>
 
 namespace castor3d::shader
 {
@@ -18,7 +19,6 @@ namespace castor3d::shader
 		: sdw::StructInstance{ writer, castor::move( expr ), enabled }
 		, f0{ getMember( "f0", vec3( 0.04_f ) ) }
 		, f90{ getMember( "f90", vec3( 1.0_f ) ) }
-		, normal{ getMember( "normal", vec3( 0.0_f ) ) }
 		, colour{ getMember( "colour", vec3( 0.0_f ) ) }
 		, emissiveColour{ getMember( "emissiveColour", vec3( 0.0_f ) ) }
 		, emissiveFactor{ getMember( "emissiveFactor", 0.0_f ) }
@@ -52,11 +52,27 @@ namespace castor3d::shader
 		, shininess{ computeShininessFromRoughness( roughness ) }
 		, specular{ getMember( "specular", vec3( 0.0_f ) ) }
 	{
+		auto & structType = static_cast< sdw::type::Struct const & >( *sdw::StructInstance::getType() );
+
+		if ( auto index = structType.findMember( "normal" );
+			index != ast::type::Struct::NotFound )
+		{
+			m_derivativeValues = ast::type::isStructType( structType.getMember( index ).type );
+		}
 	}
 
 	BlendComponents::BlendComponents( Materials const & materials
 		, Material const & material
 		, SurfaceBase const & surface )
+		: BlendComponents{ *materials.getWriter()
+			, makeInit( materials, material, surface, nullptr )
+			, true }
+	{
+	}
+
+	BlendComponents::BlendComponents( Materials const & materials
+		, Material const & material
+		, DerivSurfaceBase const & surface )
 		: BlendComponents{ *materials.getWriter()
 			, makeInit( materials, material, surface, nullptr )
 			, true }
@@ -74,6 +90,15 @@ namespace castor3d::shader
 	}
 
 	BlendComponents::BlendComponents( Materials const & materials
+		, Material const & material
+		, DerivSurfaceBase const & surface
+		, sdw::Vec4 const & clrCot )
+		: BlendComponents{ *materials.getWriter()
+			, makeInit( materials, material, surface, &clrCot )
+			, true }
+	{}
+
+	BlendComponents::BlendComponents( Materials const & materials
 		, bool zeroInit )
 		: BlendComponents{ *materials.getWriter()
 			, makeInit( materials, zeroInit )
@@ -82,11 +107,83 @@ namespace castor3d::shader
 	}
 
 	void BlendComponents::finish( PassShaders const & passShaders
-		, SurfaceBase const & surface
+		, DerivSurfaceBase const & surface
 		, Utils & utils
 		, sdw::Vec3 const worldEye )
 	{
 		passShaders.finishComponents( surface, worldEye, utils, *this );
+	}
+
+	void BlendComponents::setNormal( sdw::Vec3 const v )
+	{
+		if ( usesDerivativeValues() )
+		{
+			getMember< shader::DerivVec3 >( "normal" ).value() = v;
+		}
+		else
+		{
+			getMember< sdw::Vec3 >( "normal" ) = v;
+		}
+	}
+
+	void BlendComponents::normalizeNormal()
+	{
+		if ( usesDerivativeValues() )
+		{
+			getMember< shader::DerivVec3 >( "normal" ) = normalize( getMember< shader::DerivVec3 >( "normal" ) );
+		}
+		else
+		{
+			getMember< sdw::Vec3 >( "normal" ) = normalize( getMember< sdw::Vec3 >( "normal" ) );
+		}
+	}
+
+	sdw::Vec3 BlendComponents::getRawNormal()const
+	{
+		return usesDerivativeValues()
+			? getMember< shader::DerivVec3 >( "normal" ).value()
+			: getMember< sdw::Vec3 >( "normal" );
+	}
+
+	sdw::Vec4 BlendComponents::getRawTangent()const
+	{
+		return usesDerivativeValues()
+			? getMember< shader::DerivVec4 >( "tangent" ).value()
+			: getMember< sdw::Vec4 >( "tangent" );
+	}
+
+	sdw::Vec3 BlendComponents::getRawBitangent()const
+	{
+		return usesDerivativeValues()
+			? getMember< shader::DerivVec3 >( "bitangent" ).value()
+			: getMember< sdw::Vec3 >( "bitangent" );
+	}
+
+	shader::DerivVec3 BlendComponents::getDerivNormal()const
+	{
+		return usesDerivativeValues()
+			? getMember< shader::DerivVec3 >( "normal" )
+			: shader::DerivVec3{ normalize( getMember< sdw::Vec3 >( "normal" ) )
+				, dFdx( getMember< sdw::Vec3 >( "normal" ) )
+				, dFdy( getMember< sdw::Vec3 >( "normal" ) ) };
+	}
+
+	shader::DerivVec4 BlendComponents::getDerivTangent()const
+	{
+		return usesDerivativeValues()
+			? getMember< shader::DerivVec4 >( "tangent" )
+			: shader::DerivVec4{ normalize( getMember< sdw::Vec4 >( "tangent" ) )
+				, dFdx( getMember< sdw::Vec4 >( "tangent" ) )
+				, dFdy( getMember< sdw::Vec4 >( "tangent" ) ) };
+	}
+
+	shader::DerivVec3 BlendComponents::getDerivBitangent()const
+	{
+		return usesDerivativeValues()
+			? getMember< shader::DerivVec3 >( "bitangent" )
+			: shader::DerivVec3{ normalize( getMember< sdw::Vec3 >( "bitangent" ) )
+				, dFdx( getMember< sdw::Vec3 >( "bitangent" ) )
+				, dFdy( getMember< sdw::Vec3 >( "bitangent" ) ) };
 	}
 
 	sdw::type::BaseStructPtr BlendComponents::makeType( ast::type::TypesCache & cache

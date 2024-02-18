@@ -21,6 +21,8 @@ namespace castor3d::shader
 
 		C3D_API sdw::RetVec3 computeIncident( sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & wsCamera )const;
+		C3D_API DerivVec3 computeIncident( DerivVec3 const & wsPosition
+			, sdw::Vec3 const & wsCamera )const;
 		C3D_API void computeCombined( BlendComponents & components
 			, LightSurface const & lightSurface
 			, sdw::Vec3 const & position

@@ -6,6 +6,7 @@
 #include "Castor3D/Scene/SceneFileParserData.hpp"
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
+#include "Castor3D/Shader/Shaders/GlslDerivativeValue.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
@@ -31,9 +32,18 @@ namespace castor3d
 
 		if ( !components.hasMember( "normal" ) )
 		{
-			components.declMember( "normal", sdw::type::Kind::eVec3F );
-			components.declMember( "tangent", sdw::type::Kind::eVec4F );
-			components.declMember( "bitangent", sdw::type::Kind::eVec3F );
+			if ( checkFlag( materials.getFilter(), ComponentModeFlag::eDerivTex ) )
+			{
+				components.declMember( "normal", shader::DerivVec3::makeType( components.getTypesCache() ) );
+				components.declMember( "tangent", shader::DerivVec4::makeType( components.getTypesCache() ) );
+				components.declMember( "bitangent", shader::DerivVec3::makeType( components.getTypesCache() ) );
+			}
+			else
+			{
+				components.declMember( "normal", sdw::type::Kind::eVec3F );
+				components.declMember( "tangent", sdw::type::Kind::eVec4F );
+				components.declMember( "bitangent", sdw::type::Kind::eVec3F );
+			}
 		}
 	}
 
@@ -51,15 +61,24 @@ namespace castor3d
 
 		if ( surface )
 		{
-			inits.emplace_back( sdw::makeExpr( surface->getMember< sdw::Vec3 >( "normal", vec3( 0.0_f ) ) ) );
-			inits.emplace_back( sdw::makeExpr( surface->getMember< sdw::Vec4 >( "tangent", vec4( 0.0_f ) ) ) );
-			inits.emplace_back( sdw::makeExpr( surface->getMember< sdw::Vec3 >( "bitangent", vec3( 0.0_f ) ) ) );
+			if ( checkFlag( materials.getFilter(), ComponentModeFlag::eDerivTex ) )
+			{
+				inits.emplace_back( makeExpr( surface->getMember< shader::DerivVec3 >( "normal", shader::derivVec3( 0.0_f ) ) ) );
+				inits.emplace_back( makeExpr( surface->getMember< shader::DerivVec4 >( "tangent", shader::derivVec4( 0.0_f ) ) ) );
+				inits.emplace_back( makeExpr( surface->getMember< shader::DerivVec3 >( "bitangent", shader::derivVec3( 0.0_f ) ) ) );
+			}
+			else
+			{
+				inits.emplace_back( makeExpr( surface->getMember< sdw::Vec3 >( "normal", vec3( 0.0_f ) ) ) );
+				inits.emplace_back( makeExpr( surface->getMember< sdw::Vec4 >( "tangent", vec4( 0.0_f ) ) ) );
+				inits.emplace_back( makeExpr( surface->getMember< sdw::Vec3 >( "bitangent", vec3( 0.0_f ) ) ) );
+			}
 		}
 		else
 		{
-			inits.emplace_back( sdw::makeExpr( vec3( 0.0_f ) ) );
-			inits.emplace_back( sdw::makeExpr( vec4( 0.0_f ) ) );
-			inits.emplace_back( sdw::makeExpr( vec3( 0.0_f ) ) );
+			inits.emplace_back( makeExpr( vec3( 0.0_f ) ) );
+			inits.emplace_back( makeExpr( vec4( 0.0_f ) ) );
+			inits.emplace_back( makeExpr( vec3( 0.0_f ) ) );
 		}
 	}
 
@@ -70,9 +89,19 @@ namespace castor3d
 	{
 		if ( res.hasMember( "normal" ) )
 		{
-			res.getMember< sdw::Vec3 >( "normal" ) += src.getMember< sdw::Vec3 >( "normal" ) * passMultiplier;
-			res.getMember< sdw::Vec4 >( "tangent" ) += src.getMember< sdw::Vec4 >( "tangent" ) * passMultiplier;
-			res.getMember< sdw::Vec3 >( "bitangent" ) += src.getMember< sdw::Vec3 >( "bitangent" ) * passMultiplier;
+			if ( res.usesDerivativeValues() )
+			{
+				using shader::operator*;
+				res.getMember< shader::DerivVec3 >( "normal" ) += src.getMember< shader::DerivVec3 >( "normal" ) * passMultiplier;
+				res.getMember< shader::DerivVec4 >( "tangent" ) += src.getMember< shader::DerivVec4 >( "tangent" ) * passMultiplier;
+				res.getMember< shader::DerivVec3 >( "bitangent" ) += src.getMember< shader::DerivVec3 >( "bitangent" ) * passMultiplier;
+			}
+			else
+			{
+				res.getMember< sdw::Vec3 >( "normal" ) += src.getMember< sdw::Vec3 >( "normal" ) * passMultiplier;
+				res.getMember< sdw::Vec4 >( "tangent" ) += src.getMember< sdw::Vec4 >( "tangent" ) * passMultiplier;
+				res.getMember< sdw::Vec3 >( "bitangent" ) += src.getMember< sdw::Vec3 >( "bitangent" ) * passMultiplier;
+			}
 		}
 	}
 

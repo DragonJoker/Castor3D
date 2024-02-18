@@ -6,6 +6,7 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Shader/Shaders/GlslDerivativeValue.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
 #include <ShaderWriter/Source.hpp>
@@ -17,6 +18,11 @@ namespace castor3d
 	namespace shader
 	{
 		sdw::Vec4 CameraData::projToView( sdw::Vec4 const & psPosition )const
+		{
+			return invProjection() * psPosition;
+		}
+
+		DerivVec4 CameraData::projToView( DerivVec4 const & psPosition )const
 		{
 			return invProjection() * psPosition;
 		}
@@ -46,6 +52,11 @@ namespace castor3d
 			return invCurView() * vsPosition;
 		}
 
+		DerivVec4 CameraData::curViewToWorld( DerivVec4 const & vsPosition )const
+		{
+			return invCurView() * vsPosition;
+		}
+
 		sdw::Vec4 CameraData::prvViewToWorld( sdw::Vec4 const & vsPosition )const
 		{
 			return invPrvView() * vsPosition;
@@ -57,6 +68,11 @@ namespace castor3d
 		}
 
 		sdw::Vec4 CameraData::worldToPrvProj( sdw::Vec4 const & wsPosition )const
+		{
+			return prvViewProj() * wsPosition;
+		}
+
+		DerivVec4 CameraData::worldToPrvProj( DerivVec4 const & wsPosition )const
 		{
 			return prvViewProj() * wsPosition;
 		}
@@ -143,6 +159,13 @@ namespace castor3d
 		void CameraData::jitter( sdw::Vec4 & csPosition )const
 		{
 			csPosition.xy() -= jitter() * csPosition.w();
+		}
+
+		void CameraData::jitter( DerivVec4 & csPosition )const
+		{
+			csPosition.value().xy() -= jitter() * csPosition.value().w();
+			csPosition.dPdx().xy() -= jitter() * csPosition.dPdx().w();
+			csPosition.dPdy().xy() -= jitter() * csPosition.dPdy().w();
 		}
 
 		sdw::Vec3 CameraData::transformCamera( sdw::Mat3 const & transform )const

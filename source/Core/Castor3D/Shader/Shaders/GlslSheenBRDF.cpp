@@ -92,7 +92,7 @@ namespace castor3d::shader
 		}
 
 		return m_computeSheen( pNdotH
-			, lightSurface.NdotV()
+			, lightSurface.NdotV().value()
 			, pNdotL
 			, proughness );
 	}

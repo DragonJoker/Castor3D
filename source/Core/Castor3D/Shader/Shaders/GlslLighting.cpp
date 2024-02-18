@@ -50,8 +50,7 @@ namespace castor3d::shader
 	}
 
 	void LightingModel::finish( PassShaders const & passShaders
-		, RasterizerSurfaceBase const & rasterSurface
-		, SurfaceBase const & surface
+		, DerivSurfaceBase const & surface
 		, Utils & utils
 		, sdw::Vec3 const worldEye
 		, BlendComponents & components )
@@ -61,7 +60,6 @@ namespace castor3d::shader
 			, utils
 			, worldEye );
 		doFinish( passShaders
-			, rasterSurface
 			, components );
 	}
 
@@ -130,7 +128,7 @@ namespace castor3d::shader
 					|| components.hasMember( "hasTransmission" ) ) )
 			: m_writer.declLocale( "fresnelFactor"
 				, m_utils.fresnelMix( incident
-					, components.normal
+					, components.getRawNormal()
 					, components.refractionRatio )
 				, ( components.hasMember( "specularFactor" )
 					|| components.hasMember( "refractionRatio" )
@@ -234,7 +232,7 @@ namespace castor3d::shader
 					auto radiance = m_writer.declLocale( "radiance"
 						, vec3( 0.0_f ) );
 					lightSurface.updateL( m_utils
-						, -light.direction()
+						, derivVec3( -light.direction() )
 						, components.f0
 						, components );
 					doComputeLight( light.base()
@@ -325,7 +323,7 @@ namespace castor3d::shader
 					auto radiance = m_writer.declLocale( "radiance"
 						, vec3( 0.0_f ) );
 					lightSurface.updateL( m_utils
-						, light.position() - lightSurface.worldPosition().xyz()
+						, derivVec3( light.position() ) - getXYZ( lightSurface.worldPosition() )
 						, components.f0
 						, components );
 					doComputeLight( light.base()
@@ -334,7 +332,7 @@ namespace castor3d::shader
 						, radiance
 						, output );
 					auto attenuation = m_writer.declLocale( "attenuation", 1.0_f );
-					light.getAttenuationFactor( lightSurface.lengthL(), attenuation );
+					light.getAttenuationFactor( lightSurface.lengthL().value(), attenuation );
 
 					if ( m_shadowModel.isEnabled() )
 					{
@@ -409,11 +407,11 @@ namespace castor3d::shader
 					, DirectLighting const & parentOutput )
 				{
 					lightSurface.updateL( m_utils
-						, light.position() - lightSurface.worldPosition().xyz()
+						, derivVec3( light.position() ) - getXYZ( lightSurface.worldPosition() )
 						, components.f0
 						, components );
 					auto spotFactor = m_writer.declLocale( "spotFactor"
-						, dot( lightSurface.L(), light.direction() ) );
+						, dot( lightSurface.L().value(), light.direction() ) );
 
 					IF( m_writer, spotFactor > light.outerCutOffCos() )
 					{
@@ -433,7 +431,7 @@ namespace castor3d::shader
 						output.coatingSpecular() = spotFactor * output.coatingSpecular();
 						output.sheen().x() = spotFactor * output.sheen().x();
 						auto attenuation = m_writer.declLocale( "attenuation", 1.0_f );
-						light.getAttenuationFactor( lightSurface.lengthL(), attenuation );
+						light.getAttenuationFactor( lightSurface.lengthL().value(), attenuation );
 
 						if ( m_shadowModel.isEnabled() )
 						{
@@ -509,7 +507,7 @@ namespace castor3d::shader
 					, LightSurface const & lightSurface
 					, sdw::UInt const & receivesShadows )
 				{
-					lightSurface.updateL( -light.direction() );
+					lightSurface.updateL( derivVec3( -light.direction() ) );
 					auto radiance = m_writer.declLocale( "radiance"
 						, vec3( 0.0_f ) );
 					auto diffuse = doComputeLightDiffuse( light.base()
@@ -579,7 +577,7 @@ namespace castor3d::shader
 					, LightSurface const & lightSurface
 					, sdw::UInt const & receivesShadows )
 				{
-					lightSurface.updateL( light.position() - lightSurface.worldPosition().xyz() );
+					lightSurface.updateL( derivVec3( light.position() ) - getXYZ( lightSurface.worldPosition() ) );
 					auto radiance = m_writer.declLocale( "radiance"
 						, vec3( 0.0_f ) );
 					auto diffuse = doComputeLightDiffuse( light.base()
@@ -587,7 +585,7 @@ namespace castor3d::shader
 						, lightSurface
 						, radiance );
 					auto attenuation = m_writer.declLocale( "attenuation", 1.0_f );
-					light.getAttenuationFactor( lightSurface.lengthL(), attenuation );
+					light.getAttenuationFactor( lightSurface.lengthL().value(), attenuation );
 
 					if ( m_shadowModel.isEnabled() )
 					{
@@ -653,9 +651,9 @@ namespace castor3d::shader
 					, LightSurface const & lightSurface
 					, sdw::UInt const & receivesShadows )
 				{
-					lightSurface.updateL( light.position() - lightSurface.worldPosition().xyz() );
+					lightSurface.updateL( derivVec3( light.position() ) - getXYZ( lightSurface.worldPosition() ) );
 					auto spotFactor = m_writer.declLocale( "spotFactor"
-						, dot( lightSurface.L(), light.direction() ) );
+						, dot( lightSurface.L().value(), light.direction() ) );
 					auto diffuse = m_writer.declLocale( "diffuse"
 						, vec3( 0.0_f ) );
 
@@ -670,7 +668,7 @@ namespace castor3d::shader
 						spotFactor = clamp( ( spotFactor - light.outerCutOffCos() ) / light.cutOffsCosDiff(), 0.0_f, 1.0_f );
 						diffuse = spotFactor * diffuse;
 						auto attenuation = m_writer.declLocale( "attenuation", 1.0_f );
-						light.getAttenuationFactor( lightSurface.lengthL(), attenuation );
+						light.getAttenuationFactor( lightSurface.lengthL().value(), attenuation );
 
 						if ( m_shadowModel.isEnabled() )
 						{
@@ -749,7 +747,7 @@ namespace castor3d::shader
 					auto radiance = m_writer.declLocale( "radiance"
 						, vec3( 0.0_f ) );
 					lightSurface.updateL( m_utils
-						, -light.direction()
+						, derivVec3( -light.direction() )
 						, components.f0
 						, components );
 					doComputeLightAllButDiffuse( light.base()
@@ -839,7 +837,7 @@ namespace castor3d::shader
 					auto radiance = m_writer.declLocale( "radiance"
 						, vec3( 0.0_f ) );
 					lightSurface.updateL( m_utils
-						, light.position() - lightSurface.worldPosition().xyz()
+						, derivVec3( light.position() ) - getXYZ( lightSurface.worldPosition() )
 						, components.f0
 						, components );
 					doComputeLightAllButDiffuse( light.base()
@@ -848,7 +846,7 @@ namespace castor3d::shader
 						, radiance
 						, output );
 					auto attenuation = m_writer.declLocale( "attenuation", 1.0_f );
-					light.getAttenuationFactor( lightSurface.lengthL(), attenuation );
+					light.getAttenuationFactor( lightSurface.lengthL().value(), attenuation );
 
 					if ( m_shadowModel.isEnabled() )
 					{
@@ -923,11 +921,11 @@ namespace castor3d::shader
 					, DirectLighting const & parentOutput )
 				{
 					lightSurface.updateL( m_utils
-						, light.position() - lightSurface.worldPosition().xyz()
+						, derivVec3( light.position() ) - getXYZ( lightSurface.worldPosition() )
 						, components.f0
 						, components );
 					auto spotFactor = m_writer.declLocale( "spotFactor"
-						, dot( lightSurface.L(), light.direction() ) );
+						, dot( lightSurface.L().value(), light.direction() ) );
 
 					IF( m_writer, spotFactor > light.outerCutOffCos() )
 					{
@@ -946,7 +944,7 @@ namespace castor3d::shader
 						output.coatingSpecular() = spotFactor * output.coatingSpecular();
 						output.sheen().x() = spotFactor * output.sheen().x();
 						auto attenuation = m_writer.declLocale( "attenuation", 1.0_f );
-						light.getAttenuationFactor( lightSurface.lengthL(), attenuation );
+						light.getAttenuationFactor( lightSurface.lengthL().value(), attenuation );
 
 						if ( m_shadowModel.isEnabled() )
 						{
@@ -1043,7 +1041,7 @@ namespace castor3d::shader
 		{
 			auto cascadeFactors = m_writer.declLocale( "cascadeFactors"
 				, m_lights.getCascadeFactors( shadows
-					, lightSurface.viewPosition()
+					, lightSurface.viewPosition().value()
 					, m_shadowModel.getMaxCascadeCount() ) );
 			*m_directionalCascadeIndex = m_writer.cast< sdw::UInt >( cascadeFactors.x() );
 			*m_directionalCascadeCount = shadows.cascadeCount();
@@ -1149,7 +1147,7 @@ namespace castor3d::shader
 				, m_shadowModel.computePoint( baseShadows
 					, shadowMapIndex
 					, lightSurface
-					, 1.0_f - ( length( -lightSurface.vertexToLight() ) / lightRange ) ) );
+					, 1.0_f - ( lightSurface.lengthL().value() / lightRange ) ) );
 
 			if ( withDiffuse )
 			{
@@ -1185,7 +1183,7 @@ namespace castor3d::shader
 					, shadowMapIndex
 					, lightSurface
 					, shadows.transform()
-					, length( -lightSurface.vertexToLight() ) / lightRange ) );
+					, lightSurface.lengthL().value() / lightRange ) );
 
 			if ( withDiffuse )
 			{
@@ -1257,7 +1255,7 @@ namespace castor3d::shader
 				, m_shadowModel.computePoint( baseShadows
 					, shadowMapIndex
 					, lightSurface
-					, 1.0_f - ( length( -lightSurface.vertexToLight() ) / lightRange ) ) );
+					, 1.0_f - ( lightSurface.lengthL().value() / lightRange ) ) );
 			output *= shadowFactor;
 		}
 		FI
@@ -1284,7 +1282,7 @@ namespace castor3d::shader
 					, shadowMapIndex
 					, lightSurface
 					, shadows.transform()
-					, length( -lightSurface.vertexToLight() ) / lightRange ) );
+					, lightSurface.lengthL().value() / lightRange ) );
 			output *= shadowFactor;
 		}
 		FI
@@ -1365,13 +1363,13 @@ namespace castor3d::shader
 	{
 	}
 
-	sdw::Float LightingModel::doGetNdotL( LightSurface const & lightSurface
+	DerivFloat LightingModel::doGetNdotL( LightSurface const & lightSurface
 		, BlendComponents const & components )
 	{
 		return lightSurface.NdotL();
 	}
 
-	sdw::Float LightingModel::doGetNdotH( LightSurface const & lightSurface
+	DerivFloat LightingModel::doGetNdotH( LightSurface const & lightSurface
 		, BlendComponents const & components )
 	{
 		return lightSurface.NdotH();
@@ -1383,7 +1381,7 @@ namespace castor3d::shader
 		, sdw::Vec3 & radiance
 		, DirectLighting & output )
 	{
-		radiance = doComputeRadiance( light, lightSurface.L() );
+		radiance = doComputeRadiance( light, lightSurface.L().value() );
 		auto isLit = m_writer.declLocale( "isLit", 0.0_f );
 		doInitLightSpecifics( lightSurface, components );
 		auto rawDiffuse = doComputeDiffuseTerm( radiance
@@ -1420,7 +1418,7 @@ namespace castor3d::shader
 	{
 		auto isLit = m_writer.declLocale( "isLit", 0.0_f );
 		auto result = m_writer.declLocale( "result", vec3( 0.0_f ) );
-		radiance = doComputeRadiance( light, lightSurface.L() );
+		radiance = doComputeRadiance( light, lightSurface.L().value() );
 		doInitLightSpecifics( lightSurface, components );
 		doComputeDiffuseTerm( radiance
 			, light.intensity().x()
@@ -1437,7 +1435,7 @@ namespace castor3d::shader
 		, sdw::Vec3 & radiance
 		, DirectLighting & output )
 	{
-		radiance = doComputeRadiance( light, lightSurface.L() );
+		radiance = doComputeRadiance( light, lightSurface.L().value() );
 		auto isLit = m_writer.declLocale( "isLit", 0.0_f );
 		doInitLightSpecifics( lightSurface, components );
 		doComputeSpecularTerm( radiance

@@ -519,9 +519,9 @@ namespace castor3d::shader
 		, sdw::UInt const & pmaxCascade )
 	{
 		return computeDirectional( pshadows
-			, plightSurface.vertexToLight()
-			, plightSurface.N()
-			, plightSurface.worldPosition().xyz()
+			, plightSurface.vertexToLight().value()
+			, plightSurface.N().value()
+			, plightSurface.worldPosition().value().xyz()
 			, plightMatrix
 			, pcascadeIndex
 			, pmaxCascade );
@@ -618,9 +618,9 @@ namespace castor3d::shader
 		return m_computeSpot( pshadows
 			, pshadowMapIndex
 			, pdepth
-			, plightSurface.vertexToLight()
-			, plightSurface.N()
-			, plightSurface.worldPosition().xyz()
+			, plightSurface.vertexToLight().value()
+			, plightSurface.N().value()
+			, plightSurface.worldPosition().value().xyz()
 			, plightMatrix );
 	}
 
@@ -711,9 +711,9 @@ namespace castor3d::shader
 		return m_computePoint( pshadows
 			, pshadowMapIndex
 			, pdepth
-			, plightSurface.vertexToLight()
-			, plightSurface.N()
-			, plightSurface.worldPosition().xyz() );
+			, plightSurface.vertexToLight().value()
+			, plightSurface.N().value()
+			, plightSurface.worldPosition().value().xyz() );
 	}
 
 	sdw::Float Shadow::computeVolumetric( shader::ShadowData const & shadows
@@ -726,7 +726,7 @@ namespace castor3d::shader
 
 		// Prepare ray
 		auto rayVector = m_writer.declLocale( "rayVector"
-			, lightSurface.worldPosition().xyz() - lightSurface.eyePosition() );
+			, lightSurface.worldPosition().value().xyz() - lightSurface.eyePosition() );
 		auto rayLength = m_writer.declLocale( "rayLength"
 			, length( rayVector ) );
 		auto rayDirection = m_writer.declLocale( "rayDirection"
@@ -745,7 +745,7 @@ namespace castor3d::shader
 
 		// Compute scattering value
 		auto RdotL = m_writer.declLocale( "RdotL"
-			, dot( rayDirection, -lightSurface.L() ) );
+			, dot( rayDirection, -lightSurface.L().value() ) );
 		auto sqVolumetricScattering = m_writer.declLocale( "sqVolumetricScattering"
 			, shadows.volumetricScattering() * shadows.volumetricScattering() );
 		auto dblVolumetricScattering = m_writer.declLocale( "dblVolumetricScattering"
@@ -776,9 +776,9 @@ namespace castor3d::shader
 
 		// Prepare ray
 		auto rayLength = m_writer.declLocale( "rayLength"
-			, lightSurface.lengthV() );
+			, lightSurface.lengthV().value() );
 		auto rayDirection = m_writer.declLocale( "rayDirection"
-			, -lightSurface.V() );
+			, -lightSurface.V().value() );
 		auto stepLength = m_writer.declLocale( "stepLength"
 			, rayLength / m_writer.cast< sdw::Float >( shadows.volumetricSteps() ) );
 		auto screenUV = m_writer.declLocale( "screenUV"
@@ -873,8 +873,8 @@ namespace castor3d::shader
 		}
 
 		return m_computeVolumetric( pshadows
-			, plightSurface.L()
-			, plightSurface.N()
+			, plightSurface.L().value()
+			, plightSurface.N().value()
 			, pray
 			, pstepLength
 			, plightMatrix

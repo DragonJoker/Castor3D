@@ -4,6 +4,7 @@
 #include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
 #include "Castor3D/Material/Pass/Component/PassMapComponent.hpp"
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
+#include "Castor3D/Shader/Shaders/GlslDerivativeValue.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
@@ -235,7 +236,7 @@ namespace castor3d::shader
 		updateComponents( flags.textures, maps, material, components, flags.isFrontCulled() );
 	}
 
-	void PassShaders::finishComponents( SurfaceBase const & surface
+	void PassShaders::finishComponents( DerivSurfaceBase const & surface
 		, sdw::Vec3 const worldEye
 		, Utils & utils
 		, BlendComponents & components )const

@@ -201,7 +201,7 @@ namespace castor3d
 					, writer.cast< sdw::Float >( in.nodeId )
 					, writer.cast< sdw::Float >( material.lightingModel ) );
 				out.velocity = in.getVelocity();
-				out.nmlOcc = vec4( components.normal, components.occlusion );
+				out.nmlOcc = vec4( components.getRawNormal(), components.occlusion );
 			} );
 	}
 }

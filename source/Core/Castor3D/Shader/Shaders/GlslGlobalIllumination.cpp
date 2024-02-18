@@ -97,7 +97,7 @@ namespace castor3d
 			indirectLighting.diffuseColour() = ( hasDiffuseGI
 				? cookTorrance.computeDiffuse( normalize( indirectLighting.diffuseColour() )
 					, length( indirectLighting.diffuseColour() )
-					, lightSurface.difF() )
+					, lightSurface.difF().value() )
 				: vec3( 0.0_f ) );
 			debugOutput.registerOutput( cuT( "Indirect" ), cuT( "Diffuse" ), indirectLighting.diffuseColour() );
 		}
@@ -202,8 +202,8 @@ namespace castor3d
 					, indirectLighting.diffuseBlend()
 					, voxelData );
 				auto envBRDF = m_writer.declLocale( "envBRDF"
-					, brdfMap.lod( vec2( lightSurface.NdotV(), roughness ), 0.0_f ) );
-				indirectLighting.specular() *= sdw::fma( m_utils.conductorFresnel( lightSurface.NdotV(), indirectLighting.specular() )
+					, brdfMap.lod( vec2( lightSurface.NdotV().value(), roughness ), 0.0_f ) );
+				indirectLighting.specular() *= sdw::fma( m_utils.conductorFresnel( lightSurface.NdotV().value(), indirectLighting.specular() )
 					, vec3( envBRDF.x() )
 					, vec3( envBRDF.y() ) );
 			}
@@ -286,8 +286,8 @@ namespace castor3d
 			, VoxelData const & voxelData )
 		{
 			return traceConeRadiance( voxels
-				, lightSurface.N()
-				, lightSurface.worldPosition().xyz()
+				, lightSurface.N().value()
+				, lightSurface.worldPosition().value().xyz()
 				, voxelData );
 		}
 
@@ -462,7 +462,7 @@ namespace castor3d
 			FI
 
 			auto vxlPosition = m_writer.declLocale( "vxlPosition"
-				, clamp( abs( voxelData.worldToClip( lightSurface.worldPosition().xyz() ) ), vec3( -1.0_f ), vec3( 1.0_f ) ) );
+				, clamp( abs( voxelData.worldToClip( lightSurface.worldPosition().value().xyz() ) ), vec3( -1.0_f ), vec3( 1.0_f ) ) );
 			auto vxlBlend = m_writer.declLocale( "vxlBlend"
 				, 1.0_f - pow( max( vxlPosition.x(), max( vxlPosition.y(), vxlPosition.z() ) ), 4.0_f ) );
 			return vec4( mix( vec3( 0.0_f )
@@ -506,8 +506,8 @@ namespace castor3d
 			, LpvGridData lpvGridData )
 		{
 			CU_Require( m_computeLPVRadiance );
-			return m_computeLPVRadiance( lightSurface.N()
-				, lightSurface.worldPosition().xyz()
+			return m_computeLPVRadiance( lightSurface.N().value()
+				, lightSurface.worldPosition().value().xyz()
 				, lpvGridData );
 		}
 
@@ -515,8 +515,8 @@ namespace castor3d
 			, LayeredLpvGridData llpvGridData )
 		{
 			CU_Require( m_computeLLPVRadiance );
-			return m_computeLLPVRadiance( lightSurface.N()
-				, lightSurface.worldPosition().xyz()
+			return m_computeLLPVRadiance( lightSurface.N().value()
+				, lightSurface.worldPosition().value().xyz()
 				, llpvGridData );
 		}
 
@@ -638,9 +638,9 @@ namespace castor3d
 			}
 
 			return m_traceConeReflection( pvoxels
-				, plightSurface.N()
-				, plightSurface.worldPosition().xyz()
-				, plightSurface.V()
+				, plightSurface.N().value()
+				, plightSurface.worldPosition().value().xyz()
+				, plightSurface.V().value()
 				, proughness
 				, pvoxelData );
 		}
@@ -710,9 +710,9 @@ namespace castor3d
 			}
 
 			return m_traceConeOcclusion( pvoxels
-				, plightSurface.N()
-				, plightSurface.worldPosition().xyz()
-				, plightSurface.L()
+				, plightSurface.N().value()
+				, plightSurface.worldPosition().value().xyz()
+				, plightSurface.L().value()
 				, pvoxelData );
 		}
 	}

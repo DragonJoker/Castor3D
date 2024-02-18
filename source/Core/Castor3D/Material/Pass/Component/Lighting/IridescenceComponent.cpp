@@ -266,7 +266,7 @@ namespace castor3d
 			|| checkFlag( filter, ComponentModeFlag::eSpecularLighting );
 	}
 
-	void IridescenceComponent::Plugin::finishComponent( shader::SurfaceBase const & surface
+	void IridescenceComponent::Plugin::finishComponent( shader::DerivSurfaceBase const & surface
 		, sdw::Vec3 const worldEye
 		, shader::Utils & utils
 		, shader::BlendComponents & components )
@@ -286,13 +286,10 @@ namespace castor3d
 
 		IF( writer, components.iridescenceFactor != 0.0_f )
 		{
-			auto incident = writer.declLocale( "incident"
-				, normalize( surface.worldPosition.xyz() - worldEye ) );
-			sdw::Vec3 normal = components.hasMember( "normal" )
-				? components.normal
-				: surface.normal;
+			auto incident = writer.declLocale( "c3d_iridescenceIncident"
+				, normalize( surface.worldPosition.value().xyz() - worldEye ) );
 			auto NdotV = writer.declLocale( "NdotV"
-				, dot( normal, -incident ) );
+				, dot( components.getRawNormal(), -incident ) );
 			components.iridescenceFresnel = utils.evalIridescence( 1.0_f
 				, components.iridescenceIor
 				, NdotV

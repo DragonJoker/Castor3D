@@ -4,6 +4,7 @@
 #include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
 #include "Castor3D/Scene/SceneFileParserData.hpp"
+#include "Castor3D/Shader/Shaders/GlslDerivativeValue.hpp"
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 

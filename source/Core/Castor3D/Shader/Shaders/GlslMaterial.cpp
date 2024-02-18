@@ -5,6 +5,7 @@
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslDebugOutput.hpp"
+#include "Castor3D/Shader/Shaders/GlslDerivativeValue.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslPassShaders.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
@@ -79,7 +80,7 @@ namespace castor3d::shader
 				ROF
 
 				output = result;
-				output.normal = normalize( result.normal );
+				output.normalizeNormal();
 			}
 			else
 			{

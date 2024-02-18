@@ -42,6 +42,7 @@ namespace castor3d::shader
 		C3D_API sdw::Mat3 getNormalMtx( PipelineFlags const & flags
 			, sdw::Mat4 const & curModelMatrix )const;
 		C3D_API sdw::Vec4 worldToModel( sdw::Vec4 const & pos )const;
+		C3D_API DerivVec4 worldToModel( DerivVec4 const & pos )const;
 		C3D_API sdw::Vec4 modelToWorld( sdw::Vec4 const & pos )const;
 		C3D_API sdw::Vec4 modelToCurWorld( sdw::Vec4 const & pos )const;
 		C3D_API sdw::Vec4 modelToPrvWorld( sdw::Vec4 const & pos )const;

@@ -575,10 +575,10 @@ namespace castor3d
 							, utils
 							, "lightSurface"
 							, c3d_cameraData.position()
-							, in.worldPosition
-							, in.worldPosition.xyz()
+							, { in.worldPosition, dFdx( in.worldPosition ), dFdy( in.worldPosition ) }
+							, { in.worldPosition.xyz(), dFdx( in.worldPosition.xyz() ), dFdy( in.worldPosition.xyz() ) }
 							, in.fragCoord.xyz()
-							, normalize( components.normal )
+							, normalize( components.getDerivNormal() )
 							, components.f0
 							, components
 							, true, true, false );
@@ -597,7 +597,7 @@ namespace castor3d
 					auto encodedColor = writer.declLocale( "encodedColor"
 						, utils.encodeColor( vec4( color.xyz(), components.opacity ) ) );
 					auto encodedNormal = writer.declLocale( "encodedNormal"
-						, utils.encodeNormal( components.normal ) );
+						, utils.encodeNormal( components.getRawNormal() ) );
 					auto writecoord = writer.declLocale( "writecoord"
 						, uvec3( floor( uvw * c3d_voxelData.clipToGrid ) ) );
 					auto id = writer.declLocale( "id"

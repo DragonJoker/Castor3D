@@ -476,9 +476,9 @@ namespace water
 
 		auto & writer{ *components.getWriter() };
 		auto tbn = writer.declLocale( "waterTBN"
-			, castor3d::shader::Utils::getTBN( components.normal
-				, components.getMember< sdw::Vec4 >( "tangent" ).xyz()
-				, components.getMember< sdw::Vec3 >( "bitangent" ) ) );
+			, castor3d::shader::Utils::getTBN( components.getRawNormal()
+				, components.getRawTangent().xyz()
+				, components.getRawBitangent() ) );
 		auto finalNormal = writer.declLocale( "finalNormal"
 			, vec3( 0.0_f ) );
 
@@ -502,7 +502,7 @@ namespace water
 				finalNormal = -finalNormal;
 			}
 
-			components.normal = normalize( finalNormal );
+			components.setNormal( normalize( finalNormal ) );
 		}
 
 		if ( components.hasMember( "transmission" ) )

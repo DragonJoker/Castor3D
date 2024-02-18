@@ -49,7 +49,7 @@ namespace castor3d
 			auto debugOutputBlock = debugOutput.pushBlock( cuT( "Reflections" ) );
 			reflections.computeCombined( components
 				, lightSurface
-				, lightSurface.worldPosition().xyz()
+				, lightSurface.worldPosition().value().xyz()
 				, backgroundModel
 				, mippedScene
 				, camera

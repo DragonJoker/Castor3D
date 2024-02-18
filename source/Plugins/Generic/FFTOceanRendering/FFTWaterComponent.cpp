@@ -186,7 +186,7 @@ namespace ocean_fft
 				finalNormal = -finalNormal;
 			}
 
-			components.normal = normalize( finalNormal );
+			components.setNormal( normalize( finalNormal ) );
 		
 			if ( components.hasMember( "waterColourMod" ) )
 			{

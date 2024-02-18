@@ -32,14 +32,14 @@ namespace toon::shader
 	protected:
 		void initLightSpecifics( c3d::LightSurface const & lightSurface
 			, c3d::BlendComponents const & components );
-		sdw::Float getNdotL( c3d::LightSurface const & lightSurface
+		c3d::DerivFloat getNdotL( c3d::LightSurface const & lightSurface
 			, c3d::BlendComponents const & components );
-		sdw::Float getNdotH( c3d::LightSurface const & lightSurface
+		c3d::DerivFloat getNdotH( c3d::LightSurface const & lightSurface
 			, c3d::BlendComponents const & components );
 
 	private:
-		castor::RawUniquePtr< sdw::Float > m_NdotL;
-		castor::RawUniquePtr< sdw::Float > m_NdotH;
+		castor::RawUniquePtr< c3d::DerivFloat > m_NdotL;
+		castor::RawUniquePtr< c3d::DerivFloat > m_NdotH;
 	};
 
 	class ToonPhongLightingModel
@@ -69,9 +69,9 @@ namespace toon::shader
 	protected:
 		void doInitLightSpecifics( c3d::LightSurface const & lightSurface
 			, c3d::BlendComponents const & components )override;
-		sdw::Float doGetNdotL( c3d::LightSurface const & lightSurface
+		c3d::DerivFloat doGetNdotL( c3d::LightSurface const & lightSurface
 			, c3d::BlendComponents const & components )override;
-		sdw::Float doGetNdotH( c3d::LightSurface const & lightSurface
+		c3d::DerivFloat doGetNdotH( c3d::LightSurface const & lightSurface
 			, c3d::BlendComponents const & components )override;
 	};
 
@@ -102,9 +102,9 @@ namespace toon::shader
 	protected:
 		void doInitLightSpecifics( c3d::LightSurface const & lightSurface
 			, c3d::BlendComponents const & components )override;
-		sdw::Float doGetNdotL( c3d::LightSurface const & lightSurface
+		c3d::DerivFloat doGetNdotL( c3d::LightSurface const & lightSurface
 			, c3d::BlendComponents const & components )override;
-		sdw::Float doGetNdotH( c3d::LightSurface const & lightSurface
+		c3d::DerivFloat doGetNdotH( c3d::LightSurface const & lightSurface
 			, c3d::BlendComponents const & components )override;
 	};
  }
