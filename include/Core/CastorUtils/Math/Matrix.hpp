@@ -58,10 +58,14 @@ namespace castor
 		explicit Matrix( Array< Type, Columns * Rows > const & rhs );
 		template< typename Type >
 		explicit Matrix( Matrix< Type, Columns, Rows > const & matrix );
-		template< typename ... Types >
-		explicit Matrix( Types && ... inits ) requires isRightSize< Types... >;
 		explicit Matrix( std::initializer_list< T > rhs );
 		~Matrix()noexcept = default;
+
+		template< typename ... Types >
+		explicit Matrix( Types && ... inits ) requires isRightSize< Types... >
+			: Matrix{ Array< T, Columns * Rows >{ std::forward< Types >( inits )... } }
+		{
+		}
 		/**@}*/
 		/**
 		 *\~english

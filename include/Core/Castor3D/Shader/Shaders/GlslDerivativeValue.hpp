@@ -48,9 +48,9 @@ namespace castor3d::shader
 		{
 		}
 
-		auto value()const { return this->getMember< "value" >(); }
-		auto dPdx()const { return this->getMember< "dPdx" >(); }
-		auto dPdy()const { return this->getMember< "dPdy" >(); }
+		auto value()const { return this->template getMember< "value" >(); }
+		auto dPdx()const { return this->template getMember< "dPdx" >(); }
+		auto dPdy()const { return this->template getMember< "dPdy" >(); }
 
 		DerivativeValueT operator-()const;
 		DerivativeValueT & operator+=( DerivativeValueT const & rhs );

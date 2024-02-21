@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___GLSL_TextureConfiguration_H___
 
 #include "GlslBuffer.hpp"
+#include "GlslDerivativeValue.hpp"
 #include "GlslTextureTransform.hpp"
 
 #include <ShaderWriter/MatTypes/Mat4.hpp>

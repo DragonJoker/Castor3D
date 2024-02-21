@@ -75,10 +75,10 @@ namespace castor3d::shader
 		, ast::expr::ExprPtr expr
 		, bool enabled )
 		: StructInstance{ writer, castor::move( expr ), enabled }
-		, clipPosition{ this->getMember< sdw::Vec3 >( "clipPosition", true ) }
-		, viewPosition{ this->getMember< Position4T >( "viewPosition", true ) }
-		, worldPosition{ this->getMember< Position4T >( "worldPosition", true ) }
-		, normal{ this->getMember< NormalT >( "normal", true ) }
+		, clipPosition{ this->template getMember< sdw::Vec3 >( "clipPosition", true ) }
+		, viewPosition{ this->template getMember< Position4T >( "viewPosition", true ) }
+		, worldPosition{ this->template getMember< Position4T >( "worldPosition", true ) }
+		, normal{ this->template getMember< NormalT >( "normal", true ) }
 	{
 	}
 
@@ -179,7 +179,7 @@ namespace castor3d::shader
 		, ast::expr::ExprPtr expr
 		, bool enabled )
 		: SurfaceBaseT< Position3T, Position4T, NormalT >{ writer, castor::move( expr ), enabled }
-		, texCoord{ this->getMember< sdw::Vec3 >( "texture0" ) }
+		, texCoord{ this->template getMember< sdw::Vec3 >( "texture0" ) }
 	{
 	}
 
@@ -320,17 +320,17 @@ namespace castor3d::shader
 		, sdw::expr::ExprPtr expr
 		, bool enabled )
 		: SurfaceBaseT< Position3T, Position4T, Normal3T >{ writer, castor::move( expr ), enabled }
-		, curPosition{ this->getMember< Position4T >( "curPosition", true ) }
-		, prvPosition{ this->getMember< Position4T >( "prvPosition", true ) }
-		, tangentSpaceFragPosition{ this->getMember< Position3T >( "tangentSpaceFragPosition", true ) }
-		, tangentSpaceViewPosition{ this->getMember< sdw::Vec3 >( "tangentSpaceViewPosition", true ) }
-		, tangent{ this->getMember< Normal4T >( "tangent", true ) }
-		, bitangent{ this->getMember< Normal3T >( "bitangent", true ) }
-		, colour{ this->getMember< sdw::Vec3 >( "colour", true ) }
-		, passMultipliers{ this->getMemberArray< sdw::Vec4 >( "passMultipliers", true ) }
-		, nodeId{ this->getMember< sdw::UInt >( "nodeId", true ) }
-		, vertexId{ this->getMember< sdw::UInt >( "vertexId", true ) }
-		, meshletId{ this->getMember< sdw::UInt >( "meshletId", true ) }
+		, curPosition{ this->template getMember< Position4T >( "curPosition", true ) }
+		, prvPosition{ this->template getMember< Position4T >( "prvPosition", true ) }
+		, tangentSpaceFragPosition{ this->template getMember< Position3T >( "tangentSpaceFragPosition", true ) }
+		, tangentSpaceViewPosition{ this->template getMember< sdw::Vec3 >( "tangentSpaceViewPosition", true ) }
+		, tangent{ this->template getMember< Normal4T >( "tangent", true ) }
+		, bitangent{ this->template getMember< Normal3T >( "bitangent", true ) }
+		, colour{ this->template getMember< sdw::Vec3 >( "colour", true ) }
+		, passMultipliers{ this->template getMemberArray< sdw::Vec4 >( "passMultipliers", true ) }
+		, nodeId{ this->template getMember< sdw::UInt >( "nodeId", true ) }
+		, vertexId{ this->template getMember< sdw::UInt >( "vertexId", true ) }
+		, meshletId{ this->template getMember< sdw::UInt >( "meshletId", true ) }
 	{
 	}
 
@@ -653,10 +653,10 @@ namespace castor3d::shader
 		, sdw::expr::ExprPtr expr
 		, bool enabled )
 		: RasterizerSurfaceBaseT< Position3T, Position4T, Normal3T, Normal4T >{ writer, castor::move( expr ), enabled }
-		, texture0{ this->getMember< TexcoordT >( "texture0", true ) }
-		, texture1{ this->getMember< TexcoordT >( "texture1", true ) }
-		, texture2{ this->getMember< TexcoordT >( "texture2", true ) }
-		, texture3{ this->getMember< TexcoordT >( "texture3", true ) }
+		, texture0{ this->template getMember< TexcoordT >( "texture0", true ) }
+		, texture1{ this->template getMember< TexcoordT >( "texture1", true ) }
+		, texture2{ this->template getMember< TexcoordT >( "texture2", true ) }
+		, texture3{ this->template getMember< TexcoordT >( "texture3", true ) }
 	{
 	}
 

@@ -82,13 +82,6 @@ namespace castor
 	}
 
 	template< typename T, uint32_t Columns, uint32_t Rows >
-	template< typename ... Types >
-	Matrix< T, Columns, Rows >::Matrix( Types && ... inits ) requires isRightSize< Types... >
-		: Matrix{ Array< T, Columns * Rows >{ std::forward< Types >( inits )... } }
-	{
-	}
-
-	template< typename T, uint32_t Columns, uint32_t Rows >
 	Matrix< T, Columns, Rows >::Matrix( std::initializer_list< T > rhs )
 	{
 		auto it = rhs.begin();
