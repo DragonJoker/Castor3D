@@ -194,7 +194,7 @@ namespace castor3d
 		}
 
 		bool allowCompression = !checkFlag( config.textureSpace, TextureSpace::eTangentSpace );
-		return TextureSourceInfo{ image->getPath().getFileName( true )
+		return TextureSourceInfo{ image->getName()
 			, config
 			, image->getPath().getPath()
 			, image->getPath().getFileName( true )
