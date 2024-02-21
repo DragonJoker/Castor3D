@@ -281,7 +281,7 @@ namespace castor3d::shader
 			, Normal3T normal
 			, TexcoordT texCoord );
 		template< sdw::var::Flag FlagU >
-		RasterizerSurfaceT( RasterizerSurfaceT< Position3T, Position4T, Normal3T, Normal4T, TexcoordT, FlagU > const & rhs );
+		explicit RasterizerSurfaceT( RasterizerSurfaceT< Position3T, Position4T, Normal3T, Normal4T, TexcoordT, FlagU > const & rhs );
 
 		SDW_DeclStructInstance( , RasterizerSurfaceT );
 
