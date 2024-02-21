@@ -1452,7 +1452,7 @@ namespace castor3d
 
 				for ( auto const & [buffer, nodes] : pipelinesNodes.nodes )
 				{
-					if ( auto firstVisibleNode = queuerndnd::hasVisibleNode( nodes ) )
+					if ( queuerndnd::hasVisibleNode( nodes ) )
 					{
 						auto & pipelineNodes = getPipelineNodes( pipeline.pipeline->getFlagsHash()
 							, *buffer
@@ -2078,7 +2078,6 @@ namespace castor3d
 	{
 		C3D_DebugTime( getOwner()->getOwner()->getTypeName() + " - Billboards" );
 		uint32_t result{};
-		uint32_t idxIndex{};
 		uint32_t nidxIndex{};
 
 		for ( auto const & [_, pipelinesNodes] : m_billboardNodes )
@@ -2087,7 +2086,7 @@ namespace castor3d
 
 			for ( auto const & [buffer, nodes] : pipelinesNodes.nodes )
 			{
-				if ( auto firstVisibleNode = queuerndnd::hasVisibleNode( nodes ) )
+				if ( queuerndnd::hasVisibleNode( nodes ) )
 				{
 					auto & pipelineNodes = getPipelineNodes( pipeline.pipeline->getFlagsHash()
 						, *buffer

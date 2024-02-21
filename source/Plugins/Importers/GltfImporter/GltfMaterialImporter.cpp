@@ -270,6 +270,10 @@ namespace c3d_gltf
 				mimeType = std::get< 5 >( impDataSource ).mimeType;
 				data = getData( std::get< 5 >( impDataSource ), offset, size );
 				break;
+			case 6:
+				mimeType = std::get< 6 >( impDataSource ).mimeType;
+				data = getData( std::get< 6 >( impDataSource ), offset, size );
+				break;
 			default:
 				break;
 			}

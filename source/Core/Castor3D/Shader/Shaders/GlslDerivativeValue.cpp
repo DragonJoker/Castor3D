@@ -9,7 +9,7 @@ namespace castor3d::shader
 			, DerivT const & pa )
 		{
 			auto & writer = sdw::findWriterMandat( pa );
-			auto function = writer.implementFunction< ReturnT >( name
+			auto function = writer.template implementFunction< ReturnT >( name
 				, [&writer, func]( DerivT const & a )
 				{
 					auto a00 = writer.declLocale( "a00", a.value() );
@@ -29,7 +29,7 @@ namespace castor3d::shader
 			, DerivT const & pa )
 		{
 			auto & writer = sdw::findWriterMandat( pa );
-			auto function = writer.implementFunction< ReturnT >( name
+			auto function = writer.template implementFunction< ReturnT >( name
 				, [&writer, func]( DerivT const & a )
 				{
 					auto a00 = writer.declLocale( "a00", a.value() );
@@ -49,7 +49,7 @@ namespace castor3d::shader
 			, DerivT const & pa, DerivT const & pb )
 		{
 			auto & writer = sdw::findWriterMandat( pa, pb );
-			auto function = writer.implementFunction< ReturnT >( name
+			auto function = writer.template implementFunction< ReturnT >( name
 				, [&writer, func]( DerivT const & a
 					, DerivT const & b )
 				{
@@ -74,7 +74,7 @@ namespace castor3d::shader
 			, DerivT const & pa, DerivT const & pb, DerivT const & pc )
 		{
 			auto & writer = sdw::findWriterMandat( pa, pb, pc );
-			auto function = writer.implementFunction< ReturnT >( name
+			auto function = writer.template implementFunction< ReturnT >( name
 				, [&writer, func]( DerivT const & a
 					, DerivT const & b
 					, DerivT const & c )
@@ -104,7 +104,7 @@ namespace castor3d::shader
 			, DerivT const & pa, DerivT const & pb, sdw::Float const & pc )
 		{
 			auto & writer = sdw::findWriterMandat( pa, pb, pc );
-			auto function = writer.implementFunction< ReturnT >( name
+			auto function = writer.template implementFunction< ReturnT >( name
 				, [&writer, func]( DerivT const & a
 					, DerivT const & b
 					, sdw::Float const & c )
@@ -131,7 +131,7 @@ namespace castor3d::shader
 			, DerivT const & pa, sdw::Float const & pb, sdw::Float const & pc )
 		{
 			auto & writer = sdw::findWriterMandat( pa, pb, pc );
-			auto function = writer.implementFunction< ReturnT >( name
+			auto function = writer.template implementFunction< ReturnT >( name
 				, [&writer, func]( DerivT const & a
 					, sdw::Float const & b
 					, sdw::Float const & c )
@@ -155,7 +155,7 @@ namespace castor3d::shader
 			, ValueT const & pa, DerivativeValueT< ValueU, StructNameT > const & pb )
 		{
 			auto & writer = sdw::findWriterMandat( pa, pb );
-			auto function = writer.implementFunction< DerivativeValueT< ValueU, StructNameT > >( name
+			auto function = writer.template implementFunction< DerivativeValueT< ValueU, StructNameT > >( name
 				, [&writer, func]( ValueT const & a
 					, DerivativeValueT< ValueU, StructNameT > const & b )
 				{
@@ -177,7 +177,7 @@ namespace castor3d::shader
 			, DerivativeValueT< ValueT, StructNameT > const & pa, ValueT const & pb )
 		{
 			auto & writer = sdw::findWriterMandat( pa, pb );
-			auto function = writer.implementFunction< DerivativeValueT< ValueT, StructNameT > >( name
+			auto function = writer.template implementFunction< DerivativeValueT< ValueT, StructNameT > >( name
 				, [&writer, func]( DerivativeValueT< ValueT, StructNameT > const & a
 					, ValueT const & b )
 				{
@@ -199,7 +199,7 @@ namespace castor3d::shader
 			, DerivativeValueT< ValueT, StructNameT > const & pa, DerivativeValueT< ValueT, StructNameT > const & pb )
 		{
 			auto & writer = sdw::findWriterMandat( pa, pb );
-			auto function = writer.implementFunction< DerivativeValueT< ValueT, StructNameT > >( name
+			auto function = writer.template implementFunction< DerivativeValueT< ValueT, StructNameT > >( name
 				, [&writer, func]( DerivativeValueT< ValueT, StructNameT > const & a
 					, DerivativeValueT< ValueT, StructNameT > const & b )
 				{
@@ -224,7 +224,7 @@ namespace castor3d::shader
 			, DerivativeValueT< ValueT, StructNameT > const & pa )
 		{
 			auto & writer = sdw::findWriterMandat( pa );
-			auto function = writer.implementFunction< ReturnT >( name
+			auto function = writer.template implementFunction< ReturnT >( name
 				, [&writer, func]( DerivativeValueT< ValueT, StructNameT > const & a )
 				{
 					writer.returnStmt( ReturnT{ ( a.value().*func )()
@@ -240,7 +240,7 @@ namespace castor3d::shader
 			, DerivativeValueT< ValueT, StructNameT > const & pa )
 		{
 			auto & writer = sdw::findWriterMandat( pa );
-			auto function = writer.implementFunction< ReturnT >( name
+			auto function = writer.template implementFunction< ReturnT >( name
 				, [&writer, func]( DerivativeValueT< ValueT, StructNameT > const & a )
 				{
 					writer.returnStmt( ReturnT{ func( a.value() )
@@ -384,19 +384,19 @@ namespace castor3d::shader
 
 	DerivVec2 negate( DerivVec2 const a )
 	{
-		using Func = sdw::Vec2( sdw::Vec2:: * )( )const;
+		using Func = sdw::Vec2( sdw::Vec2::* )( )const;
 		return deriv::applyMbr< DerivVec2, Func >( &sdw::Vec2::operator-, "derivNegate2", a );
 	}
 
 	DerivVec3 negate( DerivVec3 const a )
 	{
-		using Func = sdw::Vec3( sdw::Vec3:: * )( )const;
+		using Func = sdw::Vec3( sdw::Vec3::* )( )const;
 		return deriv::applyMbr< DerivVec3, Func >( &sdw::Vec3::operator-, "derivNegate3", a );
 	}
 
 	DerivVec4 negate( DerivVec4 const a )
 	{
-		using Func = sdw::Vec4( sdw::Vec4:: * )( )const;
+		using Func = sdw::Vec4( sdw::Vec4::* )( )const;
 		return deriv::applyMbr< DerivVec4, Func >( &sdw::Vec4::operator-, "derivNegate4", a );
 	}
 
@@ -423,55 +423,55 @@ namespace castor3d::shader
 
 	DerivFloat derivX( DerivVec2 const v )
 	{
-		using Func = sdw::Float( sdw::Vec2:: * )( )const;
+		using Func = sdw::Float( sdw::Vec2::* )( )const;
 		return deriv::applyMbrSel< DerivFloat, Func >( &sdw::Vec2::x, "derivDerivX2", v );
 	}
 
 	DerivFloat derivX( DerivVec3 const v )
 	{
-		using Func = sdw::Float( sdw::Vec3:: * )( )const;
+		using Func = sdw::Float( sdw::Vec3::* )( )const;
 		return deriv::applyMbrSel< DerivFloat, Func >( &sdw::Vec3::x, "derivDerivX3", v );
 	}
 
 	DerivFloat derivX( DerivVec4 const v )
 	{
-		using Func = sdw::Float( sdw::Vec4:: * )( )const;
+		using Func = sdw::Float( sdw::Vec4::* )( )const;
 		return deriv::applyMbrSel< DerivFloat, Func >( &sdw::Vec4::x, "derivDerivX4", v );
 	}
 
 	DerivFloat derivY( DerivVec2 const v )
 	{
-		using Func = sdw::Float( sdw::Vec2:: * )( )const;
+		using Func = sdw::Float( sdw::Vec2::* )( )const;
 		return deriv::applyMbrSel< DerivFloat, Func >( &sdw::Vec2::y, "derivDerivY2", v );
 	}
 
 	DerivFloat derivY( DerivVec3 const v )
 	{
-		using Func = sdw::Float( sdw::Vec3:: * )( )const;
+		using Func = sdw::Float( sdw::Vec3::* )( )const;
 		return deriv::applyMbrSel< DerivFloat, Func >( &sdw::Vec3::y, "derivDerivY3", v );
 	}
 
 	DerivFloat derivY( DerivVec4 const v )
 	{
-		using Func = sdw::Float( sdw::Vec4:: * )( )const;
+		using Func = sdw::Float( sdw::Vec4::* )( )const;
 		return deriv::applyMbrSel< DerivFloat, Func >( &sdw::Vec4::y, "derivDerivY4", v );
 	}
 
 	DerivFloat derivZ( DerivVec3 const v )
 	{
-		using Func = sdw::Float( sdw::Vec3:: * )( )const;
+		using Func = sdw::Float( sdw::Vec3::* )( )const;
 		return deriv::applyMbrSel< DerivFloat, Func >( &sdw::Vec3::z, "derivDerivZ3", v );
 	}
 
 	DerivFloat derivZ( DerivVec4 const v )
 	{
-		using Func = sdw::Float( sdw::Vec4:: * )( )const;
+		using Func = sdw::Float( sdw::Vec4::* )( )const;
 		return deriv::applyMbrSel< DerivFloat, Func >( &sdw::Vec4::z, "derivDerivZ4", v );
 	}
 
 	DerivFloat derivW( DerivVec4 const v )
 	{
-		using Func = sdw::Float( sdw::Vec4:: * )( )const;
+		using Func = sdw::Float( sdw::Vec4::* )( )const;
 		return deriv::applyMbrSel< DerivFloat, Func >( &sdw::Vec4::w, "derivDerivW4", v );
 	}
 

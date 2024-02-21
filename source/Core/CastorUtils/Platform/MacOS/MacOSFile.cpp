@@ -72,19 +72,6 @@ namespace castor
 			}
 		}
 
-		static bool isLink( Path const & filePath )
-		{
-			auto cfilePath = toUtf8( filePath );
-			struct stat buf;
-
-			if ( lstat( cfilePath.c_str(), &buf ) )
-			{
-				printErrnoName( cuT( "file" ), filePath );
-			}
-
-			return S_ISLNK( buf.st_mode );
-		}
-
 		template< typename TraverseDirT, typename HitFileT >
 		static void traverse( Path const & folderPath
 			, TraverseDirT const & directoryFunction

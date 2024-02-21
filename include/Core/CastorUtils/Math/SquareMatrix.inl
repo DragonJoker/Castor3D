@@ -451,13 +451,6 @@ namespace castor
 	}
 
 	template< typename T, uint32_t Count >
-	template< typename ... Types >
-	SquareMatrix< T, Count >::SquareMatrix( Types && ... inits ) requires isRightSize< Types... >
-		: matrix_type{ std::forward< Types >( inits )... }
-	{
-	}
-
-	template< typename T, uint32_t Count >
 	inline SquareMatrix< T, Count >::SquareMatrix( std::initializer_list< T > rhs )
 		: matrix_type( castor::move( rhs ) )
 	{
