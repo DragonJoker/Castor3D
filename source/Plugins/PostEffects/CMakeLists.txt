@@ -7,7 +7,8 @@ option( CASTOR_BUILD_POSTFX_FXAA "Build FXAA PostEffect plugin" TRUE )
 option( CASTOR_BUILD_POSTFX_SMAA "Build SMAA PostEffect plugin" TRUE )
 option( CASTOR_BUILD_POSTFX_FILMGRAIN "Build FilmGrain PostEffect plugin" TRUE )
 option( CASTOR_BUILD_POSTFX_LINEARMOTIONBLUR "Build LinearMotionBlur PostEffect plugin" TRUE )
-option( CASTOR_BUILD_POSTFX_DRAWEDGES "Build DrawEdgesPostEffect PostEffect plugin" TRUE )
+option( CASTOR_BUILD_POSTFX_DRAWEDGES "Build DrawEdges PostEffect plugin" TRUE )
+option( CASTOR_BUILD_POSTFX_DEPTHOFFIELD "Build DepthOfField PostEffect plugin" TRUE )
 
 function( PostEffectsInit )
 	set( Bloom "no (Not wanted)" PARENT_SCOPE )
@@ -19,6 +20,7 @@ function( PostEffectsInit )
 	set( Ltsk  "no (Not wanted)" PARENT_SCOPE )
 	set( MtBr  "no (Not wanted)" PARENT_SCOPE )
 	set( DrEd  "no (Not wanted)" PARENT_SCOPE )
+	set( DoF   "no (Not wanted)" PARENT_SCOPE )
 endfunction( PostEffectsInit )
 
 function( PostEffectsBuild )
@@ -84,6 +86,12 @@ function( PostEffectsBuild )
 			set( DrEd ${Build} PARENT_SCOPE )
 		endif()
 
+		if( ${CASTOR_BUILD_POSTFX_DEPTHOFFIELD} )
+			set( Build ${DrEd} )
+			add_subdirectory( Plugins/PostEffects/DepthOfFieldPostEffect )
+			set( DoF ${Build} PARENT_SCOPE )
+		endif()
+
 		set( CastorMinLibraries
 			${CastorMinLibraries}
 			PARENT_SCOPE
@@ -131,7 +139,10 @@ function( PostEffectsSummary msg )
 			set( msg_tmp "${msg_tmp}\n    LinearMotionBlur     ${MtBr}" )
 		endif ()
 		if( ${CASTOR_BUILD_POSTFX_DRAWEDGES} )
-			set( msg_tmp "${msg_tmp}\n    DrawEdgesPostEffect  ${DrEd}" )
+			set( msg_tmp "${msg_tmp}\n    DrawEdges            ${DrEd}" )
+		endif ()
+		if( ${CASTOR_BUILD_POSTFX_DEPTHOFFIELD} )
+			set( msg_tmp "${msg_tmp}\n    DepthOfField         ${DoF}" )
 		endif ()
 		set( msg "${msg}${msg_tmp}" PARENT_SCOPE )
 	endif ()
@@ -215,6 +226,15 @@ function( PostEffectsSetup )
 			cpack_add_component( DrawEdgesPostEffect
 				DISPLAY_NAME "DrawEdgesPostEffect"
 				DESCRIPTION "Allows edges drawing post effect."
+				GROUP Plugins
+				DEPENDS Castor3D
+				INSTALL_TYPES Minimal Full
+			)
+		endif()
+		if( ${CASTOR_BUILD_POSTFX_DEPTHOFFIELD} )
+			cpack_add_component( DepthOfFieldPostEffect
+				DISPLAY_NAME "DepthOfFieldPostEffect"
+				DESCRIPTION "Allows depth of field post effect."
 				GROUP Plugins
 				DEPENDS Castor3D
 				INSTALL_TYPES Minimal Full
