@@ -83,7 +83,7 @@ namespace castor3d
 			writes.push_back( ashes::WriteDescriptorSet{ firstBounce.binding
 				, 0u
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, { VkDescriptorImageInfo{ graph.createSampler( firstBounce.image.samplerDesc )
+				, { VkDescriptorImageInfo{ graph.createSampler( firstBounce.getSamplerDesc() )
 					, graph.createImageView( firstBounce.view() )
 					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } } );
 			writes.push_back( ashes::WriteDescriptorSet{ secondBounce.binding

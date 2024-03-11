@@ -509,10 +509,10 @@ namespace castor3d
 							// note: no additional barriers as we are still doing read from source-> write to dest, so that should be good
 							u32 lastChunkOffset = chunkSize * ( numChunks - 1 ) * sizeof( u32 );
 							auto lastChunkSize = u32( totalValues * sizeof( u32 ) - lastChunkOffset );
-							auto & srcMorton = m_pass.buffers[0].buffer.buffer.buffer( index );
-							auto & srcIndices = m_pass.buffers[1].buffer.buffer.buffer( index );
-							auto & dstMorton = m_pass.buffers[0].buffer.buffer.buffer( 1u - index );
-							auto & dstIndices = m_pass.buffers[1].buffer.buffer.buffer( 1u - index );
+							auto srcMorton = m_pass.buffers[0].buffer( index );
+							auto srcIndices = m_pass.buffers[1].buffer( index );
+							auto dstMorton = m_pass.buffers[0].buffer( 1u - index );
+							auto dstIndices = m_pass.buffers[1].buffer( 1u - index );
 							VkBufferCopy region{ lastChunkOffset, lastChunkOffset, lastChunkSize };
 							m_context.vkCmdCopyBuffer( commandBuffer, srcMorton, dstMorton, 1u, &region );
 							m_context.vkCmdCopyBuffer( commandBuffer, srcIndices, dstIndices, 1u, &region );
@@ -533,17 +533,15 @@ namespace castor3d
 			{
 				for ( auto & attach : m_pass.buffers )
 				{
-					auto buffer = attach.buffer;
-
 					if ( !attach.isNoTransition()
 						&& attach.isStorageBuffer()
 						&& attach.isClearableBuffer() )
 					{
-						auto currentState = context.getAccessState( buffer.buffer.buffer( passIndex )
-							, buffer.range );
+						auto currentState = context.getAccessState( attach.buffer( passIndex )
+							, attach.getBufferRange() );
 						context.memoryBarrier( commandBuffer
-							, buffer.buffer.buffer( passIndex )
-							, buffer.range
+							, attach.buffer( passIndex )
+							, attach.getBufferRange()
 							, currentState.access
 							, currentState.pipelineStage
 							, crg::AccessState{ VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT }

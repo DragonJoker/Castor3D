@@ -49,7 +49,7 @@ namespace ocean_fft
 			auto range = data.info.subresourceRange;
 			data.info.subresourceRange.levelCount = 1u;
 			auto sampler = graph.createSampler( crg::SamplerDesc{} );
-			inViewId = graph.createView( data );
+			inViewId = graph.getResources().getHandler().createViewId( data );
 			auto inView = graph.createImageView( inViewId );
 
 			for ( uint32_t level = range.baseMipLevel; level < range.baseMipLevel + range.levelCount - 1u; ++level )
@@ -65,7 +65,7 @@ namespace ocean_fft
 
 				data.info.subresourceRange.baseMipLevel++;
 				data.name = imageId.data->name + "_L" + castor::string::toMbString( data.info.subresourceRange.baseMipLevel );
-				auto outViewId = graph.createView( data );
+				auto outViewId = graph.getResources().getHandler().createViewId( data );
 				auto outView = graph.createImageView( outViewId );
 				writes.push_back( ashes::WriteDescriptorSet{ GenerateMipmapsPass::eOutput
 					, 0u
@@ -164,7 +164,7 @@ namespace ocean_fft
 		, m_pipelineLayout{ genmips::createPipelineLayout( m_device, *m_descriptorSetLayout ) }
 		, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, castor::makeString( Name ), genmips::createShader( device ) }
 		, m_pipeline{ genmips::createPipeline( device, *m_pipelineLayout, m_shader ) }
-		, m_descriptorSetPool{ m_descriptorSetLayout->createPool( crg::getMipLevels( m_pass.images.front().image.view() ) + crg::getMipLevels( m_pass.images.back().image.view() ) ) }
+		, m_descriptorSetPool{ m_descriptorSetLayout->createPool( crg::getMipLevels( m_pass.images.front().view() ) + crg::getMipLevels( m_pass.images.back().view() ) ) }
 		, m_descriptorSets{ genmips::createDescriptorSets( m_graph, *m_descriptorSetPool, m_pass ) }
 	{
 		auto extent = getExtent( m_pass.images.front().view() );

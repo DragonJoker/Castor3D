@@ -455,17 +455,15 @@ namespace castor3d
 			{
 				for ( auto & attach : m_pass.buffers )
 				{
-					auto buffer = attach.buffer;
-
 					if ( !attach.isNoTransition()
 						&& attach.isStorageBuffer()
 						&& attach.isClearableBuffer() )
 					{
-						auto currentState = context.getAccessState( buffer.buffer.buffer( passIndex )
-							, buffer.range );
+						auto currentState = context.getAccessState( attach.buffer( passIndex )
+							, attach.getBufferRange() );
 						context.memoryBarrier( commandBuffer
-							, buffer.buffer.buffer( passIndex )
-							, buffer.range
+							, attach.buffer( passIndex )
+							, attach.getBufferRange()
 							, currentState.access
 							, currentState.pipelineStage
 							, ( ( idx == 2 )
