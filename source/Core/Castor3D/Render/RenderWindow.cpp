@@ -354,6 +354,21 @@ namespace castor3d
 			}
 		}
 #endif
+
+		static void convert( crg::SemaphoreWaitArray const & toWait
+			, std::vector< VkSemaphore > & semaphores )
+		{
+			for ( auto & wait : toWait )
+			{
+				if ( wait.semaphore
+					&& semaphores.end() == std::find( semaphores.begin()
+						, semaphores.end()
+						, wait.semaphore ) )
+				{
+					semaphores.push_back( wait.semaphore );
+				}
+			}
+		}
 	}
 
 	//*************************************************************************************************
@@ -1645,7 +1660,7 @@ namespace castor3d
 		try
 		{
 			ashes::VkSemaphoreArray semaphores;
-			crg::convert( toWait, semaphores );
+			rendwndw::convert( toWait, semaphores );
 
 			if ( fence )
 			{

@@ -68,6 +68,30 @@ namespace castor3d
 			using VertexBufferHolder = castor::DataHolderT< ashes::VertexBufferPtr< castor::Point3f > >;
 			using IndexBufferHolder = castor::DataHolderT< ashes::BufferPtr< u16 > >;
 
+			crg::rm::Config buildConfig( RenderDevice const & device
+				, VkExtent2D const & size
+				, crg::ImageViewIdArray const & depth
+				, bool forceVisible )
+			{
+				crg::rm::Config result;
+				result.vertexBuffer( doCreateVertexBuffer( device ) )
+					.indexBuffer( doCreateIndexBuffer( device ) )
+					.depthStencilState( ( depth.empty()
+						? ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_FALSE, VK_FALSE, VK_COMPARE_OP_GREATER_OR_EQUAL }
+						: ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_TRUE, VK_FALSE, VK_COMPARE_OP_GREATER_OR_EQUAL } ) )
+					.getIndexType( crg::GetIndexTypeCallback( [](){ return VK_INDEX_TYPE_UINT16; } ) )
+					.getPrimitiveCount( crg::GetPrimitiveCountCallback( [](){ return 36u; } ) )
+					.isEnabled( IsEnabledCallback( [this](){ return doIsEnabled(); } ) )
+					.getPassIndex( GetPassIndexCallback( [this, forceVisible]() { return m_background->getPassIndex( forceVisible ); } ) )
+					.renderSize( size )
+					.programCreator( { 2u
+						, [this, &device]( uint32_t programIndex )
+						{
+							return crg::makeVkArray< VkPipelineShaderStageCreateInfo >( doInitialiseShader( device, programIndex ) );
+						} } );
+				return result;
+			}
+
 		public:
 			BackgroundPass( crg::FramePass const & pass
 				, crg::GraphContext & context
@@ -85,22 +109,7 @@ namespace castor3d
 					, context
 					, graph
 					, crg::ru::Config{ 2u, true }
-					, crg::rm::Config{}
-						.vertexBuffer( doCreateVertexBuffer( device ) )
-						.indexBuffer( doCreateIndexBuffer( device ) )
-						.depthStencilState( ( depth.empty()
-							? ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_FALSE, VK_FALSE, VK_COMPARE_OP_GREATER_OR_EQUAL }
-							: ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_TRUE, VK_FALSE, VK_COMPARE_OP_GREATER_OR_EQUAL } ) )
-						.getIndexType( crg::GetIndexTypeCallback( [](){ return VK_INDEX_TYPE_UINT16; } ) )
-						.getPrimitiveCount( crg::GetPrimitiveCountCallback( [](){ return 36u; } ) )
-						.isEnabled( IsEnabledCallback( [this](){ return doIsEnabled(); } ) )
-						.getPassIndex( GetPassIndexCallback( [this, forceVisible]() { return m_background->getPassIndex( forceVisible ); } ) )
-						.renderSize( size )
-						.programCreator( { 2u
-							, [this, &device]( uint32_t programIndex )
-							{
-								return crg::makeVkArray< VkPipelineShaderStageCreateInfo >( doInitialiseShader( device, programIndex ) );
-							} } ) }
+					, buildConfig( device, size, depth, forceVisible ) }
 			{
 			}
 

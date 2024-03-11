@@ -170,17 +170,15 @@ namespace castor3d
 			{
 				for ( auto & attach : m_pass.buffers )
 				{
-					auto buffer = attach.buffer;
-
 					if ( !attach.isNoTransition()
 						&& attach.isStorageBuffer()
 						&& attach.isClearableBuffer() )
 					{
-						auto currentState = context.getAccessState( buffer.buffer.buffer( index )
-							, buffer.range );
+						auto currentState = context.getAccessState( attach.buffer( index )
+							, attach.getBufferRange() );
 						context.memoryBarrier( commandBuffer
-							, buffer.buffer.buffer( index )
-							, buffer.range
+							, attach.buffer( index )
+							, attach.getBufferRange()
 							, currentState.access
 							, currentState.pipelineStage
 							, { VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT } );

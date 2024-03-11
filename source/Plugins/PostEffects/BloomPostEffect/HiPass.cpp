@@ -70,12 +70,12 @@ namespace Bloom
 						, { data.viewDesc.data->info.subresourceRange.aspectMask, 0u, 1u, 0u, 1u } };
 
 					viewData.info.subresourceRange.baseMipLevel = data.viewDesc.data->info.subresourceRange.baseMipLevel;
-					crg::ImageViewId prevLevelView = m_graph.createView( viewData );
+					crg::ImageViewId prevLevelView = m_graph.getResources().getHandler().createViewId( viewData );
 
 					for ( uint32_t levelIdx = 1u; levelIdx < data.imageDesc.data->info.mipLevels; ++levelIdx )
 					{
 						viewData.info.subresourceRange.baseMipLevel = data.viewDesc.data->info.subresourceRange.baseMipLevel + levelIdx;
-						crg::ImageViewId currLevelView = m_graph.createView( viewData );
+						crg::ImageViewId currLevelView = m_graph.getResources().getHandler().createViewId( viewData );
 						data.mipGens.push_back( { prevLevelView, currLevelView } );
 						prevLevelView = currLevelView;
 					}

@@ -164,14 +164,6 @@ set( Castor3DBinsDependencies
 	castor::CastorUtils
 )
 
-#--------------------------------------------------------------------------------------------------
-#	MSVC specifics
-#--------------------------------------------------------------------------------------------------
-if( MSVC )
-	# Copy Rebracer.xml file so we can use Rebracer extension to uniformise code formatting
-	file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/data/VS/Rebracer.xml DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
-endif()
-
 option( CASTOR_BUILDGRP_TEST "Build test projects" OFF )
 option( CASTOR_BUILDGRP_SETUP "Build setup projects" OFF )
 option( CASTOR_BUILDGRP_DEMO "Build Castor3D demos." OFF )

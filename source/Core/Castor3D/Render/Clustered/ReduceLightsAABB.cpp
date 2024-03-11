@@ -342,13 +342,6 @@ namespace castor3d
 			{
 				uint32_t result{ ( m_clusters.getConfig().limitClustersToLightsAABB ? 1u : 0u )
 					+ ( m_clusters.getConfig().enableReduceWarpOptimisation ? 2u : 0u ) };
-
-				if ( uint32_t count{ computeThreadGroupsCount( m_lightCache ) };
-					m_dispatchCount && count != m_dispatchCount )
-				{
-					setToReset( result );
-				}
-
 				return result;
 			}
 
@@ -374,13 +367,11 @@ namespace castor3d
 				if ( computeThreadGroupsCount( m_lightCache ) <= 1u )
 				{
 					auto & attach = m_pass.buffers.back();
-					auto & buffer = attach.buffer;
-
-					auto currentState = context.getAccessState( buffer.buffer.buffer( index )
-						, buffer.range );
+					auto currentState = context.getAccessState( attach.buffer( index )
+						, attach.getBufferRange() );
 					context.memoryBarrier( commandBuffer
-						, buffer.buffer.buffer( index )
-						, buffer.range
+						, attach.buffer( index )
+						, attach.getBufferRange()
 						, currentState.access
 						, currentState.pipelineStage
 						, { VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT } );
@@ -482,13 +473,11 @@ namespace castor3d
 				, uint32_t index )const
 			{
 				auto & attach = m_pass.buffers.back();
-				auto & buffer = attach.buffer;
-
-				auto currentState = context.getAccessState( buffer.buffer.buffer( index )
-					, buffer.range );
+				auto currentState = context.getAccessState( attach.buffer( index )
+					, attach.getBufferRange() );
 				context.memoryBarrier( commandBuffer
-					, buffer.buffer.buffer( index )
-					, buffer.range
+					, attach.buffer( index )
+					, attach.getBufferRange()
 					, currentState.access
 					, currentState.pipelineStage
 					, { VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT } );
