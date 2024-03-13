@@ -122,62 +122,68 @@ namespace c3d_gltf
 			}
 		}
 
-		static castor::ByteArray getData( fastgltf::sources::URI const & impData
+		static void getData( fastgltf::Asset const & impAsset
+			, fastgltf::sources::URI const & impData
 			, size_t offset
-			, size_t size )
+			, size_t size
+			, fastgltf::MimeType & mimeType
+			, castor::ByteArray & result )
 		{
 			auto path = impData.uri.fspath();
 			std::ifstream stream{ path, std::ios::binary };
 			stream.seekg( 0u, std::ios::end );
 			auto fileSize = std::min( size_t( stream.tellg() ), size );
 			stream.seekg( std::streampos( int64_t( offset + impData.fileByteOffset ) ) );
-			castor::ByteArray result;
 			auto count = fileSize - impData.fileByteOffset;
 			result.resize( count );
 			stream.readsome( reinterpret_cast< char * >( result.data() ), std::streamsize( count ) );
-			return result;
+			mimeType = impData.mimeType;
 		}
 
-		static castor::ByteArray getData( fastgltf::sources::Array const & impData
+		static void getData( fastgltf::Asset const & impAsset
+			, fastgltf::sources::Array const & impData
 			, size_t offset
-			, size_t size )
+			, size_t size
+			, fastgltf::MimeType & mimeType
+			, castor::ByteArray & result )
 		{
-			castor::ByteArray result;
 			size = std::min( size, impData.bytes.size() );
 			result.resize( size );
 			std::memcpy( result.data(), impData.bytes.data() + offset, size );
-			return result;
+			mimeType = impData.mimeType;
 		}
 
-		static castor::ByteArray getData( fastgltf::sources::Vector const & impData
+		static void getData( fastgltf::Asset const & impAsset
+			, fastgltf::sources::Vector const & impData
 			, size_t offset
-			, size_t size )
+			, size_t size
+			, fastgltf::MimeType & mimeType
+			, castor::ByteArray & result )
 		{
-			castor::ByteArray result;
 			size = std::min( size, impData.bytes.size() );
 			result.resize( size );
 			std::memcpy( result.data(), impData.bytes.data() + offset, size );
-			return result;
+			mimeType = impData.mimeType;
 		}
 
-		static castor::ByteArray getData( CU_UnusedParam( fastgltf::sources::CustomBuffer const &, impData )
-			, CU_UnusedParam( size_t, offset )
-			, CU_UnusedParam( size_t, size ) )
-		{
-			castor::ByteArray result;
-			return result;
-		}
-
-		static castor::ByteArray getData( fastgltf::sources::ByteView const & impData
+		static void getData( fastgltf::Asset const & impAsset
+			, fastgltf::sources::ByteView const & impData
 			, size_t offset
-			, size_t size )
+			, size_t size
+			, fastgltf::MimeType & mimeType
+			, castor::ByteArray & result )
 		{
-			castor::ByteArray result;
 			size = std::min( size, impData.bytes.size() );
 			result.resize( size );
 			std::memcpy( result.data(), impData.bytes.data() + offset, size );
-			return result;
+			mimeType = impData.mimeType;
 		}
+
+		template< class ... ArgsT >
+		struct OverloadedGetDataT : ArgsT... { using ArgsT::operator()...; };
+		// explicit deduction guide (not needed as of C++20)
+		template< class ... ArgsT >
+		OverloadedGetDataT( ArgsT... ) -> OverloadedGetDataT< ArgsT... >;
 
 		static castor::String makeTextureName( size_t textureIndex
 			, fastgltf::Texture const & impTexture
@@ -252,31 +258,12 @@ namespace c3d_gltf
 			fastgltf::MimeType mimeType{};
 			castor::ByteArray data;
 
-			switch ( impDataSource.index() )
-			{
-			case 2:
-				mimeType = std::get< 2 >( impDataSource ).mimeType;
-				data = getData( std::get< 2 >( impDataSource ), offset, size );
-				break;
-			case 3:
-				mimeType = std::get< 3 >( impDataSource ).mimeType;
-				data = getData( std::get< 3 >( impDataSource ), offset, size );
-				break;
-			case 4:
-				mimeType = std::get< 4 >( impDataSource ).mimeType;
-				data = getData( std::get< 4 >( impDataSource ), offset, size );
-				break;
-			case 5:
-				mimeType = std::get< 5 >( impDataSource ).mimeType;
-				data = getData( std::get< 5 >( impDataSource ), offset, size );
-				break;
-			case 6:
-				mimeType = std::get< 6 >( impDataSource ).mimeType;
-				data = getData( std::get< 6 >( impDataSource ), offset, size );
-				break;
-			default:
-				break;
-			}
+			std::visit( OverloadedGetDataT{ []( auto const & ){}
+				, [&mimeType, &data, &impAsset, &offset, &size]( fastgltf::sources::URI const & source ){ getData( impAsset, source, offset, size, mimeType, data ); }
+				, [&mimeType, &data, &impAsset, &offset, &size]( fastgltf::sources::Array const & source ){ getData( impAsset, source, offset, size, mimeType, data ); }
+				, [&mimeType, &data, &impAsset, &offset, &size]( fastgltf::sources::Vector const & source ){ getData( impAsset, source, offset, size, mimeType, data ); }
+				, [&mimeType, &data, &impAsset, &offset, &size]( fastgltf::sources::ByteView const & source ){ getData( impAsset, source, offset, size, mimeType, data ); } }
+				, impDataSource );
 
 			if ( !data.empty() )
 			{
@@ -776,7 +763,7 @@ namespace c3d_gltf
 	void GltfMaterialImporter::doImportEmissiveData( fastgltf::Material const & impMaterial
 		, castor3d::Pass & pass )
 	{
-		if ( impMaterial.emissiveStrength != 0.0f
+		if ( impMaterial.emissiveStrength != 1.0f
 			|| impMaterial.emissiveTexture
 			|| std::any_of( impMaterial.emissiveFactor.begin()
 				, impMaterial.emissiveFactor.end()
@@ -845,7 +832,7 @@ namespace c3d_gltf
 	void GltfMaterialImporter::doImportIorData( fastgltf::Material const & impMaterial
 		, castor3d::Pass & pass )const
 	{
-		if ( impMaterial.ior != 0.0f )
+		if ( impMaterial.ior != 1.5f )
 		{
 			pass.createComponent< castor3d::RefractionComponent >()->setRefractionRatio( impMaterial.ior );
 			auto transmission = pass.getComponent< castor3d::TransmissionComponent >();
