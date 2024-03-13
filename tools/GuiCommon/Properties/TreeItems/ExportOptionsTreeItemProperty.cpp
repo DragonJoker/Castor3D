@@ -14,8 +14,7 @@ namespace GuiCommon
 		CreateTreeItemMenu();
 	}
 
-	void ExportOptionsTreeItemProperty::doCreateProperties( wxPGEditor * editor
-		, wxPropertyGrid * grid )
+	void ExportOptionsTreeItemProperty::doCreateProperties( wxPropertyGrid * grid )
 	{
 		static wxString PROPERTY_CATEGORY_EXPORT_OPTIONS = _( "Export Options" );
 		static wxString PROPERTY_OPTION_SCALE = _( "Scale" );

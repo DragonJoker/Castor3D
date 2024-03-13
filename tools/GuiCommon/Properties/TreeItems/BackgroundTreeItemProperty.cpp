@@ -319,7 +319,7 @@ namespace GuiCommon
 		CreateTreeItemMenu();
 	}
 
-	void BackgroundTreeItemProperty::doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )
+	void BackgroundTreeItemProperty::doCreateProperties( wxPropertyGrid * grid )
 	{
 		static wxString PROPERTY_CATEGORY_BACKGROUND = _( "Background: " );
 		static wxString PROPERTY_BACKGROUND_VISIBLE = _( "Visible" );

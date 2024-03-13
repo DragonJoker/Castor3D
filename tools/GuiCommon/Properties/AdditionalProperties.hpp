@@ -210,10 +210,95 @@ namespace GuiCommon
 		: public wxPGEditor
 	{
 	protected:
+		// Instantiates editor controls.
+		//  propgrid- wxPropertyGrid to which the property belongs
+		//    (use as parent for control).
+		// property - Property for which this method is called.
+		// pos - Position, inside wxPropertyGrid, to create control(s) to.
+		// size - Initial size for control(s).
+		// Unlike in previous version of wxPropertyGrid, it is no longer
+		// necessary to call wxEvtHandler::Connect() for interesting editor
+		// events. Instead, all events from control are now automatically
+		// forwarded to wxPGEditor::OnEvent() and wxPGProperty::OnEvent().
 		wxPGWindowList CreateControls( wxPropertyGrid * propgrid, wxPGProperty * property, wxPoint const & pos, wxSize const & size )const override;
+
+		// Loads value from property to the control.
 		void UpdateControl( wxPGProperty * property, wxWindow * ctrl )const override;
+
+		// Handles events. Returns true if value in control was modified
+		// (see wxPGProperty::OnEvent for more information).
+		// wxPropertyGrid will automatically unfocus the editor when
+		// wxEVT_TEXT_ENTER is received and when it results in
+		// property value being modified. This happens regardless of
+		// editor type (i.e. behaviour is same for any wxTextCtrl and
+		// wxComboBox based editor).
 		bool OnEvent( wxPropertyGrid * propgrid, wxPGProperty * property, wxWindow * wnd_primary, wxEvent & event )const override;
 	};
+
+	class SliderEditor
+		: public wxPGEditor
+	{
+	public:
+		class Validator : public wxValidator
+		{
+		public:
+			// Make a clone of this validator (or return NULL) - currently necessary
+			// if you're passing a reference to a validator.
+			// Another possibility is to always pass a pointer to a new validator
+			// (so the calling code can use a copy constructor of the relevant class).
+			wxObject * Clone()const override
+			{
+				return new Validator{};
+			}
+
+			// Called when the value in the window must be validated.
+			// This function can pop up an error message.
+			bool Validate( wxWindow * WXUNUSED( parent ) )override
+			{
+				return true;
+			}
+		};
+
+		static wxString const AttrMinValue;
+		static wxString const AttrMaxValue;
+		static wxString const AttrPrecision;
+
+	protected:
+		// Instantiates editor controls.
+		//  propgrid- wxPropertyGrid to which the property belongs
+		//    (use as parent for control).
+		// property - Property for which this method is called.
+		// pos - Position, inside wxPropertyGrid, to create control(s) to.
+		// size - Initial size for control(s).
+		// Unlike in previous version of wxPropertyGrid, it is no longer
+		// necessary to call wxEvtHandler::Connect() for interesting editor
+		// events. Instead, all events from control are now automatically
+		// forwarded to wxPGEditor::OnEvent() and wxPGProperty::OnEvent().
+		wxPGWindowList CreateControls( wxPropertyGrid * propgrid, wxPGProperty * property, wxPoint const & pos, wxSize const & size )const override;
+
+		// Loads value from property to the control.
+		void UpdateControl( wxPGProperty * property, wxWindow * ctrl )const override;
+
+		// Handles events. Returns true if value in control was modified
+		// (see wxPGProperty::OnEvent for more information).
+		// wxPropertyGrid will automatically unfocus the editor when
+		// wxEVT_TEXT_ENTER is received and when it results in
+		// property value being modified. This happens regardless of
+		// editor type (i.e. behaviour is same for any wxTextCtrl and
+		// wxComboBox based editor).
+		bool OnEvent( wxPropertyGrid * propgrid, wxPGProperty * property, wxWindow * wnd_primary, wxEvent & event )const override;
+
+		// Returns value from control, via parameter 'variant'.
+		// Usually ends up calling property's StringToValue or IntToValue.
+		// Returns true if value was different.
+		bool GetValueFromControl( wxVariant & variant, wxPGProperty * property, wxWindow * ctrl )const override;
+
+		// Sets value in control to unspecified.
+		void SetValueToUnspecified( wxPGProperty * property, wxWindow * ctrl )const override;
+	};
+
+	WX_PG_DECLARE_EDITOR( ButtonCtrl )
+	WX_PG_DECLARE_EDITOR( SliderCtrl )
 
 	wxFloatProperty * CreateProperty( wxString const & name, double const & value );
 	wxFloatProperty * CreateProperty( wxString const & name, float const & value );

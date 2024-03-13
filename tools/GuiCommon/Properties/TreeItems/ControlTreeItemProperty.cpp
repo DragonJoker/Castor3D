@@ -36,8 +36,7 @@ namespace GuiCommon
 		CreateTreeItemMenu();
 	}
 
-	void ControlTreeItemProperty::doCreateProperties( wxPGEditor * editor
-		, wxPropertyGrid * grid )
+	void ControlTreeItemProperty::doCreateProperties( wxPropertyGrid * grid )
 	{
 		static wxString PROPERTY_CATEGORY_CONTROL = _( "Control: " );
 		static wxString PROPERTY_CONTROL_VISIBLE = _( "Visible" );

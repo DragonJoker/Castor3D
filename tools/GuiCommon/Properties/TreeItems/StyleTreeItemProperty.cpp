@@ -24,8 +24,7 @@ namespace GuiCommon
 		CreateTreeItemMenu();
 	}
 
-	void StyleTreeItemProperty::doCreateProperties( wxPGEditor * editor
-		, wxPropertyGrid * grid )
+	void StyleTreeItemProperty::doCreateProperties( wxPropertyGrid * grid )
 	{
 		static wxString PROPERTY_CATEGORY = _( "Style: " );
 		static wxString PROPERTY_BACKGROUND_MATERIAL = _( "Background Material" );

@@ -23,8 +23,7 @@ namespace GuiCommon
 		CreateTreeItemMenu();
 	}
 
-	void AnimatedObjectGroupTreeItemProperty::doCreateProperties( wxPGEditor * editor
-		, wxPropertyGrid * grid )
+	void AnimatedObjectGroupTreeItemProperty::doCreateProperties( wxPropertyGrid * grid )
 	{
 		auto group = getGroup();
 

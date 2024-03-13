@@ -17,7 +17,7 @@ namespace GuiCommon
 		CreateTreeItemMenu();
 	}
 
-	void ViewportTreeItemProperty::doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )
+	void ViewportTreeItemProperty::doCreateProperties( wxPropertyGrid * grid )
 	{
 		static wxString PROPERTY_CATEGORY_VIEWPORT = _( "Viewport" );
 		static wxString PROPERTY_VIEWPORT_TYPE = _( "Type" );

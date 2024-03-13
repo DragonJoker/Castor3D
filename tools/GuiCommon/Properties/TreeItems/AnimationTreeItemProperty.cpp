@@ -23,8 +23,7 @@ namespace GuiCommon
 		CreateTreeItemMenu();
 	}
 
-	void AnimationTreeItemProperty::doCreateProperties( wxPGEditor * editor
-		, wxPropertyGrid * grid )
+	void AnimationTreeItemProperty::doCreateProperties( wxPropertyGrid * grid )
 	{
 		static wxString PROPERTY_CATEGORY_ANIMATION = _( "Animation: " );
 		static wxString PROPERTY_ANIMATION_STARTING_POINT = _( "Start at" );

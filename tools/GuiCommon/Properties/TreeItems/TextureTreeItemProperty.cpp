@@ -490,7 +490,7 @@ namespace GuiCommon
 		CreateTreeItemMenu();
 	}
 
-	void TextureTreeItemProperty::doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )
+	void TextureTreeItemProperty::doCreateProperties( wxPropertyGrid * grid )
 	{
 		static wxString const CATEGORY_TEXTURE = _( "Texture " );
 		static wxString const PROPERTY_TEXTURE_BASE = _( "Base" );

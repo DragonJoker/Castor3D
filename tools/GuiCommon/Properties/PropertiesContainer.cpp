@@ -36,8 +36,6 @@
 
 namespace GuiCommon
 {
-	wxPGEditor * PropertiesContainer::m_buttonEditor = nullptr;
-
 	PropertiesContainer::PropertiesContainer( bool canEdit
 		, wxWindow * parent
 		, wxPoint const & pos
@@ -46,11 +44,6 @@ namespace GuiCommon
 		, m_canEdit( canEdit )
 		, m_data( nullptr )
 	{
-		if ( !m_buttonEditor )
-		{
-			m_buttonEditor = RegisterEditorClass( new ButtonEventEditor() );
-		}
-
 		Connect( wxEVT_PG_CHANGED, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, PropertiesContainer::onPropertyChange ) );
 		SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
 		SetForegroundColour( PANEL_FOREGROUND_COLOUR );
@@ -75,7 +68,7 @@ namespace GuiCommon
 
 		if ( m_data )
 		{
-			m_data->CreateProperties( m_buttonEditor, this );
+			m_data->CreateProperties( this );
 		}
 	}
 

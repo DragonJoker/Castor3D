@@ -119,6 +119,7 @@ namespace GuiCommon
 		{
 			wxPGProperty * prop = appendProp( parent, new wxFloatProperty( name, m_prefix + name, value ) );
 			prop->SetEditor( wxPGEditor_SpinCtrl );
+			prop->SetAttribute( wxPG_ATTR_SPINCTRL_STEP, WXVARIANT( 0.1 ) );
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_WRAP, WXVARIANT( true ) );
 #if wxCHECK_VERSION( 3, 1, 0 )
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_MOTION, WXVARIANT( true ) );
@@ -129,6 +130,7 @@ namespace GuiCommon
 		{
 			wxPGProperty * prop = appendProp( parent, new wxFloatProperty( name, m_prefix + name, value ) );
 			prop->SetEditor( wxPGEditor_SpinCtrl );
+			prop->SetAttribute( wxPG_ATTR_SPINCTRL_STEP, WXVARIANT( 0.1 ) );
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_WRAP, WXVARIANT( true ) );
 #if wxCHECK_VERSION( 3, 1, 0 )
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_MOTION, WXVARIANT( true ) );
@@ -286,13 +288,20 @@ namespace GuiCommon
 		}
 		else if constexpr ( castor::isRangedValueT< ValueT > )
 		{
-			wxPGProperty * prop = createProperty( parent, name, value.value(), handler, castor::move( controls ) );
-			prop->SetAttribute( wxPG_ATTR_MIN, getVariant< castor::UnRangedValueT< ValueT > >( value.range().getMin() ) );
-			prop->SetAttribute( wxPG_ATTR_MAX, getVariant< castor::UnRangedValueT< ValueT > >( value.range().getMax() ) );
-			prop->SetAttribute( wxPG_ATTR_SPINCTRL_WRAP, WXVARIANT( true ) );
-#if wxCHECK_VERSION( 3, 1, 0 )
-			prop->SetAttribute( wxPG_ATTR_SPINCTRL_MOTION, WXVARIANT( true ) );
-#endif
+			wxPGProperty * prop = appendProp( parent, new wxFloatProperty( name, m_prefix + name, value.value() ) );
+			prop->SetAttribute( SliderEditor::AttrMinValue, WXVARIANT( double( value.range().getMin() ) ) );
+			prop->SetAttribute( SliderEditor::AttrMaxValue, WXVARIANT( double( value.range().getMax() ) ) );
+			prop->SetEditor( wxPGConstructSliderCtrlEditorClass() );
+			prop->SetValidator( SliderEditor::Validator{} );
+
+			if constexpr ( std::is_same_v< castor::UnRangedValueT< ValueT >, double > || std::is_same_v< castor::UnRangedValueT< ValueT >, float > )
+			{
+				prop->SetAttribute( SliderEditor::AttrPrecision, WXVARIANT( 100.0 ) );
+			}
+			else
+			{
+				prop->SetAttribute( SliderEditor::AttrPrecision, WXVARIANT( 1.0 ) );
+			}
 			return prop;
 		}
 		else if constexpr ( std::is_same_v< ValueT, wxString > )

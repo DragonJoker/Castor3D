@@ -17,7 +17,7 @@ namespace GuiCommon
 		CreateTreeItemMenu();
 	}
 
-	void BoneTreeItemProperty::doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )
+	void BoneTreeItemProperty::doCreateProperties( wxPropertyGrid * grid )
 	{
 		static wxString PROPERTY_CATEGORY_BONE = _( "Bone: " );
 		static wxString PROPERTY_CATEGORY_TRANSLATE = _( "Translate" );

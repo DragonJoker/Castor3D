@@ -38,7 +38,7 @@ namespace GuiCommon
 		/**
 		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
-		void doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )override;
+		void doCreateProperties( wxPropertyGrid * grid )override;
 
 	private:
 		void doCreateControlProperties( wxPropertyGrid * grid, castor3d::ButtonCtrl & object );

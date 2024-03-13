@@ -15,8 +15,7 @@ namespace GuiCommon
 		CreateTreeItemMenu();
 	}
 
-	void ColourGradingConfigTreeItemProperty::doCreateProperties( wxPGEditor * editor
-		, wxPropertyGrid * grid )
+	void ColourGradingConfigTreeItemProperty::doCreateProperties( wxPropertyGrid * grid )
 	{
 		TreeItemConfigurationBuilder::submit( grid, *this, m_config );
 	}

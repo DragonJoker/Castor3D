@@ -51,10 +51,8 @@ namespace GuiCommon
 		/**
 		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
-		void doCreateProperties( wxPGEditor * editor
-			, wxPropertyGrid * grid )override;
-		void doCreateFogProperties( wxPGEditor * editor
-			, wxPropertyGrid * grid );
+		void doCreateProperties( wxPropertyGrid * grid )override;
+		void doCreateFogProperties( wxPropertyGrid * grid );
 
 	private:
 		void onDebugOverlaysChange( wxVariant const & var );

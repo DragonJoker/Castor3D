@@ -34,18 +34,6 @@ namespace GuiCommon
 		{
 			return m_canEdit;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the button editor
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère l'àditeur bouton
-		 *\return		La valeur
-		 */
-		static wxPGEditor * getButtonEditor()
-		{
-			return m_buttonEditor;
-		}
 
 	private:
 		void onPropertyChange( wxPropertyGridEvent & event );
@@ -53,7 +41,6 @@ namespace GuiCommon
 	private:
 		bool m_canEdit;
 		TreeItemProperty * m_data;
-		static wxPGEditor * m_buttonEditor;
 	};
 }
 

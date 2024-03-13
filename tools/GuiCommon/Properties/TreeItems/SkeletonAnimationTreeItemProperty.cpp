@@ -18,8 +18,7 @@ namespace GuiCommon
 		CreateTreeItemMenu();
 	}
 
-	void SkeletonAnimationTreeItemProperty::doCreateProperties( wxPGEditor * editor
-		, wxPropertyGrid * grid )
+	void SkeletonAnimationTreeItemProperty::doCreateProperties( wxPropertyGrid * grid )
 	{
 		static wxString PROPERTY_CATEGORY_SKELETON_ANIMATION = _( "Skeleton Animation: " );
 

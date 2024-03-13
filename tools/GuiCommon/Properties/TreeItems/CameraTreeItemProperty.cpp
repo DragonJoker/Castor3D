@@ -17,8 +17,7 @@ namespace GuiCommon
 		CreateTreeItemMenu();
 	}
 
-	void CameraTreeItemProperty::doCreateProperties( wxPGEditor * editor
-		, wxPropertyGrid * grid )
+	void CameraTreeItemProperty::doCreateProperties( wxPropertyGrid * grid )
 	{
 		static wxString PROPERTY_CATEGORY_CAMERA = _( "Camera: " );
 

@@ -25,8 +25,7 @@ namespace GuiCommon
 			, castor3d::RenderTarget & target );
 
 	private:
-		void doCreateProperties( wxPGEditor * editor
-			, wxPropertyGrid * grid )override;
+		void doCreateProperties( wxPropertyGrid * grid )override;
 
 	private:
 		castor3d::RenderTarget & m_target;

@@ -16,8 +16,7 @@ namespace GuiCommon
 		CreateTreeItemMenu();
 	}
 
-	void VCTConfigTreeItemProperty::doCreateProperties( wxPGEditor * editor
-		, wxPropertyGrid * grid )
+	void VCTConfigTreeItemProperty::doCreateProperties( wxPropertyGrid * grid )
 	{
 		TreeItemConfigurationBuilder::submit( grid, *this, m_config );
 	}
