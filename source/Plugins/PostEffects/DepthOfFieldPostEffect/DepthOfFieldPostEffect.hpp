@@ -73,7 +73,7 @@ namespace dof
 		std::unique_ptr< castor3d::GaussianBlur > m_blurNearCoC;
 		std::unique_ptr< castor3d::GaussianBlur > m_blurFarCoC;
 		crg::FramePass const * m_lastPass{};
-		DepthOfFieldUboConfiguration m_data{};
+		DepthOfFieldConfig m_data{};
 		DepthOfFieldUbo m_ubo;
 	};
 }

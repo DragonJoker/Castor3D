@@ -17,15 +17,15 @@ namespace dof
 	namespace parse
 	{
 		class TextWriter
-			: public castor::TextWriterT< DepthOfFieldUboConfiguration >
+			: public castor::TextWriterT< DepthOfFieldConfig >
 		{
 		public:
 			explicit TextWriter( castor::String const & tabs )
-				: TextWriterT< DepthOfFieldUboConfiguration >{ tabs }
+				: TextWriterT< DepthOfFieldConfig >{ tabs }
 			{
 			}
 
-			bool operator()( DepthOfFieldUboConfiguration const & object
+			bool operator()( DepthOfFieldConfig const & object
 				, castor::StringStream & file )override
 			{
 				castor3d::log::info << cuT( "Writing Depth of Field" ) << std::endl;
@@ -33,9 +33,9 @@ namespace dof
 
 				if ( auto block{ beginBlock( file, cuT( "depth_of_field" ) ) } )
 				{
-					result = writeOpt( file, cuT( "focal_distance" ), object.focalDistance, 10.0f )
-						&& writeOpt( file, cuT( "focal_length" ), object.focalLength, 1.0f )
-						&& writeOpt( file, cuT( "bokeh_scale" ), object.bokehScale, 1.0f );
+					result = writeOpt( file, cuT( "focal_distance" ), object.focalDistance.value(), 10.0f )
+						&& writeOpt( file, cuT( "focal_length" ), object.focalLength.value(), 1.0f )
+						&& writeOpt( file, cuT( "bokeh_scale" ), object.bokehScale.value(), 1.0f );
 				}
 
 				return result;
@@ -128,7 +128,7 @@ namespace dof
 
 	//*********************************************************************************************
 
-	void DepthOfFieldUboConfiguration::setParameters( castor3d::Parameters parameters )
+	void DepthOfFieldConfig::setParameters( castor3d::Parameters parameters )
 	{
 		float value{};
 
@@ -146,32 +146,9 @@ namespace dof
 		{
 			bokehScale = value;
 		}
-
-		float constexpr goldenAngle = 2.39996323f;
-		size_t idx64 = 0;
-		size_t idx16 = 0;
-
-		for ( int j = 0; j < 80; ++j )
-		{
-			auto theta = float( j ) * goldenAngle;
-			auto r = float( sqrt( j ) / sqrt( 80.0 ) );
-
-			castor::Point4f p{ r * cos( theta ), r * sin( theta ), 0.0f, 0.0f };
-
-			if ( j % 5 == 0 )
-			{
-				points16[idx16] = p;
-				++idx16;
-			}
-			else
-			{
-				points64[idx64] = p;
-				++idx64;
-			}
-		}
 	}
 
-	void DepthOfFieldUboConfiguration::accept( castor3d::ConfigurationVisitorBase & visitor )
+	void DepthOfFieldConfig::accept( castor3d::ConfigurationVisitorBase & visitor )
 	{
 		visitor.visit( cuT( "Depth Of Field" ) );
 		visitor.visit( cuT( "Focal Distance" ), focalDistance );
@@ -179,12 +156,12 @@ namespace dof
 		visitor.visit( cuT( "Bokeh Scale" ), bokehScale );
 	}
 
-	bool DepthOfFieldUboConfiguration::write( castor::StringStream & file, castor::String const & tabs )const
+	bool DepthOfFieldConfig::write( castor::StringStream & file, castor::String const & tabs )const
 	{
 		return dof::parse::TextWriter{ tabs }( *this, file );
 	}
 
-	castor::AttributeParsers DepthOfFieldUboConfiguration::createParsers()
+	castor::AttributeParsers DepthOfFieldConfig::createParsers()
 	{
 		using namespace castor;
 		AttributeParsers result;
@@ -198,7 +175,7 @@ namespace dof
 		return result;
 	}
 
-	castor::StrUInt32Map DepthOfFieldUboConfiguration::createSections()
+	castor::StrUInt32Map DepthOfFieldConfig::createSections()
 	{
 		return
 		{
@@ -222,9 +199,43 @@ namespace dof
 		m_device.uboPool->putBuffer( m_ubo );
 	}
 
-	void DepthOfFieldUbo::cpuUpdate( Configuration const & data )
+	void DepthOfFieldUbo::cpuUpdate( DepthOfFieldConfig const & data )
 	{
-		m_ubo.getData() = data;
+		auto & dst = m_ubo.getData();
+
+		if ( dst.pad0 == 0.0f )
+		{
+			float constexpr goldenAngle = 2.39996323f;
+			size_t idx64 = 0;
+			size_t idx16 = 0;
+
+			for ( int j = 0; j < 80; ++j )
+			{
+				auto theta = float( j ) * goldenAngle;
+				auto r = float( sqrt( j ) / sqrt( 80.0 ) );
+
+				castor::Point4f p{ r * cos( theta ), r * sin( theta ), 0.0f, 0.0f };
+
+				if ( j % 5 == 0 )
+				{
+					dst.points16[idx16] = p;
+					++idx16;
+				}
+				else
+				{
+					dst.points64[idx64] = p;
+					++idx64;
+				}
+			}
+
+			dst.pad0 = 1.0f;
+		}
+
+		dst.focalDistance = data.focalDistance.value();
+		dst.focalLength = data.focalLength.value();
+		dst.bokehScale = data.bokehScale.value();
+		dst.pixelStepFull = data.pixelStepFull;
+		dst.pixelStepHalf = data.pixelStepHalf;
 	}
 
 	//*********************************************************************************************

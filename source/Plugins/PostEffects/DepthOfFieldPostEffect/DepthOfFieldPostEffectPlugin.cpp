@@ -43,8 +43,8 @@ extern "C"
 		engine->getPostEffectFactory().registerType( dof::PostEffect::Type
 			, &dof::PostEffect::create );
 		engine->registerParsers( dof::PostEffect::Type
-			, dof::DepthOfFieldUboConfiguration::createParsers()
-			, dof::DepthOfFieldUboConfiguration::createSections()
+			, dof::DepthOfFieldConfig::createParsers()
+			, dof::DepthOfFieldConfig::createSections()
 			, nullptr );
 	}
 

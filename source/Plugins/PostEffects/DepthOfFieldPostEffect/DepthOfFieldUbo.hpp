@@ -15,7 +15,7 @@ See LICENSE file in root folder
 
 namespace dof
 {
-	struct DepthOfFieldUboConfiguration
+	struct DepthOfFieldConfig
 	{
 		void setParameters( castor3d::Parameters parameters );
 		void accept( castor3d::ConfigurationVisitorBase & visitor );
@@ -23,10 +23,20 @@ namespace dof
 		static castor::AttributeParsers createParsers();
 		static castor::StrUInt32Map createSections();
 
+		castor::RangedValue< float > focalDistance{ 10.0f, castor::makeRange( 0.0f, 100.0f ) };
+		castor::RangedValue< float > focalLength{ 1.0f, castor::makeRange( 0.0f, 100.0f ) };
+		castor::RangedValue< float > bokehScale{ 1.0f, castor::makeRange( 0.0f, 10.0f ) };
+
+		castor::Point2f pixelStepFull{ 1.0f, 1.0f };
+		castor::Point2f pixelStepHalf{ 1.0f, 1.0f };
+	};
+
+	struct DepthOfFieldUboConfiguration
+	{
 		float focalDistance{ 10.0f };
 		float focalLength{ 1.0f };
 		float bokehScale{ 1.0f };
-		float pad0;
+		float pad0{ 0.0f };
 
 		castor::Point2f pixelStepFull{ 1.0f, 1.0f };
 		castor::Point2f pixelStepHalf{ 1.0f, 1.0f };
@@ -72,7 +82,7 @@ namespace dof
 	public:
 		explicit DepthOfFieldUbo( castor3d::RenderDevice const & device );
 		~DepthOfFieldUbo();
-		void cpuUpdate( Configuration const & data );
+		void cpuUpdate( DepthOfFieldConfig const & data );
 
 		void createPassBinding( crg::FramePass & pass
 			, uint32_t binding )const
