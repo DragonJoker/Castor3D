@@ -28,8 +28,7 @@ namespace GuiCommon
 		CreateTreeItemMenu();
 	}
 
-	void SubmeshTreeItemProperty::doCreateProperties( wxPGEditor * editor
-		, wxPropertyGrid * grid )
+	void SubmeshTreeItemProperty::doCreateProperties( wxPropertyGrid * grid )
 	{
 		static wxString PROPERTY_CATEGORY_SUBMESH = _( "Submesh: " );
 		static wxString PROPERTY_SUBMESH_MATERIAL = _( "Material" );

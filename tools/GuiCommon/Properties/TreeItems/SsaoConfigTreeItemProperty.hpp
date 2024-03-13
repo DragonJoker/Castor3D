@@ -25,10 +25,7 @@ namespace GuiCommon
 			, castor3d::SsaoConfig & config );
 
 	private:
-		void doCreateProperties( wxPGEditor * editor
-			, wxPropertyGrid * grid )override;
-		void doCreateSsaoProperties( wxPGEditor * editor
-			, wxPropertyGrid * grid );
+		void doCreateProperties( wxPropertyGrid * grid )override;
 
 	private:
 		castor3d::SsaoConfig & m_config;

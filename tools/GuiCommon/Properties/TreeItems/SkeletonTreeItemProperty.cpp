@@ -17,8 +17,7 @@ namespace GuiCommon
 		CreateTreeItemMenu();
 	}
 
-	void SkeletonTreeItemProperty::doCreateProperties( wxPGEditor * editor
-		, wxPropertyGrid * grid )
+	void SkeletonTreeItemProperty::doCreateProperties( wxPropertyGrid * grid )
 	{
 		static wxString PROPERTY_CATEGORY_SKELETON = _( "Skeleton: " );
 		static wxString PROPERTY_CATEGORY_INVERSE_BIND = _( "Global Inverse Bind" );

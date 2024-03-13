@@ -19,8 +19,7 @@ namespace GuiCommon
 		CreateTreeItemMenu();
 	}
 
-	void ClustersConfigTreeItemProperty::doCreateProperties( wxPGEditor * editor
-		, wxPropertyGrid * grid )
+	void ClustersConfigTreeItemProperty::doCreateProperties( wxPropertyGrid * grid )
 	{
 		TreeItemConfigurationBuilder::submit( grid, *this, m_target.getClustersConfig() );
 	}

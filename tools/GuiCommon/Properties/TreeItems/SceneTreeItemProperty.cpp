@@ -19,7 +19,7 @@ namespace GuiCommon
 		CreateTreeItemMenu();
 	}
 
-	void SceneTreeItemProperty::doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )
+	void SceneTreeItemProperty::doCreateProperties( wxPropertyGrid * grid )
 	{
 		static wxString PROPERTY_CATEGORY_SCENE = _( "Scene: " );
 		static wxString PROPERTY_SCENE_AMBIENT_LIGHT = _( "Ambient light" );
@@ -29,11 +29,10 @@ namespace GuiCommon
 		addPropertyT( grid, PROPERTY_SCENE_AMBIENT_LIGHT, m_scene.getAmbientLight(), &m_scene, &castor3d::Scene::setAmbientLight );
 		addPropertyT( grid, PROPERTY_SHADOW_LPV_INDIRECT_ATT, m_scene.getLpvIndirectAttenuation(), &m_scene, &castor3d::Scene::setLpvIndirectAttenuation );
 
-		doCreateFogProperties( editor, grid );
+		doCreateFogProperties( grid );
 	}
 
-	void SceneTreeItemProperty::doCreateFogProperties( wxPGEditor * editor
-		, wxPropertyGrid * grid )
+	void SceneTreeItemProperty::doCreateFogProperties( wxPropertyGrid * grid )
 	{
 		static wxString PROPERTY_FOG = _( "Fog" );
 		static wxString PROPERTY_FOG_TYPE = _( "Type" );

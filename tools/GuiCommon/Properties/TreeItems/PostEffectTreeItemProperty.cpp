@@ -115,8 +115,7 @@ namespace GuiCommon
 		CreateTreeItemMenu();
 	}
 
-	void PostEffectTreeItemProperty::doCreateProperties( wxPGEditor * editor
-		, wxPropertyGrid * grid )
+	void PostEffectTreeItemProperty::doCreateProperties( wxPropertyGrid * grid )
 	{
 		static wxString PROPERTY_CATEGORY_POST_EFFECT = _( "Post Effect: " );
 		static wxString PROPERTY_POST_EFFECT_ENABLED = _( "Enabled" );
@@ -125,7 +124,7 @@ namespace GuiCommon
 
 		addProperty( grid, PROPERTY_CATEGORY_POST_EFFECT + m_effect.getName() );
 		addPropertyT( grid, PROPERTY_POST_EFFECT_ENABLED, m_effect.isEnabled(), &m_effect, &castor3d::PostEffect::enable );
-		addProperty( grid, PROPERTY_POST_EFFECT_SHADER, editor
+		addProperty( grid, PROPERTY_POST_EFFECT_SHADER
 			, [this]( wxVariant const & var )
 			{
 				ShaderSources sources = PostEffectShaderGatherer::submit( m_effect );

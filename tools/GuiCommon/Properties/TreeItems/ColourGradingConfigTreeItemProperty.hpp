@@ -25,10 +25,8 @@ namespace GuiCommon
 			, castor3d::ColourGradingConfig & config );
 
 	private:
-		void doCreateProperties( wxPGEditor * editor
-			, wxPropertyGrid * grid )override;
-		void doCreateSsaoProperties( wxPGEditor * editor
-			, wxPropertyGrid * grid );
+		void doCreateProperties( wxPropertyGrid * grid )override;
+		void doCreateSsaoProperties( wxPropertyGrid * grid );
 
 	private:
 		castor3d::ColourGradingConfig & m_config;

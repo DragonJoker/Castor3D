@@ -102,8 +102,7 @@ namespace GuiCommon
 		CreateTreeItemMenu();
 	}
 
-	void FrameVariableTreeItemProperty::doCreateProperties( wxPGEditor * editor
-		, wxPropertyGrid * grid )
+	void FrameVariableTreeItemProperty::doCreateProperties( wxPropertyGrid * grid )
 	{
 		static wxString PROPERTY_CATEGORY_VARIABLE = _( "Uniform:" );
 		static wxString PROPERTY_VALUE = _( "Value" );

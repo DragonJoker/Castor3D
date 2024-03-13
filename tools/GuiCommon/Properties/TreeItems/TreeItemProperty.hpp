@@ -61,10 +61,9 @@ namespace GuiCommon
 		/**
 		 *\~english
 		 *\brief		Creates and fills the item properties, in the given wxPropertyGrid
-		 *\param[in]	editor	The button editor, for properties that need it
 		 *\param[in]	grid	The target wxPropertyGrid
 		 */
-		void CreateProperties( wxPGEditor * editor, wxPropertyGrid * grid );
+		void CreateProperties( wxPropertyGrid * grid );
 		/**
 		 *\brief		Call when a property grid property is changed
 		 *\param[in]	event	The event
@@ -106,7 +105,7 @@ namespace GuiCommon
 		 *\param[in]	editor	The button editor, for properties that need it
 		 *\param[in]	grid	The target wxPropertyGrid
 		 */
-		virtual void doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid ) = 0;
+		virtual void doCreateProperties( wxPropertyGrid * grid ) = 0;
 
 	public:
 		using PropertyChangeHandler = castor::Function< void ( wxVariant const & ) >;
@@ -179,12 +178,10 @@ namespace GuiCommon
 			, castor3d::ConfigurationVisitorBase::ControlsListT< ControlT > controls = castor3d::ConfigurationVisitorBase::ControlsListT< ControlT >{} );
 		wxPGProperty * addProperty( wxPropertyGrid * parent
 			, wxString const & name
-			, wxPGEditor * editor
 			, PropertyChangeHandler handler
 			, bool * control = nullptr );
 		wxPGProperty * addProperty( wxPGProperty * parent
 			, wxString const & name
-			, wxPGEditor * editor
 			, PropertyChangeHandler handler
 			, bool * control = nullptr );
 		wxPGProperty * addProperty( wxPropertyGrid * parent
@@ -201,12 +198,10 @@ namespace GuiCommon
 			, std::atomic_bool * control );
 		wxPGProperty * addProperty( wxPropertyGrid * parent
 			, wxString const & name
-			, wxPGEditor * editor
 			, PropertyChangeHandler handler
 			, std::atomic_bool * control );
 		wxPGProperty * addProperty( wxPGProperty * parent
 			, wxString const & name
-			, wxPGEditor * editor
 			, PropertyChangeHandler handler
 			, std::atomic_bool * control );
 		wxPGProperty * addMaterial( wxPropertyGrid * parent

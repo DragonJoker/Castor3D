@@ -66,6 +66,121 @@ namespace GuiCommon
 
 		return false;
 	}
+
+	//************************************************************************************************
+
+	wxString const SliderEditor::AttrMinValue = wxT( "gcFSEMinValue" );
+	wxString const SliderEditor::AttrMaxValue = wxT( "gcFSEMaxValue" );
+	wxString const SliderEditor::AttrPrecision = wxT( "gcFSEPrecision" );
+
+	wxPGWindowList SliderEditor::CreateControls( wxPropertyGrid * propgrid, wxPGProperty * property, wxPoint const & pos, wxSize const & size )const
+	{
+		double value = property->GetValue().GetDouble();
+		auto minValue = property->GetAttribute( AttrMinValue ).GetDouble();
+		auto maxValue = property->GetAttribute( AttrMaxValue ).GetDouble();
+		auto precision = property->GetAttribute( AttrPrecision ).GetDouble();
+
+		value = std::min( std::max( value, minValue ), maxValue );
+		return wxPGWindowList{ new wxSlider{ propgrid->GetPanel(), wxID_ANY
+			, int( value * precision ), int( minValue * precision ), int( maxValue * precision )
+			, pos, size, wxSL_HORIZONTAL } };
+	}
+
+	void SliderEditor::UpdateControl( wxPGProperty * property, wxWindow * wnd ) const
+	{
+		if ( auto ctrl = dynamic_cast< wxSlider * >( wnd ) )
+		{
+			auto value = property->DoGetValue().GetDouble();
+			auto minValue = property->GetAttribute( AttrMinValue ).GetDouble();
+			auto maxValue = property->GetAttribute( AttrMaxValue ).GetDouble();
+			auto precision = property->GetAttribute( AttrPrecision ).GetDouble();
+			value = std::min( std::max( value, minValue ), maxValue );
+			ctrl->SetValue( int( value * precision ) );
+		}
+	}
+
+	bool SliderEditor::OnEvent( wxPropertyGrid * propgrid, wxPGProperty * property, wxWindow * wnd_primary, wxEvent & event )const
+	{
+		if ( event.GetEventType() == wxEVT_SCROLL_CHANGED
+			|| event.GetEventType() == wxEVT_SCROLL_THUMBTRACK
+			|| event.GetEventType() == wxEVT_SCROLL_THUMBRELEASE )
+		{
+			// Update the value
+			event.Skip();
+			propgrid->EditorsValueWasModified();
+
+			return true;
+		}
+
+		return false;
+	}
+
+	bool SliderEditor::GetValueFromControl( wxVariant & variant, wxPGProperty * property, wxWindow * wnd )const
+	{
+		if ( auto ctrl = dynamic_cast< wxSlider * >( wnd ) )
+		{
+			if ( auto precision = property->GetAttribute( AttrPrecision ).GetDouble();
+				precision == 1.0 )
+			{
+				variant = wxVariant( long( ctrl->GetValue() ) );
+				property->SetValue( variant );
+			}
+			else
+			{
+				variant = wxVariant( double( ctrl->GetValue() ) / double( precision ) );
+				property->SetValue( variant );
+			}
+		}
+
+		return true;
+	}
+
+	void SliderEditor::SetValueToUnspecified( wxPGProperty * property, wxWindow * wnd )const
+	{
+		if ( auto ctrl = dynamic_cast< wxSlider * >( wnd ) )
+		{
+			if ( auto precision = property->GetAttribute( AttrPrecision ).GetDouble();
+				precision == 1.0 )
+			{
+				auto minValue = property->GetAttribute( AttrMinValue ).GetDouble();
+				ctrl->SetValue( int( minValue ) );
+			}
+			else
+			{
+				auto minValue = property->GetAttribute( AttrMinValue ).GetDouble();
+				ctrl->SetValue( int( minValue * precision ) );
+			}
+		}
+	}
+
+	//************************************************************************************************
+
+	wxPGEditor * wxPGEditor_ButtonCtrl{};
+
+	wxPGEditor * wxPGConstructButtonCtrlEditorClass()
+	{
+		if ( !wxPGEditor_ButtonCtrl )
+		{
+			wxPGEditor_ButtonCtrl = wxPropertyGrid::DoRegisterEditorClass( new ButtonEventEditor, wxT( "ButtonEventEditor" ) );
+		}
+
+		return wxPGEditor_ButtonCtrl;
+	}
+
+	//************************************************************************************************
+
+	wxPGEditor * wxPGEditor_SliderCtrl{};
+
+	wxPGEditor * wxPGConstructSliderCtrlEditorClass()
+	{
+		if ( !wxPGEditor_SliderCtrl )
+		{
+			wxPGEditor_SliderCtrl = wxPropertyGrid::DoRegisterEditorClass( new SliderEditor, wxT( "SliderEditor" ) );
+		}
+
+		return wxPGEditor_SliderCtrl;
+	}
+
 	//************************************************************************************************
 
 	wxFloatProperty * CreateProperty( wxString const & name, double const & value )

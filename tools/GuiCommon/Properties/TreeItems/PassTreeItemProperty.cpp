@@ -552,7 +552,7 @@ namespace GuiCommon
 		CreateTreeItemMenu();
 	}
 
-	void PassTreeItemProperty::doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )
+	void PassTreeItemProperty::doCreateProperties( wxPropertyGrid * grid )
 	{
 		static wxString PROPERTY_CATEGORY_PASS = _( "Pass: " );
 		static wxString PROPERTY_CATEGORY_BASE = _( "Base" );
@@ -563,7 +563,7 @@ namespace GuiCommon
 		{
 			addProperty( grid, PROPERTY_CATEGORY_PASS + wxString( pass->getOwner()->getName() ) );
 			auto mainContainer = addProperty( grid, PROPERTY_CATEGORY_BASE );
-			addProperty( grid, PROPERTY_PASS_SHADER, editor
+			addProperty( grid, PROPERTY_PASS_SHADER
 				, [this]( wxVariant const & var )
 				{
 					auto lpass = getPass();

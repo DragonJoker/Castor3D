@@ -20,8 +20,7 @@ namespace GuiCommon
 		CreateTreeItemMenu();
 	}
 
-	void BillboardTreeItemProperty::doCreateProperties( wxPGEditor * editor
-		, wxPropertyGrid * grid )
+	void BillboardTreeItemProperty::doCreateProperties( wxPropertyGrid * grid )
 	{
 		static wxString PROPERTY_CATEGORY_BILLBOARD = _( "Billboard: " );
 		static wxString PROPERTY_BILLBOARD_MATERIAL = _( "Material" );

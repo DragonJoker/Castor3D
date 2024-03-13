@@ -31,8 +31,7 @@ namespace GuiCommon
 		CreateTreeItemMenu();
 	}
 
-	void SsaoConfigTreeItemProperty::doCreateProperties( wxPGEditor * editor
-		, wxPropertyGrid * grid )
+	void SsaoConfigTreeItemProperty::doCreateProperties( wxPropertyGrid * grid )
 	{
 		TreeItemConfigurationBuilder::submit( grid, *this, m_config );
 	}

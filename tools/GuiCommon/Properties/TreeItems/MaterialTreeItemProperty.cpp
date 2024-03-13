@@ -15,8 +15,7 @@ namespace GuiCommon
 		CreateTreeItemMenu();
 	}
 
-	void MaterialTreeItemProperty::doCreateProperties( wxPGEditor * editor
-		, wxPropertyGrid * grid )
+	void MaterialTreeItemProperty::doCreateProperties( wxPropertyGrid * grid )
 	{
 		static wxString PROPERTY_CATEGORY_MATERIAL = _( "Material: " );
 

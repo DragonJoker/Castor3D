@@ -27,8 +27,7 @@ namespace GuiCommon
 		CreateTreeItemMenu();
 	}
 
-	void OverlayTreeItemProperty::doCreateProperties( wxPGEditor * editor
-		, wxPropertyGrid * grid )
+	void OverlayTreeItemProperty::doCreateProperties( wxPropertyGrid * grid )
 	{
 		static wxString PROPERTY_CATEGORY_OVERLAY = _( "Overlay: " );
 		static wxString PROPERTY_OVERLAY_VISIBLE = _( "Visible" );

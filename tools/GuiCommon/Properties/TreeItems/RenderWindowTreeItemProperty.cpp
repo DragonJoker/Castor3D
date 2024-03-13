@@ -18,18 +18,16 @@ namespace GuiCommon
 		CreateTreeItemMenu();
 	}
 
-	void RenderWindowTreeItemProperty::doCreateProperties( wxPGEditor * editor
-		, wxPropertyGrid * grid )
+	void RenderWindowTreeItemProperty::doCreateProperties( wxPropertyGrid * grid )
 	{
 		static wxString PROPERTY_CATEGORY_RENDER_WINDOW = _( "Render Window: " );
 
 		addProperty( grid, PROPERTY_CATEGORY_RENDER_WINDOW + wxString( m_window.getName() ) );
 
-		doCreateDebugProperties( editor, grid );
+		doCreateDebugProperties( grid );
 	}
 
-	void RenderWindowTreeItemProperty::doCreateDebugProperties( wxPGEditor * editor
-		, wxPropertyGrid * grid )
+	void RenderWindowTreeItemProperty::doCreateDebugProperties( wxPropertyGrid * grid )
 	{
 		static wxString PROPERTY_CATEGORY_DEBUG = _( "Debug" );
 		static wxString PROPERTY_SCENE_DEBUG_OVERLAYS = _( "Debug overlays" );

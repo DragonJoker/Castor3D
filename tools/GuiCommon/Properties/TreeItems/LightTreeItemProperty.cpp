@@ -21,7 +21,7 @@ namespace GuiCommon
 		CreateTreeItemMenu();
 	}
 
-	void LightTreeItemProperty::doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )
+	void LightTreeItemProperty::doCreateProperties( wxPropertyGrid * grid )
 	{
 		TreeItemConfigurationBuilder::submit( grid, *this, m_light );
 	}

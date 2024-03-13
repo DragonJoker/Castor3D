@@ -127,8 +127,7 @@ namespace GuiCommon
 		CreateTreeItemMenu();
 	}
 
-	void ToneMappingTreeItemProperty::doCreateProperties( wxPGEditor * editor
-		, wxPropertyGrid * grid )
+	void ToneMappingTreeItemProperty::doCreateProperties( wxPropertyGrid * grid )
 	{
 		static wxString PROPERTY_CATEGORY_TONE_MAPPING = _( "Tone Mapping" );
 		static wxString PROPERTY_TONE_MAPPING_TYPE = _( "Type" );
@@ -168,7 +167,7 @@ namespace GuiCommon
 		castor3d::HdrConfig & hdrConfig = m_target.getHdrConfig();
 		addPropertyT( grid, PROPERTY_TONE_MAPPING_EXPOSURE, &hdrConfig.exposure );
 		addPropertyT( grid, PROPERTY_TONE_MAPPING_GAMMA, &hdrConfig.gamma );
-		addProperty( grid, PROPERTY_TONE_MAPPING_SHADER, editor
+		addProperty( grid, PROPERTY_TONE_MAPPING_SHADER
 			, [this]( wxVariant const & var ){ onEditShader( var ); } );
 	}
 

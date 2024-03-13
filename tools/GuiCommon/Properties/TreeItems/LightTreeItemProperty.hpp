@@ -59,7 +59,7 @@ namespace GuiCommon
 		/**
 		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
-		void doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )override;
+		void doCreateProperties( wxPropertyGrid * grid )override;
 
 	private:
 		castor3d::Light & m_light;

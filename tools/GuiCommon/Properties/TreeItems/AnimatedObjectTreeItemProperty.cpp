@@ -16,8 +16,7 @@ namespace GuiCommon
 		CreateTreeItemMenu();
 	}
 
-	void AnimatedObjectTreeItemProperty::doCreateProperties( wxPGEditor * editor
-		, wxPropertyGrid * grid )
+	void AnimatedObjectTreeItemProperty::doCreateProperties( wxPropertyGrid * grid )
 	{
 		static wxString PROPERTY_CATEGORY_ANIMATED_OBJECT = _( "Animated Object: " );
 		auto object = getObject();

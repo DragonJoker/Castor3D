@@ -25,8 +25,7 @@ namespace GuiCommon
 			, castor3d::VctConfig & config );
 
 	private:
-		void doCreateProperties( wxPGEditor * editor
-			, wxPropertyGrid * grid )override;
+		void doCreateProperties( wxPropertyGrid * grid )override;
 
 	private:
 		castor3d::VctConfig & m_config;

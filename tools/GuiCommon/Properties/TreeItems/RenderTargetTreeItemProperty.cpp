@@ -107,8 +107,7 @@ namespace GuiCommon
 		CreateTreeItemMenu();
 	}
 
-	void RenderTargetTreeItemProperty::doCreateProperties( wxPGEditor * editor
-		, wxPropertyGrid * grid )
+	void RenderTargetTreeItemProperty::doCreateProperties( wxPropertyGrid * grid )
 	{
 		static wxString PROPERTY_CATEGORY_RENDER_TARGET = _( "Render Target: " );
 		static wxString PROPERTY_RENDER_TARGET_SHADER = _( "Shader" );

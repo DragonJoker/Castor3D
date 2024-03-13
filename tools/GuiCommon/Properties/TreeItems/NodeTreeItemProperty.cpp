@@ -20,8 +20,7 @@ namespace GuiCommon
 		CreateTreeItemMenu();
 	}
 
-	void NodeTreeItemProperty::doCreateProperties( wxPGEditor * editor
-		, wxPropertyGrid * grid )
+	void NodeTreeItemProperty::doCreateProperties( wxPropertyGrid * grid )
 	{
 		static wxString PROPERTY_NODE_VISIBLE = _( "Visible" );
 
