@@ -11,9 +11,6 @@ See LICENSE file in root folder
 
 #include <ShaderWriter/Intrinsics/Intrinsics.hpp>
 
-#define C3D_DebugSpotShadows 0
-#define C3D_DebugCascades 0
-
 namespace castor3d::shader
 {
 	struct ShadowData

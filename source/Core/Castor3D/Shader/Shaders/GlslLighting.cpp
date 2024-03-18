@@ -23,6 +23,8 @@
 
 CU_ImplementSmartPtr( castor3d::shader, LightingModel )
 
+#define C3D_DebugCascades 0
+
 namespace castor3d::shader
 {
 	//*********************************************************************************************
@@ -1039,6 +1041,7 @@ namespace castor3d::shader
 			, ( baseShadows.shadowType() != sdw::UInt( int( ShadowType::eNone ) )
 				&& shadowMapIndex >= 0_i ) )
 		{
+			// Get cascade index for the current fragment's view position
 			auto cascadeFactors = m_writer.declLocale( "cascadeFactors"
 				, m_lights.getCascadeFactors( shadows
 					, lightSurface.viewPosition().value()
@@ -1070,16 +1073,16 @@ namespace castor3d::shader
 				IF( m_writer, cascadeFactors.z() > 0.0_f )
 				{
 					auto filterIndex = m_writer.declLocale( "filterIndex"
-						, *m_directionalCascadeIndex - 1u );
+						, *m_directionalCascadeIndex + 1u );
 					filterScale = abs( firstScale / shadows.splitScales()[filterIndex / 4u][filterIndex % 4u] );
 					baseShadows.pcfFilterSize() = clamp( filterSize * filterScale
 						, 1.0_f
-						, 64.0_f );
+						, sdw::Float{ float( MaxPcfFilterSize ) } );
 					shadowFactor += cascadeFactors.z()
 						* m_shadowModel.computeDirectional( baseShadows
 							, lightSurface
-							, shadows.transforms()[*m_directionalCascadeIndex - 1u]
-							, *m_directionalCascadeIndex - 1u
+							, shadows.transforms()[filterIndex]
+							, filterIndex
 							, shadows.cascadeCount() );
 				}
 				FI
@@ -1096,31 +1099,27 @@ namespace castor3d::shader
 			FI
 
 #if C3D_DebugCascades
-			IF( m_writer, cascadeIndex == 0_u )
+			auto cascadeColours = m_writer.declLocaleArray( "cascadeColours"
+				, 6u
+				, std::vector< sdw::Vec3 >{vec3( 1.0_f, 0.25f, 0.25f )
+					, vec3( 0.25f, 1.0_f, 0.25f )
+					, vec3( 0.25f, 0.25f, 1.0_f )
+					, vec3( 1.0_f, 1.0f, 0.25f )
+					, vec3( 1.0_f, 0.25f, 1.0f )
+					, vec3( 0.25_f, 1.0f, 1.0f ) } );
+			auto cascadeColour = m_writer.declLocale( "cascadeColour"
+				, ( cascadeColours[*m_directionalCascadeIndex] * cascadeFactors.y() ) );
+
+			IF( m_writer, cascadeFactors.z() > 0.0_f )
 			{
-				output.diffuse().rgb() *= vec3( 1.0_f, 0.25f, 0.25f );
-				output.specular().rgb() *= vec3( 1.0_f, 0.25f, 0.25f );
-				output.coatingSpecular().rgb() *= vec3( 1.0_f, 0.25f, 0.25f );
-			}
-			ELSEIF( cascadeIndex == 1_u )
-			{
-				output.diffuse().rgb() *= vec3( 0.25_f, 1.0f, 0.25f );
-				output.specular().rgb() *= vec3( 0.25_f, 1.0f, 0.25f );
-				output.coatingSpecular().rgb() *= vec3( 0.25_f, 1.0f, 0.25f );
-			}
-			ELSEIF( cascadeIndex == 2_u )
-			{
-				output.diffuse().rgb() *= vec3( 0.25_f, 0.25f, 1.0f );
-				output.specular().rgb() *= vec3( 0.25_f, 0.25f, 1.0f );
-				output.coatingSpecular().rgb() *= vec3( 0.25_f, 0.25f, 1.0f );
-			}
-			ELSE
-			{
-				output.diffuse().rgb() *= vec3( 1.0_f, 1.0f, 0.25f );
-				output.specular().rgb() *= vec3( 1.0_f, 1.0f, 0.25f );
-				output.coatingSpecular().rgb() *= vec3( 1.0_f, 1.0f, 0.25f );
+				cascadeColour += cascadeColours[*m_directionalCascadeIndex + 1_u] * cascadeFactors.z();
 			}
 			FI
+
+			output.diffuse().rgb() *= cascadeColour;
+			output.specular().rgb() *= cascadeColour;
+			output.coatingSpecular().rgb() *= cascadeColour;
+
 #endif
 		}
 		FI
