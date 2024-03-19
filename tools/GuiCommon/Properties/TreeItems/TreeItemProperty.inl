@@ -412,9 +412,9 @@ namespace GuiCommon
 			{
 				wxColour col;
 				col << var;
-				( *value.value )->x = float( ( ( col.GetRGB() & 0x00FF0000 ) >> 16 ) ) / 255.0f;
-				( *value.value )->y = float( ( ( col.GetRGB() & 0x0000FF00 ) >> 8 ) ) / 255.0f;
-				( *value.value )->z = float( ( ( col.GetRGB() & 0x000000FF ) >> 0 ) ) / 255.0f;
+				( *value.value )->x = float( col.Red() ) / 255.0f;
+				( *value.value )->y = float( col.Green() ) / 255.0f;
+				( *value.value )->z = float( col.Blue() ) / 255.0f;
 			}
 			, castor::move( controls ) );
 		return prop;
