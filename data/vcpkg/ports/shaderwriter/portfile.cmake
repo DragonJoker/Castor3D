@@ -2,9 +2,9 @@ vcpkg_minimum_required(VERSION 2022-10-12) # for ${VERSION}
 
 vcpkg_from_github(OUT_SOURCE_PATH SOURCE_PATH
     REPO DragonJoker/ShaderWriter
-    REF 52dc29e13be29dd84c538584712526fa079e1e6b
+    REF 073f111b92467c93eee884309ad52d871c18a33b
     HEAD_REF development
-    SHA512 47e568dbab09b3c76a7f44a8dcc6db17a1894e8a2fcc124a992d7b788b9b3a2c973df3bb82fb7db12449ea74aba2e9083bdf02bd679b6eb27ab97c2ee3e830c5
+    SHA512 42908d0df6826aadf9edbf3a65ca686af677dfa455d6387e6cae59f7d437c5db9c46828e1607d4f10661c8e81740de0dc457bdbbbc16bad8d225481d5d8253a3
 )
 
 vcpkg_from_github(OUT_SOURCE_PATH CMAKE_SOURCE_PATH
