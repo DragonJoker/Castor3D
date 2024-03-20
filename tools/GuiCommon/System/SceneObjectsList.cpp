@@ -862,8 +862,8 @@ namespace GuiCommon
 				{
 					AppendItem( lightsId
 						, light->getName()
-						, -1
-						, -1
+						, icon
+						, iconSel
 						, new LightTreeItemProperty{ m_propertiesHolder->isEditable(), *light } );
 				}
 			}
