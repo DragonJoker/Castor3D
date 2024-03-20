@@ -581,7 +581,7 @@ namespace castor3d::shader
 									, m_writer.cast< sdw::UInt >( shadowMapIndex )
 									, depthBias
 									, shadows.pcfSampleCount()
-									, shadows.pcfFilterSize() / 2.0_f );
+									, shadows.pcfFilterSize() );
 							}
 							ELSE
 							{
