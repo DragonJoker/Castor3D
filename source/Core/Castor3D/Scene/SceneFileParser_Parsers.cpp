@@ -2407,7 +2407,7 @@ namespace castor3d
 				, blockContext->isStatic );
 
 			auto name = sceneNode->getName();
-			auto node = blockContext->scene->scene->addSceneNode( name, sceneNode );
+			auto node = blockContext->scene->scene->addSceneNode( name, sceneNode, true );
 			sceneNode.reset();
 
 			if ( !blockContext->isStatic )

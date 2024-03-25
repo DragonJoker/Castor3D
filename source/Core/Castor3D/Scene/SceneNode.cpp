@@ -37,8 +37,6 @@ namespace castor3d
 			m_name += castor::string::toString( Count );
 		}
 
-		m_scene.markDirty( *this );
-
 		if ( parent )
 		{
 			doAttachTo( *parent );
@@ -104,6 +102,8 @@ namespace castor3d
 	void SceneNode::attachTo( SceneNode & node )
 	{
 		doAttachTo( node );
+		onParentChanged( *this );
+		markDirty();
 	}
 
 	void SceneNode::detach( bool cleanup )noexcept
@@ -185,6 +185,11 @@ namespace castor3d
 		}
 	}
 
+	void SceneNode::markDirty()
+	{
+		m_scene.markDirty( *this );
+	}
+
 	void SceneNode::rotate( castor::Quaternion const & orientation )
 	{
 		CU_Require( !m_static );
@@ -195,7 +200,7 @@ namespace castor3d
 			doUpdateChildsDerivedTransform();
 			m_mtxChanged = true;
 			m_mtxSet = false;
-			m_scene.markDirty( *this );
+			markDirty();
 		}
 	}
 
@@ -209,7 +214,7 @@ namespace castor3d
 			doUpdateChildsDerivedTransform();
 			m_mtxChanged = true;
 			m_mtxSet = false;
-			m_scene.markDirty( *this );
+			markDirty();
 		}
 	}
 
@@ -223,7 +228,7 @@ namespace castor3d
 			doUpdateChildsDerivedTransform();
 			m_mtxChanged = true;
 			m_mtxSet = false;
-			m_scene.markDirty( *this );
+			markDirty();
 		}
 	}
 
@@ -259,7 +264,7 @@ namespace castor3d
 			doUpdateChildsDerivedTransform();
 			m_mtxChanged = true;
 			m_mtxSet = false;
-			m_scene.markDirty( *this );
+			markDirty();
 		}
 	}
 
@@ -273,7 +278,7 @@ namespace castor3d
 			doUpdateChildsDerivedTransform();
 			m_mtxChanged = true;
 			m_mtxSet = false;
-			m_scene.markDirty( *this );
+			markDirty();
 		}
 	}
 
@@ -287,7 +292,7 @@ namespace castor3d
 			doUpdateChildsDerivedTransform();
 			m_mtxChanged = true;
 			m_mtxSet = false;
-			m_scene.markDirty( *this );
+			markDirty();
 		}
 	}
 
@@ -305,7 +310,7 @@ namespace castor3d
 				, m_orientation );
 			m_mtxChanged = true;
 			m_mtxSet = true;
-			m_scene.markDirty( *this );
+			markDirty();
 		}
 	}
 
@@ -449,9 +454,6 @@ namespace castor3d
 				m_parent->addChild( *this );
 				m_mtxChanged = true;
 			}
-
-			onParentChanged( *this );
-			m_scene.markDirty( *this );
 		}
 	}
 
@@ -465,7 +467,7 @@ namespace castor3d
 			m_parent = nullptr;
 			parent->detachChild( *this );
 			m_mtxChanged = true;
-			m_scene.markDirty( *this );
+			markDirty();
 		}
 	}
 
