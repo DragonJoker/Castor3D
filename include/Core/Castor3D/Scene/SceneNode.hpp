@@ -167,6 +167,13 @@ namespace castor3d
 		 *\brief		Détache tous les enfants de ce noeud
 		 */
 		C3D_API void detachChildren( bool cleanup )noexcept;
+		/**
+		 *\~english
+		 *\brief		Marks this scene node as dirty.
+		 *\~french
+		 *\brief		Marque ce noeud comme dirty.
+		 */
+		C3D_API void markDirty();
 		/**@}*/
 		/**
 		 *\name Local transformations.
@@ -374,6 +381,17 @@ namespace castor3d
 		SceneNode * m_parent{};
 		SceneNodeMap m_children;
 		MovableArray m_objects;
+	};
+
+	template< typename CacheT >
+	struct SceneNodeInitialiserT
+	{
+		using ElementT = typename CacheT::ElementT;
+
+		void operator()( ElementT & element )const
+		{
+			element.markDirty();
+		}
 	};
 
 	template< typename CacheT >

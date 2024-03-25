@@ -100,7 +100,7 @@ namespace castor3d
 		, castor::Named{ name }
 		, m_resources{ engine.getGraphResourceHandler() }
 		, m_sceneNodeCache{ makeObjectCache< SceneNode, castor::String, SceneNodeCacheTraits >( *this
-			, castor::DummyFunctorT< SceneNodeCache >{}
+			, SceneNodeInitialiserT< SceneNodeCache >{}
 			, castor::DummyFunctorT< SceneNodeCache >{}
 			, SceneNodeMergerT< SceneNodeCache >{ getName() }
 			, SceneNodeAttacherT< SceneNodeCache >{}
