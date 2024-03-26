@@ -163,7 +163,8 @@ namespace c3d_gltf
 			, NodeAnimationChannelSampler const & animChannels
 			, fastgltf::AnimationPath channel
 			, castor::Map< castor::Milliseconds, KeyT > & result
-			, castor::Set< castor::Milliseconds > & allTimes )
+			, castor::Set< castor::Milliseconds > & allTimes
+			, CompressedBufferDataAdapter const & adapter )
 		{
 			auto it = std::find_if( animChannels.begin()
 				, animChannels.end()
@@ -177,20 +178,22 @@ namespace c3d_gltf
 			{
 				AnimationChannelSampler const & channelSampler = *it;
 				castor::Vector< float > times;
-				fastgltf::iterateAccessor< float >( impAsset
+				iterateAccessor< float >( impAsset
 					, impAsset.accessors[channelSampler.second.inputAccessor]
 					, [&times]( float value )
 					{
 						times.push_back( value );
-					} );
+					}
+					, adapter );
 				castor::Vector< KeyT > values;
-				fastgltf::iterateAccessor< KeyDataTypeT< KeyT > >( impAsset
+				iterateAccessor< KeyDataTypeT< KeyT > >( impAsset
 					, impAsset.accessors[channelSampler.second.outputAccessor]
 					, [&values]( KeyDataTypeT< KeyT > value )
 					{
 						values.push_back( KeyT{ castor::move( value ) } );
-					} );
-					// for AnimationInterpolation::CubicSpline can have more outputs
+					}
+					, adapter );
+				// for AnimationInterpolation::CubicSpline can have more outputs
 				uint32_t weightStride = uint32_t( values.size() / times.size() );
 				uint32_t ii = ( channelSampler.second.interpolation == fastgltf::AnimationInterpolation::CubicSpline )
 					? 1u
@@ -217,15 +220,16 @@ namespace c3d_gltf
 			, uint32_t wantedFps
 			, AnimationT & animation
 			, castor::Map< castor::Milliseconds, castor::UniquePtr< KeyFrameT > > & keyframes
-			, FuncT fillKeyFrame )
+			, FuncT fillKeyFrame
+			, CompressedBufferDataAdapter const & adapter )
 		{
 			castor::Set< castor::Milliseconds > times;
 			castor::Map< castor::Milliseconds, castor::Point3f > translates;
 			castor::Map< castor::Milliseconds, castor::Quaternion > rotates;
 			castor::Map< castor::Milliseconds, castor::Point3f > scales;
-			auto maxTranslateTime = processKeys( impAsset, animChannels, fastgltf::AnimationPath::Translation, translates, times );
-			auto maxRotateTime = processKeys( impAsset, animChannels, fastgltf::AnimationPath::Rotation, rotates, times );
-			auto maxScaleTime = processKeys( impAsset, animChannels, fastgltf::AnimationPath::Scale, scales, times );
+			auto maxTranslateTime = processKeys( impAsset, animChannels, fastgltf::AnimationPath::Translation, translates, times, adapter );
+			auto maxRotateTime = processKeys( impAsset, animChannels, fastgltf::AnimationPath::Rotation, rotates, times, adapter );
+			auto maxScaleTime = processKeys( impAsset, animChannels, fastgltf::AnimationPath::Scale, scales, times, adapter );
 			synchroniseKeys( translates
 				, rotates
 				, scales
@@ -311,7 +315,8 @@ namespace c3d_gltf
 							, castor::Point3f const & scale )
 						{
 							keyframe.addAnimationObject( *object, position, orientation, scale );
-						} );
+						}
+						, file.getAdapter() );
 				}
 				else
 				{
@@ -449,19 +454,21 @@ namespace c3d_gltf
 				for ( AnimationChannelSampler & channelSampler : impNodeAnim )
 				{
 					castor::Vector< float > times;
-					fastgltf::iterateAccessor< float >( impAsset
+					iterateAccessor< float >( impAsset
 						, impAsset.accessors[channelSampler.second.inputAccessor]
 						, [&times]( float value )
 						{
 							times.push_back( value );
-						} );
+						}
+						, file.getAdapter() );
 					castor::Vector< float > values;
-					fastgltf::iterateAccessor< float >( impAsset
+					iterateAccessor< float >( impAsset
 						, impAsset.accessors[channelSampler.second.outputAccessor]
 						, [&values]( float value )
 						{
 							values.push_back( value );
-						} );
+						}
+						, file.getAdapter() );
 
 					// for AnimationInterpolation::CubicSpline can have more outputs
 					uint32_t weightStride = uint32_t( values.size() / times.size() );
@@ -549,7 +556,8 @@ namespace c3d_gltf
 				, castor::Point3f const & scale )
 			{
 				keyframe.setTransform( position, orientation, scale );
-			} );
+			}
+			, file.getAdapter() );
 
 		for ( auto & keyFrame : keyFrames )
 		{

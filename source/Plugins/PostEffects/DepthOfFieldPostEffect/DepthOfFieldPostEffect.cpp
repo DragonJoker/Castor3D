@@ -205,7 +205,7 @@ namespace dof
 
 	void PostEffect::doCpuUpdate( castor3d::CpuUpdater & updater )
 	{
-		if ( auto camera = m_renderTarget.getCamera() )
+		if ( m_renderTarget.getCamera() )
 		{
 			m_data.pixelStepHalf->x = 1.0f / float( m_nearCoC.getExtent().width );
 			m_data.pixelStepHalf->y = 1.0f / float( m_nearCoC.getExtent().height );

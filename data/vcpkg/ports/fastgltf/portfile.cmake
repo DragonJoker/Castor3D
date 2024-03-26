@@ -1,8 +1,8 @@
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO spnda/fastgltf
-    REF "v${VERSION}"
-    SHA512 66be8e5a05210d023ec5e47dd3aa721b3cf98428bd00e227007cfc97fda35c669b5e8b82254d26c6ce2254297d16fd7a5f6bbbf3da17432df09186091d1ae351
+    REF 4cd9855d50efa287f39ac0074ce3044bebd2e520
+    SHA512 314714d82d884feb528e16dcc77c33f1db741aa002e4f1924d5e9b4f68fee60a454a0fbbac340eed250f9e5a8b69f5f3504b67dfd8ff72660e609dfa598a6a2b
     HEAD_REF main
     PATCHES fix_uri_escape_spaces.patch
 )

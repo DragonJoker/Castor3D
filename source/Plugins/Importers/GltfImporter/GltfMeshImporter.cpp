@@ -23,7 +23,8 @@ namespace c3d_gltf
 		template< typename IndexT >
 		static void parseLineList( fastgltf::Asset const & impAsset
 			, fastgltf::Accessor const & impAccessor
-			, castor3d::LinesMapping & mapping )
+			, castor3d::LinesMapping & mapping
+			, CompressedBufferDataAdapter const & adapter )
 		{
 			auto count = impAccessor.count;
 			auto lineCount = count / 2u;
@@ -32,7 +33,7 @@ namespace c3d_gltf
 			castor3d::LineIndices curIndices;
 			uint32_t idx{};
 
-			fastgltf::iterateAccessor< IndexT >( impAsset
+			iterateAccessor< IndexT >( impAsset
 				, impAccessor
 				, [&curIndices, &indicesGroup, &idx]( IndexT value )
 				{
@@ -44,7 +45,8 @@ namespace c3d_gltf
 						idx = 0u;
 						indicesGroup.push_back( curIndices );
 					}
-				} );
+				}
+				, adapter );
 			mapping.getData().addLineGroup( indicesGroup.data(), indicesGroup.data() + indicesGroup.size() );
 		}
 
@@ -53,7 +55,8 @@ namespace c3d_gltf
 			, fastgltf::Accessor const & impAccessor
 			, uint32_t lineCount
 			, castor3d::LinesMapping & mapping
-			, bool loop )
+			, bool loop
+			, CompressedBufferDataAdapter const & adapter )
 		{
 			if ( !loop )
 			{
@@ -65,7 +68,7 @@ namespace c3d_gltf
 			castor3d::LineIndices curIndices;
 			uint32_t prvIndex{ ~0u };
 
-			fastgltf::iterateAccessor< IndexT >( impAsset
+			iterateAccessor< IndexT >( impAsset
 				, impAccessor
 				, [&curIndices, &indicesGroup, &prvIndex]( IndexT value )
 				{
@@ -80,7 +83,8 @@ namespace c3d_gltf
 						indicesGroup.push_back( curIndices );
 						prvIndex = value;
 					}
-				} );
+				}
+				, adapter );
 
 			if ( loop )
 			{
@@ -95,7 +99,8 @@ namespace c3d_gltf
 		template< typename IndexT >
 		static void parseTriangleList( fastgltf::Asset const & impAsset
 			, fastgltf::Accessor const & impAccessor
-			, castor3d::TriFaceMapping & mapping )
+			, castor3d::TriFaceMapping & mapping
+			, CompressedBufferDataAdapter const & adapter )
 		{
 			auto count = impAccessor.count;
 			auto faceCount = count / 3u;
@@ -104,7 +109,7 @@ namespace c3d_gltf
 			castor3d::FaceIndices curIndices;
 			uint32_t idx{};
 
-			fastgltf::iterateAccessor< IndexT >( impAsset
+			iterateAccessor< IndexT >( impAsset
 				, impAccessor
 				, [&curIndices, &indicesGroup, &idx]( IndexT value )
 				{
@@ -117,24 +122,27 @@ namespace c3d_gltf
 						castor::swap( curIndices[0], curIndices[1] );
 						indicesGroup.push_back( curIndices );
 					}
-				} );
+				}
+				, adapter );
 			mapping.getData().addFaceGroup( indicesGroup.data(), indicesGroup.data() + indicesGroup.size() );
 		}
 
 		template< typename IndexT, bool IsStripT >
 		static void parseTriangleStrip( fastgltf::Asset const & impAsset
 			, fastgltf::Accessor const & impAccessor
-			, castor3d::TriFaceMapping & mapping )
+			, castor3d::TriFaceMapping & mapping
+			, CompressedBufferDataAdapter const & adapter )
 		{
 			auto count = impAccessor.count;
 			castor::UInt32Array indices;
 			indices.reserve( count );
-			fastgltf::iterateAccessor< IndexT >( impAsset
+			iterateAccessor< IndexT >( impAsset
 				, impAccessor
 				, [&indices]( IndexT value )
 				{
 					indices.push_back( value );
-				} );
+				}
+				, adapter );
 
 			auto faceCount = count - 2u;
 			castor::Vector< castor3d::FaceIndices > indicesGroup;
@@ -196,7 +204,8 @@ namespace c3d_gltf
 		static bool parseAttributeData( fastgltf::Asset const & impAsset
 			, auto const & impAttributes
 			, std::pmr::string const & attrName
-			, castor::Vector< castor::Point< DstDataT, DstCountT > > & result )
+			, castor::Vector< castor::Point< DstDataT, DstCountT > > & result
+			, CompressedBufferDataAdapter const & adapter )
 		{
 			auto it = findAttribute( impAttributes, attrName );
 
@@ -208,7 +217,7 @@ namespace c3d_gltf
 			auto & impAccessor = impAsset.accessors[it->second];
 			result.reserve( impAccessor.count );
 
-			fastgltf::iterateAccessor< castor::Point< SrcDataT, SrcCountT > >( impAsset
+			iterateAccessor< castor::Point< SrcDataT, SrcCountT > >( impAsset
 				, impAccessor
 				, [&result]( castor::Point< SrcDataT, SrcCountT > value )
 				{
@@ -226,7 +235,8 @@ namespace c3d_gltf
 					{
 						result.push_back( castor::Point < DstDataT, DstCountT >{ value } );
 					}
-				} );
+				}
+				, adapter );
 			return !result.empty();
 		}
 
@@ -239,30 +249,31 @@ namespace c3d_gltf
 			, castor::Point3fArray & texcoords1
 			, castor::Point3fArray & texcoords2
 			, castor::Point3fArray & texcoords3
-			, castor::Point3fArray & colours )
+			, castor::Point3fArray & colours
+			, CompressedBufferDataAdapter const & adapter )
 		{
-			if ( !meshes::parseAttributeData< 3u, float >( impAsset, impAttributes, "POSITION", positions )
+			if ( !meshes::parseAttributeData< 3u, float >( impAsset, impAttributes, "POSITION", positions, adapter )
 				|| positions.empty() )
 			{
 				return;
 			}
 
-			if ( meshes::parseAttributeData< 3u, float >( impAsset, impAttributes, "NORMAL", normals ) )
+			if ( meshes::parseAttributeData< 3u, float >( impAsset, impAttributes, "NORMAL", normals, adapter ) )
 			{
-				if ( !meshes::parseAttributeData< 4u, float >( impAsset, impAttributes, "TANGENT", tangents ) )
+				if ( !meshes::parseAttributeData< 4u, float >( impAsset, impAttributes, "TANGENT", tangents, adapter ) )
 				{
-					meshes::parseAttributeData< 3u, float >( impAsset, impAttributes, "TANGENT", tangents );
+					meshes::parseAttributeData< 3u, float >( impAsset, impAttributes, "TANGENT", tangents, adapter );
 				}
 			}
 
-			meshes::parseAttributeData< 2u, float, 3u, float, true >( impAsset, impAttributes, "TEXCOORD_0", texcoords0 );
-			meshes::parseAttributeData< 2u, float, 3u, float, true >( impAsset, impAttributes, "TEXCOORD_1", texcoords1 );
-			meshes::parseAttributeData< 2u, float, 3u, float, true >( impAsset, impAttributes, "TEXCOORD_2", texcoords2 );
-			meshes::parseAttributeData< 2u, float, 3u, float, true >( impAsset, impAttributes, "TEXCOORD_3", texcoords3 );
+			meshes::parseAttributeData< 2u, float, 3u, float, true >( impAsset, impAttributes, "TEXCOORD_0", texcoords0, adapter );
+			meshes::parseAttributeData< 2u, float, 3u, float, true >( impAsset, impAttributes, "TEXCOORD_1", texcoords1, adapter );
+			meshes::parseAttributeData< 2u, float, 3u, float, true >( impAsset, impAttributes, "TEXCOORD_2", texcoords2, adapter );
+			meshes::parseAttributeData< 2u, float, 3u, float, true >( impAsset, impAttributes, "TEXCOORD_3", texcoords3, adapter );
 
-			if ( !meshes::parseAttributeData< 4u, float >( impAsset, impAttributes, "COLOR_0", colours ) )
+			if ( !meshes::parseAttributeData< 4u, float >( impAsset, impAttributes, "COLOR_0", colours, adapter ) )
 			{
-				meshes::parseAttributeData< 3u, float >( impAsset, impAttributes, "COLOR_0", colours );
+				meshes::parseAttributeData< 3u, float >( impAsset, impAttributes, "COLOR_0", colours, adapter );
 			}
 		}
 
@@ -438,13 +449,13 @@ namespace c3d_gltf
 				switch ( impAccessor.componentType )
 				{
 				case fastgltf::ComponentType::UnsignedByte:
-					meshes::parseLineList< uint8_t >( impAsset, impAccessor, *mapping );
+					meshes::parseLineList< uint8_t >( impAsset, impAccessor, *mapping, file.getAdapter() );
 					break;
 				case fastgltf::ComponentType::UnsignedShort:
-					meshes::parseLineList< uint16_t >( impAsset, impAccessor, *mapping );
+					meshes::parseLineList< uint16_t >( impAsset, impAccessor, *mapping, file.getAdapter() );
 					break;
 				case fastgltf::ComponentType::UnsignedInt:
-					meshes::parseLineList< uint32_t >( impAsset, impAccessor, *mapping );
+					meshes::parseLineList< uint32_t >( impAsset, impAccessor, *mapping, file.getAdapter() );
 					break;
 				default:
 					mapping.reset();
@@ -488,13 +499,13 @@ namespace c3d_gltf
 				switch ( impAccessor.componentType )
 				{
 				case fastgltf::ComponentType::UnsignedByte:
-					meshes::parseLineStrip< uint8_t >( impAsset, impAccessor, count, *mapping, loop );
+					meshes::parseLineStrip< uint8_t >( impAsset, impAccessor, count, *mapping, loop, file.getAdapter() );
 					break;
 				case fastgltf::ComponentType::UnsignedShort:
-					meshes::parseLineStrip< uint16_t >( impAsset, impAccessor, count, *mapping, loop );
+					meshes::parseLineStrip< uint16_t >( impAsset, impAccessor, count, *mapping, loop, file.getAdapter() );
 					break;
 				case fastgltf::ComponentType::UnsignedInt:
-					meshes::parseLineStrip< uint32_t >( impAsset, impAccessor, count, *mapping, loop );
+					meshes::parseLineStrip< uint32_t >( impAsset, impAccessor, count, *mapping, loop, file.getAdapter() );
 					break;
 				default:
 					mapping.reset();
@@ -535,13 +546,13 @@ namespace c3d_gltf
 				switch ( impAccessor.componentType )
 				{
 				case fastgltf::ComponentType::UnsignedByte:
-					meshes::parseTriangleList< uint8_t >( impAsset, impAccessor, *mapping );
+					meshes::parseTriangleList< uint8_t >( impAsset, impAccessor, *mapping, file.getAdapter() );
 					break;
 				case fastgltf::ComponentType::UnsignedShort:
-					meshes::parseTriangleList< uint16_t >( impAsset, impAccessor, *mapping );
+					meshes::parseTriangleList< uint16_t >( impAsset, impAccessor, *mapping, file.getAdapter() );
 					break;
 				case fastgltf::ComponentType::UnsignedInt:
-					meshes::parseTriangleList< uint32_t >( impAsset, impAccessor, *mapping );
+					meshes::parseTriangleList< uint32_t >( impAsset, impAccessor, *mapping, file.getAdapter() );
 					break;
 				default:
 					mapping.reset();
@@ -606,13 +617,13 @@ namespace c3d_gltf
 				switch ( impAccessor.componentType )
 				{
 				case fastgltf::ComponentType::UnsignedByte:
-					meshes::parseTriangleStrip< uint8_t, true >( impAsset, impAccessor, *mapping );
+					meshes::parseTriangleStrip< uint8_t, true >( impAsset, impAccessor, *mapping, file.getAdapter() );
 					break;
 				case fastgltf::ComponentType::UnsignedShort:
-					meshes::parseTriangleStrip< uint16_t, true >( impAsset, impAccessor, *mapping );
+					meshes::parseTriangleStrip< uint16_t, true >( impAsset, impAccessor, *mapping, file.getAdapter() );
 					break;
 				case fastgltf::ComponentType::UnsignedInt:
-					meshes::parseTriangleStrip< uint32_t, true >( impAsset, impAccessor, *mapping );
+					meshes::parseTriangleStrip< uint32_t, true >( impAsset, impAccessor, *mapping, file.getAdapter() );
 					break;
 				default:
 					mapping.reset();
@@ -680,13 +691,13 @@ namespace c3d_gltf
 				switch ( impAccessor.componentType )
 				{
 				case fastgltf::ComponentType::UnsignedByte:
-					meshes::parseTriangleStrip< uint8_t, false >( impAsset, impAccessor, *mapping );
+					meshes::parseTriangleStrip< uint8_t, false >( impAsset, impAccessor, *mapping, file.getAdapter() );
 					break;
 				case fastgltf::ComponentType::UnsignedShort:
-					meshes::parseTriangleStrip< uint16_t, false >( impAsset, impAccessor, *mapping );
+					meshes::parseTriangleStrip< uint16_t, false >( impAsset, impAccessor, *mapping, file.getAdapter() );
 					break;
 				case fastgltf::ComponentType::UnsignedInt:
-					meshes::parseTriangleStrip< uint32_t, false >( impAsset, impAccessor, *mapping );
+					meshes::parseTriangleStrip< uint32_t, false >( impAsset, impAccessor, *mapping, file.getAdapter() );
 					break;
 				default:
 					mapping.reset();
@@ -734,6 +745,7 @@ namespace c3d_gltf
 		, castor3d::Submesh & submesh
 		, castor3d::Material * material )
 	{
+		auto & file = static_cast< GltfImporterFile const & >( *m_file );
 		submesh.setDefaultMaterial( material );
 		auto positions = submesh.createComponent< castor3d::PositionsComponent >();
 		castor::Point3fArray nml;
@@ -802,7 +814,8 @@ namespace c3d_gltf
 			, *texcoords1
 			, *texcoords2
 			, *texcoords3
-			, *colours );
+			, *colours
+			, file.getAdapter() );
 		castor::Vector< castor3d::SubmeshAnimationBuffer > morphTargets;
 		uint32_t index{};
 
@@ -818,7 +831,8 @@ namespace c3d_gltf
 				, buffer.texcoords1
 				, buffer.texcoords2
 				, buffer.texcoords3
-				, buffer.colours );
+				, buffer.colours
+				, file.getAdapter() );
 
 			if ( index < impMesh.weights.size()
 				&& impMesh.weights[index] != 0.0f )
@@ -844,16 +858,16 @@ namespace c3d_gltf
 
 		castor::Point4uiArray joints;
 
-		if ( !meshes::parseAttributeData< 4u, uint8_t >( impAsset, impPrimitive.attributes, "JOINTS_0", joints ) )
+		if ( !meshes::parseAttributeData< 4u, uint8_t >( impAsset, impPrimitive.attributes, "JOINTS_0", joints, file.getAdapter() ) )
 		{
-			meshes::parseAttributeData< 4u, uint16_t >( impAsset, impPrimitive.attributes, "JOINTS_0", joints );
+			meshes::parseAttributeData< 4u, uint16_t >( impAsset, impPrimitive.attributes, "JOINTS_0", joints, file.getAdapter() );
 		}
 
 		if ( !joints.empty() )
 		{
 			castor::Point4fArray weights;
 
-			if ( meshes::parseAttributeData< 4u, float >( impAsset, impPrimitive.attributes, "WEIGHTS_0", weights )
+			if ( meshes::parseAttributeData< 4u, float >( impAsset, impPrimitive.attributes, "WEIGHTS_0", weights, file.getAdapter() )
 				&& weights.size() == joints.size() )
 			{
 				castor3d::VertexBoneDataArray datas;

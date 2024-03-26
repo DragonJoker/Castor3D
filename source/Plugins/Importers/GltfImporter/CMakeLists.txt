@@ -88,6 +88,7 @@ if( fastgltf_FOUND )
 			${ImporterDependencies}
 			simdjson::simdjson
 			fastgltf::fastgltf
+			meshoptimizer::meshoptimizer
 	)
 	set_target_properties( ${PROJECT_NAME}
 		PROPERTIES

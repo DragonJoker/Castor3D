@@ -144,6 +144,24 @@ namespace c3d_gltf
 		castor::StringMap< GlSkeletonData > skeletons;
 	};
 
+	/** Replacement buffer data adapter for fastgltf which supports decompressing with EXT_meshopt_compression */
+	struct CompressedBufferDataAdapter
+	{
+		std::vector< std::optional< fastgltf::StaticVector< std::byte > > > decompressedBuffers;
+
+		/** Get the data pointer of a loaded (possibly compressed) buffer */
+		[[nodiscard]]
+		static fastgltf::span< std::byte const > getData( fastgltf::Buffer const & buffer
+			, std::size_t byteOffset
+			, std::size_t byteLength );
+
+		/** Decompress all buffer views and store them in this adapter */
+		bool decompress( fastgltf::Asset const & asset );
+
+		fastgltf::span< std::byte const > operator()( fastgltf::Asset const & asset
+			, std::size_t bufferViewIdx ) const;
+	};
+
 	class GltfImporterFile
 		: public castor3d::ImporterFile
 	{
@@ -225,6 +243,11 @@ namespace c3d_gltf
 			return m_sceneData.meshes;
 		}
 
+		auto const & getAdapter()const
+		{
+			return m_adapter;
+		}
+
 	public:
 		static castor::MbString const Name;
 
@@ -240,6 +263,7 @@ namespace c3d_gltf
 		fastgltf::Expected< fastgltf::Asset > m_expAsset;
 		fastgltf::Asset const * m_asset{};
 		castor::Vector< size_t > m_sceneIndices{};
+		CompressedBufferDataAdapter m_adapter;
 		GlSceneData m_sceneData;
 		mutable NameContainer m_materialNames;
 		mutable NameContainer m_meshNames;

@@ -19,6 +19,10 @@
 
 #include <CastorUtils/Design/ArrayView.hpp>
 
+#include <CastorUtils/Config/BeginExternHeaderGuard.hpp>
+#include <meshoptimizer.h>
+#include <CastorUtils/Config/EndExternHeaderGuard.hpp>
+
 namespace c3d_gltf
 {
 	//*********************************************************************************************
@@ -112,7 +116,8 @@ namespace c3d_gltf
 		}
 
 		static castor::Vector< castor3d::NodeTransform > listInstances( fastgltf::Asset const & impAsset
-			, fastgltf::Node const & impNode )
+			, fastgltf::Node const & impNode
+			, CompressedBufferDataAdapter const & adapter )
 		{
 			castor::Point3fArray translations;
 			castor::QuaternionArray rotations;
@@ -123,32 +128,35 @@ namespace c3d_gltf
 
 			if ( tit != impNode.instancingAttributes.end() )
 			{
-				fastgltf::iterateAccessor< castor::Point3f >( impAsset
+				iterateAccessor< castor::Point3f >( impAsset
 					, impAsset.accessors[tit->second]
 					, [&translations]( castor::Point3f value )
 					{
 						translations.push_back( castor::move( value ) );
-					} );
+					}
+					, adapter );
 			}
 
 			if ( rit != impNode.instancingAttributes.end() )
 			{
-				fastgltf::iterateAccessor< castor::Point4f >( impAsset
+				iterateAccessor< castor::Point4f >( impAsset
 					, impAsset.accessors[rit->second]
 					, [&rotations]( castor::Point4f const & value )
 					{
 						rotations.push_back( castor::Quaternion{ value } );
-					} );
+					}
+					, adapter );
 			}
 
 			if ( sit != impNode.instancingAttributes.end() )
 			{
-				fastgltf::iterateAccessor< castor::Point3f >( impAsset
+				iterateAccessor< castor::Point3f >( impAsset
 					, impAsset.accessors[sit->second]
 					, [&scalings]( castor::Point3f value )
 					{
 						scalings.push_back( castor::move( value ) );
-					} );
+					}
+					, adapter );
 			}
 
 			size_t instanceCount = std::max( translations.size(), std::max( rotations.size(), scalings.size() ) );
@@ -443,7 +451,8 @@ namespace c3d_gltf
 			, size_t parentIndex
 			, size_t & parentInstanceCount
 			, castor::Vector< GltfNodeData > & nodes
-			, castor::Vector< GltfNodeData > & skeletonNodes )
+			, castor::Vector< GltfNodeData > & skeletonNodes
+			, CompressedBufferDataAdapter const & adapter )
 		{
 			if ( isSkeletonNode )
 			{
@@ -453,7 +462,7 @@ namespace c3d_gltf
 			else
 			{
 				auto & asset = file.getAsset();
-				auto transforms = file::listInstances( asset, *nodeData.node );
+				auto transforms = file::listInstances( asset, *nodeData.node, adapter );
 
 				if ( !transforms.empty() )
 				{
@@ -547,6 +556,138 @@ namespace c3d_gltf
 
 	//*********************************************************************************************
 
+	[[nodiscard]]
+	fastgltf::span< std::byte const > CompressedBufferDataAdapter::getData( fastgltf::Buffer const & buffer
+		, std::size_t byteOffset,
+		std::size_t byteLength )
+	{
+		using namespace fastgltf;
+		return std::visit( visitor{ []( auto & ) -> span< std::byte const >
+					{
+						assert( false && "Tried accessing a buffer with no data, likely because no buffers were loaded. Perhaps you forgot to specify the LoadExternalBuffers option?" );
+						return {};
+					}
+				, []( const sources::Fallback & ) -> span< std::byte const >
+					{
+						assert( false && "Tried accessing data of a fallback buffer." );
+						return {};
+					}
+				, [&]( const sources::Array & array ) -> span< std::byte const >
+					{
+						return span( reinterpret_cast< std::byte const * >( array.bytes.data() ), array.bytes.size_bytes() ).subspan( byteOffset, byteLength );
+					}
+				, [&]( const sources::Vector & vec ) -> span< std::byte const >
+					{
+						return span( reinterpret_cast< std::byte const * >( vec.bytes.data() ), vec.bytes.size() ).subspan( byteOffset, byteLength );
+					}
+				, [&]( const sources::ByteView & bv ) -> span< std::byte const >
+					{
+						return bv.bytes.subspan( byteOffset, byteLength );
+					} }
+			, buffer.data );
+	}
+
+	/** Decompress all buffer views and store them in this adapter */
+	bool CompressedBufferDataAdapter::decompress( const fastgltf::Asset & asset )
+	{
+		using namespace fastgltf;
+
+		decompressedBuffers.reserve( asset.bufferViews.size() );
+		for ( auto & bufferView : asset.bufferViews )
+		{
+			if ( !bufferView.meshoptCompression )
+			{
+				decompressedBuffers.emplace_back( std::nullopt );
+				continue;
+			}
+
+			// This is a compressed buffer view.
+			// For the original implementation, see https://github.com/jkuhlmann/cgltf/pull/129#issue-739550034
+			auto const & mc = *bufferView.meshoptCompression;
+			fastgltf::StaticVector< std::byte > result( mc.count * mc.byteStride );
+
+			// Get the data span from the compressed buffer.
+			auto data = getData( asset.buffers[mc.bufferIndex], mc.byteOffset, mc.byteLength );
+
+			int rc = -1;
+			switch ( mc.mode )
+			{
+			case MeshoptCompressionMode::Attributes:
+				{
+					rc = meshopt_decodeVertexBuffer( result.data()
+						, mc.count
+						, mc.byteStride
+						, reinterpret_cast< const unsigned char * >( data.data() )
+						, mc.byteLength );
+					break;
+				}
+			case MeshoptCompressionMode::Triangles:
+				{
+					rc = meshopt_decodeIndexBuffer( result.data()
+						, mc.count
+						, mc.byteStride
+						, reinterpret_cast< const unsigned char * >( data.data() )
+						, mc.byteLength );
+					break;
+				}
+			case MeshoptCompressionMode::Indices:
+				{
+					rc = meshopt_decodeIndexSequence( result.data()
+						, mc.count
+						, mc.byteStride
+						, reinterpret_cast< const unsigned char * >( data.data() )
+						, mc.byteLength );
+					break;
+				}
+			}
+
+			if ( rc != 0 )
+				return false;
+
+			switch ( mc.filter )
+			{
+			case MeshoptCompressionFilter::None:
+				break;
+			case MeshoptCompressionFilter::Octahedral:
+				{
+					meshopt_decodeFilterOct( result.data(), mc.count, mc.byteStride );
+					break;
+				}
+			case MeshoptCompressionFilter::Quaternion:
+				{
+					meshopt_decodeFilterQuat( result.data(), mc.count, mc.byteStride );
+					break;
+				}
+			case MeshoptCompressionFilter::Exponential:
+				{
+					meshopt_decodeFilterExp( result.data(), mc.count, mc.byteStride );
+					break;
+				}
+			}
+
+			decompressedBuffers.emplace_back( std::move( result ) );
+		}
+
+		return true;
+	}
+
+	fastgltf::span< std::byte const > CompressedBufferDataAdapter::operator()( const fastgltf::Asset & asset, std::size_t bufferViewIdx ) const
+	{
+		using namespace fastgltf;
+
+		auto & bufferView = asset.bufferViews[bufferViewIdx];
+		if ( bufferView.meshoptCompression )
+		{
+			assert( decompressedBuffers.size() == asset.bufferViews.size() );
+
+			assert( decompressedBuffers[bufferViewIdx].has_value() );
+			return span( decompressedBuffers[bufferViewIdx]->data(), decompressedBuffers[bufferViewIdx]->size_bytes() );
+		}
+
+		return getData( asset.buffers[bufferView.bufferIndex], bufferView.byteOffset, bufferView.byteLength );
+	}
+	//*********************************************************************************************
+
 	castor::MbString const GltfImporterFile::Name = "GLTF Importer";
 
 	GltfImporterFile::GltfImporterFile( castor3d::Engine & engine
@@ -561,6 +702,8 @@ namespace c3d_gltf
 		if ( isValid() )
 		{
 			m_asset = &m_expAsset.get< 1 >();
+			m_adapter.decompress( *m_asset );
+
 			uint32_t sceneIndex{};
 
 			if ( getParameters().get( cuT( "sceneIndex" ), sceneIndex ) )
@@ -1164,7 +1307,8 @@ namespace c3d_gltf
 
 					file::addNode( *this, castor::move( nodeData ), isSkeletonNode, parentIndex
 						, parentInstanceCount
-						, m_sceneData.nodes, m_sceneData.skeletonNodes );
+						, m_sceneData.nodes, m_sceneData.skeletonNodes
+						, m_adapter );
 					return std::make_tuple( parentInstanceCount, true, isSkeletonNode );
 				} );
 		}
