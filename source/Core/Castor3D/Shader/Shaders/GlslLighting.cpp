@@ -139,6 +139,8 @@ namespace castor3d::shader
 
 		if ( fresnelFactor.isEnabled() )
 		{
+			debugOutput.registerOutput( cuT( "Combine" ), cuT( "Fresnel Factor" ), fresnelFactor );
+
 			IF( m_writer, components.refractionRatio != 0.0_f
 				&& components.hasRefraction != 0_u
 				&& components.hasTransmission == 0_u )
@@ -165,7 +167,7 @@ namespace castor3d::shader
 				, ambientOcclusion
 				, reflectedDiffuse ) );
 		debugOutput.registerOutput( cuT( "Combine" ), cuT( "Diffuse BRDF" ), diffuseBrdf );
-		debugOutput.registerOutput( cuT( "Combine" ), cuT( "AdjustedSpecular" ), directLighting.specular() );
+		debugOutput.registerOutput( cuT( "Combine" ), cuT( "Adjusted Specular" ), directLighting.specular() );
 		auto specularBrdf = m_writer.declLocale( "c3d_specularBrdf"
 			, doGetSpecularBrdf( components
 				, directLighting, indirectLighting
@@ -202,8 +204,15 @@ namespace castor3d::shader
 				, clamp( components.getMember< sdw::Float >( "specularFactor" ), 0.0_f, 1.0_f ) );
 			specularBrdf *= specularFactor * fresnelFactor;
 			diffuseBrdf *= 1.0_f - specularFactor * fresnelFactor;
+			debugOutput.registerOutput( cuT( "Combine" ), cuT( "Specular Factor" ), specularFactor );
+		}
+		else
+		{
+			debugOutput.registerOutput( cuT( "Combine" ), cuT( "Specular Factor" ), 0.0_f );
 		}
 
+		debugOutput.registerOutput( cuT( "Combine" ), cuT( "Final Specular" ), specularBrdf );
+		debugOutput.registerOutput( cuT( "Combine" ), cuT( "Final Diffuse" ), diffuseBrdf );
 		debugOutput.registerOutput( cuT( "Combine" ), cuT( "Emissive" ), emissive );
 		auto combineResult = m_writer.declLocale( "c3d_combineResult"
 			, emissive + specularBrdf + diffuseBrdf );

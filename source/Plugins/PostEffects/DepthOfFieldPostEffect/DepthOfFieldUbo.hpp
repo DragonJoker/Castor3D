@@ -1,5 +1,4 @@
 /*
-/*
 See LICENSE file in root folder
 */
 #ifndef ___C3DDOF_DepthOfFieldUbo_H___
@@ -67,11 +66,11 @@ namespace dof
 
 		auto focalDistance()const { return getMember< "focalDistance" >(); }
 		auto focalLength()const { return getMember< "focalLength" >(); }
-		auto bokehScale()const { return getMember< "bokehScale" >(); };
-		auto pixelStepFull()const { return getMember< "pixelStepFull" >(); };
-		auto pixelStepHalf()const { return getMember< "pixelStepHalf" >(); };
-		auto points64()const { return getMember< "points64" >(); };
-		auto points16()const { return getMember< "points16" >(); };
+		auto bokehScale()const { return getMember< "bokehScale" >(); }
+		auto pixelStepFull()const { return getMember< "pixelStepFull" >(); }
+		auto pixelStepHalf()const { return getMember< "pixelStepHalf" >(); }
+		auto points64()const { return getMember< "points64" >(); }
+		auto points16()const { return getMember< "points16" >(); }
 	};
 
 	class DepthOfFieldUbo

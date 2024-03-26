@@ -226,12 +226,13 @@ namespace c3d_gltf
 		if ( impSkin.inverseBindMatrices )
 		{
 			skinOffsetMatrices.reserve( impSkin.joints.size() );
-			fastgltf::iterateAccessor< castor::Matrix4x4f >( impAsset
+			iterateAccessor< castor::Matrix4x4f >( impAsset
 				, impAsset.accessors[*impSkin.inverseBindMatrices]
 				, [&skinOffsetMatrices]( castor::Matrix4x4f value )
 				{
 					skinOffsetMatrices.push_back( castor::move( value ) );
-				} );
+				}
+				, file.getAdapter() );
 		}
 		else
 		{

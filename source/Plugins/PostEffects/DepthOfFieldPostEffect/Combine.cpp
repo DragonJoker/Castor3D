@@ -1,4 +1,4 @@
-#include "DepthOfFieldPostEffect/ComputeCircleOfConfusion.hpp"
+#include "DepthOfFieldPostEffect/Combine.hpp"
 
 #include "DepthOfFieldPostEffect/DepthOfFieldUbo.hpp"
 
