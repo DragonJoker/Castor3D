@@ -90,14 +90,14 @@ if ( ${CASTOR_BUILD_CASTOR3D} )
 		if ( NOT CASTOR_FORCE_GLSLANG_SUBMODULE )
 			if ( VCPKG_TOOLCHAIN )
 				set( glslang_DIR ${VCPKG_SHARE_DIR}/glslang )
-				find_package( glslang CONFIG REQUIRED glslang OGLCompiler OSDependent SPIRV SPVRemapper )
+				find_package( glslang CONFIG REQUIRED glslang GenericCodeGen OSDependent SPIRV SPVRemapper )
 				if ( TARGET glslang::SPIRV )
 					get_target_property( glslang_INCLUDE_DIR glslang::SPIRV INTERFACE_INCLUDE_DIRECTORIES )
 					find_path( glslang_INCLUDE_DIR glslang/Public/ShaderLang.h )
 					set( glslang_LIBRARIES
 						glslang::OSDependent
 						glslang::glslang
-						glslang::OGLCompiler
+						glslang::GenericCodeGen
 						glslang::SPIRV
 						glslang::SPVRemapper
 					)
@@ -107,13 +107,13 @@ if ( ${CASTOR_BUILD_CASTOR3D} )
 					set( glslang_LIBRARIES
 						OSDependent
 						glslang
-						OGLCompiler
+						GenericCodeGen
 						SPIRV
 						SPVRemapper
 					)
 				endif ()
 			else ()
-				find_package( glslang REQUIRED glslang OSDependent OGLCompiler SPIRV )
+				find_package( glslang REQUIRED glslang OSDependent GenericCodeGen SPIRV )
 				if ( glslang_FOUND )
 					set( CASTOR_USE_GLSLANG ON )
 				else ()
@@ -121,7 +121,7 @@ if ( ${CASTOR_BUILD_CASTOR3D} )
 				endif ()
 				set( glslang_LIBRARIES
 					glslang::glslang
-					glslang::OGLCompiler
+					glslang::GenericCodeGen
 					glslang::SPIRV
 				)
 			endif ()
@@ -137,7 +137,7 @@ if ( ${CASTOR_BUILD_CASTOR3D} )
 				set( SKIP_GLSLANG_INSTALL ON )
 				add_subdirectory( ${CMAKE_CURRENT_SOURCE_DIR}/../external/glslang ${CMAKE_BINARY_DIR}/external/glslang )
 				set_property( TARGET glslang PROPERTY FOLDER "External/glslang" )
-				set_property( TARGET OGLCompiler PROPERTY FOLDER "External/glslang" )
+				set_property( TARGET GenericCodeGen PROPERTY FOLDER "External/glslang" )
 				set_property( TARGET OSDependent PROPERTY FOLDER "External/glslang" )
 				set_property( TARGET SPIRV PROPERTY FOLDER "External/glslang" )
 				set_property( TARGET SPVRemapper PROPERTY FOLDER "External/glslang" )
@@ -145,7 +145,7 @@ if ( ${CASTOR_BUILD_CASTOR3D} )
 			set( glslang_LIBRARIES
 				OSDependent
 				glslang
-				OGLCompiler
+				GenericCodeGen
 				SPIRV
 				SPVRemapper
 			)
