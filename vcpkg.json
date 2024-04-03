@@ -25,6 +25,7 @@
       "./data/vcpkg/ports/ashes",
       "./data/vcpkg/ports/draco",
       "./data/vcpkg/ports/fastgltf",
+      "./data/vcpkg/ports/liblzma",
       "./data/vcpkg/ports/rendergraph",
       "./data/vcpkg/ports/shaderwriter"
     ]
