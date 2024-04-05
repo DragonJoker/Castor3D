@@ -196,6 +196,12 @@ namespace castor3d
 		*/
 		C3D_API void destroy( ControlRPtr control );
 
+		/** Destroys the controls related to given scene.
+		*\param[in] scene
+		*	The controls scene.
+		*/
+		C3D_API void destroyControls( Scene const & scene );
+
 		/** Adds a control that can an event target
 		*\param[in] control
 		*	The control
@@ -219,10 +225,12 @@ namespace castor3d
 		/** Retrieves a control.
 		*\param[in] name
 		*	The control name.
+		*\param[in] scene
+		*	The control scene.
 		*\return
 		*	The control.
 		*/
-		C3D_API ControlRPtr findControl( castor::String const & name )const;
+		C3D_API ControlRPtr findControl( castor::String const & name, SceneRPtr scene )const;
 
 		/** \return
 		*	The root controls.
@@ -365,6 +373,9 @@ namespace castor3d
 		/** Marks the manager as to be updated.
 		*/
 		void doMarkDirty();
+
+		void doRemoveControlNL( ControlID id, bool rootControl = true );
+		void doDestroyControlsRec( ControlRPtr control );
 
 	public:
 		C3D_API static castor::String Name;

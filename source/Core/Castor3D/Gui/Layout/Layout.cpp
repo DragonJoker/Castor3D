@@ -67,7 +67,8 @@ namespace castor3d
 		}
 	}
 
-	void Layout::removeControl( Control const & control )
+	void Layout::removeControl( Control const & control
+			, bool checkPresent )
 	{
 		auto it = std::find_if( m_items.begin()
 			, m_items.end()
@@ -78,7 +79,11 @@ namespace castor3d
 
 		if ( it == m_items.end() )
 		{
-			log::warn << "Layout: The control [" << control.getName() << "] was not found in the layout." << std::endl;
+			if ( checkPresent )
+			{
+				log::warn << "Layout: The control [" << control.getName() << "] was not found in the layout." << std::endl;
+			}
+
 			return;
 		}
 

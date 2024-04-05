@@ -2041,7 +2041,8 @@ namespace castor3d
 					blockContext->controlName = parent->getName() + cuT( "/" ) + blockContext->controlName;
 				}
 
-				if ( auto control = blockContext->controls->findControl( blockContext->controlName ) )
+				if ( auto control = blockContext->controls->findControl( blockContext->controlName
+					, blockContext->scene ? blockContext->scene->scene : nullptr ) )
 				{
 					blockContext->layout->addControl( *control
 						, castor::move( blockContext->layoutCtrlFlags ) );

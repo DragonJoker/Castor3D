@@ -1235,8 +1235,8 @@ namespace castor3d
 		}
 
 		auto const & manager = static_cast< ControlsManager & >( *getEngine()->getUserInputListener() );
-		auto global = manager.findControl( cuT( "C3D_LoadingScreen/GlobalProgress" ) );
-		auto local = manager.findControl( cuT( "C3D_LoadingScreen/LocalProgress" ) );
+		auto global = manager.findControl( cuT( "C3D_LoadingScreen/GlobalProgress" ), scene );
+		auto local = manager.findControl( cuT( "C3D_LoadingScreen/LocalProgress" ), scene );
 
 		if ( !m_progressBar )
 		{

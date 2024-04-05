@@ -68,6 +68,7 @@ namespace castor3d
 
 	void LayoutControl::doDestroy()
 	{
+		m_layout.reset();
 		destroyScrollBars();
 	}
 
