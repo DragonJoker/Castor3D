@@ -107,6 +107,8 @@ namespace castor3d
 		mutable SceneCullerSignal onCompute;
 		mutable SceneCullerSubmeshSignal onSubmeshChanged;
 		mutable SceneCullerBillboardSignal onBillboardChanged;
+		mutable SceneCullerSubmeshSignal onSubmeshRemoved;
+		mutable SceneCullerBillboardSignal onBillboardRemoved;
 
 	private:
 		void doInitialiseCulled();

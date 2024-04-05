@@ -182,7 +182,9 @@ namespace castor3d
 		PipelineNodesBuffer m_pipelinesNodes;
 
 		SceneCullerSubmeshSignalConnection m_onSubmeshChanged;
+		SceneCullerSubmeshSignalConnection m_onSubmeshRemoved;
 		SceneCullerBillboardSignalConnection m_onBillboardChanged;
+		SceneCullerBillboardSignalConnection m_onBillboardRemoved;
 
 		castor::UnorderedSet< CulledNodeT< SubmeshRenderNode > const * > m_pendingSubmeshes;
 		castor::UnorderedSet< CulledNodeT< BillboardRenderNode > const * > m_pendingBillboards;
