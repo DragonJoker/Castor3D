@@ -143,11 +143,6 @@ namespace castor3d
 
 	void Material::cleanup()
 	{
-		if ( !m_initialised )
-		{
-			return;
-		}
-
 		m_initialised = false;
 
 		for ( auto const & pass : m_passes )

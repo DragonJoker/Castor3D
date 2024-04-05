@@ -295,11 +295,8 @@ namespace castor3d
 
 	void Pass::cleanup()
 	{
-		if ( m_initialised )
-		{
-			m_initialised = false;
-			getOwner()->getOwner()->getMaterialCache().unregisterPass( *this );
-		}
+		m_initialised = false;
+		getOwner()->getOwner()->getMaterialCache().unregisterPass( *this );
 	}
 
 	void Pass::update()
