@@ -19,44 +19,46 @@ endif ()
 set( MAIN_PROJECT_NAME "Castor3D" )
 
 set( VERSION_MAJOR 0 )
-set( VERSION_MINOR 15 )
+set( VERSION_MINOR 16 )
 set( VERSION_BUILD 0 )
-set( VERSION_YEAR 2023 )
+set( VERSION_YEAR 2024 )
 
-# Setup lookup for external modules
-if ( VCPKG_TOOLCHAIN )
-	set( CMAKE_MODULE_PATH
-		${CMAKE_CURRENT_SOURCE_DIR}/CMake
-		${CMAKE_CURRENT_SOURCE_DIR}/CMake/Modules
-		${CMAKE_CURRENT_SOURCE_DIR}/CMake/Toolchains
-	)
-	set( CMAKE_MAP_IMPORTED_CONFIG_MINSIZEREL Release )
-	set( CMAKE_MAP_IMPORTED_CONFIG_RELWITHDEBINFO Release )
-else ()
-	set( CMAKE_MODULE_PATH
-		${CMAKE_CURRENT_SOURCE_DIR}/CMake
-		${CMAKE_CURRENT_SOURCE_DIR}/CMake/Modules
-		${CMAKE_CURRENT_SOURCE_DIR}/CMake/Modules/Traditional
-		${CMAKE_CURRENT_SOURCE_DIR}/CMake/Toolchains
-	)
+if ( NOT CMAKE_MODULE_PATH )
+	# Setup lookup for external modules
+	if ( VCPKG_TOOLCHAIN )
+		set( CMAKE_MODULE_PATH
+			${CMAKE_CURRENT_SOURCE_DIR}/CMake
+			${CMAKE_CURRENT_SOURCE_DIR}/CMake/Modules
+			${CMAKE_CURRENT_SOURCE_DIR}/CMake/Toolchains
+		)
+		set( CMAKE_MAP_IMPORTED_CONFIG_MINSIZEREL Release )
+		set( CMAKE_MAP_IMPORTED_CONFIG_RELWITHDEBINFO Release )
+	else ()
+		set( CMAKE_MODULE_PATH
+			${CMAKE_CURRENT_SOURCE_DIR}/CMake
+			${CMAKE_CURRENT_SOURCE_DIR}/CMake/Modules
+			${CMAKE_CURRENT_SOURCE_DIR}/CMake/Modules/Traditional
+			${CMAKE_CURRENT_SOURCE_DIR}/CMake/Toolchains
+		)
+	endif ()
+
+	set( CMAKE_TEMPLATES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/CMake/Templates )
+	set( CMAKE_POSITION_INDEPENDENT_CODE ON )
+
+	set( CMAKE_CONFIGURATION_TYPES "Debug;Release;RelWithDebInfo" CACHE STRING "The configuration types" FORCE )
+
+	project( ${MAIN_PROJECT_NAME} )
+
+	include( Setup )
+	include( Project )
+	include( CompilerVersion )
+	include( UnitTest )
+	include( CompilationFlags )
+	include( AStyleUtils )
+	include( Doxygen )
+	include( ExternalDependencies )
+	include( PrecompiledHeaders )
 endif ()
-
-set( CMAKE_TEMPLATES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/CMake/Templates )
-set( CMAKE_POSITION_INDEPENDENT_CODE ON )
-
-set( CMAKE_CONFIGURATION_TYPES "Debug;Release;RelWithDebInfo" CACHE STRING "The configuration types" FORCE )
-
-project( ${MAIN_PROJECT_NAME} )
-
-include( Setup )
-include( Project )
-include( CompilerVersion )
-include( UnitTest )
-include( CompilationFlags )
-include( AStyleUtils )
-include( Doxygen )
-include( ExternalDependencies )
-include( PrecompiledHeaders )
 
 msg_debug( "PROJECTS_OS [${PROJECTS_OS}]" )
 msg_debug( "PROJECTS_PLATFORM [${PROJECTS_PLATFORM}]" )
