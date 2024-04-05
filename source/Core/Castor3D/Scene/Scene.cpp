@@ -7,6 +7,7 @@
 #include "Castor3D/Event/Frame/CpuFunctorEvent.hpp"
 #include "Castor3D/Event/Frame/FrameListener.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
+#include "Castor3D/Gui/ControlsManager.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Pass/PassFactory.hpp"
@@ -354,6 +355,8 @@ namespace castor3d
 		m_dirtyNodes.clear();
 		m_dirtyBillboards.clear();
 		m_dirtyObjects.clear();
+
+		getEngine()->getControlsManager()->destroyControls( *this );
 
 		m_animatedObjectGroupCache->cleanup();
 		m_geometryCache->cleanup();

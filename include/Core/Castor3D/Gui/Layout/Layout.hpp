@@ -236,8 +236,11 @@ namespace castor3d
 		/** Removes a control.
 		*\param[in] control
 		*	The control.
+		*\param[in] checkPresent
+		*	\p true to log a warning if not found.
 		*/
-		C3D_API void removeControl( Control const & control );
+		C3D_API void removeControl( Control const & control
+			, bool checkPresent = true );
 
 		/** Adds a space.
 		*\param[in] size

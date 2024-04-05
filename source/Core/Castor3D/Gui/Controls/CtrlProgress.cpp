@@ -73,19 +73,8 @@ namespace castor3d
 
 	ProgressCtrl::~ProgressCtrl()noexcept
 	{
-		if ( m_text )
-		{
-			if ( m_scene )
-			{
-				m_scene->removeOverlay( getName() + cuT( "/Text" ), true );
-			}
-			else
-			{
-				getEngine().removeOverlay( getName() + cuT( "/Text" ), true );
-			}
-		}
-
 		auto & manager = *getEngine().getControlsManager();
+		manager.unregisterControl( *m_text );
 		manager.unregisterControl( *m_progress );
 		manager.unregisterControl( *m_container );
 
@@ -199,6 +188,7 @@ namespace castor3d
 		CU_Require( getControlsManager() );
 		auto & manager = *getControlsManager();
 		doUpdatePosSize();
+		manager.create( m_text );
 		manager.create( m_progress );
 		manager.create( m_container );
 	}
@@ -217,13 +207,22 @@ namespace castor3d
 		{
 			manager.destroy( m_progress );
 		}
+
+		if ( m_text )
+		{
+			manager.destroy( m_text );
+		}
 	}
 
 	void ProgressCtrl::doUpdateStyle()
 	{
 		auto & style = getStyle();
 		m_container->setStyle( &style.getContainerStyle() );
-		m_progress->setStyle( &style.getProgressStyle() );
+
+		if ( auto progress = m_progress )
+		{
+			progress->setStyle( &style.getProgressStyle() );
+		}
 
 		if ( hasTitle() )
 		{
@@ -331,14 +330,14 @@ namespace castor3d
 			}
 		}
 
-		if ( m_container )
+		if ( auto container = m_container )
 		{
-			m_container->setVisible( value );
+			container->setVisible( value );
 		}
 
-		if ( m_progress )
+		if ( auto progress = m_progress )
 		{
-			m_progress->setVisible( value );
+			progress->setVisible( value );
 		}
 
 		if ( auto text = m_text )
@@ -370,18 +369,18 @@ namespace castor3d
 			}
 		}
 
-		if ( m_container )
+		if ( auto container = m_container )
 		{
-			m_container->setPosition( { left, top } );
-			m_container->setSize( { uint32_t( std::max( 0, int32_t( clientSize->x ) - left ) )
+			container->setPosition( { left, top } );
+			container->setSize( { uint32_t( std::max( 0, int32_t( clientSize->x ) - left ) )
 				, uint32_t( std::max( 0, int32_t( clientSize->y ) - top ) ) } );
 
 			if ( !isVertical() )
 			{
 				if ( auto text = m_text )
 				{
-					text->setPosition( m_container->getClientOffset() );
-					text->setSize( m_container->getClientSize() );
+					text->setPosition( container->getClientOffset() );
+					text->setSize( container->getClientSize() );
 				}
 			}
 		}

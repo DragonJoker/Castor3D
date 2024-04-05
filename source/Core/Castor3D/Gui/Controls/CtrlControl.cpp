@@ -13,10 +13,23 @@
 #include "Castor3D/Overlay/TextOverlay.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
+#include <CastorUtils/Miscellaneous/Hash.hpp>
+
 CU_ImplementSmartPtr( castor3d, Control )
 
 namespace castor3d
 {
+	namespace ctrl
+	{
+		static size_t makeHash( castor::String const & name
+			, Scene const * scene )
+		{
+			auto result = std::hash< castor::String >{}( name );
+			result = castor::hashCombine( result, scene );
+			return result;
+		}
+	}
+
 	static int32_t constexpr ResizeBorderSize = 10;
 
 	Control::Control( ControlType type
@@ -32,7 +45,7 @@ namespace castor3d
 		, m_scene{ scene }
 		, m_parent{ parent }
 		, m_flags{ flags }
-		, m_id{ std::hash< castor::String >{}( getName() ) }
+		, m_id{ ctrl::makeHash( getName(), m_scene ) }
 		, m_type{ type }
 		, m_engine{ style->getEngine() }
 		, m_style{ style }

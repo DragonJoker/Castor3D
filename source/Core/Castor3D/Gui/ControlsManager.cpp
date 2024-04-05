@@ -239,6 +239,27 @@ namespace castor3d
 		removeControl( control->getId() );
 	}
 
+	void ControlsManager::destroyControls( Scene const & scene )
+	{
+		auto it = m_rootControls.begin();
+
+		while ( it != m_rootControls.end() )
+		{
+			if ( auto control = *it;
+				control->hasScene() && &control->getScene() == &scene )
+			{
+				doDestroyControlsRec( control );
+				it = m_rootControls.erase( it );
+			}
+			else
+			{
+				++it;
+			}
+		}
+
+		doMarkDirty();
+	}
+
 	ControlRPtr ControlsManager::registerControl( ControlUPtr control )
 	{
 		return &static_cast< Control & >( *doAddHandler( castor::ptrRefCast< EventHandler >( control ) ) );
@@ -273,29 +294,48 @@ namespace castor3d
 	{
 		{
 			ctrlmgr::LockType lock{ castor::makeUniqueLock( m_mutexControlsById ) };
-			auto it = m_controlsById.find( id );
-
-			if ( it == m_controlsById.end() )
-			{
-				CU_Exception( "This control does not exist in the manager." );
-			}
-
-			auto control = it->second;
-			m_controlsById.erase( it );
-
-			if ( !control->getParent() )
-			{
-				auto rootit = std::find( m_rootControls.begin()
-					, m_rootControls.end()
-					, control );
-
-				if ( rootit != m_rootControls.end() )
-				{
-					m_rootControls.erase( rootit );
-				}
-			}
+			doRemoveControlNL( id );
 		}
 		doMarkDirty();
+	}
+
+	void ControlsManager::doRemoveControlNL( ControlID id, bool rootControl )
+	{
+		auto it = m_controlsById.find( id );
+
+		if ( it == m_controlsById.end() )
+		{
+			CU_Exception( "This control does not exist in the manager." );
+		}
+
+		auto control = it->second;
+		m_controlsById.erase( it );
+
+		if ( rootControl && !control->getParent() )
+		{
+			auto rootit = std::find( m_rootControls.begin()
+				, m_rootControls.end()
+				, control );
+
+			if ( rootit != m_rootControls.end() )
+			{
+				m_rootControls.erase( rootit );
+			}
+		}
+	}
+
+	void ControlsManager::doDestroyControlsRec( ControlRPtr control )
+	{
+		control->destroy();
+		doRemoveControlNL( control->getId(), false );
+		m_layout->removeControl( *control, false );
+
+		while ( !control->getChildren().empty() )
+		{
+			doDestroyControlsRec( *control->getChildren().begin() );
+		}
+
+		doRemoveHandlerNL( *control );
 	}
 
 	ControlRPtr ControlsManager::getControl( ControlID id )const
@@ -311,14 +351,22 @@ namespace castor3d
 		return it->second;
 	}
 
-	ControlRPtr ControlsManager::findControl( castor::String const & name )const
+	ControlRPtr ControlsManager::findControl( castor::String const & name, SceneRPtr scene )const
 	{
 		auto controls = doGetHandlers();
 		auto it = std::find_if( controls.begin()
 			, controls.end()
-			, [&name]( EventHandler const * lookup )
+			, [&name, scene]( EventHandler const * lookup )
 			{
-				return lookup->getName() == name;
+				auto result = lookup->getName() == name;
+
+				if ( result && scene )
+				{
+					auto control = static_cast< Control const * >( lookup );
+					result = ( control->hasScene() && scene == &control->getScene() );
+				}
+
+				return result;
 			} );
 		return it == controls.end()
 			? nullptr
