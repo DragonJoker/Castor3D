@@ -784,11 +784,23 @@ namespace castor3d
 			{
 				doAddSubmesh( node );
 			} ) }
+		, m_onSubmeshRemoved{ queue.getCuller().onSubmeshRemoved.connect( [this]( SceneCuller const &
+				, CulledNodeT< SubmeshRenderNode > const & node
+				, bool )
+			{
+				doRemoveSubmesh( node );
+			} ) }
 		, m_onBillboardChanged{ queue.getCuller().onBillboardChanged.connect( [this]( SceneCuller const &
 				, CulledNodeT< BillboardRenderNode > const & node
 				, bool )
 			{
 				doAddBillboard( node );
+			} ) }
+		, m_onBillboardRemoved{ queue.getCuller().onBillboardRemoved.connect( [this]( SceneCuller const &
+				, CulledNodeT< BillboardRenderNode > const & node
+				, bool )
+			{
+				doRemoveBillboard( node );
 			} ) }
 	{
 #if VK_EXT_mesh_shader || VK_NV_mesh_shader
@@ -1407,12 +1419,28 @@ namespace castor3d
 
 	void QueueRenderNodes::doAddSubmesh( CulledNodeT< SubmeshRenderNode > const & node )
 	{
-		m_pendingSubmeshes.insert( &node );
+		auto & queue = *getOwner();
+		auto & renderPass = *queue.getOwner();
+
+		if ( renderPass.isValidPass( *node.node->pass )
+			&& renderPass.isValidRenderable( node.node->instance )
+			&& renderPass.isValidNode( *node.node->instance.getParent() ) )
+		{
+			m_pendingSubmeshes.insert( &node );
+		}
 	}
 
 	void QueueRenderNodes::doAddBillboard( CulledNodeT< BillboardRenderNode > const & node )
 	{
-		m_pendingBillboards.insert( &node );
+		auto & queue = *getOwner();
+		auto & renderPass = *queue.getOwner();
+
+		if ( renderPass.isValidPass( *node.node->pass )
+			&& renderPass.isValidRenderable( node.node->instance )
+			&& renderPass.isValidNode( *node.node->instance.getNode() ) )
+		{
+			m_pendingBillboards.insert( &node );
+		}
 	}
 
 	void QueueRenderNodes::doRemoveSubmesh( CulledNodeT< SubmeshRenderNode > const & node )

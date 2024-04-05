@@ -179,6 +179,7 @@ namespace castor3d
 
 		if ( m_culledSubmeshes.end() != it )
 		{
+			onSubmeshRemoved( *this, **it, false );
 			m_culledSubmeshes.erase( it );
 		}
 	}
@@ -194,6 +195,7 @@ namespace castor3d
 
 		if ( m_culledBillboards.end() != it )
 		{
+			onBillboardRemoved( *this, **it, false );
 			m_culledBillboards.erase( it );
 		}
 	}
