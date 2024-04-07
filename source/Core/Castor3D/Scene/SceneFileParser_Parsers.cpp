@@ -1607,7 +1607,7 @@ namespace castor3d
 			}
 			else
 			{
-				blockContext->centerCamera = params[0]->get< castor::String >();
+				params[0]->get( blockContext->centerCamera );
 			}
 		}
 		CU_EndAttribute()
@@ -1620,7 +1620,20 @@ namespace castor3d
 			}
 			else
 			{
-				blockContext->preferredImporter = params[0]->get< castor::String >();
+				params[0]->get( blockContext->preferredImporter );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserSceneImportIgnoreVertexColour, SceneImportContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing name parameter" ) );
+			}
+			else
+			{
+				params[0]->get( blockContext->ignoreVertexColour );
 			}
 		}
 		CU_EndAttribute()
@@ -1665,6 +1678,11 @@ namespace castor3d
 				if ( blockContext->noOptimisations )
 				{
 					parameters.add( cuT( "no_optimisations" ), blockContext->noOptimisations );
+				}
+
+				if ( blockContext->ignoreVertexColour )
+				{
+					parameters.add( cuT( "ignore_vertex_colour" ), blockContext->ignoreVertexColour );
 				}
 
 				if ( blockContext->emissiveMult != 1.0f )
@@ -5281,6 +5299,7 @@ namespace castor3d
 			context.addParser( cuT( "emissive_mult" ), parserSceneImportEmissiveMult, { makeParameter< ParameterType::eFloat >() } );
 			context.addParser( cuT( "recenter_camera" ), parserSceneImportCenterCamera, { makeParameter< ParameterType::eName >() } );
 			context.addParser( cuT( "preferred_importer" ), parserSceneImportPreferredImporter, { makeParameter< ParameterType::eName >() } );
+			context.addParser( cuT( "ignore_vertex_colour" ), parserSceneImportIgnoreVertexColour, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
 			context.addPushParser( cuT( "texture_remap_config" ), CSCNSection::eTextureRemap, parserSceneImportTexRemap );
 			context.addPopParser( cuT( "}" ), parserSceneImportEnd );
 		}
