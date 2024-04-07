@@ -1,4 +1,3 @@
-option( CASTOR_BUILDGRP_GENERATOR "Build Castor3D Generator plugins" TRUE )
 option( CASTOR_BUILD_GENERATOR_DIAMOND_SQUARE_TERRAIN "Build DiamondSquareTerrain generator plugin" TRUE )
 
 function( GeneratorInit )

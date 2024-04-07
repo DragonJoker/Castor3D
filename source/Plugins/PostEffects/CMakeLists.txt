@@ -1,4 +1,3 @@
-option( CASTOR_BUILDGRP_POSTFX "Build Castor3D PostEffect plugins" TRUE )
 option( CASTOR_BUILD_POSTFX_BLOOM "Build HDR Bloom PostEffect plugin" TRUE )
 option( CASTOR_BUILD_POSTFX_PBRBLOOM "Build PDR Bloom PostEffect plugin" TRUE )
 option( CASTOR_BUILD_POSTFX_LIGHTSTREAKS "Build LightStreaks PostEffect plugin" TRUE )

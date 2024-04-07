@@ -1,4 +1,3 @@
-option( CASTOR_BUILDGRP_PARTICLES "Build Castor3D Particles plugins" TRUE )
 option( CASTOR_BUILD_PARTICLE_FIREWORKS "Build Fireworks Particle plugin" TRUE )
 
 function( ParticlesInit )

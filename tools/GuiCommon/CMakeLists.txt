@@ -3,7 +3,7 @@ project( GuiCommon )
 if ( VCPKG_BUILD OR CASTOR_FORCE_VCPKG_SUBMODULES )
 	set( ShaderWriter_DIR ${VCPKG_SHARE_DIR}/shaderwriter )
 	set( SdwModules CompilerSpirV )
-	if ( CASTOR_GUICOMMON_NEEDS_HLSL )
+	if ( CASTOR_C3D_NEEDS_HLSL )
 		set( SdwModules ${SdwModules} CompilerHlsl )
 	endif ()
 	if ( CASTOR_C3D_NEEDS_GLSL )
@@ -361,7 +361,7 @@ if ( CASTOR_SAMPLE_CASTOR_VIEWER_RECORDS )
 			GUICOMMON_RECORDS
 	)
 endif ()
-if ( CASTOR_GUICOMMON_NEEDS_HLSL )
+if ( CASTOR_C3D_NEEDS_HLSL )
 	target_compile_definitions( ${PROJECT_NAME}
 		PUBLIC
 			GC_HasHLSL

@@ -1,4 +1,3 @@
-option( CASTOR_BUILDGRP_GENERIC "Build Castor3D Generic plugins" ON )
 option( CASTOR_BUILD_GENERIC_TOONMATERIAL "Build Toon Material generic plugin" ON )
 option( CASTOR_BUILD_GENERIC_FFTOCEANRENDERING "Build FFT ocean rendering plugin" ON )
 option( CASTOR_BUILD_GENERIC_ATMOSPHERESCATTERING "Build Atmosphere scattering plugin" ON )
