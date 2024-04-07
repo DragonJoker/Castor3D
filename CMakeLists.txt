@@ -79,7 +79,6 @@ set_property( GLOBAL PROPERTY USE_FOLDERS ON )
 set( COMPILER_FOLDER "vc14" )
 
 option( CASTOR_USE_GLSLANG "Use glslang to convert GLSL shaders to SPIR-V" OFF )
-option( CASTOR_BUILGRP_RENDERER "Build Ashes renderer plugins" ON )
 
 if ( WIN32 )
 	option( CASTOR_USE_DEPS_WXWIDGETS "Use wxWidgets from dependencies submodule instead of system/vcpkg one" OFF )
@@ -166,12 +165,14 @@ set( Castor3DBinsDependencies
 	castor::CastorUtils
 )
 
-option( CASTOR_BUILDGRP_TEST "Build test projects" OFF )
-option( CASTOR_BUILDGRP_SETUP "Build setup projects" OFF )
 option( CASTOR_BUILDGRP_DEMO "Build Castor3D demos." OFF )
+option( CASTOR_BUILDGRP_SETUP "Build setup projects" OFF )
+option( CASTOR_BUILDGRP_TEST "Build test projects" OFF )
+option( CASTOR_BUILDGRP_TOOL "Build Castor3D tools." OFF )
+
 option( CASTOR_BUILD_CASTOR3D "Build Castor3D" ON )
 option( CASTOR_C3D_NEEDS_GLSL "Tells if Castor3D needs CompilerGlsl from ShaderWriter" OFF )
-option( CASTOR_GUICOMMON_NEEDS_HLSL "Tells if GuiCommon needs CompilerHlsl from ShaderWriter" OFF )
+option( CASTOR_C3D_NEEDS_HLSL "Tells if Castor3D needs CompilerHlsl from ShaderWriter" OFF )
 
 # Small macro to add subdirectory files to current target source and header files
 macro( parse_subdir_files_ex _BASE_DIR _PROJGROUP _FOLDER _GROUP )
@@ -265,9 +266,12 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 	endif ()
 
 	add_subdirectory( source )
-	add_subdirectory( tools )
 
-	if ( CASTOR_BUILD_CASTOR3D )
+	if ( CASTOR_BUILDGRP_TOOL )
+		add_subdirectory( tools )
+	endif ()
+
+	if ( CASTOR_BUILD_CASTOR3D AND CASTOR_BUILDGRP_DEMO )
 		add_subdirectory( demos )
 	endif ()
 

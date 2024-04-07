@@ -1,4 +1,3 @@
-option( CASTOR_BUILDGRP_IMPORTER "Build Castor3D Importer plugins" TRUE )
 option( CASTOR_BUILD_IMPORTER_ASSIMP "Build Assimp Importer plugin (needs ASSIMP library)" TRUE )
 option( CASTOR_BUILD_IMPORTER_GLTF "Build GLTF Importer plugin (needs fastgltf library)" TRUE )
 
