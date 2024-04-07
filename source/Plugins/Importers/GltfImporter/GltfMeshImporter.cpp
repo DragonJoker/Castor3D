@@ -250,7 +250,8 @@ namespace c3d_gltf
 			, castor::Point3fArray & texcoords2
 			, castor::Point3fArray & texcoords3
 			, castor::Point3fArray & colours
-			, CompressedBufferDataAdapter const & adapter )
+			, CompressedBufferDataAdapter const & adapter
+			, bool ignoreVertexColour )
 		{
 			if ( !meshes::parseAttributeData< 3u, float >( impAsset, impAttributes, "POSITION", positions, adapter )
 				|| positions.empty() )
@@ -271,9 +272,12 @@ namespace c3d_gltf
 			meshes::parseAttributeData< 2u, float, 3u, float, true >( impAsset, impAttributes, "TEXCOORD_2", texcoords2, adapter );
 			meshes::parseAttributeData< 2u, float, 3u, float, true >( impAsset, impAttributes, "TEXCOORD_3", texcoords3, adapter );
 
-			if ( !meshes::parseAttributeData< 4u, float >( impAsset, impAttributes, "COLOR_0", colours, adapter ) )
+			if ( !ignoreVertexColour )
 			{
-				meshes::parseAttributeData< 3u, float >( impAsset, impAttributes, "COLOR_0", colours, adapter );
+				if ( !meshes::parseAttributeData< 4u, float >( impAsset, impAttributes, "COLOR_0", colours, adapter ) )
+				{
+					meshes::parseAttributeData< 3u, float >( impAsset, impAttributes, "COLOR_0", colours, adapter );
+				}
 			}
 		}
 
@@ -799,7 +803,10 @@ namespace c3d_gltf
 			texcoords3 = &texComp->getData().getData();
 		}
 
-		if ( meshes::hasAttribute( impPrimitive.attributes, "COLOR_0" ) )
+		auto ignoreVertexColours = file.getParameters().get< bool >( "ignore_vertex_colour" );
+
+		if ( meshes::hasAttribute( impPrimitive.attributes, "COLOR_0" )
+			&& !ignoreVertexColours )
 		{
 			auto colComp = submesh.createComponent< castor3d::ColoursComponent >();
 			colours = &colComp->getData().getData();
@@ -815,7 +822,8 @@ namespace c3d_gltf
 			, *texcoords2
 			, *texcoords3
 			, *colours
-			, file.getAdapter() );
+			, file.getAdapter()
+			, ignoreVertexColours );
 		castor::Vector< castor3d::SubmeshAnimationBuffer > morphTargets;
 		uint32_t index{};
 
@@ -832,7 +840,8 @@ namespace c3d_gltf
 				, buffer.texcoords2
 				, buffer.texcoords3
 				, buffer.colours
-				, file.getAdapter() );
+				, file.getAdapter()
+				, ignoreVertexColours );
 
 			if ( index < impMesh.weights.size()
 				&& impMesh.weights[index] != 0.0f )

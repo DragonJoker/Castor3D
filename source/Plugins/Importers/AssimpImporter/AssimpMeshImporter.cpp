@@ -234,7 +234,8 @@ namespace c3d_assimp
 			texcoords3 = &texComp->getData().getData();
 		}
 
-		if ( aiMesh.HasVertexColors( 0u ) )
+		if ( aiMesh.HasVertexColors( 0u )
+			&& !file.getParameters().get< bool >( "ignore_vertex_colour" ) )
 		{
 			auto colComp = submesh.createComponent< castor3d::ColoursComponent >();
 			colours = &colComp->getData().getData();
