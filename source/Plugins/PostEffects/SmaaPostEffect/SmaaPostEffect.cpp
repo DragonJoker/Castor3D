@@ -467,7 +467,7 @@ namespace smaa
 
 		if ( m_config.data.enablePredication != ref.enablePredication )
 		{
-			file << ( tabs + cuT( "\tpredication true\n" ) );
+			file << ( tabs + cuT( "\tenablePredication true\n" ) );
 
 			if ( m_config.data.predicationScale != ref.predicationScale )
 			{

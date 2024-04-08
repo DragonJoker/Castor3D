@@ -145,7 +145,7 @@ namespace GuiCommon
 
 #endif
 #if GC_HasGLSL
-		glsl::GlslExtensionSet getGLSLExtensions( uint32_t glslVersion )
+		static glsl::GlslExtensionSet getGLSLExtensions( uint32_t glslVersion )
 		{
 			glsl::GlslExtensionSet result;
 
