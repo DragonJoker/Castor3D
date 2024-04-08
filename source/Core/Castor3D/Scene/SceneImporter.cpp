@@ -252,21 +252,28 @@ namespace castor3d
 					castor3d::stepProgressBarLocal( m_file->getProgressBar()
 						, castor::string::toString( index ) + cuT( " / " ) + castor::string::toString( total ) );
 
-					if ( auto mesh = scene.createMesh( data.name, scene );
-						meshImporter->import( *mesh
+					if ( auto mesh = scene.createMesh( data.name, scene ) )
+					{
+						if ( meshImporter->import( *mesh
 							, m_file
 							, emptyParams
 							, true ) )
-					{
-						if ( !data.skeleton.empty() )
 						{
-							auto skelIt = skeletons.find( data.skeleton );
-							CU_Require( skelIt != skeletons.end() );
-							mesh->setSkeleton( skelIt->second );
+							if ( !data.skeleton.empty() )
+							{
+								auto skelIt = skeletons.find( data.skeleton );
+								CU_Require( skelIt != skeletons.end() );
+								mesh->setSkeleton( skelIt->second );
+							}
+
+							result.try_emplace( data.name, mesh.get() );
+							scene.addMesh( data.name, mesh, true );
 						}
 
-						result.try_emplace( data.name, mesh.get() );
-						scene.addMesh( data.name, mesh, true );
+						if ( mesh )
+						{
+							mesh->cleanup();
+						}
 					}
 				}
 			}
