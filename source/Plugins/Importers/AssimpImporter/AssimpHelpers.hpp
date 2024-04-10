@@ -439,11 +439,20 @@ namespace c3d_assimp
 		return result;
 	}
 
-	inline castor::Pair< uint32_t, double > getNodeAnimFrameTicks( aiNodeAnim const & aiNodeAnim )
+	inline std::tuple< uint32_t, double, double > getNodeAnimFrameTicks( aiNodeAnim const & aiNodeAnim )
 	{
 		return { std::max( { aiNodeAnim.mNumPositionKeys
 				, aiNodeAnim.mNumRotationKeys
 				, aiNodeAnim.mNumScalingKeys } )
+			, std::min( { ( aiNodeAnim.mNumPositionKeys > 0
+					? aiNodeAnim.mPositionKeys[aiNodeAnim.mNumPositionKeys - 1u].mTime
+					: std::numeric_limits< double >::max() )
+				, ( aiNodeAnim.mNumRotationKeys > 0
+					? aiNodeAnim.mRotationKeys[aiNodeAnim.mNumRotationKeys - 1u].mTime
+					: std::numeric_limits< double >::max() )
+				, ( aiNodeAnim.mNumScalingKeys > 0
+					? aiNodeAnim.mScalingKeys[aiNodeAnim.mNumScalingKeys - 1u].mTime
+					: std::numeric_limits< double >::max() ) } )
 			, std::max( { ( aiNodeAnim.mNumPositionKeys > 0
 					? aiNodeAnim.mPositionKeys[aiNodeAnim.mNumPositionKeys - 1u].mTime
 					: 0.0 )
@@ -455,10 +464,11 @@ namespace c3d_assimp
 					: 0.0 ) } ) };
 	}
 
-	inline castor::Pair< uint32_t, double > getAnimationFrameTicks( aiAnimation const & aiAnimation )
+	inline std::tuple< uint32_t, double, double > getAnimationFrameTicks( aiAnimation const & aiAnimation )
 	{
 		uint32_t count = 0u;
-		double ticks = 0.0;
+		double maxTicks = 0.0;
+		double minTicks = std::numeric_limits< double >::max();
 
 		for ( auto nodeAnim : castor::makeArrayView( aiAnimation.mChannels, aiAnimation.mNumChannels ) )
 		{
@@ -466,7 +476,17 @@ namespace c3d_assimp
 				, nodeAnim->mNumPositionKeys
 				, nodeAnim->mNumRotationKeys
 				, nodeAnim->mNumScalingKeys } );
-			ticks = std::max( { ticks
+			minTicks = std::min( { minTicks
+				, ( nodeAnim->mNumPositionKeys > 0
+					? nodeAnim->mPositionKeys[nodeAnim->mNumPositionKeys - 1u].mTime
+					: std::numeric_limits< double >::max() )
+				, ( nodeAnim->mNumRotationKeys > 0
+					? nodeAnim->mRotationKeys[nodeAnim->mNumRotationKeys - 1u].mTime
+					: std::numeric_limits< double >::max() )
+				, ( nodeAnim->mNumScalingKeys > 0
+					? nodeAnim->mScalingKeys[nodeAnim->mNumScalingKeys - 1u].mTime
+					: std::numeric_limits< double >::max() ) } );
+			maxTicks = std::max( { maxTicks
 				, ( nodeAnim->mNumPositionKeys > 0
 					? nodeAnim->mPositionKeys[nodeAnim->mNumPositionKeys - 1u].mTime
 					: 0.0 )
@@ -478,7 +498,7 @@ namespace c3d_assimp
 					: 0.0 ) } );
 		}
 
-		return { count, ticks };
+		return { count, minTicks, maxTicks };
 	}
 
 	inline aiNode const * findMeshNode( uint32_t meshIndex
@@ -721,6 +741,7 @@ namespace c3d_assimp
 		, castor::Map< castor::Milliseconds, castor::Quaternion > const & rotates
 		, [[maybe_unused]] castor::Set< castor::Milliseconds > const & times
 		, uint32_t fps
+		, castor::Milliseconds minTime
 		, castor::Milliseconds maxTime
 		, AnimationT & animation
 		, castor::Map< castor::Milliseconds, castor::UniquePtr< KeyFrameT > > & keyframes
@@ -732,12 +753,12 @@ namespace c3d_assimp
 		auto wantedFps = std::min< int64_t >( 60, int64_t( fps ) );
 		castor::Milliseconds step{ 1000 / wantedFps };
 
-		for ( auto time = 0_ms; time <= maxTime; time += step )
+		for ( auto time = minTime; time <= maxTime; time += step )
 		{
 			auto translate = interpolate( time, pointInterpolator, translates );
 			auto scale = interpolate( time, pointInterpolator, scales );
 			auto rotate = interpolate( time, quatInterpolator, rotates );
-			fillKeyFrame( getKeyFrame( time, animation, keyframes )
+			fillKeyFrame( getKeyFrame( time - minTime, animation, keyframes )
 				, translate
 				, rotate
 				, scale );
@@ -750,6 +771,7 @@ namespace c3d_assimp
 		, typename FuncT >
 	inline void processAnimationNodeKeys( aiAnimT const & aiAnim
 		, uint32_t wantedFps
+		, castor::Milliseconds minTime
 		, castor::Milliseconds maxTime
 		, int64_t ticksPerSecond
 		, AnimationT & animation
@@ -774,6 +796,7 @@ namespace c3d_assimp
 			, rotates
 			, times
 			, wantedFps
+			, minTime
 			, maxTime
 			, animation
 			, keyframes
