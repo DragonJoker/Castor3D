@@ -25,6 +25,7 @@ namespace c3d_assimp
 		bool doImportNode( castor3d::SceneNodeAnimation & animation )override;
 
 		void doProcessSkeletonAnimationNodes( castor3d::SkeletonAnimation & animation
+			, castor::Milliseconds minTime
 			, castor::Milliseconds maxTime
 			, int64_t ticksPerSecond
 			, castor3d::Skeleton const & skeleton

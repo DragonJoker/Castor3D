@@ -86,15 +86,15 @@ namespace c3d_assimp
 
 		auto & aiAnimation = *it->second;
 		auto & aiNode = *file.getAiScene().mRootNode;
-		auto [frameCount, frameTicks] = getAnimationFrameTicks( aiAnimation );
-		castor3d::log::info << cuT( "  Skeleton Animation found: [" ) << name << cuT( "]" ) << std::endl;
+		auto [frameCount, minFrameTicks, maxFrameTicks] = getAnimationFrameTicks( aiAnimation );
 		int64_t ticksPerSecond = aiAnimation.mTicksPerSecond != 0.0
 			? int64_t( aiAnimation.mTicksPerSecond )
 			: 25ll;
 		SkeletonAnimationKeyFrameMap keyframes;
 		SkeletonAnimationObjectSet notAnimated;
 		doProcessSkeletonAnimationNodes( animation
-			, fromAssimp( frameTicks, ticksPerSecond )
+			, fromAssimp( minFrameTicks, ticksPerSecond )
+			, fromAssimp( maxFrameTicks, ticksPerSecond )
 			, ticksPerSecond
 			, skeleton
 			, aiNode
@@ -131,6 +131,9 @@ namespace c3d_assimp
 			animation.addKeyFrame( castor::ptrRefCast< castor3d::AnimationKeyFrame >( keyFrame.second ) );
 		}
 
+		castor3d::log::info << cuT( "Loaded skeleton animation [" ) << animation.getName() << cuT( "] " )
+			<< animation.getLength().count() << cuT( " ms, " )
+			<< animation.size() << cuT( " Keyframes" ) << std::endl;
 		return true;
 	}
 
@@ -148,7 +151,6 @@ namespace c3d_assimp
 
 			if ( animIt != animations.end() )
 			{
-				castor3d::log::info << cuT( "  Mesh Animation found for mesh [" ) << mesh.getName() << cuT( "], submesh " ) << index << cuT( ": [" ) << name << cuT( "]" ) << std::endl;
 				auto & aiAnimation = *animIt->second.second;
 
 				castor3d::MeshAnimationSubmesh animSubmesh{ animation, *submesh };
@@ -179,6 +181,9 @@ namespace c3d_assimp
 			}
 		}
 
+		castor3d::log::info << cuT( "Loaded mesh animation [" ) << animation.getName() << cuT( "] " )
+			<< animation.getLength().count() << cuT( " ms, " )
+			<< animation.size() << cuT( " Keyframes" ) << std::endl;
 		return true;
 	}
 
@@ -197,15 +202,15 @@ namespace c3d_assimp
 
 		auto & aiAnimation = *it->second.first;
 		auto & aiNodeAnim = *it->second.second;
-		auto [frameCount, frameTicks] = getNodeAnimFrameTicks( aiNodeAnim );
-		castor3d::log::info << cuT( "  SceneNode Animation found: [" ) << name << cuT( "]" ) << std::endl;
+		auto [frameCount, minFrameTicks, maxFrameTicks] = getNodeAnimFrameTicks( aiNodeAnim );
 		int64_t ticksPerSecond = aiAnimation.mTicksPerSecond != 0.0
 			? int64_t( aiAnimation.mTicksPerSecond )
 			: 25ll;
 		SceneNodeAnimationKeyFrameMap keyframes;
 		processAnimationNodeKeys( aiNodeAnim
 			, getEngine()->getWantedFps()
-			, fromAssimp( frameTicks, ticksPerSecond )
+			, fromAssimp( minFrameTicks, ticksPerSecond )
+			, fromAssimp( maxFrameTicks, ticksPerSecond )
 			, ticksPerSecond
 			, animation
 			, keyframes
@@ -222,10 +227,14 @@ namespace c3d_assimp
 			animation.addKeyFrame( castor::ptrRefCast< castor3d::AnimationKeyFrame >( keyFrame.second ) );
 		}
 
+		castor3d::log::info << cuT( "Loaded node animation [" ) << animation.getName() << cuT( "] " )
+			<< animation.getLength().count() << cuT( " ms, " )
+			<< animation.size() << cuT( " Keyframes" ) << std::endl;
 		return true;
 	}
 
 	void AssimpAnimationImporter::doProcessSkeletonAnimationNodes( castor3d::SkeletonAnimation & animation
+		, castor::Milliseconds minTime
 		, castor::Milliseconds maxTime
 		, int64_t ticksPerSecond
 		, castor3d::Skeleton const & skeleton
@@ -274,6 +283,7 @@ namespace c3d_assimp
 			{
 				processAnimationNodeKeys( *aiNodeAnim
 					, getEngine()->getWantedFps()
+					, minTime
 					, maxTime
 					, ticksPerSecond
 					, animation

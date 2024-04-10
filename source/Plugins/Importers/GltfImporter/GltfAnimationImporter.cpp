@@ -134,6 +134,7 @@ namespace c3d_gltf
 			, castor::Map< castor::Milliseconds, castor::Point3f > const & scales
 			, [[maybe_unused]] castor::Set< castor::Milliseconds > const & times
 			, uint32_t fps
+			, castor::Milliseconds minTime
 			, castor::Milliseconds maxTime
 			, AnimationT & animation
 			, castor::Map< castor::Milliseconds, castor::UniquePtr< KeyFrameT > > & keyframes
@@ -146,12 +147,12 @@ namespace c3d_gltf
 			auto wantedFps = std::min< int64_t >( 60, int64_t( fps ) );
 			castor::Milliseconds step{ 1000 / wantedFps };
 
-			for ( auto time = 0_ms; time <= maxTime; time += step )
+			for ( auto time = minTime; time <= maxTime; time += step )
 			{
 				auto translate = interpolate( time, pointInterpolator, translates, castor::Point3f{} );
 				auto rotate = interpolate( time, quatInterpolator, rotates, castor::Quaternion::identity() );
 				auto scale = interpolate( time, pointInterpolator, scales, castor::Point3f{ 1.0f, 1.0f, 1.0f } );
-				fillKeyFrame( getKeyFrame( time, animation, keyframes )
+				fillKeyFrame( getKeyFrame( time - minTime, animation, keyframes )
 					, translate
 					, rotate
 					, scale );
@@ -159,7 +160,7 @@ namespace c3d_gltf
 		}
 
 		template< typename KeyT >
-		static castor::Milliseconds processKeys( fastgltf::Asset const & impAsset
+		static std::pair< castor::Milliseconds, castor::Milliseconds> processKeys( fastgltf::Asset const & impAsset
 			, NodeAnimationChannelSampler const & animChannels
 			, fastgltf::AnimationPath channel
 			, castor::Map< castor::Milliseconds, KeyT > & result
@@ -172,6 +173,7 @@ namespace c3d_gltf
 				{
 					return lookup.first.path == channel;
 				} );
+			castor::Milliseconds minTime{ std::numeric_limits< int32_t >::max() };
 			castor::Milliseconds maxTime{};
 
 			if ( it != animChannels.end() )
@@ -207,9 +209,11 @@ namespace c3d_gltf
 					uint32_t k = weightStride * i + ii;
 					result.emplace( timeIndex, values[k] );
 				}
+
+				minTime = result.begin()->first;
 			}
 
-			return maxTime;
+			return { minTime, maxTime };
 		}
 
 		template< typename AnimationT
@@ -227,14 +231,15 @@ namespace c3d_gltf
 			castor::Map< castor::Milliseconds, castor::Point3f > translates;
 			castor::Map< castor::Milliseconds, castor::Quaternion > rotates;
 			castor::Map< castor::Milliseconds, castor::Point3f > scales;
-			auto maxTranslateTime = processKeys( impAsset, animChannels, fastgltf::AnimationPath::Translation, translates, times, adapter );
-			auto maxRotateTime = processKeys( impAsset, animChannels, fastgltf::AnimationPath::Rotation, rotates, times, adapter );
-			auto maxScaleTime = processKeys( impAsset, animChannels, fastgltf::AnimationPath::Scale, scales, times, adapter );
+			auto [minTranslateTime, maxTranslateTime] = processKeys( impAsset, animChannels, fastgltf::AnimationPath::Translation, translates, times, adapter );
+			auto [minRotateTime, maxRotateTime] = processKeys( impAsset, animChannels, fastgltf::AnimationPath::Rotation, rotates, times, adapter );
+			auto [minScaleTime, maxScaleTime] = processKeys( impAsset, animChannels, fastgltf::AnimationPath::Scale, scales, times, adapter );
 			synchroniseKeys( translates
 				, rotates
 				, scales
 				, times
 				, wantedFps
+				, std::min( minTranslateTime, std::min( minRotateTime, minScaleTime ) )
 				, std::max( maxTranslateTime, std::max( maxRotateTime, maxScaleTime ) )
 				, animation
 				, keyframes
@@ -425,6 +430,9 @@ namespace c3d_gltf
 			animation.addKeyFrame( castor::ptrRefCast< castor3d::AnimationKeyFrame >( keyFrame.second ) );
 		}
 
+		castor3d::log::info << cuT( "Loaded skeleton animation [" ) << animation.getName() << cuT( "] " )
+			<< animation.getLength().count() << cuT( " ms, " )
+			<< animation.size() << cuT( " Keyframes" ) << std::endl;
 		return keyframes.size() > 1u;
 	}
 
@@ -444,7 +452,6 @@ namespace c3d_gltf
 
 			if ( animIt != animations.end() )
 			{
-				castor3d::log::info << cuT( "  Mesh Animation found for mesh [" ) << mesh.getName() << cuT( "], submesh " ) << index << cuT( ": [" ) << name << cuT( "]" ) << std::endl;
 				castor3d::MeshAnimationSubmesh animSubmesh{ animation, * submesh };
 				auto & animChannels = animIt->second;
 				size_t nodeIndex = anims::getMeshNodeIndex( file, animChannels, mesh.getName(), index );
@@ -523,6 +530,9 @@ namespace c3d_gltf
 			}
 		}
 
+		castor3d::log::info << cuT( "Loaded mesh animation [" ) << animation.getName() << cuT( "] " )
+			<< animation.getLength().count() << cuT( " ms, " )
+			<< animation.size() << cuT( " Keyframes" ) << std::endl;
 		return hasAnyKeyframes;
 	}
 
@@ -564,6 +574,9 @@ namespace c3d_gltf
 			animation.addKeyFrame( castor::ptrRefCast< castor3d::AnimationKeyFrame >( keyFrame.second ) );
 		}
 
+		castor3d::log::info << cuT( "Loaded node animation [" ) << animation.getName() << cuT( "] " )
+			<< animation.getLength().count() << cuT( " ms, " )
+			<< animation.size() << cuT( " Keyframes" ) << std::endl;
 		return keyFrames.size() > 1u;
 	}
 }

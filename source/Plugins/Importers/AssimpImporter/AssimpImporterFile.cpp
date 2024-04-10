@@ -792,7 +792,7 @@ namespace c3d_assimp
 			if ( auto [skeletonData, skeleton] = file::findSkeletonForAnim( getScene(), *m_aiScene->mRootNode, *aiAnimation, m_sceneData );
 				skeletonData )
 			{
-				auto [frameCount, frameTicks] = getAnimationFrameTicks( *aiAnimation );
+				auto [frameCount, minFrameTicks, maxFrameTicks] = getAnimationFrameTicks( *aiAnimation );
 
 				if ( frameCount > 1 )
 				{
@@ -932,7 +932,7 @@ namespace c3d_assimp
 
 			for ( auto anim : anims )
 			{
-				auto [frameCount, frameTicks] = getNodeAnimFrameTicks( *anim.second );
+				auto [frameCount, minFrameTicks, maxFrameTicks] = getNodeAnimFrameTicks( *anim.second );
 
 				if ( frameCount > 1 )
 				{
