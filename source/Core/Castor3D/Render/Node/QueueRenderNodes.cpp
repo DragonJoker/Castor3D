@@ -125,6 +125,16 @@ namespace castor3d
 			return it != nodes.end() ? &( *it ) : nullptr;
 		}
 
+		static bool hasVisibleInstance( castor::UnorderedSet< Geometry const * > const & instances )
+		{
+			return std::any_of( instances.begin()
+				, instances.end()
+				, []( Geometry const * lookup )
+				{
+					return lookup->getParent()->isVisible();
+				} );
+		}
+
 		static uint32_t bindPipeline( ashes::CommandBuffer const & commandBuffer
 			, QueueRenderNodes & queueNodes
 			, RenderPipeline const & pipeline
@@ -1544,20 +1554,23 @@ namespace castor3d
 
 					for ( auto const & [submesh, node] : submeshes )
 					{
-						auto instanceCount = node.node->getInstanceCount();
-						queuerndnd::registerNodeCommands( *pipeline.pipeline
-							, node
-							, commandBuffer
-							, instanceCount
-							, pipelineId
-							, 0u
-							, pipelinesBuffer
-							, idxIndex
-							, nidxIndex );
-						m_visible.objectCount += instanceCount;
-						m_visible.faceCount += uint32_t( submesh->getFaceCount() * instanceCount );
-						m_visible.vertexCount += uint32_t( submesh->getPointsCount() * instanceCount );
-						++result;
+						if ( queuerndnd::hasVisibleInstance( node.second ) )
+						{
+							auto instanceCount = node.first.node->getInstanceCount();
+							queuerndnd::registerNodeCommands( *pipeline.pipeline
+								, node.first
+								, commandBuffer
+								, instanceCount
+								, pipelineId
+								, 0u
+								, pipelinesBuffer
+								, idxIndex
+								, nidxIndex );
+							m_visible.objectCount += instanceCount;
+							m_visible.faceCount += uint32_t( submesh->getFaceCount() * instanceCount );
+							m_visible.vertexCount += uint32_t( submesh->getPointsCount() * instanceCount );
+							++result;
+						}
 					}
 				}
 			}
@@ -1659,25 +1672,28 @@ namespace castor3d
 
 					for ( auto const & [submesh, node] : submeshes )
 					{
-						auto instanceCount = node.node->getInstanceCount();
-						queuerndnd::fillNodeIndirectCommands( node
-							, indirectIdxBuffer
-							, indirectNIdxBuffer
-							, instanceCount );
-						m_visible.objectCount += instanceCount;
-						m_visible.faceCount += uint32_t( submesh->getFaceCount() * instanceCount );
-						m_visible.vertexCount += uint32_t( submesh->getPointsCount() * instanceCount );
-						CU_Require( size_t( std::distance( origIndirectIdxBuffer, indirectIdxBuffer ) ) <= submeshIdxCommands.getCount() );
-						CU_Require( size_t( std::distance( origIndirectNIdxBuffer, indirectNIdxBuffer ) ) <= submeshNIdxCommands.getCount() );
-						queuerndnd::registerNodeCommands( *pipeline.pipeline
-							, node
-							, commandBuffer
-							, &submeshIdxCommands
-							, submeshNIdxCommands
-							, 1u
-							, idxIndex
-							, nidxIndex );
-						++result;
+						if ( queuerndnd::hasVisibleInstance( node.second ) )
+						{
+							auto instanceCount = node.first.node->getInstanceCount();
+							queuerndnd::fillNodeIndirectCommands( node.first
+								, indirectIdxBuffer
+								, indirectNIdxBuffer
+								, instanceCount );
+							m_visible.objectCount += instanceCount;
+							m_visible.faceCount += uint32_t( submesh->getFaceCount() * instanceCount );
+							m_visible.vertexCount += uint32_t( submesh->getPointsCount() * instanceCount );
+							CU_Require( size_t( std::distance( origIndirectIdxBuffer, indirectIdxBuffer ) ) <= submeshIdxCommands.getCount() );
+							CU_Require( size_t( std::distance( origIndirectNIdxBuffer, indirectNIdxBuffer ) ) <= submeshNIdxCommands.getCount() );
+							queuerndnd::registerNodeCommands( *pipeline.pipeline
+								, node.first
+								, commandBuffer
+								, &submeshIdxCommands
+								, submeshNIdxCommands
+								, 1u
+								, idxIndex
+								, nidxIndex );
+							++result;
+						}
 					}
 				}
 			}
@@ -1830,54 +1846,60 @@ namespace castor3d
 					{
 						for ( auto const & [submesh, node] : submeshes )
 						{
-							auto instanceCount = node.node->getInstanceCount();
-							queuerndnd::fillNodeIndirectCommands( node
-								, indirectMshBuffer
-								, indirectIdxBuffer
-								, indirectNIdxBuffer
-								, instanceCount );
-							m_visible.objectCount += instanceCount;
-							m_visible.faceCount += uint32_t( submesh->getFaceCount() * instanceCount );
-							m_visible.vertexCount += uint32_t( submesh->getPointsCount() * instanceCount );
-							CU_Require( size_t( std::distance( origIndirectMshBuffer, indirectMshBuffer ) ) <= submeshMshCommands.getCount() );
-							CU_Require( size_t( std::distance( origIndirectIdxBuffer, indirectIdxBuffer ) ) <= submeshIdxCommands.getCount() );
-							CU_Require( size_t( std::distance( origIndirectNIdxBuffer, indirectNIdxBuffer ) ) <= submeshNIdxCommands.getCount() );
+							if ( queuerndnd::hasVisibleInstance( node.second ) )
+							{
+								auto instanceCount = node.first.node->getInstanceCount();
+								queuerndnd::fillNodeIndirectCommands( node.first
+									, indirectMshBuffer
+									, indirectIdxBuffer
+									, indirectNIdxBuffer
+									, instanceCount );
+								m_visible.objectCount += instanceCount;
+								m_visible.faceCount += uint32_t( submesh->getFaceCount() * instanceCount );
+								m_visible.vertexCount += uint32_t( submesh->getPointsCount() * instanceCount );
+								CU_Require( size_t( std::distance( origIndirectMshBuffer, indirectMshBuffer ) ) <= submeshMshCommands.getCount() );
+								CU_Require( size_t( std::distance( origIndirectIdxBuffer, indirectIdxBuffer ) ) <= submeshIdxCommands.getCount() );
+								CU_Require( size_t( std::distance( origIndirectNIdxBuffer, indirectNIdxBuffer ) ) <= submeshNIdxCommands.getCount() );
 
-							queuerndnd::registerNodeCommands( *pipeline.pipeline
-								, *node.node
-								, commandBuffer
-								, submeshMshCommands
-								, pipelineId
-								, 0u
-								, instanceCount
-								, mshIndex );
-							++result;
+								queuerndnd::registerNodeCommands( *pipeline.pipeline
+									, *node.first.node
+									, commandBuffer
+									, submeshMshCommands
+									, pipelineId
+									, 0u
+									, instanceCount
+									, mshIndex );
+								++result;
+							}
 						}
 					}
 					else
 					{
 						for ( auto const & [submesh, node] : submeshes )
 						{
-							auto instanceCount = node.node->getInstanceCount();
-							queuerndnd::fillNodeIndirectCommands( node
-								, indirectIdxBuffer
-								, indirectNIdxBuffer
-								, instanceCount );
-							m_visible.objectCount += instanceCount;
-							m_visible.faceCount += uint32_t( submesh->getFaceCount() * instanceCount );
-							m_visible.vertexCount += uint32_t( submesh->getPointsCount() * instanceCount );
-							CU_Require( size_t( std::distance( origIndirectIdxBuffer, indirectIdxBuffer ) ) <= submeshIdxCommands.getCount() );
-							CU_Require( size_t( std::distance( origIndirectNIdxBuffer, indirectNIdxBuffer ) ) <= submeshNIdxCommands.getCount() );
+							if ( queuerndnd::hasVisibleInstance( node.second ) )
+							{
+								auto instanceCount = node.first.node->getInstanceCount();
+								queuerndnd::fillNodeIndirectCommands( node.first
+									, indirectIdxBuffer
+									, indirectNIdxBuffer
+									, instanceCount );
+								m_visible.objectCount += instanceCount;
+								m_visible.faceCount += uint32_t( submesh->getFaceCount() * instanceCount );
+								m_visible.vertexCount += uint32_t( submesh->getPointsCount() * instanceCount );
+								CU_Require( size_t( std::distance( origIndirectIdxBuffer, indirectIdxBuffer ) ) <= submeshIdxCommands.getCount() );
+								CU_Require( size_t( std::distance( origIndirectNIdxBuffer, indirectNIdxBuffer ) ) <= submeshNIdxCommands.getCount() );
 
-							queuerndnd::registerNodeCommands( *pipeline.pipeline
-								, node
-								, commandBuffer
-								, &submeshIdxCommands
-								, submeshNIdxCommands
-								, 1u
-								, idxIndex
-								, nidxIndex );
-							++result;
+								queuerndnd::registerNodeCommands( *pipeline.pipeline
+									, node.first
+									, commandBuffer
+									, &submeshIdxCommands
+									, submeshNIdxCommands
+									, 1u
+									, idxIndex
+									, nidxIndex );
+								++result;
+							}
 						}
 					}
 				}
@@ -2034,54 +2056,60 @@ namespace castor3d
 					{
 						for ( auto const & [submesh, node] : submeshes )
 						{
-							auto instanceCount = node.node->getInstanceCount();
-							queuerndnd::fillNodeIndirectCommands( node
-								, indirectMshBuffer
-								, indirectIdxBuffer
-								, indirectNIdxBuffer
-								, instanceCount );
-							m_visible.objectCount += instanceCount;
-							m_visible.faceCount += uint32_t( submesh->getFaceCount() * instanceCount );
-							m_visible.vertexCount += uint32_t( submesh->getPointsCount() * instanceCount );
-							CU_Require( size_t( std::distance( origIndirectMshBuffer, indirectMshBuffer ) ) <= submeshMshCommands.getCount() );
-							CU_Require( size_t( std::distance( origIndirectIdxBuffer, indirectIdxBuffer ) ) <= submeshIdxCommands.getCount() );
-							CU_Require( size_t( std::distance( origIndirectNIdxBuffer, indirectNIdxBuffer ) ) <= submeshNIdxCommands.getCount() );
+							if ( queuerndnd::hasVisibleInstance( node.second ) )
+							{
+								auto instanceCount = node.first.node->getInstanceCount();
+								queuerndnd::fillNodeIndirectCommands( node.first
+									, indirectMshBuffer
+									, indirectIdxBuffer
+									, indirectNIdxBuffer
+									, instanceCount );
+								m_visible.objectCount += instanceCount;
+								m_visible.faceCount += uint32_t( submesh->getFaceCount() * instanceCount );
+								m_visible.vertexCount += uint32_t( submesh->getPointsCount() * instanceCount );
+								CU_Require( size_t( std::distance( origIndirectMshBuffer, indirectMshBuffer ) ) <= submeshMshCommands.getCount() );
+								CU_Require( size_t( std::distance( origIndirectIdxBuffer, indirectIdxBuffer ) ) <= submeshIdxCommands.getCount() );
+								CU_Require( size_t( std::distance( origIndirectNIdxBuffer, indirectNIdxBuffer ) ) <= submeshNIdxCommands.getCount() );
 
-							queuerndnd::registerNodeCommands( *pipeline.pipeline
-								, *node.node
-								, commandBuffer
-								, submeshMshCommands
-								, pipelineId
-								, 0u
-								, instanceCount
-								, mshIndex );
-							++result;
+								queuerndnd::registerNodeCommands( *pipeline.pipeline
+									, *node.first.node
+									, commandBuffer
+									, submeshMshCommands
+									, pipelineId
+									, 0u
+									, instanceCount
+									, mshIndex );
+								++result;
+							}
 						}
 					}
 					else
 					{
 						for ( auto const & [submesh, node] : submeshes )
 						{
-							auto instanceCount = node.node->getInstanceCount();
-							queuerndnd::fillNodeIndirectCommands( node
-								, indirectIdxBuffer
-								, indirectNIdxBuffer
-								, instanceCount );
-							m_visible.objectCount += instanceCount;
-							m_visible.faceCount += uint32_t( submesh->getFaceCount() * instanceCount );
-							m_visible.vertexCount += uint32_t( submesh->getPointsCount() * instanceCount );
-							CU_Require( size_t( std::distance( origIndirectIdxBuffer, indirectIdxBuffer ) ) <= submeshIdxCommands.getCount() );
-							CU_Require( size_t( std::distance( origIndirectNIdxBuffer, indirectNIdxBuffer ) ) <= submeshNIdxCommands.getCount() );
+							if ( queuerndnd::hasVisibleInstance( node.second ) )
+							{
+								auto instanceCount = node.first.node->getInstanceCount();
+								queuerndnd::fillNodeIndirectCommands( node.first
+									, indirectIdxBuffer
+									, indirectNIdxBuffer
+									, instanceCount );
+								m_visible.objectCount += instanceCount;
+								m_visible.faceCount += uint32_t( submesh->getFaceCount() * instanceCount );
+								m_visible.vertexCount += uint32_t( submesh->getPointsCount() * instanceCount );
+								CU_Require( size_t( std::distance( origIndirectIdxBuffer, indirectIdxBuffer ) ) <= submeshIdxCommands.getCount() );
+								CU_Require( size_t( std::distance( origIndirectNIdxBuffer, indirectNIdxBuffer ) ) <= submeshNIdxCommands.getCount() );
 
-							queuerndnd::registerNodeCommands( *pipeline.pipeline
-								, node
-								, commandBuffer
-								, &submeshIdxCommands
-								, submeshNIdxCommands
-								, 1u
-								, idxIndex
-								, nidxIndex );
-							++result;
+								queuerndnd::registerNodeCommands( *pipeline.pipeline
+									, node.first
+									, commandBuffer
+									, &submeshIdxCommands
+									, submeshNIdxCommands
+									, 1u
+									, idxIndex
+									, nidxIndex );
+								++result;
+							}
 						}
 					}
 				}

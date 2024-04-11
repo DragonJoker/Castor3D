@@ -65,6 +65,7 @@ namespace castor3d
 	struct RenderNodeTraitsT
 	{
 		using Object = Submesh;
+		using Instance = Geometry;
 		using Command = VkDrawIndexedIndirectCommand;
 	};
 
@@ -72,11 +73,14 @@ namespace castor3d
 	struct RenderNodeTraitsT< BillboardRenderNode >
 	{
 		using Object = BillboardBase;
+		using Instance = BillboardBase;
 		using Command = VkDrawIndirectCommand;
 	};
 
 	template< typename NodeT >
 	using NodeObjectT = typename RenderNodeTraitsT< NodeT >::Object;
+	template< typename NodeT >
+	using NodeInstanceT = typename RenderNodeTraitsT< NodeT >::Instance;
 	template< typename NodeT >
 	using NodeCommandT = typename RenderNodeTraitsT< NodeT >::Command;
 

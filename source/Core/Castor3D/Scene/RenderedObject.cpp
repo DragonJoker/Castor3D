@@ -13,20 +13,21 @@ namespace castor3d
 		, uint32_t meshletCount
 		, ModelBufferConfiguration & modelData )
 	{
+		auto modelMtx = sceneNode.getDerivedTransformationMatrix();
+		auto normalMtx = castor::Matrix3x3f{ modelMtx }.getInverse().getTransposed();
+
 		if ( !sceneNode.isVisible() )
 		{
-			return;
+			modelMtx = {};
+			normalMtx = {};
 		}
-
-		auto & modelMtx = sceneNode.getDerivedTransformationMatrix();
-		auto normal = castor::Matrix3x3f{ modelMtx };
 
 		modelData.prvModel = m_firstUpdate > 0
 			? modelMtx
 			: modelData.curModel;
 		m_firstUpdate = m_firstUpdate ? m_firstUpdate - 1u : 0u;
 		modelData.curModel = modelMtx;
-		modelData.normal = castor::Matrix4x4f{ normal.getInverse().getTransposed() };
+		modelData.normal = castor::Matrix4x4f{ normalMtx };
 
 		modelData.materialId = pass.getId();
 		modelData.shadowReceiver = isShadowReceiver() ? 1u : 0u;
