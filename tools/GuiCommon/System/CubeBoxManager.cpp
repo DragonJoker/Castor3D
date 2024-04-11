@@ -10,12 +10,13 @@
 #include <Castor3D/Material/Material.hpp>
 #include <Castor3D/Material/Pass/Pass.hpp>
 #include <Castor3D/Material/Pass/Component/Other/ColourComponent.hpp>
+#include <Castor3D/Model/Vertex.hpp>
 #include <Castor3D/Model/Mesh/Mesh.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/DefaultRenderComponent.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/LinesMapping.hpp>
-#include <Castor3D/Model/Vertex.hpp>
+#include <Castor3D/Model/Skeleton/Skeleton.hpp>
 #include <Castor3D/Scene/Geometry.hpp>
 #include <Castor3D/Scene/Scene.hpp>
 #include <Castor3D/Scene/SceneNode.hpp>
@@ -28,10 +29,40 @@ namespace GuiCommon
 {
 	namespace
 	{
-		castor3d::MeshResPtr doCreateCubeMesh( castor::String const name
-			, castor3d::Scene & scene
+		castor3d::MaterialObs doCreateMaterial( castor3d::Scene const & scene
 			, castor::HdrRgbColour const & colour
 			, castor::String const & colourName )
+		{
+			castor3d::MaterialObs material{};
+			castor::String matName = cuT( "BBox_" ) + colourName;
+
+			if ( !scene.getEngine()->hasMaterial( matName ) )
+			{
+				material = scene.getEngine()->addNewMaterial( matName
+					, *scene.getEngine()
+					, scene.getDefaultLightingModel() );
+
+				if ( auto mat = material )
+				{
+					mat->setSerialisable( false );
+
+					auto pass = mat->createPass();
+					pass->enableLighting( false );
+					pass->enablePicking( false );
+					pass->createComponent< castor3d::ColourComponent >()->setColour( colour );
+				}
+			}
+			else
+			{
+				material = scene.getEngine()->findMaterial( matName );
+			}
+
+			return material;
+		}
+
+		castor3d::MeshResPtr doCreateCubeMesh( castor::String const name
+			, castor3d::Scene & scene
+			, castor3d::MaterialObs material )
 		{
 			auto result = scene.addNewMesh( name, scene );
 			result->setSerialisable( false );
@@ -68,30 +99,6 @@ namespace GuiCommon
 				castor3d::LineIndices{ { 3u, 7u } },
 			};
 			mapping->getData().addLineGroup( lines );
-			castor3d::MaterialObs material{};
-			castor::String matName = cuT( "BBox_" ) + colourName;
-
-			if ( !scene.getEngine()->hasMaterial( matName ) )
-			{
-				material = scene.getEngine()->addNewMaterial( matName
-					, *scene.getEngine()
-					, scene.getDefaultLightingModel() );
-
-				if ( auto mat = material )
-				{
-					mat->setSerialisable( false );
-
-					auto pass = mat->createPass();
-					pass->enableLighting( false );
-					pass->enablePicking( false );
-					pass->createComponent< castor3d::ColourComponent >()->setColour( colour );
-				}
-			}
-			else
-			{
-				material = scene.getEngine()->findMaterial( matName );
-			}
-
 			submesh->setDefaultMaterial( material );
 			result->computeContainers();
 			scene.getListener().postEvent( makeGpuInitialiseEvent( *submesh ) );
@@ -101,11 +108,16 @@ namespace GuiCommon
 
 	CubeBoxManager::CubeBoxManager( castor3d::Scene & scene )
 		: m_scene{ scene }
-		, m_obbMesh{ doCreateCubeMesh( cuT( "CubeBox_OBB" ), scene, castor::HdrRgbColour::fromPredefined( castor::PredefinedRgbColour::eRed ), cuT( "Red" ) ) }
-		, m_obbSubmesh{ doCreateCubeMesh( cuT( "CubeBox_OBB_Submesh" ), scene, castor::HdrRgbColour::fromPredefined( castor::PredefinedRgbColour::eBlue ), cuT( "Blue" ) ) }
-		, m_obbSelectedSubmesh{ doCreateCubeMesh( cuT( "CubeBox_OBB_SelectedSubmesh" ), scene, castor::HdrRgbColour::fromComponents( 1.0f, 1.0f, 0.0f ), cuT( "Yellow" ) ) }
-		, m_obbBone{ doCreateCubeMesh( cuT( "CubeBox_OBB_Bone" ), scene, castor::HdrRgbColour::fromPredefined( castor::PredefinedRgbColour::eDarkBlue ), cuT( "DarkBlue" ) ) }
-		, m_aabbMesh{ doCreateCubeMesh( cuT( "CubeBox_AABB" ), scene, castor::HdrRgbColour::fromPredefined( castor::PredefinedRgbColour::eGreen ), cuT( "Green" ) ) }
+		, m_obbMeshMaterial{ doCreateMaterial( scene, castor::HdrRgbColour::fromPredefined( castor::PredefinedRgbColour::eRed ), cuT( "Red" ) ) }
+		, m_obbSubmeshMaterial{ doCreateMaterial( scene, castor::HdrRgbColour::fromPredefined( castor::PredefinedRgbColour::eBlue ), cuT( "Blue" ) ) }
+		, m_obbSelectedSubmeshMaterial{ doCreateMaterial( scene, castor::HdrRgbColour::fromComponents( 1.0f, 1.0f, 0.0f ), cuT( "Yellow" ) ) }
+		, m_obbBoneMaterial{ doCreateMaterial( scene, castor::HdrRgbColour::fromPredefined( castor::PredefinedRgbColour::eDarkBlue ), cuT( "DarkBlue" ) ) }
+		, m_aabbMeshMaterial{ doCreateMaterial( scene, castor::HdrRgbColour::fromPredefined( castor::PredefinedRgbColour::eGreen ), cuT( "Green" ) ) }
+		, m_obbMesh{ doCreateCubeMesh( cuT( "CubeBox_OBB" ), scene, m_obbMeshMaterial ) }
+		, m_obbSubmesh{ doCreateCubeMesh( cuT( "CubeBox_OBB_Submesh" ), scene, m_obbSubmeshMaterial ) }
+		, m_obbSelectedSubmesh{ doCreateCubeMesh( cuT( "CubeBox_OBB_SelectedSubmesh" ), scene, m_obbSelectedSubmeshMaterial ) }
+		, m_obbBone{ doCreateCubeMesh( cuT( "CubeBox_OBB_Bone" ), scene, m_obbBoneMaterial ) }
+		, m_aabbMesh{ doCreateCubeMesh( cuT( "CubeBox_AABB" ), scene, m_aabbMeshMaterial ) }
 	{
 	}
 
@@ -122,8 +134,8 @@ namespace GuiCommon
 		m_obbBone = {};
 		m_obbSelectedSubmesh = {};
 		m_obbSubmesh = {};
-		m_aabbNode = {};
-		m_obbNode = {};
+		m_aabbObject = {};
+		m_obbObject = {};
 	}
 
 	void CubeBoxManager::displayObject( castor3d::Geometry const & object
@@ -135,17 +147,21 @@ namespace GuiCommon
 			{
 				m_object = &object;
 				m_submesh = &submesh;
-				m_aabbNode = doAddBB( m_aabbMesh
+				m_aabbObject = doAddBB( m_aabbMesh
+					, m_aabbMeshMaterial
 					, m_aabbMesh->getName()
 					, *m_scene.getObjectRootNode()
-					, m_object->getBoundingBox() );
-				m_aabbNode->setScale( { 1.0f, 1.0f, 1.0f } );
-				m_aabbNode->setPosition( {} );
-				m_obbNode = doAddBB( m_obbMesh
+					, m_object->getBoundingBox()
+					, false );
+				m_aabbObject->getParent()->setScale( { 1.0f, 1.0f, 1.0f } );
+				m_aabbObject->getParent()->setPosition( {} );
+				m_obbObject = doAddBB( m_obbMesh
+					, m_obbMeshMaterial
 					, m_obbMesh->getName()
 					, *object.getParent()
 					, m_object->getBoundingBox() );
-				m_obbSelectedSubmeshNode = doAddBB( m_obbSelectedSubmesh
+				m_obbSelectedSubmeshObject = doAddBB( m_obbSelectedSubmesh
+					, m_obbSelectedSubmeshMaterial
 					, m_obbMesh->getName() + castor::string::toString( submesh.getId() )
 					, *object.getParent()
 					, m_object->getBoundingBox( submesh ) );
@@ -154,7 +170,8 @@ namespace GuiCommon
 				{
 					if ( psubmesh.get() != m_submesh )
 					{
-						m_obbSubmeshNodes.push_back( doAddBB( m_obbSubmesh
+						m_obbSubmeshObjects.push_back( doAddBB( m_obbSubmesh
+							, m_obbSubmeshMaterial
 							, m_obbMesh->getName() + castor::string::toString( psubmesh->getId() )
 							, *object.getParent()
 							, m_object->getBoundingBox( *psubmesh ) ) );
@@ -176,80 +193,96 @@ namespace GuiCommon
 			, [this]()
 			{
 				m_sceneConnection.disconnect();
-				doRemoveBB( m_aabbMesh->getName(), m_aabbNode );
-				doRemoveBB( m_obbMesh->getName(), m_obbNode );
-				doRemoveBB( m_obbSelectedSubmesh->getName(), m_obbSelectedSubmeshNode );
-				uint32_t i = 0u;
+				doRemoveBB( m_aabbObject );
+				doRemoveBB( m_obbObject );
+				doRemoveBB( m_obbSelectedSubmeshObject );
 
-				for ( auto & submesh : *m_object->getMesh() )
+				for ( auto object : m_obbSubmeshObjects )
 				{
-					if ( submesh.get() != m_submesh )
-					{
-						doRemoveBB( m_obbMesh->getName() + castor::string::toString( submesh->getId() )
-							, m_obbSubmeshNodes[i] );
-						i++;
-					}
+					doRemoveBB( object );
 				}
 
-				i = 0u;
-
-				for ( auto & node : m_obbBoneNodes )
+				for ( auto & object : m_obbBoneObjects )
 				{
-					doRemoveBB( m_obbMesh->getName() + cuT( "_Bone_" ) + castor::string::toString( i++ )
-						, node );
+					doRemoveBB( object );
 				}
 
-				m_obbBoneNodes.clear();
-				m_obbSubmeshNodes.clear();
-				m_obbSelectedSubmeshNode = nullptr;
-				m_obbNode = {};
-				m_aabbNode = {};
+				m_obbBoneObjects.clear();
+				m_obbSubmeshObjects.clear();
+				m_obbSelectedSubmeshObject = nullptr;
+				m_obbObject = {};
+				m_aabbObject = {};
 				m_object = nullptr;
 				m_submesh = nullptr;
 			} ) );
 	}
 
-	castor3d::SceneNodeRPtr CubeBoxManager::doAddBB( castor3d::MeshResPtr bbMesh
+	castor3d::GeometryRPtr CubeBoxManager::doAddBB( castor3d::MeshResPtr bbMesh
+		, castor3d::MaterialRPtr material
 		, castor::String const & nameSpec
 		, castor3d::SceneNode & parent
-		, castor::BoundingBox const & bb )
+		, castor::BoundingBox const & bb
+		, bool handleSkeleton )
 	{
-		castor3d::SceneNodeRPtr result;
+		castor3d::SceneNodeRPtr sceneNode;
 		auto name = m_object->getName() + cuT( "-" ) + nameSpec;
 
 		if ( !m_scene.hasSceneNode( name ) )
 		{
-			result = m_scene.addNewSceneNode( name );
-			result->setSerialisable( false );
+			sceneNode = m_scene.addNewSceneNode( name );
+			sceneNode->setSerialisable( false );
 		}
 		else
 		{
-			result = m_scene.findSceneNode( name );
+			sceneNode = m_scene.findSceneNode( name );
 		}
 
+		auto realParent = &parent;
+
+		if ( auto skeleton = m_object->getMesh()->getSkeleton();
+			skeleton && handleSkeleton )
+		{
+			sceneNode->attachTo( *realParent );
+			sceneNode->setTransformationMatrix( skeleton->getGlobalInverseTransform() );
+			sceneNode->setVisible( true );
+			realParent = sceneNode;
+			name += "_Skel";
+
+			if ( !m_scene.hasSceneNode( name ) )
+			{
+				sceneNode = m_scene.addNewSceneNode( name );
+				sceneNode->setSerialisable( false );
+			}
+			else
+			{
+				sceneNode = m_scene.findSceneNode( name );
+			}
+		}
+
+		sceneNode->attachTo( *realParent );
+		auto scale = ( bb.getDimensions() ) / 2.0f;
+		sceneNode->setScale( scale );
+		sceneNode->setPosition( bb.getCenter() );
+		sceneNode->setVisible( true );
+
 		castor3d::GeometryUPtr ownGeometry;
-		castor3d::GeometryRPtr geometry;
+		castor3d::GeometryRPtr result;
 
 		if ( !m_scene.hasGeometry( name ) )
 		{
-			ownGeometry = castor::makeUnique< castor3d::Geometry >( name, m_scene, *result, bbMesh );
-			geometry = ownGeometry.get();
+			ownGeometry = castor::makeUnique< castor3d::Geometry >( name, m_scene, *sceneNode, bbMesh );
+			result = ownGeometry.get();
 		}
 		else
 		{
-			geometry = m_scene.findGeometry( name );
+			result = m_scene.findGeometry( name );
 		}
 
-		geometry->setShadowCaster( false );
-		auto scale = ( bb.getDimensions() ) / 2.0f;
-		result->attachTo( parent );
-		result->setScale( scale );
-		result->setPosition( bb.getCenter() );
-		result->setVisible( true );
+		result->setShadowCaster( false );
 
-		for ( auto & submesh : *geometry->getMesh() )
+		for ( auto & submesh : *result->getMesh() )
 		{
-			geometry->setMaterial( *submesh, submesh->getDefaultMaterial() );
+			result->setMaterial( *submesh, material );
 		}
 
 		if ( ownGeometry )
@@ -260,30 +293,32 @@ namespace GuiCommon
 		return result;
 	}
 
-	void CubeBoxManager::doRemoveBB( castor::String const & nameSpec
-		, castor3d::SceneNodeRPtr bbNode )
+	void CubeBoxManager::doRemoveBB( castor3d::GeometryRPtr bbObject )
 	{
-		bbNode->setVisible( false );
+		if ( bbObject )
+		{
+			bbObject->getParent()->setVisible( false );
+		}
 	}
 
 	void CubeBoxManager::onSceneUpdate( castor3d::Scene const & scene )
 	{
-		if ( m_aabbNode )
+		if ( m_aabbObject )
 		{
 			auto & obb = m_object->getBoundingBox();
 
-			if ( m_obbNode )
+			if ( m_obbObject )
 			{
 				auto scale = obb.getDimensions() / 2.0f;
-				m_obbNode->setScale( scale );
-				m_obbNode->setPosition( obb.getCenter() );
+				m_obbObject->getParent()->setScale( scale );
+				m_obbObject->getParent()->setPosition( obb.getCenter() );
 			}
 
-			if ( m_obbSelectedSubmeshNode )
+			if ( m_obbSelectedSubmeshObject )
 			{
 				auto & sobb = m_object->getBoundingBox( *m_submesh );
-				m_obbSelectedSubmeshNode->setScale( sobb.getDimensions() / 2.0f );
-				m_obbSelectedSubmeshNode->setPosition( sobb.getCenter() );
+				m_obbSelectedSubmeshObject->getParent()->setScale( sobb.getDimensions() / 2.0f );
+				m_obbSelectedSubmeshObject->getParent()->setPosition( sobb.getCenter() );
 			}
 
 			uint32_t i = 0u;
@@ -293,13 +328,14 @@ namespace GuiCommon
 				if ( submesh.get() != m_submesh )
 				{
 					auto & ssobb = m_object->getBoundingBox( *submesh );
-					m_obbSubmeshNodes[i]->setScale( ssobb.getDimensions() / 2.0f );
-					m_obbSubmeshNodes[i]->setPosition( ssobb.getCenter() );
+					auto node = m_obbSubmeshObjects[i]->getParent();
+					node->setScale( ssobb.getDimensions() / 2.0f );
+					node->setPosition( ssobb.getCenter() );
 					++i;
 				}
 			}
 
-			auto aabb = obb.getAxisAligned( m_object->getParent()->getDerivedTransformationMatrix() );
+			auto aabb = obb.getAxisAligned( m_object->getGlobalTransform() );
 			auto aabbMin = aabb.getMin();
 			auto aabbMax = aabb.getMax();
 			auto aabbSubmesh = m_aabbMesh->getSubmesh( 0u );
@@ -317,6 +353,8 @@ namespace GuiCommon
 				data[7u] = castor::Point3f( aabbMax->x, aabbMin->y, aabbMax->z );
 				positions->getData().needsUpdate();
 				aabbSubmesh->needsUpdate();
+				m_aabbMesh->computeContainers();
+				m_aabbObject->initContainers();
 			}
 
 			castor3d::Engine * engine = m_scene.getEngine();
