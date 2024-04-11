@@ -12,7 +12,9 @@ namespace castor3d
 	struct InstantiatedObjectsNodesViewT
 	{
 		using NodeObject = NodeObjectT< NodeT >;
+		using NodeInstance = NodeInstanceT< NodeT >;
 		using RenderedNode = RenderedNodeT< NodeT >;
+		using NodeInstances = castor::Pair< RenderedNode, castor::UnorderedSet< NodeInstance const * > >;
 
 		static uint64_t constexpr maxObjects = 1024ULL;
 		static uint64_t constexpr maxCount = maxObjects;
@@ -22,10 +24,11 @@ namespace castor3d
 			auto data = &node.node->data;
 			auto it = std::find_if( begin()
 				, end()
-				, [&data]( castor::Pair< NodeObject const *, RenderedNode > const & lookup )
+				, [&data]( castor::Pair< NodeObject const *, NodeInstances > const & lookup )
 				{
 					return lookup.first == data;
 				} );
+			auto instance = &node.node->instance;
 
 			if ( it == end() )
 			{
@@ -40,10 +43,12 @@ namespace castor3d
 					}
 				}
 
-				m_objects.emplace_back( data, castor::move( node ) );
+				NodeInstances instances{ castor::move( node ), {} };
+				m_objects.emplace_back( data, castor::move( instances ) );
 				it = std::next( begin(), ptrdiff_t( size() - 1u ) );
 			}
 
+			it->second.second.emplace( instance );
 			return it;
 		}
 
@@ -88,7 +93,7 @@ namespace castor3d
 		}
 
 	private:
-		castor::Vector< castor::Pair< NodeObject const *, RenderedNode > > m_objects;
+		castor::Vector< castor::Pair< NodeObject const *, NodeInstances > > m_objects;
 	};
 
 	template< typename NodeT >
@@ -271,12 +276,13 @@ namespace castor3d
 					CU_Exception( "Too many nodes" );
 				}
 #endif
-				auto it = emplace( pipeline, isFrontCulled );
-				it->nodes.emplace( buffer
-					, RenderedNode{ culled.node
-						, culled.visible
-						, castor::move( command ) } );
 			}
+
+			auto it = emplace( pipeline, isFrontCulled );
+			it->nodes.emplace( buffer
+				, RenderedNode{ culled.node
+					, culled.visible
+					, castor::move( command ) } );
 		}
 
 		void clear()noexcept
