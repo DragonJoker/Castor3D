@@ -282,7 +282,7 @@ namespace castor3d
 		auto mesh = geometry->getMesh();
 		castor::Point3f center{ geometry->getParent()->getDerivedPosition() };
 		castor::BoundingSphere sphere{ center, mesh->getBoundingSphere().getRadius() };
-		//! castor::Matrix4x4f const & transform{ geometry->getParent()->getDerivedTransformationMatrix() };
+		//! castor::Matrix4x4f const & transform{ geometry->getGlobalTransform() };
 		auto result = castor::Intersection::eOut;
 
 		if ( intersects( sphere, distance ) != castor::Intersection::eOut )

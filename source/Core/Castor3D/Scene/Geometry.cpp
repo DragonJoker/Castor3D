@@ -5,6 +5,7 @@
 #include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Model/Skeleton/Skeleton.hpp"
 #include "Castor3D/Render/Node/SceneRenderNodes.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
@@ -290,6 +291,18 @@ namespace castor3d
 		return submesh.isDynamic()
 			? std::hash< Geometry const * >{}( this )
 			: std::hash< uint32_t >{}( pass.getHash() );
+	}
+
+	castor::Matrix4x4f Geometry::getGlobalTransform()const
+	{
+		auto result = getParent()->getDerivedTransformationMatrix();
+
+		if ( auto skeleton = getMesh()->getSkeleton() )
+		{
+			result = result * skeleton->getGlobalInverseTransform();
+		}
+
+		return result;
 	}
 
 	void Geometry::doUpdateMesh()

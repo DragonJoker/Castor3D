@@ -82,11 +82,12 @@ namespace castor3d
 	bool Camera::isVisible( Geometry const & geometry, Submesh const & submesh )const
 	{
 		auto & sceneNode = *geometry.getParent();
+		auto transform = geometry.getGlobalTransform();
 		auto result = m_frustum.isVisible( geometry.getBoundingSphere( submesh )
-				, sceneNode.getDerivedTransformationMatrix()
+				, transform
 				, sceneNode.getDerivedScale() )
 			&& m_frustum.isVisible( geometry.getBoundingBox( submesh )
-				, sceneNode.getDerivedTransformationMatrix() );
+				, transform );
 		return result;
 	}
 

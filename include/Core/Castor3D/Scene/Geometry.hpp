@@ -194,16 +194,23 @@ namespace castor3d
 			, uint32_t id )noexcept;
 		/**
 		 *\~english
-		 *\brief		Retrieves the object hash.
 		 *\param[in]	pass	The material pass.
 		 *\param[in]	submesh	The submesh.
+		 *\return		The object hash.
 		 *\~french
-		 *\brief		Récupère le hash l'objet.
 		 *\param[in]	pass	La passe de matériau.
 		 *\param[in]	submesh	Le sous-maillage.
+		 *\return		Le hash l'objet.
 		 */
 		C3D_API size_t getHash( Pass const & pass
 			, Submesh const & submesh )const noexcept;
+		/**
+		 *\~english
+		 *\return		The global object transformation, from scene node and skeleton.
+		 *\~french
+		 *\return		La transformation glbale de l'objet, depuis son scene node et son squelette.
+		 */
+		C3D_API castor::Matrix4x4f getGlobalTransform()const;
 		/**
 		*\~english
 		*name
