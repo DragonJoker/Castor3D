@@ -365,9 +365,12 @@ namespace c3d_gltf
 			}
 		}
 
+		uint32_t index{};
+
 		for ( auto & meshesIt : submeshes )
 		{
 			auto & impMesh = *meshesIt.first;
+			castor3d::log::info << cuT( "    submesh found: [" ) << index++ << cuT( "]" ) << std::endl;
 
 			for ( auto & materialsIt : meshesIt.second )
 			{

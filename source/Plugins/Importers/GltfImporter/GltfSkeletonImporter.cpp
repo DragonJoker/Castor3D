@@ -48,6 +48,9 @@ namespace c3d_gltf
 				castor::matrix::setTransform( matrix, transform.translate, transform.scale, transform.rotate );
 				castor::matrix::decompose( matrix, transform.translate, transform.scale, transform.rotate );
 				skelNode->setTransform( { transform } );
+				castor3d::log::trace << "        Translation [" << skelNode->getTransform().translate << "]" << std::endl;
+				castor3d::log::trace << "        Rotation [" << skelNode->getTransform().rotate << "]" << std::endl;
+				castor3d::log::trace << "        Scale [" << skelNode->getTransform().scale << "]" << std::endl;
 
 				if ( parentSkelNode )
 				{
@@ -100,7 +103,7 @@ namespace c3d_gltf
 					auto parentIndex = findParentNode( nodeIndex );
 
 					if ( parentIndex != size_t{ ~0u }
-					&& file.isSkeletonNode( parentIndex ) )
+						&& file.isSkeletonNode( parentIndex ) )
 					{
 						parentNodes.insert( parentIndex );
 					}
