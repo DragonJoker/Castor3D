@@ -218,8 +218,7 @@ namespace c3d_gltf
 				, skeletons.end()
 				, [&impAsset, nodeIndex]( fastgltf::Skin const & lookup )
 				{
-					return /*( lookup.skeleton && *lookup.skeleton == nodeIndex )
-						|| */lookup.joints.end() != std::find_if( lookup.joints.begin()
+					return lookup.joints.end() != std::find_if( lookup.joints.begin()
 						, lookup.joints.end()
 						, [&impAsset, nodeIndex]( size_t lookupIndex )
 						{
@@ -520,6 +519,22 @@ namespace c3d_gltf
 					}
 				}
 			}
+		}
+
+		bool nodeHasAttachment( GltfImporterFile const & file
+			, fastgltf::Node const & node )
+		{
+			if ( node.cameraIndex || node.meshIndex || node.lightIndex || node.skinIndex )
+			{
+				return true;
+			}
+
+			return std::any_of( node.children.begin()
+				, node.children.end()
+				, [&file]( size_t lookup )
+				{
+					return nodeHasAttachment( file, file.getAsset().nodes[lookup] );
+				} );
 		}
 	}
 
@@ -1305,11 +1320,18 @@ namespace c3d_gltf
 							, processedMeshes, nodeData );
 					}
 
-					file::addNode( *this, castor::move( nodeData ), isSkeletonNode, parentIndex
-						, parentInstanceCount
-						, m_sceneData.nodes, m_sceneData.skeletonNodes
-						, m_adapter );
-					return std::make_tuple( parentInstanceCount, true, isSkeletonNode );
+					bool result = isSkeletonNode
+						|| file::nodeHasAttachment( *this, node );
+
+					if ( result )
+					{
+						file::addNode( *this, castor::move( nodeData ), isSkeletonNode, parentIndex
+							, parentInstanceCount
+							, m_sceneData.nodes, m_sceneData.skeletonNodes
+							, m_adapter );
+					}
+
+					return std::make_tuple( parentInstanceCount, result, isSkeletonNode );
 				} );
 		}
 	}
