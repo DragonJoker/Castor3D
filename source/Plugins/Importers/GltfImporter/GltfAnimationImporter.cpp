@@ -138,6 +138,7 @@ namespace c3d_gltf
 			, castor::Milliseconds maxTime
 			, AnimationT & animation
 			, castor::Map< castor::Milliseconds, castor::UniquePtr< KeyFrameT > > & keyframes
+			, castor3d::NodeTransform const & defaultTransform
 			, FuncT fillKeyFrame )
 		{
 			castor3d::InterpolatorT< castor::Point3f, castor3d::InterpolatorType::eLinear > pointInterpolator;
@@ -149,9 +150,9 @@ namespace c3d_gltf
 
 			for ( auto time = minTime; time <= maxTime; time += step )
 			{
-				auto translate = interpolate( time, pointInterpolator, translates, castor::Point3f{} );
-				auto rotate = interpolate( time, quatInterpolator, rotates, castor::Quaternion::identity() );
-				auto scale = interpolate( time, pointInterpolator, scales, castor::Point3f{ 1.0f, 1.0f, 1.0f } );
+				auto translate = interpolate( time, pointInterpolator, translates, defaultTransform.translate );
+				auto rotate = interpolate( time, quatInterpolator, rotates, defaultTransform.rotate );
+				auto scale = interpolate( time, pointInterpolator, scales, defaultTransform.scale );
 				fillKeyFrame( getKeyFrame( time - minTime, animation, keyframes )
 					, translate
 					, rotate
@@ -224,6 +225,7 @@ namespace c3d_gltf
 			, uint32_t wantedFps
 			, AnimationT & animation
 			, castor::Map< castor::Milliseconds, castor::UniquePtr< KeyFrameT > > & keyframes
+			, castor3d::NodeTransform const & defaultTransform
 			, FuncT fillKeyFrame
 			, CompressedBufferDataAdapter const & adapter )
 		{
@@ -243,6 +245,7 @@ namespace c3d_gltf
 				, std::max( maxTranslateTime, std::max( maxRotateTime, maxScaleTime ) )
 				, animation
 				, keyframes
+				, defaultTransform
 				, fillKeyFrame );
 		}
 
@@ -314,6 +317,7 @@ namespace c3d_gltf
 						, file.getEngine()->getWantedFps()
 						, animation
 						, keyFrames
+						, object->getNodeTransform()
 						, [&object]( castor3d::SkeletonAnimationKeyFrame & keyframe
 							, castor::Point3f const & position
 							, castor::Quaternion const & orientation
@@ -560,6 +564,7 @@ namespace c3d_gltf
 			, file.getEngine()->getWantedFps()
 			, animation
 			, keyFrames
+			, { node.getPosition(), node.getScale(), node.getOrientation() }
 			, []( castor3d::SceneNodeAnimationKeyFrame & keyframe
 				, castor::Point3f const & position
 				, castor::Quaternion const & orientation
