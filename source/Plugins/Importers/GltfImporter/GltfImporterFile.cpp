@@ -524,7 +524,7 @@ namespace c3d_gltf
 		bool nodeHasAttachment( GltfImporterFile const & file
 			, fastgltf::Node const & node )
 		{
-			if ( node.cameraIndex || node.meshIndex || node.lightIndex || node.skinIndex )
+			if ( node.cameraIndex || node.meshIndex || node.lightIndex || node.skinIndex || !node.instancingAttributes.empty() )
 			{
 				return true;
 			}
