@@ -393,12 +393,12 @@ namespace castor3d
 			for ( uint32_t i = 1; i < nbVertex; i++ )
 			{
 				castor::Point3f cur{ points[i] };
-				max[0] = std::max( cur[0], max[0] );
-				max[1] = std::max( cur[1], max[1] );
-				max[2] = std::max( cur[2], max[2] );
-				min[0] = std::min( cur[0], min[0] );
-				min[1] = std::min( cur[1], min[1] );
-				min[2] = std::min( cur[2], min[2] );
+				max->x = std::max( cur->x, max->x );
+				max->y = std::max( cur->y, max->y );
+				max->z = std::max( cur->z, max->z );
+				min->x = std::min( cur->x, min->x );
+				min->y = std::min( cur->y, min->y );
+				min->z = std::min( cur->z, min->z );
 			}
 
 			m_box.load( min, max );
@@ -409,12 +409,6 @@ namespace castor3d
 				computeNormals();
 			}
 		}
-	}
-
-	void Submesh::updateContainers( castor::BoundingBox const & boundingBox )
-	{
-		m_box = boundingBox;
-		m_sphere.load( m_box );
 	}
 
 	uint32_t Submesh::getFaceCount()const

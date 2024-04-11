@@ -10,6 +10,7 @@
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Model/Skeleton/Skeleton.hpp"
 #include "Castor3D/Render/RenderNodesPass.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Culling/PipelineNodes.hpp"
@@ -34,6 +35,30 @@ CU_ImplementSmartPtr( castor3d, SceneCuller )
 
 namespace castor3d
 {
+	//*********************************************************************************************
+
+	namespace cull
+	{
+		bool isSphereVisible( Frustum const & frustum
+			, SceneNode const & sceneNode
+			, Geometry const & instance
+			, Submesh const & data )
+		{
+			return frustum.isVisible( instance.getBoundingSphere( data )
+				, instance.getGlobalTransform()
+				, sceneNode.getDerivedScale() );
+		}
+
+		bool isBoxVisible( Frustum const & frustum
+			, SceneNode const & sceneNode
+			, Geometry const & instance
+			, Submesh const & data )
+		{
+			return frustum.isVisible( instance.getBoundingBox( data )
+				, instance.getGlobalTransform() );
+		}
+	}
+
 	//*********************************************************************************************
 
 	AnimatedObjectRPtr findAnimatedObject( Scene const & scene
@@ -79,12 +104,9 @@ namespace castor3d
 		return sceneNode
 			&& sceneNode->isDisplayable()
 			&& sceneNode->isVisible()
-			&& ( node.data.getInstantiation().isInstanced( *node.pass )		// Don't cull individual instances
-				|| ( frustum.isVisible( node.instance.getBoundingSphere( node.data )	// First test against bounding sphere
-						, sceneNode->getDerivedTransformationMatrix()
-						, sceneNode->getDerivedScale() )
-					&& frustum.isVisible( node.instance.getBoundingBox( node.data )		// Then against bounding box
-						, sceneNode->getDerivedTransformationMatrix() ) ) );
+			&& ( node.data.getInstantiation().isInstanced( *node.pass ) // Don't cull individual instances
+				|| ( cull::isSphereVisible( frustum, *sceneNode, node.instance, node.data )
+					&& cull::isBoxVisible( frustum, *sceneNode, node.instance, node.data ) ) );
 	}
 
 	//*********************************************************************************************

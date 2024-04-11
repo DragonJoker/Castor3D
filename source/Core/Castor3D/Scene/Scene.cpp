@@ -331,7 +331,7 @@ namespace castor3d
 
 				if ( node && mesh )
 				{
-					auto bbox = mesh->getBoundingBox().getAxisAligned( node->getDerivedTransformationMatrix() );
+					auto bbox = mesh->getBoundingBox().getAxisAligned( geometry->getGlobalTransform() );
 
 					for ( auto i = 0u; i < 3u; ++i )
 					{

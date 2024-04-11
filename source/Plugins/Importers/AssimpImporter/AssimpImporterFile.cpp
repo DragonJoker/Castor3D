@@ -380,6 +380,25 @@ namespace c3d_assimp
 
 			return transform;
 		}
+
+		bool nodeHasAttachment( AssimpImporterFile const & file
+			, aiNode const & node )
+		{
+			if ( auto & aiScene = file.getAiScene();
+				node.mNumMeshes
+					|| file::isSkeletonNode( node, makeString( node.mName ), file.getBonesNodes(), file.getSkeletons() )
+					|| !file::findNodeAnims( node, castor::makeArrayView( aiScene.mAnimations, aiScene.mNumAnimations ) ).empty() )
+			{
+				return true;
+			}
+
+			return std::any_of( node.mChildren
+				, node.mChildren + node.mNumChildren
+				, [&file]( aiNode const * lookup )
+				{
+					return nodeHasAttachment( file, *lookup );
+				} );
+		}
 	}
 
 	//*********************************************************************************************
@@ -412,6 +431,22 @@ namespace c3d_assimp
 			doPrelistSceneNodes( *m_aiScene->mRootNode, processed, cumulativeTransforms );
 			doPrelistLights();
 			doPrelistCameras();
+			auto it = m_sceneData.nodes.begin();
+
+			while ( it != m_sceneData.nodes.end() )
+			{
+				if ( it->node && it->anims.empty() && it->meshes.empty() )
+				{
+					it = m_sceneData.nodes.erase( it );
+				}
+				else
+				{
+					it->translate = {};
+					it->scale = { 1.0f, 1.0f, 1.0f };
+					it->rotate = castor::Quaternion::identity();
+					++it;
+				}
+			}
 		}
 	}
 
@@ -916,6 +951,7 @@ namespace c3d_assimp
 		transform *= fromAssimp( node.mTransformation );
 		cumulativeTransforms.emplace( &node, transform );
 		bool isSkeletonNode = file::isSkeletonNode( node, aiNodeName, m_bonesNodes, m_sceneData.skeletons );
+		bool isAnimated{};
 		auto nodeName = getInternalName( aiNodeName );
 		AssimpNodeData nodeData{ parentName
 			, nodeName
@@ -929,6 +965,7 @@ namespace c3d_assimp
 		{
 			auto anims = file::findNodeAnims( node
 				, castor::makeArrayView( m_aiScene->mAnimations, m_aiScene->mNumAnimations ) );
+			isAnimated = !anims.empty();
 
 			for ( auto anim : anims )
 			{
@@ -986,17 +1023,20 @@ namespace c3d_assimp
 			}
 		}
 
-		m_sceneData.nodes.emplace_back( castor::move( nodeData ) );
-		parentName = nodeName;
-
-		// continue for all child nodes
-		for ( auto aiChild : castor::makeArrayView( node.mChildren, node.mNumChildren ) )
+		if ( file::nodeHasAttachment( *this, node ) )
 		{
-			doPrelistSceneNodes( *aiChild
-				, processedMeshes
-				, cumulativeTransforms
-				, parentName
-				, transform );
+			m_sceneData.nodes.emplace_back( castor::move( nodeData ) );
+			parentName = nodeName;
+
+			// continue for all child nodes
+			for ( auto aiChild : castor::makeArrayView( node.mChildren, node.mNumChildren ) )
+			{
+				doPrelistSceneNodes( *aiChild
+					, processedMeshes
+					, cumulativeTransforms
+					, parentName
+					, transform );
+			}
 		}
 	}
 
