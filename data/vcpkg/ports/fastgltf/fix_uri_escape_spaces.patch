@@ -27,7 +27,7 @@ index a5d1206..eca5ad0 100644
  			if (hasBit(config.extensions, Extensions::KHR_lights_punctual)) {
  				dom::object lightsObject;
 -				if (extensionsObject[extensions::KHR_lights_punctual].get_object().get(lightsObject) == SUCCESS) FASTGLTF_LIKELY {
-+				if (auto lightsError = extensionsObject[extensions::KHR_lights_punctual].get_object().get(lightsObject) == SUCCESS) FASTGLTF_LIKELY {
++				if (auto lightsError = extensionsObject[extensions::KHR_lights_punctual].get_object().get(lightsObject); lightsError == SUCCESS) FASTGLTF_LIKELY {
  					std::uint64_t light;
  					if (auto lightError = lightsObject["light"].get_uint64().get(light); lightError == SUCCESS) FASTGLTF_LIKELY {
  						node.lightIndex = static_cast<std::size_t>(light);
