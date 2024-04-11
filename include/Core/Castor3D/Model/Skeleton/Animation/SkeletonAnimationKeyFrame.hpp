@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_SkeletonAnimationKeyFrame_H___
 
 #include "Castor3D/Binary/BinaryModule.hpp"
+#include "Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp"
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationModule.hpp"
 
 #include "Castor3D/Animation/AnimationKeyFrame.hpp"
@@ -83,6 +84,14 @@ namespace castor3d
 		C3D_API TransformArray::iterator find( BoneNode const & bone );
 		/**
 		 *\~english
+		 *\return		The keyframe's bounding box.
+		 *\~french
+		 *\return		La bounding box de la keyframe.
+		 */
+		C3D_API SubmeshBoundingBoxList const & computeBoundingBoxes( Mesh const & mesh
+			, Skeleton const & skeleton )const;
+		/**
+		 *\~english
 		 *\brief		Initialises the keyframe.
 		 *\~french
 		 *\brief		Initialise la keyframe.
@@ -139,6 +148,7 @@ namespace castor3d
 		//!\~english	The transformations, per animation object.
 		//!\~french		Les transformations, par objet d'animation.
 		TransformArray m_transforms;
+		mutable std::unordered_map< size_t, SubmeshBoundingBoxList > m_boxes;
 
 		friend class BinaryParser< SkeletonAnimationKeyFrame >;
 		friend class BinaryWriter< SkeletonAnimationKeyFrame >;
