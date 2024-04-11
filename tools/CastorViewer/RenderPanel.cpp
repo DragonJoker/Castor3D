@@ -435,7 +435,8 @@ namespace CastorViewer
 		auto oldSubmesh = m_selectedSubmesh;
 		auto oldGeometry = m_selectedGeometry;
 
-		if ( oldGeometry != geometry )
+		if ( oldGeometry != geometry
+			|| oldSubmesh != submesh )
 		{
 			m_selectedSubmesh = nullptr;
 
