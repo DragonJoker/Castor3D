@@ -100,6 +100,11 @@ namespace castor3d
 				return instance == &static_cast< SkeletonAnimationInstance & >( animation );
 			} ) );
 		m_reinit = m_playingAnimations.empty();
+
+		if ( m_reinit )
+		{
+			m_geometry.initContainers();
+		}
 	}
 
 	void AnimatedSkeleton::doClearAnimations()

@@ -108,6 +108,13 @@ namespace castor3d
 			, MaterialObs material );
 		/**
 		 *\~english
+		 *\brief		Initialises the bounding box from the base submeshes boxes.
+		 *\~french
+		 *\brief		Initialise les bounding box et sphere depuis boxes des sous-maillages.
+		 */
+		C3D_API void initContainers();
+		/**
+		 *\~english
 		 *\brief		Computes the bounding box from the given submeshes boxes.
 		 *\~french
 		 *\brief		Calcule les bounding box et sphere depuis boxes des sous-maillages données.

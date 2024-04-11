@@ -174,6 +174,23 @@ namespace castor3d
 		return result;
 	}
 
+	void Geometry::initContainers()
+	{
+		m_submeshesBoxes.clear();
+		m_submeshesSpheres.clear();
+
+		if ( auto mesh = m_mesh )
+		{
+			for ( auto & submesh : *mesh )
+			{
+				m_submeshesBoxes.emplace( submesh.get(), submesh->getBoundingBox() );
+				m_submeshesSpheres.emplace( submesh.get(), submesh->getBoundingSphere() );
+			}
+
+			doUpdateContainers();
+		}
+	}
+
 	void Geometry::updateContainers( SubmeshBoundingBoxList const & boxes )
 	{
 		auto lock( castor::makeUniqueLock( m_mutex ) );
@@ -278,8 +295,6 @@ namespace castor3d
 	void Geometry::doUpdateMesh()
 	{
 		m_submeshesMaterials.clear();
-		m_submeshesBoxes.clear();
-		m_submeshesSpheres.clear();
 
 		if ( auto mesh = m_mesh )
 		{
@@ -290,8 +305,6 @@ namespace castor3d
 				CU_Require( &submesh->getParent() == mesh );
 				auto material = submesh->getDefaultMaterial();
 				m_submeshesMaterials.emplace( submesh.get(), material );
-				m_submeshesBoxes.emplace( submesh.get(), submesh->getBoundingBox() );
-				m_submeshesSpheres.emplace( submesh.get(), submesh->getBoundingSphere() );
 
 				if ( material )
 				{
@@ -299,7 +312,7 @@ namespace castor3d
 				}
 			}
 
-			doUpdateContainers();
+			initContainers();
 		}
 		else
 		{
