@@ -1,5 +1,9 @@
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationKeyFrame.hpp"
 
+#include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/SkinComponent.hpp"
+#include "Castor3D/Model/Skeleton/BoneNode.hpp"
+#include "Castor3D/Model/Skeleton/Skeleton.hpp"
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp"
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationBone.hpp"
 
@@ -122,6 +126,99 @@ namespace castor3d
 				transform.cumulative = transformMtx;
 			}
 		}
+	}
+
+	SubmeshBoundingBoxList const & SkeletonAnimationKeyFrame::computeBoundingBoxes( Mesh const & mesh
+		, Skeleton const & skeleton )const
+	{
+		auto hash = std::hash< Mesh const * >{}( &mesh );
+		hash = castor::hashCombinePtr( hash, skeleton );
+		auto [rit, inserted] = m_boxes.try_emplace( hash );
+
+		if ( inserted )
+		{
+			float constexpr rmax = std::numeric_limits< float >::max();
+			float constexpr rmin = std::numeric_limits< float >::lowest();
+
+			for ( auto & submesh : mesh )
+			{
+				castor::Point3f min{ rmax, rmax, rmax };
+				castor::Point3f max{ rmin, rmin, rmin };
+
+				if ( !submesh->hasComponent( SkinComponent::TypeName ) )
+				{
+					min = submesh->getBoundingBox().getMin();
+					max = submesh->getBoundingBox().getMax();
+				}
+				else
+				{
+					auto component = submesh->getComponent< SkinComponent >();
+					auto & positions = submesh->getPositions();
+					uint32_t index = 0u;
+
+					for ( auto & boneData : component->getData().getData() )
+					{
+						castor::Matrix4x4f transform{ 1.0 };
+
+						if ( boneData.m_weights[0] > 0 )
+						{
+							auto bone = *( skeleton.getBones().begin() + boneData.m_ids[0] );
+							auto it = find( *bone );
+
+							if ( it != end() )
+							{
+								transform = castor::Matrix4x4f{ it->cumulative * bone->getInverseTransform() * boneData.m_weights[0] };
+							}
+							else
+							{
+								transform = castor::Matrix4x4f{ bone->getInverseTransform() * boneData.m_weights[0] };
+							}
+						}
+
+						for ( uint32_t i = 1; i < boneData.m_ids.size(); ++i )
+						{
+							if ( boneData.m_weights[i] > 0 )
+							{
+								auto bone = *( skeleton.getBones().begin() + boneData.m_ids[i] );
+								auto it = find( *bone );
+
+								if ( it != end() )
+								{
+									transform += castor::Matrix4x4f{ it->cumulative * bone->getInverseTransform() * boneData.m_weights[i] };
+								}
+								else
+								{
+									transform += castor::Matrix4x4f{ bone->getInverseTransform() * boneData.m_weights[0] };
+								}
+							}
+						}
+
+						auto & cposition = positions[index];
+						castor::Point4f position{ cposition[0], cposition[1], cposition[2], 1.0f };
+						position = transform * position;
+						min[0] = std::min( min[0], position[0] );
+						min[1] = std::min( min[1], position[1] );
+						min[2] = std::min( min[2], position[2] );
+						max[0] = std::max( max[0], position[0] );
+						max[1] = std::max( max[1], position[1] );
+						max[2] = std::max( max[2], position[2] );
+
+						++index;
+					}
+				}
+
+				CU_Ensure( !std::isnan( min[0] ) && !std::isnan( min[1] ) && !std::isnan( min[2] ) );
+				CU_Ensure( !std::isnan( max[0] ) && !std::isnan( max[1] ) && !std::isnan( max[2] ) );
+				CU_Ensure( !std::isinf( min[0] ) && !std::isinf( min[1] ) && !std::isinf( min[2] ) );
+				CU_Ensure( !std::isinf( max[0] ) && !std::isinf( max[1] ) && !std::isinf( max[2] ) );
+				CU_Ensure( min != castor::Point3f( rmax, rmax, rmax ) );
+				CU_Ensure( max != castor::Point3f( rmin, rmin, rmin ) );
+				rit->second.emplace_back( submesh.get()
+					, castor::BoundingBox{ min, max } );
+			}
+		}
+
+		return rit->second;
 	}
 
 	//*************************************************************************************************
