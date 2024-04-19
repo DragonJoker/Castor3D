@@ -51,29 +51,29 @@ namespace castor3d
 			, RenderNodesPass *& nodesPass );
 		/**
 		 *\~english
-		 *\brief		Compute the number of nodes for given BVH level.
-		 *\param[in]	numLeaves	The number of leaf nodes.
+		 *\param[in]	level	The BVH level.
+		 *\return		The number of nodes for given BVH level.
 		 *\~french
-		 *\brief		Calcule le nombre de noeuds du niveau donné d'un BVH.
-		 *\param[in]	numLeaves	Le nombre de noeuds feuilles.
+		 *\param[in]	level	Le niveau du BVH.
+		 *\return		Le nombre de noeuds du niveau donné d'un BVH.
 		 */
 		C3D_API static uint32_t getNumLevelNodes( uint32_t level );
 		/**
 		 *\~english
-		 *\brief		Compute the number of levels needed for a BVH that consists of a number of leaf nodes.
 		 *\param[in]	numLeaves	The number of leaf nodes.
+		 *\return		The number of levels needed for a BVH that consists of a number of leaf nodes.
 		 *\~french
-		 *\brief		Calcule le nombre de niveaux nécessaire pour un BVH contenant le nombre de noeuds feuille donné.
 		 *\param[in]	numLeaves	Le nombre de noeuds feuilles.
+		 *\return		Le nombre de niveaux nécessaire pour un BVH contenant le nombre de noeuds feuille donné.
 		 */
 		C3D_API static uint32_t getNumLevels( uint32_t numLeaves );
 		/**
 		 *\~english
-		 *\brief		Compute the number of (child) nodes needed to represent a BVH that consists of a number of leaf nodes.
 		 *\param[in]	numLeaves	The number of leaf nodes.
+		 *\return		The number of (child) nodes needed to represent a BVH that consists of a number of leaf nodes.
 		 *\~french
-		 *\brief		Calcule le nombre de noeuds (enfants) nécessaire pour un représenter un BVH contenant le nombre de noeuds feuille donné.
 		 *\param[in]	numLeaves	Le nombre de noeuds feuilles.
+		 *\return		Le nombre de noeuds (enfants) nécessaire pour un représenter un BVH contenant le nombre de noeuds feuille donné.
 		 */
 		C3D_API static uint32_t getNumNodes( uint32_t numLeaves );
 

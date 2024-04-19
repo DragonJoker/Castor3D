@@ -72,16 +72,18 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	device	The GPU device.
-		 *\param[in]	target	The target texture.
-		 *\param[in]	timer	The timer for this pass.
-		 *\param[in]	level	The command buffer level.
+		 *\param[in]	device			The GPU device.
+		 *\param[in]	target			The target texture.
+		 *\param[in]	hdrConfigUbo	The HDR configuration used when rendering to an HDR screen.
+		 *\param[in]	timer			The timer for this pass.
+		 *\param[in]	level			The command buffer level.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	device	Le device GPU.
-		 *\param[in]	target	La texture cible.
-		 *\param[in]	timer	Le timer pour cette passe.
-		 *\param[in]	level	Le niveau du command buffer.
+		 *\param[in]	device			Le device GPU.
+		 *\param[in]	target			La texture cible.
+		 *\param[in]	hdrConfigUbo	La configuration HDR lors du rendu sur un écran HDR.
+		 *\param[in]	timer			Le timer pour cette passe.
+		 *\param[in]	level			Le niveau du command buffer.
 		 */
 		C3D_API OverlayRenderer( RenderDevice const & device
 			, Texture const & target
@@ -103,11 +105,13 @@ namespace castor3d
 		 *\param[in]	device		The render device.
 		 *\param[in]	renderPass	The render pass.
 		 *\param[in]	framebuffer	The framebuffer receiving the result.
+		 *\param[in]	fence		The fence to wait for before rendering.
 		 *\~french
 		 *\brief		Commence la préparation des incrustations.
 		 *\param[in]	device		Le périphérique de rendu.
 		 *\param[in]	renderPass	La passe de rendu.
 		 *\param[in]	framebuffer	Le framebuffer recevant le résultat.
+		 *\param[in]	fence		La fence à attendre avant le rendu.
 		 */
 		C3D_API OverlayPreparer beginPrepare( RenderDevice const & device
 			, VkRenderPass renderPass
@@ -115,11 +119,11 @@ namespace castor3d
 			, crg::Fence & fence );
 		/**
 		 *\~english
-		 *\brief		Uploads all GPU buffers to VRAM.
-		 *\param[in]	cb	The command buffer on which transfer commands are recorded.
+		 *\brief			Uploads all GPU buffers to VRAM.
+		 *\param[in,out]	uploader	Receives the upload requests.
 		 *\~french
-		 *\brief		Met à jour tous les tampons GPU en VRAM.
-		 *\param[in]	cb	Le command buffer sur lequel les commandes de transfert sont enregistrées.
+		 *\brief			Met à jour tous les tampons GPU en VRAM.
+		 *\param[in,out]	uploader	Reçoit les requêtes d'upload.
 		 */
 		C3D_API void upload( UploadData & uploader );
 		/**

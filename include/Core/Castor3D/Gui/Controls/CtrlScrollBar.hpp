@@ -157,19 +157,16 @@ namespace castor3d
 		void doAdjustZIndex( uint32_t offset )override;
 
 		/** Event when mouse moves over the thumb control
-		 *\param[in]	control	The thumb control
 		 *\param[in]	event	The mouse event
 		 */
 		void onThumbMouseMove( MouseEvent const & event );
 
 		/** Event when mouse left button is released over the thumb control
-		 *\param[in]	control	The thumb control
 		 *\param[in]	event	The mouse event
 		 */
 		void onThumbMouseButtonDown( MouseEvent const & event );
 
 		/** Event when mouse left button is released over the thumb control
-		 *\param[in]	control	The thumb control
 		 *\param[in]	event	The mouse event
 		 */
 		void onThumbMouseButtonUp( MouseEvent const & event );
@@ -180,7 +177,6 @@ namespace castor3d
 		void onKeyDown( KeyboardEvent const & event );
 
 		/** Event when a keyboard key is pressed on the active thumb or bar control
-		 *\param[in]	control	The control
 		 *\param[in]	event	The keyboard event
 		 */
 		void onNcKeyDown( KeyboardEvent const & event );

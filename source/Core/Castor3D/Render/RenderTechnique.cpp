@@ -187,17 +187,17 @@ namespace castor3d
 
 		static LightVolumePassResultArray doCreateLLPVResult( crg::ResourcesCache & resources
 			, RenderDevice const & device
+			, Scene const & scene
 			, castor::String const & prefix )
 		{
 			LightVolumePassResultArray result;
-			auto const & engine = *device.renderSystem.getEngine();
 
 			for ( uint32_t i = 0u; i < LpvMaxCascadesCount; ++i )
 			{
 				result.emplace_back( castor::makeUnique< LightVolumePassResult >( resources
 					, device
 					, prefix + castor::string::toString( i )
-					, engine.getLpvGridSize() ) );
+					, scene.getLpvGridSize() ) );
 			}
 
 			return result;
@@ -408,11 +408,12 @@ namespace castor3d
 			? castor::makeUnique< LightVolumePassResult >( m_renderTarget.getResources()
 				, m_device
 				, getName()
-				, getEngine()->getLpvGridSize() )
+				, m_renderTarget.getScene()->getLpvGridSize() )
 			: nullptr ) }
 		, m_llpvResult{ ( m_shadowBuffer
 			? rendtech::doCreateLLPVResult( m_renderTarget.getResources()
 				, m_device
+				, *renderTarget.getScene()
 				, getName() )
 			: LightVolumePassResultArray{} ) }
 		, m_indirectLighting{ ( ( m_renderTarget.isFullLoadingEnabled() || m_renderTarget.getScene()->needsGlobalIllumination() ) ? &m_lpvConfigUbo : nullptr )

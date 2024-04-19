@@ -89,7 +89,7 @@ namespace castor3d
 					, m_layouts );
 			}
 			/**
-			 *\copydoc		castor3d::SubmeshComponentData::clone
+			 *\copydoc		castor3d::SubmeshComponentData::copy
 			 */
 			void copy( SubmeshComponentDataRPtr data )const override
 			{

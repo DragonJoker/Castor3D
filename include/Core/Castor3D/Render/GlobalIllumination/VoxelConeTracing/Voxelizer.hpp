@@ -31,6 +31,7 @@ namespace castor3d
 		 *\param[in]	camera			The camera viewing the scene.
 		 *\param[in]	voxelizerUbo	The voxelizer configuration UBO.
 		 *\param[in]	voxelConfig		The voxelizer configuration.
+		 *\param[in]	previousPasses	The passes on which the voxelization pass depent.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	resources		Le gestionnaire de ressources du render graph.
@@ -41,6 +42,7 @@ namespace castor3d
 		 *\param[in]	camera			La caméra regardant la scène.
 		 *\param[in]	voxelizerUbo	L'UBO de configuration du voxelizer.
 		 *\param[in]	voxelConfig		La configuration du voxelizer.
+		 *\param[in]	previousPasses	Les passes dont dépend la passe de voxellisation.
 		 */
 		C3D_API Voxelizer( crg::ResourcesCache & resources
 			, RenderDevice const & device

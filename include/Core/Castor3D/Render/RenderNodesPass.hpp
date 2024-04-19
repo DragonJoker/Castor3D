@@ -352,9 +352,11 @@ namespace castor3d
 		 *\~english
 		 *\brief		Retrieves the geometry shader source matching the given flags.
 		 *\param[in]	flags	The pipeline flags.
+		 *\param[in]	builder	Receives the source.
 		 *\~french
 		 *\brief		Récupère le source du geometry shader qui correspond aux indicateurs donnés.
 		 *\param[in]	flags	Les indicateurs de pipeline.
+		 *\param[in]	builder	Reçoit le source.
 		 */
 		C3D_API void getSubmeshShaderSource( PipelineFlags const & flags
 			, ast::ShaderBuilder & builder )const;
@@ -362,9 +364,11 @@ namespace castor3d
 		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags.
 		 *\param[in]	flags	The pipeline flags.
+		 *\param[in]	builder	Receives the source.
 		 *\~french
 		 *\brief		Récupère le source du pixel shader qui correspond aux indicateurs donnés.
 		 *\param[in]	flags	Les indicateurs de pipeline.
+		 *\param[in]	builder	Reçoit le source.
 		 */
 		C3D_API void getPixelShaderSource( PipelineFlags const & flags
 			, ast::ShaderBuilder & builder )const;
@@ -443,6 +447,7 @@ namespace castor3d
 		 *\param[in]	isFrontCulled		\p true for front face culling, \p false for back face culling.
 		 *\param[in]	passLayerIndex		The material pass layer index.
 		 *\param[in]	morphTargets		The morph targets buffer.
+		 *\param[in]	submeshData			The submesh render data, if any.
 		 *\~french
 		 *\brief		Crée les indicateurs de pipeline pour la configuration donnée.
 		 *\param[in]	passComponents		La combinaison de composants de passe.
@@ -461,6 +466,7 @@ namespace castor3d
 		 *\param[in]	isFrontCulled		\p true pour front face culling, \p false pour back face culling.
 		 *\param[in]	passLayerIndex		L'indice de la couche de la passe de matériau.
 		 *\param[in]	morphTargets		Le buffer de morph targets.
+		 *\param[in]	submeshData			Les données de rendu du submesh, s'il en a.
 		 */
 		C3D_API PipelineFlags createPipelineFlags( PassComponentCombine const & passComponents
 			, SubmeshComponentCombine const & submeshComponents
@@ -490,6 +496,7 @@ namespace castor3d
 		 *\param[in]	topology			The render topology.
 		 *\param[in]	isFrontCulled		\p true for front face culling, \p false for back face culling.
 		 *\param[in]	morphTargets		The morph targets buffer.
+		 *\param[in]	submeshData			The submesh render data, if any.
 		 *\~french
 		 *\brief		Crée les indicateurs de pipeline pour la configuration donnée.
 		 *\param[in]	pass				La passe pour laquelle le pipeline est créé.
@@ -500,6 +507,7 @@ namespace castor3d
 		 *\param[in]	topology			La topologie de rendu.
 		 *\param[in]	isFrontCulled		\p true pour front face culling, \p false pour back face culling.
 		 *\param[in]	morphTargets		Le buffer de morph targets.
+		 *\param[in]	submeshData			Les données de rendu du submesh, s'il en a.
 		 */
 		C3D_API PipelineFlags createPipelineFlags( Pass const & pass
 			, TextureCombine const & textures
@@ -552,12 +560,12 @@ namespace castor3d
 		 *\brief		Initialises the additional descriptor set.
 		 *\param[in]	pipeline		The render pipeline.
 		 *\param[in]	shadowMaps		The shadow maps.
-		 *\param[in]	morphTargets	The morph targets buffer.
+		 *\param[in]	shadowBuffer	The buffer holding the shadow configuration data.
 		 *\~french
 		 *\brief		Initialise l'ensemble de descripteurs additionnels.
 		 *\param[in]	pipeline		Le render pipeline.
 		 *\param[in]	shadowMaps		Les shadow maps.
-		 *\param[in]	morphTargets	Le buffer de morph targets.
+		 *\param[in]	shadowBuffer	Le buffer contenant les données de configuration des ombres.
 		 */
 		C3D_API void initialiseAdditionalDescriptor( RenderPipeline & pipeline
 			, ShadowMapLightTypeArray const & shadowMaps
@@ -584,17 +592,15 @@ namespace castor3d
 		C3D_API void countNodes( RenderInfo & info )const noexcept;
 		/**
 		 *\~english
-		 *\brief		Creates a blend state matching given blend modes.
 		 *\param[in]	colourBlendMode	The colour blend mode.
 		 *\param[in]	alphaBlendMode	The alpha blend mode.
 		 *\param[in]	attachesCount	The wanted blend attaches count.
-		 *\return
+		 *\return		A blend state matching given blend modes.
 		 *\~french
-		 *\brief		Crée un état de mélange correspondant aux modes de mélange donnés.
 		 *\param[in]	colourBlendMode	Le mode de mélange couleurs.
 		 *\param[in]	alphaBlendMode	Le mode de mélange alpha.
 		 *\param[in]	attachesCount	Le nombre d'attaches de mélange voulues.
-		 *\return
+		 *\return		Un état de mélange correspondant aux modes de mélange donnés.
 		 */
 		C3D_API static ashes::PipelineColorBlendStateCreateInfo createBlendState( BlendMode colourBlendMode
 			, BlendMode alphaBlendMode
@@ -602,16 +608,16 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief			Adds shadow maps descriptor layout bindings to given list.
-		 *\param[in]		sceneFlags	Used to define what shadow maps need to be bound.
-		 *\param[in,out]	bindings	Receives the bindings.
-		 *\param[in,out]	index		The current binding index.
-		 *\return
+		 *\param[in]		sceneFlags		Used to define what shadow maps need to be bound.
+		 *\param[in,out]	bindings		Receives the bindings.
+		 *\param[in]		shaderStages	The impacted shader stages.
+		 *\param[in,out]	index			The current binding index.
 		 *\~french
 		 *\brief			Ajoute les bindings de descriptor layout des shadow maps à la liste donnée.
-		 *\param[in]		sceneFlags	Le mode de mélange couleurs.
-		 *\param[in,out]	bindings	Reçoit les bindings.
-		 *\param[in,out]	index		L'index de binding actuel.
-		 *\return
+		 *\param[in]		sceneFlags		Le mode de mélange couleurs.
+		 *\param[in,out]	bindings		Reçoit les bindings.
+		 *\param[in]		shaderStages	Les shader stages impactés.
+		 *\param[in,out]	index			L'index de binding actuel.
 		 */
 		C3D_API static void addShadowBindings( SceneFlags const & sceneFlags
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings
@@ -620,14 +626,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief			Adds shadow maps descriptor layout bindings to given list.
-		 *\param[in,out]	bindings	Receives the bindings.
-		 *\param[in,out]	index		The current binding index.
-		 *\return
+		 *\param[in,out]	bindings		Receives the bindings.
+		 *\param[in]		shaderStages	The impacted shader stages.
+		 *\param[in,out]	index			The current binding index.
 		 *\~french
 		 *\brief			Ajoute les bindings de descriptor layout des shadow maps à la liste donnée.
-		 *\param[in,out]	bindings	Reçoit les bindings.
-		 *\param[in,out]	index		L'index de binding actuel.
-		 *\return
+		 *\param[in,out]	bindings		Reçoit les bindings.
+		 *\param[in]		shaderStages	Les shader stages impactés.
+		 *\param[in,out]	index			L'index de binding actuel.
 		 */
 		C3D_API static void addShadowBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
 			, VkShaderStageFlags shaderStages
@@ -635,16 +641,16 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief			Adds background descriptor layout bindings to given list.
-		 *\param[in]		background	The background.
-		 *\param[in,out]	bindings	Receives the bindings.
-		 *\param[in,out]	index		The current binding index.
-		 *\return
+		 *\param[in]		background		The background.
+		 *\param[in,out]	bindings		Receives the bindings.
+		 *\param[in]		shaderStages	The impacted shader stages.
+		 *\param[in,out]	index			The current binding index.
 		 *\~french
 		 *\brief			Ajoute les bindings de descriptor layout du background à la liste donnée.
-		 *\param[in]		background	Le fond.
-		 *\param[in,out]	bindings	Reçoit les bindings.
-		 *\param[in,out]	index		L'index de binding actuel.
-		 *\return
+		 *\param[in]		background		Le fond.
+		 *\param[in,out]	bindings		Reçoit les bindings.
+		 *\param[in]		shaderStages	Les shader stages impactés.
+		 *\param[in,out]	index			L'index de binding actuel.
 		 */
 		C3D_API static void addBackgroundBindings( SceneBackground const & background
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings
@@ -653,18 +659,18 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief			Adds indirect lighting descriptor layout bindings to given list.
-		 *\param[in]		sceneFlags	The scene flags.
-		 *\param[in]		llpvResult	The Layered LPV result.
-		 *\param[in,out]	bindings	Receives the bindings.
-		 *\param[in,out]	index		The current binding index.
-		 *\return
+		 *\param[in]		flags				The scene flags.
+		 *\param[in]		indirectLighting	The indirect lighting data.
+		 *\param[in,out]	bindings			Receives the bindings.
+		 *\param[in]		shaderStages		The impacted shader stages.
+		 *\param[in,out]	index				The current binding index.
 		 *\~french
 		 *\brief			Ajoute les bindings de descriptor layout de l'éclairage indirect à la liste donnée.
-		 *\param[in]		sceneFlags	Les indicateurs de scène.
-		 *\param[in]		llpvResult	Le résultat du Layered LPV.
-		 *\param[in,out]	bindings	Reçoit les bindings.
-		 *\param[in,out]	index		L'index de binding actuel.
-		 *\return
+		 *\param[in]		flags				Les indicateurs de scène.
+		 *\param[in]		indirectLighting	Les données d'indirect lighting.
+		 *\param[in,out]	bindings			Reçoit les bindings.
+		 *\param[in]		shaderStages		Les shader stages impactés.
+		 *\param[in,out]	index				L'index de binding actuel.
 		 */
 		C3D_API static void addGIBindings( SceneFlags flags
 			, IndirectLightingData const & indirectLighting
@@ -676,14 +682,14 @@ namespace castor3d
 		 *\brief			Adds clusters descriptor layout bindings to given list.
 		 *\param[in]		frustumClusters	The clusters.
 		 *\param[in,out]	bindings		Receives the bindings.
+		 *\param[in]		shaderStages	The impacted shader stages.
 		 *\param[in,out]	index			The current binding index.
-		 *\return
 		 *\~french
 		 *\brief			Ajoute les bindings de descriptor layout des clusters à la liste donnée.
 		 *\param[in]		frustumClusters	Les clusters.
 		 *\param[in,out]	bindings		Reçoit les bindings.
+		 *\param[in]		shaderStages	Les shader stages impactés.
 		 *\param[in,out]	index			L'index de binding actuel.
-		 *\return
 		 */
 		C3D_API static void addClusteredLightingBindings( FrustumClusters const & frustumClusters
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings
@@ -964,11 +970,13 @@ namespace castor3d
 		 *\param[in]		flags				The pipeline flags.
 		 *\param[in,out]	descriptorWrites	Receives the descriptor writes.
 		 *\param[in]		shadowMaps			The shadow maps.
+		 *\param[in]		shadowBuffer		The buffer holding the shadows configuration data.
 		 *\~french
 		 *\brief			Initialise l'ensemble de descripteurs additionnels.
 		 *\param[in]		flags				Les indicateurs de pipeline.
 		 *\param[in,out]	descriptorWrites	Reçoit les descriptor writes.
 		 *\param[in]		shadowMaps			Les shadow maps.
+		 *\param[in]		shadowBuffer		Le buffer contenant les données de configuration des ombres.
 		 */
 		C3D_API virtual void doFillAdditionalDescriptor( PipelineFlags const & flags
 			, ashes::WriteDescriptorSetArray & descriptorWrites
@@ -987,9 +995,11 @@ namespace castor3d
 		 *\~english
 		 *\brief		Retrieves the task shader source matching the given flags.
 		 *\param[in]	flags	The pipeline flags.
+		 *\param[in]	builder	Records the shader.
 		 *\~french
 		 *\brief		Récupère le source du task shader qui correspond aux indicateurs donnés.
 		 *\param[in]	flags	Les indicateurs de pipeline.
+		 *\param[in]	builder	Enregistree le shader.
 		 */
 		C3D_API virtual void doGetSubmeshShaderSource( PipelineFlags const & flags
 			, ast::ShaderBuilder & builder )const;
@@ -997,9 +1007,11 @@ namespace castor3d
 		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags.
 		 *\param[in]	flags	The pipeline flags.
+		 *\param[in]	builder	Records the shader.
 		 *\~french
 		 *\brief		Récupère le source du pixel shader qui correspond aux indicateurs donnés.
 		 *\param[in]	flags	Les indicateurs de pipeline.
+		 *\param[in]	builder	Enregistree le shader.
 		 */
 		C3D_API virtual void doGetPixelShaderSource( PipelineFlags const & flags
 			, ast::ShaderBuilder & builder )const = 0;

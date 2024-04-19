@@ -15,26 +15,20 @@ namespace castor
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	function	Caller function
-		 *\param[in]	file		Function file
-		 *\param[in]	line		Function line
+		 *\param[in]	file		Function file.
+		 *\param[in]	function	Caller function.
+		 *\param[in]	name		The block name.
+		 *\param[in]	line		Function line.
 		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	function	La fonction appelante
-		 *\param[in]	file		Le fichier oà se trouve la fonction
-		 *\param[in]	line		La ligne dans la fonction
+		 *\param[in]	file		Le fichier où se trouve la fonction.
+		 *\param[in]	function	La fonction appelante.
+		 *\param[in]	name		Le nom du bloc.
+		 *\param[in]	line		La ligne dans la fonction.
 		 */
 		CU_API BlockTimer( char const * file
 			, char const * function
 			, String name
 			, uint32_t line );
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
 		CU_API ~BlockTimer()noexcept;
 
 	private:

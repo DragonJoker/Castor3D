@@ -16,12 +16,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	submesh				The parent submesh.
-		 *\param[in]	type				The component type.
+		 *\param[in]	submesh	The parent submesh.
+		 *\param[in]	type	The component type.
+		 *\param[in]	data	The component data.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	submesh				Le sous-maillage parent.
-		 *\param[in]	type				Le type de composant.
+		 *\param[in]	submesh	Le sous-maillage parent.
+		 *\param[in]	type	Le type de composant.
+		 *\param[in]	data	Les données du composant.
 		 */
 		C3D_API IndexMapping( Submesh & submesh
 			, castor::String const & type

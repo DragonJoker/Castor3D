@@ -207,13 +207,13 @@ namespace castor3d
 		C3D_API void removePass( Pass & pass )noexcept;
 		/**
 		 *\~english
-		 *\brief		Updates the passes buffer.
-		 *\param[in]	specifics		The buffers specific to pass components.
-		 *\param[in]	commandBuffer	Receives the update commands.
+		 *\brief			Updates the passes buffer.
+		 *\param[in]		specifics	The buffers specific to pass components.
+		 *\param[in,out]	uploader	Receives the upload requests.
 		 *\~french
-		 *\brief		Met à jour le tampon de passes.
-		 *\param[in]	specifics		Le buffers spécifiques aux composants de passe.
-		 *\param[in]	commandBuffer	Reçoit les commandes de mise à jour.
+		 *\brief			Met à jour le tampon de passes.
+		 *\param[in]		specifics	Le buffers spécifiques aux composants de passe.
+		 *\param[in,out]	uploader	Reçoit les requêtes d'upload.
 		 */
 		C3D_API void update( SpecificsBuffers const & specifics
 			, UploadData & uploader );

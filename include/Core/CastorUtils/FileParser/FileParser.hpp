@@ -117,22 +117,26 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	rootSectionId	The root section id.
+		 *\param[in]	rootSectionId		The root section id.
+		 *\param[in]	rootBlockContext	The root block context.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	rootSectionId	L'id de la section de root.
+		 *\param[in]	rootSectionId		L'id de la section de root.
+		 *\param[in]	rootBlockContext	Le contexte de block de root.
 		 */
 		CU_API explicit FileParser( SectionId rootSectionId
 			, void * rootBlockContext = nullptr );
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	logger			The logger instance.
-		 *\param[in]	rootSectionId	The root section id.
+		 *\param[in]	logger				The logger instance.
+		 *\param[in]	rootSectionId		The root section id.
+		 *\param[in]	rootBlockContext	The root block context.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	logger			L'instance de logging.
-		 *\param[in]	rootSectionId	L'id de la section de root.
+		 *\param[in]	logger				L'instance de logging.
+		 *\param[in]	rootSectionId		L'id de la section de root.
+		 *\param[in]	rootBlockContext	Le contexte de block de root.
 		 */
 		CU_API FileParser( LoggerInstance & logger
 			, SectionId rootSectionId

@@ -213,7 +213,7 @@ namespace castor3d
 					, runnableGraph
 					, device
 					, lightType
-					, device.renderSystem.getEngine()->getLpvGridSize()
+					, lightCache.getScene()->getLpvGridSize()
 					, rsmSize );
 				lightInjectionPasses.emplace_back( res.get() );
 				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
@@ -261,7 +261,7 @@ namespace castor3d
 					, runnableGraph
 					, device
 					, lightType
-					, device.renderSystem.getEngine()->getLpvGridSize()
+					, lightCache.getScene()->getLpvGridSize()
 					, rsmSize );
 				geometryInjectionPasses.emplace_back( res.get() );
 				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )

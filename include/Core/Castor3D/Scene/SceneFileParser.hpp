@@ -22,11 +22,13 @@ namespace castor3d
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	engine	The engine.
+		 *\brief			Constructor.
+		 *\param[in]		engine		The engine.
+		 *\param[in,out]	progress	Optional progress bar.
 		 *\~french
-		 *\brief		Constructeur.
-		 *\param[in]	engine	Le moteur.
+		 *\brief			Constructeur.
+		 *\param[in]		engine		Le moteur.
+		 *\param[in,out]	progress	Barre de progression optionnelle.
 		 */
 		C3D_API explicit SceneFileParser( Engine & engine
 			, ProgressBar * progress = nullptr );

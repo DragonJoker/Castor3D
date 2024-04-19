@@ -1,25 +1,18 @@
-﻿Bibliothèque CastorUtils	{#mainpage}
-========================
+﻿# Bibliothèque CastorUtils
 
-## Introduction
-
-Cette bibliothèque contient des classes générales aidant au développement du moteur Castor3D.
-
-## Résumé
-
-### Alignement
+## Alignement
 
 - alignedAlloc/alignedFree.
 - AlignedMemoryAllocator/NonAlignedMemoryAllocator.
 
-### Données
+## Données
 
 - Gestion de fichiers, binaires ou texte (BinaryFile et TextFile).
 - FileParser, un analayseur de brace file, avec son FileParserContext et ses writers/parsers.
 - Classes de chargement de données binaires ou texte (BinaryLoader et TextLoader).
 - ZipArchive
 
-### Concepts
+## Concepts
 
 - Implémentation d'ArrayView.
 - Implémentation de BlockGuard.
@@ -30,7 +23,7 @@ Cette bibliothèque contient des classes générales aidant au développement du
 - NonCopyable.
 - Unique.
 
-### Graphisme
+## Graphisme
 
 - RgbColour/RgbaColour et ColourComponent/HdrColourComponent.
 - BoundingContainer, BoundingCube et BoundingSphere.
@@ -39,7 +32,7 @@ Cette bibliothèque contient des classes générales aidant au développement du
 - PixelFormat, Pixel et PxBuffer, pour les conversions de pixels.
 - Position, Size.
 
-### Mathématiques
+## Mathématiques
 
 - Conversions d'angle.
 - Conversions de longueurs.
@@ -53,7 +46,7 @@ Cette bibliothèque contient des classes générales aidant au développement du
 - Rectangle.
 - Fonctions de math template.
 
-### Divers
+## Divers
 
 - BlockTracker et BlockTimer.
 - Console et Logger.

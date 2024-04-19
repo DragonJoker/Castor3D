@@ -36,10 +36,18 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor
 		 *\param[in]	renderPass	The parent render pass.
+		 *\param[in]	device		The GPU device.
+		 *\param[in]	culler		The scene culler used by this queue.
+		 *\param[in]	typeName	The parent pass type name.
+		 *\param[in]	meshShading	Tells if the parent pass uses mesh shaders.
 		 *\param[in]	ignored		The geometries attached to this node will be ignored in the render.
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	renderPass	La passe de rendu parente.
+		 *\param[in]	device		Le device GPU.
+		 *\param[in]	culler		Le culler de scène utilisé par cette file.
+		 *\param[in]	typeName	Le nom du type de la passe parente.
+		 *\param[in]	meshShading	Dit si la passe parent utilise les mesh shaders.
 		 *\param[in]	ignored		Les géométries attachées à ce noeud seront ignorées lors du rendu.
 		 */
 		C3D_API RenderQueue( RenderNodesPass & renderPass
@@ -65,24 +73,28 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief			Updates the render nodes.
-		 *\param[in,out]	shadowMaps	Receives the shadow maps used in the render pass.
+		 *\param[in,out]	shadowMaps		Receives the shadow maps used in the render pass.
+		 *\param[in]		shadowBuffer	The buffer holding the shadow configuration data.
 		 *\~french
 		 *\brief			Met à jour les noeuds de rendu.
-		 *\param[in,out]	shadowMaps	Reçoit les shadow maps utilisées par la passe de rendu.
+		 *\param[in,out]	shadowMaps		Reçoit les shadow maps utilisées par la passe de rendu.
+		 *\param[in]		shadowBuffer	Le buffer contenant les données de configuration des ombres.
 		 */
 		C3D_API void update( ShadowMapLightTypeArray const & shadowMaps
 			, ShadowBuffer const * shadowBuffer );
 		/**
 		 *\~english
 		 *\brief			Updates the render nodes.
-		 *\param[in,out]	shadowMaps	Receives the shadow maps used in the render pass.
-		 *\param[in]		viewport	The viewport restraining the render pass.
-		 *\param[in]		scissor		The scissors restraining the render pass.
+		 *\param[in,out]	shadowMaps		Receives the shadow maps used in the render pass.
+		 *\param[in]		shadowBuffer	The buffer holding the shadow configuration data.
+		 *\param[in]		viewport		The viewport restraining the render pass.
+		 *\param[in]		scissor			The scissors restraining the render pass.
 		 *\~french
 		 *\brief			Met à jour les noeuds de rendu.
-		 *\param[in,out]	shadowMaps	Reçoit les shadow maps utilisées par la passe de rendu.
-		 *\param[in]		viewport	Le viewport restreignant par la passe de rendu.
-		 *\param[in]		scissor		Le scissor restreignant par la passe de rendu.
+		 *\param[in,out]	shadowMaps		Reçoit les shadow maps utilisées par la passe de rendu.
+		 *\param[in]		shadowBuffer	Le buffer contenant les données de configuration des ombres.
+		 *\param[in]		viewport		Le viewport restreignant par la passe de rendu.
+		 *\param[in]		scissor			Le scissor restreignant par la passe de rendu.
 		 */
 		C3D_API void update( ShadowMapLightTypeArray & shadowMaps
 			, ShadowBuffer const * shadowBuffer
@@ -91,12 +103,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief			Updates the render nodes.
-		 *\param[in,out]	shadowMaps	Receives the shadow maps used in the render pass.
-		 *\param[in]		scissor		The scissors restraining the render pass.
+		 *\param[in,out]	shadowMaps		Receives the shadow maps used in the render pass.
+		 *\param[in]		shadowBuffer	The buffer holding the shadow configuration data.
+		 *\param[in]		scissor			The scissors restraining the render pass.
 		 *\~french
 		 *\brief			Met à jour les noeuds de rendu.
-		 *\param[in,out]	shadowMaps	Reçoit les shadow maps utilisées par la passe de rendu.
-		 *\param[in]		scissor		Le scissor restreignant par la passe de rendu.
+		 *\param[in,out]	shadowMaps		Reçoit les shadow maps utilisées par la passe de rendu.
+		 *\param[in]		shadowBuffer	Le buffer contenant les données de configuration des ombres.
+		 *\param[in]		scissor			Le scissor restreignant par la passe de rendu.
 		 */
 		C3D_API void update( ShadowMapLightTypeArray & shadowMaps
 			, ShadowBuffer const * shadowBuffer

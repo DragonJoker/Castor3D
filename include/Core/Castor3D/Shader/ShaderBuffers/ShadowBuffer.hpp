@@ -25,14 +25,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine	The engine.
 		 *\param[in]	device	The GPU device.
-		 *\param[in]	count	The max passes count.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine	Le moteur.
 		 *\param[in]	device	Le device GPU.
-		 *\param[in]	count	Le nombre maximal de passes.
 		 */
 		C3D_API explicit ShadowBuffer( RenderDevice const & device );
 		C3D_API ~ShadowBuffer()noexcept;

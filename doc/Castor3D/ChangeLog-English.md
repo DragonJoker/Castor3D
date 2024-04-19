@@ -1,7 +1,37 @@
-Change log	{#changelog}
+﻿Change log	{#changelog}
 ==========
 
 This page is here to inform about the changes since the earliest versions of the engine.
+
+## Version 0.16.0
+
+### Important Changes
+- Implemented lights part of clustered rendering.
+- Reworked light attenuation as a range.
+- Implemented colour grading.
+- Integrated CastorGui in Castor3D.
+- Implemented context blocks in the scene file parser.
+
+### New Features
+- Implemented Mikktspace support.
+- Removed deferred rendering.
+- Implemented a glTF importer.
+- Implemented a depth of field plugin.
+- Added support for HDR screens.
+- Scene importers can now import cameras.
+
+#### General
+- Reworked submesh components like pass components.
+- Moved lights shadow data in a separate buffer
+- Limit loading scope
+- Fixed light scattering interactions with shadows.
+- Reworked the way resources are uploaded to VRAM.
+- Fixed GPU particle system.
+- Renamed events to have them more explicit.
+- Expressed FFTOcean as pass and submesh components.
+- Implemented water as a pass component.
+- Reworked node update to improve performances.
+- Reworked loading screen.
 
 ## Version 0.15.0
 
@@ -301,7 +331,7 @@ This page is here to inform about the changes since the earliest versions of the
 
 - Created Uncharted 2 tone mappings.
 
-## Fixed Bugs
+### Fixed Bugs
 #### Castor3D
 
 - Fixed bounding boxes for animated meshes and skinned meshes.

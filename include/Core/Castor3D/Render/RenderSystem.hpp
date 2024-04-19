@@ -47,41 +47,54 @@ namespace castor3d
 	{
 	public:
 		/**
-		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	engine				The engine.
-		 *\param[in]	desc				The Ashes plugin description.
-		 *\param[in]	instanceExtensions	The instance extensions.
-		 *\param[in]	deviceExtensions	The device extensions.
-		 *\~french
-		 *\brief		Constructeur.
-		 *\param[in]	engine	Le moteur.
-		 *\param[in]	desc	The Ashes plugin description.
-		 *\param[in]	instanceExtensions	Les extensions d'instance.
-		 *\param[in]	deviceExtensions	Les extensions de device.
-		 */
+		*\~english
+		*	Constructor.
+		*\param[in] engine
+		*	The engine.
+		*\param[in] desc
+		*	The Ashes plugin description.
+		*\param[in] instanceExtensions
+		*	The instance extensions.
+		*\param[in] deviceExtensions
+		*	The device extensions.
+		*\~french
+		*	Constructeur.
+		*\param[in] engine
+		*	Le moteur.
+		*\param[in] desc
+		*	The Ashes plugin description.
+		*\param[in] instanceExtensions
+		*	Les extensions d'instance.
+		*\param[in] deviceExtensions
+		*	Les extensions de device.
+		*/
 		C3D_API RenderSystem( Engine & engine
 			, AshPluginDescription desc
 			, Extensions instanceExtensions = {}
 			, Extensions deviceExtensions = {} );
 		/**
-		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	engine				The engine.
-		 *\param[in]	renderer			The selected renderer.
-		 *\param[in]	deviceExtensions	The device extensions.
-		 *\~french
-		 *\brief		Constructeur.
-		 *\param[in]	engine				Le moteur.
-		 *\param[in]	renderer			Le renderer sélectionné.
-		 *\param[in]	deviceExtensions	Les extensions de device.
-		 */
+		*\~english
+		*	Constructor.
+		*\param[in] engine
+		*	The engine.
+		*\param[in] renderer
+		*	The selected renderer.
+		*\param[in] deviceExtensions
+		*	The device extensions.
+		*\~french
+		*	Constructeur.
+		*\param[in] engine
+		*	Le moteur.
+		*\param[in] renderer
+		*	Le renderer sélectionné.
+		*\param[in] deviceExtensions
+		*	Les extensions de device.
+		*/
 		C3D_API RenderSystem( Engine & engine
 			, Renderer renderer
 			, Extensions deviceExtensions = {} );
 		/**
 		*\~english
-		*\brief
 		*	Creates a Vulkan instance usable with Castor3D.
 		*\param[in] engine
 		*	The engine.
@@ -90,7 +103,6 @@ namespace castor3d
 		*\param[in] instanceExtensions
 		*	The instance extensions.
 		*\~french
-		*\brief
 		*	Crée une instance Vulkan compatible avec Castor3D.
 		*\param[in] engine
 		*	Le moteur.
@@ -104,7 +116,6 @@ namespace castor3d
 			, Extensions & instanceExtensions );
 		/**
 		*\~english
-		*\brief
 		*	Adds the instance layers names to the given names.
 		*\param[in] engine
 		*	The engine.
@@ -113,7 +124,6 @@ namespace castor3d
 		*\param[in,out] names
 		*	The liste to fill.
 		*\~french
-		*\brief
 		*	Ajoute les couches de l'instance aux noms déjà présents dans la liste donnée.
 		*\param[in] engine
 		*	Le moteur.
@@ -126,66 +136,97 @@ namespace castor3d
 			, ashes::VkLayerPropertiesArray const & layers
 			, ashes::StringArray & names );
 		/**
-		 *\~english
-		 *\brief		Compiles a shader module to the necessary shader language.
-		 *\param[in]	stage	The shader stage.
-		 *\param[in]	name	The shader name.
-		 *\param[in]	shader	The shader to compile.
-		 *\return		The compiled shader.
-		 *\~french
-		 *\brief		Compile un shader dans le langage shader nécessaire.
-		 *\param[in]	stage	Le stage du shader.
-		 *\param[in]	name	Le nom du shader.
-		 *\param[in]	shader	Le shader à compiler.
-		 *\return		Le shader compilé.
-		 */
+		*\~english
+		*	Compiles a shader module to the necessary shader language.
+		*\param[in] stage
+		*	The shader stage.
+		*\param[in] name
+		*	The shader name.
+		*\param[in] shader
+		*	The shader to compile.
+		*\param[in] entryPoint
+		*	The shader entry point to compile.
+		*\return
+		*	The compiled shader.
+		*\~french
+		*	Compile un shader dans le langage shader nécessaire.
+		*\param[in] stage
+		*	Le stage du shader.
+		*\param[in] name
+		*	Le nom du shader.
+		*\param[in] shader
+		*	Le shader à compiler.
+		*\param[in] entryPoint
+		*	Le point d'entrée de shader à compiler.
+		*\return
+		*	Le shader compilé.
+		*/
 		C3D_API SpirVShader compileShader( VkShaderStageFlagBits stage
 			, castor::String const & name
 			, ast::Shader const & shader
 			, ast::EntryPointConfig const & entryPoint );
 		/**
-		 *\~english
-		 *\brief		Compiles a shader module to the necessary shader language.
-		 *\param[in]	stage	The shader stage.
-		 *\param[in]	name	The shader name.
-		 *\param[in]	glsl	The shader to compile.
-		 *\return		The compiled shader.
-		 *\~french
-		 *\brief		Compile un shader dans le langage shader nécessaire.
-		 *\param[in]	stage	Le stage du shader.
-		 *\param[in]	name	Le nom du shader.
-		 *\param[in]	glsl	Le shader à compiler.
-		 *\return		Le shader compilé.
-		 */
+		*\~english
+		*	Compiles a shader module to the necessary shader language.
+		*\param[in] stage
+		*	The shader stage.
+		*\param[in] name
+		*	The shader name.
+		*\param[in] glsl
+		*	The shader to compile.
+		*\return
+		*	The compiled shader.
+		*\~french
+		*	Compile un shader dans le langage shader nécessaire.
+		*\param[in] stage
+		*	Le stage du shader.
+		*\param[in] name
+		*	Le nom du shader.
+		*\param[in] glsl
+		*	Le shader à compiler.
+		*\return
+		*	Le shader compilé.
+		*/
 		C3D_API SpirVShader compileShader( VkShaderStageFlagBits stage
 			, castor::String const & name
 			, castor::MbString const & glsl )const;
 		/**
-		 *\~english
-		 *\brief		Compiles a shader module to the necessary shader language.
-		 *\param[in]	shaderModule	The shader to compile.
-		 *\return		The compiled shader.
-		 *\~french
-		 *\brief		Compile un shader dans le langage shader nécessaire.
-		 *\param[in]	shaderModule	Le shader à compiler.
-		 *\return		Le shader compilé.
-		 */
+		*\~english
+		*	Compiles a shader module to the necessary shader language.
+		*\param[in] shaderModule
+		*	The shader to compile.
+		*\return
+		*	The compiled shader.
+		*\~french
+		*	Compile un shader dans le langage shader nécessaire.
+		*\param[in] shaderModule
+		*	Le shader à compiler.
+		*\return
+		*	Le shader compilé.
+		*/
 		C3D_API SpirVShader const & compileShader( ShaderModule & shaderModule );
 		/**
-		 *\~english
-		 *\brief		Compiles a shader module to the necessary shader language.
-		 *\param[in]	shaderModule	The shader to compile.
-		 *\return		The compiled shader.
-		 *\~french
-		 *\brief		Compile un shader dans le langage shader nécessaire.
-		 *\param[in]	shaderModule	Le shader à compiler.
-		 *\return		Le shader compilé.
-		 */
+		*\~english
+		*	Compiles a shader module to the necessary shader language.
+		*\param[in] shaderModule
+		*	The shader to compile.
+		*\param[in] entryPoint
+		*	The shader entry point to compile.
+		*\return
+		*	The compiled shader.
+		*\~french
+		*	Compile un shader dans le langage shader nécessaire.
+		*\param[in] shaderModule
+		*	Le shader à compiler.
+		*\param[in] entryPoint
+		*	Le point d'entrée de shader à compiler.
+		*\return
+		*	Le shader compilé.
+		*/
 		C3D_API SpirVShader const & compileShader( ProgramModule & shaderModule
 			, ast::EntryPointConfig const & entryPoint );
 		/**
 		*\~english
-		*\brief
 		*	Computes an frustum projection matrix.
 		*\param[in] left, right
 		*	The left and right planes position.
@@ -194,7 +235,6 @@ namespace castor3d
 		*\param[in] zNear, zFar
 		*	The near and far planes position.
 		*\~french
-		*\brief
 		*	Calcule une matrice de projection frustum.
 		*\param[in] left, right
 		*	La position des plans gauche et droite.
@@ -221,7 +261,6 @@ namespace castor3d
 		*\param[in] zFar
 		*	The far plane position.
 		*\~french
-		*\brief
 		*	Calcule une matrice de projection en perspective.
 		*\param[in] fovy
 		*	L'angle d'ouverture verticale.
@@ -238,7 +277,6 @@ namespace castor3d
 			, float zFar )const;
 		/**
 		*\~english
-		*\brief
 		*	Computes an orthographic projection matrix.
 		*\param[in] left, right
 		*	The left and right planes position.
@@ -247,7 +285,6 @@ namespace castor3d
 		*\param[in] zNear, zFar
 		*	The near and far planes position.
 		*\~french
-		*\brief
 		*	Calcule une matrice de projection orthographique.
 		*\param[in] left, right
 		*	La position des plans gauche et droite.
@@ -272,9 +309,7 @@ namespace castor3d
 		*\param[in] zNear
 		*	The near plane position.
 		*\~french
-		*\brief
-		*	Calcule une matrice de projection en perspective sans clipping
-		*	d'arrière plan.
+		*	Calcule une matrice de projection en perspective sans clipping d'arrière plan.
 		*\param[in] fovy
 		*	L'angle d'ouverture verticale.
 		*\param[in] aspect

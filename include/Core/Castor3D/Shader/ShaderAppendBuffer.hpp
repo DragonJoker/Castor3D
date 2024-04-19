@@ -24,13 +24,11 @@ namespace castor3d
 		 *\param[in]	device		The GPU device.
 		 *\param[in]	size		The buffer size.
 		 *\param[in]	name		The shader buffer name.
-		 *\param[in]	wantedState	The wanted state, after upload.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	device		Le device GPU.
 		 *\param[in]	size		La taille du tampon.
 		 *\param[in]	name		Le nom du tampon shader.
-		 *\param[in]	wantedState	L'accès souhaité après l'upload.
 		 */
 		C3D_API ShaderAppendBuffer( RenderDevice const & device
 			, VkDeviceSize size

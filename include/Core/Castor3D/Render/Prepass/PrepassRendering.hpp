@@ -25,7 +25,6 @@ namespace castor3d
 		 *\brief		Constructor
 		 *\param[in]	parent			The parent technique.
 		 *\param[in]	device			The GPU device.
-		 *\param[in]	queueData		The queue receiving the GPU commands.
 		 *\param[in]	previousPasses	The passes this pass depends on.
 		 *\param[in]	progress		The optional progress bar.
 		 *\param[in]	visbuffer		\p true to enable visibility buffer.
@@ -33,7 +32,6 @@ namespace castor3d
 		 *\brief		Constructeur
 		 *\param[in]	parent			La technique parente.
 		 *\param[in]	device			Le device GPU.
-		 *\param[in]	queueData		La queue recevant les commandes GPU.
 		 *\param[in]	previousPasses	Les passes dont celle-ci dépend.
 		 *\param[in]	progress		La barre de progression optionnelle.
 		 *\param[in]	visbuffer		\p true pour activer le buffer de visibilité.

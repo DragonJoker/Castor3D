@@ -19,22 +19,16 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	resources	The graph resources handler.
-		 *\param[in]	device		The GPU device.
-		 *\param[in]	queueData	The queue receiving the GPU commands.
-		 *\param[in]	size		The render area dimensions.
-		 *\param[in]	cameraUbo	The scene matrices UBO.
-		 *\param[in]	sceneUbo	The scene UBO.
-		 *\param[in]	culler		The culler for this pass.
+		 *\param[in]	parent	The parent render target.
+		 *\param[in]	device	The GPU device.
+		 *\param[in]	colour	The target colour image.
+		 *\param[in]	depth	The target depth image.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	resources	Le gestionnaire de ressources du graphe.
-		 *\param[in]	device		Le device GPU.
-		 *\param[in]	queueData	La queue recevant les commandes GPU.
-		 *\param[in]	size		Les dimensions de la zone de rendu
-		 *\param[in]	cameraUbo	L'UBO de matrices de la scène.
-		 *\param[in]	sceneUbo	L'UBO de scène.
-		 *\param[in]	culler		Le culler pour cette passe.
+		 *\param[in]	parent	La render target parente.
+		 *\param[in]	device	Le device GPU.
+		 *\param[in]	colour	L'image couleur cible.
+		 *\param[in]	depth	L'image profondeur cible.
 		 */
 		C3D_API DebugDrawer( RenderTarget & parent
 			, RenderDevice const & device
@@ -64,11 +58,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Renders added objects.
+		 *\param[in]	queue	The queue receiving the render commands.
 		 *\param[in]	toWait	The semaphores to wait.
 		 *\return		The semaphores signaled by this render.
 		 *\~french
 		 *\brief		Dessine les objets ajoutés.
-		 *\param[in]	queue	The queue recevant les commandes de dessin.
+		 *\param[in]	queue	La file recevant les commandes de dessin.
 		 *\param[in]	toWait	Les sémaphores à attendre.
 		 *\return		Les sémaphores signalés par ce dessin.
 		 */

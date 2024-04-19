@@ -151,19 +151,16 @@ namespace castor3d
 		void doOnMouseButtonUp( MouseEvent const & event )override;
 
 		/** Event when mouse moves over the tick control
-		 *\param[in]	control	The tick control
 		 *\param[in]	event		The mouse event
 		 */
 		void onTickMouseMove( MouseEvent const & event );
 
 		/** Event when mouse left button is released over the tick control
-		 *\param[in]	control	The tick control
 		 *\param[in]	event		The mouse event
 		 */
 		void onTickMouseButtonDown( MouseEvent const & event );
 
 		/** Event when mouse left button is released over the tick control
-		 *\param[in]	control	The tick control
 		 *\param[in]	event	The mouse event
 		 */
 		void onTickMouseButtonUp( MouseEvent const & event );
@@ -174,7 +171,6 @@ namespace castor3d
 		void onKeyDown( KeyboardEvent const & event );
 
 		/** Event when a keyboard key is pressed on the active tick or line control
-		 *\param[in]	control	The control raising the eevent
 		 *\param[in]	event	The keyboard event
 		 */
 		void onNcKeyDown( KeyboardEvent const & event );

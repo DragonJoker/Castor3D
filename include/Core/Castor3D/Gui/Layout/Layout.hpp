@@ -203,6 +203,8 @@ namespace castor3d
 		/** Constructor for global layout
 		*\param[in] typeName
 		*	The layout type name.
+		*\param[in] manager
+		*	The parent controls manager.
 		*/
 		C3D_API explicit Layout( castor::String const & typeName
 			, ControlsManager & manager );

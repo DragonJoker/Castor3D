@@ -61,15 +61,11 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Picks a geometry at given mouse position.
-		 *\param[in]	device		The GPU device.
 		 *\param[in]	position	The position in the pass.
-		 *\param[in]	camera		The viewing camera.
 		 *\return		PickingPass::PickNodeType::eNone if nothing was picked.
 		 *\~french
 		 *\brief		Sélectionne la géométrie à la position de souris donnée.
-		 *\param[in]	device		Le device GPU.
 		 *\param[in]	position	La position dans la passe.
-		 *\param[in]	camera		La caméra regardant la scène.
 		 *\return		PickingPass::PickNodeType si rien n'a été pické.
 		 */
 		C3D_API PickNodeType pick( castor::Position position );

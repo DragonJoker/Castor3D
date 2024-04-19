@@ -35,7 +35,6 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	graph			The parent graph.
 		 *\param[in]	device			The GPU device.
 		 *\param[in]	environmentMap	The parent reflection map.
 		 *\param[in]	faceNode		The node from which the camera is created.
@@ -44,7 +43,6 @@ namespace castor3d
 		 *\param[in]	background		The scene background.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	graph			The parent graph.
 		 *\param[in]	device			Le device GPU.
 		 *\param[in]	environmentMap	Le reflection map parente.
 		 *\param[in]	faceNode		Le noeud depuis lequel on crée la caméra.
@@ -79,15 +77,9 @@ namespace castor3d
 		C3D_API void update( GpuUpdater & updater );
 		/**
 		 *\~english
-		 *\brief		Renders the environment map.
-		 *\param[in]	toWait	The semaphores to wait.
-		 *\param[in]	queue	The queue receiving the render commands.
-		 *\return		The semaphores signaled by this render.
+		 *\brief		Records the pass commands.
 		 *\~french
-		 *\brief		Dessine la texture d'environnement.
-		 *\param[in]	toWait	Les sémaphores à attendre.
-		 *\param[in]	queue	The queue recevant les commandes de dessin.
-		 *\return		Les sémaphores signalés par ce dessin.
+		 *\brief		Enregistre les commandes de la passe.
 		 */
 		C3D_API void record();
 		/**

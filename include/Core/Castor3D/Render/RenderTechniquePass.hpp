@@ -131,12 +131,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	parent	The parent technique.
-		 *\param[in]	scene	The scene.
+		 *\param[in]	parent				The parent technique.
+		 *\param[in]	scene				The scene.
+		 *\param[in]	outputScattering	Defines if the pass outputs scattering data.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	parent	La technique parente.
-		 *\param[in]	scene	La scène.
+		 *\param[in]	parent				La technique parente.
+		 *\param[in]	scene				La scène.
+		 *\param[in]	outputScattering	Définit si la passe sort des données de scattering.
 		 */
 		C3D_API RenderTechniquePass( RenderTechnique * parent
 			, Scene const & scene

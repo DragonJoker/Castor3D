@@ -84,10 +84,8 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Creates the texture in the render system.
-		 *\param[in]	device		The GPU device.
 		 *\~french
 		 *\brief		Crée la texture au niveau du renderer.
-		 *\param[in]	device		Le device GPU.
 		 */
 		C3D_API bool initialise();
 		/**

@@ -479,7 +479,7 @@ namespace castor3d
 	 *\return		La taille (sizeof( value ) pour les types basiques).
 	 */
 	template< typename T, size_t Count >
-	static inline size_t getDataSize( castor::Array< T, Count > const & /*value*/ )
+	static inline size_t getDataSize( [[maybe_unused]] castor::Array< T, Count > const & value )
 	{
 		return Count * sizeof( T );
 	}
@@ -524,7 +524,7 @@ namespace castor3d
 	 *\return		La taille (sizeof( value ) pour les types basiques).
 	 */
 	template< typename T, uint32_t Count >
-	static inline size_t getDataSize( castor::Point< T, Count > const & /*value*/ )
+	static inline size_t getDataSize( [[maybe_unused]] castor::Point< T, Count > const & value )
 	{
 		return Count * sizeof( T );
 	}
@@ -569,7 +569,7 @@ namespace castor3d
 	 *\return		La taille (sizeof( value ) pour les types basiques).
 	 */
 	template< typename T, uint32_t Count >
-	static inline size_t getDataSize( castor::Coords< T, Count > const & /*value*/ )
+	static inline size_t getDataSize( [[maybe_unused]] castor::Coords< T, Count > const & value )
 	{
 		return Count * sizeof( T );
 	}
@@ -614,7 +614,7 @@ namespace castor3d
 	 *\return		La taille (sizeof( value ) pour les types basiques).
 	 */
 	template< typename T, uint32_t Columns, uint32_t Rows >
-	static inline size_t getDataSize( castor::Matrix< T, Columns, Rows > const & /*value*/ )
+	static inline size_t getDataSize( [[maybe_unused]] castor::Matrix< T, Columns, Rows > const & value )
 	{
 		return Columns * Rows * sizeof( T );
 	}
@@ -659,7 +659,7 @@ namespace castor3d
 	 *\return		La taille (sizeof( value ) pour les types basiques).
 	 */
 	template< typename T, uint32_t Count >
-	static inline size_t getDataSize( castor::SquareMatrix< T, Count > const & /*value*/ )
+	static inline size_t getDataSize( [[maybe_unused]] castor::SquareMatrix< T, Count > const & value )
 	{
 		return Count * Count * sizeof( T );
 	}
@@ -701,7 +701,7 @@ namespace castor3d
 	 *\param[in]	value	La valeur.
 	 *\return		La taille (sizeof( value ) pour les types basiques).
 	 */
-	static inline size_t getDataSize( castor::RgbColour const & /*value*/ )
+	static inline size_t getDataSize( [[maybe_unused]] castor::RgbColour const & value )
 	{
 		return 3u * sizeof( float );
 	}
@@ -743,7 +743,7 @@ namespace castor3d
 	 *\param[in]	value	La valeur.
 	 *\return		La taille (sizeof( value ) pour les types basiques).
 	 */
-	static inline size_t getDataSize( castor::RgbaColour const & /*value*/ )
+	static inline size_t getDataSize( [[maybe_unused]] castor::RgbaColour const & value )
 	{
 		return 4u * sizeof( float );
 	}
@@ -785,7 +785,7 @@ namespace castor3d
 	 *\param[in]	value	La valeur.
 	 *\return		La taille (sizeof( value ) pour les types basiques).
 	 */
-	static inline size_t getDataSize( castor::Size const & /*value*/ )
+	static inline size_t getDataSize( [[maybe_unused]] castor::Size const & value )
 	{
 		return 2 * sizeof( uint32_t );
 	}
@@ -827,7 +827,7 @@ namespace castor3d
 	 *\param[in]	value	La valeur.
 	 *\return		La taille (sizeof( value ) pour les types basiques).
 	 */
-	static inline size_t getDataSize( castor::Position const & /*value*/ )
+	static inline size_t getDataSize( [[maybe_unused]] castor::Position const & value )
 	{
 		return 2 * sizeof( int32_t );
 	}
@@ -857,7 +857,7 @@ namespace castor3d
 	 *\return		Le tampon.
 	 */
 	template< typename T >
-	static inline uint8_t * getBuffer( castor::QuaternionT< T > & value )
+	static inline uint8_t * getBuffer( [[maybe_unused]] castor::QuaternionT< T > & value )
 	{
 		return BytePtr( value.ptr() );
 	}
@@ -872,7 +872,7 @@ namespace castor3d
 	 *\return		La taille (sizeof( value ) pour les types basiques).
 	 */
 	template< typename T >
-	static inline size_t getDataSize( castor::QuaternionT< T > const & /*value*/ )
+	static inline size_t getDataSize( [[maybe_unused]] castor::QuaternionT< T > const & value )
 	{
 		return 4 * sizeof( T );
 	}
@@ -884,7 +884,7 @@ namespace castor3d
 	 *\brief			Met la valeur donnée en big endian.
 	 *\param[in,out]	value	La valeur.
 	 */
-	static inline void prepareChunkData( bool const & /*value*/ )
+	static inline void prepareChunkData( [[maybe_unused]] bool const & value )
 	{
 		// noop
 	}
@@ -896,7 +896,7 @@ namespace castor3d
 	 *\brief			Met la valeur donnée en big endian.
 	 *\param[in,out]	value	La valeur.
 	 */
-	static inline void prepareChunkData( int8_t const & /*value*/ )
+	static inline void prepareChunkData( [[maybe_unused]] int8_t const & value )
 	{
 		// noop
 	}
@@ -908,7 +908,7 @@ namespace castor3d
 	 *\brief			Met la valeur donnée en big endian.
 	 *\param[in,out]	value	La valeur.
 	 */
-	static inline void prepareChunkData( uint8_t const & /*value*/ )
+	static inline void prepareChunkData( [[maybe_unused]] uint8_t const & value )
 	{
 		// noop
 	}

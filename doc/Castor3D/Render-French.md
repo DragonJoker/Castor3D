@@ -1,4 +1,4 @@
-# Explications du rendu
+﻿# Explications du rendu
 
 ## Général
 

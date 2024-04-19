@@ -50,6 +50,7 @@ namespace castor3d
 		 *\param[in]	device			The GPU device.
 		 *\param[in]	colour			The result colour image.
 		 *\param[in]	intermediate	The intermediate colour image.
+		 *\param[in]	previousPasses	The passes that the technique has to wait for.
 		 *\param[in]	progress		The optional progress bar.
 		 *\param[in]	visbuffer		\p true to enable visibility buffer.
 		 *\param[in]	weightedBlended	\p true to enable weighted blended rendering.
@@ -60,6 +61,7 @@ namespace castor3d
 		 *\param[in]	device			Le device GPU.
 		 *\param[in]	colour			L'image couleur résultat.
 		 *\param[in]	intermediate	L'image couleur intermédiaire.
+		 *\param[in]	previousPasses	Les passes que la technique doit attendre.
 		 *\param[in]	progress		La barre de progression optionnelle.
 		 *\param[in]	visbuffer		\p true pour activer le visibility buffer.
 		 *\param[in]	weightedBlended	\p true pour activer le weighed blended rendering.
@@ -87,15 +89,6 @@ namespace castor3d
 		 *\return		Le nombre d'étapes nécessaires à l'initialisation, pour en montrer la progression.
 		 */
 		static uint32_t countInitialisationSteps()noexcept;
-		/**
-		 *\~english
-		 *\brief		Lists the intermediate view used by the whole technique.
-		 *\param[out]	intermediates	Receives the intermediate views.
-		 *\~french
-		 *\brief		Liste les vues intermédiaires utilisées par toute la technique.
-		 *\param[out]	intermediates	Reçoit les vues intermédiaires.
-		 */
-		C3D_API void listIntermediates( castor::Vector< IntermediateView > & intermediates );
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, CPU wise.

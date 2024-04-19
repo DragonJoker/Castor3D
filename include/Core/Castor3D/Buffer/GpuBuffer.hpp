@@ -33,7 +33,6 @@ namespace castor3d
 		 *\param[in]	debugName		The debug name.
 		 *\param[in]	sharingMode		The sharing mode.
 		 *\param[in]	allocatedSize	The buffer size.
-		 *\param[in]	smallData		Tells if the memory chunks allocated through this buffer are less than 65536 bytes.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	renderSystem	Le device sur lequel le stockage est alloué.
@@ -42,7 +41,6 @@ namespace castor3d
 		 *\param[in]	debugName		Le nom debug.
 		 *\param[in]	sharingMode		Le mode de partage.
 		 *\param[in]	allocatedSize	La taille du buffer.
-		 *\param[in]	smallData		Dit si les chunks mémoire alloués via ce buffer font moins de 65536 bytes.
 		 */
 		C3D_API GpuBufferBase( RenderSystem const & renderSystem
 			, VkBufferUsageFlags usage
@@ -52,28 +50,26 @@ namespace castor3d
 			, VkDeviceSize allocatedSize );
 		/**
 		 *\~english
-		 *\brief		Uploads all ready memory ranges to VRAM.
-		 *\param[in]	cb	The command buffer on which transfer commands are recorded.
+		 *\brief			Uploads all ready memory ranges to VRAM.
+		 *\param[in,out]	uploader	Receives the upload requests.
 		 *\~french
-		 *\brief		Met à jour tous les intervalles mémoire prêts en VRAM.
-		 *\param[in]	cb	Le command buffer sur lequel les commandes de transfert sont enregistrées.
+		 *\brief			Met à jour tous les intervalles mémoire prêts en VRAM.
+		 *\param[in,out]	uploader	Reçoit les requêtes d'upload.
 		 */
 		C3D_API void upload( UploadData & uploader );
 		/**
 		 *\~english
-		 *\brief		Uploads a memory range.
-		 *\param[in]	queue				The queue to which the upload commands will be submitted to.
-		 *\param[in]	commandPool			The command pool from which the command buffer will be created.
-		 *\param[in]	offset, size		The memory range.
-		 *\param[in]	dstAccessFlags		The access flags wanted after upload.
-		 *\param[in]	dstPipelineFlags	The pipeline stage flags wanted after upload.
+		 *\brief			Uploads a memory range.
+		 *\param[in,out]	uploader			Receives the upload requests.
+		 *\param[in]		offset, size		The memory range.
+		 *\param[in]		dstAccessFlags		The access flags wanted after upload.
+		 *\param[in]		dstPipelineFlags	The pipeline stage flags wanted after upload.
 		 *\~french
-		 *\brief		Met à jour un intervalle mémoire en VRAM.
-		 *\param[in]	queue				La queue à laquelle les commandes d'upload seront soumises.
-		 *\param[in]	commandPool			Le command pool depuis lequel le command buffer sera créé.
-		 *\param[in]	offset, size		L'intervalle mémoire.
-		 *\param[in]	dstAccessFlags		Les flags d'accès voulus après l'upload.
-		 *\param[in]	dstPipelineFlags	Les flags d'étape de pipeline voulus après l'upload.
+		 *\brief			Met à jour un intervalle mémoire en VRAM.
+		 *\param[in,out]	uploader			Reçoit les requêtes d'upload.
+		 *\param[in]		offset, size		L'intervalle mémoire.
+		 *\param[in]		dstAccessFlags		Les flags d'accès voulus après l'upload.
+		 *\param[in]		dstPipelineFlags	Les flags d'étape de pipeline voulus après l'upload.
 		 */
 		C3D_API void upload( UploadData & uploader
 			, VkDeviceSize offset
@@ -241,7 +237,6 @@ namespace castor3d
 		 *\param[in]	debugName		The debug name.
 		 *\param[in]	sharingMode		The sharing mode.
 		 *\param[in]	allocator		The allocator.
-		 *\param[in]	smallData		Tells if the memory chunks allocated through this buffer are less than 65536 bytes.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	renderSystem	Le device sur lequel le stockage est alloué.
@@ -250,7 +245,6 @@ namespace castor3d
 		 *\param[in]	debugName		Le nom debug.
 		 *\param[in]	sharingMode		Le mode de partage.
 		 *\param[in]	allocator		L'allocateur.
-		 *\param[in]	smallData		Dit si les chunks mémoire alloués via ce buffer font moins de 65536 bytes.
 		 */
 		GpuBufferT( RenderSystem const & renderSystem
 			, VkBufferUsageFlags usage
@@ -306,22 +300,20 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	renderSystem	The device on which the storage is allocated.
+		 *\param[in]	device			The device on which the storage is allocated.
 		 *\param[in]	usage			The buffer targets.
 		 *\param[in]	memoryFlags		The buffer memory properties.
 		 *\param[in]	debugName		The debug name.
 		 *\param[in]	sharingMode		The sharing mode.
 		 *\param[in]	allocator		The allocator.
-		 *\param[in]	smallData		Tells if the memory chunks allocated through this buffer are less than 65536 bytes.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	renderSystem	Le device sur lequel le stockage est alloué.
+		 *\param[in]	device			Le device sur lequel le stockage est alloué.
 		 *\param[in]	usage			Les cibles du tampon.
 		 *\param[in]	memoryFlags		Les propriétés mémoire du tampon.
 		 *\param[in]	debugName		Le nom debug.
 		 *\param[in]	sharingMode		Le mode de partage.
 		 *\param[in]	allocator		L'allocateur.
-		 *\param[in]	smallData		Dit si les chunks mémoire alloués via ce buffer font moins de 65536 bytes.
 		 */
 		GpuBaseBufferT( RenderDevice const & device
 			, VkBufferUsageFlags usage

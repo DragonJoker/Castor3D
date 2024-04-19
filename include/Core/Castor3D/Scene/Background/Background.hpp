@@ -271,6 +271,8 @@ namespace castor3d
 		*	Adds the background specific bindings.
 		*\param	bindings
 		*	Receives the bindings.
+		*\param	shaderStages
+		*	The impacted shader stages.
 		*\param	index
 		*	The bindings start index.
 		*\~french
@@ -278,6 +280,8 @@ namespace castor3d
 		*	Ajoute les bindings spécifiques au fond.
 		*\param	bindings
 		*	Reçoit les bindings.
+		*\param	shaderStages
+		*	Les shader stages impactés.
 		*\param	index
 		*	L'indice de départ des bindings.
 		*/
@@ -288,8 +292,6 @@ namespace castor3d
 		*\~english
 		*\brief
 		*	Adds the background specific descriptors.
-		*\param	flags
-		*	The pipeline flags.
 		*\param	descriptorWrites
 		*	Receives the descriptors.
 		*\param	targetImage
@@ -299,8 +301,6 @@ namespace castor3d
 		*\~french
 		*\brief
 		*	Ajoute les descripteurs spécifiques au fond.
-		*\param	flags
-		*	Les indicateurs de pipeline.
 		*\param	descriptorWrites
 		*	Reçoit les descripteurs.
 		*\param	targetImage

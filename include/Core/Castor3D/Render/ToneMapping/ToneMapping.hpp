@@ -30,22 +30,24 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Specified constructor.
-		 *\param[in]	engine			The engine.
-		 *\param[in]	graph			The render graph.
-		 *\param[in]	source			L'image source.
-		 *\param[in]	target			L'image cible.
-		 *\param[in]	previousPass	The previous frame pass.
-		 *\param[in]	hdrConfigUbo	The configuration data.
-		 *\param[in]	progress		The progress bar.
+		 *\param[in]	engine				The engine.
+		 *\param[in]	graph				The render graph.
+		 *\param[in]	source				L'image source.
+		 *\param[in]	target				L'image cible.
+		 *\param[in]	previousPass		The previous frame pass.
+		 *\param[in]	hdrConfigUbo		The HDR configuration data.
+		 *\param[in]	colourGradingUbo	The colour grading configuration data.
+		 *\param[in]	progress			The progress bar.
 		 *\~french
 		 *\brief		Constructeur spécifié.
-		 *\param[in]	engine			Le moteur.
-		 *\param[in]	graph			Le render graph.
-		 *\param[in]	source			The source image.
-		 *\param[in]	target			The target image.
-		 *\param[in]	previousPass	La frame pass précédente.
-		 *\param[in]	hdrConfigUbo	Les données de confiuration.
-		 *\param[in]	progress		La barre de progression.
+		 *\param[in]	engine				Le moteur.
+		 *\param[in]	graph				Le render graph.
+		 *\param[in]	source				The source image.
+		 *\param[in]	target				The target image.
+		 *\param[in]	previousPass		La frame pass précédente.
+		 *\param[in]	hdrConfigUbo		Les données de confiuration HDR.
+		 *\param[in]	colourGradingUbo	Les données de confiuration de colour grading.
+		 *\param[in]	progress			La barre de progression.
 		 */
 		C3D_API ToneMapping( Engine & engine
 			, crg::FramePassGroup & graph
@@ -80,10 +82,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialises tone mapping shader and pipeline.
-		 *\param[in]	name		The tone mapping name.
+		 *\param[in]	name	The tone mapping name.
 		 *\~french
 		 *\brief		Initialise le shader et le pipeline de mappage de tons.
-		 *\param[in]	name		Le nom du mappage de tons.
+		 *\param[in]	name	Le nom du mappage de tons.
 		 */
 		C3D_API void updatePipeline( castor::String const & name );
 		/**
@@ -97,9 +99,11 @@ namespace castor3d
 		C3D_API void accept( ToneMappingVisitor & visitor );
 		/**
 		 *\~english
-		 *\return		The vertex shader for tone mapping.
+		 *\brief			Retrieves the vertex shader for tone mapping.
+		 *\param[in, out]	builder	Receives the shader source.
 		 *\~french
-		 *\return		Le vertex shader pour le tone mapping.
+		 *\brief			Récupère le vertex shader pour le tone mapping.
+		 *\param[in, out]	builder	Reçoit le source du shader.
 		 */
 		C3D_API static void getVertexProgram( ast::ShaderBuilder & builder );
 		/**

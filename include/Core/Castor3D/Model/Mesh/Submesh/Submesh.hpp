@@ -43,12 +43,10 @@ namespace castor3d
 		 *\brief		Constructor.
 		 *\param[in]	mesh	The parent mesh.
 		 *\param[in]	id		The submesh ID.
-		 *\param[in]	flags	The submesh flags.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	mesh	Le mesh parent.
 		 *\param[in]	id		L'ID du sous-maillage.
-		 *\param[in]	flags	Les indicateur du sous-maillage.
 		 */
 		C3D_API explicit Submesh( Mesh & mesh
 			, uint32_t id = 1 );
@@ -220,10 +218,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\return		The program flags.
-		 *\param[in]	material	The material for which we want the flags.
+		 *\param[in]	pass	The material pass for which we want the flags.
 		 *\~french
 		 *\return		Les indicateurs de programme.
-		 *\param[in]	material	Le matériau pour lequel on veut les indicateurs.
+		 *\param[in]	pass	La passe de matériau pour laquelle on veut les indicateurs.
 		 */
 		C3D_API ProgramFlags getProgramFlags( Pass const & pass )const noexcept;
 		/**
@@ -236,13 +234,11 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Instantiates the submesh with a geometry and its material.
-		 *\param[in]	geometry	The geometry instantiating the submesh.
 		 *\param[in]	oldMaterial	The old material.
 		 *\param[in]	newMaterial	The new material.
 		 *\param[in]	update		Tells if the instantiation component must be updated.
 		 *\~french
 		 *\brief		Instancie le submesh avec une géométrie et son matériau.
-		 *\param[in]	geometry	La géométrie instantiant le submesh.
 		 *\param[in]	oldMaterial	Le matériau précédent.
 		 *\param[in]	newMaterial	Le nouveau matériau.
 		 *\param[in]	update		Dit si le composant d'instantiation doit être mis à jour.
@@ -264,12 +260,14 @@ namespace castor3d
 		/**
 		*\~english
 		*\return		The geometry buffers for given render node.
-		 *\param[in]	node	The render node using this submesh.
-		 *\param[in]	flags	The pipeline flags.
+		 *\param[in]	geometry	The geometry instancing this submesh.
+		 *\param[in]	pass		The pass used to render this submesh.
+		 *\param[in]	flags		The pipeline flags.
 		*\~french
 		*\return		Les tampons de géométrie associés au noeud de rendu donné.
-		 *\param[in]	node	Le noeud de rendu utilisant ce sous-maillage.
-		 *\param[in]	flags	Les indicateurs de pipeline.
+		 *\param[in]	geometry	La géométrie instanciant ce sous-maillage.
+		 *\param[in]	pass		La passe utilisée dans le rendeu de ce sous-maillage.
+		 *\param[in]	flags		Les indicateurs de pipeline.
 		*/
 		C3D_API GeometryBuffers const & getGeometryBuffers( Geometry const & geometry
 			, Pass const & pass

@@ -22,7 +22,7 @@ namespace castor3d
 				return nullptr;
 			}
 			/**
-			 *\copydoc	castor3d::shader::SubmeshRenderShader::getShaderSource
+			 *\copydoc	castor3d::SubmeshRenderShader::getShaderSource
 			 */
 			void getShaderSource( Engine const & engine
 				, PipelineFlags const & flags

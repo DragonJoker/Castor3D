@@ -213,16 +213,22 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Creates an importer from a file type.
-		 *\param[in]	type		The file type
-		 *\param[in]	name		The preferred importer name
+		 *\param[in]	type		The file type.
+		 *\param[in]	name		The preferred importer name.
+		 *\param[in]	engine		The engine.
+		 *\param[in]	file		The file containing the data to import.
 		 *\param[in]	parameters	The import parameters.
+		 *\param[in]	progress	An optional progress bar.
 		 *\return		The created importer.
 		 *\~french
 		 *\brief		Crée un importeur à partir d'un type de fichier.
 		 *\param[in]	type		Le type de fichier.
 		 *\param[in]	name		Le nom de l'importeur préféré.
+		 *\param[in]	engine		Le moteur.
+		 *\param[in]	file		Le fichier contenant les données à importer.
 		 *\param[in]	parameters	Les paramètres d'import.
-		 *\return		L'importeur créé
+		 *\param[in]	progress	Une barre de progression optionnelle.
+		 *\return		L'importeur créé.
 		 */
 		C3D_API ImporterFileUPtr create( castor::String const & type
 			, castor::String const & name
@@ -230,6 +236,26 @@ namespace castor3d
 			, castor::Path const & file
 			, Parameters const & parameters
 			, ProgressBar * progress = nullptr )const;
+		/**
+		 *\~english
+		 *\brief		Creates an importer from a file type.
+		 *\param[in]	type		The file type.
+		 *\param[in]	name		The preferred importer name.
+		 *\param[in]	scene		The parent scene.
+		 *\param[in]	file		The file containing the data to import.
+		 *\param[in]	parameters	The import parameters.
+		 *\param[in]	progress	An optional progress bar.
+		 *\return		The created importer.
+		 *\~french
+		 *\brief		Crée un importeur à partir d'un type de fichier.
+		 *\param[in]	type		Le type de fichier.
+		 *\param[in]	name		Le nom de l'importeur préféré.
+		 *\param[in]	scene		La scène parente.
+		 *\param[in]	file		Le fichier contenant les données à importer.
+		 *\param[in]	parameters	Les paramètres d'import.
+		 *\param[in]	progress	Une barre de progression optionnelle.
+		 *\return		L'importeur créé.
+		 */
 		C3D_API ImporterFileUPtr create( castor::String const & type
 			, castor::String const & name
 			, Scene & scene
@@ -239,20 +265,44 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Creates an importer from a file type.
-		 *\param[in]	key			The file type.
+		 *\param[in]	type		The file type.
+		 *\param[in]	engine		The engine.
+		 *\param[in]	file		The file containing the data to import.
 		 *\param[in]	parameters	The import parameters.
+		 *\param[in]	progress	An optional progress bar.
 		 *\return		The created importer.
 		 *\~french
 		 *\brief		Crée un importeur à partir d'un type de fichier.
 		 *\param[in]	type		Le type de fichier.
+		 *\param[in]	engine		Le moteur.
+		 *\param[in]	file		Le fichier contenant les données à importer.
 		 *\param[in]	parameters	Les paramètres d'import.
-		 *\return		L'importeur créé
+		 *\param[in]	progress	Une barre de progression optionnelle.
+		 *\return		L'importeur créé.
 		 */
 		C3D_API ImporterFileUPtr create( castor::String const & type
 			, Engine & engine
 			, castor::Path const & file
 			, Parameters const & parameters
 			, ProgressBar * progress = nullptr )const;
+		/**
+		 *\~english
+		 *\brief		Creates an importer from a file type.
+		 *\param[in]	type		The file type.
+		 *\param[in]	scene		The parent scene.
+		 *\param[in]	file		The file containing the data to import.
+		 *\param[in]	parameters	The import parameters.
+		 *\param[in]	progress	An optional progress bar.
+		 *\return		The created importer.
+		 *\~french
+		 *\brief		Crée un importeur à partir d'un type de fichier.
+		 *\param[in]	type		Le type de fichier.
+		 *\param[in]	scene		La scène parente.
+		 *\param[in]	file		Le fichier contenant les données à importer.
+		 *\param[in]	parameters	Les paramètres d'import.
+		 *\param[in]	progress	Une barre de progression optionnelle.
+		 *\return		L'importeur créé.
+		 */
 		C3D_API ImporterFileUPtr create( castor::String const & type
 			, Scene & scene
 			, castor::Path const & file
@@ -308,11 +358,11 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Checks if the given file type is registered.
-		 *\param[in]	key	The file type.
+		 *\param[in]	type	The file type.
 		 *\return		\p true if registered.
 		 *\~french
 		 *\brief		Vérifie si un type de fichier est enregistré.
-		 *\param[in]	key	Le type de fichier.
+		 *\param[in]	type	Le type de fichier.
 		 *\return		\p true si enregistré.
 		 */
 		bool isTypeRegistered( castor::String const & type )const

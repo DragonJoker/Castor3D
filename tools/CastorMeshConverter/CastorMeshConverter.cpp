@@ -58,7 +58,6 @@ namespace convert
 		std::cout << "  -m VALUE    Specify materials type" << std::endl;
 		std::cout << "              VALUE can be one of:" << std::endl;
 		std::cout << "              - phong : Phong" << std::endl;
-		std::cout << "              - blinn_phong : Blinn-Phong" << std::endl;
 		std::cout << "              - pbr : PBR (default value)" << std::endl;
 	}
 
