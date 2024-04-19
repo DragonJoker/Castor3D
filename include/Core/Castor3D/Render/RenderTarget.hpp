@@ -91,25 +91,21 @@ namespace castor3d
 		C3D_API void update( GpuUpdater & updater );
 		/**
 		 *\~english
-		 *\brief		Uploads overlays GPU buffers to VRAM.
-		 *\param[in]	cb	The command buffer on which transfer commands are recorded.
+		 *\brief			Uploads overlays GPU buffers to VRAM.
+		 *\param[in,out]	uploader	Receives the upload requests.
 		 *\~french
-		 *\brief		Met à jour tous les tampons GPU d'incrustations en VRAM.
-		 *\param[in]	cb	Le command buffer sur lequel les commandes de transfert sont enregistrées.
+		 *\brief			Met à jour tous les tampons GPU d'incrustations en VRAM.
+		 *\param[in,out]	uploader	Reçoit les requêtes d'upload.
 		 */
 		C3D_API void upload( UploadData & uploader );
 		/**
 		 *\~english
 		 *\brief		Renders one frame.
-		 *\param[in]	device	The GPU device.
-		 *\param[out]	info	Receives the render informations.
 		 *\param[in]	queue	The queue receiving the render commands.
 		 *\param[in]	toWait	The semaphores to wait.
 		 *\return		The semaphores signaled by this render.
 		 *\~french
 		 *\brief		Dessine une frame.
-		 *\param[in]	device	Le device GPU.
-		 *\param[out]	info	Reçoit les informations de rendu.
 		 *\param[in]	queue	The queue recevant les commandes de dessin.
 		 *\param[in]	toWait	Les sémaphores à attendre.
 		 *\return		Les sémaphores signalés par ce dessin.
@@ -199,11 +195,9 @@ namespace castor3d
 		 *\~english
 		 *\brief		Sets the tone mapping implementation type.
 		 *\param[in]	name		The type.
-		 *\param[in]	parameters	The parameters.
 		 *\~french
 		 *\brief		Définit le type d'implémentation de mappage de tons.
 		 *\param[in]	name		Le type.
-		 *\param[in]	parameters	Les paramètres.
 		 */
 		C3D_API void setToneMappingType( castor::StringView name );
 		/**

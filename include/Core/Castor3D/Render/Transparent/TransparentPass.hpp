@@ -26,6 +26,8 @@ namespace castor3d
 		 *\param[in]	graph				The runnable graph.
 		 *\param[in]	device				The GPU device.
 		 *\param[in]	sceneImage			The current render result.
+		 *\param[in]	depthObjImage		The image holding the opaque objects depth/object ID.
+		 *\param[in]	normalsImage		The image holding the opaque objects normals.
 		 *\param[in]	targetImage			The image this pass renders to.
 		 *\param[in]	targetDepth			The depth image this pass renders to.
 		 *\param[in]	renderPassDesc		The scene render pass construction data.
@@ -38,6 +40,8 @@ namespace castor3d
 		 *\param[in]	graph				Le runnable graph.
 		 *\param[in]	device				Le device GPU.
 		 *\param[in]	sceneImage			Le résultat actuel du rendu.
+		 *\param[in]	depthObjImage		L'image contenant les profondeur/ID d'objet des objets opaques.
+		 *\param[in]	normalsImage		L'image contenant les normales des objets opaques.
 		 *\param[in]	targetImage			L'image dans laquelle cette passe fait son rendu.
 		 *\param[in]	targetDepth			L'image de profondeur dans laquelle cette passe fait son rendu.
 		 *\param[in]	renderPassDesc		Les données de construction de passe de rendu de scène.

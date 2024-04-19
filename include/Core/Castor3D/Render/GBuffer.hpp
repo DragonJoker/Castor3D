@@ -55,6 +55,8 @@ namespace castor3d
 		*	The layers count for the g-buffer.
 		*\param[in] sampleCount
 		*	The images samples count.
+		*\param[out] owned
+		*	The images that are owned by the g-buffer.
 		*\~french
 		*\brief
 		*	Initialise les textures du g-buffer 2D ou 2D array.
@@ -72,6 +74,8 @@ namespace castor3d
 		*	Le nombre de layers du g-buffer.
 		*\param[in] sampleCount
 		*	Le nombre de samples des images.
+		*\param[out] owned
+		*	Les images dont le g-buffer a la responsabilité.
 		*/
 		template< typename TextureEnumT >
 		castor::Vector< Texture const * > doCreateTextures( crg::ResourcesCache & resources
@@ -127,6 +131,8 @@ namespace castor3d
 		*	The g-buffer's dimensions.
 		*\param[in] sampleCount
 		*	The images samples count.
+		*\param[out] owned
+		*	The images that are owned by the g-buffer.
 		*\~french
 		*\brief
 		*	Initialise les textures du g-buffer 3D.
@@ -142,6 +148,8 @@ namespace castor3d
 		*	Les dimensions du g-buffer.
 		*\param[in] sampleCount
 		*	Le nombre de samples des images.
+		*\param[out] owned
+		*	Les images dont le g-buffer a la responsabilité.
 		*/
 		template< typename TextureEnumT >
 		castor::Vector< Texture const * > doCreateTextures( crg::ResourcesCache & resources

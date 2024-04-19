@@ -52,6 +52,8 @@ namespace castor3d
 			*\~english
 			*\brief
 			*	Fills the components shader struct with the members provided by this component.
+			*\param[in] componentsMask
+			*	Used to check if the component is valid in the context of the call.
 			*\param[in,out] components
 			*	Receives the struct members.
 			*\param[in] materials
@@ -61,6 +63,8 @@ namespace castor3d
 			*\~french
 			*\brief
 			*	Remplit la structure shader de composants avec les membres fournis par ce composant.
+			*\param[in] componentsMask
+			*	Utilisé pour déterminer si le composant est valide dans le contexte de l'appel.
 			*\param[in,out] components
 			*	Reçoit les membres de la structure.
 			*\param[in] materials
@@ -122,8 +126,6 @@ namespace castor3d
 			*\~english
 			*\brief
 			*	Fills this component's values with the data retrieved from a texture.
-			*\param[in] combine
-			*	Used to check if the component's textures are enabled.
 			*\param[in] flags
 			*	Used to check if the render pass is configured so the component is usable.
 			*\param[in] config
@@ -139,8 +141,6 @@ namespace castor3d
 			*\~french
 			*\brief
 			*	Remplit les valeurs de ce composant avec des données récupérées depuis une texture.
-			*\param[in] combine
-			*	Utilisé pour vérifier si les textures du composant sont activées.
 			*\param[in] flags
 			*	Utilisé pour vérifier si la passe de rendu est configurée pour que le composant soit utilisable.
 			*\param[in] config
@@ -195,16 +195,24 @@ namespace castor3d
 			/**
 			*\~english
 			*	Adjusts the component data after textures have been parsed.
-			*\param[in] combine
-			*	Used to check if the component's textures are enabled.
+			*\param[in] maps
+			*	Holds the material pass images.
+			*\param[in] material
+			*	The material data.
 			*\param[in,out] components
 			*	Contains the component members.
+			*\param[in] isFrontCulled
+			*	Tells if this shader is for front culled objects.
 			*\~french
 			*	Ajuste les données du composant après que les textures ont été traitées.
-			*\param[in] combine
-			*	Utilisé pour vérifier si les textures du composant sont activées.
+			*\param[in] maps
+			*	Contient les images des passes de matériau.
+			*\param[in] material
+			*	Les données du matériau.
 			*\param[in,out] components
 			*	Contient les membres du composant.
+			*\param[in] isFrontCulled
+			*	Dit si ce shader est pour les objets front culled.
 			*/
 			C3D_API virtual void updateComponent( sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 				, shader::Material const & material

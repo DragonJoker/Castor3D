@@ -531,14 +531,14 @@ namespace castor::string
 	/**
 	 *\~english
 	 *\brief			Removes spaces on the left and/or on the right of the given String
-	 *\param[in,out]	str		The String to trim, receives the trimmed string
+	 *\param[in,out]	text	The String to trim, receives the trimmed string
 	 *\param[in]		left	Tells if we remove the left spaces
 	 *\param[in]		right	Tells if we remove the right spaces
 	 *\param[in]		seps	The characters to trim
 	 *\return			The trimmed String
 	 *\~french
 	 *\brief			Supprime les espaces à gauche et/ou à droite dans la chaîne donnée
-	 *\param[in,out]	str		La chaîne à modifier, reçoit la chaîne modifiée
+	 *\param[in,out]	text	La chaîne à modifier, reçoit la chaîne modifiée
 	 *\param[in]		left	Dit si on enlève les espaces à gauche
 	 *\param[in]		right	Dit si on enlève les espaces à droite
 	 *\param[in]		seps	Les caractères à supprimer
@@ -552,14 +552,14 @@ namespace castor::string
 	/**
 	 *\~english
 	 *\brief			Removes spaces on the left and/or on the right of the given String
-	 *\param[in,out]	str		The String to trim, receives the trimmed string
+	 *\param[in,out]	text	The String to trim, receives the trimmed string
 	 *\param[in]		left	Tells if we remove the left spaces
 	 *\param[in]		right	Tells if we remove the right spaces
 	 *\param[in]		seps	The characters to trim
 	 *\return			The trimmed String
 	 *\~french
 	 *\brief			Supprime les espaces à gauche et/ou à droite dans la chaîne donnée
-	 *\param[in,out]	str		La chaîne à modifier, reçoit la chaîne modifiée
+	 *\param[in,out]	text	La chaîne à modifier, reçoit la chaîne modifiée
 	 *\param[in]		left	Dit si on enlève les espaces à gauche
 	 *\param[in]		right	Dit si on enlève les espaces à droite
 	 *\param[in]		seps	Les caractères à supprimer
@@ -902,10 +902,12 @@ namespace castor::string
 		 *\~english
 		 *\brief		Retrieves an UTF-8 char32_t from a char array iterator.
 		 *\param[in]	first	The char iterator.
+		 *\param[in]	end		The end iterator.
 		 *\return		The UTF-8 char32_t character.
 		 *\~french
 		 *\brief		Récupère un char32_t encodé en UTF-8 à partir d'un itérateur sur une chaîne.
 		 *\param[in]	first	L'itérateur sur la chaîne.
+		 *\param[in]	end		L'itérateur sur la fin de la chaîne.
 		 *\return		Le caractère char32_t en UTF-8.
 		 */
 		template< typename IteratorType >

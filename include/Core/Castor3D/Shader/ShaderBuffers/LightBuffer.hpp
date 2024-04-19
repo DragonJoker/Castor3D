@@ -70,11 +70,11 @@ namespace castor3d
 		C3D_API void update( CpuUpdater & updater );
 		/**
 		 *\~english
-		 *\brief		Uploads the buffer to VRAM.
-		 *\param[in]	commandBuffer	Receives the upload commands.
+		 *\brief			Uploads the buffer to VRAM.
+		 *\param[in,out]	uploader	Receives the upload requests.
 		 *\~french
-		 *\brief		Uploade le tampon en VRAM.
-		 *\param[in]	commandBuffer	Reçoit les commandes d'upload.
+		 *\brief			Uploade le tampon en VRAM.
+		 *\param[in,out]	uploader	Reçoit les requêtes d'upload.
 		 */
 		C3D_API void upload( UploadData & uploader );
 		/**

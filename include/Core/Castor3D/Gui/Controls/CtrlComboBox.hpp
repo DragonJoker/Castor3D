@@ -204,7 +204,6 @@ namespace castor3d
 		void onKeyDown( KeyboardEvent const & event );
 
 		/** Event when a keyboard key is pressed on the active tick or line control
-		*\param[in]	control		The control raising the event
 		*\param[in]	event		The keyboard event
 		*/
 		void onNcKeyDown( KeyboardEvent const & event );

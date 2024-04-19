@@ -36,6 +36,7 @@ namespace castor3d
 		 *\param[in]	renderPassDesc		The scene render pass construction data.
 		 *\param[in]	techniquePassDesc	The technique render pass construction data.
 		 *\param[in]	mippedColour		The scene colour render result, with mipmaps.
+		 *\param[in]	hasEnvMap			Tells if the pass accesses environment maps.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	parent				La technique parente.
@@ -50,6 +51,7 @@ namespace castor3d
 		 *\param[in]	renderPassDesc		Les données de construction de passe de rendu de scène.
 		 *\param[in]	techniquePassDesc	Les données de construction de passe de rendu de technique.
 		 *\param[in]	mippedColour		Le résultat couleur du rendu de la scène, avec ses mipmaps.
+		 *\param[in]	hasEnvMap			Dit si la passe accède aux environment maps.
 		 */
 		C3D_API ForwardRenderTechniquePass( RenderTechnique * parent
 			, crg::FramePass const & pass

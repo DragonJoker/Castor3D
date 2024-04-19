@@ -22,14 +22,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine		The engine.
 		 *\param[in]	device		The GPU device.
 		 *\param[in]	size		The buffer size.
 		 *\param[in]	name		The shader buffer name.
 		 *\param[in]	wantedState	The wanted state, after upload.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine		Le moteur.
 		 *\param[in]	device		Le device GPU.
 		 *\param[in]	size		La taille du tampon.
 		 *\param[in]	name		Le nom du tampon shader.
@@ -41,22 +39,22 @@ namespace castor3d
 			, crg::AccessState wantedState = { VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT } );
 		/**
 		 *\~english
-		 *\brief		Updates the buffer.
-		 *\param[in]	commandBuffer	The command buffer receiving upload commands.
+		 *\brief			Updates the buffer.
+		 *\param[in,out]	uploader	Receives the upload requests.
 		 *\~french
-		 *\brief		Met à jour le tampon.
-		 *\param[in]	commandBuffer	Le command buffer recevant les commandes d'upload.
+		 *\brief			Met à jour le tampon.
+		 *\param[in,out]	uploader	Reçoit les requêtes d'upload.
 		 */
 		C3D_API void upload( UploadData & uploader )const;
 		/**
 		 *\~english
-		 *\brief		Updates the buffer on GPU.
-		 *\param[in]	commandBuffer	The command buffer receiving upload commands.
-		 *\param[in]	offset, size	The updated range.
+		 *\brief			Updates the buffer on GPU.
+		 *\param[in,out]	uploader		Receives the upload requests.
+		 *\param[in]		offset, size	The updated range.
 		 *\~french
-		 *\brief		Met à jour le tampon sur le GPU.
-		 *\param[in]	commandBuffer	Le command buffer recevant les commandes d'upload.
-		 *\param[in]	offset, size	L'intervalle à mettre à jour.
+		 *\brief			Met à jour le tampon sur le GPU.
+		 *\param[in,out]	uploader		Reçoit les requêtes d'upload.
+		 *\param[in]		offset, size	L'intervalle à mettre à jour.
 		 */
 		C3D_API void upload( UploadData & uploader
 			, VkDeviceSize offset

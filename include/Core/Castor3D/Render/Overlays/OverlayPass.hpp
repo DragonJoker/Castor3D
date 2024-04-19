@@ -20,24 +20,26 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	pass		The parent frame pass.
-		 *\param[in]	context		The rendering context.
-		 *\param[in]	graph		The runnable graph.
-		 *\param[in]	device		The GPU device.
-		 *\param[in]	scene		The scene.
-		 *\param[in]	size		The render area dimensions.
-		 *\param[in]	output		The result texture.
-		 *\param[in]	drawGlobal	\p true to also draw global overlays.
+		 *\param[in]	pass			The parent frame pass.
+		 *\param[in]	context			The rendering context.
+		 *\param[in]	graph			The runnable graph.
+		 *\param[in]	device			The GPU device.
+		 *\param[in]	scene			The scene.
+		 *\param[in]	size			The render area dimensions.
+		 *\param[in]	output			The result texture.
+		 *\param[in]	hdrConfigUbo	The HDR configuration used when rendering to an HDR screen.
+		 *\param[in]	drawGlobal		\p true to also draw global overlays.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	pass		La frame pass parente.
-		 *\param[in]	context		Le contexte de rendu.
-		 *\param[in]	graph		Le runnable graph.
-		 *\param[in]	device		Le device GPU.
-		 *\param[in]	scene		La scène.
-		 *\param[in]	size		Les dimensions de la zone de rendu.
-		 *\param[in]	output		La texture résultat.
-		 *\param[in]	drawGlobal	\p true pour dessiner les incrustations globales.
+		 *\param[in]	pass			La frame pass parente.
+		 *\param[in]	context			Le contexte de rendu.
+		 *\param[in]	graph			Le runnable graph.
+		 *\param[in]	device			Le device GPU.
+		 *\param[in]	scene			La scène.
+		 *\param[in]	size			Les dimensions de la zone de rendu.
+		 *\param[in]	output			La texture résultat.
+		 *\param[in]	hdrConfigUbo	La configuration HDR lors du rendu sur un écran HDR.
+		 *\param[in]	drawGlobal		\p true pour dessiner les incrustations globales.
 		 */
 		C3D_API OverlayPass( crg::FramePass const & pass
 			, crg::GraphContext & context
@@ -68,11 +70,11 @@ namespace castor3d
 		C3D_API void update( GpuUpdater & updater );
 		/**
 		 *\~english
-		 *\brief		Uploads overlays GPU buffers to VRAM.
-		 *\param[in]	cb	The command buffer on which transfer commands are recorded.
+		 *\brief			Uploads overlays GPU buffers to VRAM.
+		 *\param[in,out]	uploader	Receives the upload requests.
 		 *\~french
-		 *\brief		Met à jour tous les tampons GPU d'incrustations en VRAM.
-		 *\param[in]	cb	Le command buffer sur lequel les commandes de transfert sont enregistrées.
+		 *\brief			Met à jour tous les tampons GPU d'incrustations en VRAM.
+		 *\param[in,out]	uploader	Reçoit les requêtes d'upload.
 		 */
 		C3D_API void upload( UploadData & uploader );
 

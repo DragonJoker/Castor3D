@@ -21,7 +21,7 @@ set( ${PROJECT_NAME}_DESCRIPTION "${MAIN_PROJECT_NAME} Utils" )
 set( ${PROJECT_NAME}_BRIEF "Multiplatform utilities library" )
 set( ${PROJECT_NAME}_ICON "${CMAKE_SOURCE_DIR}/data/Images/castor-dark-small.png" )
 set( ${PROJECT_NAME}_VERSION_MAJOR 0 )
-set( ${PROJECT_NAME}_VERSION_MINOR 15 )
+set( ${PROJECT_NAME}_VERSION_MINOR 16 )
 set( ${PROJECT_NAME}_VERSION_BUILD 0 )
 
 if ( ZLIB_FOUND AND FreeType_FOUND )
@@ -852,8 +852,6 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 	endif ()
 
 	add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )
-	target_add_doc_ex( ${PROJECT_NAME} "French" "*.h *.hpp" ${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME} )
-	target_add_doc_ex( ${PROJECT_NAME} "English" "*.h *.hpp" ${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME} )
 
 	set( Build "yes (version ${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_BUILD})" PARENT_SCOPE )
 else ()

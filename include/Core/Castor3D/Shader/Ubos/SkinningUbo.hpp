@@ -34,14 +34,14 @@ namespace castor3d
 		 *\param[in]	writer				The shader writer.
 		 *\param[in]	transformsBinding	The descriptor set binding point for the transforms buffer.
 		 *\param[in]	transformsSet		The descriptor set index for the transforms buffer.
-		 *\param[in]	flags				The program flags.
+		 *\param[in]	hasSkin				\p true to enable skinning.
 		 *\return		The skinning data.
 		 *\~french
 		 *\brief		Déclare les variables nécessaires au calcul du skinning dans le vertex shader.
 		 *\param[in]	writer				Le shader writer.
 		 *\param[in]	transformsBinding	Le point d'attache du descriptor set pour le buffer de matrices de transformation.
 		 *\param[in]	transformsSet		L'index du descriptor set pour le buffer de matrices de transformation.
-		 *\param[in]	flags				Les indicateurs du programme.
+		 *\param[in]	hasSkin				\p true pour activer le skinning.
 		 *\return		Les données de skinning.
 		 */
 		C3D_API static shader::SkinningData declare( sdw::ShaderWriter & writer

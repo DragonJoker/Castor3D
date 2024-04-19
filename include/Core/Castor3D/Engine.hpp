@@ -147,33 +147,21 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	appName				The user application name.
-		 *\param[in]	appVersion			The user application version.
-		 *\param[in]	enableValidation	\p true to enable rendering API validation.
-		 *\param[in]	enableRandom		\p true to generate random seeds at each run.
+		 *\param[in]	config	The engine configuration.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	appName				Le nom de l'application.
-		 *\param[in]	appVersion			La version de l'application.
-		 *\param[in]	enableValidation	\p true pour activer la validation via l'API de rendu.
-		 *\param[in]	enableRandom		\p true pour générer des random seeds à chaque lancement.
+		 *\param[in]	config	La configuration du moteur.
 		 */
 		C3D_API explicit Engine( EngineConfig config );
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	appName				The user application name.
-		 *\param[in]	appVersion			The user application version.
-		 *\param[in]	enableValidation	\p true to enable rendering API validation.
-		 *\param[in]	enableRandom		\p true to generate random seeds at each run.
-		 *\param[in]	logger				The logger instance.
+		 *\param[in]	config	The engine configuration.
+		 *\param[in]	logger	The logger instance.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	appName				Le nom de l'application.
-		 *\param[in]	appVersion			La version de l'application.
-		 *\param[in]	enableValidation	\p true pour activer la validation via l'API de rendu.
-		 *\param[in]	enableRandom		\p true pour générer des random seeds à chaque lancement.
-		 *\param[in]	logger				L'instance de logger.
+		 *\param[in]	config	La configuration du moteur.
+		 *\param[in]	logger	L'instance de logger.
 		 */
 		C3D_API Engine( EngineConfig config
 			, castor::LoggerInstance & logger );
@@ -291,11 +279,11 @@ namespace castor3d
 		C3D_API void update( GpuUpdater & updater );
 		/**
 		 *\~english
-		 *\brief		Updates the buffers.
-		 *\param[in]	commandBuffer	Receives the upload commands.
+		 *\brief			Updates the buffers.
+		 *\param[in,out]	uploader	Receives the upload requests.
 		 *\~french
-		 *\brief		Met à jour les buffers.
-		 *\param[in]	commandBuffer	Reçoit les commandes d'upload.
+		 *\brief			Met à jour les buffers.
+		 *\param[in,out]	uploader	Reçoit les requêtes d'upload.
 		 */
 		C3D_API void upload( UploadData & uploader );
 		/**

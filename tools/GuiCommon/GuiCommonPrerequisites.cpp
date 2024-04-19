@@ -171,7 +171,6 @@ namespace GuiCommon
 				case uint32_t( CSCNSection::eTextureUnit ):
 				case uint32_t( CSCNSection::eShaderProgram ):
 				case uint32_t( CSCNSection::eShaderStage ):
-				case uint32_t( CSCNSection::eShaderUBO ):
 				case uint32_t( CSCNSection::eUBOVariable ):
 				case uint32_t( CSCNSection::eTextureAnimation ):
 				case uint32_t( CSCNSection::eTextureTransform ):

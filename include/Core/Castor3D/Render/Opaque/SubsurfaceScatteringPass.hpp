@@ -32,6 +32,7 @@ namespace castor3d
 		 *\param[in]	cameraUbo		The camera UBO.
 		 *\param[in]	depthObj		The depths and objects image.
 		 *\param[in]	diffuse			The diffuse lighting texture.
+		 *\param[in]	isEnabled		Callback to check if the pass is active.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	graph			Le frame graph.
@@ -42,6 +43,7 @@ namespace castor3d
 		 *\param[in]	cameraUbo		L'UBO de la caméra.
 		 *\param[in]	depthObj		La texture de profondeurs et d'objets.
 		 *\param[in]	diffuse			La texture de diffuse lighting.
+		 *\param[in]	isEnabled		Callback de détermination d'activation de la passe.
 		 */
 		C3D_API SubsurfaceScatteringPass( crg::FramePassGroup & graph
 			, crg::FramePass const & previousPass

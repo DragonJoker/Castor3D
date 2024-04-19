@@ -95,17 +95,15 @@ namespace castor
 	/**
 	 *\~english
 	 *\brief		Stream operator.
-	 *\remarks		Initializes the stream in order to Prefix it.
+	 *\remarks		Initializes the stream in order to prefix it.
 	 *\param[in]	stream	The stream.
-	 *\param[in]	Prefix	The Prefix.
 	 *\~french
 	 *\brief		Opérateur de flux.
 	 *\remarks		Initialise le flux afin de pouvoir le préfixer.
 	 *\param[in]	stream	Le flux.
-	 *\param[in]	Prefix	Le préfixe.
 	 */
 	template< typename CharType, typename PrefixType >
-	inline std::basic_ostream< CharType > & operator<<( std::basic_ostream< CharType > & stream, format::BasePrefixer< CharType, PrefixType > const & /*prefix*/ )
+	inline std::basic_ostream< CharType > & operator<<( std::basic_ostream< CharType > & stream, format::BasePrefixer< CharType, PrefixType > const & )
 	{
 		if ( auto * sbuf = dynamic_cast< format::BasicPrefixBuffer< format::BasePrefixer< CharType, PrefixType >, CharType > * >( stream.rdbuf() );
 			!sbuf )

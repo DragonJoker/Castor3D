@@ -389,7 +389,6 @@ namespace castor3d
 		void move( MouseEvent const & event );
 
 		/** Ends dragging of the control.
-		 *\param[in]	event		The mouse event.
 		 */
 		void endMove();
 
@@ -404,7 +403,6 @@ namespace castor3d
 		void resize( MouseEvent const & event );
 
 		/** Ends dragging of the control.
-		 *\param[in]	event		The mouse event.
 		 */
 		void endResize();
 

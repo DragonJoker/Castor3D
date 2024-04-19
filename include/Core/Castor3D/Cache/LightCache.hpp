@@ -83,11 +83,11 @@ namespace castor3d
 		C3D_API void update( CpuUpdater & updater );
 		/**
 		 *\~english
-		 *\brief		Uploads all GPU buffers to VRAM.
-		 *\param[in]	cb	The command buffer on which transfer commands are recorded.
+		 *\brief			Uploads all GPU buffers to VRAM.
+		 *\param[in,out]	uploader	Receives the upload requests.
 		 *\~french
-		 *\brief		Met à jour tous les tampons GPU en VRAM.
-		 *\param[in]	cb	Le command buffer sur lequel les commandes de transfert sont enregistrées.
+		 *\brief			Met à jour tous les tampons GPU en VRAM.
+		 *\param[in,out]	uploader	Reçoit les requêtes d'upload.
 		 */
 		C3D_API void upload( UploadData & uploader )const;
 		/**
@@ -112,20 +112,26 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Creates the descriptor set layout binding at given point.
+		 *\param[in]	stages	The impacted shader stages.
 		 *\param[in]	index	The binding point index.
 		 *\~french
 		 *\brief		Crée une attache de layout de set de descripteurs au point donné.
+		 *\param[in]	stages	Les shader stages impactés.
 		 *\param[in]	index	L'indice du point d'attache.
 		 */
 		C3D_API VkDescriptorSetLayoutBinding createLayoutBinding( VkShaderStageFlags stages
 			, uint32_t index )const;
 		/**
 		 *\~english
-		 *\brief		Creates the descriptor set layout binding at given point.
-		 *\param[in]	index	The binding point index.
+		 *\brief			Adds the descriptor set layout binding at given point.
+		 *\param[in,out]	bindings	Receives the binding.
+		 *\param[in]		stages		The impacted shader stages.
+		 *\param[in,out]	index		The binding index.
 		 *\~french
-		 *\brief		Crée une attache de layout de set de descripteurs au point donné.
-		 *\param[in]	index	L'indice du point d'attache.
+		 *\brief			Ajoute une attache de layout de set de descripteurs au point donné.
+		 *\param[in,out]	bindings	Reçoit l'attache.
+		 *\param[in]		stages		Les shader stages impactés.
+		 *\param[in,out]	index		L'indice du point d'attache.
 		 */
 		C3D_API void addLayoutBinding( ashes::VkDescriptorSetLayoutBindingArray & bindings
 			, VkShaderStageFlags stages

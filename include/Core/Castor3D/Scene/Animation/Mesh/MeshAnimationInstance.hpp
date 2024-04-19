@@ -20,7 +20,6 @@ namespace castor3d
 		C3D_API MeshAnimationInstance( MeshAnimationInstance const & rhs ) = delete;
 		C3D_API MeshAnimationInstance & operator=( MeshAnimationInstance const & rhs ) = delete;
 		C3D_API ~MeshAnimationInstance()noexcept override = default;
-		/**@}*/
 		/**
 		 *\~english
 		 *\brief		Constructor.

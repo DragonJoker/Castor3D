@@ -151,17 +151,19 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
+		 *\param[in]	size		The render size.
 		 *\param[in]	camera		The camera holding the data.
 		 *\param[in]	view		The new view matrix.
 		 *\param[in]	projection	The new projection matrix.
-		 *\param[in]	size		The render size.
+		 *\param[in]	debugIndex	The currently selected debug data index.
 		 *\param[in]	jitter		The jittering value.
 		 *\~french
 		 *\brief		Met à jour l'UBO avec les valeurs données.
+		 *\param[in]	size		Les dimensions du rendu.
 		 *\param[in]	camera		La caméra contenant les données.
 		 *\param[in]	view		La nouvelle matrice de vue.
 		 *\param[in]	projection	La nouvelle matrice de projection.
-		 *\param[in]	size		Les dimensions du rendu.
+		 *\param[in]	debugIndex	L'indice des données de debug actuellement sélectionnées.
 		 *\param[in]	jitter		La valeur de jittering.
 		 */
 		C3D_API Configuration & cpuUpdate( castor::Size const & size
@@ -174,16 +176,18 @@ namespace castor3d
 		 *\~english
 		 *\brief		Updates the UBO from given values.
 		 *\param[in]	camera		The camera holding the data.
-		 *\param[in]	safeBanded	\p true to use safebanded size.
 		 *\param[in]	view		The new view matrix.
 		 *\param[in]	projection	The new projection matrix.
+		 *\param[in]	debugIndex	The currently selected debug data index.
+		 *\param[in]	safeBanded	\p true to use safebanded size.
 		 *\param[in]	jitter		The jittering value.
 		 *\~french
 		 *\brief		Met à jour l'UBO avec les valeurs données.
 		 *\param[in]	camera		La caméra contenant les données.
-		 *\param[in]	safeBanded	\p true pour utiliser la taille avec les safebands.
 		 *\param[in]	view		La nouvelle matrice de vue.
 		 *\param[in]	projection	La nouvelle matrice de projection.
+		 *\param[in]	debugIndex	L'indice des données de debug actuellement sélectionnées.
+		 *\param[in]	safeBanded	\p true pour utiliser la taille avec les safebands.
 		 *\param[in]	jitter		La valeur de jittering.
 		 */
 		C3D_API Configuration & cpuUpdate( Camera const & camera
@@ -196,11 +200,13 @@ namespace castor3d
 		 *\~english
 		 *\brief		Updates the UBO from given values.
 		 *\param[in]	camera		The camera holding the data.
+		 *\param[in]	debugIndex	The currently selected debug data index.
 		 *\param[in]	safeBanded	\p true to use safebanded size and projection matrix.
 		 *\param[in]	jitter		The jittering value.
 		 *\~french
 		 *\brief		Met à jour l'UBO avec les valeurs données.
 		 *\param[in]	camera		La caméra contenant les données.
+		 *\param[in]	debugIndex	L'indice des données de debug actuellement sélectionnées.
 		 *\param[in]	safeBanded	\p true pour utiliser la taille et la matrice de projection avec les safebands.
 		 *\param[in]	jitter		La valeur de jittering.
 		 */
@@ -211,15 +217,17 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
-		 *\param[in]	camera		The camera holding the data.
-		 *\param[in]	safeBanded	\p true to use safebanded projection matrix.
 		 *\param[in]	size		The render size.
+		 *\param[in]	camera		The camera holding the data.
+		 *\param[in]	debugIndex	The currently selected debug data index.
+		 *\param[in]	safeBanded	\p true to use safebanded projection matrix.
 		 *\param[in]	jitter		The jittering value.
 		 *\~french
 		 *\brief		Met à jour l'UBO avec les valeurs données.
-		 *\param[in]	camera		La caméra contenant les données.
-		 *\param[in]	safeBanded	\p true pour utiliser la matrice de projection avec les safebands.
 		 *\param[in]	size		Les dimensions du rendu.
+		 *\param[in]	camera		La caméra contenant les données.
+		 *\param[in]	debugIndex	L'indice des données de debug actuellement sélectionnées.
+		 *\param[in]	safeBanded	\p true pour utiliser la matrice de projection avec les safebands.
 		 *\param[in]	jitter		La valeur de jittering.
 		 */
 		C3D_API Configuration & cpuUpdate( castor::Size const & size
@@ -230,17 +238,19 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
+		 *\param[in]	size		The render size.
 		 *\param[in]	view		The new view matrix.
 		 *\param[in]	projection	The new projection matrix.
+		 *\param[in]	debugIndex	The currently selected debug data index.
 		 *\param[in]	frustum		The frustum, from which planes are copied.
-		 *\param[in]	size		The render size.
 		 *\param[in]	jitter		The jittering value.
 		 *\~french
 		 *\brief		Met à jour l'UBO avec les valeurs données.
+		 *\param[in]	size		Les dimensions du rendu.
 		 *\param[in]	view		La nouvelle matrice de vue.
 		 *\param[in]	projection	La nouvelle matrice de projection.
+		 *\param[in]	debugIndex	L'indice des données de debug actuellement sélectionnées.
 		 *\param[in]	frustum		Le frustum depuis lequel les plans sont copiés.
-		 *\param[in]	size		Les dimensions du rendu.
 		 *\param[in]	jitter		La valeur de jittering.
 		 */
 		C3D_API Configuration & cpuUpdate( castor::Size const & size
@@ -255,11 +265,13 @@ namespace castor3d
 		 *\remarks		View matrix won't be updated.
 		 *\param[in]	size		The render size.
 		 *\param[in]	projection	The new projection matrix.
+		 *\param[in]	debugIndex	The currently selected debug data index.
 		 *\~french
 		 *\brief		Met à jour l'UBO avec les valeurs données.
 		 *\remarks		La matrice de vue ne sera pas mise à jour.
 		 *\param[in]	size		Les dimensions du rendu.
 		 *\param[in]	projection	La nouvelle matrice de projection.
+		 *\param[in]	debugIndex	L'indice des données de debug actuellement sélectionnées.
 		 */
 		C3D_API Configuration & cpuUpdate( castor::Size const & size
 			, castor::Matrix4x4f const & projection

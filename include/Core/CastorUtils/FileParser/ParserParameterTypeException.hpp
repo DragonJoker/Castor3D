@@ -18,10 +18,16 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	expectedType	The real parameter type.
+		 *\param[in]	givenType	The user given type.
+		 *\param[in]	file		The incriminated file name.
+		 *\param[in]	function	The incriminated function name.
+		 *\param[in]	line		The incriminated line name.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	expectedType	Le type réel du paramètre.
+		 *\param[in]	givenType	Le type donné par l'utilisateur.
+		 *\param[in]	file		Le nom du fichier incriminé.
+		 *\param[in]	function	Le nom de la fonction incriminée.
+		 *\param[in]	line		Le numéro de la ligne incriminée.
 		 */
 		explicit ParserParameterTypeException( ParameterType givenType
 			, char const * file

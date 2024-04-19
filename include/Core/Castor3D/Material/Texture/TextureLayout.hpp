@@ -116,11 +116,13 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	renderSystem	The render system.
+		 *\param[in]	name			The debug name for this layout.
 		 *\param[in]	image			The image.
 		 *\param[in]	imageView		The image view.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	renderSystem	Le render system.
+		 *\param[in]	name			Le nom de debug pour ce layout.
 		 *\param[in]	image			L'image.
 		 *\param[in]	imageView		La vue sur l'image.
 		 */

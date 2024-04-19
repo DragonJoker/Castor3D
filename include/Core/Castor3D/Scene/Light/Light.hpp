@@ -75,13 +75,9 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Records the light data into given buffer.
-		 *\param[in]	index	The light index in the buffer.
-		 *\param[in]	offset	The light data offset in the buffer.
 		 *\param[out]	data	Receives the informations.
 		 *\~french
 		 *\brief		Enregistre les données de la source lumineuse dans le tampon donné.
-		 *\param[in]	index	L'index de la source lumineuse dans le buffer.
-		 *\param[in]	offset	L'offset des données de la source lumineuse dans le buffer.
 		 *\param[out]	data	Reçoit les informations.
 		 */
 		C3D_API void fillShadowBuffer( AllShadowData & data );

@@ -50,10 +50,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Uploads all GPU buffers to VRAM.
-		 *\param[in]	cb	The command buffer on which transfer commands are recorded.
+		 *\param[in]	uploader	Receives the upload requests.
 		 *\~french
 		 *\brief		Met à jour tous les tampons GPU en VRAM.
-		 *\param[in]	cb	Le command buffer sur lequel les commandes de transfert sont enregistrées.
+		 *\param[in]	uploader	Reçoit les requêtes d'upload.
 		 */
 		C3D_API void upload( UploadData const & uploader )const;
 		/**

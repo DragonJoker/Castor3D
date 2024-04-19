@@ -1,4 +1,4 @@
-# Générer Castor3D
+﻿# Générer Castor3D
 
 Castor3D utilise CMake pour générer les fichiers de projets.<br />
 
@@ -6,7 +6,7 @@ Vous devez donc lancer CMake pour générer les fichiers de projet pour la solut
 
 La génération de projets s'appuie sur vcpkg pour la gestion des dépendances.<br />
 
-La documenation de CastorUtils et Castor3D peut être générée via Doxygen.<br />
+La documentation de CastorUtils et Castor3D peut être générée via Doxygen.<br />
 
 Les compilateurs testés sont les suivants :
 - Visual Studio 2022

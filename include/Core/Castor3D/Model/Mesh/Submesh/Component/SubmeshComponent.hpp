@@ -29,17 +29,15 @@ namespace castor3d
 			: public SubmeshSubComponent
 		{
 			/**
-			*\~english
-			*\brief
-			*	Fills the surface shader struct with the members provided by this component.
-			*\param[in,out] type
-			*	Receives the members.
-			*\~french
-			*\brief
-			*	Remplit la structure shader de surface avec les membres fournis par ce composant.
-			*\param[in] type
-			*	Reçoit les membres.
-			*/
+			 *\~english
+			 *\brief			Fills the surface shader struct with the members provided by this component.
+			 *\param[in,out]	type	Receives the members.
+			 *\param[in,out]	index	The optional first component member index, that will be incremented if it is defined.
+			 *\~french
+			 *\brief			Remplit la structure shader de surface avec les membres fournis par ce composant.
+			 *\param[in, out]	type	Reçoit les membres.
+			 *\param[in, out]	index	L'indice optionnel du premier membre du composant, sera incrémenté si défini.
+			 */
 			C3D_API virtual void fillSurfaceType( sdw::type::Struct & type
 				, uint32_t * index )const
 			{
@@ -50,17 +48,15 @@ namespace castor3d
 			: public SubmeshSubComponent
 		{
 			/**
-			*\~english
-			*\brief
-			*	Fills the surface shader struct with the members provided by this component.
-			*\param[in,out] type
-			*	Receives the members.
-			*\~french
-			*\brief
-			*	Remplit la structure shader de surface avec les membres fournis par ce composant.
-			*\param[in] type
-			*	Reçoit les membres.
-			*/
+			 *\~english
+			 *\brief			Fills the surface shader struct with the members provided by this component.
+			 *\param[in,out]	type	Receives the members.
+			 *\param[in,out]	index	The optional first component member index, that will be incremented if it is defined.
+			 *\~french
+			 *\brief			Remplit la structure shader de surface avec les membres fournis par ce composant.
+			 *\param[in, out]	type	Reçoit les membres.
+			 *\param[in, out]	index	L'indice optionnel du premier membre du composant, sera incrémenté si défini.
+			 */
 			C3D_API virtual void fillSurfaceType( sdw::type::Struct & type
 				, uint32_t * index )const
 			{
@@ -73,16 +69,26 @@ namespace castor3d
 	{
 		/**
 		 *\~english
-		 *\brief		Initialises the render date
+		 *\brief		Initialises the render data.
+		 *\param[in]	device	The render device.
 		 *\~french
-		 *\brief		Initialise les données de rendu
+		 *\brief		Initialise les données de rendu.
+		 *\param[in]	device	Le périphérique de rendu.
 		 */
 		C3D_API virtual bool initialise( RenderDevice const & device ) = 0;
 		/**
 		 *\~english
 		 *\brief		Records the component's dependent passes.
+		 *\param[in]	device			The render device.
+		 *\param[in]	resources		The graph resources.
+		 *\param[in]	graph			The parent graph.
+		 *\param[in]	previousPasses	The passes this one depends on.
 		 *\~french
 		 *\brief		Enregistre les passes dont le composant dépend.
+		 *\param[in]	device			Le périphérique de rendu.
+		 *\param[in]	resources		Les ressources du graphe.
+		 *\param[in]	graph			Le graphe parent.
+		 *\param[in]	previousPasses	Les passes dont celle-ci dépend.
 		 */
 		C3D_API virtual crg::FramePassArray record( RenderDevice const & device
 			, crg::ResourcesCache & resources
@@ -94,24 +100,30 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Records the component's dependencies.
+		 *\param[in]	pass	The frame pass for this component.
 		 *\~french
 		 *\brief		Enregistre les ressoures dont le composant dépend.
+		 *\param[in]	pass	La frame pass de ce composant.
 		 */
 		C3D_API virtual void registerDependencies( crg::FramePass & pass )const
 		{
 		}
 		/**
 		 *\~english
-		 *\brief		Cleans the render data
+		 *\brief		Cleans the render data.
+		 *\param[in]	device	The render device.
 		 *\~french
-		 *\brief		Nettoie les données de rendu
+		 *\brief		Nettoie les données de rendu.
+		 *\param[in]	device	Le périphérique de rendu.
 		 */
 		C3D_API virtual void cleanup( RenderDevice const & device ) = 0;
 		/**
 		 *\~english
-		 *\brief		Updates the component.
+		 *\brief			Updates the component.
+		 *\param[in, out]	updater	The update data.
 		 *\~french
-		 *\brief		Met à jour le composant.
+		 *\brief			Met à jour le composant.
+		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API virtual void update( CpuUpdater & updater ) = 0;
 		/**
@@ -133,10 +145,12 @@ namespace castor3d
 		 *\brief			Fills the descriptor layout bindings.
 		 *\param[in]		flags		The pipeline flags.
 		 *\param[in,out]	bindings	Receives the additional bindings.
+		 *\param[in,out]	index		The bindings starting index.
 		 *\~french
 		 *\brief			Remplit les attaches de layout de descripteurs.
 		 *\param[in]		flags		Les indicateurs de pipeline.
 		 *\param[in,out]	bindings	Reçoit les attaches additionnelles.
+		 *\param[in,out]	index		L'indice de départ des attaches.
 		 */
 		C3D_API virtual void fillBindings( PipelineFlags const & flags
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings
@@ -146,10 +160,12 @@ namespace castor3d
 		 *\brief			Initialises the additional descriptor set.
 		 *\param[in]		flags				The pipeline flags.
 		 *\param[in,out]	descriptorWrites	Receives the descriptor writes.
+		 *\param[in,out]	index				The bindings starting index.
 		 *\~french
 		 *\brief			Initialise l'ensemble de descripteurs additionnels.
 		 *\param[in]		flags				Les indicateurs de pipeline.
 		 *\param[in,out]	descriptorWrites	Reçoit les descriptor writes.
+		 *\param[in,out]	index				L'indice de départ des attaches.
 		 */
 		C3D_API virtual void fillDescriptor( PipelineFlags const & flags
 			, ashes::WriteDescriptorSetArray & descriptorWrites
@@ -179,11 +195,13 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Retrieves the shader source matching the given flags.
+		 *\param[in]	engine			The engine.
 		 *\param[in]	flags			The pipeline flags.
 		 *\param[in]	componentsMask	The nodes pass components flags.
 		 *\param[in]	builder			The shader builder.
 		 *\~french
 		 *\brief		Récupère le source du shader qui correspond aux indicateurs donnés.
+		 *\param[in]	engine			Le moteur.
 		 *\param[in]	flags			Les indicateurs de pipeline.
 		 *\param[in]	componentsMask	Les indicateurs de composants de la passe de noeuds.
 		 *\param[in]	builder			Le shader builder.
@@ -200,41 +218,49 @@ namespace castor3d
 		C3D_API SubmeshComponentData( Submesh & submesh );
 		/**
 		 *\~english
-		 *\brief		Initialises the submesh
+		 *\brief		Initialises the submesh.
+		 *\param[in]	device	The render device.
 		 *\~french
-		 *\brief		Initialise le sous-maillage
+		 *\brief		Initialise le sous-maillage.
+		 *\param[in]	device	Le périphérique de rendu.
 		 */
 		C3D_API bool initialise( RenderDevice const & device );
 		/**
 		 *\~english
-		 *\brief		Cleans the submesh
+		 *\brief		Cleans the submesh.
+		 *\param[in]	device	The render device.
 		 *\~french
-		 *\brief		Nettoie le sous-maillage
+		 *\brief		Nettoie le sous-maillage.
+		 *\param[in]	device	Le périphérique de rendu.
 		 */
 		C3D_API void cleanup( RenderDevice const & device );
 		/**
 		 *\~english
-		 *\brief		Uploads data on VRAM.
-		 *\remarks		For host visible buffers.
+		 *\brief			Uploads data on VRAM.
+		 *\remarks			For host visible buffers.
+		 *\param[in,out]	uploader	Receives the upload requests.
 		 *\~french
-		 *\brief		Met les données en VRAM.
-		 *\remarks		Pour les buffers host visible.
+		 *\brief			Met les données en VRAM.
+		 *\remarks			Pour les buffers host visible.
+		 *\param[in,out]	uploader	Reçoit les requêtes d'upload.
 		 */
 		C3D_API void upload( UploadData & uploader );
 		/**
 		 *\~english
 		 *\brief			Gathers buffers that need to go in a vertex layout.
 		 *\param[in]		flags			The pipeline flags.
-		 *\param[in]		material		The material.
+		 *\param[in]		pass			The material pass.
+		 *\param[in]		bufferOffsets	Holds the buffers.
 		 *\param[in,out]	buffers			Receives the buffers.
 		 *\param[in,out]	offsets			Receives the buffers offsets.
 		 *\param[in,out]	layouts			Receives the vertex layouts.
 		 *\param[in,out]	currentBinding	The current buffer binding.
 		 *\param[in,out]	currentLocation	The current attribute location.
 		 *\~french
-		 *\brief		Récupère les tampons qui doivent aller dans un vertex layout.
+		 *\brief			Récupère les tampons qui doivent aller dans un vertex layout.
 		 *\param[in]		flags			Les flags de pipeline.
-		 *\param[in]		material		Les matériau.
+		 *\param[in]		pass			La passe de matériau.
+		 *\param[in]		bufferOffsets	Détient les buffers.
 		 *\param[in,out]	buffers			Reçoit les buffers.
 		 *\param[in,out]	offsets			Reçoit les offsets dans les buffers.
 		 *\param[in,out]	layouts			Reçoit les vertex layouts.
@@ -251,10 +277,10 @@ namespace castor3d
 			, uint32_t & currentLocation ) = 0;
 		/**
 		 *\~english
-		 *\return			Copy given component's data into this one.
+		 *\brief			Copies given component's data into this one.
 		 *\param[in,out]	data The source component's data.
 		 *\~french
-		 *\return			Copie les données du composant donné dans celui-ci.
+		 *\brief			Copie les données du composant donné dans celui-ci.
 		 *\param[in,out]	data	Les données du composant source.
 		 */
 		C3D_API virtual void copy( SubmeshComponentDataRPtr data )const = 0;
@@ -310,13 +336,13 @@ namespace castor3d
 		C3D_API virtual ~SubmeshComponentPlugin() = default;
 		C3D_API SubmeshComponentPlugin( SubmeshComponentPlugin && rhs )noexcept = default;
 		/**
-		*\~english
-		*\param[in] submeshComponents
-		*	The components registrar.
-		*\~french
-		*\param[in] submeshComponents
-		*	Le registre de composants.
-		*/
+		 *\~english
+		 *\param[in]	submeshComponents		The components registrar.
+		 *\param[in]	pcreateParserContext	The user defined parsing context creator.
+		 *\~french
+		 *\param[in]	submeshComponents		Le registre de composants.
+		 *\param[in]	pcreateParserContext	La fonction de création d'un contexte défini par l'utilisateur.
+		 */
 		C3D_API explicit SubmeshComponentPlugin( SubmeshComponentRegister const & submeshComponents
 			, castor::UserContextCreator const & pcreateParserContext = {} )
 			: createParserContext{ pcreateParserContext }
@@ -330,32 +356,24 @@ namespace castor3d
 		*/
 		/**@{*/
 		/**
-		*\~english
-		*\brief
-		*	Fills the given lists with this component's parsers.
-		*\param[in,out] parsers
-		*	Receives the parsers.
-		*\~french
-		*\brief
-		*	Remplit les listes données avec les parsers de ce composant.
-		*\param[in,out] parsers
-		*	Reçoit les parsers.
-		*/
+		 *\~english
+		 *\brief			Fills the given lists with this component's parsers.
+		 *\param[in,out]	parsers	Receives the parsers.
+		 *\~french
+		 *\brief			Remplit les listes données avec les parsers de ce composant.
+		 *\param[in,out]	parsers	Reçoit les parsers.
+		 */
 		C3D_API virtual void createParsers( castor::AttributeParsers & parsers )const
 		{
 		}
 		/**
-		*\~english
-		*\brief
-		*	Fills the sections list with the ones created by this component.
-		*\param[in,out] sections
-		*	Receives the sections.
-		*\~french
-		*\brief
-		*	Remplit la liste de sections donnée avec les sections créées par ce composant.
-		*\param[in,out] sections
-		*	Reçoit les sections.
-		*/
+		 *\~english
+		 *\brief			Fills the sections list with the ones created by this component.
+		 *\param[in,out]	sections	Receives the sections.
+		 *\~french
+		 *\brief			Remplit la liste de sections donnée avec les sections créées par ce composant.
+		 *\param[in,out]	sections	Reçoit les sections.
+		 */
 		C3D_API virtual void createSections( castor::StrUInt32Map & sections )const
 		{
 		}
@@ -363,20 +381,15 @@ namespace castor3d
 		castor::UserContextCreator createParserContext;
 		/**@}*/
 		/**
-		*\~english
-		*	Creates a component for given submesh.
-		*\remarks
-		*	Doesn't add the component to the submesh.
-		*\param[in] submesh
-		*	The submesh.
-		*\~french
-		*\brief
-		*	Crée un composant pour le submesh donné.
-		*\remarks
-		*	N'ajoute pas le composant au submesh.
-		*\param[in] submesh
-		*	Le submesh.
-		*/
+		 *\~english
+		 *\brief		Creates a component for given submesh.
+		 *\remarks		Doesn't add the component to the submesh.
+		 *\param[in]	submesh	The submesh.
+		 *\~french
+		 *\brief		Crée un composant pour le submesh donné.
+		 *\remarks		N'ajoute pas le composant au submesh.
+		 *\param[in]	submesh	Le submesh.
+		 */
 		C3D_API virtual SubmeshComponentUPtr createComponent( Submesh & submesh )const = 0;
 		/**
 		*\name
@@ -384,13 +397,11 @@ namespace castor3d
 		*/
 		/**@{*/
 		/**
-		*\~english
-		*\return
-		*	The pass flags for this component.
-		*\~french
-		*\return
-		*	Les indicateurs de passe pour ce composant.
-		*/
+		 *\~english
+		 *\return	The pass flags for this component.
+		 *\~french
+		 *\return	Les indicateurs de passe pour ce composant.
+		 */
 		C3D_API virtual SubmeshComponentFlag getComponentFlags()const noexcept
 		{
 			return makeSubmeshComponentFlag( getId() );
@@ -497,37 +508,31 @@ namespace castor3d
 		*/
 		/**@{*/
 		/**
-		*\~english
-		*\brief
-		*	Creates the component's vertex surface shaders.
-		*\~french
-		*\brief
-		*	Crée les shaders pour la surface de vertex du composant.
-		*/
+		 *\~english
+		 *\return	The component's vertex surface shaders.
+		 *\~french
+		 *\brief	Les shaders pour la surface de vertex du composant.
+		 */
 		C3D_API virtual shader::SubmeshVertexSurfaceShaderPtr createVertexSurfaceShader()const
 		{
 			return nullptr;
 		}
 		/**
-		*\~english
-		*\brief
-		*	Creates the component's surface shaders.
-		*\~french
-		*\brief
-		*	Crée les shaders pour la surface du composant.
-		*/
+		 *\~english
+		 *\return	The component's surface shaders.
+		 *\~french
+		 *\return	Les shaders pour la surface du composant.
+		 */
 		C3D_API virtual shader::SubmeshRasterSurfaceShaderPtr createRasterSurfaceShader()const
 		{
 			return nullptr;
 		}
 		/**
-		*\~english
-		*\brief
-		*	Creates the component's render shader.
-		*\~french
-		*\brief
-		*	Crée le shader de rendu du composant.
-		*/
+		 *\~english
+		 *\return	The component's render shader.
+		 *\~french
+		 *\return	Le shader de rendu du composant.
+		 */
 		C3D_API virtual SubmeshRenderShaderPtr createRenderShader()const
 		{
 			return nullptr;
@@ -570,11 +575,13 @@ namespace castor3d
 		 *\brief		Constructor.
 		 *\param[in]	submesh	The parent submesh.
 		 *\param[in]	type	The component type.
+		 *\param[in]	data	The component data.
 		 *\param[in]	deps	The components this one depends on.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	submesh	Le sous-maillage parent.
 		 *\param[in]	type	Le type de composant.
+		 *\param[in]	data	Les données du composant.
 		 *\param[in]	deps	Les composants dont celui-ci dépend.
 		 */
 		C3D_API SubmeshComponent( Submesh & submesh

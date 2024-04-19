@@ -40,7 +40,6 @@ namespace castor3d::shader
 		 *\param		alphaFunc		The alpha function.
 		 *\param[in]	opacity			The opacity value.
 		 *\param[in]	alphaRef		The alpha comparison reference value.
-		 *\param[in]	passMultiplier	The pass multiplier factor.
 		 *\param[in]	opaque			\p true for opaque nodes, \p false for transparent ones.
 		 *\~french
 		 *\brief		Ecrit la fonction d'opacité en GLSL.
@@ -48,7 +47,6 @@ namespace castor3d::shader
 		 *\param		alphaFunc		La fonction d'opacité.
 		 *\param[in]	opacity			La valeur d'opacité.
 		 *\param[in]	alphaRef		La valeur de référence pour la comparaison alpha.
-		 *\param[in]	passMultiplier	Le facteur de multiplication de la passe.
 		 *\param[in]	opaque			\p true pour les noeuds opaques, \p false pour les transparents.
 		 */
 		C3D_API static void applyAlphaFunc( sdw::ShaderWriter & writer

@@ -42,7 +42,8 @@ namespace castor
 		 *\param[in,out]	object	L'objet à lire.
 		 *\param[in,out]	file	Le fichier où lire l'objet.
 		 */
-		virtual bool operator()( CU_UnusedParam( T &, object ), CU_UnusedParam( Type &, file ) )
+		virtual bool operator()( [[maybe_unused]] T & object
+			, [[maybe_unused]] Type & file )
 		{
 			CU_LoaderError( "Import not supported by the loader registered for this type" );
 		}

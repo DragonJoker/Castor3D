@@ -1,4 +1,4 @@
-# Building Castor3D
+﻿# Building Castor3D
 
 Castor3D uses CMake to build project files.
 

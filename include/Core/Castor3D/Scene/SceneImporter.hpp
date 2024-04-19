@@ -49,19 +49,21 @@ namespace castor3d
 			, castor::Map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps );
 		/**
 		 *\~english
-		 *\brief		Scene import Function.
-		 *\param[out]	scene			Receives the imported data.
-		 *\param[in]	pathFile		The location of the file to import.
-		 *\param[in]	parameters		Import configuration parameters.
-		 *\param[in]	textureRemaps	The imported textures remapping parameters.
-		 *\return		\p false if any problem occured.
+		 *\brief			Scene import Function.
+		 *\param[out]		scene			Receives the imported data.
+		 *\param[in]		pathFile		The location of the file to import.
+		 *\param[in]		parameters		Import configuration parameters.
+		 *\param[in]		textureRemaps	The imported textures remapping parameters.
+		 *\param[in,out]	progress		Optional progress bar.
+		 *\return			\p false if any problem occured.
 		 *\~french
-		 *\brief		Fonction d'import de Scene.
-		 *\param[out]	scene			Reçoit les données importées.
-		 *\param[in]	pathFile		Le chemin vers le fichier à importer.
-		 *\param[in]	parameters		Paramètres de configuration de l'import.
-		 *\param[in]	textureRemaps	Les paramètres de reaffectation des textures importées.
-		 *\return		\p false si un problème quelconque est survenu.
+		 *\brief			Fonction d'import de Scene.
+		 *\param[out]		scene			Reçoit les données importées.
+		 *\param[in]		pathFile		Le chemin vers le fichier à importer.
+		 *\param[in]		parameters		Paramètres de configuration de l'import.
+		 *\param[in]		textureRemaps	Les paramètres de reaffectation des textures importées.
+		 *\param[in,out]	progress		Barre de progression optionnelle.
+		 *\return			\p false si un problème quelconque est survenu.
 		 */
 		C3D_API bool import( Scene & scene
 			, castor::Path const & pathFile
@@ -87,17 +89,19 @@ namespace castor3d
 			, Parameters const & parameters );
 		/**
 		 *\~english
-		 *\brief		Scene animations import Function.
-		 *\param[out]	scene			Receives the imported data.
-		 *\param[in]	pathFile		The location of the file to import.
-		 *\param[in]	parameters		Import configuration parameters.
-		 *\return		\p false if any problem occured.
+		 *\brief			Scene animations import Function.
+		 *\param[out]		scene			Receives the imported data.
+		 *\param[in]		pathFile		The location of the file to import.
+		 *\param[in]		parameters		Import configuration parameters.
+		 *\param[in,out]	progress		Optional progress bar.
+		 *\return			\p false if any problem occured.
 		 *\~french
-		 *\brief		Fonction d'import des animations de Scene.
-		 *\param[out]	scene			Reçoit les données importées.
-		 *\param[in]	pathFile		Le chemin vers le fichier à importer.
-		 *\param[in]	parameters		Paramètres de configuration de l'import.
-		 *\return		\p false si un problème quelconque est survenu.
+		 *\brief			Fonction d'import des animations de Scene.
+		 *\param[out]		scene			Reçoit les données importées.
+		 *\param[in]		pathFile		Le chemin vers le fichier à importer.
+		 *\param[in]		parameters		Paramètres de configuration de l'import.
+		 *\param[in,out]	progress		Barre de progression optionnelle.
+		 *\return			\p false si un problème quelconque est survenu.
 		 */
 		C3D_API bool importAnimations( Scene & scene
 			, castor::Path const & pathFile

@@ -3718,28 +3718,6 @@ namespace castor3d
 		}
 		CU_EndAttributePushBlock( CSCNSection::eShaderStage, blockContext )
 
-		static CU_ImplementAttributeParserBlock( parserConstantsBuffer, ProgramContext )
-		{
-			if ( !blockContext->shaderProgram )
-			{
-				CU_ParsingError( cuT( "No ShaderProgram initialised." ) );
-			}
-			else if ( params.empty() )
-			{
-				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
-			else
-			{
-				params[0]->get( blockContext->name );
-
-				if ( blockContext->name.empty() )
-				{
-					CU_ParsingError( cuT( "Invalid empty name" ) );
-				}
-			}
-		}
-		CU_EndAttributePushBlock( CSCNSection::eShaderUBO, blockContext )
-
 		static CU_ImplementAttributeParserBlock( parserShaderProgramEnd, ProgramContext )
 		{
 			if ( !blockContext->shaderProgram )
@@ -5429,13 +5407,7 @@ namespace castor3d
 		static void addShaderProgramParsers( castor::AttributeParsers & result )
 		{
 			BlockParserContextT< ProgramContext > context{ result, CSCNSection::eShaderProgram };
-			context.addPushParser( cuT( "vertex_program" ), CSCNSection::eShaderStage, parserVertexShader );
-			context.addPushParser( cuT( "pixel_program" ), CSCNSection::eShaderStage, parserPixelShader );
-			context.addPushParser( cuT( "geometry_program" ), CSCNSection::eShaderStage, parserGeometryShader );
-			context.addPushParser( cuT( "hull_program" ), CSCNSection::eShaderStage, parserHullShader );
-			context.addPushParser( cuT( "domain_program" ), CSCNSection::eShaderStage, parserDomainShader );
 			context.addPushParser( cuT( "compute_program" ), CSCNSection::eShaderStage, parserComputeShader );
-			context.addPushParser( cuT( "constants_buffer" ), CSCNSection::eShaderUBO, parserConstantsBuffer, { makeParameter< ParameterType::eName >() } );
 			context.addPopParser( cuT( "}" ), parserShaderProgramEnd );
 		}
 
@@ -5673,7 +5645,6 @@ namespace castor3d
 			, { uint32_t( CSCNSection::eRenderTarget ), cuT( "render_target" ) }
 			, { uint32_t( CSCNSection::eShaderProgram ), cuT( "shader_program" ) }
 			, { uint32_t( CSCNSection::eShaderStage ), cuT( "shader_object" ) }
-			, { uint32_t( CSCNSection::eShaderUBO ), cuT( "constants_buffer" ) }
 			, { uint32_t( CSCNSection::eUBOVariable ), cuT( "variable" ) }
 			, { uint32_t( CSCNSection::eBillboard ), cuT( "billboard" ) }
 			, { uint32_t( CSCNSection::eBillboardList ), cuT( "positions" ) }

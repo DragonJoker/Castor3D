@@ -46,7 +46,6 @@ namespace castor3d
 		eRenderTarget = CU_MakeSectionName( 'R', 'T', 'G', 'R' ),
 		eShaderProgram = CU_MakeSectionName( 'G', 'L', 'S', 'L' ),
 		eShaderStage = CU_MakeSectionName( 'S', 'P', 'G', 'M' ),
-		eShaderUBO = CU_MakeSectionName( 'S', 'U', 'B', 'O' ),
 		eUBOVariable = CU_MakeSectionName( 'S', 'U', 'B', 'V' ),
 		eBillboard = CU_MakeSectionName( 'B', 'L', 'B', 'd' ),
 		eBillboardList = CU_MakeSectionName( 'B', 'L', 'B', 'L' ),

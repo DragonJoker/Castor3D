@@ -31,7 +31,8 @@ namespace castor
 		 *\param[in]		object	L'objet à écrire.
 		 *\param[in,out]	file	Le fichier où écrire l'objet.
 		 */
-		virtual bool operator()( CU_UnusedParam( DataT const &, object ), CU_UnusedParam( Type &, file ) )
+		virtual bool operator()( [[maybe_unused]] DataT const & object
+			, [[maybe_unused]] Type & file )
 		{
 			CU_LoaderError( "Export not supported by the loader registered for this type" );
 		}

@@ -103,11 +103,11 @@ namespace castor3d
 			/**
 			 *\~english
 			 *\brief		Retrieves the instances count
-			 *\param[in]	material	The material for which the instance count is retrieved
+			 *\param[in]	pass	The material pass for which the instance count is retrieved
 			 *\return		The value
 			 *\~french
 			 *\brief		Récupère le nombre d'instances
-			 *\param[in]	material	Le matériau pour lequel le compte est récupéré
+			 *\param[in]	pass	La passe de matériau pour lequel le compte est récupéré
 			 *\return		La valeur
 			 */
 			C3D_API uint32_t getRefCount( Pass const & pass )const;

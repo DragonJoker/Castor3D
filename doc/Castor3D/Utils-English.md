@@ -1,25 +1,18 @@
-﻿CastorUtils Library	{#mainpage}
-===================
+﻿# CastorUtils Library
 
-## Introduction
-
-This library contains some helper classes to ease the development of Castor3D engine.
-
-## Summary
-
-### Align
+## Align
 
 - alignedAlloc/alignedFree.
 - AlignedMemoryAllocator/NonAlignedMemoryAllocator.
 
-### Data
+## Data
 
 - File management base classes binary and text (BinaryFile and TextFile)
 - FileParser, a brace file parser, along with its FileParserContext and base writers/parsers.
 - Loader classes, binary and text (BinaryLoader and TextLoader)
 - ZipArchive
 
-### Design
+## Design
 
 - ArrayView implementation.
 - BlockGuard implementation.
@@ -30,7 +23,7 @@ This library contains some helper classes to ease the development of Castor3D en
 - NonCopyable.
 - Unique.
 
-### Graphics
+## Graphics
 
 - RgbColour/RgbaColour and ColourComponent/HdrColourComponent.
 - BoundingContainer, BoundingCube and BoundingSphere.
@@ -39,7 +32,7 @@ This library contains some helper classes to ease the development of Castor3D en
 - PixelFormat, Pixel and PxBuffer, to manage pixel conversions.
 - Position, Size.
 
-### Mathematics
+## Mathematics
 
 - Angle conversions.
 - Length conversions.
@@ -53,7 +46,7 @@ This library contains some helper classes to ease the development of Castor3D en
 - Rectangle.
 - Template math functions.
 
-### Miscellaneous
+## Miscellaneous
 
 - BlockTracker and BlockTimer.
 - Console and Logger.

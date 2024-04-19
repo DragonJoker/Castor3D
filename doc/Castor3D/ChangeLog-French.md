@@ -1,7 +1,36 @@
-Suivi de versions	{#changelog}
+﻿Suivi de versions	{#changelog}
 =================
 
 Cette page sert à informer des évolutions du moteur depuis les premières versions.
+
+## Version 0.16.0
+
+### Important Changes
+- Implémentation du clustered lighting.
+- L'atténuation des sources lumineuses est maintenant une distance max.
+- Implémentaiton d'opérateurs de colour grading.
+- Intégration de CastorGui dans Castor3D.
+- Implémentation des context blocks dans le scene file parser.
+
+### New Features
+- Ajout du support de Mikktspace.
+- Suppression du deferred rendering.
+- Implémentation d'un importeur glTF.
+- Implémentation d'un plugin de depth of field.
+- Ajout du support des écrans HDR.
+- Les importeurs de scène peuvent maintenant importer les caméras.
+
+#### General
+- Réimplémenté les submesh components à la manière des pass components.
+- Déplacement des données d'ombre des sources lumineuses dans un buffer séparé.
+- Correction de l'interaction du light scattering avec les ombres.
+- Refonte de l'upload en VRAM des ressources.
+- Réparation des particules GPU.
+- Renommage des évènements pour plus de clarté.
+- Expression de l'océan FFT en termes de pass component et submesh component.
+- Implémentation de l'eau en tant que pass component.
+- Refonte de l'update des render nodes pour améliorer les performances à ce niveau.
+- Réécriture de l'écran de chargement.
 
 ## Version 0.15.0
 
@@ -229,7 +258,7 @@ Cette page sert à informer des évolutions du moteur depuis les premières vers
 - Ajout de l'outil CastorMeshConverter, permettant de convertir les fichiers mesh supportés en fichiers cmsh, en ligne de commande.
 - Ajout de l'outil DiffImage, qui effectue la comparaison entre une image de référence et une autre image (générée via CastorTestLauncher), pour automatiser les tests de rendu.
 
-## Fixed Bugs
+### Fixed Bugs
 
 #### CastorUtils
 
@@ -295,7 +324,7 @@ Cette page sert à informer des évolutions du moteur depuis les premières vers
 
 - Création de l'opérateur de tone mapping Uncharted 2.
 
-## Corrections
+### Corrections
 
 #### Castor3D
 
@@ -419,7 +448,7 @@ Cette page sert à informer des évolutions du moteur depuis les premières vers
 - L'aspect global des application avec IHM a été retravaillé, en utilisant wxAuiManager.
 - Utilisation de wxTreeCtrl et des wxPropertyGrid, pour lister les objets, et visualiser leurs propriétés.
 
-## Fixed Bugs
+### Fixed Bugs
 
 #### CastorUtils
 
