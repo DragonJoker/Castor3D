@@ -38,7 +38,7 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->addFace( x, y, z );
+			m_internal->getData().addFace( x, y, z );
 			hr = S_OK;
 		}
 		else

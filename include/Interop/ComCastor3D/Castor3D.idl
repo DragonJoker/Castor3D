@@ -1519,8 +1519,8 @@ interface IDirectionalLight
 interface IPointLight
 	: IDispatch
 {
-	[propget, id( 2 ), helpstring( "The light attenuation values (constant, linear and quadratic)" )] HRESULT Attenuation( [out, retval] IVector3D ** pVal );
-	[propput, id( 2 ), helpstring( "The light attenuation values (constant, linear and quadratic)" )] HRESULT Attenuation( [in] IVector3D * val );
+	[propget, id( 2 ), helpstring( "The light attenuation range" )] HRESULT AttenuationRange( [out, retval] float * pVal );
+	[propput, id( 2 ), helpstring( "The light attenuation range" )] HRESULT AttenuationRange( [in] float val );
 };
 
 // ISpotLight
@@ -1533,8 +1533,8 @@ interface IPointLight
 interface ISpotLight
 	: IDispatch
 {
-	[propget, id( 2 ), helpstring( "The light attenuation values (constant, linear and quadratic)" )] HRESULT Attenuation( [out, retval] IVector3D ** pVal );
-	[propput, id( 2 ), helpstring( "The light attenuation values (constant, linear and quadratic)" )] HRESULT Attenuation( [in] IVector3D * val );
+	[propget, id( 2 ), helpstring( "The light attenuation range" )] HRESULT AttenuationRange( [out, retval] float * pVal );
+	[propput, id( 2 ), helpstring( "The light attenuation range" )] HRESULT AttenuationRange( [in] float val );
 	[propget, id( 3 ), helpstring( "The light exponent value" )] HRESULT Exponent( [out, retval] float * pVal );
 	[propput, id( 3 ), helpstring( "The light exponent value" )] HRESULT Exponent( [in] float val );
 	[propget, id( 4 ), helpstring( "The light inner cut off value" )] HRESULT InnerCutOff( [out, retval] IAngle ** pVal );
@@ -1760,7 +1760,7 @@ interface IEngine
 // Castor3DLib
 [
 	uuid( AE7400FF-58CB-40F5-9D8B-3373BCC45E54 ),
-	version( 0.15 ),
+	version( 0.16 ),
 	helpstring( "Castor3D interfaces" )
 ]
 library Castor3D

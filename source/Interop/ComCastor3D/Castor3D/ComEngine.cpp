@@ -55,7 +55,7 @@ namespace CastorCom
 					}
 					catch ( std::exception & exc )
 					{
-						castor::Logger::logError( cuT( "Failed to parse the scene file, with following error:" ) + castor::string::stringCast< castor::xchar >( exc.what() ) );
+						castor::Logger::logError( cuT( "Failed to parse the scene file, with following error:" ) + castor::makeString( exc.what() ) );
 					}
 				}
 			}
@@ -78,10 +78,10 @@ namespace CastorCom
 
 		if ( !m_internal )
 		{
-			m_internal = new castor3d::Engine{ fromBstr( appName )
+			m_internal = new castor3d::Engine{ castor3d::EngineConfig{ fromBstr( appName )
 				, castor3d::Version{ ComCastor3D_VERSION_MAJOR, ComCastor3D_VERSION_MINOR, ComCastor3D_VERSION_BUILD }
 				, enableValidation == TRUE
-				, true };
+				, true } };
 			hr = S_OK;
 		}
 		else
@@ -473,13 +473,13 @@ namespace CastorCom
 					{
 						if ( set )
 						{
-							callbacks->OnSetClipBoardText( toBstr( castor::string::stringCast< castor::xchar >( text ) ) );
+							callbacks->OnSetClipBoardText( toBstr( castor::makeString( text ) ) );
 						}
 						else
 						{
 							BSTR result;
 							callbacks->OnGetClipBoardText( &result );
-							text = castor::string::toU32String( fromBstr( result ) );
+							text = castor::toUtf8U32String( fromBstr( result ) );
 						}
 
 						return text;

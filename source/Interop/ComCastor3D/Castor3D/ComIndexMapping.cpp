@@ -10,12 +10,12 @@ namespace CastorCom
 		{
 			if ( value )
 			{
-				if ( m_internal->getType() == castor3d::TriFaceMapping::Name )
+				if ( m_internal->getType() == castor3d::TriFaceMapping::TypeName )
 				{
 					*value = eINDEX_MAPPING_TYPE_FACE;
 					hr = S_OK;
 				}
-				else if ( m_internal->getType() == castor3d::TriFaceMapping::Name )
+				else if ( m_internal->getType() == castor3d::LinesMapping::TypeName )
 				{
 					*value = eINDEX_MAPPING_TYPE_LINE;
 					hr = S_OK;

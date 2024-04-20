@@ -39,7 +39,7 @@ namespace castor3d
 
 	namespace cull
 	{
-		bool isSphereVisible( Frustum const & frustum
+		static bool isSphereVisible( Frustum const & frustum
 			, SceneNode const & sceneNode
 			, Geometry const & instance
 			, Submesh const & data )
@@ -49,7 +49,7 @@ namespace castor3d
 				, sceneNode.getDerivedScale() );
 		}
 
-		bool isBoxVisible( Frustum const & frustum
+		static bool isBoxVisible( Frustum const & frustum
 			, SceneNode const & sceneNode
 			, Geometry const & instance
 			, Submesh const & data )
